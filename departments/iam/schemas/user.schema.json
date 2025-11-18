@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "description": "User identity and profile schema",
+  "type": "object",
+  "required": ["id", "name", "email", "role", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique user identifier",
+      "pattern": "^user_[0-9]+_[a-z0-9]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "User's full name",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "User's email address"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["admin", "maintainer", "contributor", "member", "guest"],
+      "description": "User's role in the system"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "pending", "suspended"],
+      "description": "Current account status"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Account creation timestamp"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "verified_email": {
+      "type": "boolean",
+      "description": "Whether email has been verified"
+    },
+    "mfa_enabled": {
+      "type": "boolean",
+      "description": "Whether MFA is enabled"
+    },
+    "linked_identities": {
+      "type": "array",
+      "description": "Linked platform identities",
+      "items": {
+        "$ref": "#/definitions/LinkedIdentity"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional user metadata",
+      "properties": {
+        "company": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "bio": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LinkedIdentity": {
+      "type": "object",
+      "required": ["platform", "platform_id", "verified"],
+      "properties": {
+        "platform": {
+          "type": "string",
+          "enum": ["github", "discord", "gitlens", "email"],
+          "description": "Identity platform"
+        },
+        "platform_id": {
+          "type": "string",
+          "description": "Platform-specific user identifier"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username on the platform"
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether identity has been verified"
+        },
+        "linked_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When identity was linked"
+        }
+      }
+    }
+  }
+}
