@@ -165,7 +165,8 @@ export class UserRegistry extends EventEmitter {
     platform: LinkedIdentity['platform'],
     platformId: string
   ): User | undefined {
-    for (const user of this.users.values()) {
+    const users = Array.from(this.users.values());
+    for (const user of users) {
       const identity = user.linked_identities.find(
         (id) => id.platform === platform && id.platform_id === platformId
       );
