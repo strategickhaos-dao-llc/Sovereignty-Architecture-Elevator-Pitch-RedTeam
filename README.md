@@ -17,14 +17,19 @@ This system creates a **sovereignty control plane** that bridges:
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
 cd sovereignty-architecture
 
-# 2. Deploy to Kubernetes
+# 2. Set up environment variables
+cp .env.example .env
+# Edit .env and add your actual credentials
+# IMPORTANT: Never commit .env to git!
+
+# 3. Deploy to Kubernetes
 ./bootstrap/deploy.sh
 
-# 3. Configure Discord integration
+# 4. Configure Discord integration
 export DISCORD_TOKEN="your_bot_token"
 export PRS_CHANNEL="channel_id"
 
-# 4. Test GitLens integration
+# 5. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
@@ -98,7 +103,14 @@ git:
 ```
 
 ### Environment Variables
+
+**🔐 Security Note**: All sensitive credentials should be stored in a `.env` file which is excluded from git via `.gitignore`. Use `.env.example` as a template.
+
 ```bash
+# 1. Copy the example file
+cp .env.example .env
+
+# 2. Edit .env with your actual values
 # Discord Integration
 DISCORD_BOT_TOKEN=your_bot_token
 PRS_CHANNEL=channel_id_for_prs
@@ -116,6 +128,8 @@ PGVECTOR_CONN=postgresql://user:pass@host:5432/db
 # Infrastructure
 EVENTS_HMAC_KEY=your_64_char_hmac_key
 ```
+
+**⚠️ NEVER commit your `.env` file to git!** It contains sensitive credentials and secrets.
 
 ## 🎯 Discord Workflow Integration
 
