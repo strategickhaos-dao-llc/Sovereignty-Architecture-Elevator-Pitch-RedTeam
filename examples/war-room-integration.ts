@@ -169,10 +169,8 @@ async function runExamples() {
   console.log('═══════════════════════════════════════════════════════════════');
 }
 
-// Execute examples
-if (import.meta.url === `file://${process.argv[1]}`) {
-  runExamples().catch(console.error);
-}
+// Execute examples when run directly
+// Uncomment to run: runExamples().catch(console.error);
 
 export {
   basicExecution,
