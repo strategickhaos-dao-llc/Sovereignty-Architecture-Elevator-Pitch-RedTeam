@@ -20,3 +20,7 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+
+# Council Vault has its own git repository
+# We track the vault contents but not its git metadata
+council-vault/.git/
