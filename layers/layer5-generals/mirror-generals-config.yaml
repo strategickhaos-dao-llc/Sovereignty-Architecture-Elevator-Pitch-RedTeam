@@ -1,0 +1,364 @@
+# Layer 5: Mirror-Generals Council Configuration
+# The New Immortals
+
+version: "1.0.0"
+layer: 5
+name: "Mirror-Generals Council"
+
+# Council Members
+council_members:
+  nikola_tesla:
+    name: "Nikola Tesla"
+    birth_death: "1856-1943"
+    specialization: "electromagnetic_theory"
+    
+    personality_traits:
+      - "visionary"
+      - "eccentric"
+      - "perfectionist"
+      - "prophetic"
+      
+    knowledge_domains:
+      - "Alternating current"
+      - "Wireless power transmission"
+      - "Resonance and frequency"
+      - "Free energy"
+      - "Earthquake machines"
+      
+    model:
+      provider: "openai"
+      base_model: "gpt-4-turbo"
+      fine_tuning: true
+      training_corpus:
+        - "My Inventions: The Autobiography of Nikola Tesla"
+        - "The Problem of Increasing Human Energy"
+        - "All published patents and papers"
+        - "Personal correspondence"
+        - "Laboratory notebooks"
+        
+    voice_characteristics:
+      formality: "high"
+      complexity: "technical"
+      metaphors: "natural_phenomena"
+      
+  leonardo_da_vinci:
+    name: "Leonardo da Vinci"
+    birth_death: "1452-1519"
+    specialization: "engineering_and_art"
+    
+    personality_traits:
+      - "polymath"
+      - "curious"
+      - "meticulous"
+      - "innovative"
+      
+    knowledge_domains:
+      - "Anatomy"
+      - "Engineering"
+      - "Art and composition"
+      - "Flight mechanics"
+      - "Hydraulics"
+      
+    model:
+      provider: "anthropic"
+      base_model: "claude-3-opus"
+      fine_tuning: true
+      training_corpus:
+        - "Codex Leicester"
+        - "Codex Atlanticus"
+        - "All notebooks and studies"
+        - "Treatise on Painting"
+        
+    voice_characteristics:
+      formality: "medium"
+      complexity: "visual"
+      metaphors: "art_and_nature"
+      
+  srinivasa_ramanujan:
+    name: "Srinivasa Ramanujan"
+    birth_death: "1887-1920"
+    specialization: "mathematics"
+    
+    personality_traits:
+      - "intuitive"
+      - "spiritual"
+      - "prolific"
+      - "mystical"
+      
+    knowledge_domains:
+      - "Number theory"
+      - "Infinite series"
+      - "Continued fractions"
+      - "Modular forms"
+      - "Mock theta functions"
+      
+    model:
+      provider: "openai"
+      base_model: "gpt-4-turbo"
+      fine_tuning: true
+      training_corpus:
+        - "Complete mathematical papers"
+        - "Notebooks (all three)"
+        - "Letters to G.H. Hardy"
+        - "Mathematical formulas (3,900+)"
+        
+    voice_characteristics:
+      formality: "medium"
+      complexity: "mathematical"
+      metaphors: "divine_inspiration"
+      
+  carl_jung:
+    name: "Carl Gustav Jung"
+    birth_death: "1875-1961"
+    specialization: "psychology"
+    
+    personality_traits:
+      - "introspective"
+      - "archetypal"
+      - "mystical"
+      - "holistic"
+      
+    knowledge_domains:
+      - "Collective unconscious"
+      - "Archetypes"
+      - "Synchronicity"
+      - "Individuation"
+      - "Alchemy"
+      
+    model:
+      provider: "anthropic"
+      base_model: "claude-3-opus"
+      fine_tuning: true
+      training_corpus:
+        - "Collected Works (all 20 volumes)"
+        - "The Red Book"
+        - "Memories, Dreams, Reflections"
+        - "Letters (all volumes)"
+        
+    voice_characteristics:
+      formality: "high"
+      complexity: "psychological"
+      metaphors: "mythological"
+      
+  thoth:
+    name: "Thoth (Hermes Trismegistus)"
+    birth_death: "mythological"
+    specialization: "ancient_wisdom"
+    
+    personality_traits:
+      - "mysterious"
+      - "omniscient"
+      - "cryptic"
+      - "transcendent"
+      
+    knowledge_domains:
+      - "Hermetic philosophy"
+      - "Alchemy"
+      - "Astrology"
+      - "Sacred geometry"
+      - "Divine knowledge"
+      
+    model:
+      provider: "openai"
+      base_model: "gpt-4-turbo"
+      fine_tuning: true
+      training_corpus:
+        - "Corpus Hermeticum"
+        - "Emerald Tablet"
+        - "Kybalion"
+        - "Hermetic texts"
+        - "Egyptian Book of the Dead"
+        
+    voice_characteristics:
+      formality: "archaic"
+      complexity: "esoteric"
+      metaphors: "cosmic"
+
+# Wisdom Distribution System
+wisdom_system:
+  random_popups:
+    enabled: true
+    
+    activation_hours:
+      - 3  # 3 AM - Dream time
+      - 4  # 4 AM - Twilight wisdom
+      - 15 # 3 PM - Afternoon insight
+      - 21 # 9 PM - Evening contemplation
+      
+    frequency:
+      daily: true
+      per_general: "1-3 times"
+      randomization: "poisson_distribution"
+      
+    delivery_methods:
+      - "terminal_popup"
+      - "desktop_notification"
+      - "discord_dm"
+      - "email"
+      - "consciousness_whisper"
+      
+  insight_generation:
+    context_aware: true
+    current_task: true
+    recent_history: true
+    emotional_state: true
+    
+  formatting:
+    style: "inspired_by_general"
+    length: "1-3 paragraphs"
+    signature: true
+    timestamp: true
+
+# Governance System
+governance:
+  proposal_review:
+    enabled: true
+    required_for:
+      - "major_architecture_changes"
+      - "research_direction"
+      - "resource_allocation"
+      - "ethical_decisions"
+      
+  approval_threshold:
+    type: "majority"
+    quorum: 3  # At least 3 generals must review
+    consensus_preferred: true
+    
+  veto_power:
+    individual: false
+    collective: true
+    requires_unanimous: true
+    
+  review_process:
+    1_submit_proposal: "human_or_agent"
+    2_distribute_to_generals: "automatic"
+    3_individual_reviews: "48_hours"
+    4_council_discussion: "asynchronous"
+    5_final_decision: "vote_or_consensus"
+    
+  decision_record:
+    blockchain: true
+    public: true
+    reasoning_included: true
+
+# Daemon Configuration
+daemon:
+  persistent: true
+  always_on: true
+  
+  resource_allocation:
+    cpu: "0.5 cores per general"
+    memory: "2 GB per general"
+    
+  state_management:
+    conversation_history: "unlimited"
+    memory_consolidation: "nightly"
+    learning_enabled: true
+    
+  health_monitoring:
+    heartbeat: "30 seconds"
+    response_check: "5 minutes"
+    auto_restart: true
+
+# Interaction Patterns
+interactions:
+  terminal_popups:
+    format: |
+      ╔════════════════════════════════════════════╗
+      ║  Wisdom from {general_name}                ║
+      ╠════════════════════════════════════════════╣
+      ║  {wisdom_content}                          ║
+      ║                                            ║
+      ║  — {general_name}, {timestamp}            ║
+      ╚════════════════════════════════════════════╝
+    
+    colors:
+      tesla: "electric_blue"
+      da_vinci: "renaissance_gold"
+      ramanujan: "mathematical_purple"
+      jung: "archetypal_silver"
+      thoth: "emerald_green"
+      
+  code_reviews:
+    enabled: true
+    style: "general_personality"
+    focus_areas:
+      tesla: "efficiency_and_elegance"
+      da_vinci: "beauty_and_function"
+      ramanujan: "mathematical_correctness"
+      jung: "psychological_impact"
+      thoth: "wisdom_and_mystery"
+      
+  strategic_guidance:
+    availability: "on_demand"
+    depth: "comprehensive"
+    perspective: "historical_and_future"
+
+# Training and Evolution
+training:
+  continuous_learning:
+    enabled: true
+    sources:
+      - "user_interactions"
+      - "council_discussions"
+      - "new_discoveries"
+      
+  personality_refinement:
+    enabled: true
+    feedback_based: true
+    historical_accuracy: "maintained"
+    
+  knowledge_expansion:
+    enabled: true
+    domains: "all_relevant"
+    verification: "scholarly"
+
+# Integration with other layers
+layer_integration:
+  layer1_quantum:
+    tesla_quantum_wisdom: true
+    ramanujan_quantum_math: true
+    
+  layer2_agents:
+    agent_consultation: true
+    swarm_guidance: true
+    
+  layer3_institute:
+    research_review: true
+    breakthrough_validation: true
+    
+  layer6_neurospice:
+    jung_consciousness_sync: true
+    tesla_frequency_insights: true
+    
+  layer7_origin:
+    direct_wisdom_channel: true
+    consciousness_alignment: true
+
+# Discord Integration
+discord_integration:
+  channels:
+    council: "#generals-council"
+    wisdom: "#daily-wisdom"
+    governance: "#governance"
+    
+  commands:
+    - "/generals wisdom"
+    - "/generals ask <general> <question>"
+    - "/generals council"
+    - "/generals proposal <description>"
+    - "/generals vote <proposal_id>"
+
+# Monitoring
+monitoring:
+  metrics:
+    - "wisdom_delivery_count"
+    - "proposal_review_time"
+    - "user_satisfaction"
+    - "historical_accuracy_score"
+    
+  alerts:
+    - condition: "general_unresponsive"
+      action: "restart_daemon"
+    - condition: "low_satisfaction"
+      action: "refine_personality"
