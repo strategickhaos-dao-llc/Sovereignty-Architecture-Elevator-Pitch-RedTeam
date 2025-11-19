@@ -2,6 +2,13 @@
 repos:
   - repo: local
     hooks:
+      - id: check-local-paths
+        name: "Check for Local File Paths"
+        entry: hooks/check-local-paths.sh
+        language: script
+        files: \.(md|txt|yaml|yml|json|sh|py|js|ts|env|conf|config|toml)$
+        stages: [commit]
+
       - id: require-disclaimer
         name: "Require Disclaimer"
         entry: hooks/require_disclaimer.sh
