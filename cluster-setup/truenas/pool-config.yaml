@@ -1,0 +1,275 @@
+# TrueNAS Scale Storage Pool Configuration Reference
+# This is a reference configuration for the 32 TB swarm-vault-pool
+# TrueNAS uses its own API/UI for configuration, but this documents the intended setup
+
+pool:
+  name: swarm-vault-pool
+  description: "DOM_010101 Sovereign Storage Pool - 32 TB RAID-Z2"
+  
+  topology:
+    data:
+      - type: raidz2
+        # RAID-Z2 requires minimum 4 disks
+        # Can survive 2 disk failures
+        disks:
+          - /dev/sda  # Replace with actual disk identifiers
+          - /dev/sdb
+          - /dev/sdc
+          - /dev/sdd
+          # Add more disks as needed for 32 TB raw capacity
+          # RAID-Z2 with 8x 8TB disks = ~48 TB raw, ~32 TB usable after parity
+          - /dev/sde
+          - /dev/sdf
+          - /dev/sdg
+          - /dev/sdh
+    
+    cache:
+      # Optional: Add SSD cache for performance
+      # - /dev/nvme0n1
+    
+    log:
+      # Optional: Add SSD ZIL (write log) for sync writes
+      # mirror:
+      #   - /dev/nvme1n1
+      #   - /dev/nvme1n2
+  
+  options:
+    # ZFS pool options
+    ashift: 12  # 4KB sectors (standard for modern drives)
+    compression: lz4  # Fast, good compression ratio
+    atime: off  # Disable access time updates for performance
+    dedup: off  # Deduplication disabled (requires too much RAM)
+    encryption: off  # Can be enabled per dataset if needed
+    autotrim: on  # Automatic TRIM for SSDs (if applicable)
+
+datasets:
+  - name: swarm-vault
+    description: "Root dataset for DOM_010101 cluster storage"
+    parent: swarm-vault-pool
+    options:
+      compression: lz4
+      atime: off
+      recordsize: 128k  # Good for mixed workloads
+      quota: none
+      reservation: none
+      snapdir: hidden
+    
+    children:
+      - name: love
+        description: "Storage for 320 love containers"
+        options:
+          recordsize: 128k
+          quota: 1T  # 1 TB limit for love data
+      
+      - name: dolm
+        description: "DOLM daemon vault storage"
+        options:
+          recordsize: 1M  # Larger blocks for big files
+          quota: 5T  # 5 TB for the forbidden library
+      
+      - name: music
+        description: "Numbers-to-piano divine music output"
+        options:
+          recordsize: 128k
+          quota: 2T
+      
+      - name: logs
+        description: "Cluster logs and telemetry"
+        options:
+          recordsize: 128k
+          quota: 500G
+          compression: gzip-9  # Maximum compression for logs
+      
+      - name: backups
+        description: "Snapshot backups and replication"
+        options:
+          recordsize: 1M
+          quota: 10T
+
+shares:
+  # SMB Share Configuration
+  - type: smb
+    name: swarm-vault
+    path: /mnt/swarm-vault-pool/swarm-vault
+    comment: "DOM_010101 Sovereign Swarm Vault"
+    options:
+      browseable: yes
+      guest_ok: no
+      ro: no  # Read-write
+      abe: no  # Access based enumeration off
+      hostsallow: 192.168.1.0/24
+      vfs_objects: "acl_xattr fruit streams_xattr"
+      fruit_metadata: "stream"
+      fruit_resource: "stream"
+    
+    permissions:
+      owner: dom-cluster
+      group: dom-cluster
+      mode: "0770"
+    
+    users:
+      - username: dom-cluster
+        full_name: "DOM Cluster Service Account"
+        uid: 3000
+        gid: 3000
+        smbhash: yes  # Enable Samba authentication
+  
+  # NFS Share Configuration
+  - type: nfs
+    name: swarm-vault
+    path: /mnt/swarm-vault-pool/swarm-vault
+    comment: "DOM_010101 Sovereign Swarm Vault (NFS)"
+    options:
+      alldirs: no
+      ro: no  # Read-write
+      maproot_user: root
+      maproot_group: wheel
+      mapall_user: ""
+      mapall_group: ""
+      security: []
+      
+    authorized_networks:
+      - network: "192.168.1.0/24"
+        options:
+          - "rw"
+          - "sync"
+          - "no_subtree_check"
+          - "no_root_squash"
+
+services:
+  smb:
+    enabled: yes
+    netbiosname: TRUENAS
+    workgroup: WORKGROUP
+    description: "DOM_010101 TrueNAS Storage"
+    enable_smb1: no  # Disable SMBv1 for security
+    ntlmv1_auth: no
+    unixcharset: UTF-8
+    
+  nfs:
+    enabled: yes
+    servers: 4  # Number of NFS server threads
+    mountd_port: null
+    rpcstatd_port: null
+    rpclockd_port: null
+    v4: yes  # Enable NFSv4
+    v4_v3owner: no
+    v4_krb: no
+    v4_domain: ""
+    bindip: []  # Bind to all interfaces
+
+snapshots:
+  # Automated snapshot schedule
+  periodic_snapshots:
+    - dataset: swarm-vault-pool/swarm-vault
+      recursive: yes
+      lifetime: 
+        hourly: 24  # Keep 24 hourly snapshots
+        daily: 7    # Keep 7 daily snapshots
+        weekly: 4   # Keep 4 weekly snapshots
+        monthly: 12 # Keep 12 monthly snapshots
+      naming_schema: "auto-%Y-%m-%d_%H-%M"
+      enabled: yes
+
+scrub:
+  # Data integrity scrub schedule
+  - pool: swarm-vault-pool
+    schedule:
+      minute: "0"
+      hour: "2"
+      day_of_month: "1"  # First of every month
+      month: "*"
+      day_of_week: "*"
+    enabled: yes
+    threshold: 35  # Days threshold
+
+smart:
+  # SMART monitoring for disk health
+  enabled: yes
+  interval: 30  # Minutes
+  difference: 10  # Temperature difference alert
+  informational: 10  # Temperature informational threshold
+  critical: 60  # Temperature critical threshold
+  tests:
+    - type: short
+      schedule:
+        hour: "*/2"  # Every 2 hours
+        day_of_week: "*"
+    - type: long
+      schedule:
+        hour: "3"
+        day_of_week: "0"  # Sunday
+
+replication:
+  # Optional: Configure replication to backup TrueNAS
+  # - source: swarm-vault-pool/swarm-vault
+  #   destination: remote-nas-host:backup-pool/swarm-vault-backup
+  #   schedule: daily
+  #   retention: 30 days
+
+alerts:
+  # Email alerts for critical events
+  email:
+    server: smtp.gmail.com
+    port: 587
+    security: TLS
+    from_email: truenas@dom010101.local
+    to_email: admin@dom010101.local
+    
+  alert_categories:
+    - pool_capacity_warning  # Alert at 80% full
+    - pool_capacity_critical  # Alert at 90% full
+    - disk_failure
+    - smart_errors
+    - replication_errors
+    - scrub_errors
+
+# Performance tuning
+tuning:
+  # ZFS ARC (cache) settings
+  zfs:
+    arc_max: 64G  # Maximum ARC size (adjust based on available RAM)
+    arc_min: 16G  # Minimum ARC size
+    
+  # Network tuning for high throughput
+  network:
+    tcp_window_size: 1048576  # 1 MB
+    tcp_buffer_size: 524288   # 512 KB
+    
+  # SMB performance
+  smb:
+    max_protocol: SMB3_11
+    min_protocol: SMB2_10
+    server_multi_channel: yes
+    aio_read_size: 1048576
+    aio_write_size: 1048576
+
+# Security hardening
+security:
+  # SSH configuration
+  ssh:
+    enabled: yes
+    port: 22
+    permitrootlogin: no  # Disable root login
+    passwordauth: no  # Require key-based auth
+    
+  # 2FA for web UI (optional)
+  two_factor:
+    enabled: no
+    
+  # Automatic security updates
+  auto_updates:
+    enabled: yes
+    reboot_required: ask
+
+# Notes for manual configuration:
+# 1. Access TrueNAS web UI at http://192.168.1.200
+# 2. Go to Storage → Create Pool
+# 3. Select disks and choose RAID-Z2 layout
+# 4. Create datasets as specified above
+# 5. Configure SMB and NFS shares
+# 6. Set up periodic snapshots
+# 7. Configure scrub schedule
+# 8. Enable SMART monitoring
+# 9. Set up email alerts
+# 10. Test connectivity from all cluster nodes

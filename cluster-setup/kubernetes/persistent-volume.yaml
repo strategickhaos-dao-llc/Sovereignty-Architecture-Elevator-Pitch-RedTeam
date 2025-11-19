@@ -1,0 +1,133 @@
+# TrueNAS Scale Persistent Volume Configuration
+# Creates persistent volumes for the DOM_010101 swarm backed by TrueNAS NFS
+
+---
+# Persistent Volume for Swarm Vault (General Purpose)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: truenas-swarm-vault
+  labels:
+    type: nfs
+    storage: truenas
+spec:
+  capacity:
+    storage: 10Ti  # 10 TB allocation
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: truenas-nfs
+  nfs:
+    server: 192.168.1.200
+    path: /mnt/swarm-vault-pool/swarm-vault
+  mountOptions:
+    - nfsvers=4.1
+    - hard
+    - intr
+
+---
+# Persistent Volume for Love Containers
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: truenas-love-vault
+  labels:
+    type: nfs
+    storage: truenas
+    purpose: love
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: truenas-nfs
+  nfs:
+    server: 192.168.1.200
+    path: /mnt/swarm-vault-pool/swarm-vault/love
+  mountOptions:
+    - nfsvers=4.1
+    - hard
+    - intr
+
+---
+# Persistent Volume for DOLM Daemon
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: truenas-dolm-vault
+  labels:
+    type: nfs
+    storage: truenas
+    purpose: dolm
+spec:
+  capacity:
+    storage: 5Ti
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: truenas-nfs
+  nfs:
+    server: 192.168.1.200
+    path: /mnt/swarm-vault-pool/swarm-vault/dolm
+  mountOptions:
+    - nfsvers=4.1
+    - hard
+    - intr
+
+---
+# Storage Class for TrueNAS NFS
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: truenas-nfs
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+
+---
+# Persistent Volume Claim for Love Containers
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: love-vault-pvc
+  namespace: dom-empire
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: truenas-nfs
+  resources:
+    requests:
+      storage: 1Ti
+  selector:
+    matchLabels:
+      purpose: love
+
+---
+# Persistent Volume Claim for DOLM Daemon
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dolm-vault-pvc
+  namespace: dom-empire
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: truenas-nfs
+  resources:
+    requests:
+      storage: 5Ti
+  selector:
+    matchLabels:
+      purpose: dolm
+
+---
+# Namespace for DOM Empire workloads
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dom-empire
+  labels:
+    name: dom-empire
+    owner: dom-010101
+    purpose: sovereign-cluster

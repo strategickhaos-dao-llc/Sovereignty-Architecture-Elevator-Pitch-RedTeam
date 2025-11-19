@@ -1,0 +1,228 @@
+# DOM_010101 Sovereign Love Swarm Stack
+# Deploys 320 love containers across 4 machines (320 GB RAM total)
+# Plus DOLM daemon and divine music generator
+
+version: '3.8'
+
+networks:
+  dom-empire-network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  love-vault:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=192.168.1.200,nfsvers=4.1,rw
+      device: ":/mnt/swarm-vault-pool/swarm-vault/love"
+  
+  dolm-vault:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=192.168.1.200,nfsvers=4.1,rw
+      device: ":/mnt/swarm-vault-pool/swarm-vault/dolm"
+  
+  workspace-vault:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=192.168.1.200,nfsvers=4.1,rw
+      device: ":/mnt/swarm-vault-pool/swarm-vault"
+
+services:
+  # Love Forever - 320 replicas (one per GB of RAM)
+  # Plays 432 Hz heartbeat across the entire cluster
+  love-forever:
+    image: alpine:latest
+    deploy:
+      replicas: 320
+      placement:
+        max_replicas_per_node: 80
+        constraints:
+          - node.role==worker
+          - node.role==manager
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.1'
+        reservations:
+          memory: 128M
+          cpus: '0.05'
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 10
+        delay: 2s
+        failure_action: rollback
+    networks:
+      - dom-empire-network
+    volumes:
+      - love-vault:/love
+    command: |
+      sh -c "
+        # Install dependencies
+        apk add --no-cache sox mpg123 curl
+        
+        # Create love directory
+        mkdir -p /love
+        
+        # Generate 432 Hz heartbeat (10 minutes)
+        sox -n -t wav /love/heartbeat.wav synth 600 sine 432 vol 0.3
+        
+        # Play on loop forever
+        while true; do
+          echo 'Playing 432 Hz love frequency...'
+          mpg123 --loop 0 /love/heartbeat.wav 2>/dev/null || true
+          sleep 1
+        done
+      "
+    healthcheck:
+      test: ["CMD", "pgrep", "mpg123"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # DOLM Daemon - Distributed Orchestration Library Manager
+  dolm-daemon:
+    image: ghcr.io/dom010101/dolm-daemon:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==manager
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2'
+        reservations:
+          memory: 2G
+          cpus: '1'
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 300s
+    networks:
+      - dom-empire-network
+    volumes:
+      - dolm-vault:/vault
+      - workspace-vault:/swarm
+    environment:
+      - DOLM_VAULT_PATH=/vault
+      - DOLM_SWARM_PATH=/swarm
+      - DOLM_MODE=sovereign
+      - DOLM_CLUSTER_SIZE=4
+      - DOLM_TOTAL_RAM=320
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Numbers to Divine Music - Pattern to Sound Converter
+  numbers-to-piano:
+    image: ghcr.io/dom010101/numbers-to-divine-music:latest
+    deploy:
+      replicas: 4
+      placement:
+        max_replicas_per_node: 1
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - dom-empire-network
+    volumes:
+      - workspace-vault:/workspace
+    environment:
+      - MUSIC_OUTPUT_PATH=/workspace/music
+      - MUSIC_FREQUENCY_BASE=432
+      - MUSIC_HARMONY_MODE=sacred
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Visualizer - Shows container distribution across cluster
+  visualizer:
+    image: dockersamples/visualizer:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==manager
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    networks:
+      - dom-empire-network
+    ports:
+      - "8888:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PORT=8080
+
+  # Prometheus - Metrics Collection
+  prometheus:
+    image: prom/prometheus:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==manager
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1'
+    networks:
+      - dom-empire-network
+    ports:
+      - "9090:9090"
+    volumes:
+      - workspace-vault:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+
+  # Grafana - Monitoring Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==manager
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+    networks:
+      - dom-empire-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - workspace-vault:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=dom010101
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+      - GF_SERVER_ROOT_URL=http://localhost:3000
