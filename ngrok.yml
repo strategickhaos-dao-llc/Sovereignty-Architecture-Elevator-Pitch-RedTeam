@@ -1,0 +1,45 @@
+# Ngrok Sovereignty Configuration
+# For persistent domains, reserve your domain at https://dashboard.ngrok.com/cloud-edge/domains
+# Free tier includes 1 static domain per account
+
+version: "2"
+authtoken: YOUR_NGROK_AUTH_TOKEN  # Get from https://dashboard.ngrok.com/get-started/your-authtoken
+
+tunnels:
+  event-gateway:
+    proto: http
+    addr: 8080
+    # Uncomment and set your reserved domain (free tier: 1 domain)
+    # domain: event-gateway-YOUR-RESERVED-DOMAIN.ngrok-free.app
+    inspect: true
+    schemes:
+      - https
+    # Optional: Add webhook verification for GitHub
+    request_header:
+      add:
+        - "X-Forwarded-Host: event-gateway-YOUR-RESERVED-DOMAIN.ngrok-free.app"
+    # Optional: Response headers for CORS if needed
+    # response_header:
+    #   add:
+    #     - "Access-Control-Allow-Origin: *"
+
+  # Example: Add more tunnels for other services
+  # refinory-api:
+  #   proto: http
+  #   addr: 8085
+  #   domain: refinory-YOUR-RESERVED-DOMAIN.ngrok-free.app
+
+# Web interface for inspecting requests
+web_addr: localhost:4040
+
+# Optional: Enable metrics for monitoring
+# console_ui: true
+# console_ui_color: transparent
+
+# Region selection (us, eu, ap, au, sa, jp, in)
+region: us
+
+# Log settings
+log_level: info
+log_format: json
+log: /tmp/ngrok.log
