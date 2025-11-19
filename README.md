@@ -270,6 +270,20 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+**Local webhook testing not working:**
+```bash
+# Check if ngrok tunnel is running
+curl http://localhost:4040/api/tunnels
+
+# Restart ngrok if needed
+./scripts/start-ngrok.sh
+
+# Verify local service is accessible
+curl http://localhost:8080/health
+
+# See complete guide: NGROK_SETUP.md
+```
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
