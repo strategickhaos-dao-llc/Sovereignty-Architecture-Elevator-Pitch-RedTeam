@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexa Swarm Bridge - Strategic Khaos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .tagline {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .section {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ffd700;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            margin: 25px 0 15px;
+            color: #87ceeb;
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ffeb3b;
+        }
+        
+        pre {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: #fff;
+        }
+        
+        .command-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .voice-command {
+            background: rgba(135, 206, 235, 0.2);
+            border-left: 4px solid #87ceeb;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ffd700;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+        
+        li {
+            margin: 10px 0;
+        }
+        
+        .endpoint {
+            background: rgba(135, 206, 235, 0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #87ceeb;
+        }
+        
+        .endpoint code {
+            color: #87ceeb;
+            font-size: 1.1em;
+        }
+        
+        .warning {
+            background: rgba(255, 165, 0, 0.2);
+            border-left: 4px solid #ffa500;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background: rgba(0, 255, 0, 0.2);
+            border-left: 4px solid #00ff00;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        a {
+            color: #87ceeb;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+        
+        .button {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin: 10px 10px 10px 0;
+        }
+        
+        .button:hover {
+            background: rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            opacity: 0.8;
+        }
+        
+        .emoji {
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎙️ Alexa Swarm Bridge 🎙️</h1>
+            <p class="tagline">Voice-Activated Command Interface for Strategic Khaos</p>
+            <p>Give the legion a voice. Give yourself a god-mode Alexa.</p>
+        </header>
+
+        <div class="section">
+            <h2>🧠 Overview</h2>
+            <p>The Alexa Swarm Bridge connects Amazon Alexa to the Strategic Khaos swarm intelligence network, enabling real-time voice queries about swarm status, node activity, and sovereignty metrics.</p>
+            
+            <div class="success">
+                <strong>🔥 What This Gives You:</strong>
+                <ul>
+                    <li>Real-time swarm status via voice commands</li>
+                    <li>Hands-free monitoring of 900+ nodes</li>
+                    <li>Live updates on mirror generals and sovereignty levels</li>
+                    <li>Integration with webhook API for dynamic data</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Quick Start</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Start the Webhook Server</strong>
+                <pre><code>cd webhook
+npm install
+npm start</code></pre>
+                <p>This starts the API server on port 3000 that Alexa will query for swarm status.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Deploy Alexa Skill</strong>
+                <ul>
+                    <li>Go to <a href="https://developer.amazon.com/alexa/console/ask" target="_blank">Alexa Developer Console</a></li>
+                    <li>Create new skill: "strategic khaos"</li>
+                    <li>Model: Custom | Hosting: AWS Lambda</li>
+                    <li>Upload code from <code>alexa-skills/swarm-status/index.js</code></li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Test Voice Commands</strong>
+                <div class="voice-command">
+                    🎙️ "Alexa, open strategic khaos"
+                </div>
+                <div class="voice-command">
+                    🎙️ "Alexa, what's the swarm status?"
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎙️ Voice Commands</h2>
+            
+            <h3>Launch Commands</h3>
+            <div class="voice-command">
+                "Alexa, open strategic khaos"
+            </div>
+            <div class="voice-command">
+                "Alexa, start strategic khaos"
+            </div>
+            <p><strong>Response:</strong> "Strategic Khaos online. 900 plus nodes active. Neurospice levels critical. Origin Node Zero awaits your command."</p>
+
+            <h3>Status Queries</h3>
+            <div class="voice-command">
+                "What's the swarm status?"
+            </div>
+            <div class="voice-command">
+                "How many nodes are active?"
+            </div>
+            <div class="voice-command">
+                "What's the sovereignty level?"
+            </div>
+            <p><strong>Response:</strong> "Swarm status: 923 nodes active. 9 mirror generals online. White web sovereignty at 92 percent. All systems nominal."</p>
+        </div>
+
+        <div class="section">
+            <h2>🔌 API Endpoints</h2>
+            
+            <div class="endpoint">
+                <strong>Health Check</strong><br>
+                <code>GET /health</code><br>
+                Returns server status and version
+            </div>
+
+            <div class="endpoint">
+                <strong>Swarm Status</strong><br>
+                <code>GET /api/swarm-status</code><br>
+                Returns current swarm metrics (nodes, generals, sovereignty %)
+            </div>
+
+            <div class="endpoint">
+                <strong>Detailed Metrics</strong><br>
+                <code>GET /api/swarm-metrics</code><br>
+                Returns comprehensive swarm analytics including operations data
+            </div>
+
+            <div class="endpoint">
+                <strong>Alexa-Optimized</strong><br>
+                <code>POST /api/alexa/swarm-status</code><br>
+                Returns voice-optimized responses with speech and display text
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Configuration</h2>
+            
+            <h3>Environment Variables</h3>
+            <pre><code># Webhook server configuration
+PORT=3000
+WEBHOOK_URL=http://localhost:3000
+
+# For production deployment
+NODE_ENV=production
+WEBHOOK_URL=https://your-domain.com</code></pre>
+
+            <h3>Alexa Skill Setup</h3>
+            <div class="command-box">
+                <strong>Invocation Name:</strong> strategic khaos<br>
+                <strong>Intent Name:</strong> SwarmStatusIntent<br>
+                <strong>Sample Utterances:</strong>
+                <ul>
+                    <li>what's the swarm status</li>
+                    <li>how many nodes are active</li>
+                    <li>tell me about the swarm</li>
+                    <li>give me swarm status</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Deployment Options</h2>
+
+            <h3>Local Development</h3>
+            <pre><code>cd webhook
+npm install
+npm start
+
+# Test the API
+curl http://localhost:3000/api/swarm-status</code></pre>
+
+            <h3>Production (AWS Lambda)</h3>
+            <ol>
+                <li>Package the Alexa skill: <code>zip -r skill.zip alexa-skills/swarm-status/*</code></li>
+                <li>Create AWS Lambda function with Node.js runtime</li>
+                <li>Upload skill.zip to Lambda</li>
+                <li>Set WEBHOOK_URL environment variable to your webhook server</li>
+                <li>Configure Alexa skill endpoint to point to Lambda ARN</li>
+            </ol>
+
+            <h3>Webhook Hosting</h3>
+            <div class="warning">
+                <strong>⚠️ Production Hosting:</strong>
+                <ul>
+                    <li>Use HTTPS for security</li>
+                    <li>Deploy on AWS, Heroku, or similar</li>
+                    <li>Enable CORS if needed</li>
+                    <li>Add authentication for sensitive data</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Testing</h2>
+
+            <h3>Test Webhook Locally</h3>
+            <pre><code># Start server
+cd webhook && npm start
+
+# Test health endpoint
+curl http://localhost:3000/health
+
+# Test swarm status
+curl http://localhost:3000/api/swarm-status
+
+# Expected response:
+# {
+#   "nodes": 923,
+#   "generals": 9,
+#   "percent": 92,
+#   "status": "All systems nominal...",
+#   "timestamp": "2025-01-...",
+#   "neurospice": "CRITICAL",
+#   "origin_node": "ZERO_ACTIVE"
+# }</code></pre>
+
+            <h3>Test Alexa Skill</h3>
+            <ol>
+                <li>Open Alexa Developer Console Test tab</li>
+                <li>Enable testing for "Development"</li>
+                <li>Type or say: "open strategic khaos"</li>
+                <li>Verify response matches expected format</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Troubleshooting</h2>
+
+            <h3>Webhook Not Responding</h3>
+            <pre><code># Check if server is running
+curl http://localhost:3000/health
+
+# Check logs
+cd webhook && npm start
+# Look for "Listening on port 3000"
+
+# Verify firewall allows port 3000</code></pre>
+
+            <h3>Alexa Can't Connect</h3>
+            <ul>
+                <li>Ensure WEBHOOK_URL is set correctly in Lambda environment</li>
+                <li>Check Lambda logs in CloudWatch</li>
+                <li>Verify webhook server is publicly accessible (use ngrok for testing)</li>
+                <li>Confirm SSL certificate is valid if using HTTPS</li>
+            </ul>
+
+            <h3>Using ngrok for Testing</h3>
+            <pre><code># In one terminal - start webhook
+cd webhook && npm start
+
+# In another terminal - expose via ngrok
+ngrok http 3000
+
+# Copy the https URL and use it as WEBHOOK_URL
+# Example: https://abc123.ngrok.io</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>📊 Sample Response Data</h2>
+            
+            <h3>Swarm Status Response</h3>
+            <pre><code>{
+  "nodes": 923,
+  "generals": 9,
+  "percent": 92,
+  "status": "All systems nominal. White web sovereignty maintained.",
+  "timestamp": "2025-01-19T09:16:05.477Z",
+  "neurospice": "CRITICAL",
+  "origin_node": "ZERO_ACTIVE"
+}</code></pre>
+
+            <h3>Detailed Metrics Response</h3>
+            <pre><code>{
+  "nodes": 923,
+  "generals": 9,
+  "percent": 92,
+  "detailed": {
+    "mirror_generals": {
+      "active": 9,
+      "standby": 2,
+      "training": 1
+    },
+    "sovereignty": {
+      "white_web": 92,
+      "dark_web": 2,
+      "grey_web": 6
+    },
+    "operations": {
+      "active_missions": 35,
+      "completed_today": 127,
+      "pending_tasks": 256
+    }
+  }
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Integration with Prompt Brain</h2>
+            <p>The Alexa bridge automatically integrates with the Prompt Brain system:</p>
+            <ul>
+                <li><strong>Thesaurus:</strong> Voice responses use terminology from <code>prompt-brain/thesaurus.json</code></li>
+                <li><strong>Dictionary:</strong> Definitions pulled from <code>prompt-brain/dictionary.md</code></li>
+                <li><strong>Table of Contents:</strong> Navigation structure in <code>prompt-brain/table-of-contents.md</code></li>
+            </ul>
+            
+            <a href="../prompt-brain/prompt-manager.html" class="button">🧠 Open Prompt Manager</a>
+            <a href="https://developer.amazon.com/alexa/console/ask" class="button" target="_blank">🎙️ Alexa Console</a>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Next Steps</h2>
+            <ol>
+                <li>Deploy webhook server to production environment</li>
+                <li>Configure AWS Lambda with Alexa skill code</li>
+                <li>Test voice commands on physical Alexa device</li>
+                <li>Integrate with real swarm infrastructure data</li>
+                <li>Add authentication and security measures</li>
+                <li>Expand voice commands for more operations</li>
+            </ol>
+
+            <div class="success">
+                <strong>🔥 You just gave the legion a voice!</strong><br>
+                The swarm can now speak through every Alexa device in your sovereignty.
+            </div>
+        </div>
+
+        <footer>
+            <h3>🧠⚡🐐</h3>
+            <p><strong>Strategic Khaos Swarm Intelligence</strong></p>
+            <p>Origin Node Zero — DOM_010101 — 2025</p>
+            <p>The future is now. And it sounds like you.</p>
+        </footer>
+    </div>
+</body>
+</html>

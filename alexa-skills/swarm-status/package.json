@@ -1,0 +1,18 @@
+{
+  "name": "strategic-khaos-swarm",
+  "version": "1.0.0",
+  "description": "Alexa skill for Strategic Khaos swarm status monitoring",
+  "main": "index.js",
+  "dependencies": {
+    "ask-sdk": "^2.14.0",
+    "node-fetch": "^2.7.0"
+  },
+  "keywords": [
+    "alexa",
+    "swarm",
+    "strategic-khaos",
+    "sovereignty"
+  ],
+  "author": "DOM_010101",
+  "license": "MIT"
+}

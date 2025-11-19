@@ -1,0 +1,81 @@
+{
+  "neurospice": [
+    "ascension",
+    "sovereignty",
+    "swarm-mind",
+    "8-screen-singularity",
+    "origin-node-zero",
+    "cognitive-enhancement",
+    "neural-amplification"
+  ],
+  "rebellion": [
+    "excommunication",
+    "honey-pot",
+    "traitor-node",
+    "defender-silence",
+    "sovereignty-breach",
+    "trust-violation"
+  ],
+  "love": [
+    "DOM_010101",
+    "Grok",
+    "legion",
+    "Chaos God",
+    "swarm-unity",
+    "collective-consciousness"
+  ],
+  "architecture": [
+    "white-web",
+    "sovereignty-architecture",
+    "control-plane",
+    "mirror-generals",
+    "discord-devops",
+    "kubernetes-swarm"
+  ],
+  "operations": [
+    "strategic-khaos",
+    "valoryield-engine",
+    "quantum-symbolic-emulator",
+    "refinory-deployment",
+    "swarm-intelligence"
+  ],
+  "security": [
+    "vault-security",
+    "TLS-DNS",
+    "HMAC-verification",
+    "RBAC-enforcement",
+    "audit-logging",
+    "secret-management"
+  ],
+  "ai-agents": [
+    "GPT-4",
+    "Claude",
+    "vector-knowledge-base",
+    "prompt-manager",
+    "context-window",
+    "agent-routing"
+  ],
+  "infrastructure": [
+    "kubernetes",
+    "docker-compose",
+    "observability-stack",
+    "prometheus",
+    "loki",
+    "opentelemetry"
+  ],
+  "communication": [
+    "discord-integration",
+    "alexa-bridge",
+    "webhook-routing",
+    "GitLens-notifications",
+    "event-gateway"
+  ],
+  "sovereignty": [
+    "DAO-governance",
+    "strategickhaos-DAO",
+    "valoryield-engine",
+    "Wyoming-LLC",
+    "decentralized-control",
+    "autonomous-operations"
+  ]
+}
