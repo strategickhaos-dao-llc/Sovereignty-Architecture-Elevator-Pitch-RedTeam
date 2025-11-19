@@ -257,6 +257,12 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🔧 Advanced Topics
+
+- **[Grafana Development Guide](GRAFANA_DEVELOPMENT.md)** - Custom dashboard development and plugin creation
+- **[GitLens Integration](GITLENS_INTEGRATION.md)** - VS Code integration and PR workflows
+- **[Deployment Guide](DEPLOYMENT.md)** - Production deployment procedures
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file

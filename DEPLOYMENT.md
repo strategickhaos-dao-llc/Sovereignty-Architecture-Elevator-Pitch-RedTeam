@@ -193,6 +193,15 @@ curl -X POST https://events.strategickhaos.com/health
 - Set up Alertmanager → Discord integration
 - Create operational dashboards
 
+**For custom dashboard development:**
+```bash
+# Clone Grafana repository for development
+./scripts/setup-grafana-dev.sh
+
+# See complete guide
+# GRAFANA_DEVELOPMENT.md
+```
+
 ## 🎉 You've Successfully Built...
 
 **A complete sovereign architecture control plane** that enables:
