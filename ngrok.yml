@@ -1,0 +1,57 @@
+# ngrok Configuration for Sovereignty Architecture Local Development
+# This configuration enables local webhook testing for GitHub and Discord integrations
+#
+# Usage:
+#   1. Sign up for ngrok at https://ngrok.com
+#   2. Get your authtoken from https://dashboard.ngrok.com/get-started/your-authtoken
+#   3. Replace YOUR_NGROK_AUTHTOKEN below with your actual token
+#   4. Run: ngrok start --all --config=ngrok.yml
+#
+# OR use the provided script: ./scripts/start-ngrok.sh
+
+version: "2"
+authtoken: YOUR_NGROK_AUTHTOKEN
+
+tunnels:
+  # Event Gateway - GitHub webhook receiver
+  event-gateway:
+    proto: http
+    addr: 8080
+    subdomain: strategickhaos-events
+    bind_tls: true
+    inspect: true
+    metadata: "Event Gateway - GitHub webhooks → Discord"
+    
+  # Discord Bot - Command and control interface
+  discord-bot:
+    proto: http
+    addr: 3000
+    subdomain: strategickhaos-bot
+    bind_tls: true
+    inspect: true
+    metadata: "Discord Bot API endpoint"
+    
+  # Refinory Service - AI refinement pipeline
+  refinory:
+    proto: http
+    addr: 8000
+    subdomain: strategickhaos-refinory
+    bind_tls: true
+    inspect: true
+    metadata: "Refinory service for AI processing"
+
+# Web inspection interface (visit http://localhost:4040)
+web_addr: localhost:4040
+
+# Log settings
+log_level: info
+log_format: json
+log: ./logs/ngrok.log
+
+# Regional settings - choose closest to your location for better latency
+# Options: us, eu, ap, au, sa, jp, in
+region: us
+
+# Retry configuration for tunnel establishment
+console_ui: true
+update_check: true

@@ -103,7 +103,62 @@ Sovereignty-Architecture-Elevator-Pitch-/
 - Per-channel AI model routing (different models for different purposes)
 - Context-aware assistance understanding your infrastructure
 
-## 🚀 Deployment Instructions
+## 🧪 Local Development with ngrok
+
+### Quick Start for Local Testing
+
+For local webhook testing and development without deploying to production:
+
+```bash
+# 1. Install ngrok
+brew install ngrok/ngrok/ngrok  # macOS
+# OR: choco install ngrok        # Windows
+# OR: sudo apt install ngrok     # Linux
+
+# 2. Configure authtoken in ngrok.yml
+# Get from: https://dashboard.ngrok.com/get-started/your-authtoken
+
+# 3. Start ngrok tunnels
+./scripts/start-ngrok.sh        # Linux/macOS
+# OR: .\scripts\start-ngrok.ps1 # Windows
+
+# 4. Start your local services
+docker-compose up -d
+
+# 5. Configure GitHub webhooks with ngrok URL
+# Use tunnel URL from ngrok output: https://your-tunnel.ngrok.io/webhook
+```
+
+**📚 Complete ngrok guide**: See [NGROK_SETUP.md](NGROK_SETUP.md)
+
+### What You Get with ngrok
+
+- ✅ **Test webhooks locally** - No need for production deployment
+- ✅ **Debug in real-time** - Inspect all requests at http://localhost:4040
+- ✅ **Secure tunnels** - TLS encryption out of the box
+- ✅ **Quick iteration** - Test changes immediately
+
+### Local Development Workflow
+
+```bash
+# 1. Start local services
+docker-compose up event-gateway discord-bot refinory
+
+# 2. Start ngrok tunnels (in another terminal)
+./scripts/start-ngrok.sh
+
+# 3. Get tunnel URL
+curl http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'
+
+# 4. Configure GitHub webhook with the tunnel URL
+
+# 5. Make code changes and test immediately
+
+# 6. View requests in ngrok web interface
+open http://localhost:4040
+```
+
+## 🚀 Production Deployment Instructions
 
 ### Step 1: Prerequisites
 ```bash
