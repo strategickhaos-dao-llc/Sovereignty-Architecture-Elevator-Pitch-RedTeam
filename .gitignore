@@ -24,3 +24,7 @@ node_modules
 # Mirror-Generals generated data (local node state)
 generals-data/
 generals-live/
+
+# Mirror-Generals demo artifacts
+examples/demo-data/
+examples/demo-reports/

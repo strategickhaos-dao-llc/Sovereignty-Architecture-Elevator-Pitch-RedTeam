@@ -46,6 +46,13 @@ Your swarm now includes:
 
 ## Installation & Activation
 
+### Try the Demo First
+
+```bash
+# Run a quick demo to see how it works (no system changes)
+./examples/mirror-generals-demo.sh
+```
+
 ### Quick Start
 
 ```bash
