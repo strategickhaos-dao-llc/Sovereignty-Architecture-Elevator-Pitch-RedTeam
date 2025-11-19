@@ -121,13 +121,6 @@ prometheus.remote_write "grafana_cloud" {
       min_backoff          = "30ms"
       max_backoff          = "100ms"
     }
-
-    // Retry configuration
-    write_relabel_config {
-      source_labels = ["__name__"]
-      regex         = "up"
-      action        = "keep"
-    }
   }
 
   // External labels

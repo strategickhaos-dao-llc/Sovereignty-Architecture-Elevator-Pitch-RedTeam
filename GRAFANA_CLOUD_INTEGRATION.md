@@ -16,8 +16,8 @@ The project is configured to send metrics to **Grafana Cloud** alongside the loc
 ### Grafana Cloud Instance
 - **Instance Name**: me1010101-prom
 - **Instance ID/Username**: 2786173
-- **Region**: US East (OH) - prod-us-east-0
-- **Cluster**: mimir-prod-56
+- **Region**: US East (Ohio) - us-east-2
+- **Cluster**: mimir-prod-56 (prod-us-east-0)
 - **Cloud Provider**: AWS (us-east-2)
 
 ### Endpoints
@@ -170,9 +170,9 @@ The following metrics are automatically sent to Grafana Cloud:
 
 3. **Test connectivity**:
    ```bash
-   # Test from Prometheus container
-   docker exec prometheus wget -O- --header="Authorization: Bearer ${GRAFANA_CLOUD_API_TOKEN}" \
-     https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push
+   # Test from Prometheus container (using Basic Auth)
+   docker exec prometheus wget -O- --user="2786173:${GRAFANA_CLOUD_API_TOKEN}" \
+     https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/api/v1/labels
    ```
 
 4. **Check remote write queue**:
