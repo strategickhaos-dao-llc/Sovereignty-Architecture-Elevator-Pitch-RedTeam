@@ -1,10 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { REST } from "discord.js";
-import { loadConfig, env } from "./config.js";
+import { config, env } from "./config.js";
 import { githubRoutes } from "./routes/github.js";
 
-const cfg = loadConfig();
+const cfg = config;
 const app = express();
 
 // keep raw for signature
@@ -22,5 +22,5 @@ const channelIds = {
 
 app.post("/webhooks/github", githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
 
-const port = Number(process.env.PORT || cfg.event_gateway.port || 3001);
+const port = Number(process.env.PORT || 3001);
 app.listen(port, () => console.log(`Event gateway on :${port}`));
