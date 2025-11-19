@@ -4,6 +4,7 @@ export function loadConfig() {
     const doc = yaml.load(fs.readFileSync("discovery.yml", "utf8"));
     return doc;
 }
+export const config = loadConfig();
 export const env = (k, req = true) => {
     const v = process.env[k];
     if (!v && req)

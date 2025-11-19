@@ -11,7 +11,9 @@ export async function registerCommands(token, appId) {
             .addStringOption(o => o.setName("tag").setRequired(true)),
         new SlashCommandBuilder().setName("scale").setDescription("Scale service")
             .addStringOption(o => o.setName("service").setRequired(true))
-            .addIntegerOption(o => o.setName("replicas").setRequired(true))
+            .addIntegerOption(o => o.setName("replicas").setRequired(true)),
+        new SlashCommandBuilder().setName("snapshot").setDescription("Capture sovereign system state")
+            .addStringOption(o => o.setName("id").setDescription("Custom snapshot ID (default: timestamp)").setRequired(false))
     ].map(c => c.toJSON());
     const rest = new REST({ version: "10" }).setToken(token);
     await rest.put(Routes.applicationCommands(appId), { body: cmds });

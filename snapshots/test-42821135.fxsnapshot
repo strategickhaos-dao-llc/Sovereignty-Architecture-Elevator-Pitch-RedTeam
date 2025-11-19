@@ -1,0 +1,363 @@
+id: test-42821135
+timestamp: 1763593428954
+createdAt: '2025-11-19T23:03:48.954Z'
+config:
+  org:
+    name: Strategickhaos DAO LLC / Valoryield Engine
+    contact:
+      owner: Domenic Garza
+      slack_or_discord_handle: null
+    compliance:
+      - none
+  discord:
+    guild_id: null
+    channels:
+      status: '#cluster-status'
+      alerts: '#alerts'
+      deployments: '#deployments'
+      inference: '#inference-stream'
+      agents: '#agents'
+      prs: '#prs'
+      dev_feed: '#dev-feed'
+    bot:
+      app_id: null
+      token_secret_ref: vault://kv/discord/bot_token
+      intents:
+        message_content: true
+        guild_members: false
+      rbac:
+        prod_role: ReleaseMgr
+        allow_commands:
+          - /status
+          - /logs
+          - /deploy
+          - /scale
+          - /review
+        prod_protected_commands:
+          - /deploy
+          - /scale
+      rate_limits:
+        max_msgs_per_min: 30
+        burst: 10
+  infra:
+    environments:
+      - dev
+      - staging
+      - prod
+    control_api:
+      base_url: https://control.internal.strategickhaos
+      auth:
+        type: bearer
+        token_secret_ref: vault://kv/ctrl/api_token
+      network:
+        access: zerotrust
+        cidrs_allowed: []
+    message_bus:
+      type: redis
+      url: redis://redis.internal.strategickhaos:6379
+      topic_prefix: ops.
+    nodes:
+      orchestrator: kubernetes
+      clusters:
+        - name: prod-us
+          api_server: https://k8s-prod.strategickhaos.internal
+          auth: oidc
+          namespaces:
+            - quantum-symbolic
+            - valoryield
+            - agents
+        - name: dev
+          api_server: https://k8s-dev.strategickhaos.internal
+          auth: oidc
+          namespaces:
+            - '*'
+    logging:
+      provider: loki
+      endpoint: https://loki.strategickhaos.internal
+      auth_secret_ref: vault://kv/observability/loki_auth
+    metrics:
+      provider: prometheus
+      alertmanager_webhook: https://events.strategickhaos.com/alert
+    tracing:
+      provider: otel
+      collector_endpoint: http://otel-collector.observability:4317
+  ai_agents:
+    enabled: true
+    model_provider: openai
+    model_name: gpt-4o-mini
+    routing:
+      per_channel:
+        '#agents': gpt-4o-mini
+        '#inference-stream': none
+    vector_store:
+      type: pgvector
+      conn_string_secret_ref: vault://kv/pgvector/conn
+      namespaces:
+        - name: runbooks
+          sources:
+            - type: wiki
+              url: https://wiki.strategickhaos.internal/runbooks
+            - type: repo
+              repo: git@github.com:Strategickhaos-Swarm-Intelligence/runbooks.git
+        - name: logs-schemas
+          sources:
+            - type: s3
+              bucket: strategickhaos-observability
+              prefix: schemas/
+  git:
+    provider: github
+    org: Strategickhaos-Swarm-Intelligence
+    app:
+      id: null
+      webhook_secret_ref: vault://kv/git/webhook_secret
+      private_key_secret_ref: vault://kv/git/app_private_key
+    repos:
+      - name: quantum-symbolic-emulator
+        channel: '#deployments'
+        env: dev
+        post_events:
+          - pull_request
+          - check_suite
+          - push
+          - issue_comment
+      - name: valoryield-engine
+        channel: '#deployments'
+        env: prod
+        post_events:
+          - pull_request
+          - check_suite
+          - push
+      - name: infra
+        channel: '#deployments'
+        env: prod
+        post_events:
+          - pull_request
+          - check_suite
+    gitlens:
+      edition: pro
+      vscode_users_group: devs
+      features_used:
+        - launchpad
+        - commit_graph
+        - pr_management
+      notify_to_discord:
+        enabled: true
+        channel: '#prs'
+        events:
+          - review_started
+          - review_submitted
+          - needs_attention
+        cli_token_secret_ref: vault://kv/discord/bot_token
+    ci:
+      system: github_actions
+      post_status_to_discord: true
+  event_gateway:
+    public_url: https://events.strategickhaos.com
+    auth:
+      hmac:
+        key_secret_ref: vault://kv/events/hmac_key
+        header: X-Sig
+        algo: sha256
+    endpoints:
+      - path: /event
+        allowed_services:
+          - quantum-symbolic
+          - valoryield
+          - agent-*
+        discord_channel: '#cluster-status'
+      - path: /alert
+        allowed_services:
+          - alertmanager
+        discord_channel: '#alerts'
+      - path: /git
+        verify: github_app
+        routes:
+          - event: pull_request
+            actions:
+              - opened
+              - ready_for_review
+              - closed
+              - merged
+              - review_requested
+            discord_channel: '#prs'
+          - event: check_suite
+            discord_channel: '#deployments'
+          - event: push
+            branches:
+              - main
+              - release/*
+            discord_channel: '#deployments'
+  commands:
+    enabled: true
+    list:
+      - name: status
+        description: Service status
+        params:
+          - name: service
+            type: string
+            required: true
+      - name: logs
+        description: Tail logs
+        params:
+          - name: service
+            type: string
+            required: true
+          - name: tail
+            type: int
+            default: 200
+      - name: deploy
+        description: Deploy tag to env
+        protected: true
+        params:
+          - name: env
+            type: string
+            enum:
+              - dev
+              - staging
+              - prod
+          - name: tag
+            type: string
+      - name: scale
+        description: Scale service
+        protected: true
+        params:
+          - name: service
+            type: string
+          - name: replicas
+            type: int
+      - name: request
+        description: Create Refinory architecture request
+        params:
+          - name: project
+            type: string
+            required: true
+          - name: description
+            type: string
+            required: true
+          - name: experts
+            type: string
+            required: false
+      - name: refinory-status
+        description: Get Refinory request status
+        params:
+          - name: request_id
+            type: string
+            required: true
+  security:
+    secrets_manager: vault
+    rotate_days:
+      discord_token: 30
+      webhook_secret: 90
+    redaction:
+      patterns:
+        - (?i)api[_-]?key\s*[:=]\s*\S+
+        - (?i)password\s*[:=]\s*\S+
+        - Bearer\s+[A-Za-z0-9._-]+
+    audit_log_sink: cloudwatch://discord-audit
+  governance:
+    approvals:
+      prod_commands_require:
+        - ReleaseMgr
+    change_management:
+      link: https://wiki.strategickhaos.internal/change-management
+    data_handling:
+      post_pii_to_discord: false
+  testing:
+    sandbox_guild_id: null
+    dry_run: true
+    notify_channel: '#agents'
+  limits:
+    discord_api:
+      max_messages_per_minute: 30
+      max_embed_size_kb: 5
+    attachments:
+      allow_images: false
+      allow_logs_upload: true
+  refinory:
+    enabled: true
+    repo_root: /workspaces/Sovereignty-Architecture-Elevator-Pitch-
+    services_domain: refinory.strategickhaos.local
+    network: strategickhaos_network
+    ports:
+      api: 8085
+      orchestrator: 8081
+      dashboard: 3000
+      temporal: 7233
+    runtime:
+      gpu: false
+      workers: 4
+      max_concurrency: 16
+    storage:
+      artifacts_dir: /var/refinory/artifacts
+      outputs_dir: /var/refinory/outputs
+      models_dir: /var/refinory/models
+    secrets:
+      openai_api_key_ref: vault://kv/openai/api_key
+      github_token_ref: vault://kv/github/pat
+    integrations:
+      postgres_dsn_ref: vault://kv/postgres/recon_dsn
+      redis_url_ref: vault://kv/redis/url
+      qdrant_url: http://qdrant:6333
+      grafana_url: http://grafana:3000
+      prometheus_url: http://prometheus:9090
+    git:
+      default_org: Strategickhaos-Swarm-Intelligence
+      default_branch: main
+      repo_prefix: ref-
+      auto_create_repo: true
+      create_pr: true
+    experts:
+      team:
+        - name: frontend
+        - name: backend
+        - name: devops
+        - name: security
+        - name: ai_ml
+        - name: mobile
+        - name: blockchain
+        - name: testing
+        - name: architecture
+        - name: data_science
+      orchestration:
+        strategy: parallel_then_reduce
+        max_rounds: 3
+        reducer: architecture
+    policies:
+      allow_external_calls: false
+      require_security_review: true
+      require_tests: true
+      require_containerization: true
+      deployment_envs:
+        - dev
+        - staging
+    discord:
+      announce_channel: '#deployments'
+      alerts_channel: '#alerts'
+      prs_channel: '#prs'
+      notify_events:
+        - request_created
+        - architecture_ready
+        - build_passed
+        - deploy_succeeded
+infrastructure:
+  k8s: healthy
+  containers: local
+  orchestrator: kubernetes
+  timestamp: '2025-11-19T23:03:48.955Z'
+agents:
+  active_agents: 0
+  status: ready
+  last_activity: '2025-11-19T23:03:48.955Z'
+repositories:
+  status: healthy
+  repos_tracked: 0
+  last_check: '2025-11-19T23:03:48.955Z'
+security:
+  status: secure
+  last_audit: '2025-11-19T23:03:48.955Z'
+  vulnerabilities: 0
+observability:
+  status: operational
+  metrics_collected: 0
+  last_scrape: '2025-11-19T23:03:48.955Z'
+checksum: d9e8713d4ffe6eed4c026f449dacf064f29056664e446ab31c3df0c11187eb31
