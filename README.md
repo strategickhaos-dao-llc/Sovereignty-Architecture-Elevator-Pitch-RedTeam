@@ -165,6 +165,28 @@ governance:
 
 ## 📊 Monitoring & Alerts
 
+### Sovereign Monitoring Stack
+
+The monitoring stack runs **100% locally** with no external dependencies or costs:
+
+```bash
+# Kill Grafana Cloud integration and run fully sovereign
+make cloud-die
+
+# Check monitoring stack status
+make cloud-status
+```
+
+**Features:**
+- ✅ **Zero Cost**: No Grafana Cloud bills, unlimited local metrics
+- ✅ **Unlimited Series**: No artificial limits on metric cardinality
+- ✅ **Full Control**: All data stays on your infrastructure
+- ✅ **No Vendor Lock-in**: Standard Prometheus + Grafana stack
+
+**Access Points:**
+- Grafana Dashboard: `http://localhost:3000`
+- Prometheus Metrics: `http://localhost:9090`
+
 ### Key Metrics
 - Discord API response times and rate limits
 - GitHub webhook processing latency
