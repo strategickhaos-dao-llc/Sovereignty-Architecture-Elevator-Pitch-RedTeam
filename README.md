@@ -6,9 +6,11 @@
 
 This system creates a **sovereignty control plane** that bridges:
 - **Discord** - Command & control interface
+- **Alexa** - Voice-activated swarm monitoring (NEW 🎙️)
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Prompt Brain** - Centralized knowledge management system (NEW 🧠)
 
 ## 🚀 Quick Start
 
@@ -26,6 +28,15 @@ export PRS_CHANNEL="channel_id"
 
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
+
+# 5. Start Alexa Swarm Bridge (NEW)
+cd webhook
+npm install && npm start
+# Say: "Alexa, open strategic khaos"
+
+# 6. Open Prompt Manager (NEW)
+python3 -m http.server 8080
+# Visit: http://localhost:8080/prompt-brain/prompt-manager.html
 ```
 
 ## 📋 Core Components
@@ -35,6 +46,20 @@ export PRS_CHANNEL="channel_id"
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+
+### 🎙️ Alexa Swarm Bridge (NEW)
+- **Voice Commands**: "Alexa, what's the swarm status?"
+- **Real-time Monitoring**: Track 900+ nodes via voice
+- **Webhook API**: REST endpoints for swarm metrics
+- **Sovereignty Metrics**: Neurospice levels, mirror generals, node counts
+- **Documentation**: See [ALEXA_SWARM_BRIDGE_GUIDE.md](ALEXA_SWARM_BRIDGE_GUIDE.md)
+
+### 🧠 Prompt Brain (NEW)
+- **Thesaurus**: Semantic relationships between concepts
+- **Dictionary**: Comprehensive terminology definitions
+- **Table of Contents**: Unified documentation navigation
+- **Web Interface**: Interactive prompt manager at `prompt-brain/prompt-manager.html`
+- **AI Agent Integration**: Central knowledge source for all agents
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
