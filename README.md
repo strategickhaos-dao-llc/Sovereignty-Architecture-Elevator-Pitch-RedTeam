@@ -199,6 +199,27 @@ git push origin main
 ## 🛠️ Development Workflow
 
 ### Local Development
+
+#### Setup ngrok for Webhook Testing
+For local webhook testing and development, set up ngrok tunnels:
+
+```bash
+# 1. Install ngrok (see NGROK_SETUP.md for details)
+brew install ngrok/ngrok/ngrok  # macOS
+# OR: sudo apt install ngrok     # Linux
+
+# 2. Configure your authtoken in ngrok.yml
+# Get token from: https://dashboard.ngrok.com/get-started/your-authtoken
+
+# 3. Start ngrok tunnels
+./scripts/start-ngrok.sh
+
+# 4. Use the tunnel URLs for GitHub webhook configuration
+```
+
+📚 **Complete ngrok guide**: See [NGROK_SETUP.md](NGROK_SETUP.md)
+
+#### Development Environment Setup
 ```bash
 # 1. Set up environment
 export DISCORD_TOKEN="dev_token"
@@ -247,6 +268,20 @@ kubectl logs -f deployment/event-gateway -n ops
 
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
+```
+
+**Local webhook testing not working:**
+```bash
+# Check if ngrok tunnel is running
+curl http://localhost:4040/api/tunnels
+
+# Restart ngrok if needed
+./scripts/start-ngrok.sh
+
+# Verify local service is accessible
+curl http://localhost:8080/health
+
+# See complete guide: NGROK_SETUP.md
 ```
 
 ## 👥 Community & Contributors
