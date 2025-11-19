@@ -1,0 +1,12 @@
+# Patent Research - Design Registry
+
+This directory stores registered designs and innovations with cryptographic proofs.
+
+Each design should be documented with:
+- Title and description
+- Inventors
+- Creation date with timestamp proof
+- Technical specifications
+- Prior art references (if any)
+
+Designs are tracked for potential patent applications and to establish prior art.

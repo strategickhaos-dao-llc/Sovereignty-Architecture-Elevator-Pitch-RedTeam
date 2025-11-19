@@ -1,0 +1,399 @@
+# Patent Research Department Configuration
+# Automated patent scanning and IP protection system
+
+version: "1.0"
+department: "patent-research"
+description: "Patent and IP Research Department - autonomous scanning and protection of intellectual property"
+
+patent_research:
+  enabled: true
+  service_name: "patent-research-service"
+  port: 8095
+  
+  scanning:
+    enabled: true
+    autonomous: true
+    schedule: "weekly Mon 04:00 UTC"
+    
+    databases:
+      - name: "uspto"
+        description: "United States Patent and Trademark Office"
+        enabled: true
+        api_endpoint: "https://developer.uspto.gov/api/v1"
+        api_key_ref: "vault://kv/patent/uspto_api_key"
+        rate_limit_per_minute: 30
+        
+      - name: "epo"
+        description: "European Patent Office"
+        enabled: true
+        api_endpoint: "https://ops.epo.org/3.2"
+        api_key_ref: "vault://kv/patent/epo_api_key"
+        rate_limit_per_minute: 20
+        
+      - name: "wipo"
+        description: "World Intellectual Property Organization"
+        enabled: true
+        api_endpoint: "https://patentscope.wipo.int/search"
+        api_key_ref: "vault://kv/patent/wipo_api_key"
+        rate_limit_per_minute: 15
+      
+      - name: "google_patents"
+        description: "Google Patents Public Dataset"
+        enabled: true
+        api_endpoint: "https://patents.google.com/api"
+        rate_limit_per_minute: 50
+    
+    technology_domains:
+      - name: "ai_machine_learning"
+        keywords:
+          - "retrieval augmented generation"
+          - "vector database"
+          - "semantic search"
+          - "embedding model"
+          - "transformer architecture"
+          - "neural network pruning"
+          - "model fine-tuning"
+          - "LLM alignment"
+          - "prompt engineering"
+          - "few-shot learning"
+        classifications:
+          - "G06N 3/00"   # AI/Machine Learning
+          - "G06N 5/00"   # Knowledge-based models
+          - "G06F 16/00"  # Information retrieval
+      
+      - name: "distributed_systems"
+        keywords:
+          - "distributed consensus"
+          - "blockchain"
+          - "DAO governance"
+          - "Byzantine fault tolerance"
+          - "distributed ledger"
+          - "smart contract"
+          - "peer-to-peer network"
+          - "gossip protocol"
+        classifications:
+          - "G06Q 20/00"  # Payment systems
+          - "H04L 67/00"  # Network protocols
+          - "G06F 9/00"   # Multiprocessing
+      
+      - name: "devops_infrastructure"
+        keywords:
+          - "kubernetes orchestration"
+          - "container security"
+          - "observability"
+          - "distributed tracing"
+          - "service mesh"
+          - "GitOps"
+          - "CI/CD automation"
+          - "infrastructure as code"
+        classifications:
+          - "G06F 9/50"   # Workload management
+          - "H04L 41/00"  # Network management
+      
+      - name: "security_cryptography"
+        keywords:
+          - "zero trust architecture"
+          - "multi-factor authentication"
+          - "homomorphic encryption"
+          - "secure multi-party computation"
+          - "quantum-resistant cryptography"
+          - "identity management"
+        classifications:
+          - "H04L 9/00"   # Cryptography
+          - "G06F 21/00"  # Security arrangements
+          - "H04L 63/00"  # Network security
+      
+      - name: "data_processing"
+        keywords:
+          - "vector similarity search"
+          - "approximate nearest neighbor"
+          - "graph neural network"
+          - "knowledge graph"
+          - "semantic indexing"
+          - "entity resolution"
+        classifications:
+          - "G06F 16/00"  # Information retrieval
+          - "G06F 17/00"  # Data processing
+    
+    search_parameters:
+      date_range:
+        start_date: "2020-01-01"  # Look back 5 years
+        rolling_window_days: 90    # Focus on last 90 days for new scans
+      result_limit_per_query: 100
+      full_text_search: true
+      include_applications: true    # Include pending applications
+      include_granted: true          # Include granted patents
+      exclude_expired: true
+      language_preference: ["en", "de", "fr", "ja", "zh"]
+  
+  analysis:
+    enabled: true
+    ai_powered: true
+    model_provider: "openai"
+    model_name: "gpt-4o-mini"
+    
+    relevance_scoring:
+      enabled: true
+      similarity_threshold: 0.75
+      factors:
+        - "keyword_match"
+        - "classification_overlap"
+        - "abstract_similarity"
+        - "claim_similarity"
+        - "inventor_relevance"
+        - "assignee_relevance"
+    
+    priority_levels:
+      critical:
+        description: "Direct threat to our products/designs"
+        similarity_threshold: 0.90
+        requires_immediate_review: true
+        notify_legal: true
+        
+      high:
+        description: "Significant overlap with our technology"
+        similarity_threshold: 0.80
+        requires_review_within_days: 7
+        
+      medium:
+        description: "Related technology area"
+        similarity_threshold: 0.70
+        requires_review_within_days: 30
+        
+      low:
+        description: "Tangentially related"
+        similarity_threshold: 0.60
+        informational_only: true
+    
+    threat_assessment:
+      enabled: true
+      factors:
+        - "claim_breadth"
+        - "geographic_coverage"
+        - "assignee_enforcement_history"
+        - "remaining_patent_term"
+        - "litigation_history"
+      output_format: "structured_report"
+  
+  design_tracking:
+    enabled: true
+    registry_path: "departments/patent-research/designs/"
+    
+    proof_methods:
+      - name: "sha256"
+        enabled: true
+      - name: "blockchain"
+        enabled: false
+        network: "ethereum"
+      - name: "rfc3161_timestamp"
+        enabled: true
+        tsa_url: "http://timestamp.digicert.com"
+    
+    required_fields:
+      - "title"
+      - "description"
+      - "inventors"
+      - "creation_date"
+      - "tags"
+    
+    optional_fields:
+      - "diagrams"
+      - "code_samples"
+      - "prior_art_references"
+      - "related_patents"
+      - "commercial_applications"
+    
+    versioning:
+      enabled: true
+      track_changes: true
+      require_approval_for_publication: true
+  
+  prior_art:
+    enabled: true
+    search_depth: "comprehensive"
+    
+    sources:
+      - "patent_databases"
+      - "academic_publications"
+      - "arxiv"
+      - "github_repositories"
+      - "technical_blogs"
+      - "conference_proceedings"
+      - "standards_documents"
+    
+    search_engines:
+      - name: "google_scholar"
+        enabled: true
+      - name: "semantic_scholar"
+        enabled: true
+      - name: "ieee_xplore"
+        enabled: true
+      - name: "arxiv"
+        enabled: true
+    
+    analysis_output:
+      - "similarity_report"
+      - "citation_network"
+      - "timeline_visualization"
+      - "novelty_assessment"
+  
+  freedom_to_operate:
+    enabled: true
+    
+    analysis_scope:
+      default_territories: ["US", "EU", "CN", "JP"]
+      include_pending_applications: true
+      look_ahead_years: 3  # Consider patents that may issue soon
+    
+    risk_levels:
+      high_risk:
+        description: "Strong likelihood of infringement"
+        action: "halt_development"
+        require_legal_opinion: true
+        
+      medium_risk:
+        description: "Potential infringement concerns"
+        action: "design_around"
+        require_technical_analysis: true
+        
+      low_risk:
+        description: "Minimal infringement risk"
+        action: "monitor"
+    
+    report_sections:
+      - "executive_summary"
+      - "relevant_patents"
+      - "claim_mapping"
+      - "risk_assessment"
+      - "design_around_options"
+      - "licensing_opportunities"
+      - "recommendations"
+  
+  defensive_strategy:
+    enabled: true
+    
+    publication:
+      enabled: true
+      platforms:
+        - "ip.com"
+        - "arxiv"
+        - "github"
+        - "company_blog"
+      review_required: true
+      embargo_period_days: 30
+    
+    patent_filing:
+      enabled: true
+      provisional_first: true
+      budget_per_year_usd: 50000
+      priority_areas:
+        - "core_algorithms"
+        - "unique_architectures"
+        - "novel_integrations"
+      
+      filing_criteria:
+        novelty_score_min: 0.80
+        commercial_value_min: "medium"
+        defensibility: "high"
+    
+    monitoring:
+      competitor_watch: true
+      competitors:
+        - "OpenAI"
+        - "Anthropic"
+        - "Google DeepMind"
+        - "Meta AI"
+        - "Microsoft Research"
+      alert_on_new_filings: true
+  
+  notifications:
+    discord:
+      enabled: true
+      channels:
+        alerts: "#patent-alerts"
+        reports: "#research"
+        critical: "#legal"
+      priority_threshold: "medium"
+      
+    email:
+      enabled: true
+      recipients:
+        - "ip@strategickhaos.com"
+        - "legal@strategickhaos.com"
+      digest_frequency: "weekly"
+      immediate_alerts_for: ["critical", "high"]
+    
+    webhook:
+      enabled: true
+      endpoints:
+        - url: "https://events.strategickhaos.com/patent-alert"
+          method: "POST"
+          auth_header_ref: "vault://kv/patent/webhook_token"
+  
+  reporting:
+    enabled: true
+    
+    schedules:
+      weekly_scan_summary:
+        enabled: true
+        day: "Monday"
+        time: "09:00 UTC"
+        recipients: ["engineering", "research"]
+        
+      monthly_landscape:
+        enabled: true
+        day: 1
+        time: "09:00 UTC"
+        recipients: ["leadership", "legal"]
+        
+      quarterly_portfolio:
+        enabled: true
+        months: [1, 4, 7, 10]
+        day: 15
+        recipients: ["leadership", "legal", "finance"]
+    
+    formats:
+      - "pdf"
+      - "markdown"
+      - "json"
+    
+    storage:
+      path: "departments/patent-research/reports/"
+      retention_days: 1095  # 3 years
+  
+  database:
+    type: "postgresql"
+    conn_string_ref: "vault://kv/patent/db_connection"
+    tables:
+      patents: "patent_patents"
+      designs: "patent_designs"
+      scan_results: "patent_scan_results"
+      fto_reports: "patent_fto_reports"
+      alerts: "patent_alerts"
+  
+  api:
+    enabled: true
+    base_path: "/api/patent-research"
+    authentication: "bearer_token"
+    rate_limiting:
+      enabled: true
+      max_requests_per_minute: 60
+  
+  compliance:
+    attorney_client_privilege: true
+    confidential_by_default: true
+    publication_approval_required: true
+    legal_review_threshold: "high_priority"
+  
+  monitoring:
+    metrics:
+      enabled: true
+      port: 9095
+      path: "/metrics"
+    health_check:
+      enabled: true
+      path: "/health"
+    dashboards:
+      grafana:
+        enabled: true
+        dashboard_id: "patent-research-overview"

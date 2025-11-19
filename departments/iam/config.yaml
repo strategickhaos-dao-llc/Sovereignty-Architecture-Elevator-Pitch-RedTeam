@@ -1,0 +1,283 @@
+# IAM Department Configuration
+# Identity & Access Management System
+
+version: "1.0"
+department: "iam"
+description: "Identity and Access Management Department - handles user registration, authentication, and identity linking"
+
+iam:
+  enabled: true
+  service_name: "iam-service"
+  port: 8090
+  
+  registration:
+    enabled: true
+    require_approval: false
+    default_role: "member"
+    verification:
+      email: true
+      manual_review: false
+      admin_notification: true
+    fields:
+      required:
+        - "name"
+        - "email"
+      optional:
+        - "github_username"
+        - "discord_id"
+        - "company"
+        - "location"
+  
+  authentication:
+    methods:
+      - "password"
+      - "github_oauth"
+      - "discord_oauth"
+    password_policy:
+      min_length: 12
+      require_uppercase: true
+      require_lowercase: true
+      require_numbers: true
+      require_special: true
+      max_age_days: 90
+    mfa:
+      enabled: true
+      required_for_roles: ["admin", "maintainer"]
+      methods:
+        - "totp"
+        - "backup_codes"
+    session:
+      duration_hours: 24
+      refresh_enabled: true
+      refresh_duration_days: 30
+      max_concurrent_sessions: 3
+    oauth:
+      github:
+        client_id_secret_ref: "vault://kv/iam/github_oauth_client_id"
+        client_secret_ref: "vault://kv/iam/github_oauth_secret"
+        scopes: ["user:email", "read:user"]
+      discord:
+        client_id_secret_ref: "vault://kv/iam/discord_oauth_client_id"
+        client_secret_ref: "vault://kv/iam/discord_oauth_secret"
+        scopes: ["identify", "email"]
+  
+  identity_linking:
+    enabled: true
+    platforms:
+      github:
+        enabled: true
+        auto_discover: true
+        sync_frequency: "hourly"
+        api_token_secret_ref: "vault://kv/github/pat"
+      discord:
+        enabled: true
+        sync_roles: true
+        sync_frequency: "realtime"
+        bot_token_secret_ref: "vault://kv/discord/bot_token"
+      gitlens:
+        enabled: true
+        track_activity: true
+        vscode_integration: true
+      email:
+        enabled: true
+        primary_only: true
+  
+  roles:
+    - name: "admin"
+      description: "Full system administrator"
+      permissions:
+        - "*"
+      inherits: []
+    
+    - name: "maintainer"
+      description: "Project maintainer with deployment rights"
+      permissions:
+        - "deploy"
+        - "review"
+        - "merge"
+        - "manage_users"
+        - "read"
+        - "write"
+        - "comment"
+      inherits: ["contributor"]
+    
+    - name: "contributor"
+      description: "Active contributor with commit rights"
+      permissions:
+        - "commit"
+        - "pr"
+        - "review"
+        - "read"
+        - "write"
+        - "comment"
+      inherits: ["member"]
+    
+    - name: "member"
+      description: "Basic team member"
+      permissions:
+        - "read"
+        - "comment"
+      inherits: []
+    
+    - name: "guest"
+      description: "Guest with read-only access"
+      permissions:
+        - "read"
+      inherits: []
+  
+  teams:
+    enabled: true
+    allow_nested: true
+    default_teams:
+      - name: "engineering"
+        description: "Engineering team"
+        default_role: "contributor"
+      - name: "security"
+        description: "Security team"
+        default_role: "maintainer"
+      - name: "research"
+        description: "Research team"
+        default_role: "member"
+  
+  onboarding:
+    enabled: true
+    automated: true
+    steps:
+      - name: "welcome_message"
+        type: "discord_dm"
+        template: "templates/welcome.md"
+      - name: "setup_wizard"
+        type: "interactive"
+        duration_minutes: 10
+      - name: "link_accounts"
+        type: "oauth_flow"
+        platforms: ["github", "discord"]
+      - name: "team_assignment"
+        type: "automated"
+        based_on: "github_org_membership"
+      - name: "resource_provisioning"
+        type: "automated"
+        resources:
+          - "git_access"
+          - "discord_channels"
+          - "documentation"
+    notifications:
+      admin_channel: "#admin"
+      new_user_announcement: "#general"
+  
+  security:
+    password_hashing:
+      algorithm: "bcrypt"
+      rounds: 12
+    token_signing:
+      algorithm: "RS256"
+      key_secret_ref: "vault://kv/iam/jwt_private_key"
+      issuer: "iam.strategickhaos.com"
+    rate_limiting:
+      login_attempts:
+        max_per_hour: 5
+        lockout_duration_minutes: 30
+      registration:
+        max_per_ip_per_day: 3
+      api_calls:
+        max_per_minute: 100
+    audit_logging:
+      enabled: true
+      events:
+        - "login_success"
+        - "login_failure"
+        - "logout"
+        - "registration"
+        - "password_change"
+        - "mfa_enabled"
+        - "mfa_disabled"
+        - "role_change"
+        - "permission_change"
+        - "identity_linked"
+        - "identity_unlinked"
+      sink: "cloudwatch://iam-audit"
+      retention_days: 365
+  
+  database:
+    type: "postgresql"
+    conn_string_secret_ref: "vault://kv/iam/db_connection"
+    pool_size: 20
+    tables:
+      users: "iam_users"
+      sessions: "iam_sessions"
+      identities: "iam_linked_identities"
+      audit_log: "iam_audit_log"
+      roles: "iam_roles"
+      permissions: "iam_permissions"
+  
+  api:
+    enabled: true
+    base_path: "/api/iam"
+    cors:
+      enabled: true
+      allowed_origins: ["https://strategickhaos.com", "http://localhost:3000"]
+    rate_limiting:
+      enabled: true
+      max_requests_per_minute: 100
+    documentation:
+      enabled: true
+      path: "/api/iam/docs"
+  
+  notifications:
+    discord:
+      enabled: true
+      channels:
+        admin_alerts: "#admin"
+        new_users: "#general"
+        security_events: "#security"
+    email:
+      enabled: true
+      smtp_config_secret_ref: "vault://kv/iam/smtp_config"
+      from_address: "iam@strategickhaos.com"
+      templates_dir: "departments/iam/templates/email"
+  
+  integration:
+    discord_bot:
+      enabled: true
+      commands:
+        - name: "register"
+          description: "Register a new user account"
+        - name: "link"
+          description: "Link your account to GitHub/GitLens"
+        - name: "whoami"
+          description: "View your identity information"
+        - name: "profile"
+          description: "View or update your profile"
+    github_app:
+      enabled: true
+      sync_org_members: true
+      auto_invite: true
+    gitlens:
+      enabled: true
+      activity_webhook: "https://iam.strategickhaos.com/api/iam/gitlens/activity"
+  
+  monitoring:
+    metrics:
+      enabled: true
+      port: 9091
+      path: "/metrics"
+      provider: "prometheus"
+    health_check:
+      enabled: true
+      path: "/health"
+      interval_seconds: 30
+    dashboards:
+      grafana:
+        enabled: true
+        dashboard_id: "iam-overview"
+  
+  compliance:
+    gdpr:
+      enabled: true
+      data_export: true
+      right_to_deletion: true
+    data_retention:
+      active_users: "indefinite"
+      inactive_users_days: 365
+      deleted_users_days: 30
+      audit_logs_days: 365

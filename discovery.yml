@@ -15,6 +15,9 @@ discord:
     agents: "#agents"
     prs: "#prs"
     dev_feed: "#dev-feed"
+    iam: "#iam"                     # Identity & Access Management
+    patent_alerts: "#patent-alerts" # Patent Research alerts
+    research: "#research"           # General research updates
   bot:
     app_id: null                    # Discord application ID
     token_secret_ref: "vault://kv/discord/bot_token"
@@ -29,6 +32,10 @@ discord:
         - "/deploy"
         - "/scale"
         - "/review"
+        - "/register"     # IAM user registration
+        - "/link"         # Link platform identities
+        - "/whoami"       # View identity info
+        - "/patent-scan"  # Trigger patent scan
       prod_protected_commands:
         - "/deploy"
         - "/scale"
@@ -322,3 +329,40 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+# Departments Configuration
+departments:
+  enabled: true
+  
+  iam:
+    enabled: true
+    description: "Identity & Access Management Department"
+    config_file: "departments/iam/config.yaml"
+    service_port: 8090
+    api_endpoint: "/api/iam"
+    discord_channel: "#iam"
+    responsibilities:
+      - "User registration and onboarding"
+      - "Authentication and authorization"
+      - "Cross-platform identity linking"
+      - "Role and permission management"
+      - "Session management"
+    
+  patent_research:
+    enabled: true
+    description: "Patent & IP Research Department"
+    config_file: "departments/patent-research/config.yaml"
+    service_port: 8095
+    api_endpoint: "/api/patent-research"
+    discord_channels:
+      alerts: "#patent-alerts"
+      reports: "#research"
+    responsibilities:
+      - "Autonomous patent database scanning"
+      - "Prior art detection and analysis"
+      - "Design and innovation tracking"
+      - "Freedom to operate assessments"
+      - "IP portfolio management"
+    automation:
+      autonomous_scanning: true
+      schedule: "weekly Mon 04:00 UTC"
+      notification_threshold: "medium"
