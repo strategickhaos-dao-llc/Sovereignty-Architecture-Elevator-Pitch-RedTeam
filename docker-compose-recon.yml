@@ -127,3 +127,28 @@ services:
       retries: 3
       start_period: 30s
     restart: unless-stopped
+
+  # Security & Penetration Testing Terminals
+  kali:
+    image: kalilinux/kali-rolling
+    container_name: kali-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    networks:
+      - reconnet
+    command: /bin/bash
+
+  parrot:
+    image: ghcr.io/m1k1o/parrot-security:latest
+    container_name: parrot-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    networks:
+      - reconnet
+    command: /bin/bash

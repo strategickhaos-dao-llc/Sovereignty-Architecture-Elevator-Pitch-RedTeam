@@ -252,6 +252,31 @@ services:
       - "traefik.http.routers.jaeger.rule=Host(`tracing.strategickhaos.local`)"
       - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
 
+  # Security & Penetration Testing Terminals
+  kali:
+    <<: *common
+    image: kalilinux/kali-rolling
+    container_name: kali-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    networks: [obs_network, recon_network]
+    command: /bin/bash
+
+  parrot:
+    <<: *common
+    image: ghcr.io/m1k1o/parrot-security:latest
+    container_name: parrot-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    networks: [obs_network, recon_network]
+    command: /bin/bash
+
 volumes:
   vault_data:
   vault_logs:

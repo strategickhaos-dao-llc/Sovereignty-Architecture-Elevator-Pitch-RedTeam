@@ -334,3 +334,30 @@ services:
       - cloudos_network
     logging: *default-logging
     restart: unless-stopped
+
+  # Security & Penetration Testing Terminals
+  kali:
+    image: kalilinux/kali-rolling
+    container_name: kali-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    networks:
+      - cloudos_network
+    logging: *default-logging
+    command: /bin/bash
+
+  parrot:
+    image: ghcr.io/m1k1o/parrot-security:latest
+    container_name: parrot-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    networks:
+      - cloudos_network
+    logging: *default-logging
+    command: /bin/bash
