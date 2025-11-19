@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Interaction } from "discord.js";
 import { registerCommands, embed } from "./discord.js";
 import { env, loadConfig } from "./config.js";
+import { createSnapshot, saveSnapshot, getLatestSnapshot, listSnapshots } from "./snapshot.js";
 
 const cfg = loadConfig();
 const token = env("DISCORD_TOKEN");
@@ -47,6 +48,17 @@ client.on("interactionCreate", async (i: Interaction) => {
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+    } else if (i.commandName === "snapshot") {
+      const customId = i.options.getString("id") || undefined;
+      const snapshot = createSnapshot(customId);
+      const filename = saveSnapshot(snapshot);
+      const allSnapshots = listSnapshots();
+      await i.reply({ 
+        embeds: [embed(
+          "System Snapshot Created", 
+          `Snapshot ID: ${snapshot.snapshot.id}\nFile: ${filename}\nTimestamp: ${snapshot.snapshot.timestamp}\nTotal snapshots: ${allSnapshots.length}`
+        )] 
+      });
     }
   } catch (e: any) {
     await i.reply({ content: `Error: ${e.message}` });
