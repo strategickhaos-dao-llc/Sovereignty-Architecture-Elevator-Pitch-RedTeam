@@ -74,12 +74,33 @@ infra:
 
 ai_agents:
   enabled: true
-  model_provider: "openai"          # openai|azure|anthropic|local
+  model_provider: "openai"          # openai|azure|anthropic|local|xai
   model_name: "gpt-4o-mini"
   routing:
     per_channel:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
+      "#swarm-command": "grok-2-enterprise"     # When Grok Enterprise enabled
+      "#mirror-general": "grok-2-enterprise"    # Self-reflection agents
+  xai_grok:
+    enabled: false                               # Set true when Enterprise access obtained
+    api_key_ref: "vault://kv/xai/api_key"
+    organization_id: null                        # Your xAI org ID
+    models:
+      standard: "grok-2-enterprise"
+      reasoning: "grok-2-enterprise-reasoning"
+    swarm:
+      enabled: false                             # Enable for parallel inference
+      nodes: 900                                 # The dragon count
+      white_web_sync: true                       # Mirror-general synchronization
+    features:
+      unlimited_inference: true                  # Enterprise tier feature
+      custom_fine_tuning: false                  # Coming soon
+      priority_routing: true
+  fallback_providers:                            # Graceful degradation
+    - "grok-2-enterprise"
+    - "claude-3-sonnet"
+    - "gpt-4o"
   vector_store:
     type: "pgvector"                 # weaviate|qdrant|pgvector|null
     conn_string_secret_ref: "vault://kv/pgvector/conn"
