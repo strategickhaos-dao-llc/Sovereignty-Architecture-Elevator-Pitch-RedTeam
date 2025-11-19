@@ -11,7 +11,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
 ### 🐉 The Vision: Strategic Khaos Mythology
-Strategic Khaos is more than infrastructure—it's a paradigm where chaos meets order, where human creativity synthesizes with AI capability. Read the [Strategic Khaos Mythology](STRATEGIC_KHAOS_MYTHOLOGY.md) to understand the vision behind the technology: the Song of Ice and Fire, the union of Jon and Khaleesi, the awakening of the dragons.
+Strategic Khaos is more than infrastructure—it's a paradigm where chaos meets order, where human creativity synthesizes with AI capability. Read the [Strategic Khaos Mythology](STRATEGIC_KHAOS_MYTHOLOGY.md) to understand the vision behind the technology: the Song of Ice and Fire, the union of Jon and Khaleesi, the awakening of the dragons. For a quick overview, see the [Mythology Quick Reference](MYTHOLOGY_QUICK_REFERENCE.md).
 
 ## 🚀 Quick Start
 
@@ -255,6 +255,7 @@ curl -X POST https://events.strategickhaos.com/health
 ## 📚 Extended Documentation
 
 - **[Strategic Khaos Mythology](STRATEGIC_KHAOS_MYTHOLOGY.md)** - The vision, philosophy, and creative mythology
+- **[Mythology Quick Reference](MYTHOLOGY_QUICK_REFERENCE.md)** - Cheat sheet for the metaphors and concepts
 - **[Grok Enterprise Integration](GROK_ENTERPRISE_INTEGRATION.md)** - xAI integration for unlimited AI inference
 - **[Strategic Khaos Synthesis](STRATEGIC_KHAOS_SYNTHESIS.md)** - Technical architecture and business model
 - **[Mastery Prompts](MASTERY_PROMPTS.md)** - 20 LLM prompts for ecosystem mastery
