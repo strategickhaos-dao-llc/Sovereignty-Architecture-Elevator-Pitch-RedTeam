@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, digital forensics capabilities, and sovereign infrastructure management.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Digital Forensics** - Comprehensive onsite investigation toolkit (DOM_010101 Edition)
 
 ## 🚀 Quick Start
 
@@ -247,6 +248,43 @@ kubectl logs -f deployment/event-gateway -n ops
 
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
+```
+
+## 🔬 Digital Forensics Capabilities
+
+The Sovereignty Architecture now includes a complete **onsite digital forensics suite** powered by DOM_010101:
+
+### Quick Start
+```bash
+# Deploy forensics stack
+docker compose -f docker-compose-forensics.yml up -d
+
+# Access forensics services
+docker compose -f docker-compose-forensics.yml ps
+```
+
+### Documentation
+- **[DOM_010101_FORENSICS.md](DOM_010101_FORENSICS.md)** - Complete forensics toolchain and deployment guide
+- **[VIDEO_CONTENT_LIBRARY.md](VIDEO_CONTENT_LIBRARY.md)** - 100+ educational videos and training content
+- **[NEXT_100_IDEAS.md](NEXT_100_IDEAS.md)** - Innovation roadmap and future capabilities
+
+### Key Features
+- **Phone Imaging**: Mobile device forensics (iOS/Android)
+- **Disk Encryption Cracking**: Hashcat + JohnTheRipper with GPU acceleration
+- **Memory Forensics**: Volatility3 + Rekall for RAM analysis
+- **OSINT Platform**: Maltego + SpiderFoot + custom crawlers
+- **Drone Reconnaissance**: Thermal imaging and aerial OSINT
+- **Chain of Custody**: Blockchain-based evidence tracking
+- **AI Analysis**: Lie detection, deepfake detection, automated reports
+- **Video Training**: AI-generated educational content with voice cloning
+
+### Discord Integration
+New forensics commands available in Discord:
+```bash
+/forensics start <case-id>    # Initialize forensics case
+/forensics evidence add       # Add evidence with chain of custody
+/forensics analyze            # Run automated analysis
+/forensics report             # Generate case report
 ```
 
 ## 📄 License & Support
