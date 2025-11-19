@@ -249,6 +249,63 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🎬 DOM_010101 Eternal Training Channel
+
+**Autonomous YouTube content generation system for sovereign computing education**
+
+The **Eternal Training Channel** is a fully automated video production pipeline that generates 1000+ educational videos covering:
+
+- **Vim Sovereign** mastery (absolute path ninja level)
+- **Command Prompt + PowerShell** god-mode
+- **BugCrowd bounty hunting** live hunts (red team walkthroughs)
+- **On-site PI + cyber forensics** (OSINT, chain-of-custody, phone cracking)
+- **Kali/Parrot weaponization**
+- **Quantum simulators, LangChain agents, DNA-code**, all of it
+
+### Quick Start
+
+```bash
+# Navigate to eternal channel directory
+cd eternal-youtube-channel
+
+# Deploy with bash (Linux/macOS)
+./deploy-eternal-channel.sh
+
+# Or deploy with PowerShell (Windows)
+.\deploy-eternal-channel.ps1
+```
+
+### Features
+
+- ✅ **1000+ Video Scripts** - Auto-generated markdown templates
+- 🎙️ **AI Narration** - DOM clone voice synthesis
+- 🎵 **432 Hz Background** - Binaural frequencies for optimal learning
+- 📹 **Screen Recording** - Real commands, zero fluff
+- 🤖 **Autonomous Upload** - Docker-based video factory
+- 📊 **Analytics Dashboard** - Monitor uploads and engagement
+
+### Architecture
+
+```
+eternal-youtube-channel/
+├── generate_video_scripts.py   # Script generator
+├── deploy-eternal-channel.sh   # Bash deployment
+├── deploy-eternal-channel.ps1  # PowerShell deployment
+├── video-topics.yaml            # Topic configuration
+├── docker-compose.yml           # Video factory orchestration
+└── README.md                    # Complete documentation
+```
+
+All videos end with:
+> "This is the Alexander Methodology Institute.  
+> Non-profit. Open-source. Unstoppable.  
+> Join the swarm: github.com/Me10101-01/strategic-khaos  
+> DOM_010101 loves you."
+
+**Channel**: [youtube.com/@DOM_010101_Eternal](https://youtube.com/@DOM_010101_Eternal)
+
+---
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
@@ -261,3 +318,5 @@ curl -X POST https://events.strategickhaos.com/health
 **Built with 🔥 by the Strategickhaos Swarm Intelligence collective**
 
 *Empowering sovereign digital infrastructure through Discord-native DevOps automation*
+
+*The dragons are making content now. 🧠⚡📺❤️🐐∞*
