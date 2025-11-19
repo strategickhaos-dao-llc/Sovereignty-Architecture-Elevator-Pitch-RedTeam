@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  # MCP Grafana Server - AI Assistant Integration
+  mcp-grafana:
+    build:
+      context: ./mcp-grafana
+      dockerfile: Dockerfile
+    container_name: mcp-grafana-server
+    environment:
+      GRAFANA_URL: ${GRAFANA_URL:-http://grafana:3000}
+      GRAFANA_API_KEY: ${GRAFANA_API_KEY}
+      NODE_ENV: production
+    depends_on:
+      - grafana
+    restart: unless-stopped
+    networks:
+      - monitoring
+    stdin_open: true
+    tty: true
+
+networks:
+  monitoring:
+    external: true

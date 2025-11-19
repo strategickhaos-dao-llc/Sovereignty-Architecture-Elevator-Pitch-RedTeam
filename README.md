@@ -48,6 +48,12 @@ export PRS_CHANNEL="channel_id"
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
 
+### 🔌 MCP Grafana Server (`mcp-grafana`)
+- **AI Assistant Integration**: Model Context Protocol server for Grafana
+- **Dashboard Access**: Query dashboards, metrics, and alerts via AI
+- **Prometheus Integration**: Execute PromQL queries through natural language
+- **Health Monitoring**: Real-time Grafana and datasource health checks
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
@@ -69,6 +75,24 @@ kubectl apply -f bootstrap/k8s/
 - **Loki** - Centralized logging aggregation
 - **OpenTelemetry** - Distributed tracing
 - **Alertmanager** - Alert routing to Discord channels
+- **MCP Grafana Server** - AI-powered observability queries and dashboard access
+
+### MCP Grafana Integration
+Deploy with Docker Compose:
+```bash
+# Start monitoring stack with MCP server
+docker-compose -f docker-compose-scaffold.yml -f docker-compose.mcp.yml up -d
+
+# Generate Grafana API key (required)
+# Navigate to Grafana UI → Configuration → API Keys → Add Key
+# Add to .env: GRAFANA_API_KEY=your_key_here
+```
+
+The MCP Grafana server enables AI assistants to:
+- Query dashboards and visualizations
+- Execute PromQL queries via natural language
+- Monitor alert states and health
+- Access datasource configurations
 
 ## 🔧 Configuration
 
@@ -143,6 +167,34 @@ ai_agents:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
       "#prs": "claude-3-sonnet"  # Code review assistance
+```
+
+### MCP (Model Context Protocol) Integration
+The MCP Grafana server provides AI assistants with direct access to observability data:
+
+**Available Tools:**
+- `list_dashboards` - View all Grafana dashboards
+- `get_dashboard` - Fetch specific dashboard details
+- `list_alerts` - Check active alerts
+- `query_metrics` - Execute PromQL queries
+- `list_datasources` - View configured datasources
+- `check_health` - Monitor Grafana health
+
+**Usage with Claude Desktop:**
+Add to `claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "grafana": {
+      "command": "node",
+      "args": ["./mcp-grafana/dist/index.js"],
+      "env": {
+        "GRAFANA_URL": "http://localhost:3000",
+        "GRAFANA_API_KEY": "your_api_key"
+      }
+    }
+  }
+}
 ```
 
 ## 🔐 Security & Governance
