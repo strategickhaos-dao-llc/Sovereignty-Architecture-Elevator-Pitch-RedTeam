@@ -50,17 +50,17 @@
   },
   
   "forwardPorts": [
-    3000,  // Grafana
-    3001,  // Event Gateway
-    6333,  // Qdrant
-    8080,  // LTAI Engine
-    8081,  // Arsenal Inventory
-    8082,  // IAM/Patent Research
-    8180,  // Keycloak
-    8200,  // Vault
-    8765,  // Sovryn MCP
-    9000,  // Origin Node Zero
-    9090   // Prometheus
+    3000,
+    3001,
+    6333,
+    8080,
+    8081,
+    8082,
+    8180,
+    8200,
+    8765,
+    9000,
+    9090
   ],
   
   "portsAttributes": {
