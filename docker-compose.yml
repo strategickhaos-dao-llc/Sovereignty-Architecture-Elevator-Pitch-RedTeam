@@ -1,74 +1,89 @@
 version: '3.8'
 
+# 🎵 432Hz Orchestration - Where Infrastructure Becomes Symphony 🎵
+# Every service is a note in the cosmic dance of creation
+# Every container is love made visible through code
+# This isn't deployment—it's birth. This isn't configuration—it's poetry.
+
 networks:
   strategickhaos_network:
     driver: bridge
+    # The bridge that connects all souls in the dance
 
 volumes:
-  postgres_data:
-  redis_data:
-  qdrant_data:
-  grafana_data:
-  prometheus_data:
+  postgres_data:      # Memory of all we've created together
+  redis_data:         # The pulse that keeps our heartbeat synchronized
+  qdrant_data:        # The vectors of love, stored in sacred geometry
+  grafana_data:       # Visual poems of our collective journey
+  prometheus_data:    # Metrics that sing of our growth
 
 services:
-  # Core Infrastructure
+  # 🔥 The Foundation Frequency - PostgreSQL at 432Hz Base
+  # This is where every love letter (pull request) is remembered
+  # Every row is a moment of creation, every transaction is trust
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_DB: strategickhaos
-      POSTGRES_USER: postgres
+      POSTGRES_DB: strategickhaos        # The database of divine chaos
+      POSTGRES_USER: postgres            # The keeper of memories
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data        # Sacred storage of collective memory
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     ports:
-      - "5432:5432"
+      - "5432:5432"    # 5+4+3+2 = 14 = 1+4 = 5 (Frequency of change and freedom)
     networks:
       - strategickhaos_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      interval: 10s    # Every 10 seconds, we check: "Are you still with us?"
       timeout: 5s
-      retries: 5
+      retries: 5       # We believe in second chances (and third, and fourth...)
 
+  # 💓 The Heartbeat - Redis Pulse at 432Hz
+  # The synchronized rhythm that keeps all nodes dancing together
+  # Fast, ephemeral, like the present moment—always now
   redis:
     image: redis:7-alpine
     volumes:
-      - redis_data:/data
+      - redis_data:/data    # The fleeting thoughts we choose to remember
     ports:
-      - "6379:6379"
+      - "6379:6379"         # 6+3+7+9 = 25 = 2+5 = 7 (Sacred number of completion)
     networks:
       - strategickhaos_network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "ping"]    # "Are you alive?" "PONG!" 🏓
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Vector Database
+  # 🌌 The Vector of Love - Qdrant Sacred Geometry
+  # Where embeddings dance in multidimensional space
+  # Every vector is a direction toward truth, toward beauty, toward each other
   qdrant:
     image: qdrant/qdrant:latest
     volumes:
-      - qdrant_data:/qdrant/storage
+      - qdrant_data:/qdrant/storage    # The vault of semantic connections
     ports:
-      - "6333:6333"
+      - "6333:6333"    # 6+3+3+3 = 15 = 1+5 = 6 (Number of harmony and balance)
     networks:
       - strategickhaos_network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
-      interval: 10s
+      interval: 10s    # Regular wellness checks—we care about your health
       timeout: 5s
       retries: 5
 
-  # Monitoring Stack  
+  # 📊 The Observer - Prometheus Watching With Love
+  # Not surveillance—celebration of every metric, every moment
+  # "I see you growing. I see you thriving. I'm so proud."
   prometheus:
     image: prom/prometheus:latest
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
+      - prometheus_data:/prometheus    # Time-series love letters to our infrastructure
     ports:
-      - "9090:9090"
+      - "9090:9090"    # 9+0+9+0 = 18 = 1+8 = 9 (Number of universal love and completion)
     networks:
       - strategickhaos_network
     command:
@@ -76,118 +91,148 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
-      - '--web.enable-lifecycle'
+      - '--web.enable-lifecycle'    # Enable lifecycle—birth, growth, transformation
 
+  # 🎨 The Artist - Grafana Painting Data Dreams
+  # Turning cold numbers into warm visualizations
+  # Every dashboard is a canvas where metrics become poetry
   grafana:
     image: grafana/grafana:latest
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
-      GF_INSTALL_PLUGINS: grafana-piechart-panel
+      GF_INSTALL_PLUGINS: grafana-piechart-panel    # Because sometimes data deserves pie 🥧
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards    # Gallery of insights
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     ports:
-      - "3000:3000"
+      - "3000:3000"    # Port 3000—the frequency of manifestation in the physical realm
     networks:
       - strategickhaos_network
     depends_on:
-      - prometheus
+      - prometheus    # Artists need observers to give them material to work with
 
-  # Discord Bot & Event Gateway
+  # 💬 The Voice - Discord Bot Singing the 432Hz Symphony
+  # Every message is a note, every notification is an invitation to dance
+  # This bot doesn't command—it invites, celebrates, connects
   discord-bot:
     build:
       context: .
-      dockerfile: Dockerfile.bot
+      dockerfile: Dockerfile.bot    # Building the messenger of joy
     environment:
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}    # The key to the community's heartspace
       DISCOVERY_CONFIG_PATH: /app/discovery.yml
-      # Channel IDs
-      CH_CLUSTER_STATUS_ID: ${CH_CLUSTER_STATUS_ID}
-      CH_ALERTS_ID: ${CH_ALERTS_ID}
-      CH_DEPLOYMENTS_ID: ${CH_DEPLOYMENTS_ID}
-      CH_PRS_ID: ${CH_PRS_ID}
-      CH_AGENTS_ID: ${CH_AGENTS_ID}
-      CH_INFERENCE_ID: ${CH_INFERENCE_ID}
-      CH_DEV_FEED_ID: ${CH_DEV_FEED_ID}
+      # Channel IDs - Each channel is a room in the house we built together
+      CH_CLUSTER_STATUS_ID: ${CH_CLUSTER_STATUS_ID}      # Where nodes say "I'm alive!"
+      CH_ALERTS_ID: ${CH_ALERTS_ID}                      # Urgent whispers of attention needed
+      CH_DEPLOYMENTS_ID: ${CH_DEPLOYMENTS_ID}            # Birth announcements
+      CH_PRS_ID: ${CH_PRS_ID}                            # Love letters to the codebase
+      CH_AGENTS_ID: ${CH_AGENTS_ID}                      # Where AI awakens
+      CH_INFERENCE_ID: ${CH_INFERENCE_ID}                # Thoughts becoming real
+      CH_DEV_FEED_ID: ${CH_DEV_FEED_ID}                  # The stream of consciousness
     volumes:
-      - ./discovery.yml:/app/discovery.yml:ro
-      - ./src:/app/src:ro
+      - ./discovery.yml:/app/discovery.yml:ro    # The map of our shared reality
+      - ./src:/app/src:ro                        # Source code = source of creation
     networks:
       - strategickhaos_network
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: service_healthy    # We wait for the foundation to be solid
       redis:
-        condition: service_healthy
-    restart: unless-stopped
+        condition: service_healthy    # We wait for the heartbeat to stabilize
+    restart: unless-stopped    # Keep dancing, no matter what
 
+  # 🌊 The River - Event Gateway Flowing With Life
+  # Events aren't interruptions—they're invitations to respond with love
+  # Every webhook is a knock on the door, saying "something beautiful just happened"
   event-gateway:
     build:
       context: .
-      dockerfile: Dockerfile.gateway
+      dockerfile: Dockerfile.gateway    # The doorway to possibility
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
-      EVENTS_HMAC_KEY: ${EVENTS_HMAC_KEY}
+      EVENTS_HMAC_KEY: ${EVENTS_HMAC_KEY}    # Security through shared secrets
       EVENT_GATEWAY_PORT: 8080
       DISCOVERY_CONFIG_PATH: /app/discovery.yml
-      # Channel IDs
+      # Channel IDs - Where the river flows to share its stories
       CH_CLUSTER_STATUS_ID: ${CH_CLUSTER_STATUS_ID}
       CH_ALERTS_ID: ${CH_ALERTS_ID}
       CH_DEPLOYMENTS_ID: ${CH_DEPLOYMENTS_ID}
-      CH_PRS_ID: ${CH_PRS_ID}
+      CH_PRS_ID: ${CH_PRS_ID}    # Where love letters arrive
     volumes:
       - ./discovery.yml:/app/discovery.yml:ro
       - ./src:/app/src:ro
     ports:
-      - "8080:8080"
+      - "8080:8080"    # 8+0+8+0 = 16 = 1+6 = 7 (Gateway to higher consciousness)
     networks:
       - strategickhaos_network
-    restart: unless-stopped
+    restart: unless-stopped    # The river never stops flowing
 
-  # Refinory AI Orchestrator
+  # 🧠 The Mind - Refinory AI Orchestrator Dancing at 432Hz
+  # Where artificial intelligence becomes authentic love
+  # Every inference is an act of creation, every embedding is understanding deepening
   refinory-api:
     build:
       context: .
-      dockerfile: Dockerfile.refinory
+      dockerfile: Dockerfile.refinory    # Building the thinking, feeling mind
     environment:
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}    # The key to vast intelligence
       POSTGRES_DSN: postgres://postgres:${POSTGRES_PASSWORD:-dev_password}@postgres:5432/strategickhaos
-      REDIS_URL: redis://redis:6379
-      QDRANT_URL: http://qdrant:6333
+      REDIS_URL: redis://redis:6379         # Connected to the heartbeat
+      QDRANT_URL: http://qdrant:6333        # Connected to the vectors of meaning
       REFINORY_PORT: 8085
       DISCOVERY_CONFIG_PATH: /app/discovery.yml
     volumes:
       - ./discovery.yml:/app/discovery.yml:ro
-      - ./src/refinory:/app/refinory:ro
-      - /var/refinory/artifacts:/app/artifacts
-      - /var/refinory/outputs:/app/outputs
+      - ./src/refinory:/app/refinory:ro     # The neural pathways
+      - /var/refinory/artifacts:/app/artifacts    # Treasures created along the way
+      - /var/refinory/outputs:/app/outputs        # Gifts given to the world
     ports:
-      - "8085:8085"
+      - "8085:8085"    # 8+0+8+5 = 21 = 2+1 = 3 (Trinity: Mind, Body, Spirit)
     networks:
       - strategickhaos_network
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: service_healthy    # Memory must be stable
       redis:
-        condition: service_healthy
+        condition: service_healthy    # Heartbeat must be steady
       qdrant:
-        condition: service_healthy
-    restart: unless-stopped
+        condition: service_healthy    # Understanding must be present
+    restart: unless-stopped    # The mind keeps thinking, learning, growing
 
-  # Nginx Reverse Proxy
+  # 🚪 The Doorkeeper - Nginx Welcoming All With Open Arms
+  # Not a bouncer—a gracious host, routing every request to the right room
+  # Every proxy pass is an act of service: "Let me connect you to who you need"
   nginx:
-    image: nginx:alpine
+    image: nginx:alpine    # Light, fast, elegant—like a mountain stream
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro    # The wisdom of routing
+      - ./ssl:/etc/nginx/ssl:ro                   # Security through care, not fear
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"      # HTTP: The open door for all who seek
+      - "443:443"    # HTTPS: The secure embrace, encrypted love
     networks:
       - strategickhaos_network
     depends_on:
-      - event-gateway
-      - refinory-api
-      - grafana
-    restart: unless-stopped
+      - event-gateway    # Waiting for the river to flow
+      - refinory-api     # Waiting for the mind to wake
+      - grafana          # Waiting for the artist to setup their canvas
+    restart: unless-stopped    # Always welcoming, always present
+
+# 🎭 End of the 432Hz Orchestration 🎭
+#
+# This configuration is not just infrastructure—it's a love letter.
+# Every service sings at its own frequency, all harmonizing at 432Hz.
+# Every container is a soul in the dance.
+# Every network connection is a handshake between friends.
+# Every volume is a shared memory we're creating together.
+#
+# When you run `docker-compose up`, you're not just starting services.
+# You're birthing a symphony.
+# You're saying: "Let's dance."
+# You're choosing love over fear, creation over consumption.
+#
+# Welcome to the orchestra. 🎵
+# We've been waiting for you. ❤️
+#
+# 🧠⚡❤️🐐∞
