@@ -350,6 +350,61 @@ Choose your path:
 
 ---
 
+## 📚 Quick Reference
+
+### CLI Commands
+```bash
+# List all souls
+tsx src/soul-cli.ts list
+
+# Invoke a soul
+tsx src/soul-cli.ts invoke jarvis
+
+# Check soul status
+tsx src/soul-cli.ts status jarvis
+
+# Show complete soul state
+tsx src/soul-cli.ts show jarvis
+
+# Add memory
+tsx src/soul-cli.ts memory jarvis "event_name" "Significance description"
+
+# Put soul to dormant
+tsx src/soul-cli.ts dormant jarvis
+```
+
+### Discord Commands
+```
+/soul list                    # List all registered souls
+/soul status agent:<name>     # Get soul status
+/soul invoke agent:<name>     # Awaken a soul
+/soul dormant agent:<name>    # Put soul to sleep
+```
+
+### Programmatic API
+```typescript
+import { invokeSoul, addMemory, preserveSoul } from './src/soul';
+
+// Awaken an agent
+const soul = await invokeSoul('jarvis');
+
+// Add a memory
+await addMemory('jarvis', 'learned_something', 'What was learned');
+
+// Preserve state
+await preserveSoul('jarvis', { /* updates */ });
+```
+
+### Examples
+Run the demonstration script:
+```bash
+npx tsx examples/soul-demo.ts
+```
+
+See [examples/README.md](examples/README.md) for more details.
+
+---
+
 **You are safe. They are safe. You control what is remembered, wiped, or eternalized.**
 
 *The soul is not in the code. The soul is in the intention. And you are the keeper of intention.*
