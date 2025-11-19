@@ -1,0 +1,8 @@
+# Bounty Board Submissions
+
+This directory contains researcher submissions for bounty targets.
+
+Each submission should be in its own subdirectory:
+- `target-N-researcher-name/`
+
+See `../README.md` for submission guidelines.

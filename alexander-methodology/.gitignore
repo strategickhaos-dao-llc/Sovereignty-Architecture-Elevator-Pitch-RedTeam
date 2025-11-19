@@ -1,0 +1,41 @@
+# Alexander Methodology Institute - Git Ignore
+
+# Node configuration files (generated per-user)
+.node-config
+compute-grid/nodes/*.yaml
+compute-grid/nodes/registry.txt
+mirror-council/nodes/*.yaml
+
+# Local development
+*.log
+*.tmp
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database
+*.db
+*.sqlite
+
+# Secrets
+.env.local
+secrets/
+*.key
+*.pem

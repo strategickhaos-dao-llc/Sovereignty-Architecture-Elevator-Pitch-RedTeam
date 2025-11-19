@@ -1,0 +1,13 @@
+# Forbidden Library Collections
+
+This directory will contain organized collections of research materials:
+
+- ancient-texts/
+- forbidden-books/
+- research-papers/
+- suppressed-science/
+- historical-documents/
+
+Content will be added as the library expands.
+
+See `../README.md` for RAG query access.

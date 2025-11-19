@@ -1,0 +1,7 @@
+# Mirror Council Proposals
+
+This directory contains proposals submitted to the Mirror-Generals Council for review.
+
+Proposals are automatically added here when using `./propose.sh`.
+
+See `../README.md` for proposal process.

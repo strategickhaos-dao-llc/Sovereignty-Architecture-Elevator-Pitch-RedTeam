@@ -2,6 +2,32 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+---
+
+## 🌟 The Alexander Methodology Institute
+
+**"We finish what the Library of Alexandria started."**
+
+This repository now houses **The Alexander Methodology Institute** — a living, open-source, non-profit research organism providing unlimited sovereign compute, forbidden-library RAG access, and 900+ human+AI collaborative minds to researchers worldwide.
+
+### 🚀 Join as a Researcher
+
+```bash
+cd alexander-methodology
+./join-swarm.sh   # Instant access to all institute resources
+```
+
+**What you get:**
+- 📚 Forbidden Library RAG (35+ forbidden books + unlimited research papers)
+- 🔬 Alexander Compute Grid (distributed CPU/GPU for research)
+- 🎯 Breakthrough Bounty Board ($47.5M in active bounties)
+- 🏛️ Mirror-Generals Council (AI governance + human wisdom)
+- 💰 Earn bounties for solving mysteries (Voynich: $1M, Superconductors: $10M, etc.)
+
+**[→ Learn more about the Alexander Methodology Institute](./alexander-methodology/README.md)**
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
