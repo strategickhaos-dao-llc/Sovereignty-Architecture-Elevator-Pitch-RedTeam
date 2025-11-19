@@ -1,0 +1,218 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: threat-model-2025-vault
+  namespace: security
+  labels:
+    app: "war-room-synthesizer"
+    component: "threat-vault"
+    security.strategickhaos.io/immutable: "true"
+  annotations:
+    security.strategickhaos.io/signature: "DOM_010101_1763542516532_QDJNXGBXQL"
+    security.strategickhaos.io/version: "2025.1.0"
+    security.strategickhaos.io/generated: "2025-11-19T08:55:16.532Z"
+immutable: true
+data:
+  threat-matrix.json: |
+    {
+      "tactics": [
+        {
+          "id": "TA0001",
+          "name": "Initial Access",
+          "findings": []
+        },
+        {
+          "id": "TA0002",
+          "name": "Execution",
+          "findings": []
+        },
+        {
+          "id": "TA0003",
+          "name": "Persistence",
+          "findings": []
+        },
+        {
+          "id": "TA0004",
+          "name": "Privilege Escalation",
+          "findings": []
+        },
+        {
+          "id": "TA0005",
+          "name": "Defense Evasion",
+          "findings": []
+        },
+        {
+          "id": "TA0006",
+          "name": "Credential Access",
+          "findings": []
+        },
+        {
+          "id": "TA0007",
+          "name": "Discovery",
+          "findings": []
+        },
+        {
+          "id": "TA0008",
+          "name": "Lateral Movement",
+          "findings": []
+        },
+        {
+          "id": "TA0009",
+          "name": "Collection",
+          "findings": []
+        },
+        {
+          "id": "TA0011",
+          "name": "Command and Control",
+          "findings": []
+        }
+      ],
+      "techniques": [],
+      "findings": [
+        {
+          "id": "RE-001",
+          "severity": "medium",
+          "category": "Reverse Engineering",
+          "attackVector": "Static code analysis of public repositories",
+          "mitreMapping": "T1592 - Gather Victim Host Information"
+        },
+        {
+          "id": "SC-001",
+          "severity": "high",
+          "category": "Supply Chain",
+          "attackVector": "Malicious package injection in dependency chain",
+          "mitreMapping": "T1195 - Supply Chain Compromise"
+        },
+        {
+          "id": "WG-001",
+          "severity": "high",
+          "category": "Network Security",
+          "attackVector": "ARP spoofing and traffic interception attempts",
+          "mitreMapping": "T1557 - Adversary-in-the-Middle"
+        },
+        {
+          "id": "PT-001",
+          "severity": "critical",
+          "category": "Token Security",
+          "attackVector": "Session token interception via network monitoring",
+          "mitreMapping": "T1528 - Steal Application Access Token"
+        },
+        {
+          "id": "BD-001",
+          "severity": "critical",
+          "category": "Backdoor Detection",
+          "attackVector": "Configuration file tampering and privilege escalation",
+          "mitreMapping": "T1543 - Create or Modify System Process"
+        },
+        {
+          "id": "SE-001",
+          "severity": "high",
+          "category": "Social Engineering",
+          "attackVector": "Targeted phishing campaigns and credential harvesting",
+          "mitreMapping": "T1566 - Phishing"
+        }
+      ]
+    }
+  node-trust-levels.json: |
+    {
+      "totalNodes": 895,
+      "trustLevels": {
+        "verified": 671,
+        "trusted": 134,
+        "monitoring": 71,
+        "untrusted": 17
+      },
+      "criteria": {
+        "verified": "Core legion members with verified identity and security posture",
+        "trusted": "Known contributors with established track record",
+        "monitoring": "New or inactive nodes under observation",
+        "untrusted": "Flagged nodes requiring immediate review"
+      }
+    }
+  hardening-playbook.json: |
+    {
+      "title": "Strategic Khaos Hardening Playbook",
+      "sections": [
+        {
+          "name": "Network Security",
+          "actions": [
+            "Enable WireGuard tunnel encryption with PFS",
+            "Implement network segmentation",
+            "Deploy IDS/IPS on all network boundaries",
+            "Enable DDoS protection"
+          ]
+        },
+        {
+          "name": "Access Control",
+          "actions": [
+            "Enforce MFA for all administrative access",
+            "Implement zero-trust architecture",
+            "Rotate credentials every 30 days",
+            "Use hardware security keys for critical systems"
+          ]
+        },
+        {
+          "name": "Application Security",
+          "actions": [
+            "Enable content security policy (CSP)",
+            "Implement rate limiting on all APIs",
+            "Use prepared statements to prevent SQL injection",
+            "Enable HTTPS everywhere with HSTS"
+          ]
+        },
+        {
+          "name": "Monitoring & Response",
+          "actions": [
+            "Deploy SIEM for centralized logging",
+            "Set up real-time alerting for anomalies",
+            "Implement automated incident response",
+            "Conduct quarterly security audits"
+          ]
+        }
+      ],
+      "oneClickApply": true,
+      "automationScript": "/scripts/apply-hardening.sh"
+    }
+  counter-attack.json: |
+    {
+      "title": "Active Defense & Counter-Attack Strategies",
+      "disclaimer": "Use responsibly and within legal boundaries",
+      "strategies": [
+        {
+          "name": "Honey Token Deployment",
+          "description": "Deploy fake credentials to detect and track attackers",
+          "effectiveness": "High",
+          "legalRisk": "Low"
+        },
+        {
+          "name": "Aggressive Attribution",
+          "description": "Use advanced techniques to identify attacker infrastructure",
+          "effectiveness": "Medium",
+          "legalRisk": "Medium"
+        },
+        {
+          "name": "Deception Networks",
+          "description": "Create realistic decoy systems to waste attacker resources",
+          "effectiveness": "High",
+          "legalRisk": "Low"
+        },
+        {
+          "name": "Active Response",
+          "description": "Automated blocking and counter-measures against active threats",
+          "effectiveness": "Very High",
+          "legalRisk": "Low"
+        }
+      ],
+      "ethicalGuidelines": [
+        "Always operate within legal boundaries",
+        "Document all defensive actions",
+        "Coordinate with law enforcement when appropriate",
+        "Prioritize protection over retaliation"
+      ]
+    }
+  metadata.json: |
+    {
+      "generated": "2025-11-19T08:55:16.532Z",
+      "version": "2025.1.0",
+      "signature": "DOM_010101_1763542516532_QDJNXGBXQL"
+    }
