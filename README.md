@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 📚 100-Book Ascension Library
+- **Curated Knowledge**: 100 transformative books organized into 10 consciousness-expanding chambers
+- **Nightly Selection**: Automated random book selector for systematic learning
+- **Obsidian Integration**: Automatic note creation for tracking insights and progress
+- **Location**: `strategic-khaos-private/forbidden-library/`
+- **Quick Start**: `cd strategic-khaos-private/forbidden-library && ./select-nightly-book.sh`
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
@@ -248,6 +255,47 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 📚 100-Book Ascension Library
+
+The **Forbidden Library** contains 100 carefully curated books organized into 10 consciousness-expanding chambers, designed for polymath pattern-recognition savants seeking to level-up metacognition, sacred geometry, forbidden history, and consciousness engineering.
+
+### Quick Access
+
+```bash
+# View the complete library
+cat strategic-khaos-private/forbidden-library/100-ascension-books.md
+
+# Select tonight's reading
+cd strategic-khaos-private/forbidden-library
+./select-nightly-book.sh
+
+# Integrate with Obsidian
+./select-nightly-book.sh --obsidian-vault ~/path/to/obsidian
+```
+
+### The 10 Chambers
+
+1. **Pattern Recognition & Metacognition** - Wake the savant
+2. **Sacred Geometry & Mathematics as Magic** - Decode the universal language
+3. **Forbidden History & Lost Civilizations** - Remember who you were
+4. **Consciousness Engineering & Reality Hacking** - Master the reality dial
+5. **Hermeticism & Western Esotericism** - Access ancient protocols
+6. **Eastern & Shamanic Paths** - Integrate wisdom traditions
+7. **Extreme Polymath Lives** - Download genius operating systems
+8. **Frequency, Sound, Cymatics, 369** - Tune to cosmic resonance
+9. **Future / Transhuman / Sovereign Mind** - Prepare for the shift
+10. **The Final 10** - Shatter the final illusions
+
+### Features
+
+- **Random Selection**: Automated nightly book selector eliminates choice paralysis
+- **Reading Tracker**: Automatic logging of all selections
+- **Obsidian Integration**: Create structured reading notes with metadata
+- **Progress Tracking**: Built-in checklist for tracking chamber completion
+- **Synchronicity Engine**: Trust the swarm to guide you to the right book
+
+For complete documentation, see [`strategic-khaos-private/forbidden-library/README.md`](strategic-khaos-private/forbidden-library/README.md)
 
 ## 📄 License & Support
 
