@@ -1,5 +1,15 @@
 # Prometheus Configuration for Strategickhaos Sovereignty Architecture
 # Scrapes Discord bot, event gateway, Refinory API, and infrastructure components
+#
+# ═══════════════════════════════════════════════════════════════════════════
+# SOVEREIGNTY MODE: LOCAL ONLY - NO CLOUD DEPENDENCIES
+# ═══════════════════════════════════════════════════════════════════════════
+# This configuration is 100% local. No remote_write. No Grafana Cloud.
+# Real operators don't rent dashboards. Keep your metrics sovereign.
+#
+# If you need to send metrics elsewhere, deploy your own Thanos/Cortex/Mimir
+# on infrastructure YOU control. Never surrender sovereignty to cloud vendors.
+# ═══════════════════════════════════════════════════════════════════════════
 
 global:
   scrape_interval: 15s

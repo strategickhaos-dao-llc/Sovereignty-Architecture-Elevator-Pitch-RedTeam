@@ -64,11 +64,21 @@ kubectl apply -f bootstrap/k8s/
 - Network policies for secure communication
 - Ingress with TLS and rate limiting
 
-### Observability Stack
-- **Prometheus** - Metrics collection from all components
-- **Loki** - Centralized logging aggregation
-- **OpenTelemetry** - Distributed tracing
-- **Alertmanager** - Alert routing to Discord channels
+### Observability Stack (100% Local - Sovereignty Mode)
+- **Prometheus** (`:9090`) - Metrics collection from all components
+- **Grafana** (`:3000`) - Visualization dashboards
+- **Loki** (`:3100`) - Centralized logging aggregation
+- **Jaeger** (`:16686`) - Distributed tracing
+- **Vault** (`:8200`) - Secrets management
+
+**🔒 Sovereignty Principle**: All metrics stay LOCAL. No cloud dependencies. No vendor lock-in.
+See [MONITORING_SOVEREIGNTY.md](./MONITORING_SOVEREIGNTY.md) for details.
+
+```bash
+make up              # Start sovereign monitoring stack
+make grafana         # Open dashboards at localhost:3000
+make check-sovereignty  # Verify no cloud leakage
+```
 
 ## 🔧 Configuration
 
