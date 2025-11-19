@@ -19,6 +19,7 @@ volumes:
   minio_data:
   keycloak_data:
   synapse_data:
+  jdk_workspace:
 
 services:
   # Reverse Proxy & Load Balancer
@@ -334,3 +335,31 @@ services:
       - cloudos_network
     logging: *default-logging
     restart: unless-stopped
+
+  # Java Development Environment (OpenJDK 25)
+  jdk-workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile.jdk
+    container_name: cloudos-jdk
+    environment:
+      - JAVA_HOME=/opt/jdk/current
+      - MAVEN_HOME=/opt/maven
+      - GRADLE_HOME=/opt/gradle
+      - CLOUDOS_HOME=/home/cloudos/.cloudos
+    ports:
+      - "8888:8888"  # Java application port
+      - "5005:5005"  # Java debug port
+    volumes:
+      - jdk_workspace:/workspace
+      - ./:/home/cloudos/cloudos-repo:ro
+    networks:
+      - cloudos_network
+    logging: *default-logging
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jdk-workspace.rule=Host(`java.localhost`)"
+      - "traefik.http.services.jdk-workspace.loadbalancer.server.port=8888"

@@ -1,0 +1,99 @@
+# Dockerfile.jdk - CloudOS JDK-enabled Container
+# Strategic Khaos Cloud Operating System with OpenJDK 25 Support
+
+FROM ubuntu:22.04
+
+LABEL maintainer="Strategickhaos DAO LLC"
+LABEL description="CloudOS JDK-enabled environment with OpenJDK 25"
+LABEL version="1.0.0"
+
+# Avoid interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# Install system dependencies and build tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    software-properties-common \
+    unzip \
+    zip \
+    vim \
+    nano \
+    htop \
+    net-tools \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up JDK directory structure
+ENV JDK_HOME_BASE=/opt/jdk
+ENV JAVA_HOME=/opt/jdk/current
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+RUN mkdir -p ${JDK_HOME_BASE}
+
+# Download and install OpenJDK 25 from Adoptium
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then ARCH="x64"; fi && \
+    if [ "$ARCH" = "aarch64" ]; then ARCH="aarch64"; fi && \
+    wget -O /tmp/openjdk-25.tar.gz \
+    "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B8/OpenJDK25U-jdk_${ARCH}_linux_hotspot_25.0.1_8.tar.gz" && \
+    mkdir -p ${JDK_HOME_BASE}/jdk-25 && \
+    tar -xzf /tmp/openjdk-25.tar.gz -C ${JDK_HOME_BASE}/jdk-25 --strip-components=1 && \
+    rm /tmp/openjdk-25.tar.gz && \
+    ln -s ${JDK_HOME_BASE}/jdk-25 ${JAVA_HOME}
+
+# Verify Java installation
+RUN java -version && javac -version
+
+# Install Maven for Java project management
+RUN wget -O /tmp/maven.tar.gz https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz && \
+    tar -xzf /tmp/maven.tar.gz -C /opt && \
+    rm /tmp/maven.tar.gz && \
+    ln -s /opt/apache-maven-3.9.6 /opt/maven
+
+ENV MAVEN_HOME=/opt/maven
+ENV PATH="${MAVEN_HOME}/bin:${PATH}"
+
+# Install Gradle for Java project management
+RUN wget -O /tmp/gradle.zip https://services.gradle.org/distributions/gradle-8.5-bin.zip && \
+    unzip /tmp/gradle.zip -d /opt && \
+    rm /tmp/gradle.zip && \
+    ln -s /opt/gradle-8.5 /opt/gradle
+
+ENV GRADLE_HOME=/opt/gradle
+ENV PATH="${GRADLE_HOME}/bin:${PATH}"
+
+# Copy JDK solver script
+COPY jdk-solver.sh /usr/local/bin/jdk-solver
+RUN chmod +x /usr/local/bin/jdk-solver
+
+# Create CloudOS user
+RUN useradd -m -s /bin/bash cloudos && \
+    echo "cloudos ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Set up workspace
+RUN mkdir -p /workspace && chown cloudos:cloudos /workspace
+WORKDIR /workspace
+
+# Switch to cloudos user
+USER cloudos
+
+# Create CloudOS configuration directory
+RUN mkdir -p /home/cloudos/.cloudos
+
+# Set environment variables for CloudOS
+ENV CLOUDOS_HOME=/home/cloudos/.cloudos
+ENV CLOUDOS_WORKSPACE=/workspace
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD java -version || exit 1
+
+# Default command
+CMD ["/bin/bash"]

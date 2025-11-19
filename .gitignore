@@ -20,3 +20,22 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.iml
+out/
+build/
+target/
+.gradle/
+.settings/
+.project
+.classpath
+bin/

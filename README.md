@@ -26,6 +26,9 @@ export PRS_CHANNEL="channel_id"
 
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
+
+# 5. (Optional) Start CloudOS with Java/JDK Support
+./start-cloudos-jdk.sh start
 ```
 
 ## 📋 Core Components
@@ -35,6 +38,13 @@ export PRS_CHANNEL="channel_id"
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+
+### ☕ JDK Solver (`jdk-solver.sh`) - **NEW**
+- **Multi-Version Support**: Install and manage OpenJDK 11, 17, 21, and 25
+- **Easy Switching**: Instantly switch between JDK versions
+- **Docker Integration**: Pre-configured containers with JDK, Maven, and Gradle
+- **Development Tools**: Full Java development environment in CloudOS
+- See [JDK_SOLVER_README.md](JDK_SOLVER_README.md) for detailed documentation
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
