@@ -19,4 +19,86 @@ target
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Node
 node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# OS specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local development
+.env.local
+.env.*.local
+*.local
+local-*
+.local/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+.cache/
+
+# Secrets and credentials
+*.pem
+*.key
+*.cert
+*.p12
+secrets/
+.secrets/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+
+# Data directories with potentially sensitive content
+data/postgres/
+data/redis/
+data/grafana/
+data/prometheus/
+data/qdrant/
+data/minio/
+data/keycloak/
+data/synapse/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Local notes and planning (to prevent accidental exposure of local paths/info)
+NOTES.md
+TODO.local.md
+*-LOCAL.*
+*-PRIVATE.*

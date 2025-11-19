@@ -249,6 +249,15 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🔒 Security & Privacy
+
+**Important**: Never commit or share local file system paths in code, documentation, or messages. Always use:
+- Relative paths from project root
+- Environment variables
+- Generic placeholders
+
+See [SECURITY_GUIDELINES.md](SECURITY_GUIDELINES.md) for detailed best practices.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
