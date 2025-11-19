@@ -31,10 +31,11 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/snapshot`
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+- **System Snapshots**: Capture and track system state over time
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
@@ -210,6 +211,30 @@ export PRS_CHANNEL="dev_channel_id"
 # 3. Run VS Code tasks
 # Command Palette → Tasks: Run Task → GitLens: Review Started
 ```
+
+### FX Snapshots
+The system includes a snapshot feature to capture system state at specific points in time:
+
+```bash
+# Create a snapshot via Discord bot
+/snapshot
+
+# Create a snapshot with a custom ID
+/snapshot id:42821135
+
+# List all snapshots programmatically
+node -e "import('./dist/snapshot.js').then(m => console.log(m.listSnapshots()))"
+
+# Get the latest snapshot
+node -e "import('./dist/snapshot.js').then(m => console.log(m.getLatestSnapshot()))"
+```
+
+Snapshots are saved as `.fxsnapshot` files and include:
+- System configuration and metadata
+- Infrastructure state (K8s, Discord, observability)
+- AI agent status and vector store information
+- Repository tracking and health metrics
+- Security and governance status
 
 ### Contributing
 1. **Fork** the repository
