@@ -264,6 +264,7 @@ docker compose -f docker-compose-forensics.yml ps
 ```
 
 ### Documentation
+- **[FORENSICS_QUICKSTART.md](FORENSICS_QUICKSTART.md)** - 5-minute quick start guide (START HERE)
 - **[DOM_010101_FORENSICS.md](DOM_010101_FORENSICS.md)** - Complete forensics toolchain and deployment guide
 - **[VIDEO_CONTENT_LIBRARY.md](VIDEO_CONTENT_LIBRARY.md)** - 100+ educational videos and training content
 - **[NEXT_100_IDEAS.md](NEXT_100_IDEAS.md)** - Innovation roadmap and future capabilities
