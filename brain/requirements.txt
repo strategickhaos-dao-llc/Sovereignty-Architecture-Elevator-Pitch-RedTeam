@@ -1,0 +1,5 @@
+# Strategickhaos Listener Requirements
+# These are the dependencies needed for the listener and related brain components
+
+flask==3.0.0
+requests==2.31.0
