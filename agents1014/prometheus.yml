@@ -1,0 +1,41 @@
+# Prometheus configuration for TRS Multi-Agent Chess System
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'trs-agents'
+    environment: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# Scrape configurations
+scrape_configs:
+  # TRS Agents metrics
+  - job_name: 'trs_agents'
+    static_configs:
+      - targets: ['trs_agents:8766']
+        labels:
+          service: 'trs_multi_agent'
+
+  # Ollama metrics (if exposed)
+  - job_name: 'ollama'
+    static_configs:
+      - targets: ['ollama:11434']
+        labels:
+          service: 'ollama_llm'
+
+  # WebSocket metrics
+  - job_name: 'websocket_bridge'
+    static_configs:
+      - targets: ['trs_agents:8765']
+        labels:
+          service: 'websocket_bridge'
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
