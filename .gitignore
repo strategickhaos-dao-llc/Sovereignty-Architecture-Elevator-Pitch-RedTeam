@@ -20,3 +20,10 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+
+# TypeScript build artifacts
+dist/
+
+# War Room Synthesizer generated files
+threat-model-2025-vault/
+threat-model-2025-configmap.yaml
