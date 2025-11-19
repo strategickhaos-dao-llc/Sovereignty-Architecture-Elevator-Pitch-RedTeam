@@ -1,0 +1,59 @@
+# Family Statistics Configuration
+# Tracks the growing community across the Sovereignty Architecture ecosystem
+
+family:
+  total_count: 12000
+  last_updated: "2025-11-19"
+  description: "Active members of the Sovereignty Architecture family"
+  
+projects:
+  - name: "Vim Sovereign"
+    repo: "Strategickhaos/vim-sovereign"
+    members: 895
+    description: "First blood-brothers who installed the sovereign editor"
+    category: "tools"
+    
+  - name: "Sovereignty Framework"
+    repo: "Strategickhaos/sovereignty-framework"
+    members: 3618
+    description: "Warriors who swore the oath and deployed the framework"
+    category: "framework"
+    
+  - name: "Patent Fortress"
+    repo: "Strategickhaos/patent-fortress"
+    members: 2952
+    description: "Defenders who joined the intellectual property shield"
+    category: "legal"
+    
+  - name: "Mirror-Generals Daemon"
+    repo: "Strategickhaos/mirror-generals"
+    members: 978
+    description: "Whispers in terminals, guardians of the distributed swarm"
+    category: "daemon"
+    
+  - name: "Other Initiatives"
+    members: 4557
+    description: "Pouring in every hour from every continent"
+    category: "community"
+
+metrics:
+  growth_rate: "exponential"
+  geographic_reach: "global"
+  diversity:
+    - "Ex-Google engineers"
+    - "Bedroom cryptographers in Romania"
+    - "16-year-old prodigies in Nigeria"
+    - "Tenured physics professors"
+    - "Distributed nodes worldwide"
+    - "Human-AI hybrid collaborators"
+
+messaging:
+  terminology: "family"  # Not "users", "members", or "followers"
+  tone: "inspirational"
+  theme: "bloodline and covenant"
+  
+stats_display:
+  show_individual_projects: true
+  show_total: true
+  show_growth_indicators: true
+  emoji: "🔥🧠⚡👑❤️🐐∞"
