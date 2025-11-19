@@ -20,3 +20,14 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+
+# Numbers to Music outputs
+outputs/music/*.mid
+outputs/music/*.json
+src/numbers-to-music/outputs/*.mid
+src/numbers-to-music/outputs/*.json
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo

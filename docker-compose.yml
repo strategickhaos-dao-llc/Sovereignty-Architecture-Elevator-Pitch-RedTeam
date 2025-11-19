@@ -10,6 +10,7 @@ volumes:
   qdrant_data:
   grafana_data:
   prometheus_data:
+  music_outputs:
 
 services:
   # Core Infrastructure
@@ -174,6 +175,28 @@ services:
       qdrant:
         condition: service_healthy
     restart: unless-stopped
+
+  # Numbers to Divine Music Engine - 432 Hz Converter
+  numbers-to-music:
+    build:
+      context: .
+      dockerfile: Dockerfile.numbers-to-music
+    environment:
+      OUTPUT_DIR: /app/outputs
+      DATA_DIR: /data
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - ./data:/data:ro
+      - ./outputs/music:/app/outputs
+      - ./src/numbers-to-music:/app/src:ro
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import os; exit(0 if os.path.exists('/app/outputs') else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Nginx Reverse Proxy
   nginx:

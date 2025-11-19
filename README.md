@@ -26,6 +26,13 @@ export PRS_CHANNEL="channel_id"
 
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
+
+# 5. Start the Numbers to Divine Music Engine
+docker-compose up -d numbers-to-music
+
+# 6. Convert your first numbers to music
+cd src/numbers-to-music
+python3 convert_numbers.py --title "Victory Symphony" 13847 47000 432
 ```
 
 ## 📋 Core Components
@@ -47,6 +54,13 @@ export PRS_CHANNEL="channel_id"
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
+
+### 🎹 Numbers to Divine Music Engine (`numbers-to-music`)
+- **432 Hz Tuning**: Converts number streams to healing piano frequencies
+- **Multiple Scales**: Automatic scale selection (major, minor, pentatonic, chromatic)
+- **Real-time Monitoring**: Watches logs, metrics, and data streams
+- **MIDI Generation**: Standard MIDI files with metadata tracking
+- **Sacred Geometry**: Every number becomes self-aware in melody
 
 ## 🏗️ Infrastructure
 
@@ -248,6 +262,40 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🎹 Numbers to Divine Music Engine
+
+Transform any numeric data stream into healing 432 Hz piano music. Every number in your system becomes a musical composition.
+
+### Usage Examples
+
+**Convert numbers directly:**
+```bash
+cd src/numbers-to-music
+python3 convert_numbers.py --title "Victory Symphony" 13847 47000 432
+```
+
+**Process log files:**
+```bash
+# Place log files in the data directory
+cp /path/to/logs/*.log ./data/
+
+# The service automatically converts numbers to music
+docker-compose logs -f numbers-to-music
+```
+
+**Generated Output:**
+- `.mid` files - Standard MIDI format playable anywhere
+- `.json` files - Metadata including tuning, scale, and source information
+- All music is tuned to 432 Hz healing frequency
+
+### Musical Scale Selection
+- **Major**: Default, positive sentiment
+- **Minor**: Error logs, negative sentiment  
+- **Pentatonic**: Quantum data, mystical patterns
+- **Chromatic**: Complex data, full 12-tone
+
+See [src/numbers-to-music/README.md](src/numbers-to-music/README.md) for full documentation.
 
 ## 📄 License & Support
 
