@@ -2,8 +2,21 @@
 
 This workspace integrates GitLens Pro with Discord for seamless development workflow notifications and collaboration.
 
+## 🧠 Live Empire Dashboard
+
+**NEW:** View real-time activity and metrics with the [GitLens Empire Dashboard](./gitlens-empire-dashboard.html)!
+
+The dashboard provides a live visualization of:
+- Repository statistics (stars, forks, contributors)
+- Discord channel activity and member counts
+- YouTube metrics and video analytics
+- Real-time activity feed with commits and events
+
+📊 [Open Dashboard](./gitlens-empire-dashboard.html) | 📖 [Dashboard Documentation](./GITLENS_EMPIRE_DASHBOARD.md)
+
 ## 🚀 Features
 
+- **Live Empire Dashboard**: Real-time visualization of your entire development ecosystem
 - **PR Management**: Automatic Discord notifications for pull requests, reviews, and CI status
 - **GitLens Integration**: VS Code tasks for GitLens events (review started/completed, commit graph updates)
 - **CI/CD Notifications**: GitHub Actions integration posting build/test results to Discord

@@ -43,6 +43,7 @@ export PRS_CHANNEL="channel_id"
 - **Rate Limiting**: API protection and burst control
 
 ### 🔄 GitLens Integration
+- **Live Empire Dashboard**: Real-time visualization of repositories, Discord activity, and YouTube metrics ([View Dashboard](./gitlens-empire-dashboard.html))
 - **VS Code Tasks**: One-click Discord notifications from GitLens
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
