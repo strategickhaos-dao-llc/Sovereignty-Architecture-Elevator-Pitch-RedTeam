@@ -218,6 +218,44 @@ export PRS_CHANNEL="dev_channel_id"
 4. **Submit** PR with improvements
 5. **Share** configuration patterns with community
 
+## 🪟 Windows Development Setup
+
+### Windows Defender Executive Override
+
+For Windows developers experiencing security prompts when running PowerShell scripts, we provide an executive override configuration tool.
+
+**⚡ Quick Start**: See [QUICK_START_WINDOWS.md](QUICK_START_WINDOWS.md) for 2-minute setup.
+
+```powershell
+# Run as Administrator
+.\defender-executive-override.ps1
+```
+
+**⚠️ Security Warning**: This script configures Windows Defender exclusions for PowerShell development. Only use on trusted development machines.
+
+**Features:**
+- Adds project directory to Defender exclusions
+- Excludes PowerShell processes from scanning  
+- Excludes .ps1 file extensions
+- Reduces security prompts during development
+- Includes dry-run mode for safety
+
+**Quick Commands:**
+```powershell
+# Test first (no changes made)
+.\defender-executive-override.ps1 -DryRun
+
+# Apply configuration
+.\defender-executive-override.ps1
+
+# Custom project path
+.\defender-executive-override.ps1 -ProjectPath "C:\Custom\Path"
+```
+
+**Documentation:**
+- 📖 **Quick Start**: [QUICK_START_WINDOWS.md](QUICK_START_WINDOWS.md) - Get started in 2 minutes
+- 📚 **Complete Guide**: [DEFENDER_OVERRIDE_GUIDE.md](DEFENDER_OVERRIDE_GUIDE.md) - Security, troubleshooting, best practices
+
 ## 🆘 Troubleshooting
 
 ### Common Issues
@@ -247,6 +285,15 @@ kubectl logs -f deployment/event-gateway -n ops
 
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
+```
+
+**Windows PowerShell execution policy errors:**
+```powershell
+# Bypass execution policy for single script
+PowerShell.exe -ExecutionPolicy Bypass -File .\script.ps1
+
+# Or set policy for current user (less secure)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ## 📄 License & Support
