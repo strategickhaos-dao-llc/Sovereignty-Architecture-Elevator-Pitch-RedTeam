@@ -1,0 +1,66 @@
+# PATENT SOVEREIGNTY PROTOCOL - CRON SCHEDULE
+# Add these entries to your crontab with: crontab -e
+#
+# Format:
+# minute hour day month weekday command
+#
+# Example paths (adjust to your installation):
+# REPO_PATH=/path/to/Sovereignty-Architecture-Elevator-Pitch-
+# PATENT_FORTRESS=$REPO_PATH/legal/patent-fortress
+
+# ============================================================================
+# COMPLETE PROTOCOL - Run all three departments
+# ============================================================================
+
+# Run every 6 hours (recommended)
+0 */6 * * * cd /path/to/Sovereignty-Architecture-Elevator-Pitch- && ./legal/patent-fortress/schedule-daemon.sh cron
+
+# OR run daily at 2 AM
+# 0 2 * * * cd /path/to/Sovereignty-Architecture-Elevator-Pitch- && ./legal/patent-fortress/schedule-daemon.sh cron
+
+# ============================================================================
+# INDIVIDUAL DEPARTMENTS
+# ============================================================================
+
+# Patent Finder - Daily at 3 AM
+# 0 3 * * * cd /path/to/Sovereignty-Architecture-Elevator-Pitch- && ./legal/patent-fortress/patent-finder.sh >> /var/log/patent-fortress/finder.log 2>&1
+
+# Royalty Scanner - Every 6 hours
+# 0 */6 * * * cd /path/to/Sovereignty-Architecture-Elevator-Pitch- && ./legal/patent-fortress/royalty-scanner.sh >> /var/log/patent-fortress/scanner.log 2>&1
+
+# Gratitude Engine - Triggered manually or by revenue events
+# (Not typically scheduled via cron)
+
+# ============================================================================
+# MAINTENANCE
+# ============================================================================
+
+# Clean up old logs (keep last 30 days)
+# 0 4 * * 0 find /tmp -name "patent-finder-*.log" -mtime +30 -delete
+# 0 4 * * 0 find /tmp -name "royalty-scanner-*.log" -mtime +30 -delete
+# 0 4 * * 0 find /tmp -name "gratitude-engine-*.log" -mtime +30 -delete
+# 0 4 * * 0 find /tmp -name "sovereignty-protocol-*.log" -mtime +30 -delete
+
+# ============================================================================
+# MONITORING
+# ============================================================================
+
+# Check Patent Fortress status and send to Discord
+# 0 9 * * 1 cd /path/to/Sovereignty-Architecture-Elevator-Pitch- && ./legal/patent-fortress/status-check.sh
+
+# ============================================================================
+# NOTES
+# ============================================================================
+#
+# 1. Replace /path/to/Sovereignty-Architecture-Elevator-Pitch- with actual path
+# 2. Create log directory: mkdir -p /var/log/patent-fortress
+# 3. Ensure scripts are executable: chmod +x legal/patent-fortress/*.sh
+# 4. Test manually first: ./legal/patent-fortress/sovereignty-protocol.sh
+# 5. Monitor logs: tail -f /var/log/patent-fortress/*.log
+# 6. For production, consider using systemd timers instead of cron
+#
+# Example systemd timer setup:
+#   sudo systemctl enable --now patent-sovereignty.timer
+#   sudo systemctl status patent-sovereignty.timer
+#
+# ============================================================================

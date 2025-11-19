@@ -1,0 +1,33 @@
+# PATENT SOVEREIGNTY PROTOCOL - SYSTEMD TIMER
+# Triggers the Patent Sovereignty Protocol every 6 hours
+#
+# Installation:
+#   sudo cp patent-sovereignty.timer /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable patent-sovereignty.timer
+#   sudo systemctl start patent-sovereignty.timer
+#
+# Usage:
+#   sudo systemctl status patent-sovereignty.timer
+#   sudo systemctl list-timers patent-sovereignty.timer
+
+[Unit]
+Description=Patent Sovereignty Protocol Timer - Runs every 6 hours
+Documentation=https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+Requires=patent-sovereignty.service
+
+[Timer]
+# Run every 6 hours
+OnCalendar=*-*-* 00/6:00:00
+
+# Run 5 minutes after system boot (if timer was missed)
+OnBootSec=5min
+
+# If system was off when timer was scheduled, run on next boot
+Persistent=true
+
+# Randomize start time by up to 5 minutes to avoid system load spikes
+RandomizedDelaySec=5min
+
+[Install]
+WantedBy=timers.target

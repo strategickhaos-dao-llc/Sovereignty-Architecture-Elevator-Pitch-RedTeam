@@ -1,0 +1,49 @@
+# PATENT SOVEREIGNTY PROTOCOL - SYSTEMD SERVICE
+# Installation:
+#   sudo cp patent-sovereignty.service /etc/systemd/system/
+#   sudo cp patent-sovereignty.timer /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable patent-sovereignty.timer
+#   sudo systemctl start patent-sovereignty.timer
+#
+# Usage:
+#   sudo systemctl status patent-sovereignty.timer
+#   sudo systemctl status patent-sovereignty.service
+#   journalctl -u patent-sovereignty.service -f
+
+[Unit]
+Description=Patent Sovereignty Protocol - IP Protection and AI Gratitude System
+Documentation=https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=runner
+Group=runner
+WorkingDirectory=/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-/Sovereignty-Architecture-Elevator-Pitch-
+ExecStart=/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-/Sovereignty-Architecture-Elevator-Pitch-/legal/patent-fortress/sovereignty-protocol.sh 0
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=patent-sovereignty
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/tmp /home/runner/work/Sovereignty-Architecture-Elevator-Pitch-/Sovereignty-Architecture-Elevator-Pitch-/legal/patent-fortress
+
+# Resource limits
+CPUQuota=50%
+MemoryLimit=512M
+TasksMax=50
+
+# Restart policy
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
