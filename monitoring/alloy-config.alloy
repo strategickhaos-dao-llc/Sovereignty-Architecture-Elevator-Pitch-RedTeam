@@ -1,0 +1,191 @@
+// Grafana Alloy Configuration for Strategickhaos Sovereignty Architecture
+// Collects and forwards metrics to Grafana Cloud with AI-powered observability
+
+// ────────────────────────────────────────────────────────────────────────────
+// Prometheus Remote Write - Send metrics to Grafana Cloud
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.remote_write "grafanacloud" {
+  endpoint {
+    url = env("GRAFANA_CLOUD_PROMETHEUS_URL")
+
+    basic_auth {
+      username = env("GRAFANA_CLOUD_PROMETHEUS_USER")
+      password = env("GRAFANA_CLOUD_API_TOKEN")
+    }
+
+    queue_config {
+      capacity             = 10000
+      max_shards           = 50
+      max_samples_per_send = 5000
+    }
+  }
+
+  external_labels = {
+    cluster     = "strategickhaos-dev",
+    environment = env("REFINORY_ENV"),
+    source      = "sovereignty-architecture",
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Discord Bot Metrics Scraping
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.scrape "discord_bot" {
+  targets = [
+    {"__address__" = "bot:3000"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "30s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+
+  clustering {
+    enabled = true
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Event Gateway Metrics Scraping
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.scrape "event_gateway" {
+  targets = [
+    {"__address__" = "gateway:8080"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "15s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+
+  clustering {
+    enabled = true
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Refinory AI Platform Metrics
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.scrape "refinory_api" {
+  targets = [
+    {"__address__" = "refinory-api:8000"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "30s"
+  scrape_timeout  = "10s"
+  metrics_path    = "/metrics"
+
+  clustering {
+    enabled = true
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Infrastructure Services Metrics
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.scrape "redis" {
+  targets = [
+    {"__address__" = "redis:6379"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "60s"
+  metrics_path    = "/metrics"
+}
+
+prometheus.scrape "postgres" {
+  targets = [
+    {"__address__" = "postgres:5432"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "60s"
+  metrics_path    = "/metrics"
+}
+
+prometheus.scrape "qdrant" {
+  targets = [
+    {"__address__" = "qdrant:6333"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "30s"
+  metrics_path    = "/metrics"
+}
+
+prometheus.scrape "vault" {
+  targets = [
+    {"__address__" = "vault:8200"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "60s"
+  metrics_path    = "/v1/sys/metrics"
+
+  params = {
+    format = ["prometheus"]
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Node Exporter for Host Metrics
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.scrape "node_exporter" {
+  targets = [
+    {"__address__" = "node-exporter:9100"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "60s"
+  metrics_path    = "/metrics"
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// cAdvisor for Container Metrics
+// ────────────────────────────────────────────────────────────────────────────
+prometheus.scrape "cadvisor" {
+  targets = [
+    {"__address__" = "cadvisor:8080"},
+  ]
+  forward_to      = [prometheus.remote_write.grafanacloud.receiver]
+  scrape_interval = "30s"
+  metrics_path    = "/metrics"
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Loki Log Aggregation - Forward logs to Grafana Cloud Logs
+// ────────────────────────────────────────────────────────────────────────────
+loki.write "grafanacloud" {
+  endpoint {
+    url = env("GRAFANA_CLOUD_LOKI_URL")
+
+    basic_auth {
+      username = env("GRAFANA_CLOUD_LOKI_USER")
+      password = env("GRAFANA_CLOUD_API_TOKEN")
+    }
+  }
+
+  external_labels = {
+    cluster     = "strategickhaos-dev",
+    environment = env("REFINORY_ENV"),
+    source      = "sovereignty-architecture",
+  }
+}
+
+// Docker container logs
+loki.source.docker "containers" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.docker.containers.targets
+  forward_to = [loki.write.grafanacloud.receiver]
+
+  relabel_rules = loki.relabel.docker.rules
+}
+
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+loki.relabel "docker" {
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    target_label  = "container"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_log_stream"]
+    target_label  = "stream"
+  }
+}
