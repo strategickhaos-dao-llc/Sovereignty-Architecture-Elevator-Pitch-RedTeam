@@ -10,11 +10,18 @@ This repository now includes the **[100-Layer Ascension Protocol](100_LAYER_ASCE
 # Explore the 100-layer architecture
 .\final-100-layer-ascension.ps1 -ShowLayers
 
-# Generate detailed report
+# Validate and generate report
+.\final-100-layer-ascension.ps1 -ValidateOnly
 .\final-100-layer-ascension.ps1 -GenerateReport
+
+# Or use the comprehensive status checker (Linux/macOS)
+./scripts/ascension_status.sh all
 ```
 
-See **[100_LAYER_ASCENSION.md](100_LAYER_ASCENSION.md)** for complete documentation.
+**Documentation:**
+- 📖 **[ASCENSION_QUICKSTART.md](ASCENSION_QUICKSTART.md)** - Quick start guide
+- 📚 **[100_LAYER_ASCENSION.md](100_LAYER_ASCENSION.md)** - Complete specification
+- ⚙️ **[100_layer_config.yaml](100_layer_config.yaml)** - Machine-readable config
 
 ## 🏛️ Architecture Overview
 

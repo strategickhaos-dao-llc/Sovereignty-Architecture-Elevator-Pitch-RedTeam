@@ -20,3 +20,7 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+dist
+
+# Generated reports from 100-Layer Ascension Protocol
+100_LAYER_ASCENSION_REPORT.md
