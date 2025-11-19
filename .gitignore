@@ -20,3 +20,44 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+
+# Forensics - Sensitive Evidence Data
+# DO NOT commit actual forensics evidence or case data
+/evidence/
+/captures/
+/vault/
+/drone/
+/backups/
+*.pcap
+*.mem
+*.raw
+*.img
+*.dd
+*.E01
+*.AFF
+*.case
+
+# Forensics - Environment and Secrets
+.env.forensics
+*.pem
+*.key
+*.crt
+/config/blockchain/crypto-config/
+
+# Forensics - Models and Generated Content
+/models/voice/*.pth
+/models/voice/*.pt
+/models/video/
+/video-output/
+/output/
+
+# Forensics - Temporary and Cache Files
+/tmp/forensics/
+/cache/
+*.tmp
+*.temp
+/wordlists/*.txt
+
+# Forensics - Logs (keep structure, ignore data)
+/logs/*.log
+/drone/logs/*.log

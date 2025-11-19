@@ -1,0 +1,336 @@
+version: '3.8'
+
+networks:
+  strategickhaos_network:
+    external: true
+  forensics_internal:
+    driver: bridge
+    internal: true
+
+volumes:
+  forensics_evidence:
+  forensics_tools:
+  forensics_db:
+  forensics_blockchain:
+  hashcat_wordlists:
+  volatility_profiles:
+  osint_data:
+
+services:
+  # Phone Imaging and Mobile Forensics
+  forensics-phone:
+    image: strategickhaos/forensics-mobile:latest
+    container_name: forensics-phone
+    privileged: true
+    environment:
+      - EVIDENCE_PATH=/evidence
+      - CASE_ID=${CASE_ID:-default}
+      - ANALYST=${ANALYST:-system}
+    volumes:
+      - forensics_evidence:/evidence
+      - forensics_tools:/tools
+      - /dev:/dev  # Access to USB devices for phone imaging
+    networks:
+      - strategickhaos_network
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-phone"
+      com.strategickhaos.description: "Mobile device forensics and imaging"
+
+  # Full Disk Encryption Cracking
+  forensics-cracking:
+    image: strategickhaos/forensics-cracking:latest
+    container_name: forensics-cracking
+    runtime: nvidia  # GPU acceleration for hashcat
+    environment:
+      - HASHCAT_WORKLOAD_PROFILE=3
+      - JOHN_OPTIONS=--fork=4
+      - WORDLIST_PATH=/wordlists
+    volumes:
+      - forensics_evidence:/evidence
+      - hashcat_wordlists:/wordlists
+    networks:
+      - forensics_internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    labels:
+      com.strategickhaos.service: "forensics-cracking"
+      com.strategickhaos.description: "Password and encryption cracking"
+
+  # Memory Forensics Analysis
+  forensics-memory:
+    image: strategickhaos/forensics-memory:latest
+    container_name: forensics-memory
+    environment:
+      - VOLATILITY_PLUGINS_PATH=/plugins
+      - VOLATILITY_PROFILES_PATH=/profiles
+    volumes:
+      - forensics_evidence:/evidence
+      - volatility_profiles:/profiles
+      - forensics_tools:/plugins
+    networks:
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-memory"
+      com.strategickhaos.description: "Memory dump analysis with Volatility3"
+
+  # OSINT and Reconnaissance Platform
+  forensics-osint:
+    image: strategickhaos/forensics-osint:latest
+    container_name: forensics-osint
+    environment:
+      - MALTEGO_API_KEY=${MALTEGO_API_KEY}
+      - SPIDERFOOT_CONFIG=/config/spiderfoot.conf
+      - OSINT_DATA_PATH=/data
+    volumes:
+      - osint_data:/data
+      - ./config/osint:/config:ro
+    ports:
+      - "5001:5001"  # SpiderFoot web interface
+    networks:
+      - strategickhaos_network
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-osint"
+      com.strategickhaos.description: "OSINT gathering and analysis"
+
+  # Drone Recon Controller
+  forensics-drone:
+    image: strategickhaos/forensics-drone:latest
+    container_name: forensics-drone
+    environment:
+      - DRONE_TYPE=${DRONE_TYPE:-mavic3}
+      - THERMAL_ANALYSIS=true
+      - GPS_TRACKING=true
+    volumes:
+      - forensics_evidence:/evidence/drone
+      - ./config/drone:/config:ro
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-drone"
+      com.strategickhaos.description: "Drone reconnaissance and thermal imaging"
+
+  # Chain of Custody Blockchain
+  forensics-blockchain:
+    image: hyperledger/fabric-peer:2.5
+    container_name: forensics-blockchain
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=forensics-peer
+      - CORE_PEER_ADDRESS=forensics-blockchain:7051
+      - CORE_PEER_LOCALMSPID=ForensicsMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp
+      - CORE_CHAINCODE_LOGGING_LEVEL=INFO
+      - CORE_CHAINCODE_LOGGING_SHIM=WARNING
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - forensics_blockchain:/var/hyperledger/production
+      - ./config/blockchain/crypto-config:/etc/hyperledger/msp:ro
+    ports:
+      - "7051:7051"
+      - "7053:7053"
+    networks:
+      - strategickhaos_network
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-blockchain"
+      com.strategickhaos.description: "Chain of custody blockchain ledger"
+
+  # AI Lie Detection and Analysis
+  forensics-ai:
+    image: strategickhaos/forensics-ai:latest
+    container_name: forensics-ai
+    environment:
+      - MODEL_PATH=/models
+      - INFERENCE_DEVICE=cuda
+      - BATCH_SIZE=8
+    volumes:
+      - forensics_evidence:/evidence
+      - ./models:/models:ro
+    networks:
+      - forensics_internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    labels:
+      com.strategickhaos.service: "forensics-ai"
+      com.strategickhaos.description: "AI-powered lie detection and analysis"
+
+  # Quantum-Resistant Evidence Vault
+  forensics-vault:
+    image: strategickhaos/forensics-vault:latest
+    container_name: forensics-vault
+    environment:
+      - VAULT_ENCRYPTION=post-quantum
+      - VAULT_BACKEND=filesystem
+      - VAULT_PATH=/vault
+    volumes:
+      - forensics_evidence:/vault
+    networks:
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-vault"
+      com.strategickhaos.description: "Quantum-resistant evidence storage"
+
+  # Forensics Database
+  forensics-db:
+    image: postgres:15
+    container_name: forensics-db
+    environment:
+      POSTGRES_DB: forensics
+      POSTGRES_USER: forensics
+      POSTGRES_PASSWORD: ${FORENSICS_DB_PASSWORD:-forensics_secure_pass}
+    volumes:
+      - forensics_db:/var/lib/postgresql/data
+      - ./init-forensics-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-db"
+      com.strategickhaos.description: "Forensics case and evidence database"
+
+  # Forensics API Gateway
+  forensics-api:
+    image: strategickhaos/forensics-api:latest
+    container_name: forensics-api
+    environment:
+      - DB_HOST=forensics-db
+      - DB_PORT=5432
+      - DB_NAME=forensics
+      - DB_USER=forensics
+      - DB_PASSWORD=${FORENSICS_DB_PASSWORD:-forensics_secure_pass}
+      - DISCORD_WEBHOOK=${DISCORD_FORENSICS_WEBHOOK}
+      - API_PORT=8090
+    volumes:
+      - forensics_evidence:/evidence:ro
+    ports:
+      - "8090:8090"
+    networks:
+      - strategickhaos_network
+      - forensics_internal
+    depends_on:
+      - forensics-db
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-api"
+      com.strategickhaos.description: "Forensics REST API gateway"
+
+  # Video Generation Pipeline
+  forensics-video:
+    image: strategickhaos/forensics-video:latest
+    container_name: forensics-video
+    environment:
+      - VOICE_CLONE_MODEL=/models/voice
+      - VIDEO_MODELS_PATH=/models/video
+      - OUTPUT_PATH=/output
+      - YOUTUBE_CHANNEL=${YOUTUBE_CHANNEL_ID}
+      - UPLOAD_ENABLED=${AUTO_UPLOAD:-false}
+    volumes:
+      - ./models/voice:/models/voice:ro
+      - ./models/video:/models/video:ro
+      - ./video-output:/output
+      - ./scripts/video:/scripts:ro
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    labels:
+      com.strategickhaos.service: "forensics-video"
+      com.strategickhaos.description: "AI video generation and upload pipeline"
+
+  # Forensics Monitoring Dashboard
+  forensics-dashboard:
+    image: grafana/grafana:latest
+    container_name: forensics-dashboard
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-worldmap-panel
+    volumes:
+      - ./monitoring/grafana/dashboards/forensics:/var/lib/grafana/dashboards
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3001:3000"
+    networks:
+      - strategickhaos_network
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-dashboard"
+      com.strategickhaos.description: "Forensics operations dashboard"
+
+  # Evidence Processing Queue
+  forensics-queue:
+    image: redis:7-alpine
+    container_name: forensics-queue
+    volumes:
+      - ./config/redis/forensics.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - forensics_internal
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-queue"
+      com.strategickhaos.description: "Evidence processing job queue"
+
+  # Forensics Worker
+  forensics-worker:
+    image: strategickhaos/forensics-worker:latest
+    container_name: forensics-worker
+    environment:
+      - REDIS_HOST=forensics-queue
+      - REDIS_PORT=6379
+      - WORKER_CONCURRENCY=4
+      - LOG_LEVEL=INFO
+    volumes:
+      - forensics_evidence:/evidence
+      - forensics_tools:/tools
+    networks:
+      - forensics_internal
+    depends_on:
+      - forensics-queue
+      - forensics-db
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-worker"
+      com.strategickhaos.description: "Background evidence processing worker"
+
+  # Network Forensics Capture
+  forensics-network:
+    image: strategickhaos/forensics-network:latest
+    container_name: forensics-network
+    network_mode: host
+    privileged: true
+    environment:
+      - CAPTURE_INTERFACE=${CAPTURE_INTERFACE:-eth0}
+      - PCAP_PATH=/captures
+      - ZEEK_ENABLED=true
+    volumes:
+      - forensics_evidence:/captures
+    restart: unless-stopped
+    labels:
+      com.strategickhaos.service: "forensics-network"
+      com.strategickhaos.description: "Network traffic capture and analysis"
