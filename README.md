@@ -198,7 +198,68 @@ git push origin main
 
 ## 🛠️ Development Workflow
 
-### Local Development
+### Local Sovereignty Development (Ngrok Edition)
+
+**Zero-trust, zero-cloud-for-dev, fully local god-mode webhook setup** 🚀
+
+This is the "post-cloud" architecture: No AWS/GCP webhook URLs that can get revoked, no waiting for deploys — just pure localhost → public tunnel → instant GitHub webhook feedback loop while you stay 100% sovereign.
+
+#### Quick Start
+```bash
+# 1. Install dependencies
+make install
+
+# 2. Configure ngrok with persistent domain
+# Edit ngrok.yml and add your authtoken from https://dashboard.ngrok.com
+# Optional: Reserve a free static domain at https://dashboard.ngrok.com/domains
+
+# 3. Start sovereign dev environment (event-gateway + ngrok)
+make dev
+
+# Or start components separately:
+npm run dev          # Start event-gateway on localhost:8080
+./start-ngrok.sh     # Start ngrok tunnels with auto-replay
+```
+
+#### Persistent Domains (Zero URL Changes on Restart)
+Reserve a free static domain at [ngrok dashboard](https://dashboard.ngrok.com/domains), then update `ngrok.yml`:
+```yaml
+tunnels:
+  event-gateway:
+    addr: 8080
+    domain: event-gateway-YOUR-RESERVED-DOMAIN.ngrok-free.app
+```
+
+Now your GitHub webhook URL **never changes** across restarts! 🎯
+
+#### Auto-Replay Failed Webhooks
+The `start-ngrok.sh` script automatically replays the last 5 failed webhook requests on startup. This gives you **insane dev velocity** — restart your dev server and instantly replay failed requests without manually triggering GitHub events.
+
+#### Grok-Powered Webhook Testing
+Test your webhook handlers with AI-generated realistic payloads:
+```bash
+# Generate a PR webhook payload
+curl https://your-tunnel.ngrok.io/grok-test \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Generate a GitHub webhook for a new PR titled \"Add sovereignty architecture\""}'
+
+# Custom scenarios
+curl https://your-tunnel.ngrok.io/grok-test \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Generate a GitHub check_suite webhook for a failed CI run"}'
+```
+
+**Requirements**: Set `XAI_API_KEY` in your `.env` file (get it from [x.ai/api](https://x.ai/api))
+
+#### Chaos Mode - Nuke & Rebuild
+```bash
+make destroy    # Nuclear option: removes all containers, volumes, and ngrok state
+make dev        # Fresh start from scratch
+```
+
+### Traditional Local Development
 ```bash
 # 1. Set up environment
 export DISCORD_TOKEN="dev_token"
