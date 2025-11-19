@@ -180,9 +180,34 @@ brain/
 
 ## 🔒 Security Notes
 
-- The listener binds to `0.0.0.0` (all interfaces) - consider restricting to `127.0.0.1` for local-only access
-- No authentication is implemented - add security measures for production use
-- Messages are transmitted in plain text - consider encryption for sensitive data
+**⚠️ IMPORTANT: This listener is designed for development and internal use.**
+
+### Network Binding
+- **Current Configuration**: The listener binds to `0.0.0.0` (all network interfaces) to accept connections from external systems
+- **Security Risk**: This exposes the listener to all network interfaces, including external networks
+- **Recommended for Production**: 
+  - Bind to `127.0.0.1` for local-only access
+  - Use firewall rules to restrict access to trusted IP addresses
+  - Place behind a VPN or private network
+
+### Authentication & Encryption
+- **No Authentication**: Currently, any client that can reach the port can send messages
+- **Plain Text**: Messages are transmitted without encryption
+- **Recommendations**:
+  - Implement authentication tokens or API keys
+  - Use TLS/SSL for encrypted communication
+  - Add rate limiting to prevent abuse
+  - Implement input validation and sanitization
+
+### To Restrict to Local Access Only
+Edit `brain/plugins/listener_bind_58563.py` and change:
+```python
+HOST = '0.0.0.0'  # Change this
+```
+To:
+```python
+HOST = '127.0.0.1'  # Local only
+```
 
 ## 📝 License
 
