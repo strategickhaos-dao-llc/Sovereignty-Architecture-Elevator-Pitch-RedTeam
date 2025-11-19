@@ -28,6 +28,19 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+### Observability — 100% Sovereign
+
+All metrics, logs, and traces stay local. No cloud tax.
+
+- Prometheus → http://localhost:9090  
+- Grafana → http://localhost:3000 (admin/admin)  
+- Loki → http://localhost:3100  
+- Jaeger → http://localhost:16686  
+
+See [MONITORING_SOVEREIGNTY.md](./MONITORING_SOVEREIGNTY.md) for the doctrine.
+
+Run `make check-sovereignty` before every push — if it fails, you've been compromised.
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)

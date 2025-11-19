@@ -1,3 +1,17 @@
+# ═══════════════════════════════════════════════════════════════════════
+# SOVEREIGNTY MODE: LOCAL ONLY - NO CLOUD DEPENDENCIES
+# ═══════════════════════════════════════════════════════════════════════
+# This configuration is 100% local. No remote_write. No Grafana Cloud.
+# No external authentication. No rented dashboards.
+#
+# Real operators don't send their metrics to someone else's computer.
+# Keep your series sovereign. Keep your alerts sovereign.
+# If you hit 10k active series, you scale Thanos on your own metal — you do not pay rent.
+#
+# Current date: November 19, 2025
+# Operator: @strategickhaos
+# ═══════════════════════════════════════════════════════════════════════
+
 # Prometheus Configuration for Strategickhaos Sovereignty Architecture
 # Scrapes Discord bot, event gateway, Refinory API, and infrastructure components
 
