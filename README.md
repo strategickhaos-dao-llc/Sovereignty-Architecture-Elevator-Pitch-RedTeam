@@ -134,6 +134,7 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 - **Log Schemas**: Structured logging patterns and analysis
 - **Infrastructure Docs**: Architecture and deployment guides
 - **Code Patterns**: Development standards and examples
+- **Forbidden Library**: 30 esoteric and alternative knowledge texts for cognitive sovereignty (see [FORBIDDEN_LIBRARY.md](FORBIDDEN_LIBRARY.md))
 
 ### Per-Channel Routing
 ```yaml
@@ -209,6 +210,10 @@ export PRS_CHANNEL="dev_channel_id"
 
 # 3. Run VS Code tasks
 # Command Palette → Tasks: Run Task → GitLens: Review Started
+
+# 4. Initialize Forbidden Library knowledge base (optional)
+./forbidden-library-protocol.sh init
+./forbidden-library-protocol.sh status
 ```
 
 ### Contributing
