@@ -1,0 +1,107 @@
+version: '3.8'
+
+networks:
+  trs_network:
+    driver: bridge
+
+volumes:
+  ollama_models:
+  whisper_models:
+
+services:
+  # Ollama - Local LLM server
+  ollama:
+    image: ollama/ollama:latest
+    container_name: trs_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    networks:
+      - trs_network
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # TRS Multi-Agent Chess System
+  trs_agents:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trs_agents
+    depends_on:
+      - ollama
+    ports:
+      - "8765:8765"  # WebSocket port for Unity
+    volumes:
+      - ./logs:/app/logs
+      - whisper_models:/app/models
+    networks:
+      - trs_network
+    environment:
+      - OLLAMA_HOST=ollama:11434
+      - OLLAMA_MODEL=llama3.2:3b
+      - WEBSOCKET_HOST=0.0.0.0
+      - WEBSOCKET_PORT=8765
+      - ENABLE_VOICE=true
+      - NUM_AGENTS=10
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+
+  # Optional: Unity Visualizer (if running in Docker)
+  # unity_visualizer:
+  #   image: unity_trs_visualizer:latest
+  #   container_name: trs_unity
+  #   depends_on:
+  #     - trs_agents
+  #   ports:
+  #     - "7777:7777"
+  #   networks:
+  #     - trs_network
+  #   environment:
+  #     - WEBSOCKET_URL=ws://trs_agents:8765
+  #   restart: unless-stopped
+
+  # Optional: Monitoring dashboard
+  grafana_trs:
+    image: grafana/grafana:latest
+    container_name: trs_grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+    networks:
+      - trs_network
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-websocket-plugin
+    restart: unless-stopped
+
+  # Prometheus for metrics collection
+  prometheus_trs:
+    image: prom/prometheus:latest
+    container_name: trs_prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/prometheus
+    networks:
+      - trs_network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
