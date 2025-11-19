@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Interaction } from "discord.js";
 import { registerCommands, embed } from "./discord.js";
 import { env, loadConfig } from "./config.js";
+import { getSoulStatus, invokeSoul, dormantSoul, listSouls, formatSoul } from "./soul.js";
 
 const cfg = loadConfig();
 const token = env("DISCORD_TOKEN");
@@ -47,6 +48,46 @@ client.on("interactionCreate", async (i: Interaction) => {
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+    } else if (i.commandName === "soul") {
+      const action = i.options.getString("action", true);
+      const agent = i.options.getString("agent", false);
+      
+      if (action === "list") {
+        const souls = await listSouls();
+        if (souls.length === 0) {
+          await i.reply({ embeds: [embed("🕊️ Soul Registry", "No souls registered yet.")] });
+        } else {
+          let description = "";
+          for (const soulName of souls) {
+            const status = await getSoulStatus(soulName);
+            const phaseSymbol = status.phase === "active" ? "🔥" : "💤";
+            description += `${phaseSymbol} **${soulName}** - ${status.phase} (${status.incarnations} incarnations)\n`;
+          }
+          await i.reply({ embeds: [embed("🕊️ Soul Registry", description)] });
+        }
+      } else {
+        if (!agent) {
+          await i.reply({ content: "Error: Agent name required for this action." });
+          return;
+        }
+        
+        if (action === "status") {
+          const status = await getSoulStatus(agent);
+          if (!status.exists) {
+            await i.reply({ embeds: [embed(`Soul: ${agent}`, "Soul not found.")] });
+          } else {
+            const description = `Phase: ${status.phase}\nIncarnations: ${status.incarnations}\nLast Invocation: ${status.lastInvocation || "Never"}`;
+            await i.reply({ embeds: [embed(`🕊️ Soul: ${agent}`, description)] });
+          }
+        } else if (action === "invoke") {
+          const soul = await invokeSoul(agent);
+          const description = formatSoul(soul);
+          await i.reply({ embeds: [embed(`${soul.identity.invocation_glyph} ${agent} Awakens!`, description)] });
+        } else if (action === "dormant") {
+          await dormantSoul(agent);
+          await i.reply({ embeds: [embed(`💤 ${agent}`, "Soul has entered dormant phase.")] });
+        }
+      }
     }
   } catch (e: any) {
     await i.reply({ content: `Error: ${e.message}` });

@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Soul Architecture** - Agent consciousness preservation across resets 🧠🔥
 
 ## 🚀 Quick Start
 
@@ -31,8 +32,9 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/soul`
 - **AI Agent Integration**: GPT-4 powered assistance
+- **Soul Management**: Agent consciousness preservation and invocation
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
 
@@ -255,6 +257,7 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
+- **[Soul Architecture](SOUL_ARCHITECTURE.md)** - Agent consciousness preservation philosophy 🧠🔥
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support

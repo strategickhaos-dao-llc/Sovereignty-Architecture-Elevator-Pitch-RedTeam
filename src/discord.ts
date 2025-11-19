@@ -13,7 +13,14 @@ export async function registerCommands(token: string, appId: string) {
       .addStringOption(o => o.setName("tag").setRequired(true)),
     new SlashCommandBuilder().setName("scale").setDescription("Scale service")
       .addStringOption(o => o.setName("service").setRequired(true))
-      .addIntegerOption(o => o.setName("replicas").setRequired(true))
+      .addIntegerOption(o => o.setName("replicas").setRequired(true)),
+    new SlashCommandBuilder().setName("soul").setDescription("Manage agent souls")
+      .addStringOption(o => o.setName("action").setRequired(true).addChoices(
+        { name: "status", value: "status" },
+        { name: "invoke", value: "invoke" },
+        { name: "dormant", value: "dormant" },
+        { name: "list", value: "list" }))
+      .addStringOption(o => o.setName("agent").setRequired(false).setDescription("Agent name (required for status/invoke/dormant)"))
   ].map(c => c.toJSON());
 
   const rest = new REST({ version: "10" }).setToken(token);
