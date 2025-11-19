@@ -130,7 +130,8 @@ class VoiceInterface:
                     
                 except Exception as e:
                     logger.error("recording_error", error=str(e))
-                    await asyncio.sleep(1)
+                    import time
+                    time.sleep(1)
         
         # Start recording thread
         self.record_thread = threading.Thread(target=record_audio, daemon=True)
