@@ -1,0 +1,13 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sovereignty-architecture
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./kubernetes/overlays/production
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: sovereignty-repo
+  targetNamespace: sovereignty-system

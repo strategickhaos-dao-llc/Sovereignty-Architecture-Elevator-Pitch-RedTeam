@@ -1,0 +1,52 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: sovereignty-build-deploy
+  namespace: sovereignty-system
+spec:
+  params:
+    - name: git-url
+      type: string
+      default: https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
+    - name: git-revision
+      type: string
+      default: main
+    - name: image-name
+      type: string
+      default: sovereignty/core
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+    
+    - name: build-image
+      taskRef:
+        name: buildah
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: IMAGE
+          value: $(params.image-name):$(params.git-revision)
+    
+    - name: deploy-to-kubernetes
+      taskRef:
+        name: kubernetes-actions
+      runAfter:
+        - build-image
+      params:
+        - name: script
+          value: |
+            kubectl apply -f kubernetes/overlays/production/

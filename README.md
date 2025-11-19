@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> 🚀 **NEW**: [Production-Ready Infrastructure](PRODUCTION_README.md) - Deploy the complete 7-Pillar global infrastructure with one command!
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +11,18 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation
 - **AI Agents** - Intelligent assistance with vector knowledge base
+
+### Production Deployment
+
+For enterprise-grade, multi-cloud deployment:
+
+```bash
+./deploy-production.sh
+# Deploys all 7 pillars: K8s Federation, Terraform IaC, GitOps, 
+# Zero-Trust Network, Observability, Secrets, CI/CD
+```
+
+See [PRODUCTION_README.md](PRODUCTION_README.md) for complete production infrastructure documentation.
 
 ## 🚀 Quick Start
 

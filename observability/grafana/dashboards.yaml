@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: sovereignty-system
+data:
+  sovereignty-overview.json: |
+    {
+      "dashboard": {
+        "title": "Sovereignty Architecture Overview",
+        "panels": [
+          {
+            "title": "Node Count",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "count(up{job='sovereignty-architecture'})"
+              }
+            ]
+          },
+          {
+            "title": "Request Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total[5m])"
+              }
+            ]
+          },
+          {
+            "title": "Error Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total{status=~'5..'}[5m])"
+              }
+            ]
+          }
+        ]
+      }
+    }

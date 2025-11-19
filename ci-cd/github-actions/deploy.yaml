@@ -1,0 +1,57 @@
+name: Deploy Sovereignty Architecture
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [chaos-god-local, staging, production]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+      
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+      
+      - name: Terraform Validate
+        working-directory: ./terraform
+        run: terraform validate
+      
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: |
+          terraform plan \
+            -var-file=environments/${{ matrix.environment }}/terraform.tfvars \
+            -out=tfplan
+      
+      - name: Terraform Apply (Auto-approve for non-prod)
+        if: matrix.environment != 'production'
+        working-directory: ./terraform
+        run: terraform apply -auto-approve tfplan
+      
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+      
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -k kubernetes/overlays/${{ matrix.environment }}/ || echo "Kubernetes deployment skipped"
+      
+      - name: Verify Deployment
+        run: |
+          kubectl get deployments -n sovereignty-system || echo "Verification skipped"

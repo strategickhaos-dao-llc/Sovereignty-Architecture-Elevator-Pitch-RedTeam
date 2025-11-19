@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: sovereignty-repo
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+  ref:
+    branch: main

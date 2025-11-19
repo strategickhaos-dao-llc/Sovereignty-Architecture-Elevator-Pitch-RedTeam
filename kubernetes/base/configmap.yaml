@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sovereignty-config
+  namespace: sovereignty-system
+data:
+  environment: "base"
+  log_level: "info"
