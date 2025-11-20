@@ -149,9 +149,12 @@ log "📊 Size: $(du -h "$SNAPSHOT_FILE" | cut -f1)"
 echo ""
 
 # Display recent snapshots
-if [ $(ls -1 "$SNAPSHOT_DIR"/fxsnapshot_*.txt 2>/dev/null | wc -l) -gt 1 ]; then
+files=("$SNAPSHOT_DIR"/fxsnapshot_*.txt)
+if [ ${#files[@]} -gt 1 ] && [ -e "${files[0]}" ]; then
     log "${YELLOW}Recent snapshots:${NC}"
-    ls -lht "$SNAPSHOT_DIR"/fxsnapshot_*.txt | head -5 | awk '{print "  " $9 " (" $5 ")"}'
+    for file in "$SNAPSHOT_DIR"/fxsnapshot_*.txt; do
+        [ -e "$file" ] && echo "  $file ($(du -h "$file" | cut -f1))"
+    done | sort -r | head -5
 fi
 
 # Optional: Show snapshot file location for easy access
