@@ -173,6 +173,12 @@ We care about **streaks**, not perfection.
 
 ## 🛠️ Quick Start Scripts
 
+### First Time Setup
+Make the scripts executable (one-time setup):
+```bash
+chmod +x scripts/start-ce-session.sh scripts/ce-log-progress.sh
+```
+
 ### Start a New CE Session
 ```bash
 ./scripts/start-ce-session.sh
