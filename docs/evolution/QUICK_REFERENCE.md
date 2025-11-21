@@ -234,7 +234,7 @@ Total: $30M first year
 - Discord: `#evolution-general`
 - GitHub: Issues/Discussions
 - Wiki: Full documentation
-- Email: support@strategickhaos.com
+- Community: See [COMMUNITY.md](../../COMMUNITY.md)
 
 ---
 

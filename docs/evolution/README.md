@@ -108,42 +108,39 @@
 Located in `/scripts/evolution/`:
 
 ```bash
-# Complete weekend setup
+# Complete weekend setup (all items #1-10)
 ./scripts/evolution/weekend-complete.sh
 
 # Validation and testing
-~/sovereignty/services/weekend-validation.sh
+./scripts/evolution/validate-evolution.sh
 
-# Individual components
-./scripts/evolution/setup-ollama-70b.sh
-./scripts/evolution/setup-comfyui.sh
-./scripts/evolution/setup-meta-brain.sh
-./scripts/evolution/setup-dashboard.sh
+# Note: Individual component scripts are integrated into weekend-complete.sh
+# See the script for detailed implementation of each item
 ```
 
 ---
 
 ### Configuration Templates
 
-Located in `/templates/evolution/`:
+Configuration templates and examples are embedded in the guides:
 
-- `customer-agreement.md` - Service agreement template
-- `sla-document.md` - SLA specifications
-- `kit-assembly-checklist.md` - Hardware assembly guide
-- `onboarding-checklist.md` - Customer onboarding
-- `monitoring-dashboard.json` - Grafana dashboard
+- Customer agreements: See [Business Guide](BUSINESS_MONETIZATION_GUIDE.md)
+- SLA specifications: See [Technical Specs](TECHNICAL_SPECIFICATIONS.md)
+- Assembly checklists: See [Business Guide](BUSINESS_MONETIZATION_GUIDE.md)
+- Onboarding procedures: See [Business Guide](BUSINESS_MONETIZATION_GUIDE.md)
+- Monitoring dashboards: Embedded in setup scripts
 
 ---
 
 ### Example Implementations
 
-Located in `/examples/evolution/`:
+Example code is embedded in the setup scripts and guides:
 
-- `meta-brain.py` - Self-reflecting swarm intelligence
-- `dashboard-server.js` - Live status dashboard
-- `voice-assistant.py` - <400ms voice loop
-- `screen-ai.py` - Real-time screen understanding
-- `customer-provisioning.sh` - Automated customer setup
+- `meta-brain.py` - Embedded in [weekend-complete.sh](../../scripts/evolution/weekend-complete.sh)
+- `dashboard-server.js` - Embedded in [weekend-complete.sh](../../scripts/evolution/weekend-complete.sh)
+- `voice-assistant.py` - Detailed in [Weekend Guide](WEEKEND_QUICKSTART.md)
+- `screen-ai.py` - Detailed in [Advanced Guide](ADVANCED_CAPABILITIES.md)
+- Customer provisioning - Detailed in [Business Guide](BUSINESS_MONETIZATION_GUIDE.md)
 
 ---
 

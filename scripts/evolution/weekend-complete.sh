@@ -135,7 +135,8 @@ echo "Runtime: ${RUNTIME}s"
 if grep -q "tokens per second" /tmp/ollama_output.log; then
     TOKSEC=$(grep "tokens per second" /tmp/ollama_output.log | tail -1 | awk '{print $1}')
     echo "Performance: ${TOKSEC} tok/s"
-    if (( $(echo "$TOKSEC > 85" | bc -l) )); then
+    # Use bash arithmetic for comparison (avoids bc dependency)
+    if [ "${TOKSEC%.*}" -gt 85 ] 2>/dev/null || [ "${TOKSEC%.*}" -eq 85 ] 2>/dev/null; then
         echo "✅ Target achieved: ${TOKSEC} tok/s"
     else
         echo "⚠️  Below target: ${TOKSEC} tok/s (target: 85+)"
@@ -523,16 +524,28 @@ chmod +x ~/sovereignty/dashboard-server/server.js
 log_info "Installing dashboard dependencies..."
 cd ~/sovereignty/dashboard-server
 if command -v npm &> /dev/null; then
-    npm init -y
-    npm install express
+    npm init -y 2>/dev/null || true
+    npm install express 2>/dev/null || {
+        log_warning "npm install failed, dashboard server may not work"
+    }
     
-    # Start dashboard server
-    log_info "Starting dashboard server..."
-    nohup node server.js > ~/sovereignty/logs/dashboard.log 2>&1 &
-    echo $! > ~/sovereignty/services/dashboard.pid
-    log_success "Dashboard server started on http://localhost:3000"
+    # Verify Node.js is available
+    if command -v node &> /dev/null; then
+        # Start dashboard server
+        log_info "Starting dashboard server..."
+        nohup node server.js > ~/sovereignty/logs/dashboard.log 2>&1 &
+        echo $! > ~/sovereignty/services/dashboard.pid
+        sleep 2
+        if curl -s http://localhost:3000/health &> /dev/null; then
+            log_success "Dashboard server started on http://localhost:3000"
+        else
+            log_warning "Dashboard server may not have started correctly"
+        fi
+    else
+        log_warning "Node.js not found, skipping dashboard server"
+    fi
 else
-    log_warning "npm not found, skipping dashboard server"
+    log_warning "npm not found, skipping dashboard server. Install Node.js to enable."
 fi
 
 # Summary
