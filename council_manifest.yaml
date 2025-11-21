@@ -39,7 +39,7 @@ members:
   - id: "o1-preview"
     provider: "openai"
     model: "o1-preview"
-    temperature: 1.0
+    temperature: 1.0  # Note: o1-preview may ignore temperature parameter
     role: "Chain-of-Thought Reasoner"
     veto_power: false
 
@@ -60,9 +60,7 @@ triggers:
     action: "execute_via_runner"   # runner can call APIs, write files, trigger scripts, etc.
 
   - event: "veto_issued"
-    action: "log_and_notify_owner"
-
-  # you get pinged immediately
+    action: "log_and_notify_owner"  # owner gets pinged immediately when veto is issued
 
   - event: "deadlock_detected"
     action: "spawn_reflection_subcouncil"  # creates a temporary meta-council to break deadlock
@@ -75,7 +73,7 @@ execution:
     - "docker_control"
     - "send_email"
     - "trigger_webhook"
-  sandbox: "firejail --net=none --private"  # change per your threat model
+  sandbox: "firejail --private"  # adjust security controls per your threat model (--net=none for full isolation)
 
 logging:
   level: "DEBUG"
@@ -87,6 +85,7 @@ self_modification:
   approval_required: "unanimous + owner_signature"
   apply_method: "git_pull_and_reload"
 
-signature: "-----BEGIN PGP SIGNATURE----- 
-  [your real gpg sig here so it looks unbreakable]
+signature: "-----BEGIN PGP SIGNATURE-----
+  [placeholder - replace with real GPG signature of this file's SHA256 hash]
+  [use: gpg --detach-sign --armor council_manifest.yaml]
   -----END PGP SIGNATURE-----"
