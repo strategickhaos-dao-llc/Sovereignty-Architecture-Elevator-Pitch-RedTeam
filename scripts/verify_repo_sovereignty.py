@@ -161,8 +161,9 @@ def scan_repository(repo_path: Path, auto_fix: bool = False) -> Dict:
             with open(license_path, 'r', encoding='utf-8') as f:
                 content = f.read()
                 result['license_type'] = detect_license_type(content)
-        except Exception as e:
+        except (IOError, UnicodeDecodeError) as e:
             result['license_type'] = 'Error reading'
+            result['issues'].append(f'Failed to read LICENSE: {type(e).__name__}')
         
         # Get commit date
         result['license_commit_date'] = get_license_commit_date(repo_path)
@@ -175,22 +176,27 @@ def scan_repository(repo_path: Path, auto_fix: bool = False) -> Dict:
         # Auto-fix if requested
         if auto_fix:
             print_info("  Adding MIT LICENSE...")
-            response = input(f"  Add MIT license to {repo_name}? (y/N): ")
-            if response.lower() == 'y':
-                try:
-                    with open(license_path, 'w', encoding='utf-8') as f:
-                        f.write(MIT_TEMPLATE.format(year=datetime.now().year))
-                    print_success("  LICENSE created")
-                    result['has_license'] = True
-                    result['license_type'] = 'MIT'
-                except Exception as e:
-                    print_error(f"  Failed to create LICENSE: {e}")
+            # Check if running in interactive terminal
+            if sys.stdin.isatty():
+                response = input(f"  Add MIT license to {repo_name}? (y/N): ")
+                if response.lower() == 'y':
+                    try:
+                        with open(license_path, 'w', encoding='utf-8') as f:
+                            f.write(MIT_TEMPLATE.format(year=datetime.now().year))
+                        print_success("  LICENSE created")
+                        result['has_license'] = True
+                        result['license_type'] = 'MIT'
+                        result['issues'].remove('Missing LICENSE file')
+                    except (IOError, ValueError) as e:
+                        print_error(f"  Failed to create LICENSE: {e}")
+            else:
+                print_warning("  Non-interactive mode, skipping confirmation")
     
     # Check for artifacts
     if artifacts_path.exists() and artifacts_path.is_dir():
         result['has_artifacts'] = True
         result['artifact_location'] = 'artifacts/'
-        artifact_count = len(list(artifacts_path.glob('*')))
+        artifact_count = sum(1 for _ in artifacts_path.glob('*'))
         print_success(f"  artifacts/ folder found ({artifact_count} files)")
     elif ext_discussions_path.exists():
         result['has_artifacts'] = True
@@ -205,7 +211,7 @@ def scan_repository(repo_path: Path, auto_fix: bool = False) -> Dict:
         result['status'] = 'fully_sovereign'
         print_success("  Status: Fully Sovereign ✓")
     elif result['has_license']:
-        result['status'] = 'licensed_only'
+        result['status'] = 'needs_artifacts'
         print_warning("  Status: Licensed (needs artifacts)")
     else:
         result['status'] = 'needs_attention'
@@ -344,7 +350,7 @@ def main():
             stats['has_artifacts'] += 1
         if result['status'] == 'fully_sovereign':
             stats['fully_sovereign'] += 1
-        if result['status'] == 'needs_attention':
+        if result['status'] in ('needs_attention', 'needs_artifacts'):
             stats['needs_attention'] += 1
     
     # Print summary

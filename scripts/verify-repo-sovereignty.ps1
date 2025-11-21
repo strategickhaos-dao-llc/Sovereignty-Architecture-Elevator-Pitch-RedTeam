@@ -196,7 +196,7 @@ foreach ($repo in $repos) {
         $stats.FullySovereign++
         Write-Success "  Status: Fully Sovereign ✓"
     } elseif ($repoResult.HasLicense) {
-        $repoResult.Status = "licensed_only"
+        $repoResult.Status = "needs_artifacts"
         $stats.NeedsAttention++
         Write-Warning "  Status: Licensed (needs artifacts)"
     } else {
