@@ -42,3 +42,8 @@ evidence/conversation_ledger.json
 evidence/conversations/*.json
 evidence/screenshots/*.png
 evidence/screenshots/*.jpg
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
