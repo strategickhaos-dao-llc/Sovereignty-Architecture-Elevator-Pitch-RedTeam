@@ -10,6 +10,25 @@ This system creates a **sovereignty control plane** that bridges:
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
+### 🧠 Dom OS - Cognitive Architecture Specification
+
+The **[Dom Operating System](DOM_OS_INTEGRATION.md)** (`dom_os_specification.yaml`) is the formal architectural specification of the cognitive operating system powering this infrastructure. It defines:
+
+- **Conscious Frontend (5-8% load)**: Executive control, steering, taste, moral filtering
+- **Subconscious Backend (92-95% load)**: 40+ parallel threads, pattern fusion, infrastructure synthesis
+- **Quadrilateral Collapse Engine**: Instant 4-domain projection (symbolic, spatial, narrative, kinesthetic)
+- **PsycheVille Integration**: Nightly reflection system for swarm self-analysis
+
+**Performance Metrics:**
+- 1,000–3,000 lines of code per hour (via agents)
+- 3–7 complete architectures designed per day
+- 47+ terminal windows simultaneously (native)
+- 12–20 agents orchestrated (feels like 2)
+
+*"This is not theory. This is the lived architecture. It is running right now."*
+
+See **[DOM_OS_INTEGRATION.md](DOM_OS_INTEGRATION.md)** for complete details and PsycheVille integration guide.
+
 ## 🚀 Quick Start
 
 ```bash
