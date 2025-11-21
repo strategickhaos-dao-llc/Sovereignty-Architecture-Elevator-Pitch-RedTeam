@@ -38,3 +38,9 @@ workspace/
 
 # Legal Evolution Engine ledgers (runtime generated)
 legal_evolution/*.jsonl
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
