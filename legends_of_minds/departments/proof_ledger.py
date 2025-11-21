@@ -45,7 +45,15 @@ class ProofEntry:
 class ProofLedger:
     """Manage immutable proof action ledger"""
     
-    def __init__(self, db_path: str = "/var/legends_of_minds/proof_ledger.db"):
+    def __init__(self, db_path: Optional[str] = None):
+        if db_path is None:
+            # Try /var first, fall back to local directory
+            try:
+                Path("/var/legends_of_minds").mkdir(parents=True, exist_ok=True)
+                db_path = "/var/legends_of_minds/proof_ledger.db"
+            except (PermissionError, OSError):
+                # Fall back to local data directory
+                db_path = "./data/proof_ledger.db"
         self.db_path = db_path
         self._init_db()
         
@@ -97,9 +105,14 @@ class ProofLedger:
         result = cursor.fetchone()
         previous_hash = result[0] if result else None
         
-        # Create entry
+        # Get next ID
+        cursor.execute("SELECT MAX(id) FROM proof_ledger")
+        result = cursor.fetchone()
+        next_id = (result[0] or 0) + 1
+        
+        # Create entry with proper ID
         entry = ProofEntry(
-            id=0,  # Will be set by database
+            id=next_id,
             timestamp=datetime.utcnow().isoformat(),
             action=action,
             department=department,
@@ -108,7 +121,7 @@ class ProofLedger:
             previous_hash=previous_hash
         )
         
-        # Compute hash
+        # Compute hash with the correct ID
         entry.hash = entry.compute_hash()
         
         # Insert into database
@@ -124,7 +137,6 @@ class ProofLedger:
             entry.previous_hash
         ))
         
-        entry.id = cursor.lastrowid
         conn.commit()
         conn.close()
         
