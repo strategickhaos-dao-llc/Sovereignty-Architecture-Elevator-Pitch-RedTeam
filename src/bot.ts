@@ -1,10 +1,11 @@
 import { Client, GatewayIntentBits, Interaction } from "discord.js";
 import { registerCommands, embed } from "./discord.js";
 import { env, loadConfig } from "./config.js";
+import { execSync } from "child_process";
 
 const cfg = loadConfig();
 const token = env("DISCORD_TOKEN");
-const appId = env("APP_ID", false) || cfg.discord?.bot?.app_id || "";
+const appId = env("APP_ID", false) || "";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -47,6 +48,22 @@ client.on("interactionCreate", async (i: Interaction) => {
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+    } else if (i.commandName === "progress") {
+      const view = i.options.getString("view") || "full";
+      const cmd = view === "full" ? "show" : view === "quick" ? "status" : view;
+      try {
+        const output = execSync(`./scripts/activate-progress.sh ${cmd}`, {
+          encoding: "utf-8",
+          cwd: process.cwd()
+        });
+        // Strip ANSI color codes for Discord
+        const cleanOutput = output.replace(/\u001b\[[0-9;]*m/g, "");
+        // Truncate if too long
+        const truncated = cleanOutput.length > 1900 ? cleanOutput.slice(0, 1900) + "\n..." : cleanOutput;
+        await i.reply({ content: "```\n" + truncated + "\n```" });
+      } catch (e: any) {
+        await i.reply({ content: `Error running progress check: ${e.message}` });
+      }
     }
   } catch (e: any) {
     await i.reply({ content: `Error: ${e.message}` });
