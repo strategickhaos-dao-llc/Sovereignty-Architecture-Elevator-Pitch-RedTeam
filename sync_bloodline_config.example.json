@@ -1,0 +1,34 @@
+{
+  "GitRepos": [
+    "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-",
+    "https://github.com/Strategickhaos-Swarm-Intelligence/quantum-symbolic-emulator",
+    "https://github.com/Strategickhaos-Swarm-Intelligence/valoryield-engine"
+  ],
+  "ObsidianVaults": [
+    {
+      "Name": "Canon-Vault",
+      "Source": "C:\\Obsidian\\Canon",
+      "Targets": [
+        "\\\\node2\\Obsidian\\Canon",
+        "\\\\node3\\Obsidian\\Canon",
+        "\\\\node4\\Obsidian\\Canon"
+      ]
+    }
+  ],
+  "DiscordBots": [
+    {
+      "Name": "sovereignty-bot",
+      "Path": "C:\\Bots\\sovereignty-bot",
+      "Command": "npm start"
+    },
+    {
+      "Name": "gitlens-bot",
+      "Path": "C:\\Bots\\gitlens-bot",
+      "Command": "npm start"
+    }
+  ],
+  "RefineryEndpoint": "http://localhost:8080/health",
+  "DiscordWebhook": null,
+  "RepoRootPath": "C:\\Repos",
+  "LogPath": "C:\\Logs\\bloodline_sync"
+}

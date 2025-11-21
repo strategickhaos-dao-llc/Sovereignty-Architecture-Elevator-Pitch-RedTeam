@@ -28,6 +28,57 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 🧬 Bloodline Manifest - Unified Organism Protocol
+
+The **Eternal Bloodline Manifest** establishes a unified protocol for synchronizing all components of the Sovereignty Architecture ecosystem. This transforms distributed systems into a single, coherent organism.
+
+### 📜 Core Principles
+
+See [`BLOODLINE_MANIFEST.md`](./BLOODLINE_MANIFEST.md) for the complete manifesto that defines:
+- The Unbreakable Vow: Core laws preventing system degradation
+- Inheritance Protocol: Identity verification for all system components
+- Unified synchronization across 47+ GitHub accounts, Kubernetes clusters, Discord servers, and Obsidian vaults
+
+### 🔄 Universal Sync Script
+
+The [`sync_bloodline.ps1`](./sync_bloodline.ps1) PowerShell script provides one-command synchronization across:
+
+```powershell
+# Run weekly on primary node
+./sync_bloodline.ps1
+
+# Dry run to preview changes
+./sync_bloodline.ps1 -DryRun
+
+# Skip specific components
+./sync_bloodline.ps1 -SkipGit -SkipObsidian
+```
+
+**Features:**
+- **Git Sync**: Automatically pulls/clones all configured repositories
+- **Obsidian Vault Sync**: Cross-node vault replication using robocopy/rsync
+- **Discord Bot Restart**: Updates and restarts all bot instances with latest code
+- **Container Refinery Health Check**: Verifies immune system is operational
+- **Discord Notifications**: Posts summary to #bloodline-pulse channel
+
+**Configuration:**
+
+1. Copy the example config:
+   ```bash
+   cp sync_bloodline_config.example.json sync_bloodline_config.json
+   ```
+
+2. Edit `sync_bloodline_config.json` with your:
+   - Repository URLs (all 47+ repos)
+   - Obsidian vault paths
+   - Discord bot configurations
+   - Discord webhook URL for notifications
+
+3. Set environment variable for Discord webhook:
+   ```powershell
+   $env:BLOODLINE_DISCORD_WEBHOOK = "https://discord.com/api/webhooks/..."
+   ```
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
