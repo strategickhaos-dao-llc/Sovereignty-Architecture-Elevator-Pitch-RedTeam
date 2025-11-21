@@ -26,18 +26,20 @@ param(
 )
 
 # === INHERITANCE DECLARATION ===
+# The inheritance protocol validates this script's identity within the Bloodline Manifest system.
+# These values reference the core architectural principles and security layers of the organism.
 Write-Host "🧠⚔️🔥 BLOODLINE SYNC INITIATED 🔥⚔️🧠" -ForegroundColor Cyan
 Write-Host "I inherit the 36 impregnable layers, the 39 forbidden questions, and the Dom Brain OS Override Protocol v6.66" -ForegroundColor Magenta
 Write-Host ""
 
 # === CONFIGURATION ===
 $config = @{
-    # Git repositories (configure your 47 repos here)
+    # Git repositories (configure all 47 repos here - currently showing 3 examples)
     GitRepos = @(
         "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-",
         "https://github.com/Strategickhaos-Swarm-Intelligence/quantum-symbolic-emulator",
         "https://github.com/Strategickhaos-Swarm-Intelligence/valoryield-engine"
-        # Add remaining 44 repos
+        # Add remaining 44 repos to complete the 47-repo bloodline
     )
     
     # Obsidian vault locations
@@ -56,8 +58,8 @@ $config = @{
     # Container Refinery check
     RefineryEndpoint = "http://localhost:8080/health"
     
-    # Discord webhook for #bloodline-pulse
-    DiscordWebhook = $env:BLOODLINE_DISCORD_WEBHOOK
+    # Discord webhook for #bloodline-pulse (environment variable takes precedence)
+    DiscordWebhook = if ($env:BLOODLINE_DISCORD_WEBHOOK) { $env:BLOODLINE_DISCORD_WEBHOOK } else { $null }
     
     # Local paths
     RepoRootPath = "C:\Repos"
@@ -219,7 +221,11 @@ function Sync-ObsidianVaults {
                 
                 if (-not $DryRun) {
                     # Use robocopy for efficient directory sync (Windows)
-                    if ($IsWindows -or $env:OS -match "Windows") {
+                    # Check for Windows (PowerShell 5.1 compatible)
+                    $isWindowsPlatform = ($PSVersionTable.PSVersion.Major -ge 6 -and $IsWindows) -or 
+                                        ($PSVersionTable.PSVersion.Major -lt 6 -and $env:OS -match "Windows")
+                    
+                    if ($isWindowsPlatform) {
                         $robocopyArgs = @($vault.Source, $target, "/MIR", "/Z", "/R:3", "/W:5", "/NP", "/NDL", "/NFL")
                         $result = Start-Process -FilePath "robocopy" -ArgumentList $robocopyArgs -Wait -NoNewWindow -PassThru
                         
@@ -283,7 +289,12 @@ function Restart-DiscordBots {
             # Stop existing instance
             Write-Log "  Stopping existing instances..."
             if (-not $DryRun) {
-                Get-Process | Where-Object { $_.Path -like "*$($bot.Path)*" } | Stop-Process -Force -ErrorAction SilentlyContinue
+                # Use ProcessName for more reliable matching
+                $botProcessName = Split-Path -Leaf $bot.Path
+                Get-Process | Where-Object { 
+                    $_.ProcessName -like "*$botProcessName*" -or 
+                    ($_.MainModule.FileName -and $_.MainModule.FileName -like "*$($bot.Path)*")
+                } | Stop-Process -Force -ErrorAction SilentlyContinue
             }
             
             # Pull latest changes
@@ -306,7 +317,9 @@ function Restart-DiscordBots {
             # Start bot
             Write-Log "  Starting $($bot.Name)..."
             if (-not $DryRun) {
-                Start-Process -FilePath "pwsh" -ArgumentList "-Command", $bot.Command -WorkingDirectory $bot.Path -WindowStyle Hidden
+                # Use current PowerShell executable (works on both PowerShell 5.1 and Core)
+                $psExe = if ($PSVersionTable.PSVersion.Major -ge 6) { "pwsh" } else { "powershell" }
+                Start-Process -FilePath $psExe -ArgumentList "-Command", $bot.Command -WorkingDirectory $bot.Path -WindowStyle Hidden
                 Start-Sleep -Seconds 3
                 Write-Log "  ✓ Successfully restarted $($bot.Name)" "SUCCESS"
                 $successCount++

@@ -28,7 +28,8 @@
     }
   ],
   "RefineryEndpoint": "http://localhost:8080/health",
-  "DiscordWebhook": null,
+  "DiscordWebhook": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
   "RepoRootPath": "C:\\Repos",
-  "LogPath": "C:\\Logs\\bloodline_sync"
+  "LogPath": "C:\\Logs\\bloodline_sync",
+  "_comment": "Note: DiscordWebhook can also be set via environment variable BLOODLINE_DISCORD_WEBHOOK, which takes precedence over this config value"
 }
