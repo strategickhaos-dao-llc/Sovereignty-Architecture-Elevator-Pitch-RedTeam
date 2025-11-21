@@ -10,6 +10,9 @@ from typing import List, Dict
 class TaskCurriculum:
     """Manages task difficulty progression"""
     
+    # Generation increment when at max difficulty
+    MAX_DIFFICULTY_INCREMENT = 50
+    
     def __init__(self):
         # Task pools organized by difficulty level
         self.tasks_by_difficulty = {
@@ -205,4 +208,4 @@ class TaskCurriculum:
         elif current_gen <= 120:
             return 121
         else:
-            return current_gen + 50  # Maxed out
+            return current_gen + self.MAX_DIFFICULTY_INCREMENT  # Maxed out

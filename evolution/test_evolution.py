@@ -108,7 +108,7 @@ def test_task_curriculum():
     # Test difficulty scaling
     assert curriculum.get_difficulty_for_generation(0) == 1
     assert curriculum.get_difficulty_for_generation(20) == 5
-    assert curriculum.get_difficulty_for_generation(100) == 12  # Gen 81-120 = difficulty 12
+    assert curriculum.get_difficulty_for_generation(100) == 12  # Gen 81+ = difficulty 12
     
     # Test task retrieval
     task = curriculum.get_task_for_generation(10)

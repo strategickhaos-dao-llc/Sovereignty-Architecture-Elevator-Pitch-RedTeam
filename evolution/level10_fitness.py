@@ -32,6 +32,9 @@ class JudgeFitness:
                 print(f"❌ Error getting response: {e}")
                 return ""
     
+    # Default score for failed evaluations
+    DEFAULT_SCORE = 5.0
+    
     async def evaluate_with_judge(self, heir_response: str, task: str) -> float:
         """
         Evaluate heir response using judge model with multi-dimensional scoring
@@ -67,7 +70,7 @@ Return ONLY a JSON: {{"total_score": 8.7, "reasoning": "brief explanation"}}
             if json_start >= 0 and json_end > json_start:
                 json_str = judge_resp[json_start:json_end]
                 score_data = json.loads(json_str)
-                total_score = score_data.get("total_score", 5.0)
+                total_score = score_data.get("total_score", self.DEFAULT_SCORE)
                 
                 # Normalize to 0-1 range
                 normalized_score = max(0.0, min(1.0, total_score / 10.0))
@@ -75,14 +78,14 @@ Return ONLY a JSON: {{"total_score": 8.7, "reasoning": "brief explanation"}}
                 return normalized_score
             else:
                 print(f"⚠️ Could not extract JSON from judge response")
-                return 0.5  # Default middle score
+                return self.DEFAULT_SCORE / 10.0  # Default middle score
                 
         except json.JSONDecodeError:
             print(f"⚠️ Failed to parse judge response as JSON")
-            return 0.5  # Penalty for breaking format
+            return self.DEFAULT_SCORE / 10.0  # Penalty for breaking format
         except Exception as e:
             print(f"❌ Error in judge evaluation: {e}")
-            return 0.5
+            return self.DEFAULT_SCORE / 10.0
     
     async def evaluate_multi_dimensional(self, heir_response: str, task: str) -> Dict[str, float]:
         """
@@ -131,12 +134,12 @@ Return ONLY a JSON:
                 
                 # Normalize all scores to 0-1 range
                 normalized = {
-                    "accuracy": scores.get("accuracy", 5.0) / 10.0,
-                    "clarity": scores.get("clarity", 5.0) / 10.0,
-                    "depth": scores.get("depth", 5.0) / 10.0,
-                    "actionability": scores.get("actionability", 5.0) / 10.0,
-                    "creativity": scores.get("creativity", 5.0) / 10.0,
-                    "total": scores.get("total_score", 5.0) / 10.0,
+                    "accuracy": scores.get("accuracy", self.DEFAULT_SCORE) / 10.0,
+                    "clarity": scores.get("clarity", self.DEFAULT_SCORE) / 10.0,
+                    "depth": scores.get("depth", self.DEFAULT_SCORE) / 10.0,
+                    "actionability": scores.get("actionability", self.DEFAULT_SCORE) / 10.0,
+                    "creativity": scores.get("creativity", self.DEFAULT_SCORE) / 10.0,
+                    "total": scores.get("total_score", self.DEFAULT_SCORE) / 10.0,
                     "reasoning": scores.get("reasoning", "")
                 }
                 

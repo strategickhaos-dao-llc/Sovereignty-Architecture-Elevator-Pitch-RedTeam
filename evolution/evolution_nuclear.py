@@ -181,6 +181,8 @@ class NuclearEvolutionEngine:
         
         # Create offspring
         offspring = []
+        sexual_count = 0
+        asexual_count = 0
         
         while len(survivors) + len(offspring) < self.population_size:
             if self.enable_crossover and len(survivors) >= 2 and random.random() < 0.7:
@@ -192,6 +194,7 @@ class NuclearEvolutionEngine:
                 self.lineage.register_heir(child.id, child.parent_id)
                 
                 offspring.append(child)
+                sexual_count += 1
             else:
                 # Asexual reproduction (30% of time or if crossover disabled)
                 parent = random.choice(survivors)
@@ -201,12 +204,16 @@ class NuclearEvolutionEngine:
                 self.lineage.register_heir(child.id, child.parent_id)
                 
                 offspring.append(child)
+                asexual_count += 1
         
         self.population = survivors + offspring
         
         print(f"   🐣 Created: {len(offspring)} offspring")
-        print(f"      - Sexual reproduction: ~{int(len(offspring) * 0.7)} heirs" if self.enable_crossover else "")
-        print(f"      - Asexual reproduction: ~{int(len(offspring) * 0.3)} heirs" if self.enable_crossover else "")
+        if self.enable_crossover:
+            print(f"      - Sexual reproduction: {sexual_count} heirs")
+            print(f"      - Asexual reproduction: {asexual_count} heirs")
+        else:
+            print(f"      - Asexual reproduction: {asexual_count} heirs")
     
     async def apply_lamarckian_evolution(self):
         """Apply Lamarckian self-modification to top performers"""
