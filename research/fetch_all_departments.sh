@@ -184,7 +184,12 @@ EOF
 if command -v jq &> /dev/null; then
     failed_json=$(printf '%s\n' "${failed_depts[@]}" | jq -R . | jq -s . 2>/dev/null || echo "[]")
 else
-    failed_json="[$(printf '"%s",' "${failed_depts[@]}" | sed 's/,$//')]"
+    # Fallback JSON generation without jq
+    if [ ${#failed_depts[@]} -eq 0 ]; then
+        failed_json="[]"
+    else
+        failed_json="[$(printf '"%s",' "${failed_depts[@]}" | sed 's/,$//')]"
+    fi
 fi
 
 cat >> "${SCRIPT_DIR}/raw_pages/batch_metadata.json" <<EOF

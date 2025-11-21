@@ -68,7 +68,7 @@ def extract_text_from_html(html_content):
         raw_text = parser.get_text()
         return clean_text(raw_text)
     except Exception as e:
-        print(f"Warning: Error extracting text: {e}", file=sys.stderr)
+        print(f"Error: Failed to extract text: {e}", file=sys.stderr)
         return ""
 
 

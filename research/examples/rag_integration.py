@@ -183,6 +183,7 @@ import chromadb
 from chromadb.utils import embedding_functions
 
 # Initialize ChromaDB client
+# Note: Use absolute path in production (e.g., Path.cwd() / "research_chroma_db")
 client = chromadb.PersistentClient(path="./research_chroma_db")
 
 # Create embedding function
