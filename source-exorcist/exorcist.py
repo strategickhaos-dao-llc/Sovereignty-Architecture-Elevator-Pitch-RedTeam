@@ -16,6 +16,22 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+def sanitize_filename(name):
+    """Sanitize a string to be safe for use as a filename."""
+    # Replace em-dash and other special dashes with regular dash
+    name = name.replace('—', '-').replace('–', '-')
+    # Replace or remove invalid characters
+    invalid_chars = '<>:"/\\|?*'
+    for char in invalid_chars:
+        name = name.replace(char, '_')
+    # Replace multiple underscores/dashes with single character
+    name = re.sub(r'_+', '_', name)
+    name = re.sub(r'-+', '-', name)
+    # Remove leading/trailing underscores, dashes and spaces
+    name = name.strip('_- ')
+    # Limit length
+    return name[:200] if len(name) > 200 else name
+
 def main():
     """Main exorcism ritual."""
     print("=" * 80)
@@ -63,33 +79,34 @@ def main():
             continue
 
         try:
-            # Download the source file
+            # Download the source file with SSL verification
             print("    → Downloading...")
-            response = requests.get(url, timeout=30)
+            response = requests.get(url, timeout=30, verify=True)
             response.raise_for_status()
             content = response.text
             
             # Calculate checksum
             sha256 = hashlib.sha256(content.encode('utf-8')).hexdigest()
             
-            # Save checksum
-            checksum_filename = f"{name.replace('/', '_').replace(' ', '_')}.sha256"
+            # Save checksum with sanitized filename
+            checksum_filename = f"{sanitize_filename(name)}.sha256"
             checksum_path = checksum_dir / checksum_filename
             with open(checksum_path, "w") as f:
                 f.write(f"{sha256}\n")
             
-            # Scan for keywords
+            # Scan for keywords using efficient case-insensitive search
             findings = []
+            content_lower = content.lower()
             for kw in keywords:
-                matches = re.findall(kw, content, re.IGNORECASE)
-                if matches:
+                count = content_lower.count(kw.lower())
+                if count > 0:
                     findings.append({
                         "keyword": kw,
-                        "count": len(matches)
+                        "count": count
                     })
             
-            # Generate report
-            report_filename = f"{name.replace('/', '_').replace(' ', '_')}.txt"
+            # Generate report with sanitized filename
+            report_filename = f"{sanitize_filename(name)}.txt"
             report_path = report_dir / report_filename
             
             with open(report_path, "w", encoding='utf-8') as f:

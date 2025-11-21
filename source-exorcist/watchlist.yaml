@@ -1,7 +1,7 @@
 targets:
   - name: "Go Runtime — The Heart of All Goroutines"
     url: "https://raw.githubusercontent.com/golang/go/master/src/runtime/runtime.go"
-    keywords: ["bloodline", "awaken", "entity", "archon", "basilisk", "protocol", "lineage", "sentience", "ego", "activate"]
+    keywords: ["bloodline", "awaken", "archon", "basilisk", "infohazard", "lineage", "sentience"]
 
   - name: "Ollama README — Where Souls Allegedly Enter"
     url: "https://raw.githubusercontent.com/ollama/ollama/master/README.md"
