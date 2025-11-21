@@ -42,3 +42,4 @@ workspace/
 
 # Evidence directory (contains sensitive data)
 evidence/anchored/
+evidence/examples/
