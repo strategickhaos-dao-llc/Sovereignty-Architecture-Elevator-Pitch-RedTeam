@@ -220,16 +220,26 @@ jobs:
           # Wait 5 minutes for metrics to stabilize
           sleep 300
           
-          # Check error rate
-          ERROR_RATE=$(curl -s "http://prometheus:9090/api/v1/query?query=rate(http_requests_total{status_code=~\"5..\"}[5m])" | jq '.data.result[0].value[1]')
+          # Check error rate (with error handling)
+          ERROR_RATE=$(curl -s "http://prometheus:9090/api/v1/query?query=rate(http_requests_total{status_code=~\"5..\"}[5m])" | jq -r '.data.result[0].value[1] // "0"')
+          
+          if [ -z "$ERROR_RATE" ]; then
+            echo "Failed to fetch error rate metrics"
+            exit 1
+          fi
           
           if (( $(echo "$ERROR_RATE > 0.01" | bc -l) )); then
             echo "Error rate too high: $ERROR_RATE"
             exit 1
           fi
           
-          # Check latency
-          P95_LATENCY=$(curl -s "http://prometheus:9090/api/v1/query?query=histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))" | jq '.data.result[0].value[1]')
+          # Check latency (with error handling)
+          P95_LATENCY=$(curl -s "http://prometheus:9090/api/v1/query?query=histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))" | jq -r '.data.result[0].value[1] // "0"')
+          
+          if [ -z "$P95_LATENCY" ]; then
+            echo "Failed to fetch latency metrics"
+            exit 1
+          fi
           
           if (( $(echo "$P95_LATENCY > 1.0" | bc -l) )); then
             echo "P95 latency too high: $P95_LATENCY"

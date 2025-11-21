@@ -347,6 +347,8 @@ Ensure replaying events is safe:
 // Bad: Not idempotent
 function applyMoneyAdded(state: Account, event: MoneyAddedEvent) {
   state.balance += event.amount; // ❌ Replaying adds money again!
+  // Problem: If you rebuild state from events, this will add money multiple times.
+  // Each replay doubles the balance!
 }
 
 // Good: Idempotent

@@ -129,6 +129,13 @@ function Sync-ToNodes {
             continue
         }
         
+        # Test connectivity before attempting sync
+        $pingResult = Test-Connection -ComputerName $nodeIP -Count 1 -Quiet -ErrorAction SilentlyContinue
+        if (-not $pingResult) {
+            Write-Warning "  Node $node ($nodeIP) is not reachable. Skipping."
+            continue
+        }
+        
         # Construct UNC path (Windows network share)
         $targetUNC = "\\$nodeIP\c$\legends_of_minds\scaffolding"
         
