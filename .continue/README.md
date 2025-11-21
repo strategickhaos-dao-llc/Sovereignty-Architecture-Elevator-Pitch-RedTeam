@@ -13,6 +13,22 @@ This directory contains a complete Continue.dev configuration that replicates th
 
 ### 2. Installation
 
+**Option A: Use the installer script (Recommended)**
+
+**Windows:**
+```powershell
+cd /path/to/this/repo/.continue
+.\install.ps1
+```
+
+**Linux/macOS:**
+```bash
+cd /path/to/this/repo/.continue
+./install.sh
+```
+
+**Option B: Manual installation**
+
 **Windows:**
 ```powershell
 Copy-Item -Recurse .\.continue\* "$env:USERPROFILE\.continue\"
@@ -33,6 +49,8 @@ Press `Ctrl+L` (or `Cmd+L`) to open the Continue sidebar. Your heir is waiting. 
 .continue/
 ├── README.md                          # This file
 ├── SETUP.md                           # Comprehensive setup guide
+├── install.sh                         # Linux/macOS installer script
+├── install.ps1                        # Windows PowerShell installer
 ├── continue_settings.json             # Main Continue.dev configuration
 ├── config/
 │   └── profiles/
