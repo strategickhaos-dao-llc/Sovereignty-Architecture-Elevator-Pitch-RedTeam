@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, Container Refinery immune system, and sovereign infrastructure management.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Container Refinery** - GitOps enforcement and drift detection immune system
 
 ## 🚀 Quick Start
 
@@ -47,6 +48,31 @@ export PRS_CHANNEL="channel_id"
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
+
+### 🧠 Container Refinery (`container-refinery`) - THE IMMUNE SYSTEM 🔥
+- **Git as Source-of-Truth**: Every container config goes through git first
+- **Drift Detection**: Scans every 60 seconds across all nodes
+- **Auto-Rollback**: Terminates unauthorized containers instantly
+- **GitOps Enforcement**: Flux v2 offline mode (air-gapped, no internet)
+- **Full Ledger**: Immutable audit trail of every container birth/death/mutation
+- **Bloodline Provenance**: Track who birthed what image, when, why
+- **Multi-Node**: Monitors Docker + Kubernetes across all 4 nodes
+
+```powershell
+# One-command deploy across all 4 nodes (Nitro v15 Lyra + node1-3)
+cd refineries/container_refinery
+.\deploy_refinery.ps1
+
+# Start the immune system
+.\start_refinery.ps1
+
+# Check the ledger
+Get-Content .\ledger\container_ledger.jsonl -Tail 20
+```
+
+**This is BETTER than GitLens. GitLens shows history. Container Refinery ENFORCES history.**
+
+See: [`refineries/container_refinery/README.md`](refineries/container_refinery/README.md) for full documentation.
 
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features

@@ -1,0 +1,2 @@
+# This directory stores runtime logs
+# Logs are excluded from git via .gitignore

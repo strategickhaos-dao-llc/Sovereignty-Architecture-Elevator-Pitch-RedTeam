@@ -1,0 +1,101 @@
+# Flux v2 Offline Configuration
+# Air-gapped GitOps enforcement - no internet connection required
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system
+  labels:
+    app.kubernetes.io/instance: flux-system
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/version: v2.2.0
+
+---
+# GitRepository source configuration
+# Points to local git repository for offline operation
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: container-manifests
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  timeout: 60s
+  url: file:///app/container_refinery/manifests
+  secretRef:
+    name: git-credentials
+  ignore: |
+    # Ignore files
+    *.log
+    *.tmp
+    .git/
+
+---
+# Kustomization for Docker manifests
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: docker-manifests
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./docker
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: container-manifests
+  timeout: 2m0s
+  retryInterval: 30s
+  force: false
+  wait: true
+
+---
+# Kustomization for Kubernetes manifests
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: k8s-manifests
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./k8s
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: container-manifests
+  timeout: 2m0s
+  retryInterval: 30s
+  force: false
+  wait: true
+
+---
+# Alert for sync failures
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: sync-failures
+  namespace: flux-system
+spec:
+  providerRef:
+    name: container-refinery-logger
+  eventSeverity: error
+  eventSources:
+    - kind: GitRepository
+      name: container-manifests
+    - kind: Kustomization
+      name: docker-manifests
+    - kind: Kustomization
+      name: k8s-manifests
+
+---
+# Alert provider - logs to file
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: container-refinery-logger
+  namespace: flux-system
+spec:
+  type: generic
+  address: http://localhost:8085/flux-webhook
