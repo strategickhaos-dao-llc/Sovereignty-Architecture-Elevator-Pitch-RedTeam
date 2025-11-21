@@ -1,0 +1,125 @@
+# Cybersecurity Department Research Links
+# CISA - Cybersecurity & Infrastructure Security
+https://www.cisa.gov/
+https://www.cisa.gov/cybersecurity
+https://www.cisa.gov/news-events/cybersecurity-advisories
+https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+https://www.cisa.gov/resources-tools
+# NIST Cybersecurity
+https://www.nist.gov/cybersecurity
+https://www.nist.gov/cyberframework
+https://csrc.nist.gov/
+https://csrc.nist.gov/publications
+https://nvd.nist.gov/
+# NSA Cybersecurity
+https://www.nsa.gov/Cybersecurity/
+https://www.nsa.gov/Press-Room/Cybersecurity-Advisories-Guidance/
+# US-CERT
+https://www.cisa.gov/uscert/
+# MITRE ATT&CK
+https://attack.mitre.org/
+https://attack.mitre.org/matrices/enterprise/
+https://d3fend.mitre.org/
+# OWASP
+https://owasp.org/
+https://owasp.org/www-project-top-ten/
+https://owasp.org/www-project-web-security-testing-guide/
+https://owasp.org/www-project-api-security/
+# SANS Institute
+https://www.sans.org/
+https://www.sans.org/blog/
+https://isc.sans.edu/
+# CIS - Center for Internet Security
+https://www.cisecurity.org/
+https://www.cisecurity.org/controls/
+https://www.cisecurity.org/benchmarks/
+# IETF Security
+https://www.ietf.org/topics/security/
+https://datatracker.ietf.org/wg/
+# Google Scholar - Cybersecurity
+https://scholar.google.com/scholar?hl=en&q=network+security
+https://scholar.google.com/scholar?hl=en&q=cryptography
+https://scholar.google.com/scholar?hl=en&q=blockchain+security
+https://scholar.google.com/scholar?hl=en&q=threat+intelligence
+https://scholar.google.com/scholar?hl=en&q=malware+analysis
+https://scholar.google.com/scholar?hl=en&q=penetration+testing
+https://scholar.google.com/scholar?hl=en&q=vulnerability+assessment
+https://scholar.google.com/scholar?hl=en&q=incident+response
+https://scholar.google.com/scholar?hl=en&q=digital+forensics
+https://scholar.google.com/scholar?hl=en&q=security+operations
+https://scholar.google.com/scholar?hl=en&q=security+architecture
+https://scholar.google.com/scholar?hl=en&q=cloud+security
+https://scholar.google.com/scholar?hl=en&q=container+security
+https://scholar.google.com/scholar?hl=en&q=kubernetes+security
+https://scholar.google.com/scholar?hl=en&q=zero+trust
+https://scholar.google.com/scholar?hl=en&q=identity+access+management
+https://scholar.google.com/scholar?hl=en&q=authentication
+https://scholar.google.com/scholar?hl=en&q=authorization
+https://scholar.google.com/scholar?hl=en&q=multi+factor+authentication
+https://scholar.google.com/scholar?hl=en&q=biometric+security
+https://scholar.google.com/scholar?hl=en&q=encryption
+https://scholar.google.com/scholar?hl=en&q=public+key+infrastructure
+https://scholar.google.com/scholar?hl=en&q=ssl+tls
+https://scholar.google.com/scholar?hl=en&q=vpn+security
+https://scholar.google.com/scholar?hl=en&q=firewall
+https://scholar.google.com/scholar?hl=en&q=intrusion+detection
+https://scholar.google.com/scholar?hl=en&q=intrusion+prevention
+https://scholar.google.com/scholar?hl=en&q=siem
+https://scholar.google.com/scholar?hl=en&q=security+analytics
+https://scholar.google.com/scholar?hl=en&q=machine+learning+security
+https://scholar.google.com/scholar?hl=en&q=ai+security
+https://scholar.google.com/scholar?hl=en&q=adversarial+machine+learning
+https://scholar.google.com/scholar?hl=en&q=web+application+security
+https://scholar.google.com/scholar?hl=en&q=api+security
+https://scholar.google.com/scholar?hl=en&q=mobile+security
+https://scholar.google.com/scholar?hl=en&q=iot+security
+https://scholar.google.com/scholar?hl=en&q=embedded+security
+https://scholar.google.com/scholar?hl=en&q=scada+security
+https://scholar.google.com/scholar?hl=en&q=industrial+control+systems
+https://scholar.google.com/scholar?hl=en&q=critical+infrastructure
+https://scholar.google.com/scholar?hl=en&q=supply+chain+security
+https://scholar.google.com/scholar?hl=en&q=software+supply+chain
+https://scholar.google.com/scholar?hl=en&q=secure+development
+https://scholar.google.com/scholar?hl=en&q=devsecops
+https://scholar.google.com/scholar?hl=en&q=application+security
+https://scholar.google.com/scholar?hl=en&q=code+analysis
+https://scholar.google.com/scholar?hl=en&q=static+analysis
+https://scholar.google.com/scholar?hl=en&q=dynamic+analysis
+https://scholar.google.com/scholar?hl=en&q=fuzzing
+https://scholar.google.com/scholar?hl=en&q=buffer+overflow
+https://scholar.google.com/scholar?hl=en&q=sql+injection
+https://scholar.google.com/scholar?hl=en&q=cross+site+scripting
+https://scholar.google.com/scholar?hl=en&q=csrf
+https://scholar.google.com/scholar?hl=en&q=security+protocols
+https://scholar.google.com/scholar?hl=en&q=network+protocols
+https://scholar.google.com/scholar?hl=en&q=wireless+security
+https://scholar.google.com/scholar?hl=en&q=5g+security
+https://scholar.google.com/scholar?hl=en&q=email+security
+https://scholar.google.com/scholar?hl=en&q=phishing
+https://scholar.google.com/scholar?hl=en&q=social+engineering
+https://scholar.google.com/scholar?hl=en&q=ransomware
+https://scholar.google.com/scholar?hl=en&q=ddos+attack
+https://scholar.google.com/scholar?hl=en&q=apt+attacks
+https://scholar.google.com/scholar?hl=en&q=cyber+warfare
+https://scholar.google.com/scholar?hl=en&q=cyber+espionage
+https://scholar.google.com/scholar?hl=en&q=threat+modeling
+https://scholar.google.com/scholar?hl=en&q=risk+management
+https://scholar.google.com/scholar?hl=en&q=security+governance
+https://scholar.google.com/scholar?hl=en&q=compliance
+https://scholar.google.com/scholar?hl=en&q=gdpr
+https://scholar.google.com/scholar?hl=en&q=hipaa+security
+https://scholar.google.com/scholar?hl=en&q=pci+dss
+https://scholar.google.com/scholar?hl=en&q=sox+compliance
+https://scholar.google.com/scholar?hl=en&q=security+audit
+https://scholar.google.com/scholar?hl=en&q=privacy+engineering
+https://scholar.google.com/scholar?hl=en&q=data+privacy
+https://scholar.google.com/scholar?hl=en&q=data+protection
+https://scholar.google.com/scholar?hl=en&q=secure+communications
+https://scholar.google.com/scholar?hl=en&q=quantum+cryptography
+https://scholar.google.com/scholar?hl=en&q=post+quantum+cryptography
+https://scholar.google.com/scholar?hl=en&q=homomorphic+encryption
+https://scholar.google.com/scholar?hl=en&q=secure+multiparty+computation
+https://scholar.google.com/scholar?hl=en&q=differential+privacy
+https://scholar.google.com/scholar?hl=en&q=trusted+execution
+https://scholar.google.com/scholar?hl=en&q=hardware+security
+https://scholar.google.com/scholar?hl=en&q=side+channel+attacks
