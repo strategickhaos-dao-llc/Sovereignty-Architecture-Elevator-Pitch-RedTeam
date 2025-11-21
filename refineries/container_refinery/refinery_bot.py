@@ -555,9 +555,17 @@ class ContainerRefineryBot:
 
 async def main():
     """Main entry point"""
-    # Get refinery path from environment or use default
+    # Get refinery path from environment or use platform-appropriate default
     import os
-    refinery_path = Path(os.getenv('REFINERY_PATH', '/app/container_refinery'))
+    import platform
+    
+    # Default path based on OS
+    if platform.system() == 'Windows':
+        default_path = r'C:\legends_of_minds\refineries\container_refinery'
+    else:
+        default_path = '/app/container_refinery'
+    
+    refinery_path = Path(os.getenv('REFINERY_PATH', default_path))
     
     # Create refinery instance
     bot = ContainerRefineryBot(refinery_path)

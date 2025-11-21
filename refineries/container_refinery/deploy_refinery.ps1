@@ -178,9 +178,27 @@ asyncio>=3.4.3
 "@ | Out-File -FilePath $requirementsFile -Encoding utf8
     }
     
-    # Install dependencies
+    # Create virtual environment if it doesn't exist
+    $venvPath = "$Path\venv"
+    if (-not (Test-Path $venvPath)) {
+        Write-Info "Creating Python virtual environment..."
+        Push-Location $Path
+        python -m venv venv
+        Pop-Location
+    }
+    
+    # Install dependencies in virtual environment
     Push-Location $Path
-    python -m pip install -r requirements.txt --quiet
+    $activateScript = "venv\Scripts\Activate.ps1"
+    if (Test-Path $activateScript) {
+        & $activateScript
+        python -m pip install --upgrade pip --quiet
+        python -m pip install -r requirements.txt --quiet
+        deactivate
+    } else {
+        Write-Warning "Virtual environment activation failed, installing globally"
+        python -m pip install -r requirements.txt --quiet
+    }
     Pop-Location
     
     Write-Success "Python dependencies installed"

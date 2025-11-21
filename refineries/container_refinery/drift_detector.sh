@@ -92,6 +92,12 @@ check_kubernetes_pods() {
         return 0
     fi
     
+    # Check if jq is available for JSON parsing
+    if ! command -v jq &> /dev/null; then
+        log_warn "jq not available, skipping Kubernetes checks (install jq for K8s monitoring)"
+        return 0
+    fi
+    
     # Check if cluster is accessible
     if ! kubectl cluster-info &> /dev/null; then
         log_info "Kubernetes cluster not accessible, skipping checks"
