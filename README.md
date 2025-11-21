@@ -272,6 +272,37 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🔗 External Artifact Tracking
+
+The Sovereignty Architecture includes a system for tracking external AI discussions and design artifacts as first-class entities in the codebase.
+
+### Purpose
+
+Track external AI conversations (Claude, ChatGPT, etc.) that influence system design as machine-readable ledger entries, enabling:
+- Design provenance and audit trails
+- Training material for future AI agents
+- Seed data for Neural Heir Evolution System (NHES)
+- Evidence for Legal Strategy Evolution Engine (LSEE)
+
+### Usage
+
+```bash
+# Add an external AI discussion to the ledger
+cd tools
+python append_artifact.py \
+  "https://claude.ai/share/777c7e93-fb67-4026-8370-1b1588c5df56" \
+  "Design of meta-evolution and legal compliance synthesizer engine."
+```
+
+### Files
+
+- **`external_artifacts.jsonl`** - Machine-readable JSONL ledger of external artifacts
+- **`tools/append_artifact.py`** - Script to append entries to the ledger
+- **`templates/external_ai_discussion_template.md`** - Template for human-readable notes
+- **`templates/external_ai_discussion_example.md`** - Example filled-out template
+
+See [tools/README.md](tools/README.md) for detailed documentation.
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
