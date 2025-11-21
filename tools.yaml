@@ -1,0 +1,329 @@
+# Sovereign Tools Definition
+# MCP (Model Context Protocol) tools available to AI agents
+
+meta:
+  name: "Sovereign Tools MCP Server"
+  version: "1.0.0"
+  description: "Tool bus for agent-augmented knowledge system"
+  protocol: "Model Context Protocol (MCP)"
+
+# Core Tool Categories
+tools:
+  
+  # File Operations
+  file_operations:
+    description: "Basic file system operations"
+    tools:
+      - name: "open_file"
+        description: "Read file contents"
+        parameters:
+          - path: "string - absolute or vault-relative path"
+        returns: "string - file contents"
+        example: "open_file('/vault/labs/cyber-recon/notes.md')"
+        
+      - name: "list_directory"
+        description: "List files in directory"
+        parameters:
+          - path: "string - directory path"
+          - recursive: "boolean - include subdirectories"
+        returns: "array - file paths"
+        example: "list_directory('/vault/labs', recursive=true)"
+        
+      - name: "search_files"
+        description: "Full-text search across vault"
+        parameters:
+          - query: "string - search terms"
+          - lab: "string - optional lab filter"
+        returns: "array - matching file paths with snippets"
+        example: "search_files('kubernetes architecture')"
+  
+  # Obsidian Integration
+  obsidian_integration:
+    description: "Obsidian vault operations"
+    tools:
+      - name: "save_to_obsidian"
+        description: "Create or update Obsidian note"
+        parameters:
+          - title: "string - note title"
+          - content: "string - markdown content"
+          - tags: "array - note tags"
+          - lab: "string - lab/folder location"
+        returns: "string - note path"
+        example: "save_to_obsidian('Architecture Review', '# Notes...', tags=['architecture'])"
+        
+      - name: "create_canvas"
+        description: "Create Obsidian canvas"
+        parameters:
+          - name: "string - canvas name"
+          - data: "object - canvas JSON structure"
+        returns: "string - canvas path"
+        example: "create_canvas('System Map', {...})"
+        
+      - name: "update_graph_view"
+        description: "Update graph relationships"
+        parameters:
+          - nodes: "array - note IDs"
+          - edges: "array - relationship definitions"
+        returns: "boolean - success"
+        example: "update_graph_view([note1, note2], [{from: note1, to: note2}])"
+        
+      - name: "add_note_link"
+        description: "Create bidirectional link between notes"
+        parameters:
+          - source: "string - source note path"
+          - target: "string - target note path"
+          - context: "string - optional link context"
+        returns: "boolean - success"
+        example: "add_note_link('note1.md', 'note2.md', 'related concept')"
+        
+      - name: "update_metadata"
+        description: "Update note frontmatter"
+        parameters:
+          - path: "string - note path"
+          - metadata: "object - frontmatter fields"
+        returns: "boolean - success"
+        example: "update_metadata('note.md', {status: 'reviewed', rating: 5})"
+  
+  # Git Operations
+  git_operations:
+    description: "Version control operations"
+    tools:
+      - name: "git_status"
+        description: "Get repository status"
+        parameters: []
+        returns: "object - status information"
+        example: "git_status()"
+        
+      - name: "git_commit"
+        description: "Commit changes"
+        parameters:
+          - message: "string - commit message"
+          - files: "array - optional file list"
+        returns: "string - commit hash"
+        example: "git_commit('Add new research notes')"
+        
+      - name: "git_push"
+        description: "Push to remote"
+        parameters:
+          - remote: "string - remote name (default: origin)"
+          - branch: "string - branch name"
+        returns: "boolean - success"
+        example: "git_push()"
+        
+      - name: "git_log"
+        description: "View commit history"
+        parameters:
+          - limit: "integer - number of commits"
+          - path: "string - optional file path filter"
+        returns: "array - commit objects"
+        example: "git_log(limit=10)"
+  
+  # Classification & Routing
+  classification:
+    description: "Content analysis and routing"
+    tools:
+      - name: "classify_file"
+        description: "Determine file topic and lab"
+        parameters:
+          - path: "string - file path"
+          - content_sample: "string - optional content preview"
+        returns: "object - {lab, topics, confidence}"
+        example: "classify_file('/ingest/paper.pdf')"
+        
+      - name: "extract_metadata"
+        description: "Extract metadata from file"
+        parameters:
+          - path: "string - file path"
+        returns: "object - metadata fields"
+        example: "extract_metadata('/ingest/document.pdf')"
+        
+      - name: "suggest_tags"
+        description: "Generate relevant tags"
+        parameters:
+          - content: "string - text content"
+          - existing_tags: "array - current tag set"
+        returns: "array - suggested tags"
+        example: "suggest_tags('kubernetes deployment guide')"
+  
+  # Knowledge Graph
+  graph_operations:
+    description: "Knowledge graph management"
+    tools:
+      - name: "find_related_notes"
+        description: "Find semantically related notes"
+        parameters:
+          - note_path: "string - source note"
+          - limit: "integer - max results"
+        returns: "array - related note paths with scores"
+        example: "find_related_notes('architecture.md', limit=5)"
+        
+      - name: "get_backlinks"
+        description: "Get notes linking to this note"
+        parameters:
+          - note_path: "string - target note"
+        returns: "array - linking note paths"
+        example: "get_backlinks('core-concept.md')"
+        
+      - name: "get_orphan_notes"
+        description: "Find notes with no links"
+        parameters:
+          - lab: "string - optional lab filter"
+        returns: "array - orphaned note paths"
+        example: "get_orphan_notes()"
+        
+      - name: "suggest_links"
+        description: "Suggest potential note connections"
+        parameters:
+          - note_path: "string - source note"
+        returns: "array - suggested links with reasons"
+        example: "suggest_links('new-note.md')"
+  
+  # Discord Integration
+  discord_integration:
+    description: "Discord notification and bot commands"
+    tools:
+      - name: "send_notification"
+        description: "Send Discord message"
+        parameters:
+          - channel: "string - channel name or ID"
+          - message: "string - message content"
+          - embed: "object - optional embed data"
+        returns: "string - message ID"
+        example: "send_notification('#knowledge-feed', 'New note created')"
+        
+      - name: "create_thread"
+        description: "Create Discord thread for discussion"
+        parameters:
+          - channel: "string - parent channel"
+          - title: "string - thread title"
+          - initial_message: "string - first message"
+        returns: "string - thread ID"
+        example: "create_thread('#prs', 'Review: Architecture Changes')"
+  
+  # Analytics & Reporting
+  analytics:
+    description: "Knowledge system analytics"
+    tools:
+      - name: "get_lab_stats"
+        description: "Statistics for a lab"
+        parameters:
+          - lab: "string - lab name"
+        returns: "object - note count, links, activity"
+        example: "get_lab_stats('cyber-recon')"
+        
+      - name: "get_activity_timeline"
+        description: "Recent vault activity"
+        parameters:
+          - days: "integer - lookback period"
+        returns: "array - activity events"
+        example: "get_activity_timeline(days=7)"
+        
+      - name: "generate_summary"
+        description: "AI summary of notes or lab"
+        parameters:
+          - target: "string - note path or lab name"
+          - style: "string - brief|detailed|executive"
+        returns: "string - markdown summary"
+        example: "generate_summary('labs/architecture', style='executive')"
+
+# Tool Chains (Common Workflows)
+workflows:
+  - name: "Ingest and Classify"
+    description: "Process new file through pipeline"
+    steps:
+      - "classify_file(path)"
+      - "extract_metadata(path)"
+      - "save_to_obsidian(title, content, tags, lab)"
+      - "git_commit(message)"
+      - "send_notification(channel, message)"
+      
+  - name: "Create Research Note"
+    description: "Create connected research note"
+    steps:
+      - "save_to_obsidian(title, content, tags)"
+      - "suggest_links(note_path)"
+      - "add_note_link(source, target) for each suggestion"
+      - "update_graph_view(nodes, edges)"
+      - "git_commit(message)"
+      
+  - name: "Daily Knowledge Review"
+    description: "Analyze and report on knowledge base"
+    steps:
+      - "get_activity_timeline(days=1)"
+      - "get_orphan_notes()"
+      - "get_lab_stats(lab) for each lab"
+      - "generate_summary('/', style='brief')"
+      - "send_notification('#knowledge-feed', summary)"
+
+# Security & Permissions
+security:
+  authentication:
+    required: true
+    method: "API key or OAuth"
+    
+  authorization:
+    read_operations: ["user", "agent"]
+    write_operations: ["user", "agent_with_approval"]
+    admin_operations: ["user_only"]
+    
+  rate_limiting:
+    per_agent: "100 requests/minute"
+    per_tool: "varies by operation cost"
+    
+  audit:
+    log_all_operations: true
+    retention_days: 365
+
+# API Configuration
+api:
+  base_url: "http://localhost:3100"
+  version: "v1"
+  protocol: "REST + WebSocket"
+  
+  authentication:
+    header: "Authorization: Bearer {token}"
+    
+  endpoints:
+    - path: "/tools/list"
+      method: "GET"
+      description: "List available tools"
+      
+    - path: "/tools/{tool_name}/execute"
+      method: "POST"
+      description: "Execute tool with parameters"
+      
+    - path: "/workflows/{workflow_name}/run"
+      method: "POST"
+      description: "Run predefined workflow"
+
+# Agent Capabilities
+agent_capabilities:
+  claude:
+    allowed_tools: "all"
+    approval_required: ["git_push", "send_notification"]
+    
+  local_llm:
+    allowed_tools: ["read_operations", "classification", "analytics"]
+    approval_required: "all_write_operations"
+    
+  refinory:
+    allowed_tools: "all"
+    approval_required: []
+
+# Extension Points
+extensions:
+  custom_tools:
+    enabled: true
+    directory: "tools/custom/"
+    
+  plugins:
+    obsidian_plugins:
+      - "Dataview"
+      - "Templater"
+      - "Advanced Tables"
+    
+  integrations:
+    future:
+      - "Notion sync"
+      - "Roam Research import"
+      - "Logseq compatibility"
