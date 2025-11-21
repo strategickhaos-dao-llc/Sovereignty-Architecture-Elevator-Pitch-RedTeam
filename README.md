@@ -10,6 +10,8 @@ This system creates a **sovereignty control plane** that bridges:
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
+**Design Philosophy**: The architecture reflects a systematic [cognitive methodology](COGNITIVE_METHODOLOGY.md) based on divergent thinking, cross-domain synthesis, and constraint-based innovation—all grounded in documented cognitive science principles.
+
 ## 🚀 Quick Start
 
 ```bash
@@ -271,6 +273,18 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🧠 Cognitive Methodology
+
+This architecture is built on a foundation of documented cognitive science principles—not extraordinary claims, but systematic application of divergent thinking, analogical reasoning, and constraint-based innovation.
+
+- **[Cognitive Methodology](COGNITIVE_METHODOLOGY.md)** - The thinking approach behind the architecture
+  - Grounded in neuroscience and cognitive science research
+  - Explains architectural decisions through a cognitive lens
+  - Safe for academic and professional contexts
+  - No supernatural or superhuman claims
+
+Understanding this methodology helps teams navigate the architecture, extend it consistently, and collaborate effectively.
 
 ## 👥 Community & Contributors
 
