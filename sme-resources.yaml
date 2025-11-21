@@ -1,0 +1,1189 @@
+# Subject Matter Expert Resources
+# 100 Authoritative Web Sources (.org, .gov, Google Scholar)
+# For Building Sovereign Infrastructure
+
+metadata:
+  version: "1.0.0"
+  created: "2025-11-21"
+  description: "Curated list of authoritative sources for sovereign infrastructure research"
+  total_resources: 100
+  domains:
+    - ".org (Non-profit organizations and standards bodies)"
+    - ".gov (Government agencies and research labs)"
+    - "scholar.google.com (Academic papers and research)"
+
+resources:
+  # Kubernetes & Container Orchestration (1-10)
+  - id: 1
+    title: "Kubernetes Official Documentation"
+    url: "https://kubernetes.io"
+    domain: ".io"
+    category: "container_orchestration"
+    sme_topics:
+      - "k3s lightweight Kubernetes"
+      - "kubectl commands"
+      - "Pod scheduling and management"
+    curl_command: "curl -L -s https://kubernetes.io/docs/"
+    
+  - id: 2
+    title: "CNCF (Cloud Native Computing Foundation)"
+    url: "https://www.cncf.io"
+    domain: ".io"
+    category: "container_orchestration"
+    sme_topics:
+      - "Cloud native patterns"
+      - "CNCF projects landscape"
+      - "Container networking"
+    curl_command: "curl -L -s https://www.cncf.io/projects/"
+    
+  - id: 3
+    title: "Docker Documentation"
+    url: "https://docs.docker.com"
+    domain: ".com"
+    category: "containers"
+    sme_topics:
+      - "Docker Swarm"
+      - "Container networking"
+      - "Multi-stage builds"
+    curl_command: "curl -L -s https://docs.docker.com/get-started/"
+    
+  - id: 4
+    title: "NIST National Vulnerability Database"
+    url: "https://nvd.nist.gov"
+    domain: ".gov"
+    category: "security"
+    sme_topics:
+      - "CVE tracking"
+      - "Security benchmarks"
+      - "Container security"
+    curl_command: "curl -L -s https://nvd.nist.gov/vuln/search"
+    
+  - id: 5
+    title: "Linux Foundation"
+    url: "https://www.linuxfoundation.org"
+    domain: ".org"
+    category: "open_source"
+    sme_topics:
+      - "Open source governance"
+      - "Linux kernel development"
+      - "Foundation projects"
+    curl_command: "curl -L -s https://www.linuxfoundation.org/projects/"
+    
+  - id: 6
+    title: "Apache Software Foundation"
+    url: "https://www.apache.org"
+    domain: ".org"
+    category: "open_source"
+    sme_topics:
+      - "Apache projects"
+      - "Open source licensing"
+      - "Community governance"
+    curl_command: "curl -L -s https://www.apache.org/index.html#projects-list"
+    
+  - id: 7
+    title: "IEEE Computer Society"
+    url: "https://www.computer.org"
+    domain: ".org"
+    category: "standards"
+    sme_topics:
+      - "Computing standards"
+      - "Best practices"
+      - "Technical publications"
+    curl_command: "curl -L -s https://www.computer.org/publications"
+    
+  - id: 8
+    title: "Internet Engineering Task Force (IETF)"
+    url: "https://www.ietf.org"
+    domain: ".org"
+    category: "networking"
+    sme_topics:
+      - "RFC documents"
+      - "Internet standards"
+      - "Protocol development"
+    curl_command: "curl -L -s https://www.ietf.org/standards/rfcs/"
+    
+  - id: 9
+    title: "Open Container Initiative"
+    url: "https://opencontainers.org"
+    domain: ".org"
+    category: "containers"
+    sme_topics:
+      - "OCI specifications"
+      - "Container runtimes"
+      - "Image formats"
+    curl_command: "curl -L -s https://opencontainers.org/about/overview/"
+    
+  - id: 10
+    title: "Kubernetes Enhancement Proposals (KEPs)"
+    url: "https://github.com/kubernetes/enhancements"
+    domain: ".com"
+    category: "container_orchestration"
+    sme_topics:
+      - "Kubernetes roadmap"
+      - "Feature proposals"
+      - "Architecture decisions"
+    curl_command: "curl -L -s https://api.github.com/repos/kubernetes/enhancements/readme"
+
+  # AI & Machine Learning (11-20)
+  - id: 11
+    title: "arXiv.org - Machine Learning Papers"
+    url: "https://arxiv.org/list/cs.LG/recent"
+    domain: ".org"
+    category: "ai_ml"
+    sme_topics:
+      - "Latest ML research"
+      - "Model architectures"
+      - "Training techniques"
+    curl_command: "curl -L -s https://arxiv.org/list/cs.LG/recent"
+    
+  - id: 12
+    title: "Papers With Code"
+    url: "https://paperswithcode.com"
+    domain: ".com"
+    category: "ai_ml"
+    sme_topics:
+      - "ML benchmarks"
+      - "State of the art models"
+      - "Implementation code"
+    curl_command: "curl -L -s https://paperswithcode.com/api/v1/papers/"
+    
+  - id: 13
+    title: "Hugging Face Documentation"
+    url: "https://huggingface.co/docs"
+    domain: ".co"
+    category: "ai_ml"
+    sme_topics:
+      - "Transformer models"
+      - "Model deployment"
+      - "Fine-tuning"
+    curl_command: "curl -L -s https://huggingface.co/docs/transformers/index"
+    
+  - id: 14
+    title: "NVIDIA Deep Learning Institute"
+    url: "https://www.nvidia.com/en-us/training/"
+    domain: ".com"
+    category: "ai_ml"
+    sme_topics:
+      - "GPU optimization"
+      - "Deep learning frameworks"
+      - "CUDA programming"
+    curl_command: "curl -L -s https://www.nvidia.com/en-us/training/"
+    
+  - id: 15
+    title: "OpenAI Research"
+    url: "https://openai.com/research"
+    domain: ".com"
+    category: "ai_ml"
+    sme_topics:
+      - "Large language models"
+      - "AI safety"
+      - "Model capabilities"
+    curl_command: "curl -L -s https://openai.com/research"
+    
+  - id: 16
+    title: "Google Scholar - AI Research"
+    url: "https://scholar.google.com"
+    domain: ".com"
+    category: "ai_ml"
+    sme_topics:
+      - "Academic papers"
+      - "Citation tracking"
+      - "Research trends"
+    curl_command: "curl -L -s 'https://scholar.google.com/scholar?q=machine+learning'"
+    
+  - id: 17
+    title: "PyTorch Documentation"
+    url: "https://pytorch.org/docs"
+    domain: ".org"
+    category: "ai_ml"
+    sme_topics:
+      - "Neural network frameworks"
+      - "Training loops"
+      - "Model optimization"
+    curl_command: "curl -L -s https://pytorch.org/docs/stable/index.html"
+    
+  - id: 18
+    title: "TensorFlow Documentation"
+    url: "https://www.tensorflow.org"
+    domain: ".org"
+    category: "ai_ml"
+    sme_topics:
+      - "ML pipelines"
+      - "Model serving"
+      - "Distributed training"
+    curl_command: "curl -L -s https://www.tensorflow.org/api_docs"
+    
+  - id: 19
+    title: "MLOps Community"
+    url: "https://mlops.community"
+    domain: ".community"
+    category: "ai_ml"
+    sme_topics:
+      - "ML operations"
+      - "Model deployment"
+      - "MLOps best practices"
+    curl_command: "curl -L -s https://mlops.community/"
+    
+  - id: 20
+    title: "Stanford AI Lab Publications"
+    url: "https://ai.stanford.edu/research/"
+    domain: ".edu"
+    category: "ai_ml"
+    sme_topics:
+      - "AI research"
+      - "Vision models"
+      - "NLP advances"
+    curl_command: "curl -L -s https://ai.stanford.edu/research/"
+
+  # Networking & Security (21-35)
+  - id: 21
+    title: "NIST Cybersecurity Framework"
+    url: "https://www.nist.gov/cyberframework"
+    domain: ".gov"
+    category: "security"
+    sme_topics:
+      - "Security frameworks"
+      - "Risk management"
+      - "Best practices"
+    curl_command: "curl -L -s https://www.nist.gov/cyberframework"
+    
+  - id: 22
+    title: "CISA (Cybersecurity & Infrastructure Security Agency)"
+    url: "https://www.cisa.gov"
+    domain: ".gov"
+    category: "security"
+    sme_topics:
+      - "Threat intelligence"
+      - "Security advisories"
+      - "Infrastructure protection"
+    curl_command: "curl -L -s https://www.cisa.gov/news-events/cybersecurity-advisories"
+    
+  - id: 23
+    title: "OWASP (Open Web Application Security Project)"
+    url: "https://owasp.org"
+    domain: ".org"
+    category: "security"
+    sme_topics:
+      - "Web security"
+      - "Top 10 vulnerabilities"
+      - "Security testing"
+    curl_command: "curl -L -s https://owasp.org/www-project-top-ten/"
+    
+  - id: 24
+    title: "WireGuard VPN Documentation"
+    url: "https://www.wireguard.com"
+    domain: ".com"
+    category: "networking"
+    sme_topics:
+      - "VPN protocols"
+      - "Cryptography"
+      - "Secure tunneling"
+    curl_command: "curl -L -s https://www.wireguard.com/papers/wireguard.pdf"
+    
+  - id: 25
+    title: "Tailscale Documentation"
+    url: "https://tailscale.com/kb"
+    domain: ".com"
+    category: "networking"
+    sme_topics:
+      - "Zero trust networking"
+      - "Mesh VPN"
+      - "NAT traversal"
+    curl_command: "curl -L -s https://tailscale.com/kb/"
+    
+  - id: 26
+    title: "Let's Encrypt Documentation"
+    url: "https://letsencrypt.org/docs/"
+    domain: ".org"
+    category: "security"
+    sme_topics:
+      - "TLS certificates"
+      - "ACME protocol"
+      - "Certificate automation"
+    curl_command: "curl -L -s https://letsencrypt.org/docs/"
+    
+  - id: 27
+    title: "Traefik Proxy Documentation"
+    url: "https://doc.traefik.io/traefik/"
+    domain: ".io"
+    category: "networking"
+    sme_topics:
+      - "Reverse proxy"
+      - "Load balancing"
+      - "Service mesh"
+    curl_command: "curl -L -s https://doc.traefik.io/traefik/"
+    
+  - id: 28
+    title: "SANS Internet Storm Center"
+    url: "https://isc.sans.edu"
+    domain: ".edu"
+    category: "security"
+    sme_topics:
+      - "Threat intelligence"
+      - "Security incidents"
+      - "Attack analysis"
+    curl_command: "curl -L -s https://isc.sans.edu/api/"
+    
+  - id: 29
+    title: "US-CERT Alerts"
+    url: "https://www.cisa.gov/uscert"
+    domain: ".gov"
+    category: "security"
+    sme_topics:
+      - "Security alerts"
+      - "Vulnerability disclosures"
+      - "Incident response"
+    curl_command: "curl -L -s https://www.cisa.gov/uscert/ncas/alerts"
+    
+  - id: 30
+    title: "RFC Editor"
+    url: "https://www.rfc-editor.org"
+    domain: ".org"
+    category: "networking"
+    sme_topics:
+      - "Internet standards"
+      - "Protocol specifications"
+      - "Technical documentation"
+    curl_command: "curl -L -s https://www.rfc-editor.org/rfc-index.html"
+    
+  - id: 31
+    title: "Zero Trust Architecture - NIST SP 800-207"
+    url: "https://csrc.nist.gov/publications/detail/sp/800-207/final"
+    domain: ".gov"
+    category: "security"
+    sme_topics:
+      - "Zero trust principles"
+      - "Architecture patterns"
+      - "Implementation guidance"
+    curl_command: "curl -L -s https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207.pdf"
+    
+  - id: 32
+    title: "NSA Cybersecurity Advisories"
+    url: "https://www.nsa.gov/Press-Room/Cybersecurity-Advisories-Guidance/"
+    domain: ".gov"
+    category: "security"
+    sme_topics:
+      - "Nation-state threats"
+      - "Cryptography guidance"
+      - "Secure configurations"
+    curl_command: "curl -L -s https://www.nsa.gov/Press-Room/Cybersecurity-Advisories-Guidance/"
+    
+  - id: 33
+    title: "CIS Benchmarks"
+    url: "https://www.cisecurity.org/cis-benchmarks"
+    domain: ".org"
+    category: "security"
+    sme_topics:
+      - "Security baselines"
+      - "Hardening guides"
+      - "Compliance standards"
+    curl_command: "curl -L -s https://www.cisecurity.org/cis-benchmarks"
+    
+  - id: 34
+    title: "Snort IDS Rules"
+    url: "https://www.snort.org"
+    domain: ".org"
+    category: "security"
+    sme_topics:
+      - "Intrusion detection"
+      - "Network monitoring"
+      - "Threat signatures"
+    curl_command: "curl -L -s https://www.snort.org/downloads"
+    
+  - id: 35
+    title: "Wireshark Documentation"
+    url: "https://www.wireshark.org/docs/"
+    domain: ".org"
+    category: "networking"
+    sme_topics:
+      - "Packet analysis"
+      - "Network troubleshooting"
+      - "Protocol debugging"
+    curl_command: "curl -L -s https://www.wireshark.org/docs/"
+
+  # Storage & Databases (36-45)
+  - id: 36
+    title: "PostgreSQL Documentation"
+    url: "https://www.postgresql.org/docs/"
+    domain: ".org"
+    category: "database"
+    sme_topics:
+      - "Relational databases"
+      - "SQL optimization"
+      - "Replication strategies"
+    curl_command: "curl -L -s https://www.postgresql.org/docs/current/"
+    
+  - id: 37
+    title: "Redis Documentation"
+    url: "https://redis.io/docs/"
+    domain: ".io"
+    category: "database"
+    sme_topics:
+      - "In-memory databases"
+      - "Caching strategies"
+      - "Pub/sub patterns"
+    curl_command: "curl -L -s https://redis.io/docs/"
+    
+  - id: 38
+    title: "Ceph Documentation"
+    url: "https://docs.ceph.com"
+    domain: ".com"
+    category: "storage"
+    sme_topics:
+      - "Distributed storage"
+      - "Object storage"
+      - "Block storage"
+    curl_command: "curl -L -s https://docs.ceph.com/en/latest/"
+    
+  - id: 39
+    title: "MinIO Documentation"
+    url: "https://min.io/docs"
+    domain: ".io"
+    category: "storage"
+    sme_topics:
+      - "S3-compatible storage"
+      - "Object storage"
+      - "High performance storage"
+    curl_command: "curl -L -s https://min.io/docs/minio/linux/index.html"
+    
+  - id: 40
+    title: "Qdrant Documentation"
+    url: "https://qdrant.tech/documentation/"
+    domain: ".tech"
+    category: "database"
+    sme_topics:
+      - "Vector databases"
+      - "Similarity search"
+      - "RAG systems"
+    curl_command: "curl -L -s https://qdrant.tech/documentation/"
+    
+  - id: 41
+    title: "Elasticsearch Documentation"
+    url: "https://www.elastic.co/guide/"
+    domain: ".co"
+    category: "database"
+    sme_topics:
+      - "Search engines"
+      - "Log aggregation"
+      - "Full-text search"
+    curl_command: "curl -L -s https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html"
+    
+  - id: 42
+    title: "MongoDB Documentation"
+    url: "https://www.mongodb.com/docs/"
+    domain: ".com"
+    category: "database"
+    sme_topics:
+      - "Document databases"
+      - "NoSQL patterns"
+      - "Sharding strategies"
+    curl_command: "curl -L -s https://www.mongodb.com/docs/"
+    
+  - id: 43
+    title: "Longhorn Documentation"
+    url: "https://longhorn.io/docs/"
+    domain: ".io"
+    category: "storage"
+    sme_topics:
+      - "Kubernetes storage"
+      - "Persistent volumes"
+      - "Backup strategies"
+    curl_command: "curl -L -s https://longhorn.io/docs/"
+    
+  - id: 44
+    title: "ZFS on Linux"
+    url: "https://openzfs.github.io/openzfs-docs/"
+    domain: ".io"
+    category: "storage"
+    sme_topics:
+      - "File systems"
+      - "Data integrity"
+      - "Snapshots"
+    curl_command: "curl -L -s https://openzfs.github.io/openzfs-docs/"
+    
+  - id: 45
+    title: "Rook Documentation"
+    url: "https://rook.io/docs/"
+    domain: ".io"
+    category: "storage"
+    sme_topics:
+      - "Cloud-native storage"
+      - "Ceph on Kubernetes"
+      - "Storage orchestration"
+    curl_command: "curl -L -s https://rook.io/docs/rook/latest/"
+
+  # Monitoring & Observability (46-55)
+  - id: 46
+    title: "Prometheus Documentation"
+    url: "https://prometheus.io/docs/"
+    domain: ".io"
+    category: "monitoring"
+    sme_topics:
+      - "Metrics collection"
+      - "Time series databases"
+      - "Alerting rules"
+    curl_command: "curl -L -s https://prometheus.io/docs/introduction/overview/"
+    
+  - id: 47
+    title: "Grafana Documentation"
+    url: "https://grafana.com/docs/"
+    domain: ".com"
+    category: "monitoring"
+    sme_topics:
+      - "Data visualization"
+      - "Dashboards"
+      - "Alerting"
+    curl_command: "curl -L -s https://grafana.com/docs/grafana/latest/"
+    
+  - id: 48
+    title: "Loki Documentation"
+    url: "https://grafana.com/docs/loki/"
+    domain: ".com"
+    category: "monitoring"
+    sme_topics:
+      - "Log aggregation"
+      - "LogQL queries"
+      - "Log retention"
+    curl_command: "curl -L -s https://grafana.com/docs/loki/latest/"
+    
+  - id: 49
+    title: "Jaeger Tracing"
+    url: "https://www.jaegertracing.io/docs/"
+    domain: ".io"
+    category: "monitoring"
+    sme_topics:
+      - "Distributed tracing"
+      - "Performance analysis"
+      - "Service dependencies"
+    curl_command: "curl -L -s https://www.jaegertracing.io/docs/"
+    
+  - id: 50
+    title: "OpenTelemetry Documentation"
+    url: "https://opentelemetry.io/docs/"
+    domain: ".io"
+    category: "monitoring"
+    sme_topics:
+      - "Observability standards"
+      - "Instrumentation"
+      - "Trace context"
+    curl_command: "curl -L -s https://opentelemetry.io/docs/"
+    
+  - id: 51
+    title: "Netdata Documentation"
+    url: "https://learn.netdata.cloud"
+    domain: ".cloud"
+    category: "monitoring"
+    sme_topics:
+      - "Real-time monitoring"
+      - "System metrics"
+      - "Health monitoring"
+    curl_command: "curl -L -s https://learn.netdata.cloud/docs/"
+    
+  - id: 52
+    title: "Elastic Observability"
+    url: "https://www.elastic.co/observability"
+    domain: ".co"
+    category: "monitoring"
+    sme_topics:
+      - "APM"
+      - "Infrastructure monitoring"
+      - "Log management"
+    curl_command: "curl -L -s https://www.elastic.co/guide/en/observability/current/index.html"
+    
+  - id: 53
+    title: "Datadog Documentation"
+    url: "https://docs.datadoghq.com"
+    domain: ".com"
+    category: "monitoring"
+    sme_topics:
+      - "Cloud monitoring"
+      - "APM"
+      - "Security monitoring"
+    curl_command: "curl -L -s https://docs.datadoghq.com/"
+    
+  - id: 54
+    title: "Nagios Documentation"
+    url: "https://www.nagios.org/documentation/"
+    domain: ".org"
+    category: "monitoring"
+    sme_topics:
+      - "Infrastructure monitoring"
+      - "Service checks"
+      - "Alerting"
+    curl_command: "curl -L -s https://www.nagios.org/documentation/"
+    
+  - id: 55
+    title: "Zabbix Documentation"
+    url: "https://www.zabbix.com/documentation"
+    domain: ".com"
+    category: "monitoring"
+    sme_topics:
+      - "Enterprise monitoring"
+      - "Network monitoring"
+      - "Auto-discovery"
+    curl_command: "curl -L -s https://www.zabbix.com/documentation/current/"
+
+  # IoT & Edge Computing (56-65)
+  - id: 56
+    title: "Raspberry Pi Documentation"
+    url: "https://www.raspberrypi.com/documentation/"
+    domain: ".com"
+    category: "iot"
+    sme_topics:
+      - "Single-board computers"
+      - "GPIO programming"
+      - "Embedded systems"
+    curl_command: "curl -L -s https://www.raspberrypi.com/documentation/"
+    
+  - id: 57
+    title: "Arduino Documentation"
+    url: "https://docs.arduino.cc"
+    domain: ".cc"
+    category: "iot"
+    sme_topics:
+      - "Microcontrollers"
+      - "Sensor integration"
+      - "Hardware prototyping"
+    curl_command: "curl -L -s https://docs.arduino.cc/"
+    
+  - id: 58
+    title: "Home Assistant Documentation"
+    url: "https://www.home-assistant.io/docs/"
+    domain: ".io"
+    category: "iot"
+    sme_topics:
+      - "Home automation"
+      - "Device integration"
+      - "Automation scripts"
+    curl_command: "curl -L -s https://www.home-assistant.io/docs/"
+    
+  - id: 59
+    title: "MQTT.org"
+    url: "https://mqtt.org"
+    domain: ".org"
+    category: "iot"
+    sme_topics:
+      - "IoT protocols"
+      - "Pub/sub messaging"
+      - "Lightweight protocols"
+    curl_command: "curl -L -s https://mqtt.org/mqtt-specification/"
+    
+  - id: 60
+    title: "Eclipse IoT Projects"
+    url: "https://iot.eclipse.org"
+    domain: ".org"
+    category: "iot"
+    sme_topics:
+      - "IoT frameworks"
+      - "Edge computing"
+      - "Device management"
+    curl_command: "curl -L -s https://iot.eclipse.org/projects/"
+    
+  - id: 61
+    title: "KubeEdge Documentation"
+    url: "https://kubeedge.io/docs/"
+    domain: ".io"
+    category: "edge_computing"
+    sme_topics:
+      - "Edge Kubernetes"
+      - "IoT orchestration"
+      - "Cloud-edge synergy"
+    curl_command: "curl -L -s https://kubeedge.io/docs/"
+    
+  - id: 62
+    title: "OpenWrt Documentation"
+    url: "https://openwrt.org/docs/"
+    domain: ".org"
+    category: "networking"
+    sme_topics:
+      - "Router firmware"
+      - "Network customization"
+      - "Embedded Linux"
+    curl_command: "curl -L -s https://openwrt.org/docs/start"
+    
+  - id: 63
+    title: "RTL-SDR Documentation"
+    url: "https://www.rtl-sdr.com"
+    domain: ".com"
+    category: "rf"
+    sme_topics:
+      - "Software defined radio"
+      - "RF monitoring"
+      - "Signal processing"
+    curl_command: "curl -L -s https://www.rtl-sdr.com/about-rtl-sdr/"
+    
+  - id: 64
+    title: "GNU Radio Documentation"
+    url: "https://wiki.gnuradio.org"
+    domain: ".org"
+    category: "rf"
+    sme_topics:
+      - "Signal processing"
+      - "RF applications"
+      - "SDR development"
+    curl_command: "curl -L -s https://wiki.gnuradio.org/index.php/Main_Page"
+    
+  - id: 65
+    title: "FCC Frequency Allocations"
+    url: "https://www.fcc.gov/engineering-technology/policy-and-rules-division/general/radio-spectrum-allocation"
+    domain: ".gov"
+    category: "rf"
+    sme_topics:
+      - "Spectrum allocation"
+      - "Radio regulations"
+      - "License requirements"
+    curl_command: "curl -L -s https://www.fcc.gov/engineering-technology/policy-and-rules-division/general/radio-spectrum-allocation"
+
+  # DevOps & CI/CD (66-75)
+  - id: 66
+    title: "GitLab Documentation"
+    url: "https://docs.gitlab.com"
+    domain: ".com"
+    category: "devops"
+    sme_topics:
+      - "CI/CD pipelines"
+      - "Git workflows"
+      - "DevOps automation"
+    curl_command: "curl -L -s https://docs.gitlab.com/"
+    
+  - id: 67
+    title: "Jenkins Documentation"
+    url: "https://www.jenkins.io/doc/"
+    domain: ".io"
+    category: "devops"
+    sme_topics:
+      - "Continuous integration"
+      - "Build automation"
+      - "Plugin ecosystem"
+    curl_command: "curl -L -s https://www.jenkins.io/doc/"
+    
+  - id: 68
+    title: "Ansible Documentation"
+    url: "https://docs.ansible.com"
+    domain: ".com"
+    category: "devops"
+    sme_topics:
+      - "Configuration management"
+      - "Infrastructure as code"
+      - "Automation playbooks"
+    curl_command: "curl -L -s https://docs.ansible.com/ansible/latest/"
+    
+  - id: 69
+    title: "Terraform Documentation"
+    url: "https://developer.hashicorp.com/terraform"
+    domain: ".com"
+    category: "devops"
+    sme_topics:
+      - "Infrastructure as code"
+      - "Cloud provisioning"
+      - "State management"
+    curl_command: "curl -L -s https://developer.hashicorp.com/terraform/docs"
+    
+  - id: 70
+    title: "ArgoCD Documentation"
+    url: "https://argo-cd.readthedocs.io"
+    domain: ".io"
+    category: "devops"
+    sme_topics:
+      - "GitOps"
+      - "Kubernetes deployments"
+      - "Declarative CD"
+    curl_command: "curl -L -s https://argo-cd.readthedocs.io/en/stable/"
+    
+  - id: 71
+    title: "Helm Documentation"
+    url: "https://helm.sh/docs/"
+    domain: ".sh"
+    category: "devops"
+    sme_topics:
+      - "Kubernetes packages"
+      - "Chart management"
+      - "Application deployment"
+    curl_command: "curl -L -s https://helm.sh/docs/"
+    
+  - id: 72
+    title: "GitHub Actions Documentation"
+    url: "https://docs.github.com/actions"
+    domain: ".com"
+    category: "devops"
+    sme_topics:
+      - "Workflow automation"
+      - "CI/CD pipelines"
+      - "Action marketplace"
+    curl_command: "curl -L -s https://docs.github.com/en/actions"
+    
+  - id: 73
+    title: "Vault Documentation"
+    url: "https://developer.hashicorp.com/vault"
+    domain: ".com"
+    category: "security"
+    sme_topics:
+      - "Secrets management"
+      - "Key rotation"
+      - "Dynamic credentials"
+    curl_command: "curl -L -s https://developer.hashicorp.com/vault/docs"
+    
+  - id: 74
+    title: "Packer Documentation"
+    url: "https://developer.hashicorp.com/packer"
+    domain: ".com"
+    category: "devops"
+    sme_topics:
+      - "Image building"
+      - "Machine images"
+      - "Multi-platform builds"
+    curl_command: "curl -L -s https://developer.hashicorp.com/packer/docs"
+    
+  - id: 75
+    title: "SaltStack Documentation"
+    url: "https://docs.saltproject.io"
+    domain: ".io"
+    category: "devops"
+    sme_topics:
+      - "Configuration management"
+      - "Remote execution"
+      - "Event-driven automation"
+    curl_command: "curl -L -s https://docs.saltproject.io/en/latest/"
+
+  # Programming & Development (76-85)
+  - id: 76
+    title: "Python.org Documentation"
+    url: "https://docs.python.org"
+    domain: ".org"
+    category: "programming"
+    sme_topics:
+      - "Python language"
+      - "Standard library"
+      - "Best practices"
+    curl_command: "curl -L -s https://docs.python.org/3/"
+    
+  - id: 77
+    title: "Go Documentation"
+    url: "https://go.dev/doc/"
+    domain: ".dev"
+    category: "programming"
+    sme_topics:
+      - "Go language"
+      - "Concurrency patterns"
+      - "System programming"
+    curl_command: "curl -L -s https://go.dev/doc/"
+    
+  - id: 78
+    title: "Rust Documentation"
+    url: "https://doc.rust-lang.org"
+    domain: ".org"
+    category: "programming"
+    sme_topics:
+      - "Systems programming"
+      - "Memory safety"
+      - "Performance optimization"
+    curl_command: "curl -L -s https://doc.rust-lang.org/"
+    
+  - id: 79
+    title: "Node.js Documentation"
+    url: "https://nodejs.org/docs/"
+    domain: ".org"
+    category: "programming"
+    sme_topics:
+      - "JavaScript runtime"
+      - "Event-driven architecture"
+      - "NPM ecosystem"
+    curl_command: "curl -L -s https://nodejs.org/docs/latest/api/"
+    
+  - id: 80
+    title: "MDN Web Docs"
+    url: "https://developer.mozilla.org"
+    domain: ".org"
+    category: "programming"
+    sme_topics:
+      - "Web standards"
+      - "JavaScript APIs"
+      - "Browser compatibility"
+    curl_command: "curl -L -s https://developer.mozilla.org/en-US/"
+    
+  - id: 81
+    title: "W3C Standards"
+    url: "https://www.w3.org/standards/"
+    domain: ".org"
+    category: "web_standards"
+    sme_topics:
+      - "Web specifications"
+      - "Accessibility"
+      - "Web protocols"
+    curl_command: "curl -L -s https://www.w3.org/TR/"
+    
+  - id: 82
+    title: "LLVM Documentation"
+    url: "https://llvm.org/docs/"
+    domain: ".org"
+    category: "programming"
+    sme_topics:
+      - "Compiler infrastructure"
+      - "Code optimization"
+      - "Toolchain development"
+    curl_command: "curl -L -s https://llvm.org/docs/"
+    
+  - id: 83
+    title: "GCC Documentation"
+    url: "https://gcc.gnu.org/onlinedocs/"
+    domain: ".org"
+    category: "programming"
+    sme_topics:
+      - "Compiler documentation"
+      - "Language extensions"
+      - "Optimization flags"
+    curl_command: "curl -L -s https://gcc.gnu.org/onlinedocs/"
+    
+  - id: 84
+    title: "Git Documentation"
+    url: "https://git-scm.com/doc"
+    domain: ".com"
+    category: "devops"
+    sme_topics:
+      - "Version control"
+      - "Branching strategies"
+      - "Git internals"
+    curl_command: "curl -L -s https://git-scm.com/docs"
+    
+  - id: 85
+    title: "GNU Project"
+    url: "https://www.gnu.org"
+    domain: ".org"
+    category: "open_source"
+    sme_topics:
+      - "Free software"
+      - "GNU tools"
+      - "Software freedom"
+    curl_command: "curl -L -s https://www.gnu.org/software/"
+
+  # Blockchain & Distributed Systems (86-95)
+  - id: 86
+    title: "Ethereum Documentation"
+    url: "https://ethereum.org/en/developers/docs/"
+    domain: ".org"
+    category: "blockchain"
+    sme_topics:
+      - "Smart contracts"
+      - "Blockchain development"
+      - "DeFi protocols"
+    curl_command: "curl -L -s https://ethereum.org/en/developers/docs/"
+    
+  - id: 87
+    title: "IPFS Documentation"
+    url: "https://docs.ipfs.tech"
+    domain: ".tech"
+    category: "distributed_systems"
+    sme_topics:
+      - "Distributed storage"
+      - "Content addressing"
+      - "P2P networks"
+    curl_command: "curl -L -s https://docs.ipfs.tech/"
+    
+  - id: 88
+    title: "Arweave Documentation"
+    url: "https://docs.arweave.org"
+    domain: ".org"
+    category: "blockchain"
+    sme_topics:
+      - "Permanent storage"
+      - "Blockchain storage"
+      - "Decentralized data"
+    curl_command: "curl -L -s https://docs.arweave.org/"
+    
+  - id: 89
+    title: "Substrate Documentation"
+    url: "https://docs.substrate.io"
+    domain: ".io"
+    category: "blockchain"
+    sme_topics:
+      - "Blockchain frameworks"
+      - "Rust blockchain"
+      - "Custom chains"
+    curl_command: "curl -L -s https://docs.substrate.io/"
+    
+  - id: 90
+    title: "Cosmos Documentation"
+    url: "https://docs.cosmos.network"
+    domain: ".network"
+    category: "blockchain"
+    sme_topics:
+      - "Inter-blockchain communication"
+      - "Tendermint consensus"
+      - "Sovereign blockchains"
+    curl_command: "curl -L -s https://docs.cosmos.network/"
+    
+  - id: 91
+    title: "Raft Consensus Algorithm"
+    url: "https://raft.github.io"
+    domain: ".io"
+    category: "distributed_systems"
+    sme_topics:
+      - "Consensus algorithms"
+      - "Distributed systems"
+      - "Leader election"
+    curl_command: "curl -L -s https://raft.github.io/"
+    
+  - id: 92
+    title: "Apache Kafka Documentation"
+    url: "https://kafka.apache.org/documentation/"
+    domain: ".org"
+    category: "distributed_systems"
+    sme_topics:
+      - "Event streaming"
+      - "Message queues"
+      - "Distributed logs"
+    curl_command: "curl -L -s https://kafka.apache.org/documentation/"
+    
+  - id: 93
+    title: "etcd Documentation"
+    url: "https://etcd.io/docs/"
+    domain: ".io"
+    category: "distributed_systems"
+    sme_topics:
+      - "Distributed key-value store"
+      - "Service discovery"
+      - "Configuration management"
+    curl_command: "curl -L -s https://etcd.io/docs/"
+    
+  - id: 94
+    title: "Consul Documentation"
+    url: "https://developer.hashicorp.com/consul"
+    domain: ".com"
+    category: "distributed_systems"
+    sme_topics:
+      - "Service mesh"
+      - "Service discovery"
+      - "Health checking"
+    curl_command: "curl -L -s https://developer.hashicorp.com/consul/docs"
+    
+  - id: 95
+    title: "ZooKeeper Documentation"
+    url: "https://zookeeper.apache.org/doc/"
+    domain: ".org"
+    category: "distributed_systems"
+    sme_topics:
+      - "Coordination service"
+      - "Distributed consensus"
+      - "Configuration management"
+    curl_command: "curl -L -s https://zookeeper.apache.org/doc/current/"
+
+  # Specialized Topics (96-100)
+  - id: 96
+    title: "NASA Open Data Portal"
+    url: "https://data.nasa.gov"
+    domain: ".gov"
+    category: "research"
+    sme_topics:
+      - "Space data"
+      - "Scientific datasets"
+      - "Public APIs"
+    curl_command: "curl -L -s https://api.nasa.gov/"
+    
+  - id: 97
+    title: "data.gov"
+    url: "https://data.gov"
+    domain: ".gov"
+    category: "research"
+    sme_topics:
+      - "Government data"
+      - "Public datasets"
+      - "Open data initiatives"
+    curl_command: "curl -L -s https://catalog.data.gov/api/3/"
+    
+  - id: 98
+    title: "Archive.org Technical Documentation"
+    url: "https://archive.org/about/faqs.php#The_Wayback_Machine"
+    domain: ".org"
+    category: "archival"
+    sme_topics:
+      - "Web archiving"
+      - "Digital preservation"
+      - "Historical data"
+    curl_command: "curl -L -s https://archive.org/help/wayback_api.php"
+    
+  - id: 99
+    title: "Library of Congress Digital Collections"
+    url: "https://www.loc.gov/collections/"
+    domain: ".gov"
+    category: "research"
+    sme_topics:
+      - "Historical archives"
+      - "Digital humanities"
+      - "Primary sources"
+    curl_command: "curl -L -s https://www.loc.gov/collections/"
+    
+  - id: 100
+    title: "PubMed Central"
+    url: "https://www.ncbi.nlm.nih.gov/pmc/"
+    domain: ".gov"
+    category: "research"
+    sme_topics:
+      - "Medical research"
+      - "Scientific papers"
+      - "Biomedical literature"
+    curl_command: "curl -L -s https://www.ncbi.nlm.nih.gov/pmc/"
+
+scripts:
+  fetch_all:
+    description: "Bash script to fetch all resources"
+    filename: "fetch-sme-resources.sh"
+    content: |
+      #!/bin/bash
+      # Fetch all SME resources and save to output directory
+      OUTPUT_DIR="sme-resources-output"
+      mkdir -p "$OUTPUT_DIR"
+      
+      echo "Fetching 100 SME resources..."
+      echo "Output directory: $OUTPUT_DIR"
+      
+      # Parse YAML and execute curl commands
+      # This is a template - actual implementation would parse the YAML
+      
+  validate_urls:
+    description: "Python script to validate all URLs"
+    filename: "validate-sme-urls.py"
+    content: |
+      #!/usr/bin/env python3
+      import yaml
+      import requests
+      from concurrent.futures import ThreadPoolExecutor
+      
+      def check_url(resource):
+          try:
+              response = requests.head(resource['url'], timeout=5)
+              return resource['id'], response.status_code, True
+          except Exception as e:
+              return resource['id'], str(e), False
+      
+      # Load and validate all resources
+
+usage_examples:
+  - description: "Fetch specific category"
+    command: "grep -A 5 'category: ai_ml' sme-resources.yaml"
+    
+  - description: "Extract all curl commands"
+    command: "grep 'curl_command:' sme-resources.yaml | sed 's/.*curl_command: \"//;s/\"$//' > curl-commands.sh"
+    
+  - description: "Get all .gov resources"
+    command: "grep -B 3 'domain: \".gov\"' sme-resources.yaml"
+    
+  - description: "Count resources by category"
+    command: "grep 'category:' sme-resources.yaml | sort | uniq -c"
+
+notes: |
+  This collection represents authoritative sources for building sovereign
+  infrastructure. All sources are:
+  
+  1. Publicly accessible
+  2. Authoritative (official docs, government, academic)
+  3. Well-maintained and updated
+  4. Free to access (no paywalls)
+  5. Relevant to sovereignty stack
+  
+  Categories cover the entire stack:
+  - Infrastructure (compute, storage, networking)
+  - Security (cryptography, hardening, compliance)
+  - Development (languages, tools, frameworks)
+  - Operations (monitoring, CI/CD, automation)
+  - Research (academic papers, datasets)
+  - Specialized (IoT, RF, blockchain, distributed systems)
