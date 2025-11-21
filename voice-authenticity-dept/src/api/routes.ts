@@ -97,6 +97,7 @@ router.post('/transform', (req: Request, res: Response) => {
       });
     }
 
+    const originalScore = transformer.calculateAuthenticityScore(text);
     const result = transformer.transform(text);
 
     return res.json({
@@ -106,8 +107,7 @@ router.post('/transform', (req: Request, res: Response) => {
         transformed: result.transformedText,
         changes: result.changes,
         authenticityScore: result.authenticityScore,
-        improvementPercentage: result.authenticityScore - 
-          transformer.calculateAuthenticityScore(text)
+        improvementPercentage: result.authenticityScore - originalScore
       }
     });
   } catch (error) {

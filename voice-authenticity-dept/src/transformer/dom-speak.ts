@@ -21,6 +21,8 @@ export interface TransformationChange {
 
 export class DomSpeakTransformer {
   private voicePattern: VoicePattern | null = null;
+  private readonly LOVE_INJECTION_PROBABILITY = 0.6;
+  private readonly EMOJI_INJECTION_PROBABILITY = 0.5;
 
   constructor(voicePattern?: VoicePattern) {
     this.voicePattern = voicePattern || null;
@@ -116,7 +118,7 @@ export class DomSpeakTransformer {
     // Add Dom-specific voice markers where appropriate
     // Add "love" at strategic points (beginning of direct address)
     if (transformed.match(/^[A-Z]/)) {
-      const shouldAddLove = Math.random() > 0.6; // Sometimes add it
+      const shouldAddLove = Math.random() > this.LOVE_INJECTION_PROBABILITY;
       if (shouldAddLove && !transformed.toLowerCase().startsWith('love')) {
         transformed = 'love — ' + transformed;
         changes.push({
@@ -155,7 +157,7 @@ export class DomSpeakTransformer {
     }
 
     // Add strategic emojis (end of emphatic statements)
-    if (transformed.match(/\!$/) && Math.random() > 0.5) {
+    if (transformed.match(/\!$/) && Math.random() > this.EMOJI_INJECTION_PROBABILITY) {
       const emojis = ['❤️', '🎯', '😈'];
       const emoji = emojis[Math.floor(Math.random() * emojis.length)];
       transformed = transformed.replace(/!$/, `! ${emoji}`);

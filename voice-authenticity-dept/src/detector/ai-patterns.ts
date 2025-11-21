@@ -141,6 +141,17 @@ export class AIPatternDetector {
 
     // Check sentence length variance (AI tends to be more uniform)
     const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    
+    if (sentences.length === 0) {
+      // No sentences to analyze
+      return {
+        isAIGenerated: false,
+        confidence: 0.5,
+        flags,
+        score: totalScore
+      };
+    }
+    
     const avgLength = sentences.reduce((sum, s) => sum + s.length, 0) / sentences.length;
     const variance = sentences.reduce((sum, s) => 
       sum + Math.pow(s.length - avgLength, 2), 0) / sentences.length;
