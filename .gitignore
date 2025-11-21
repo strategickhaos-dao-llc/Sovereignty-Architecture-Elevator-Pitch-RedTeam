@@ -41,6 +41,7 @@ evolution/evolution_ledger.jsonl
 evolution/current_population.json
 evolution/lineage_state.json
 evolution/lineage_graph.json
+evolution/nuclear_*.json*
 evolution/demo_*.json*
 evolution/*.log
 evolution/__pycache__/
