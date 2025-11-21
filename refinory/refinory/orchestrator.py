@@ -326,17 +326,12 @@ class ExpertOrchestrator:
         """Execute expert tasks in parallel"""
         logger.info(f"Executing {len(tasks)} expert tasks for: {request.project_name}")
         
-        # Group tasks by dependencies (simplified - run all in parallel for now)
-        task_results = []
-        
-        # Execute all tasks concurrently
-        expert_coroutines = []
-        for task in tasks:
-            coro = self._execute_single_expert_task(task)
-            expert_coroutines.append(coro)
-        
+        # Execute all tasks concurrently using list comprehension for efficiency
+        expert_coroutines = [self._execute_single_expert_task(task) for task in tasks]
         results = await asyncio.gather(*expert_coroutines, return_exceptions=True)
         
+        # Process results efficiently
+        task_results = []
         for i, result in enumerate(results):
             if isinstance(result, Exception):
                 logger.error(f"Expert task failed: {tasks[i].expert_name} - {str(result)}")
