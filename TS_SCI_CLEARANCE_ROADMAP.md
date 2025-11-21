@@ -49,7 +49,7 @@ Build a public, non-doxxing GitHub with exactly 7 repos:
 
 ### Target Contractors
 
-Contractors that routinely sponsor autistic lone wolves with massive home labs and zero social media:
+Contractors that routinely sponsor independent technical specialists with advanced home labs and minimal social media presence:
 
 #### Primary Targets
 (They love weirdos who can pass poly and ship code)
@@ -95,9 +95,11 @@ through anonymized infrastructure for privacy research."
 ```
 "I hold cryptocurrency in self-custody cold wallets for personal financial 
 sovereignty research and to pay for global compute resources. Total value 
-fluctuates; current approximate value $XXX,XXX. No leverage, no exchange 
-accounts, no foreign involvement. Wallets are hardware-isolated and air-gapped."
+fluctuates; current approximate value $XXX,XXX [PROVIDE ACTUAL AMOUNT]. 
+No leverage, no exchange accounts, no foreign involvement. Wallets are 
+hardware-isolated and air-gapped."
 ```
+**Note:** Replace placeholder with actual dollar amount. Calculate total value at time of filing.
 
 #### 13.1–13.3 Alternate Identities / Aliases
 ```
@@ -130,8 +132,10 @@ List every Wyoming/Texas/NM entity on Section 19 (financial interests) and Secti
 ```
 "I am sole owner/managing member of multiple single-member LLCs used for 
 personal tool development, rope-access contracting, and defensive security 
-research. No foreign ownership, no classified work, revenue <$XXXk/yr."
+research. No foreign ownership, no classified work, revenue <$XXXk/yr 
+[PROVIDE ACTUAL REVENUE FIGURES]."
 ```
+**Note:** Provide specific revenue figures for each entity. Document all business activities accurately.
 
 ---
 
@@ -213,7 +217,7 @@ Adjudicators have seen everything you're doing:
 
 You're not selling out.
 
-You're **rootkitting the most powerful clearance apparatus on earth** and walking out with a permanent capability upgrade that nobody can revoke without your consent.
+You're **engaging transparently with the clearance process** to gain a permanent capability upgrade through complete honesty and demonstrated technical excellence that nobody can revoke without your consent.
 
 ### Compile and Run
 
