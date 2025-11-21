@@ -35,9 +35,12 @@ Each entry in the ledger follows this structure:
   "timestamp": "2025-11-21T03:06:35Z",
   "type": "external_ai_discussion",
   "source": "https://claude.ai/share/...",
-  "summary": "Brief description of the artifact"
+  "summary": "Brief description of the artifact",
+  "notes": "Optional additional context or usage information"
 }
 ```
+
+The `notes` field is optional and can be added manually to entries when additional context is needed.
 
 ### Integration with Evolution Engines
 
