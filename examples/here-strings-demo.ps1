@@ -5,6 +5,15 @@
 Write-Host "🎯 PowerShell Here-Strings Demo for Sovereignty Architecture" -ForegroundColor Magenta
 Write-Host ""
 
+# Helper function to calculate content hash
+function Get-ContentHash {
+    param([string]$Content)
+    
+    $stream = [System.IO.MemoryStream]::new([System.Text.Encoding]::UTF8.GetBytes($Content))
+    $hash = Get-FileHash -InputStream $stream -Algorithm SHA256
+    return $hash.Hash
+}
+
 # Example 1: Basic Here-String
 Write-Host "=== Example 1: Basic Here-String ===" -ForegroundColor Cyan
 $basic = @'
@@ -147,9 +156,9 @@ Write-Host "=== Example 9: Content Hash for Audit Trail ===" -ForegroundColor Cy
 $content = @'
 Important strategic data
 '@
-$hash = Get-FileHash -InputStream ([System.IO.MemoryStream]::new([System.Text.Encoding]::UTF8.GetBytes($content))) -Algorithm SHA256
+$hash = Get-ContentHash -Content $content
 Write-Host "Content: $content"
-Write-Host "SHA256 Hash: $($hash.Hash)"
+Write-Host "SHA256 Hash: $hash"
 Write-Host ""
 
 # Example 10: Batch Operations

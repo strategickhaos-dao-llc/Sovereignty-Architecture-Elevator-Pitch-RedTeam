@@ -15,6 +15,15 @@ if ($DryRun) {
 }
 Write-Host ""
 
+# Helper function to calculate content hash
+function Get-ContentHash {
+    param([string]$Content)
+    
+    $stream = [System.IO.MemoryStream]::new([System.Text.Encoding]::UTF8.GetBytes($Content))
+    $hash = Get-FileHash -InputStream $stream -Algorithm SHA256
+    return $hash.Hash
+}
+
 # Example 1: Simple Legal Strategy
 Write-Host "=== Example 1: Basic Legal Strategy ===" -ForegroundColor Cyan
 $strategy1 = @'
@@ -152,21 +161,21 @@ function New-AuditEntry {
     )
     
     $timestamp = Get-Date -Format "o"
-    $contentHash = Get-FileHash -InputStream ([System.IO.MemoryStream]::new([System.Text.Encoding]::UTF8.GetBytes($Content))) -Algorithm SHA256
+    $contentHash = Get-ContentHash -Content $Content
     
-    $entry = @"
-{
-    "timestamp": "$timestamp",
-    "node": "$env:COMPUTERNAME",
-    "user": "$env:USERNAME",
-    "action": "$Action",
-    "status": "$Status",
-    "content_length": $($Content.Length),
-    "content_hash": "$($contentHash.Hash)"
-}
-"@
+    # Create a hashtable and convert to single-line JSON
+    $entryObj = @{
+        timestamp = $timestamp
+        node = $env:COMPUTERNAME
+        user = $env:USERNAME
+        action = $Action
+        status = $Status
+        content_length = $Content.Length
+        content_hash = $contentHash
+    }
     
-    return $entry
+    # Convert to compressed JSON (single line)
+    return ($entryObj | ConvertTo-Json -Compress)
 }
 
 $auditLog = "demo_legal_audit.jsonl"
@@ -187,14 +196,18 @@ $auditEntry3 | Add-Content $auditLog
 Write-Host "✅ Audit entries created"
 Write-Host ""
 Write-Host "Audit log contents:"
+$skippedLines = 0
 Get-Content $auditLog | ForEach-Object {
     try {
         $entry = $_ | ConvertFrom-Json -ErrorAction Stop
         Write-Host "  [$($entry.timestamp)] $($entry.action) - Hash: $($entry.content_hash.Substring(0,16))..."
     }
     catch {
-        # Skip malformed lines silently
+        $skippedLines++
     }
+}
+if ($skippedLines -gt 0) {
+    Write-Host "  (Skipped $skippedLines malformed line(s))" -ForegroundColor Yellow
 }
 Write-Host ""
 
@@ -305,7 +318,7 @@ This report documents compliance verification for Strategic Khaos Platform.
 
 ## Audit Trail
 All operations logged to: $auditLog
-Total entries: $(if (Test-Path $auditLog) { (Get-Content $auditLog).Count } else { 0 })
+Total entries: $(if (Test-Path $auditLog) { (Get-Item $auditLog | Measure-Object -Line).Lines } else { 0 })
 Audit log hash: $(if (Test-Path $auditLog) { (Get-FileHash $auditLog -Algorithm SHA256).Hash.Substring(0,16) } else { 'N/A' })...
 
 ## Recommendations
