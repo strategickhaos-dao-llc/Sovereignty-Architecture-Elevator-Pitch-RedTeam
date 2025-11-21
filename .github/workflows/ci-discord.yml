@@ -24,6 +24,11 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: strategickhaos-swarm-intelligence/${{ github.event.repository.name }}
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest

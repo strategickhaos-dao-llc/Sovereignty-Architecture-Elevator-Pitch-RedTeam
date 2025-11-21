@@ -20,10 +20,17 @@ on:
       confirmation:
         description: 'Type environment name to confirm'
         required: true
+      wait_time_minutes:
+        description: 'Wait time before deployment (minutes)'
+        required: false
+        default: '0'
+        type: string
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  STAGING_WAIT_MINUTES: 2
+  PRODUCTION_WAIT_MINUTES: 5
 
 permissions:
   contents: read
@@ -147,10 +154,15 @@ jobs:
           echo "Triggered by: ${{ github.actor }}"
 
       - name: Wait before deploy
+        env:
+          WAIT_MINUTES: ${{ github.event.inputs.wait_time_minutes || env.STAGING_WAIT_MINUTES }}
         run: |
-          echo "⏳ Waiting 2 minutes before staging deployment..."
+          WAIT_SECONDS=$((WAIT_MINUTES * 60))
+          echo "⏳ Waiting $WAIT_MINUTES minutes before staging deployment..."
           echo "This gives time to cancel if needed"
-          sleep 120
+          if [ "$WAIT_SECONDS" -gt 0 ]; then
+            sleep $WAIT_SECONDS
+          fi
 
       - name: Deploy to Staging
         env:
@@ -210,10 +222,15 @@ jobs:
           fi
 
       - name: Wait before deploy
+        env:
+          WAIT_MINUTES: ${{ github.event.inputs.wait_time_minutes || env.PRODUCTION_WAIT_MINUTES }}
         run: |
-          echo "⏳ Waiting 5 minutes before production deployment..."
+          WAIT_SECONDS=$((WAIT_MINUTES * 60))
+          echo "⏳ Waiting $WAIT_MINUTES minutes before production deployment..."
           echo "This gives time for final review and cancellation if needed"
-          sleep 300
+          if [ "$WAIT_SECONDS" -gt 0 ]; then
+            sleep $WAIT_SECONDS
+          fi
 
       - name: Create deployment backup
         run: |
