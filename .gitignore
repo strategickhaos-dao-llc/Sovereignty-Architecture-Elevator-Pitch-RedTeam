@@ -35,3 +35,10 @@ target/
 
 # Workspace data
 workspace/
+
+# OpenTimestamps and GPG signature files
+*.ots
+*.asc
+
+# Evidence directory (contains sensitive data)
+evidence/anchored/

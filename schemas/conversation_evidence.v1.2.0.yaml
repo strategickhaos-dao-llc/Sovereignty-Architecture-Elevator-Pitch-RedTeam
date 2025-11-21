@@ -1,0 +1,103 @@
+# conversation_evidence.v1.2.0.yaml
+# Evidence Schema for Conversation Ledger with Cryptographic Anchoring
+# Version: 1.2.0
+# Date: 2025-11-21
+
+schema_version: "1.2.0"
+schema_name: "conversation_evidence"
+description: "Cryptographically anchored conversation evidence schema with GPG signatures and OpenTimestamps blockchain proofs"
+
+# Core metadata
+metadata:
+  conversation_id: "string"           # Unique identifier for the conversation
+  timestamp: "ISO8601"                # Creation timestamp
+  version: "string"                   # Schema version used
+  operator:
+    name: "string"                    # Operator name
+    node: "string"                    # Node identifier
+    gpg_key: "string"                 # GPG key identifier
+
+# Conversation content
+conversation:
+  participants: ["array of strings"]  # List of participants
+  platform: "string"                  # Discord, Slack, etc.
+  channel: "string"                   # Channel/room identifier
+  thread_id: "string"                 # Thread identifier if applicable
+  messages:
+    - message_id: "string"
+      sender: "string"
+      timestamp: "ISO8601"
+      content: "string"
+      attachments: ["array"]
+
+# Evidence tracking
+evidence:
+  type: "string"                      # conversation, decision, action_item, etc.
+  category: "string"                  # Classification
+  tags: ["array of strings"]          # Searchable tags
+  related_ids: ["array"]              # Related conversation/evidence IDs
+
+# Integration and anchoring
+integration:
+  # Existing integrations
+  github:
+    pr_number: "integer"              # Pull request number if applicable
+    commit_sha: "string"              # Related commit
+    repository: "string"              # Repository name
+  
+  jira:
+    ticket_id: "string"               # Jira ticket reference
+    project: "string"                 # Project key
+  
+  # Cryptographic anchoring (NEW in v1.2.0)
+  gpg_signature: "string"             # Full detached GPG signature
+                                      # -----BEGIN PGP SIGNATURE-----
+                                      # ... signature content ...
+                                      # -----END PGP SIGNATURE-----
+  
+  opentimestamps:
+    stamp_file: "string"              # Proof file path (.ots extension)
+                                      # Binary file, should be git-ignored
+    stamp_hash: "string"              # SHA256 hash that was timestamped
+                                      # Format: "sha256=abc123..."
+    bitcoin_txid: "string"            # Bitcoin transaction ID (optional)
+                                      # Populated after calendar aggregation
+    status: "string"                  # Status: pending|verified|failed
+    created_at: "ISO8601"             # Timestamp when stamp was created
+    verified_at: "ISO8601"            # Timestamp when stamp was verified
+    calendar_server: "string"         # OpenTimestamps calendar server used
+
+# Provenance and audit trail
+provenance:
+  created_by: "string"                # Creator identifier
+  created_at: "ISO8601"               # Creation timestamp
+  last_modified: "ISO8601"            # Last modification timestamp
+  modification_count: "integer"       # Number of modifications
+  audit_log: ["array"]                # Audit trail entries
+    # Each entry:
+    # - timestamp: ISO8601
+    #   actor: string
+    #   action: string
+    #   details: string
+
+# Verification
+verification:
+  gpg_verified: "boolean"             # Whether GPG signature is valid
+  gpg_verified_at: "ISO8601"          # When verification was performed
+  gpg_verified_by: "string"           # Who performed verification
+  ots_verified: "boolean"             # Whether OTS proof is valid
+  ots_verified_at: "ISO8601"          # When OTS verification was performed
+  blockchain_confirmed: "boolean"     # Whether anchored to Bitcoin blockchain
+  blockchain_height: "integer"        # Bitcoin block height of confirmation
+
+# Compliance and legal
+compliance:
+  retention_period: "string"          # Retention period (e.g., "7y")
+  retention_reason: "string"          # Business/legal reason for retention
+  classification: "string"            # confidential|internal|public
+  jurisdiction: "string"              # Legal jurisdiction
+  admissible: "boolean"               # Whether evidence is court-admissible
+
+# Example usage:
+# See tools/anchor_ledger.py for automated anchoring
+# See tools/evidence_logger.py for logging with automatic anchoring
