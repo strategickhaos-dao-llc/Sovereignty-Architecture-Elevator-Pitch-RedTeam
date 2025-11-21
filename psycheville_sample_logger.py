@@ -6,7 +6,7 @@ Generates sample log events for testing the reflection worker
 
 import json
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 # Sample event types for each department
@@ -49,11 +49,13 @@ DEPARTMENT_EVENTS = {
 def generate_event(department: str, base_time: datetime = None) -> dict:
     """Generate a random event for a department"""
     if base_time is None:
-        base_time = datetime.utcnow()
+        base_time = datetime.now(timezone.utc)
     
     # Random time offset within the last 24 hours
     time_offset = timedelta(seconds=random.randint(0, 86400))
-    timestamp = (base_time - time_offset).isoformat() + 'Z'
+    event_time = base_time - time_offset
+    # Format as ISO 8601 with Z suffix (UTC)
+    timestamp = event_time.replace(tzinfo=None).isoformat() + 'Z'
     
     # Select random event type
     event_type, metadata = random.choice(DEPARTMENT_EVENTS[department])
