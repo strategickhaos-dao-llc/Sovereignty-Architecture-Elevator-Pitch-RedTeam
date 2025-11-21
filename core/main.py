@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import httpx
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Import safety monitoring router
 from safety_monitor import router as safety_router
@@ -43,7 +43,7 @@ async def root():
         "name": "Legends of Minds Control Center",
         "version": "1.0.0",
         "status": "operational",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "endpoints": {
             "docs": "/docs",
             "safety": "/api/safety/full_report",
@@ -83,7 +83,7 @@ async def health_check():
     
     return {
         "status": overall_status,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "services": services
     }
 

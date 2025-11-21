@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import List, Optional
 import httpx
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 import os
 
@@ -42,7 +42,7 @@ async def root():
         "name": "Legends of Minds - File Ingest Service",
         "version": "1.0.0",
         "status": "operational",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "endpoints": {
             "docs": "/docs",
             "upload": "/api/upload",
@@ -91,7 +91,7 @@ async def health_check():
     
     return {
         "status": overall_status,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "services": services
     }
 
@@ -119,7 +119,7 @@ async def upload_file(
             "filename": file.filename,
             "size": len(content),
             "hash": file_hash,
-            "uploaded_at": datetime.utcnow().isoformat() + "Z",
+            "uploaded_at": datetime.now(timezone.utc).isoformat(),
             "collection": collection,
             "path": str(file_path)
         }

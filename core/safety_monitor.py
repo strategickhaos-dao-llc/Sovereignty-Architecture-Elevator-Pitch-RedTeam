@@ -9,7 +9,7 @@ import psutil
 import hashlib
 from pathlib import Path
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 
 router = APIRouter(prefix="/api/safety", tags=["safety"])
@@ -52,7 +52,7 @@ async def check_process_isolation():
     """Verify Ollama process isolation and permissions"""
     
     # Find ollama process
-    ollama_procs = [p for p in psutil.process_iter(['pid', 'name', 'username', 'connections']) 
+    ollama_procs = [p for p in psutil.process_iter(['pid', 'name', 'username']) 
                     if 'ollama' in p.info['name'].lower()]
     
     if not ollama_procs:
@@ -72,13 +72,15 @@ async def check_process_isolation():
                 })
     except psutil.AccessDenied:
         connections = [{"error": "Access denied - run as admin to see connections"}]
+    except Exception:
+        connections = [{"error": "Unable to retrieve connections"}]
     
     return {
         "status": "verified",
         "process": {
             "pid": proc.pid,
             "user": proc.info['username'],
-            "is_system": proc.info['username'] == 'SYSTEM',
+            "is_system": proc.info.get('username') == 'SYSTEM',
             "connections": connections,
             "localhost_only": all(c.get('localhost_only', True) for c in connections if 'error' not in c)
         }
@@ -271,7 +273,7 @@ async def generate_full_safety_report():
     """Generate complete safety verification report"""
     
     report = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "system": "Legends of Minds - Safety Verification",
         "checks": {}
     }
