@@ -5,6 +5,10 @@
 
 set -e
 
+# Configurable parameters
+CURL_TIMEOUT=${CURL_TIMEOUT:-5}
+MAX_FAILURES=${MAX_FAILURES:-10}
+
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -43,7 +47,7 @@ check_endpoint() {
         return
     fi
     
-    local response=$(curl -L -s -o /dev/null -w "%{http_code}" --connect-timeout 5 "$url" 2>/dev/null || echo "000")
+    local response=$(curl -L -s -o /dev/null -w "%{http_code}" --connect-timeout "$CURL_TIMEOUT" "$url" 2>/dev/null || echo "000")
     
     if [[ "$response" == "$expected_status" ]] || [[ "$response" =~ ^2[0-9][0-9]$ ]]; then
         echo -e "${GREEN}✓ PASS${NC} $name ($url) - Status: $response"
@@ -398,21 +402,21 @@ print_section "9. CODE QUALITY METRICS"
 # Count lines of code in key directories
 if [ -d "./src" ]; then
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    SRC_LINES=$(find ./src -name "*.ts" -o -name "*.js" -o -name "*.py" | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
+    SRC_LINES=$(find ./src \( -name "*.ts" -o -name "*.js" -o -name "*.py" \) -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
     echo -e "${GREEN}✓ INFO${NC} Source code lines: $SRC_LINES"
     RESULTS+=("INFO|Source code lines|./src|$SRC_LINES")
 fi
 
 if [ -d "./scripts" ]; then
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    SCRIPT_LINES=$(find ./scripts -name "*.sh" -o -name "*.py" | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
+    SCRIPT_LINES=$(find ./scripts \( -name "*.sh" -o -name "*.py" \) -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
     echo -e "${GREEN}✓ INFO${NC} Script lines: $SCRIPT_LINES"
     RESULTS+=("INFO|Script lines|./scripts|$SCRIPT_LINES")
 fi
 
 # Count total documentation
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-DOC_LINES=$(find . -maxdepth 1 -name "*.md" | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
+DOC_LINES=$(find . -maxdepth 1 -name "*.md" -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
 echo -e "${GREEN}✓ INFO${NC} Documentation lines (root): $DOC_LINES"
 RESULTS+=("INFO|Documentation lines|./*.md|$DOC_LINES")
 
@@ -554,8 +558,8 @@ echo "Report generated: $REPORT_FILE"
 echo ""
 
 # Final exit status
-if [ $FAILED_CHECKS -gt 10 ]; then
-    echo -e "${RED}⚠️  Warning: Multiple checks failed. Review the report for details.${NC}"
+if [ $FAILED_CHECKS -gt $MAX_FAILURES ]; then
+    echo -e "${RED}⚠️  Warning: Multiple checks failed ($FAILED_CHECKS > $MAX_FAILURES threshold). Review the report for details.${NC}"
     exit 1
 else
     echo -e "${GREEN}✅ Verification complete!${NC}"

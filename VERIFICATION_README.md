@@ -86,6 +86,25 @@ This will:
 3. Generate a timestamped report: `VERIFICATION_REPORT_YYYYMMDD_HHMMSS.md`
 4. Exit with status 0 if successful, 1 if critical failures
 
+### Configuration
+
+The script accepts environment variables for customization:
+
+```bash
+# Set custom timeout for curl checks (default: 5 seconds)
+CURL_TIMEOUT=10 ./verify_infrastructure.sh
+
+# Set maximum allowed failures before exiting with error (default: 10)
+MAX_FAILURES=20 ./verify_infrastructure.sh
+
+# Combine multiple settings
+CURL_TIMEOUT=10 MAX_FAILURES=15 ./verify_infrastructure.sh
+```
+
+**Environment Variables:**
+- `CURL_TIMEOUT`: Connection timeout for HTTP checks (default: 5 seconds)
+- `MAX_FAILURES`: Maximum number of failed checks before exit code 1 (default: 10)
+
 ### Understanding Results
 
 - **✓ PASS** (Green): Check completed successfully
@@ -234,16 +253,18 @@ The script is designed to work in GitHub Actions:
 
 The verification script directly validates claims from `COMPARATIVE_RESOURCE_ANALYSIS.md`:
 
-| Claim | Verification Method |
-|-------|---------------------|
-| "120+ container orchestration" | Count of Docker files and compose configs |
-| "35+ docker-compose manifests" | File checks for compose YAML files |
-| "11 Obsidian vaults" | Would require Obsidian workspace access (not in repo) |
-| "10,000+ interconnected notes" | Would require vault access (not in repo) |
-| "22,000+ lines of code documentation" | Line count across all documentation files |
-| "130+ services" | Service directory and configuration counts |
-| "Multi-WAN distributed network" | Network configuration file validation |
-| "Cryptographic hash chains" | DAO record and governance file validation |
+| Claim | Verification Method | Status |
+|-------|---------------------|--------|
+| "120+ container orchestration" | Count of Docker files and compose configs | ✅ Automated |
+| "35+ docker-compose manifests" | File checks for compose YAML files | ✅ Automated |
+| "11 Obsidian vaults" | Would require Obsidian workspace access (not in repo) | ⚠️ Manual Only |
+| "10,000+ interconnected notes" | Would require vault access (not in repo) | ⚠️ Manual Only |
+| "22,000+ lines of code documentation" | Line count across all documentation files | ✅ Automated |
+| "130+ services" | Service directory and configuration counts | ✅ Automated |
+| "Multi-WAN distributed network" | Network configuration file validation | ✅ Automated |
+| "Cryptographic hash chains" | DAO record and governance file validation | ✅ Automated |
+
+**Note:** Some claims (marked ⚠️ Manual Only) require access to external systems (Obsidian vaults) or live infrastructure and cannot be automatically verified from the repository alone. These would require manual verification in the actual deployed environment.
 
 ## Summary
 
