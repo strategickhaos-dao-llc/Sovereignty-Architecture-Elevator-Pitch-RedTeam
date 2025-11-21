@@ -1,0 +1,364 @@
+version: '3.8'
+
+# Filesystem Agents: LocalGPT, AutoGPT, File Automation
+# Complete local filesystem AI for search, editing, and automation
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+networks:
+  agents_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+  # Connect to main network
+  strategickhaos_network:
+    external: true
+    name: strategickhaos_network
+
+volumes:
+  localgpt_data:
+  autogpt_data:
+  chromadb_data:
+  agent_workspace:
+  pgvector_data:
+
+services:
+  # LocalGPT - Complete RAG over local files
+  localgpt:
+    image: python:3.11-slim
+    container_name: agents-localgpt
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python app.py"
+    ports:
+      - "5111:5111"
+    volumes:
+      - ./agents/localgpt:/app
+      - localgpt_data:/data
+      - agent_workspace:/workspace
+    environment:
+      - DEVICE_TYPE=cpu
+      - MODEL_TYPE=GPT4All
+      - MODEL_PATH=/models
+      - EMBEDDINGS_MODEL=all-MiniLM-L6-v2
+      - CHUNK_SIZE=500
+      - CHUNK_OVERLAP=50
+      - PORT=5111
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5111/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=local-rag"
+      - "ai.type=localgpt"
+
+  # AutoGPT - Autonomous AI agent
+  autogpt:
+    image: significantgravitas/auto-gpt:latest
+    container_name: agents-autogpt
+    ports:
+      - "8000:8000"
+    volumes:
+      - autogpt_data:/app/data
+      - agent_workspace:/workspace
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-not_set}
+      - EXECUTE_LOCAL_COMMANDS=true
+      - RESTRICT_TO_WORKSPACE=true
+      - WORKSPACE_PATH=/workspace
+      - MEMORY_BACKEND=json_file
+      - AUTONOMOUS=false
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "ai.service=autonomous-agent"
+      - "ai.type=autogpt"
+
+  # ChromaDB - Vector database for agents
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: agents-chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+      - ALLOW_RESET=TRUE
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=vector-database"
+      - "ai.type=chromadb"
+
+  # File Watcher Agent - Monitors and processes file changes
+  file-watcher:
+    image: python:3.11-slim
+    container_name: agents-file-watcher
+    working_dir: /app
+    command: python file_watcher.py
+    volumes:
+      - ./agents/file_watcher:/app
+      - agent_workspace:/workspace:rw
+    environment:
+      - WATCH_PATH=/workspace
+      - OLLAMA_URL=http://ollama:11434
+      - CHROMADB_URL=http://chromadb:8000
+      - AUTO_INDEX=true
+      - AUTO_SUMMARIZE=true
+    networks:
+      - agents_network
+      - strategickhaos_network
+    depends_on:
+      - chromadb
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "ai.service=file-monitoring"
+      - "ai.type=watcher"
+
+  # Document Intelligence Agent
+  doc-intel:
+    image: python:3.11-slim
+    container_name: agents-doc-intel
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python doc_intel_server.py"
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./agents/doc_intel:/app
+      - agent_workspace:/workspace:ro
+    environment:
+      - SERVER_PORT=8002
+      - WORKSPACE_PATH=/workspace
+      - ENABLE_OCR=true
+      - ENABLE_PDF=true
+      - ENABLE_OFFICE=true
+      - OLLAMA_URL=http://ollama:11434
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=document-intelligence"
+      - "ai.type=doc-intel"
+
+  # Code Analysis Agent
+  code-analyst:
+    image: python:3.11-slim
+    container_name: agents-code-analyst
+    working_dir: /app
+    command: python code_analyst.py
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./agents/code_analyst:/app
+      - agent_workspace:/workspace:ro
+    environment:
+      - SERVER_PORT=8003
+      - WORKSPACE_PATH=/workspace
+      - LANGUAGES=python,javascript,java,go,rust
+      - ENABLE_AST_PARSING=true
+      - OLLAMA_URL=http://ollama:11434
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=code-analysis"
+      - "ai.type=code-analyst"
+
+  # File Search & Semantic Query Engine
+  semantic-search:
+    image: python:3.11-slim
+    container_name: agents-semantic-search
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python search_server.py"
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./agents/semantic_search:/app
+      - agent_workspace:/workspace:ro
+      - chromadb_data:/chromadb
+    environment:
+      - SERVER_PORT=8004
+      - WORKSPACE_PATH=/workspace
+      - CHROMADB_URL=http://chromadb:8000
+      - EMBEDDING_MODEL=sentence-transformers/all-mpnet-base-v2
+    networks:
+      - agents_network
+      - strategickhaos_network
+    depends_on:
+      - chromadb
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=semantic-search"
+      - "ai.type=search-engine"
+
+  # File Editor Agent - AI-powered file editing
+  file-editor:
+    image: python:3.11-slim
+    container_name: agents-file-editor
+    working_dir: /app
+    command: python editor_agent.py
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./agents/file_editor:/app
+      - agent_workspace:/workspace:rw
+    environment:
+      - SERVER_PORT=8005
+      - WORKSPACE_PATH=/workspace
+      - OLLAMA_URL=http://ollama:11434
+      - ENABLE_BACKUP=true
+      - MAX_FILE_SIZE=10485760  # 10MB
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=file-editing"
+      - "ai.type=editor-agent"
+
+  # Agent Orchestrator - Coordinates all filesystem agents
+  agent-orchestrator:
+    image: python:3.11-slim
+    container_name: agents-orchestrator
+    working_dir: /app
+    command: python orchestrator.py
+    ports:
+      - "8010:8010"
+    volumes:
+      - ./agents/orchestrator:/app
+      - agent_workspace:/workspace
+    environment:
+      - SERVER_PORT=8010
+      - WORKSPACE_PATH=/workspace
+      - LOCALGPT_URL=http://localgpt:5111
+      - AUTOGPT_URL=http://autogpt:8000
+      - DOC_INTEL_URL=http://doc-intel:8002
+      - CODE_ANALYST_URL=http://code-analyst:8003
+      - SEARCH_URL=http://semantic-search:8004
+      - EDITOR_URL=http://file-editor:8005
+      - ORCHESTRATION_MODE=auto
+    networks:
+      - agents_network
+      - strategickhaos_network
+    depends_on:
+      - chromadb
+      - localgpt
+      - doc-intel
+      - code-analyst
+      - semantic-search
+      - file-editor
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agents.rule=Host(`agents.localhost`)"
+      - "traefik.http.services.agents.loadbalancer.server.port=8010"
+      - "ai.service=agent-orchestration"
+
+  # PGVector for advanced semantic operations
+  pgvector:
+    image: ankane/pgvector:latest
+    container_name: agents-pgvector
+    environment:
+      - POSTGRES_USER=agent_user
+      - POSTGRES_PASSWORD=agent_pass
+      - POSTGRES_DB=agent_vectors
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    networks:
+      - agents_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent_user"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "ai.service=vector-database"
+      - "ai.type=pgvector"
+
+# Usage Instructions:
+#
+# 1. Create workspace directory:
+#    mkdir -p agent_workspace
+#
+# 2. Start all agents:
+#    docker-compose -f docker-compose.agents.yml up -d
+#
+# 3. Access orchestrator UI:
+#    http://localhost:8010
+#
+# 4. Example: Search files semantically
+#    curl -X POST http://localhost:8004/search \
+#      -d '{"query":"functions related to authentication"}'
+#
+# 5. Example: AI file editing
+#    curl -X POST http://localhost:8005/edit \
+#      -d '{"file":"/workspace/test.py","instruction":"add error handling"}'
+#
+# 6. Example: Code analysis
+#    curl -X POST http://localhost:8003/analyze \
+#      -d '{"path":"/workspace/src"}'
+#
+# 7. Monitor agent activity:
+#    docker-compose -f docker-compose.agents.yml logs -f agent-orchestrator

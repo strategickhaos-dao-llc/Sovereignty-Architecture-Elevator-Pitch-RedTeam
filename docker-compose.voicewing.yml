@@ -1,0 +1,253 @@
+version: '3.8'
+
+# VoiceWing: Complete local voice interface for AI lab
+# Includes: Speech-to-Text (Whisper), Text-to-Speech (Silero), Voice WebUI
+# 100% local, zero cloud dependencies
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+networks:
+  voicewing_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  
+  # Connect to main AI lab network if it exists
+  strategickhaos_network:
+    external: true
+    name: strategickhaos_network
+
+volumes:
+  whisper_models:
+  voicewing_data:
+  piper_models:
+
+services:
+  # Whisper ASR (Automatic Speech Recognition)
+  whisper-asr:
+    image: onerahmet/openai-whisper-asr-webservice:latest-gpu
+    container_name: voicewing-whisper
+    environment:
+      - ASR_MODEL=large-v3
+      - ASR_ENGINE=faster_whisper
+    ports:
+      - "9000:9000"
+    volumes:
+      - whisper_models:/root/.cache/whisper
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    labels:
+      - "ai.service=speech-recognition"
+      - "ai.type=whisper"
+
+  # Piper TTS (Text-to-Speech) - Lightweight alternative to Silero
+  piper-tts:
+    image: rhasspy/wyoming-piper:latest
+    container_name: voicewing-piper
+    command: --voice en_US-lessac-medium
+    ports:
+      - "10200:10200"
+    volumes:
+      - piper_models:/data
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "10200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=text-to-speech"
+      - "ai.type=piper"
+
+  # Coqui TTS (Advanced Neural TTS)
+  coqui-tts:
+    image: ghcr.io/coqui-ai/tts:latest
+    container_name: voicewing-coqui
+    command: --model_name tts_models/en/vctk/vits
+    ports:
+      - "5002:5002"
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    environment:
+      - TTS_SERVER_PORT=5002
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/api/tts"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=neural-tts"
+      - "ai.type=coqui"
+
+  # Open WebUI with voice integration
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: voicewing-webui
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-secret_key_change_me}
+      - WHISPER_API_URL=http://whisper-asr:9000
+      - TTS_API_URL=http://coqui-tts:5002
+      - ENABLE_RAG=true
+      - ENABLE_VOICE=true
+      - ENABLE_TTS=true
+      - ENABLE_STT=true
+    ports:
+      - "8080:8080"
+    volumes:
+      - voicewing_data:/app/backend/data
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    depends_on:
+      - whisper-asr
+      - coqui-tts
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.voice-webui.rule=Host(`voice.localhost`)"
+      - "traefik.http.services.voice-webui.loadbalancer.server.port=8080"
+      - "ai.service=voice-interface"
+
+  # Voice Activity Detection (VAD) Service
+  silero-vad:
+    image: python:3.11-slim
+    container_name: voicewing-vad
+    working_dir: /app
+    command: python -m http.server 8765
+    ports:
+      - "8765:8765"
+    volumes:
+      - ./voice_configs/silero_vad.py:/app/silero_vad.py
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    labels:
+      - "ai.service=voice-activity-detection"
+      - "ai.type=silero-vad"
+
+  # Voice Command Router
+  voice-router:
+    image: python:3.11-slim
+    container_name: voicewing-router
+    working_dir: /app
+    command: python voice_router.py
+    ports:
+      - "8766:8766"
+    volumes:
+      - ./voice_configs:/app
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    environment:
+      - WHISPER_URL=http://whisper-asr:9000
+      - TTS_URL=http://coqui-tts:5002
+      - OLLAMA_URL=http://ollama:11434
+      - ROUTER_PORT=8766
+    depends_on:
+      - whisper-asr
+      - coqui-tts
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8766/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=voice-command-router"
+
+  # Ollama (if not already running in main compose)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: voicewing-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./modelfiles:/modelfiles
+      - ollama_voice_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_KEEP_ALIVE=24h
+    networks:
+      - voicewing_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.service=llm-backend"
+
+volumes:
+  ollama_voice_data:
+
+# Usage Instructions:
+# 
+# 1. Start VoiceWing stack:
+#    docker-compose -f docker-compose.voicewing.yml up -d
+#
+# 2. Access services:
+#    - Voice WebUI: http://localhost:8080
+#    - Whisper API: http://localhost:9000
+#    - TTS API: http://localhost:5002
+#    - Voice Router: http://localhost:8766
+#
+# 3. Test speech-to-text:
+#    curl -F "audio_file=@test.wav" http://localhost:9000/asr?task=transcribe
+#
+# 4. Test text-to-speech:
+#    curl -X POST http://localhost:5002/api/tts \
+#      -d '{"text":"Hello from VoiceWing"}' \
+#      -o output.wav
+#
+# 5. Voice command example:
+#    curl -X POST http://localhost:8766/voice-command \
+#      -F "audio=@command.wav"

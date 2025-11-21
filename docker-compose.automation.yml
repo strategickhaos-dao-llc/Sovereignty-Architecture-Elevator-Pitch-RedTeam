@@ -1,0 +1,409 @@
+version: '3.8'
+
+# Screen Control & Browser Automation: Selenium, RPA, UI Testing
+# Complete local browser automation and screen control infrastructure
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+networks:
+  automation_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+
+  # Connect to main network
+  strategickhaos_network:
+    external: true
+    name: strategickhaos_network
+
+volumes:
+  selenium_recordings:
+  rpa_data:
+  playwright_data:
+
+services:
+  # Selenium Grid Hub
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: automation-selenium-hub
+    ports:
+      - "4444:4444"
+      - "4442:4442"
+      - "4443:4443"
+    environment:
+      - SE_SESSION_REQUEST_TIMEOUT=300
+      - SE_NODE_SESSION_TIMEOUT=300
+      - SE_SESSION_RETRY_INTERVAL=5
+      - GRID_MAX_SESSION=10
+      - GRID_BROWSER_TIMEOUT=300
+      - GRID_TIMEOUT=300
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "automation.service=selenium-grid"
+      - "automation.type=hub"
+
+  # Chrome Node
+  chrome:
+    image: selenium/node-chrome:latest
+    container_name: automation-chrome
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+    ports:
+      - "7900:7900"  # VNC port
+    shm_size: '2gb'
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "automation.service=browser-node"
+      - "automation.browser=chrome"
+
+  # Firefox Node
+  firefox:
+    image: selenium/node-firefox:latest
+    container_name: automation-firefox
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+    ports:
+      - "7901:7900"  # VNC port
+    shm_size: '2gb'
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "automation.service=browser-node"
+      - "automation.browser=firefox"
+
+  # Edge Node
+  edge:
+    image: selenium/node-edge:latest
+    container_name: automation-edge
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+    ports:
+      - "7902:7900"  # VNC port
+    shm_size: '2gb'
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "automation.service=browser-node"
+      - "automation.browser=edge"
+
+  # Selenium Video Recorder
+  video-recorder:
+    image: selenium/video:latest
+    container_name: automation-video-recorder
+    volumes:
+      - selenium_recordings:/videos
+    environment:
+      - DISPLAY_CONTAINER_NAME=chrome
+      - FILE_NAME=chrome_video.mp4
+    depends_on:
+      - chrome
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "automation.service=video-recorder"
+
+  # Playwright Server (Alternative to Selenium)
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    container_name: automation-playwright
+    working_dir: /workspace
+    command: sleep infinity
+    ports:
+      - "9323:9323"
+    volumes:
+      - playwright_data:/workspace
+      - ./automation/playwright:/scripts
+    environment:
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "automation.service=playwright"
+      - "automation.type=browser-automation"
+
+  # RPA Framework Server
+  rpa-server:
+    image: python:3.11-slim
+    container_name: automation-rpa-server
+    working_dir: /app
+    command: bash -c "pip install robotframework robotframework-seleniumlibrary rpaframework && python rpa_server.py"
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./automation/rpa:/app
+      - rpa_data:/data
+    environment:
+      - SELENIUM_HUB_URL=http://selenium-hub:4444/wd/hub
+      - RPA_SERVER_PORT=8090
+      - HEADLESS=true
+    depends_on:
+      - selenium-hub
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "automation.service=rpa-server"
+      - "automation.framework=robot"
+
+  # Browser Automation API (Python Selenium wrapper)
+  automation-api:
+    image: python:3.11-slim
+    container_name: automation-api
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python api_server.py"
+    ports:
+      - "8091:8091"
+    volumes:
+      - ./automation/api:/app
+    environment:
+      - SELENIUM_HUB_URL=http://selenium-hub:4444/wd/hub
+      - API_PORT=8091
+      - DEFAULT_BROWSER=chrome
+      - IMPLICIT_WAIT=10
+      - PAGE_LOAD_TIMEOUT=30
+    depends_on:
+      - selenium-hub
+      - chrome
+      - firefox
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.automation.rule=Host(`automation.localhost`)"
+      - "traefik.http.services.automation.loadbalancer.server.port=8091"
+      - "automation.service=api-server"
+
+  # AI-Powered Browser Agent
+  browser-agent:
+    image: python:3.11-slim
+    container_name: automation-browser-agent
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python browser_agent.py"
+    ports:
+      - "8092:8092"
+    volumes:
+      - ./automation/browser_agent:/app
+    environment:
+      - SELENIUM_HUB_URL=http://selenium-hub:4444/wd/hub
+      - OLLAMA_URL=http://ollama:11434
+      - AGENT_PORT=8092
+      - ENABLE_SCREENSHOTS=true
+      - ENABLE_VISION=true
+    depends_on:
+      - selenium-hub
+      - automation-api
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8092/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "automation.service=ai-browser-agent"
+      - "automation.ai=true"
+
+  # Screen Capture Service
+  screen-capture:
+    image: python:3.11-slim
+    container_name: automation-screen-capture
+    working_dir: /app
+    command: python capture_server.py
+    ports:
+      - "8093:8093"
+    volumes:
+      - ./automation/screen_capture:/app
+      - selenium_recordings:/captures
+    environment:
+      - CAPTURE_PORT=8093
+      - CHROME_VNC=chrome:7900
+      - FIREFOX_VNC=firefox:7900
+      - EDGE_VNC=edge:7900
+      - CAPTURE_INTERVAL=1000
+    depends_on:
+      - chrome
+      - firefox
+      - edge
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8093/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "automation.service=screen-capture"
+
+  # Web Scraping Service
+  scraper:
+    image: python:3.11-slim
+    container_name: automation-scraper
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python scraper_server.py"
+    ports:
+      - "8094:8094"
+    volumes:
+      - ./automation/scraper:/app
+    environment:
+      - SELENIUM_HUB_URL=http://selenium-hub:4444/wd/hub
+      - SCRAPER_PORT=8094
+      - USER_AGENT=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36
+      - ENABLE_JS=true
+      - WAIT_FOR_CONTENT=true
+    depends_on:
+      - selenium-hub
+      - chrome
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8094/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "automation.service=web-scraper"
+
+  # Testing Dashboard (Selenium Grid UI)
+  selenium-ui:
+    image: selenium/node-chrome:latest
+    container_name: automation-dashboard
+    environment:
+      - SELENIUM_HUB=http://selenium-hub:4444
+    ports:
+      - "7903:7900"
+    depends_on:
+      - selenium-hub
+    networks:
+      - automation_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "automation.service=dashboard"
+
+# Usage Instructions:
+#
+# 1. Start all automation services:
+#    docker-compose -f docker-compose.automation.yml up -d
+#
+# 2. Access Selenium Grid:
+#    http://localhost:4444
+#
+# 3. View browser sessions (VNC):
+#    - Chrome: http://localhost:7900
+#    - Firefox: http://localhost:7901
+#    - Edge: http://localhost:7902
+#
+# 4. Automation API examples:
+#
+#    # Navigate to URL
+#    curl -X POST http://localhost:8091/navigate \
+#      -d '{"url":"https://example.com","browser":"chrome"}'
+#
+#    # Click element
+#    curl -X POST http://localhost:8091/click \
+#      -d '{"selector":"#submit-button","browser":"chrome"}'
+#
+#    # Extract text
+#    curl -X POST http://localhost:8091/get-text \
+#      -d '{"selector":".content","browser":"chrome"}'
+#
+# 5. AI Browser Agent (natural language):
+#    curl -X POST http://localhost:8092/execute \
+#      -d '{"instruction":"Go to google and search for AI research"}'
+#
+# 6. Web Scraping:
+#    curl -X POST http://localhost:8094/scrape \
+#      -d '{"url":"https://example.com","selectors":["h1",".content"]}'
+#
+# 7. Screen Capture:
+#    curl -X POST http://localhost:8093/capture \
+#      -d '{"browser":"chrome","format":"png"}'
+#
+# 8. RPA Task Execution:
+#    curl -X POST http://localhost:8090/execute \
+#      -F "robot_file=@task.robot"
+#
+# 9. Monitor sessions:
+#    docker-compose -f docker-compose.automation.yml logs -f selenium-hub
