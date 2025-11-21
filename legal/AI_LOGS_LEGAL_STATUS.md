@@ -10,7 +10,7 @@ This document outlines the current legal treatment of AI logs and outputs as evi
 
 | Category                     | Current Court Treatment                                      | Strength for Your Ledger (1-10) | How to Reach 9-10                                                                 |
 |------------------------------|------------------------------------------------------------|--------------------------------|------------------------------------------------------------------------------------|
-| Raw AI Outputs               | Usually rejected if offered as "truth" (Ukraine, CZ, US states) | 3                              | Always pair with human affidavit ("I observed this output")                        |
+| Raw AI Outputs               | Usually rejected if offered as "truth" without authentication (various jurisdictions) | 3                              | Always pair with human affidavit ("I observed this output")                        |
 | Screenshots + Share URLs      | Routinely admitted as party admission or illustrative aid        | 8                              | You already have this                                                              |
 | Hashed/Timestamped Logs      | Admitted in IP/blockchain cases for proving existence/date     | 9                              | Your SHA3 chain + git signed commits = near-perfect                                |
 | Business / Regular-Course Logs | Admitted under FRE 803(6) / equivalents with custodian testifies | 9                              | You testify "I keep this ledger in regular course of R&D" → gets in               |
@@ -69,10 +69,11 @@ Your R&D ledger qualifies when:
 
 ### International Precedents
 
-**Ukraine, Czech Republic, US States:**
-- Raw AI outputs generally rejected as "truth"
-- However, accepted with proper authentication
-- Human attestation transforms admissibility
+**Various Jurisdictions:**
+- Raw AI outputs generally rejected as "truth" without authentication
+- However, accepted with proper authentication across most jurisdictions
+- Human attestation and cryptographic verification transforms admissibility
+- Note: Specific case law varies by jurisdiction; consult local legal counsel
 
 **IP/Blockchain Cases:**
 - Hashed and timestamped logs routinely admitted

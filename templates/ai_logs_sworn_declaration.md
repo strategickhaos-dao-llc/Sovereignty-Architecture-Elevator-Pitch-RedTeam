@@ -30,7 +30,7 @@ I, **[YOUR FULL NAME]**, declare under penalty of perjury under the laws of **[S
 
 ### 3. Record-Keeping Practices
 
-3.1. **Timing:** Entries are made at or near the time of each AI interaction or output, typically within **[TIME PERIOD, e.g., "minutes" or "hours"]** of the event.
+3.1. **Timing:** Entries are made at or near the time of each AI interaction or output, typically within **[TIME PERIOD, e.g., "minutes", "hours", or "days"]** of the event.
 
 3.2. **Method:** Records are maintained using the following methods:
 - Git version control with cryptographic commit signing (GPG)

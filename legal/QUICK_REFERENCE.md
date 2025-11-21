@@ -22,7 +22,9 @@ Raw AI Outputs (3/10)
 
 ### Step 1: GPG Setup (2 minutes)
 ```bash
-gpg --full-generate-key  # Choose RSA 4096, does not expire
+gpg --full-generate-key  # Choose RSA 4096
+# Key expiration: Consider 2-5 years for security best practice
+# (Non-expiring keys are allowed but may pose long-term security risks)
 git config --global user.signingkey YOUR_KEY_ID
 git config --global commit.gpgsign true
 ```
