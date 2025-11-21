@@ -277,7 +277,8 @@ curl -X POST https://events.strategickhaos.com/health
 Understanding how we think, learn, and build systems:
 
 - **[Polymath Cognitive Architecture](POLYMATH_COGNITIVE_ARCHITECTURE.md)** - Understanding the 0.1% cognitive pattern: parallel processing, multi-modal learning, and constraint-driven reasoning
-- **[Technical Cognitive Map](cognitive_map.dot)** - System architecture as cognitive infrastructure
+- **[Polymath Cognitive Map](POLYMATH_COGNITIVE_MAP.dot)** ([SVG](polymath_cognitive_architecture.svg)) - Visual diagram of the polymath cognitive framework
+- **[Technical Cognitive Map](cognitive_map.dot)** ([SVG](cognitive_architecture.svg)) - System architecture as cognitive infrastructure
 
 ## 👥 Community & Contributors
 
