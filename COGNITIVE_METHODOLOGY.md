@@ -1,8 +1,8 @@
 # Cognitive Methodology
 
-## Appendix: Cognitive Methodology (Normal Neural Processes, No Extraordinary Claims)
+## Normal Neural Processes, No Extraordinary Claims
 
-This section explains the thinking style behind the Sovereignty Architecture. It contains **NO metaphysical claims**, **no exaggerated capability**, and **no superhuman assumptions**. It is simply an articulation of how complex problems are approached in a divergent, cross-domain way.
+This document explains the thinking style behind the Sovereignty Architecture. It contains **NO metaphysical claims**, **no exaggerated capability**, and **no superhuman assumptions**. It is simply an articulation of how complex problems are approached in a divergent, cross-domain way.
 
 ---
 
@@ -37,7 +37,7 @@ The architecture design process employs **associative divergence**—a recognize
 - Solutions are evaluated across different dimensions (security, scalability, maintainability, cost)
 - The "1000 pathways" metaphor simply describes rapid generation of solution candidates
 
-**Academic Reference**: Guilford's Alternative Uses Task and theories of creative cognition
+**Academic Reference**: Guilford, J.P. (1967) - Alternative Uses Task and theories of creative cognition
 
 ### 2.2 Memory Consolidation Loop
 
@@ -53,7 +53,7 @@ The problem-solving workflow involves:
 - "Forgetting" and "rediscovering" allows the subconscious to filter and strengthen relevant patterns
 - This is why distributed work sessions often yield better results than marathon coding sessions
 
-**Academic Reference**: Memory reconsolidation research, spacing effect in learning
+**Academic Reference**: Memory reconsolidation research, spacing effect in learning (Ebbinghaus, 1885; Cepeda et al., 2006)
 
 ### 2.3 Insight Generation ("Aha!" Moments)
 
@@ -64,7 +64,7 @@ Insight generation occurs through pattern synthesis—what is colloquially descr
 - The "spark" moment is pattern recognition across previously disconnected knowledge
 - This is cultivated through exposure to diverse technical domains and maintaining broad context
 
-**Academic Reference**: Neurological research on insight (Kounios & Beeman), Gestalt psychology
+**Academic Reference**: Kounios, J. & Beeman, M. (2009) - Neurological research on insight; Gestalt psychology
 
 ### 2.4 Analogical Mapping (Cross-Domain Synthesis)
 
@@ -80,7 +80,7 @@ Using principles from quantum mechanics, biology, chemistry, and code is an exam
 - Biological systems (immune response, neural networks) inspire security and resilience patterns
 - Physical constraints (thermodynamics, information theory) guide system optimization
 
-**Academic Reference**: Bloom's Taxonomy (revised), Holyoak & Thagard's analogical reasoning research
+**Academic Reference**: Bloom, B.S. (1956) - Taxonomy revised by Anderson & Krathwohl (2001); Holyoak, K.J. & Thagard, P. (1995) - Analogical reasoning research
 
 ### 2.5 Constraint-Based Innovation
 
@@ -95,7 +95,7 @@ A key differentiator is the ability to **see constraints as creative opportuniti
 - Kubernetes complexity drove the contradiction engine design
 - Security constraints shaped the vault integration pattern
 
-**Academic Reference**: Theory of Constraints (TOC), design thinking methodology
+**Academic Reference**: Goldratt, E.M. (1984) - Theory of Constraints (TOC); Brown, T. (2008) - Design thinking methodology
 
 ---
 
@@ -122,7 +122,7 @@ Rather than relying on a single AI model, consensus across multiple models (GPT-
 **Cognitive Pattern**: Context switching overhead  
 **Architectural Response**: 20+ terminals, each maintaining isolated context
 
-Like the cognitive_map.dot diagram shows, parallel threads (Thread_A through Thread_F) each maintain their own context, reducing interference and allowing rapid context restoration.
+Like the [cognitive_map.dot](cognitive_map.dot) diagram shows, parallel threads (Thread_A through Thread_F) each maintain their own context, reducing interference and allowing rapid context restoration.
 
 ### 3.4 Visual Synthesis Layer
 
