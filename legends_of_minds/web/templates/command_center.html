@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legends of Minds - Command Center</title>
+    <link rel="stylesheet" href="/static/css/command_center.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <h1>🧠 Legends of Minds</h1>
+            <h2>Unified Agent Orchestration Platform</h2>
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>System Operational</span>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- System Status Panel -->
+            <div class="panel system-status">
+                <h3>System Status</h3>
+                <div class="status-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Active Terminals</span>
+                        <span class="metric-value" id="active-terminals">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Proof Entries</span>
+                        <span class="metric-value" id="proof-entries">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Departments</span>
+                        <span class="metric-value" id="departments-count">10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Department Selection -->
+            <div class="panel department-selector">
+                <h3>Department Operations</h3>
+                <div class="department-grid">
+                    <button class="dept-btn" data-dept="proof_ledger">
+                        📋 Proof Ledger
+                    </button>
+                    <button class="dept-btn" data-dept="gitlens">
+                        🔍 GitLens
+                    </button>
+                    <button class="dept-btn" data-dept="refinery_mcp">
+                        ⚙️ Refinery MCP
+                    </button>
+                    <button class="dept-btn" data-dept="legal_compliance">
+                        ⚖️ Legal Compliance
+                    </button>
+                    <button class="dept-btn" data-dept="compose_gen">
+                        🐳 Compose Gen
+                    </button>
+                    <button class="dept-btn" data-dept="yaml_gen">
+                        📝 YAML Gen
+                    </button>
+                    <button class="dept-btn" data-dept="repo_builder">
+                        🏗️ Repo Builder
+                    </button>
+                    <button class="dept-btn" data-dept="code_search">
+                        🔎 Code Search
+                    </button>
+                    <button class="dept-btn" data-dept="picture_search">
+                        🖼️ Picture Search
+                    </button>
+                    <button class="dept-btn" data-dept="glossary">
+                        📚 Glossary
+                    </button>
+                </div>
+            </div>
+
+            <!-- Request Builder -->
+            <div class="panel request-builder">
+                <h3>Multi-Department Request Builder</h3>
+                <div class="request-form">
+                    <select id="department-select" class="form-control">
+                        <option value="">Select Department...</option>
+                        <option value="proof_ledger">Proof Ledger</option>
+                        <option value="gitlens">GitLens</option>
+                        <option value="refinery_mcp">Refinery MCP</option>
+                        <option value="legal_compliance">Legal Compliance</option>
+                        <option value="compose_gen">Compose Gen</option>
+                        <option value="yaml_gen">YAML Gen</option>
+                        <option value="repo_builder">Repo Builder</option>
+                        <option value="code_search">Code Search</option>
+                        <option value="picture_search">Picture Search</option>
+                        <option value="glossary">Glossary</option>
+                    </select>
+                    
+                    <select id="action-select" class="form-control">
+                        <option value="">Select Action...</option>
+                    </select>
+                    
+                    <textarea id="request-data" class="form-control" placeholder="Request data (JSON)..."></textarea>
+                    
+                    <button id="submit-request" class="btn-primary">Execute Request</button>
+                </div>
+                
+                <div id="request-result" class="result-display"></div>
+            </div>
+
+            <!-- Terminal Agent -->
+            <div class="panel terminal-agent">
+                <h3>Live Terminal Agent</h3>
+                <div class="terminal-container">
+                    <div class="terminal-output" id="terminal-output">
+                        <div class="terminal-line">Legends of Minds Terminal Agent v1.0</div>
+                        <div class="terminal-line">Type commands or connect to WebSocket endpoint</div>
+                        <div class="terminal-line">Endpoint: ws://localhost:8080/ws/terminal/{id}</div>
+                    </div>
+                    <div class="terminal-input-container">
+                        <span class="terminal-prompt">$</span>
+                        <input type="text" id="terminal-input" class="terminal-input" placeholder="Enter command...">
+                    </div>
+                </div>
+                <div class="terminal-controls">
+                    <button id="connect-terminal" class="btn-success">Connect</button>
+                    <button id="disconnect-terminal" class="btn-danger" disabled>Disconnect</button>
+                    <input type="text" id="terminal-id" class="form-control" placeholder="Terminal ID" value="terminal-1">
+                </div>
+            </div>
+
+            <!-- Proof Ledger Viewer -->
+            <div class="panel proof-viewer">
+                <h3>Proof Action Ledger</h3>
+                <div class="ledger-controls">
+                    <button id="refresh-ledger" class="btn-secondary">Refresh</button>
+                    <button id="verify-ledger" class="btn-secondary">Verify Chain</button>
+                </div>
+                <div class="ledger-entries" id="ledger-entries">
+                    <div class="loading">Loading proof ledger...</div>
+                </div>
+            </div>
+
+            <!-- Legal Compliance Checker -->
+            <div class="panel compliance-checker">
+                <h3>Legal Compliance Checker</h3>
+                <div class="compliance-form">
+                    <textarea id="compliance-content" class="form-control" placeholder="Enter content to check for compliance..."></textarea>
+                    
+                    <div class="form-group">
+                        <label>Jurisdictions:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="federal_us" checked> Federal US</label>
+                            <label><input type="checkbox" value="wyoming"> Wyoming</label>
+                            <label><input type="checkbox" value="california"> California</label>
+                            <label><input type="checkbox" value="european_union"> EU</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Categories:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="privacy" checked> Privacy</label>
+                            <label><input type="checkbox" value="dao"> DAO</label>
+                            <label><input type="checkbox" value="ip"> IP</label>
+                            <label><input type="checkbox" value="marketing"> Marketing</label>
+                        </div>
+                    </div>
+                    
+                    <button id="check-compliance" class="btn-primary">Check Compliance</button>
+                </div>
+                
+                <div id="compliance-result" class="result-display"></div>
+            </div>
+
+            <!-- AI Content Generation -->
+            <div class="panel ai-content">
+                <h3>AI Content Generation</h3>
+                <div class="ai-form">
+                    <select id="content-type" class="form-control">
+                        <option value="docker-compose">Docker Compose</option>
+                        <option value="yaml-config">YAML Config</option>
+                        <option value="code">Code Generation</option>
+                        <option value="documentation">Documentation</option>
+                    </select>
+                    
+                    <textarea id="ai-prompt" class="form-control" placeholder="Describe what you want to generate..."></textarea>
+                    
+                    <button id="generate-content" class="btn-primary">Generate</button>
+                </div>
+                
+                <div id="ai-result" class="result-display"></div>
+            </div>
+
+            <!-- File Operations -->
+            <div class="panel file-ops">
+                <h3>File & Search Operations</h3>
+                <div class="file-ops-form">
+                    <input type="text" id="search-query" class="form-control" placeholder="Search query...">
+                    
+                    <div class="radio-group">
+                        <label><input type="radio" name="search-type" value="code" checked> Code</label>
+                        <label><input type="radio" name="search-type" value="files"> Files</label>
+                        <label><input type="radio" name="search-type" value="pictures"> Pictures</label>
+                    </div>
+                    
+                    <button id="search-execute" class="btn-primary">Search</button>
+                </div>
+                
+                <div id="search-results" class="result-display"></div>
+            </div>
+        </div>
+
+        <footer class="dashboard-footer">
+            <p>Legends of Minds v1.0 | Total Sovereignty | Full Automation | End-to-End Audit</p>
+            <p>Real-time Department Operations | Immutable Proof Ledger | Multi-Node Orchestration</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/command_center.js"></script>
+</body>
+</html>
