@@ -272,6 +272,13 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🧠 Cognitive Architecture
+
+Understanding how we think, learn, and build systems:
+
+- **[Polymath Cognitive Architecture](POLYMATH_COGNITIVE_ARCHITECTURE.md)** - Understanding the 0.1% cognitive pattern: parallel processing, multi-modal learning, and constraint-driven reasoning
+- **[Technical Cognitive Map](cognitive_map.dot)** - System architecture as cognitive infrastructure
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
