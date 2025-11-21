@@ -1,5 +1,5 @@
 # docker-compose.legends.yml — Legends of Minds v1 (real, working, safe)
-version: "3.8"
+# Note: version field is now obsolete in Docker Compose v2+
 
 services:
   ollama:
