@@ -1,7 +1,7 @@
 """
 Obsidian vault tools - Read, create, and search notes
 """
-import os
+import json
 from pathlib import Path
 from pydantic import BaseModel, Field
 import yaml
@@ -85,7 +85,6 @@ def create_canvas(args: CreateCanvasArgs) -> str:
         return f"Error: Canvas already exists: {args.canvas_path}"
     
     try:
-        import json
         canvas_data = {
             "nodes": args.nodes,
             "edges": []

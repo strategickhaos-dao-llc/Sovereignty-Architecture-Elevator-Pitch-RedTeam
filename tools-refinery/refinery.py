@@ -2,15 +2,15 @@
 Tools Refinery - FastAPI server for exposing safe, idempotent tools to LLM clients
 Version 0.1
 """
-from fastapi import FastAPI, HTTPException, Request, Body
+from fastapi import FastAPI, Request, Body
 from fastapi.responses import JSONResponse
-from typing import Any, Dict
 import uvicorn
 import importlib
 import inspect
 import os
 from pathlib import Path
 import yaml
+import sys
 
 app = FastAPI(
     title="Tools Refinery",
@@ -18,10 +18,17 @@ app = FastAPI(
     description="Safe, idempotent tools for LLM clients via OpenAI-compatible endpoints"
 )
 
-# Load configuration
+# Load configuration with error handling
 config_path = Path(__file__).parent / "config.yaml"
-with open(config_path) as f:
-    config = yaml.safe_load(f)
+try:
+    with open(config_path) as f:
+        config = yaml.safe_load(f)
+except FileNotFoundError:
+    print(f"Error: Configuration file not found at {config_path}")
+    sys.exit(1)
+except yaml.YAMLError as e:
+    print(f"Error: Invalid YAML in configuration file: {e}")
+    sys.exit(1)
 
 # Simple API key auth (put whatever you want in header X-API-Key)
 API_KEY = os.getenv("REFINERY_KEY", config.get("system", {}).get("api_key", "dev-key-change-me"))
@@ -78,7 +85,11 @@ if tools_dir.exists():
                     
                     # Get the function signature to find the args model
                     sig = inspect.signature(attr)
-                    args_param = list(sig.parameters.values())[0]
+                    params = list(sig.parameters.values())
+                    if not params:
+                        print(f"Warning: Tool {tool_name} has no parameters, skipping")
+                        continue
+                    args_param = params[0]
                     args_model = args_param.annotation
                     
                     # Create endpoint with proper type hints for FastAPI
