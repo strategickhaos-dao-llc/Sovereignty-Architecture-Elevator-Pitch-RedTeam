@@ -22,7 +22,7 @@ Use these to feed your local AI's training, populate your RAG folder, or enhance
 
 ### 📐 Math / Proofs / Impossible Problems (1-20)
 
-1. **Project Euler Problem 1** - Classic coding challenge
+1. **Awesome Math Resources** - Curated mathematical learning resources
 2. **Pi Digits (OEIS A000796)** - 10,000+ digits of π
 3. **Ramanujan's Notebooks** - Mathematical genius's work (Gutenberg)
 4. **Euclid's Elements** - Foundation of geometry
