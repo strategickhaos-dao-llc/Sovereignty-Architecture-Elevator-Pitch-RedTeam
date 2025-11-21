@@ -166,7 +166,11 @@ class EvolutionEngine:
         for heir in self.population:
             task = random.choice(tasks)
             fitness = await self.evaluate_heir(heir, task)
-            heir.fitness_score = (heir.fitness_score * heir.tasks_completed + fitness) / (heir.tasks_completed + 1)
+            # Update running average (tasks_completed was already incremented in evaluate_heir)
+            if heir.tasks_completed == 1:
+                heir.fitness_score = fitness
+            else:
+                heir.fitness_score = (heir.fitness_score * (heir.tasks_completed - 1) + fitness) / heir.tasks_completed
             
             print(f"  {heir.id} (gen {heir.generation}): fitness={heir.fitness_score:.3f}")
         
