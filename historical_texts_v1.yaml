@@ -1,0 +1,152 @@
+version: "1.0"
+name: "strategickhaos_historical_texts_v1"
+run_id: "historical-texts-{{ date:YYYYMMDDHHmmss }}"
+output_dir: "recon/historical_texts"
+
+globals:
+  user_agent: "Strategickhaos-Recon/1.0"
+  timeout_sec: 60
+  retries: 2
+  rate_limit_sec: 1
+  disclaimer: "PUBLIC DOMAIN RESOURCES — EDUCATIONAL USE"
+
+# Historical and esoteric text sources - all public domain and legally accessible
+sources:
+  # Ancient Manuscripts and Codices
+  - id: voynich_manuscript
+    url: "https://archive.org/details/TheVoynichManuscript"
+    file: "voynich_manuscript.html"
+    category: "manuscript"
+    priority: "high"
+    description: "Complete high-resolution scans from Yale University's Beinecke Rare Book & Manuscript Library"
+    institution: "Beinecke Library, Yale University"
+    date_range: "15th century"
+    
+  - id: nag_hammadi_library
+    url: "http://gnosis.org/naghamm/nhl.html"
+    file: "nag_hammadi_library.html"
+    category: "gnostic"
+    priority: "high"
+    description: "Complete English translation of the Nag Hammadi Library, including Coptic fragments"
+    alt_url: "https://archive.org/details/TheNagHammadiLibrary"
+    institution: "Gnosis Archive"
+    date_range: "2nd-4th century CE"
+    
+  - id: nag_hammadi_pdf
+    url: "https://archive.org/details/TheNagHammadiLibrary"
+    file: "nag_hammadi_library.pdf"
+    category: "gnostic"
+    priority: "high"
+    description: "PDF version of the complete Nag Hammadi Library"
+    institution: "Internet Archive"
+    
+  # Hermetic Texts
+  - id: corpus_hermeticum
+    url: "https://www.sacred-texts.com/eso/herm/index.htm"
+    file: "corpus_hermeticum.html"
+    category: "hermetic"
+    priority: "high"
+    description: "Complete Corpus Hermeticum and Emerald Tablet from Sacred Texts Archive"
+    institution: "Sacred Texts Archive"
+    date_range: "1st-3rd century CE"
+    
+  - id: emerald_tablet
+    url: "https://www.sacred-texts.com/alc/emerald.htm"
+    file: "emerald_tablet.html"
+    category: "hermetic"
+    priority: "medium"
+    description: "The Emerald Tablet of Hermes Trismegistus"
+    institution: "Sacred Texts Archive"
+    
+  # Esoteric Philosophy
+  - id: kybalion
+    url: "https://archive.org/details/kybalionstudyofh00inituoft"
+    file: "kybalion.html"
+    category: "hermetic_philosophy"
+    priority: "high"
+    description: "The Kybalion: A Study of the Hermetic Philosophy of Ancient Egypt and Greece (1908 edition)"
+    institution: "Internet Archive"
+    date: "1908"
+    authors: "Three Initiates"
+    
+  # Dead Sea Scrolls
+  - id: dead_sea_scrolls_official
+    url: "https://www.deadseascrolls.org.il/?locale=en_US"
+    file: "dead_sea_scrolls_official.html"
+    category: "biblical"
+    priority: "critical"
+    description: "Official digital library of the Dead Sea Scrolls, including high-resolution images and translations"
+    institution: "Israel Antiquities Authority"
+    date_range: "3rd century BCE - 1st century CE"
+    
+  - id: dead_sea_scrolls_archive
+    url: "https://archive.org/details/deadseascrolls"
+    file: "dead_sea_scrolls_archive.html"
+    category: "biblical"
+    priority: "high"
+    description: "Archive.org collection of Dead Sea Scrolls materials and translations"
+    institution: "Internet Archive"
+
+# Additional esoteric and historical reference materials
+additional_sources:
+  - id: apocrypha
+    url: "https://www.sacred-texts.com/bib/apo/index.htm"
+    description: "Biblical Apocrypha and Pseudepigrapha"
+    category: "biblical_apocrypha"
+    
+  - id: book_of_enoch
+    url: "https://www.sacred-texts.com/bib/boe/index.htm"
+    description: "The Book of Enoch"
+    category: "apocrypha"
+    
+  - id: pistis_sophia
+    url: "https://www.sacred-texts.com/chr/ps/index.htm"
+    description: "Pistis Sophia - Gnostic text"
+    category: "gnostic"
+
+ingestion_pipeline:
+  steps:
+    - fetch: "curl -L -s -H 'User-Agent: $user_agent' $url -o $output_dir/$file"
+    - validate: "test -s $output_dir/$file"
+    - chunk: "python /app/chunk.py --size 512 --overlap 128 --input $output_dir/$file"
+    - embed: "python /app/embed.py --model BAAI/bge-small-en-v1.5 --input chunked/"
+    - store: "qdrant upsert --collection historical_texts_v1 --input embedded/"
+    - audit: "python /app/proof_engine.py --query 'Summarize $id' --source $file"
+
+post_ingest:
+  - generate_proof: "python /app/proof_engine.py --output proof_historical_texts_v1.yaml"
+  - create_index: "python /app/create_search_index.py --collection historical_texts_v1"
+  - test_queries: [
+      "What is the content of the Voynich Manuscript?",
+      "What are the key texts in the Nag Hammadi Library?",
+      "What are the seven Hermetic principles in the Kybalion?",
+      "What is the Emerald Tablet?",
+      "What are the Dead Sea Scrolls?"
+    ]
+  - gpg_sign: "gpg --detach-sign --armor recon/reports/historical_texts_v1_complete.md"
+
+notes: |
+  All sources in this collection are:
+  - Public domain or freely accessible
+  - From reputable institutions (universities, museums, established archives)
+  - Educational and research-oriented
+  - Legally accessible without restrictions
+  
+  Primary institutions:
+  - Yale University's Beinecke Library
+  - Internet Archive (archive.org)
+  - Sacred Texts Archive (sacred-texts.com)
+  - Israel Antiquities Authority
+  
+  These materials are included for historical, philosophical, and research purposes
+  as part of the broader knowledge base for AI agent training and cultural literacy.
+
+audit_trail:
+  log_file: "recon/audit/historical_texts_v1_$(date +%Y%m%d).log"
+  gpg_required: true
+  sha256_checksums: true
+  source_verification: true
+
+operator: "Domenic Garza (Node 137)"
+timestamp: "2025-11-21T18:28:00Z"
+version_control: "git commit historical_texts_v1.yaml"
