@@ -1,0 +1,52 @@
+# Neural Heir Evolution System Configuration
+
+# Evolution Parameters
+evolution:
+  population_size: 10
+  mutation_rate: 1.0  # Probability of mutation (1.0 = always)
+  crossover_rate: 0.7  # Probability of crossover vs mutation
+  selection_pressure: 0.5  # Fraction that survives (0.5 = top 50%)
+  
+# LLM Configuration
+llm:
+  model: "qwen2.5:72b"
+  api_url: "http://localhost:11434"
+  temperature_range: [0.1, 2.0]  # Min and max temperature for heirs
+  
+# Judge Model (for Level 10 fitness)
+judge:
+  enabled: false  # Set to true to use judge-based evaluation
+  model: "qwen2.5:72b"
+  temperature: 0.3  # Low for consistent judging
+  
+# Lamarckian Reflection
+lamarckian:
+  enabled: false  # Set to true to enable self-reflection
+  reflection_frequency: 5  # Apply every N generations
+  temperature: 0.8
+  
+# Task Curriculum
+curriculum:
+  enabled: false  # Set to true for progressive difficulty
+  adaptive: true  # Adjust based on performance
+  starting_difficulty: 1
+  
+# Logging and Persistence
+logging:
+  ledger_file: "evolution_ledger.jsonl"
+  population_file: "current_population.json"
+  lineage_graph: "lineage_graph.dot"
+  verbose: true
+  
+# Initial Population Templates
+initial_prompts:
+  - "You are a tactical analyst. Be direct and actionable."
+  - "You are a creative problem solver. Think outside the box."
+  - "You are a cautious evaluator. Consider all risks."
+  - "You are an aggressive optimizer. Push boundaries."
+  - "You are a detail-oriented researcher. Be thorough."
+  
+initial_temperatures:
+  - 0.5
+  - 0.8
+  - 1.1
