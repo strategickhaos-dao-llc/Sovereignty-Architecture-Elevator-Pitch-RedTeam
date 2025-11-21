@@ -8,7 +8,7 @@ import json
 import logging
 from dataclasses import dataclass
 from typing import List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 @dataclass
 class AlignmentSignal:
@@ -59,7 +59,7 @@ class AlignmentMonitor:
         drift_indicators = self._detect_drift_patterns(model_output)
         
         signal = AlignmentSignal(
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             model_id=model_output.get('model_id', 'unknown'),
             decision_path=decision_path,
             confidence_score=model_output.get('confidence', 0.0),
@@ -140,7 +140,7 @@ class AlignmentMonitor:
         if not self.alert_log:
             return
         
-        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         alerts_file = f'{output_dir}/alignment_alerts_{timestamp}.json'
         
         with open(alerts_file, 'w') as f:
