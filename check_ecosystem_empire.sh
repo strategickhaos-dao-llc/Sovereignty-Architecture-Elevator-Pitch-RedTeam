@@ -18,6 +18,12 @@
 
 set -e
 
+# Configuration variables (update these as costs change)
+HARDWARE_COST_ESTIMATE="15000"
+MONTHLY_ELECTRIC_COST="150"
+CLOUD_COST_MIN="50k"
+CLOUD_COST_MAX="100k"
+
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -164,7 +170,8 @@ else
 fi
 
 # Check 9: NAS/Network storage availability
-if [ -d "/mnt/nas" ] || [ -d "/Volumes/NAS" ] || [ -d "//NAS" ]; then
+# Note: Windows UNC paths (\\NAS) may require /mnt/nas or drive letter mapping
+if [ -d "/mnt/nas" ] || [ -d "/Volumes/NAS" ] || [ -d "/nas" ]; then
     check_result "NAS Storage Mount" "PASS" "Network storage accessible"
 else
     check_result "NAS Storage Mount" "SKIP" "NAS not mounted at standard locations"
@@ -241,8 +248,13 @@ fi
 
 # Check 18: Firewall status
 if command -v ufw &> /dev/null; then
-    UFW_STATUS=$(sudo ufw status 2>/dev/null | head -1)
-    check_result "Firewall Status" "PASS" "UFW: ${UFW_STATUS}"
+    # Check if we can run sudo without password, otherwise skip
+    if sudo -n true 2>/dev/null; then
+        UFW_STATUS=$(sudo ufw status 2>/dev/null | head -1)
+        check_result "Firewall Status" "PASS" "UFW: ${UFW_STATUS}"
+    else
+        check_result "Firewall Status" "SKIP" "UFW detected but requires password"
+    fi
 elif command -v firewall-cmd &> /dev/null; then
     if systemctl is-active --quiet firewalld; then
         check_result "Firewall Status" "PASS" "firewalld is active"
@@ -449,13 +461,13 @@ CURRENT_DATE=$(date "+%Y-%m-%d %H:%M:%S")
 check_result "System Date/Time" "PASS" "${CURRENT_DATE}"
 
 # Check 82: Infrastructure cost estimate
-check_result "Hardware Cost Estimate" "PASS" "Total infrastructure ~\$15,000"
+check_result "Hardware Cost Estimate" "PASS" "Total infrastructure ~\$${HARDWARE_COST_ESTIMATE}"
 
 # Check 83: Monthly operating cost
-check_result "Electric Cost Estimate" "PASS" "~\$150/month for 5 nodes + NAS"
+check_result "Electric Cost Estimate" "PASS" "~\$${MONTHLY_ELECTRIC_COST}/month for 5 nodes + NAS"
 
 # Check 84: Cloud equivalent cost
-check_result "Big Tech Cost Comparison" "PASS" "Cloud equivalent: \$50k-\$100k/month"
+check_result "Big Tech Cost Comparison" "PASS" "Cloud equivalent: \$${CLOUD_COST_MIN}-\$${CLOUD_COST_MAX}/month"
 
 # Check 85: API key dependency
 if [ -f ".env" ] && grep -q "OPENAI_API_KEY\|ANTHROPIC_KEY\|AZURE_KEY" .env 2>/dev/null; then
