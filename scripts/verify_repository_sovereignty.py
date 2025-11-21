@@ -415,7 +415,7 @@ Examples:
     # Append to ledger if requested
     if args.append_ledger:
         ledger_entry = {
-            'timestamp': datetime.now().isoformat() + 'Z',
+            'timestamp': datetime.utcnow().isoformat() + 'Z',
             'type': 'sovereignty_verification',
             'repos_scanned': summary['total'],
             'repos_with_license': summary['with_license'],

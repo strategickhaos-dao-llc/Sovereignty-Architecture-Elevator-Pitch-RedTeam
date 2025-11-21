@@ -93,22 +93,25 @@ git show $(git log --format=%H LICENSE | tail -1)
 # 1. Create artifacts directory (if doesn't exist)
 mkdir -p artifacts
 
-# 2. Create artifact file
-cat > artifacts/claude_discussion_$(date +%Y-%m-%d).md << 'EOF'
-# Claude Discussion — $(date +%Y-%m-%d)
+# 2. Create artifact file (execute this command, dates will be auto-filled)
+ARTIFACT_DATE=$(date +%Y-%m-%d)
+ARTIFACT_TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+cat > "artifacts/claude_discussion_${ARTIFACT_DATE}.md" << EOF
+# Claude Discussion — ${ARTIFACT_DATE}
 
 Source: https://claude.ai/share/XXXXXX
 
 Used as: audit trail, agent training reference
 
-```json
+\`\`\`json
 {
-  "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "timestamp": "${ARTIFACT_TIMESTAMP}",
   "type": "external_ai_discussion",
   "source": "https://claude.ai/share/XXXXXX",
   "summary": "Brief description"
 }
-```
+\`\`\`
 EOF
 
 # 3. Commit to git

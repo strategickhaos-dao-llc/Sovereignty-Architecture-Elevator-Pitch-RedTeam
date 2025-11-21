@@ -186,9 +186,9 @@ To add a new artifact:
 
 All artifacts are under version control and can be verified with:
 
-``````powershell
+```powershell
 Get-FileHash artifacts/*.md -Algorithm SHA256
-``````
+```
 
 ## Sovereignty Guarantee
 

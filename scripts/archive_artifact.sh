@@ -70,10 +70,10 @@ To verify this artifact hasn't been tampered with:
 
 \`\`\`bash
 # Bash
-sha256sum ${FILEPATH}
+sha256sum "${FILEPATH}"
 
 # PowerShell
-Get-FileHash ${FILEPATH} -Algorithm SHA256
+Get-FileHash "${FILEPATH}" -Algorithm SHA256
 \`\`\`
 
 ## Sovereignty Guarantee
