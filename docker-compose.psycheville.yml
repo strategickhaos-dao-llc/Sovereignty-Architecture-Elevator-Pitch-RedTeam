@@ -1,0 +1,67 @@
+version: '3.8'
+
+# PsycheVille - Self-Observing Infrastructure
+# Monitors Tools Refinery usage and generates automated reflection reports
+
+networks:
+  strategickhaos_network:
+    external: true
+
+volumes:
+  psycheville_logs:
+    driver: local
+  psycheville_vault:
+    driver: local
+
+services:
+  psycheville-worker:
+    image: python:3.11-slim
+    container_name: psycheville-worker
+    working_dir: /app
+    environment:
+      - PSYCHEVILLE_CONFIG=/app/psycheville.yaml
+      - PYTHONUNBUFFERED=1
+      - TZ=UTC
+    volumes:
+      # Configuration
+      - ./psycheville/psycheville.yaml:/app/psycheville.yaml:ro
+      - ./psycheville/reflection_worker.py:/app/reflection_worker.py:ro
+      
+      # Logs (to monitor)
+      - psycheville_logs:/app/logs
+      - ./psycheville/logs:/app/logs/tools_refinery
+      
+      # Obsidian vault (output)
+      - psycheville_vault:/app/obsidian_vault
+      - ./psycheville/obsidian_vault:/app/obsidian_vault
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+    command: >
+      sh -c "
+        pip install --no-cache-dir pyyaml schedule &&
+        python -u /app/reflection_worker.py
+      "
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f reflection_worker.py || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.strategickhaos.service=psycheville"
+      - "com.strategickhaos.department=observability"
+      - "com.strategickhaos.description=Self-observation and reflection system"
+
+  # Prometheus exporter for PsycheVille metrics (optional)
+  psycheville-metrics:
+    image: prom/pushgateway:latest
+    container_name: psycheville-metrics
+    ports:
+      - "9091:9091"
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=psycheville-metrics"
+      - "com.strategickhaos.department=observability"
