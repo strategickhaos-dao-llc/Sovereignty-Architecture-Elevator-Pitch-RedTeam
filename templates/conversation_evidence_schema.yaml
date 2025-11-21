@@ -1,0 +1,239 @@
+# conversation_evidence_schema.yaml
+# YAML Schema for AI Conversation Evidence Ledger
+# Purpose: Legally-defensible audit trail for AI-assisted development
+# Version: 1.0.0
+# Last Updated: 2025-11-21
+
+metadata:
+  ledger_version: "1.0.0"
+  operator: "Domenic Garza"
+  organization: "Strategickhaos DAO LLC"
+  purpose: "R&D documentation and legal audit trail"
+  jurisdiction: "Wyoming, United States"
+  created_date: "2025-11-21T00:00:00Z"
+  last_updated: "2025-11-21T00:00:00Z"
+
+# Cryptographic integrity
+integrity:
+  hash_algorithm: "SHA3-256"
+  previous_ledger_hash: null  # First entry, or hash of previous ledger file
+  current_ledger_hash: ""     # Computed after all entries added
+  gpg_signature: ""           # Optional: GPG detached signature
+  gpg_key_fingerprint: ""     # Optional: GPG public key fingerprint
+  opentimestamp: ""           # Optional: .ots file path or hash
+
+# Individual conversation entries
+conversations:
+  - entry_id: "conv-2025-11-21-001"
+    timestamp: "2025-11-21T14:30:00Z"  # ISO 8601 format
+    ai_system:
+      provider: "OpenAI"
+      model: "GPT-4"
+      version: "gpt-4-0613"
+    
+    session_info:
+      share_url: "https://chat.openai.com/share/..."  # Externally verifiable
+      screenshot_path: "evidence/screenshots/conv-2025-11-21-001.png"
+      export_path: "evidence/exports/conv-2025-11-21-001.json"
+      duration_minutes: 45
+    
+    context:
+      project: "Sovereignty Architecture"
+      task: "Security architecture review"
+      purpose: "Identify potential vulnerabilities in authentication flow"
+      related_issues: ["GH-123", "GH-456"]
+      related_commits: ["abc123def", "456789ghi"]
+    
+    summary:
+      topic: "OAuth2 implementation security analysis"
+      key_findings:
+        - "Recommended implementing PKCE for authorization code flow"
+        - "Identified missing rate limiting on token endpoint"
+        - "Suggested adding refresh token rotation"
+      actions_taken:
+        - "Updated authentication middleware to include PKCE"
+        - "Added rate limiting configuration"
+        - "Documented security improvements in SECURITY.md"
+      human_validation: "Reviewed and validated by operator; changes implemented and tested"
+    
+    legal_attestation:
+      operator_notes: "This conversation was part of routine security hardening. All recommendations were reviewed and implemented where appropriate."
+      contemporaneous: true  # Entry made at or near time of conversation
+      business_purpose: true  # Regular course of R&D documentation
+    
+    verification:
+      entry_hash: ""  # SHA3-256 of this entry
+      previous_entry_hash: ""  # Links to previous entry for chain integrity
+      chain_position: 1  # Position in ledger
+
+  - entry_id: "conv-2025-11-21-002"
+    timestamp: "2025-11-21T16:15:00Z"
+    ai_system:
+      provider: "Anthropic"
+      model: "Claude 3.5 Sonnet"
+      version: "claude-3-5-sonnet-20241022"
+    
+    session_info:
+      share_url: "https://claude.ai/share/..."
+      screenshot_path: "evidence/screenshots/conv-2025-11-21-002.png"
+      export_path: "evidence/exports/conv-2025-11-21-002.json"
+      duration_minutes: 30
+    
+    context:
+      project: "Sovereignty Architecture"
+      task: "Code review and refactoring suggestions"
+      purpose: "Improve code quality and maintainability"
+      related_issues: ["GH-789"]
+      related_commits: ["def456ghi"]
+    
+    summary:
+      topic: "TypeScript refactoring for better type safety"
+      key_findings:
+        - "Suggested using discriminated unions for API responses"
+        - "Recommended strict null checks in tsconfig"
+        - "Identified opportunities for code deduplication"
+      actions_taken:
+        - "Refactored API response types"
+        - "Enabled strict mode in TypeScript configuration"
+        - "Created shared utility functions"
+      human_validation: "Changes reviewed and merged into main branch"
+    
+    legal_attestation:
+      operator_notes: "Code quality improvement session as part of regular development practice"
+      contemporaneous: true
+      business_purpose: true
+    
+    verification:
+      entry_hash: ""
+      previous_entry_hash: ""  # Hash of conv-2025-11-21-001
+      chain_position: 2
+
+# Cross-validation with external systems
+external_verification:
+  git_repository:
+    url: "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+    branch: "main"
+    commit_range: "abc123..def456"
+    signed_commits: true
+  
+  backup_locations:
+    - type: "local"
+      path: "/backup/conversation-ledgers/"
+      last_backup: "2025-11-21T18:00:00Z"
+    - type: "cloud"
+      provider: "encrypted-storage"
+      path: "s3://evidence-bucket/ledgers/"
+      last_backup: "2025-11-21T18:00:00Z"
+  
+  third_party_timestamps:
+    - service: "OpenTimestamps"
+      timestamp_file: "evidence/timestamps/ledger-2025-11-21.ots"
+      blockchain_anchor: "Bitcoin"
+      block_height: null  # Filled after confirmation
+    - service: "GitHub"
+      commit_sha: "abc123def456"
+      commit_timestamp: "2025-11-21T18:30:00Z"
+      commit_signed: true
+
+# Custodian information for legal testimony
+custodian:
+  name: "Domenic Garza"
+  role: "Founder and Principal Operator"
+  organization: "Strategickhaos DAO LLC"
+  contact: "domenic.garza@snhu.edu"
+  attestation: |
+    I certify that this ledger was created and maintained in the regular course
+    of business as part of my standard R&D documentation practice. Each entry
+    was made at or near the time of the conversation it describes. I have
+    personal knowledge of the facts recorded herein.
+  signature_date: ""
+  gpg_signature: ""
+
+# Compliance and audit trail
+compliance:
+  documentation_standard: "ISO 8601 timestamps, SHA3-256 integrity"
+  retention_policy: "Permanent retention for IP protection"
+  privacy_considerations: "No PII in conversation logs; all data is technical/professional"
+  legal_review:
+    required: false
+    reviewer: null
+    review_date: null
+    approved: null
+
+# Usage notes
+usage_notes: |
+  This ledger provides a contemporaneous record of AI-assisted development work.
+  It is intended for:
+  - R&D documentation
+  - Investor due diligence
+  - Patent prosecution support
+  - Trade secret protection
+  - Internal audit trails
+  
+  It is NOT intended as:
+  - Legal advice
+  - Expert testimony
+  - Standalone proof of technical facts
+  
+  For legal use, this ledger should be supplemented with:
+  1. Human testimony from the operator/custodian
+  2. GPG signatures for non-repudiation
+  3. Sworn declarations under penalty of perjury
+  4. Supporting technical evidence (code, test results, etc.)
+
+# Template instructions
+instructions: |
+  To use this template:
+  1. Copy this file to your project root or evidence/ directory
+  2. Update metadata section with your information
+  3. Add conversation entries as they occur (contemporaneous documentation)
+  4. Compute entry hashes and chain them together
+  5. Take screenshots and export conversations when possible
+  6. Commit to git with signed commits (git commit -S)
+  7. Periodically timestamp with OpenTimestamps
+  8. Keep offline backups in secure location
+  9. Update custodian attestation when needed for legal purposes
+  
+  Example hash computation (Python):
+  ```python
+  import hashlib
+  import yaml
+  
+  def compute_entry_hash(entry_dict):
+      # Remove hash fields before computing
+      entry_copy = entry_dict.copy()
+      entry_copy.pop('entry_hash', None)
+      entry_copy.pop('previous_entry_hash', None)
+      
+      # Serialize to canonical YAML
+      entry_yaml = yaml.dump(entry_copy, sort_keys=True)
+      
+      # Compute SHA3-256
+      return hashlib.sha3_256(entry_yaml.encode()).hexdigest()
+  ```
+  
+  Example GPG signing:
+  ```bash
+  gpg --detach-sign --armor conversation_ledger.yaml
+  # Creates conversation_ledger.yaml.asc
+  
+  # Verify later:
+  gpg --verify conversation_ledger.yaml.asc conversation_ledger.yaml
+  ```
+  
+  Example OpenTimestamps:
+  ```bash
+  pip install opentimestamps-client
+  ots stamp conversation_ledger.yaml
+  # Creates conversation_ledger.yaml.ots
+  
+  # Verify later (after Bitcoin confirmation):
+  ots verify conversation_ledger.yaml.ots
+  ```
+
+# Version history
+version_history:
+  - version: "1.0.0"
+    date: "2025-11-21"
+    changes: "Initial schema creation with legal hardening features"
+    author: "Domenic Garza + AI assistance"
