@@ -269,7 +269,7 @@ class DomBrainCommands(commands.Cog):
         
         # Difference
         diff = abs(result['answer'] - traditional)
-        diff_pct = (diff / abs(traditional) * 100) if traditional != 0 else 0
+        diff_pct = ((diff / abs(traditional)) * 100) if traditional != 0 else 0
         
         embed.add_field(
             name="📊 Analysis",

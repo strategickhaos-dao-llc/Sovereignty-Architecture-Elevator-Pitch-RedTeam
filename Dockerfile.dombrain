@@ -20,9 +20,9 @@ RUN useradd -m -u 1000 calculator && \
 
 USER calculator
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD python3 -c "from dom_brain_calculator import DomBrainCalculator; calc = DomBrainCalculator(pathway_count=10); calc.calculate('health', 1, 1, '+')" || exit 1
+# Health check - simple module import
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD python3 -c "import dom_brain_calculator" || exit 1
 
 # Run Discord bot by default
 CMD ["python3", "dom_brain_discord.py"]

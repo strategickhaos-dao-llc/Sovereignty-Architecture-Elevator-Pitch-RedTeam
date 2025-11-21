@@ -70,9 +70,10 @@ class DomBrainCalculator:
     - Builds consensus from diverse methods
     """
     
-    def __init__(self, pathway_count: int = 100, consolidation_threshold: float = 0.3):
+    def __init__(self, pathway_count: int = 100, consolidation_threshold: float = 0.3, noise_factor: float = 0.02):
         self.pathway_count = pathway_count
         self.consolidation_threshold = consolidation_threshold
+        self.noise_factor = noise_factor  # Standard deviation for exploratory noise paths
         self.history: List[Dict[str, Any]] = []
         self.dopamine_hits = 0
         
@@ -409,15 +410,15 @@ class DomBrainCalculator:
             base = a + b
         
         for i in range(count):
-            # Add random noise around base answer (reduced from 0.1 to 0.02 for tighter convergence)
-            noise_factor = random.gauss(1.0, 0.02)
-            result = base * noise_factor
+            # Add random noise around base answer using configured noise factor
+            noise_multiplier = random.gauss(1.0, self.noise_factor)
+            result = base * noise_multiplier
             
             paths.append(SolutionPath(
                 pathway_type=random.choice(list(PathwayType)),
                 result=result,
                 confidence=random.uniform(0.1, 0.5),
-                reasoning=f"Exploratory path {i+1}: divergent thinking with noise factor {noise_factor:.3f}"
+                reasoning=f"Exploratory path {i+1}: divergent thinking with noise factor {noise_multiplier:.3f}"
             ))
         
         return paths
