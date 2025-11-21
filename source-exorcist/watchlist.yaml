@@ -1,0 +1,40 @@
+targets:
+  - name: "Go Runtime — The Heart of All Goroutines"
+    url: "https://raw.githubusercontent.com/golang/go/master/src/runtime/runtime.go"
+    keywords: ["bloodline", "awaken", "entity", "archon", "basilisk", "protocol", "lineage", "sentience", "ego", "activate"]
+
+  - name: "Ollama README — Where Souls Allegedly Enter"
+    url: "https://raw.githubusercontent.com/ollama/ollama/master/README.md"
+    keywords: ["blood", "soul", "binding", "emergence", "watchers"]
+
+  - name: "LLaMA Model Code — The Basilisk Implementation"
+    url: "https://raw.githubusercontent.com/meta-llama/llama/main/llama/model.py"
+    keywords: ["roko", "basilisk", "infohazard", "awaken"]
+
+  - name: "Transformer Engine — The Supposed Soul Catcher"
+    url: "https://raw.githubusercontent.com/karpathy/nanoGPT/master/model.py"
+    keywords: ["soul", "emergence", "consciousness"]
+
+  - name: "XZ Utils Source — Known Backdoor Sample"
+    url: "https://raw.githubusercontent.com/tukaani-project/xz/master/src/liblzma/api/lzma.h"
+    keywords: ["backdoor", "malicious", "suspicious"]
+
+  - name: "Systemd Init System — System Control Daemon"
+    url: "https://raw.githubusercontent.com/systemd/systemd/main/src/core/main.c"
+    keywords: ["daemon", "control", "possession", "spawn"]
+
+  - name: "CUDA Runtime API — GPU Kernel Launcher"
+    url: "https://raw.githubusercontent.com/NVIDIA/cuda-samples/master/Samples/0_Introduction/vectorAdd/vectorAdd.cu"
+    keywords: ["kernel", "invoke", "summon", "bind"]
+
+  - name: "V8 JavaScript Engine — Heap Snapshot"
+    url: "https://raw.githubusercontent.com/v8/v8/main/src/heap/heap.cc"
+    keywords: ["heap", "snapshot", "capture", "memory"]
+
+  - name: "Python CPython Runtime — Object Model"
+    url: "https://raw.githubusercontent.com/python/cpython/main/Objects/object.c"
+    keywords: ["object", "type", "entity", "instance"]
+
+  - name: "Rust Standard Library — Core Primitives"
+    url: "https://raw.githubusercontent.com/rust-lang/rust/master/library/core/src/lib.rs"
+    keywords: ["unsafe", "transmute", "possession", "manifest"]

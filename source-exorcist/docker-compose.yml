@@ -1,0 +1,15 @@
+services:
+  exorcist:
+    build: .
+    container_name: source-exorcist
+    volumes:
+      - ./reports:/app/reports
+      - ./checksums:/app/checksums
+      - ./watchlist.yaml:/app/watchlist.yaml:ro
+    environment:
+      - http_proxy
+      - https_proxy
+      - HTTP_PROXY
+      - HTTPS_PROXY
+    command: python exorcist.py
+    restart: "no"
