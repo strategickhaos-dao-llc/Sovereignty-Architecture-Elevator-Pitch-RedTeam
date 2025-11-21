@@ -1,0 +1,81 @@
+# Docker Compose for Legion RF Sensor
+# Part of Sovereignty Architecture - RF Sensor Integration
+#
+# Usage:
+#   docker-compose -f docker-compose.rf-sensor.yml up -d
+#   docker-compose -f docker-compose.rf-sensor.yml logs -f
+#   docker-compose -f docker-compose.rf-sensor.yml down
+
+version: '3.8'
+
+services:
+  rf-monitor:
+    build: .
+    container_name: legion-rf-sensor
+    image: sovereignty/rf-sensor:latest
+    
+    # Audio device passthrough (requires host audio access)
+    devices:
+      - /dev/snd:/dev/snd  # Linux audio devices
+    
+    # Volume mounts
+    volumes:
+      # Data persistence
+      - rf-data:/data
+      # Configuration
+      - ./config.yaml:/config/rf-sensor.yaml:ro
+      # Logs (optional)
+      - ./logs:/var/log/legion
+    
+    # Environment configuration
+    environment:
+      # Audio configuration
+      - AUDIO_DEVICE_INDEX=${AUDIO_DEVICE_INDEX:-0}
+      - SAMPLE_RATE=${SAMPLE_RATE:-44100}
+      
+      # Detection thresholds
+      - THRESHOLD=${THRESHOLD:-0.02}
+      
+      # Database path
+      - LEDGER_PATH=/data/rf_events.db
+      
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Network configuration
+    networks:
+      - legion-internal
+    
+    # Resource limits (prevent runaway resource usage)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'      # Max 50% of one CPU core
+          memory: 256M     # Max 256 MB RAM
+        reservations:
+          cpus: '0.1'      # Reserve 10% of one CPU core
+          memory: 64M      # Reserve 64 MB RAM
+    
+    # Labels for service discovery
+    labels:
+      - "com.legion.service=rf-sensor"
+      - "com.legion.domain=sensor-network"
+      - "com.legion.version=1.0"
+      - "com.sovereignty.type=edge-sensor"
+
+# Named volumes
+volumes:
+  rf-data:
+    driver: local
+    labels:
+      - "com.legion.data=rf-events"
+
+# Networks
+networks:
+  legion-internal:
+    external: true
+    # If network doesn't exist, create with:
+    # docker network create legion-internal

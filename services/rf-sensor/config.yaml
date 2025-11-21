@@ -1,0 +1,38 @@
+# RF Sensor Configuration
+# Part of Sovereignty Architecture - RF Sensor Integration
+
+rf_sensor:
+  # Audio input configuration
+  audio:
+    device_index: null  # null = auto-detect, or specify device number
+    sample_rate: 44100  # Hz
+    chunk_size: 2048    # samples per processing chunk
+    channels: 1         # mono audio
+    
+  # Detection thresholds
+  detection:
+    rms_threshold: 0.02      # Root mean square threshold for activity
+    peak_threshold: 0.05     # Peak amplitude threshold
+    min_duration: 0.5        # Minimum event duration in seconds
+    
+  # Logging configuration
+  logging:
+    database: /var/legion/data/rf_events.db
+    log_level: INFO
+    console_output: true
+    file_output: false
+    file_path: /var/log/legion/rf-sensor.log
+    
+  # Legion framework integration
+  legion:
+    enabled: true
+    agent_notify: true
+    event_api_endpoint: http://legion-core:8080/api/events
+    notification_threshold: 0.05  # Only notify agents for strong signals
+    
+  # Visualization settings (for spectral analyzer)
+  visualization:
+    enabled: false           # Set true for GUI mode
+    waterfall_history: 100   # Number of frames in waterfall
+    update_interval: 50      # Milliseconds between updates
+    display_rms: true        # Show RMS value on spectrum plot
