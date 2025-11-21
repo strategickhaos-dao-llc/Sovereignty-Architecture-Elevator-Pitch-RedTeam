@@ -63,7 +63,7 @@ conversations:
     
     verification:
       entry_hash: ""  # SHA3-256 of this entry
-      previous_entry_hash: ""  # Links to previous entry for chain integrity
+      previous_entry_hash: null  # Links to previous entry for chain integrity (null for first entry)
       chain_position: 1  # Position in ledger
 
   - entry_id: "conv-2025-11-21-002"
