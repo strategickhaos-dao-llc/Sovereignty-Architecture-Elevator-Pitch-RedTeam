@@ -35,3 +35,10 @@ target/
 
 # Workspace data
 workspace/
+
+# Evidence ledger generated files (keep examples and schema)
+evidence/conversation_ledger.yaml
+evidence/conversation_ledger.json
+evidence/conversations/*.json
+evidence/screenshots/*.png
+evidence/screenshots/*.jpg
