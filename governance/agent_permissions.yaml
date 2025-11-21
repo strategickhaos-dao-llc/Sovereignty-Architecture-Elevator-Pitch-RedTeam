@@ -300,7 +300,6 @@ references:
     - "https://docs.github.com/en/apps/creating-github-apps/setting-up-a-github-app/choosing-permissions-for-a-github-app"
     - "https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment"
 
----
 # Notes:
 # - This file is declarative and should be synced with actual GitHub settings
 # - Any deviation should be flagged in quarterly review
