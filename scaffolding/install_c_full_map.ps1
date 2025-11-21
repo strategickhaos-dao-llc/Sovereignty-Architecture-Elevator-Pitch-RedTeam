@@ -123,9 +123,11 @@ function Sync-ToNodes {
         Write-Status "  → Syncing to $node..."
         
         # Get Tailscale IP for node
+        # Note: Node names should be in Tailscale format (e.g., 'machine-name' or 'machine.tailnet.ts.net')
         $nodeIP = & tailscale ip -4 $node 2>$null
         if (-not $nodeIP) {
-            Write-Warning "  Could not resolve $node via Tailscale. Skipping."
+            Write-Warning "  Could not resolve $node via Tailscale."
+            Write-Status "  Tip: Use 'tailscale status' to see available machine names"
             continue
         }
         

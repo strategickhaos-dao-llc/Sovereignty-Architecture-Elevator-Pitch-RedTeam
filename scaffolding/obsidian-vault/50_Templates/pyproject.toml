@@ -6,16 +6,16 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "your-project-name"
+name = "your-project-name"  # TODO: Replace with your project name
 version = "0.1.0"
-description = "Your project description"
+description = "Your project description"  # TODO: Add your project description
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "Your Name", email = "your.email@example.com"}  # TODO: Update author info
 ]
-keywords = ["sovereignty", "distributed-systems", "ai"]
+keywords = ["sovereignty", "distributed-systems", "ai"]  # TODO: Add relevant keywords
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -71,7 +71,7 @@ Repository = "https://github.com/yourusername/your-project"
 Issues = "https://github.com/yourusername/your-project/issues"
 
 [project.scripts]
-your-cli = "your_project.cli:main"
+your-cli = "your_project.cli:main"  # TODO: Replace 'your-cli' and 'your_project' with actual names
 
 [tool.setuptools.packages.find]
 where = ["src"]

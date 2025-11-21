@@ -44,9 +44,10 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=appdb
+      # TODO: Replace with secure credentials from secrets management (Vault, AWS Secrets Manager)
+      - POSTGRES_USER=${POSTGRES_USER:-user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-appdb}
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"

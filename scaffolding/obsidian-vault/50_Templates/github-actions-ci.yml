@@ -192,6 +192,10 @@ jobs:
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 
   # Canary Deployment to Production
+  # NOTE: This assumes you have a canary deployment setup with traffic splitting.
+  # For Kubernetes + Istio: Use VirtualService with weighted routing
+  # For AWS: Use ALB target group weights
+  # See: https://istio.io/latest/docs/tasks/traffic-management/traffic-shifting/
   deploy-production-canary:
     name: Deploy to Production (Canary)
     runs-on: ubuntu-latest
@@ -228,7 +232,8 @@ jobs:
             exit 1
           fi
           
-          if (( $(echo "$ERROR_RATE > 0.01" | bc -l) )); then
+          # Use awk for floating point comparison (bc not always available)
+          if awk "BEGIN {exit !($ERROR_RATE > 0.01)}"; then
             echo "Error rate too high: $ERROR_RATE"
             exit 1
           fi
@@ -241,7 +246,8 @@ jobs:
             exit 1
           fi
           
-          if (( $(echo "$P95_LATENCY > 1.0" | bc -l) )); then
+          # Use awk for floating point comparison (bc not always available)
+          if awk "BEGIN {exit !($P95_LATENCY > 1.0)}"; then
             echo "P95 latency too high: $P95_LATENCY"
             exit 1
           fi
