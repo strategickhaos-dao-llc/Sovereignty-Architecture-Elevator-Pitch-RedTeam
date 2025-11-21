@@ -318,7 +318,7 @@ This report documents compliance verification for Strategic Khaos Platform.
 
 ## Audit Trail
 All operations logged to: $auditLog
-Total entries: $(if (Test-Path $auditLog) { (Get-Item $auditLog | Measure-Object -Line).Lines } else { 0 })
+Total entries: $(if (Test-Path $auditLog) { (Get-Content $auditLog -ReadCount 0 | Measure-Object).Count } else { 0 })
 Audit log hash: $(if (Test-Path $auditLog) { (Get-FileHash $auditLog -Algorithm SHA256).Hash.Substring(0,16) } else { 'N/A' })...
 
 ## Recommendations
