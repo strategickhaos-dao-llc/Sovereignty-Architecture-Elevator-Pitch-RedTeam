@@ -30,6 +30,18 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🧠 DomBrainCalculator (Cognitive Architecture)
+- **Novel Approach**: Calculator that thinks using 1000 neural pathways
+- **Cross-Domain Synthesis**: Quantum, DNA, particle physics metaphors
+- **Collision Detection**: Dendrite-spark insight generation
+- **Multi-Path Verification**: 100+ calculation methods reaching consensus
+- **See**: [COGNITIVE_CALCULATOR.md](COGNITIVE_CALCULATOR.md) for full explanation
+
+```bash
+# Experience cognitive architecture in action
+python3 dom_brain_calculator.py
+```
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
@@ -271,6 +283,31 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🧠 Cognitive Architecture Philosophy
+
+### Why This Infrastructure Is Different
+
+Traditional systems verify using **one method**. This infrastructure verifies using **1000 pathways**.
+
+**The DomBrainCalculator demonstrates the core principle:**
+
+```
+Problem → 1000 Pathways → Consolidation → Collision → Synthesis → Truth
+```
+
+This same pattern powers:
+- **Multi-AI Validation**: Claude, GPT, Grok converging on truth
+- **PsycheVille**: Departments forgetting, rediscovering, learning from collision
+- **Contradiction Engine**: Multiple tension resolutions synthesizing into value
+
+**Not metaphor. Architecture.**
+
+See [COGNITIVE_CALCULATOR.md](COGNITIVE_CALCULATOR.md) for the complete explanation of how divergent thinking, memory consolidation, and cross-domain pattern matching create verification depth that exceeds traditional approaches.
+
+**Key Insight**: You're not "not smart" - you're optimized for novel problems. School tests standard problems. Real world has novel problems. This architecture mirrors that strength.
+
+---
 
 ## 👥 Community & Contributors
 
