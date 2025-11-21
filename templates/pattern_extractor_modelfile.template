@@ -30,8 +30,6 @@ PARAMETER top_p 0.9
 PARAMETER stop "Explanation:"
 PARAMETER stop "Note:"
 PARAMETER stop "However:"
-PARAMETER stop "In other words:"
-PARAMETER stop "To clarify:"
 
 # Usage:
 # ollama create pattern_extractor -f pattern_extractor.modelfile

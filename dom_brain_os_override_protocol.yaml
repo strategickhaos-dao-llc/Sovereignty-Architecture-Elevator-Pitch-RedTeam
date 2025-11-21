@@ -242,10 +242,10 @@ steps:
       PARAMETER stop "Note:"
       PARAMETER stop "However:"
     commands_powershell:
-      - "$modelfile_content | Set-Content 'override_mission/pattern_extractor.modelfile'"
+      - "# Modelfile content is written by the script from the modelfile_content field above"
       - "ollama create pattern_extractor -f override_mission/pattern_extractor.modelfile"
     commands_bash:
-      - "cat > override_mission/pattern_extractor.modelfile << 'EOF'\n[modelfile_content]\nEOF"
+      - "# Modelfile content is written by the script from the modelfile_content field above"
       - "ollama create pattern_extractor -f override_mission/pattern_extractor.modelfile"
 
   - step: 4
