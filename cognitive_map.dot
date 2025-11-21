@@ -7,45 +7,45 @@ digraph Cognitive_Architecture {
     edge [color="#ff0066", penwidth=2, arrowsize=1.2];
 
     // ==== CORE MIND ====
-    Sovereign_Mind [label="SOVEREIGN MIND\n@strategickhaos\nNode 137", fillcolor="#ff0066", fontcolor=white, shape=ellipse, width=4, height=1.4];
+    Sovereign_Mind [label="SOVEREIGN MIND\n@strategickhaos\nMultithreaded Nervous System\nNode 137", fillcolor="#ff0066", fontcolor=white, shape=ellipse, width=4, height=1.4];
 
     // ==== THREADS (PARALLEL PROCESSING) ====
     subgraph cluster_threads {
-        label="PARALLEL THREAD MODE"; color="#ff3399"; fontcolor=white; style=filled;
-        Thread_A [label="Environment Load\n(Athena, Docker, RAG)", fillcolor="#ff6600", fontcolor=black];
-        Thread_B [label="Repo Scanning\n(GitHub, Obsidian)", fillcolor="#ff9900", fontcolor=black];
-        Thread_C [label="Dependency Mapping\n(YAML, Dockerfiles)", fillcolor="#ffcc00", fontcolor=black];
-        Thread_D [label="Synthesis Cues\n(Contradiction Engine)", fillcolor="#ffff00", fontcolor=black];
-        Thread_E [label="Visual Layout\n(Monitors, Windows)", fillcolor="#ccff00", fontcolor=black];
-        Thread_F [label="Cognitive Compression\n(Pattern → Insight)", fillcolor="#99ff00", fontcolor=black];
+        label="PARALLEL THREAD MODE\n6-8 Concurrent Streams"; color="#ff3399"; fontcolor=white; style=filled;
+        Thread_A [label="Environment Load\n(Athena, Docker, RAG)\nMotor Coordination", fillcolor="#ff6600", fontcolor=black];
+        Thread_B [label="Repo Scanning\n(GitHub, Obsidian)\nPattern Recognition", fillcolor="#ff9900", fontcolor=black];
+        Thread_C [label="Dependency Mapping\n(YAML, Dockerfiles)\nSpatial Processing", fillcolor="#ffcc00", fontcolor=black];
+        Thread_D [label="Synthesis Cues\n(Contradiction Engine)\nExecutive Function", fillcolor="#ffff00", fontcolor=black];
+        Thread_E [label="Visual Layout\n(Monitors, Windows)\nPeripheral Awareness", fillcolor="#ccff00", fontcolor=black];
+        Thread_F [label="Cognitive Compression\n(Pattern → Insight)\nIntegrative Processing", fillcolor="#99ff00", fontcolor=black];
     }
 
     // ==== EXTERNAL MEMORY MATRIX ====
     subgraph cluster_memory {
-        label="EXTERNAL MEMORY MATRIX"; color="#00ccff"; fontcolor=white; style=filled;
-        Monitor_1 [label="Strategic Overview\n(DOT Graphs, RAG)", fillcolor="#0066ff", fontcolor=white];
-        Monitor_2 [label="Active Code\n(VSCode, JetBrains)", fillcolor="#0099ff", fontcolor=white];
-        Monitor_3 [label="Terminals + Docker\n(PowerShell, Kali)", fillcolor="#00ccff", fontcolor=white];
-        Monitor_4 [label="Logs + Recon\n(Bug Bounty, IPFS)", fillcolor="#00ffff", fontcolor=black];
-        iPad [label="Mobile Command\n(Shortcuts, Voice)", fillcolor="#66ccff", fontcolor=black];
+        label="EXTERNAL MEMORY MATRIX\nSensory Integration Layer"; color="#00ccff"; fontcolor=white; style=filled;
+        Monitor_1 [label="Strategic Overview\n(DOT Graphs, RAG)\nCentral Vision", fillcolor="#0066ff", fontcolor=white];
+        Monitor_2 [label="Active Code\n(VSCode, JetBrains)\nPrimary Focus", fillcolor="#0099ff", fontcolor=white];
+        Monitor_3 [label="Terminals + Docker\n(PowerShell, Kali)\nMotor Execution", fillcolor="#00ccff", fontcolor=white];
+        Monitor_4 [label="Logs + Recon\n(Bug Bounty, IPFS)\nPeripheral Stream", fillcolor="#00ffff", fontcolor=black];
+        iPad [label="Mobile Command\n(Shortcuts, Voice)\nProprioception", fillcolor="#66ccff", fontcolor=black];
     }
 
     // ==== SYNTHESIS LAYER ====
     subgraph cluster_synthesis {
-        label="SYNTHESIS LAYER"; color="#ff0066"; fontcolor=white; style=filled;
-        IDEs [label="IDEs\n(VSCode, Rider, PyCharm)", fillcolor="#ff3399"];
-        Terminals [label="Terminals\n(PowerShell, WSL, Kali)", fillcolor="#ff3399"];
-        Docker [label="Docker Swarm\n(Qdrant, Ollama)", fillcolor="#ff3399"];
-        Agents [label="AI Agents\n(Grok, Qwen, Recon.py)", fillcolor="#ff3399"];
+        label="SYNTHESIS LAYER\nNeural-System Interface"; color="#ff0066"; fontcolor=white; style=filled;
+        IDEs [label="IDEs\n(VSCode, Rider, PyCharm)\nLinguistic Processing", fillcolor="#ff3399"];
+        Terminals [label="Terminals\n(PowerShell, WSL, Kali)\nMotor Sequences", fillcolor="#ff3399"];
+        Docker [label="Docker Swarm\n(Qdrant, Ollama)\nDistributed Coordination", fillcolor="#ff3399"];
+        Agents [label="AI Agents\n(Grok, Qwen, Recon.py)\nExecutive Augmentation", fillcolor="#ff3399"];
     }
 
     // ==== EXECUTION MESH ====
     subgraph cluster_execution {
-        label="EXECUTION MESH"; color="#00ff00"; fontcolor=black; style=filled;
-        Athena [label="Athena 128GB\nControl Plane", fillcolor="#00cc00", fontcolor=white];
-        Kali_VM [label="Kali Offensive VM", fillcolor="#009900", fontcolor=white];
-        Nova [label="Nova TUF GPU", fillcolor="#006600", fontcolor=white];
-        Storage [label="WD Black Array", fillcolor="#003300", fontcolor=white];
+        label="EXECUTION MESH\nPhysical Infrastructure Layer"; color="#00ff00"; fontcolor=black; style=filled;
+        Athena [label="Athena 128GB\nControl Plane\nCerebellum", fillcolor="#00cc00", fontcolor=white];
+        Kali_VM [label="Kali Offensive VM\nSecurity Module\nAmygdala", fillcolor="#009900", fontcolor=white];
+        Nova [label="Nova TUF GPU\nVisual Processing\nOccipital Cortex", fillcolor="#006600", fontcolor=white];
+        Storage [label="WD Black Array\nLong-term Memory\nHippocampus", fillcolor="#003300", fontcolor=white];
     }
 
     // ==== CONNECTIONS ====
