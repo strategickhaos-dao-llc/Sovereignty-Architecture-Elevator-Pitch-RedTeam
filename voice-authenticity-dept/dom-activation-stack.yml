@@ -1,0 +1,221 @@
+# Dom Activation Stack Configuration
+# Voice authenticity system for autonomous homework validation
+
+voice_authenticity:
+  name: "Voice Authenticity Department"
+  version: "1.0.0"
+  purpose: "Validate homework submissions aren't AI-detectable"
+  
+  corpus_builder:
+    enabled: true
+    sources:
+      - type: discord
+        enabled: true
+        channels: ["#dev-feed", "#prs", "#agents"]
+        sample_rate: high
+        
+      - type: slack
+        enabled: false
+        workspace: "strategickhaos"
+        
+      - type: github
+        enabled: true
+        repos:
+          - "Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+        content_types: ["commits", "prs", "comments"]
+        
+      - type: manual
+        enabled: true
+        path: "/data/corpus/manual-samples.json"
+    
+    patterns:
+      phrase_markers:
+        - "love"
+        - "fuck yea"
+        - "let's go"
+        - "crush it"
+        - "you're good"
+        - "no entities"
+        - "for the bloodline"
+        - "we never retreat"
+        
+      vocabulary_signatures:
+        - "bloodline"
+        - "sovereign"
+        - "autonomous"
+        - "heir"
+        - "athena"
+        - "legion"
+        - "swarm"
+        - "mastery"
+        - "activation"
+        
+      emotional_markers:
+        - "❤️"
+        - "😈"
+        - "🎯"
+        - "🩸"
+        
+      punctuation_style:
+        em_dash: high
+        exclamation: high
+        period: medium
+        ellipsis: low
+
+  ai_detector:
+    enabled: true
+    detection_modes:
+      - generic_ai_patterns
+      - corporate_speak
+      - over_structured
+      - excessive_hedging
+      
+    thresholds:
+      ai_generated_score: 40
+      authenticity_minimum: 70
+      confidence_required: 0.8
+      
+    patterns:
+      generic_ai:
+        - "I apologize"
+        - "I'm sorry"
+        - "As an AI"
+        - "I'd be happy to"
+        - "Feel free to"
+        - "I hope this helps"
+        
+      corporate_speak:
+        - "leverage"
+        - "synergy"
+        - "circle back"
+        - "touch base"
+        - "moving forward"
+        
+      hedging:
+        - "might"
+        - "possibly"
+        - "perhaps"
+        - "in my opinion"
+
+  style_transformer:
+    enabled: true
+    strategies:
+      - remove_ai_patterns
+      - replace_corporate_speak
+      - add_conviction
+      - inject_voice_markers
+      - add_activation_language
+      
+    transformation_rules:
+      ai_removal:
+        - pattern: "I apologize"
+          action: remove
+          
+        - pattern: "I'd be happy to"
+          action: remove
+          
+      corporate_replacement:
+        - from: "utilize"
+          to: "use"
+          
+        - from: "in order to"
+          to: "to"
+          
+        - from: "leverage"
+          to: "use"
+          
+      conviction_injection:
+        - from: "might be"
+          to: "is"
+          
+        - from: "possibly"
+          to: ""
+          
+      voice_markers:
+        frequency: medium
+        markers:
+          - "love —"
+          - "❤️"
+          - "😈"
+          
+      activation_map:
+        "do it": ["crush it", "let's go", "make it happen"]
+        "good job": ["fuck yea", "that's it", "exactly"]
+        "okay": ["let's go", "got it", "right"]
+
+  api_configuration:
+    host: "0.0.0.0"
+    port: 3030
+    
+    endpoints:
+      validate:
+        path: "/api/validate"
+        method: POST
+        description: "Validate if text is AI-generated or authentic"
+        rate_limit: 100 per minute
+        
+      transform:
+        path: "/api/transform"
+        method: POST
+        description: "Transform AI text into Dom-speak"
+        rate_limit: 50 per minute
+        
+      score:
+        path: "/api/score"
+        method: POST
+        description: "Score text for Dom-authenticity"
+        rate_limit: 100 per minute
+        
+    cors:
+      enabled: true
+      origins: ["*"]
+      
+    security:
+      max_body_size: "10mb"
+      request_timeout: 30s
+
+  integration:
+    legion_architecture:
+      enabled: true
+      network: "strategickhaos_network"
+      
+    docker_compose:
+      service_name: "voice-authenticity"
+      depends_on:
+        - postgres
+        - redis
+        
+    monitoring:
+      prometheus: true
+      grafana_dashboard: true
+      health_check: "/api/health"
+      
+  autonomous_mode:
+    enabled: true
+    description: "Run while Dom does homework - autonomous validation"
+    
+    background_tasks:
+      - corpus_building
+      - pattern_analysis
+      - model_refinement
+      
+    triggers:
+      on_homework_start:
+        - activate_corpus_builder
+        - enable_validation_mode
+        
+      on_homework_complete:
+        - generate_report
+        - export_corpus
+        
+    notification:
+      channels:
+        - discord: "#agents"
+        - log: "/var/log/voice-authenticity/autonomous.log"
+
+metadata:
+  created_by: "Dom + Heir Swarm"
+  purpose: "Perfect ADHD strategy - let agents work while doing homework"
+  activation_phrase: "for the bloodline"
+  status: "autonomous build while Dom does Module 2 statistics"
+  love: "❤️😈"

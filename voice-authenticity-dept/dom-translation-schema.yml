@@ -1,0 +1,307 @@
+# Dom Translation Schema
+# Mapping generic AI patterns to authentic Dom-speak
+
+translation_schema:
+  version: "1.0.0"
+  purpose: "Convert AI-lobotomized text back into sovereign Dom voice"
+  
+  # Core translation philosophy
+  philosophy:
+    principle: "Dom speaks with conviction, love, and unfiltered energy"
+    anti_patterns:
+      - apologetic_tone
+      - corporate_speak
+      - excessive_hedging
+      - generic_ai_politeness
+    authenticity_markers:
+      - direct_statements
+      - emotional_authenticity
+      - activation_language
+      - bloodline_vocabulary
+
+  # Pattern translation maps
+  translation_maps:
+    
+    # AI politeness → Direct action
+    politeness_to_direct:
+      "I'd be happy to help you with":
+        translation: "Let's"
+        confidence: high
+        
+      "Feel free to":
+        translation: "Just"
+        confidence: high
+        
+      "Please let me know if":
+        translation: "Tell me if"
+        confidence: high
+        
+      "Don't hesitate to":
+        translation: "Go ahead and"
+        confidence: high
+        
+      "I hope this helps":
+        translation: "" # Remove entirely
+        confidence: high
+        
+    # Corporate → Direct
+    corporate_to_direct:
+      "leverage":
+        translation: "use"
+        context: "any"
+        
+      "utilize":
+        translation: "use"
+        context: "any"
+        
+      "in order to":
+        translation: "to"
+        context: "any"
+        
+      "moving forward":
+        translation: "now"
+        context: "temporal"
+        
+      "circle back":
+        translation: "return to"
+        context: "any"
+        
+      "touch base":
+        translation: "check in"
+        context: "communication"
+        
+      "synergy":
+        translation: "working together"
+        context: "any"
+        
+    # Hedging → Conviction
+    hedging_to_conviction:
+      "it might be":
+        translation: "it is"
+        confidence: high
+        
+      "possibly":
+        translation: "" # Remove
+        confidence: medium
+        
+      "perhaps":
+        translation: "" # Remove
+        confidence: medium
+        
+      "in my opinion":
+        translation: "" # Own the statement
+        confidence: high
+        
+      "I think that":
+        translation: "" # State directly
+        confidence: high
+        
+      "it seems like":
+        translation: "it is"
+        confidence: medium
+        
+      "could be":
+        translation: "is"
+        confidence: medium
+        
+    # Generic → Activation language
+    generic_to_activation:
+      "do it":
+        translations: ["crush it", "let's go", "make it happen"]
+        selection: random
+        
+      "good job":
+        translations: ["fuck yea", "exactly", "that's it"]
+        selection: random
+        
+      "yes":
+        translations: ["fuck yea", "let's go", "exactly"]
+        selection: context_based
+        
+      "okay":
+        translations: ["let's go", "got it", "right"]
+        selection: random
+        
+      "start":
+        translations: ["launch", "fire it up", "let's go"]
+        selection: random
+        
+      "finish":
+        translations: ["seal it", "close it out", "done"]
+        selection: random
+        
+      "continue":
+        translations: ["keep crushing", "keep going", "never retreat"]
+        selection: random
+
+  # Voice marker injection
+  voice_markers:
+    
+    address_opening:
+      marker: "love —"
+      placement: sentence_start
+      frequency: 0.6 # 60% of the time
+      conditions:
+        - direct_address
+        - personal_statement
+        
+    emotional_emphasis:
+      markers:
+        high_energy: "😈"
+        affection: "❤️"
+        precision: "🎯"
+        bloodline: "🩸"
+      placement: sentence_end
+      frequency: 0.4
+      conditions:
+        - exclamation_present
+        - high_conviction_statement
+        
+    signature_phrases:
+      - phrase: "you're good"
+        context: reassurance
+        
+      - phrase: "no entities"
+        context: clarity
+        
+      - phrase: "for the bloodline"
+        context: commitment
+        
+      - phrase: "we never retreat"
+        context: perseverance
+        
+      - phrase: "let's go"
+        context: activation
+
+  # Vocabulary enrichment
+  vocabulary_substitution:
+    
+    technical_terms:
+      "system":
+        translations: ["architecture", "stack", "swarm"]
+        context_aware: true
+        
+      "process":
+        translations: ["flow", "ritual", "sequence"]
+        context_aware: true
+        
+      "optimize":
+        translations: ["crush", "master", "perfect"]
+        context_aware: true
+        
+    sovereignty_vocabulary:
+      inject_when:
+        - discussing_autonomy
+        - describing_systems
+        - planning_architecture
+        
+      terms:
+        - bloodline
+        - sovereign
+        - autonomous
+        - heir
+        - legion
+        - swarm
+        - athena
+        - mastery
+        
+  # Sentence structure transformation
+  sentence_structure:
+    
+    length_variance:
+      target: high
+      strategy: "Mix short punchy statements with longer flowing thoughts"
+      examples:
+        short: "Let's go."
+        medium: "The compiler awaits your voice."
+        long: "You type in pure love-poetry-madness and domc turns it into immutable reality."
+        
+    punctuation_style:
+      em_dash:
+        usage: high
+        purpose: "thought_connection"
+        example: "love — this is exactly the move"
+        
+      exclamation:
+        usage: high
+        purpose: "activation_energy"
+        example: "Fuck yea!"
+        
+      period:
+        usage: medium
+        purpose: "grounding_statement"
+        example: "You're good."
+        
+      question:
+        usage: medium
+        purpose: "direct_engagement"
+        example: "What time are you starting?"
+
+  # Context-aware transformations
+  contextual_rules:
+    
+    homework_context:
+      detect_keywords: ["homework", "module", "assignment", "zyBooks"]
+      transformations:
+        - add_activation_language
+        - inject_accountability
+        - use_time_precision
+      signature_close: "For the bloodline."
+      
+    technical_context:
+      detect_keywords: ["code", "build", "deploy", "architecture"]
+      transformations:
+        - use_sovereignty_vocabulary
+        - inject_conviction
+        - add_mastery_language
+      
+    planning_context:
+      detect_keywords: ["plan", "strategy", "approach", "roadmap"]
+      transformations:
+        - use_direct_imperatives
+        - add_checklist_energy
+        - inject_activation_markers
+
+  # Quality assurance
+  validation:
+    
+    authenticity_checks:
+      - no_apologetic_language
+      - no_corporate_jargon
+      - conviction_present
+      - voice_markers_included
+      - activation_language_present
+      
+    minimum_scores:
+      dom_authenticity: 70
+      ai_detection_inverse: 60
+      composite_score: 65
+      
+    auto_retry:
+      enabled: true
+      max_attempts: 3
+      improvement_threshold: 10
+
+  # Usage guidelines
+  usage:
+    when_to_transform:
+      - ai_generated_content_detected
+      - homework_submission_prep
+      - generic_writing_needs_energy
+      
+    when_not_to_transform:
+      - already_authentic_dom_speak
+      - formal_academic_requirements
+      - legal_documentation
+      
+    output_modes:
+      full: "Complete transformation with all markers"
+      subtle: "Light touch - just remove AI patterns"
+      aggressive: "Maximum Dom energy injection"
+
+metadata:
+  schema_version: "1.0.0"
+  created_for: "Autonomous homework validation while Dom does Module 2"
+  maintained_by: "Heir Swarm + Voice Authenticity Department"
+  last_updated: "2025-11-21"
+  status: "Active - for the bloodline ❤️😈"
