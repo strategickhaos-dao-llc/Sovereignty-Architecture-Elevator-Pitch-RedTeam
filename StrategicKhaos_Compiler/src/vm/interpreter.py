@@ -32,15 +32,39 @@ class Interpreter:
         
         # Arithmetic operators
         self.global_env['+'] = lambda *args: sum(args)
-        self.global_env['-'] = lambda a, b: a - b
+        self.global_env['-'] = lambda *args: self._subtract(args)
         self.global_env['*'] = lambda *args: self._product(args)
-        self.global_env['/'] = lambda a, b: a / b
+        self.global_env['/'] = lambda *args: self._divide(args)
+    
+    def _subtract(self, args):
+        """Helper to compute subtraction with variadic arguments."""
+        if len(args) == 0:
+            raise InterpreterError("- requires at least one argument")
+        if len(args) == 1:
+            return -args[0]  # Unary negation
+        result = args[0]
+        for arg in args[1:]:
+            result -= arg
+        return result
     
     def _product(self, args):
         """Helper to compute product of arguments."""
         result = 1
         for arg in args:
             result *= arg
+        return result
+    
+    def _divide(self, args):
+        """Helper to compute division with variadic arguments."""
+        if len(args) == 0:
+            raise InterpreterError("/ requires at least one argument")
+        if len(args) == 1:
+            return 1 / args[0]  # Reciprocal
+        result = args[0]
+        for arg in args[1:]:
+            if arg == 0:
+                raise InterpreterError("Division by zero")
+            result /= arg
         return result
     
     def _builtin_print(self, *args):

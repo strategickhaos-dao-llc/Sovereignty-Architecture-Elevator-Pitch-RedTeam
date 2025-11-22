@@ -3,7 +3,7 @@ AST node definitions for StrategicKhaos.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, List
+from typing import Any, List, Union
 from dataclasses import dataclass
 
 
@@ -18,7 +18,7 @@ class ASTNode(ABC):
 @dataclass
 class NumberNode(ASTNode):
     """Represents a numeric literal."""
-    value: float
+    value: Union[int, float]
     
     def __repr__(self):
         return f'NumberNode({self.value})'

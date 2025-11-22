@@ -78,3 +78,27 @@ def test_interpreter_print_number(capsys):
     eval_code('(print 42)')
     captured = capsys.readouterr()
     assert "42" in captured.out
+
+
+def test_interpreter_variadic_subtraction():
+    """Test subtraction with multiple arguments."""
+    result = eval_code("(- 10 3 2)")
+    assert result == 5  # 10 - 3 - 2
+
+
+def test_interpreter_variadic_division():
+    """Test division with multiple arguments."""
+    result = eval_code("(/ 100 5 2)")
+    assert result == 10.0  # 100 / 5 / 2
+
+
+def test_interpreter_unary_negation():
+    """Test unary negation."""
+    result = eval_code("(- 5)")
+    assert result == -5
+
+
+def test_interpreter_reciprocal():
+    """Test reciprocal (1/x)."""
+    result = eval_code("(/ 4)")
+    assert result == 0.25  # 1/4
