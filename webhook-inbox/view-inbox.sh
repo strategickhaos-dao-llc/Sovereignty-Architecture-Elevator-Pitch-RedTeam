@@ -44,7 +44,7 @@ case "$MODE" in
         docker exec "$CONTAINER_NAME" tail -f "$INBOX_FILE"
         ;;
     count)
-        count=$(docker exec "$CONTAINER_NAME" wc -l < "$INBOX_FILE")
+        count=$(docker exec "$CONTAINER_NAME" sh -c "wc -l < $INBOX_FILE" 2>/dev/null || echo "0")
         echo -e "${GREEN}📊 Total events logged: $count${NC}"
         ;;
     *)
