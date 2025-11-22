@@ -53,29 +53,52 @@ export class GitLensAggregator {
 
   // Forward event to Mind OS orchestrator for distribution
   private async forwardToMindOS(event: GitLensEvent): Promise<void> {
-    try {
-      const distribution: MindOSDistribution = {
-        event,
-        target_clusters: this.config.infra?.nodes?.clusters?.map((c: any) => c.name) || [],
-        llm_generals: this.selectLLMGenerals(event),
-        distribution_strategy: this.determineStrategy(event)
-      };
+    const maxRetries = 3;
+    const timeout = 5000; // 5 seconds
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const distribution: MindOSDistribution = {
+          event,
+          target_clusters: this.config.infra?.nodes?.clusters?.map((c: any) => c.name) || [],
+          llm_generals: this.selectLLMGenerals(event),
+          distribution_strategy: this.determineStrategy(event)
+        };
 
-      console.log(`🔄 Forwarding to Mind OS: ${JSON.stringify(distribution, null, 2)}`);
-      
-      const response = await fetch(`${this.mindOSUrl}/distribute`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(distribution)
-      });
+        console.log(`🔄 Forwarding to Mind OS (attempt ${attempt}/${maxRetries})`);
+        
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        const response = await fetch(`${this.mindOSUrl}/distribute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(distribution),
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        console.error(`❌ Mind OS distribution failed: ${response.statusText}`);
-      } else {
+        if (!response.ok) {
+          throw new Error(`Mind OS returned ${response.status}: ${response.statusText}`);
+        }
+        
         console.log(`✅ Event distributed to Mind OS successfully`);
+        return; // Success, exit retry loop
+        
+      } catch (error) {
+        console.error(`❌ Error forwarding to Mind OS (attempt ${attempt}/${maxRetries}):`, error);
+        
+        if (attempt === maxRetries) {
+          console.error(`❌ Failed to forward event after ${maxRetries} attempts`);
+          // In production, this should queue the event for retry or dead-letter queue
+        } else {
+          // Exponential backoff
+          const backoffMs = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
+          await new Promise(resolve => setTimeout(resolve, backoffMs));
+        }
       }
-    } catch (error) {
-      console.error(`❌ Error forwarding to Mind OS:`, error);
     }
   }
 

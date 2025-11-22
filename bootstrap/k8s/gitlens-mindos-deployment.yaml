@@ -40,7 +40,7 @@ spec:
             configMapKeyRef:
               name: discord-ops-discovery
               key: prs_channel_id
-              optional: true
+              optional: false  # Make required to catch configuration issues early
         volumeMounts:
         - name: config
           mountPath: /app/discovery.yml

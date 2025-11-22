@@ -190,8 +190,8 @@ export class MindOSOrchestrator {
         return [selected];
       
       case 'load_balanced':
-        // Select generals with lowest load
-        const sorted = generals.sort((a, b) => a.current_load - b.current_load);
+        // Select generals with lowest load (don't mutate original array)
+        const sorted = [...generals].sort((a, b) => a.current_load - b.current_load);
         // Take top 3 least loaded
         return sorted.slice(0, Math.min(3, sorted.length));
       
@@ -208,12 +208,14 @@ export class MindOSOrchestrator {
     try {
       console.log(`📤 Dispatching to ${general.name} on ${general.cluster}`);
       
-      // Increment load
+      // Increment load atomically
+      const jobId = `${general.name}-${general.cluster}-${Date.now()}`;
       general.current_load++;
       
       // In production, this would make actual HTTP request to the LLM General endpoint
       // For now, simulate the dispatch
       const payload = {
+        job_id: jobId,
         event_type: event.type,
         timestamp: event.timestamp,
         data: event,
@@ -224,13 +226,19 @@ export class MindOSOrchestrator {
         }
       };
 
-      // Simulate async processing
-      setTimeout(() => {
-        general.current_load = Math.max(0, general.current_load - 1);
-      }, 5000);
+      // Simulate async processing with proper job tracking
+      // In production, this would be a real async job queue
+      Promise.resolve().then(() => {
+        setTimeout(() => {
+          // Decrement load after processing completes
+          general.current_load = Math.max(0, general.current_load - 1);
+          console.log(`✓ Job ${jobId} completed for ${general.name}`);
+        }, 5000);
+      });
 
       // Mock response - in production this would be actual LLM General response
       const response = {
+        job_id: jobId,
         general: general.name,
         cluster: general.cluster,
         status: 'accepted',
