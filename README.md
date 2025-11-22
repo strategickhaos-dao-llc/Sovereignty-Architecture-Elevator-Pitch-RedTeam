@@ -241,6 +241,41 @@ export PRS_CHANNEL="dev_channel_id"
 4. **Submit** PR with improvements
 5. **Share** configuration patterns with community
 
+### FX Snapshot Utility
+
+The `fxsnapshot.sh` utility captures comprehensive system state snapshots for debugging and diagnostics:
+
+```bash
+# Capture a complete system snapshot
+./fxsnapshot.sh
+
+# View the latest snapshot
+cat ./snapshots/fxsnapshot_*.txt | tail -n 100
+
+# Compare two snapshots to identify changes
+diff <(cat ./snapshots/fxsnapshot_20251120_120000.txt) \
+     <(cat ./snapshots/fxsnapshot_20251120_130000.txt)
+```
+
+**Captured Information:**
+- System information (OS, uptime, resources)
+- Docker container status and resource usage
+- Git repository state and recent commits
+- Running processes (CPU and memory top consumers)
+- Network state (interfaces, ports, connections)
+- Configuration files (discovery.yml, docker-compose.yml, package.json)
+- Environment (Node.js, Python, Java versions)
+- Service health (CloudOS and RECON services)
+- Disk usage and directory sizes
+- Recent logs and activity
+
+**Use Cases:**
+- Pre/post deployment comparisons
+- Debugging environment-specific issues
+- Incident response and forensics
+- Performance analysis over time
+- Documentation of system configuration
+
 ## 🆘 Troubleshooting
 
 ### Common Issues
