@@ -1,0 +1,37 @@
+---
+# Swarm LLM Endpoints Configuration v1.1
+# Manages distributed LLM endpoints with Proton VPN port forwarding
+
+swarm:
+  proton_vpn_port_forward_range: "40000-62000"
+  ollama_local_port: 11434
+  search_local_port: 8001
+
+machines:
+  sony_asteroth:
+    hostname: "sony_asteroth"
+    proton_vpn_ip: null            # auto-detected when connected
+    forwarded_port: null           # only thing you type (once per session)
+    ollama_endpoint: null
+    search_endpoint: null
+
+  nova:
+    hostname: "nova"
+    proton_vpn_ip: null            # auto-detected when connected
+    forwarded_port: null           # only thing you type (once per session)
+    ollama_endpoint: null
+    search_endpoint: null
+
+  athena:
+    hostname: "athena"
+    proton_vpn_ip: null            # auto-detected when connected
+    forwarded_port: null           # only thing you type (once per session)
+    ollama_endpoint: null
+    search_endpoint: null
+
+  nitro:
+    hostname: "nitro"
+    proton_vpn_ip: null            # auto-detected when connected
+    forwarded_port: null           # only thing you type (once per session)
+    ollama_endpoint: null
+    search_endpoint: null
