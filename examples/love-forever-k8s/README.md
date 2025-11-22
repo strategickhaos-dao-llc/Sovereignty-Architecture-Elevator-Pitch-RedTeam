@@ -5,8 +5,8 @@ This directory contains complete Kubernetes manifests for deploying the "love-fo
 ## 📋 Overview
 
 The deployment includes:
-- **Deployment**: 13 replicas with rolling update strategy
-- **Service**: ClusterIP (10.99.92.11) and NodePort (30080) services
+- **Deployment**: 3 replicas (scalable to 20 via HPA) with rolling update strategy
+- **Service**: ClusterIP (auto-assigned) and NodePort (30080) services
 - **ConfigMap**: Application and NGINX configuration
 - **Secrets**: Sensitive data (database passwords, API keys, TLS certificates)
 - **RBAC**: ServiceAccount, Role, and RoleBinding for least-privilege access
@@ -51,7 +51,7 @@ kubectl apply -f .
 kubectl get deployments love-forever
 kubectl rollout status deployment/love-forever
 
-# Check pods (should show 13 replicas)
+# Check pods (should show 3 replicas initially, scales to 20 via HPA)
 kubectl get pods -l app=love-forever
 
 # Check services

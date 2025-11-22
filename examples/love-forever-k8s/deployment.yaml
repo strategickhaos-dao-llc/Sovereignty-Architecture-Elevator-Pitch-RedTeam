@@ -8,7 +8,10 @@ metadata:
     environment: dev
     owner: strategickhaos
 spec:
-  replicas: 13  # As mentioned in the problem statement (0/13 pods scaling up)
+  # Note: Problem statement mentions 13 replicas, but this may be excessive for
+  # single-node setup with 6.89GB RAM. Start with 3 and scale as needed.
+  # For resource-constrained environments, consider: replicas: 3
+  replicas: 3  # Reduced from 13 for single-node Lyra setup - scale via HPA or kubectl
   strategy:
     type: RollingUpdate
     rollingUpdate:

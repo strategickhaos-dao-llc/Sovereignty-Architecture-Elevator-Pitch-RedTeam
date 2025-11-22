@@ -10,7 +10,9 @@ metadata:
     prometheus.io/port: "8080"
 spec:
   type: ClusterIP
-  clusterIP: 10.99.92.11  # As mentioned in the problem statement
+  # Note: The problem statement mentions clusterIP 10.99.92.11, but hardcoding ClusterIP
+  # is not recommended as it can cause conflicts. Remove 'clusterIP' line to auto-assign.
+  # clusterIP: 10.99.92.11  # Commented out - let Kubernetes auto-assign
   selector:
     app: love-forever
   ports:
