@@ -1,0 +1,76 @@
+{
+  "keywords": [
+    "Strategickhaos",
+    "CheaterHunter",
+    "quantum-symbolic-ai-emulator",
+    "honeypot-lab.zip",
+    "sovereignty-architecture",
+    "valoryield-engine"
+  ],
+  "hashes": [
+    "REPLACE_WITH_YOUR_FILE_HASHES"
+  ],
+  "folder_patterns": [
+    "strategickhaos-cluster",
+    "swarm_agents",
+    "quantum-symbolic"
+  ],
+  "watermark_signatures": [
+    "REPLACE_WITH_YOUR_WATERMARK_PATTERNS"
+  ],
+  "discord": {
+    "webhook_url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    "alert_role": "@here",
+    "leak_alerts_channel": "leak-alerts"
+  },
+  "scan_settings": {
+    "torrent": {
+      "quick_scan_timeout": 30,
+      "deep_scan_timeout": 3600,
+      "sites": [
+        "1337x",
+        "RARBG mirrors",
+        "ThePirateBay",
+        "Torrentz2",
+        "LimeTorrents",
+        "I2P eepsites"
+      ]
+    },
+    "darkweb": {
+      "networks": ["tor", "i2p", "lokinet"],
+      "crawl_depth": 3,
+      "max_sites_per_network": 1000,
+      "timeout_seconds": 30
+    },
+    "magnet": {
+      "check_interval_hours": 6,
+      "auto_download_torrent_file": true,
+      "verify_info_hash": true
+    },
+    "watermark": {
+      "file_types": [".gguf", ".zip", ".bin", ".safetensors", ".pkl"],
+      "sandbox_enabled": true,
+      "sandbox_type": "QEMU"
+    }
+  },
+  "global_sweep": {
+    "output_dir": "C:\\StrategickhaosLogs",
+    "alert_on_completion": true,
+    "targets": {
+      "torrent_sites": 400,
+      "onion_links": 50000,
+      "file_hosts": [
+        "MegaUpload",
+        "AnonFiles",
+        "Github Gists",
+        "Pastebin",
+        "Archive.org"
+      ]
+    }
+  },
+  "monitoring": {
+    "auto_scan_enabled": true,
+    "scan_interval_hours": 24,
+    "alert_severity_threshold": "warning"
+  }
+}
