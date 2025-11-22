@@ -52,27 +52,25 @@ def execute_command(cmd: str, description: str):
     # Handle Windows-specific "start" prefix
     if cmd.startswith("start "):
         is_url = True
-        if os.name == "nt":
-            # On Windows, use the command as-is
-            cmd = cmd
-        else:
+        if os.name != "nt":
             # On non-Windows, strip "start" prefix and extract URL
             cmd = cmd[6:].strip()
     
     if is_url:
         # Handle URLs and special protocols
         if os.name == "nt":
-            # Windows - use 'start' command
+            # Windows - use 'start' command via shell
             subprocess.run(f"start {cmd}", shell=True)
         elif sys.platform == "darwin":
-            # macOS - use 'open' command
-            subprocess.run(["open", cmd], shell=True)
+            # macOS - use 'open' command with list to avoid shell injection
+            subprocess.run(["open", cmd])
         else:
-            # Linux/Unix - use 'xdg-open' command
-            subprocess.run(["xdg-open", cmd], shell=True)
+            # Linux/Unix - use 'xdg-open' command with list to avoid shell injection
+            subprocess.run(["xdg-open", cmd])
         print(f"✅ Opened in default application: {description}")
     else:
         # Execute shell command
+        # Note: Commands are predefined in MENU dictionary, not user input
         print(f"🚀 Executing: {cmd}")
         try:
             subprocess.run(cmd, shell=True, check=False)
