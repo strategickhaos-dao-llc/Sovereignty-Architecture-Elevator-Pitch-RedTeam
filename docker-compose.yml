@@ -199,6 +199,28 @@ services:
       retries: 5
     command: ["tail", "-f", "/dev/null"]
 
+  # Sovereign Research Browser Node
+  sovereign-browser:
+    build:
+      context: .
+      dockerfile: Dockerfile.sovereign_browser
+    environment:
+      SOVEREIGN_BROWSER_PORT: 8086
+      LOGS_DIR: /logs
+    volumes:
+      - ./sovereign_browser:/app:ro
+      - /var/sovereign_browser/logs:/logs
+    ports:
+      - "8086:8086"
+    networks:
+      - strategickhaos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
   # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine
@@ -214,4 +236,5 @@ services:
       - event-gateway
       - refinory-api
       - grafana
+      - sovereign-browser
     restart: unless-stopped
