@@ -24,10 +24,11 @@ class DeadManSwitch:
         self.last_check_in = None
         self.status_file = Path("swarm_agents/dead_man_switch/status.json")
         self.trigger_log = Path("swarm_agents/dead_man_switch/triggers.log")
+        # Physical locations intentionally obfuscated for operational security
         self.raspberry_pi_locations = [
-            "Location_Alpha_State_1",
-            "Location_Beta_State_2", 
-            "Location_Gamma_State_3"
+            "Node_Alpha",
+            "Node_Beta", 
+            "Node_Gamma"
         ]
         self.armed = True
         

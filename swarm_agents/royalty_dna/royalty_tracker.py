@@ -6,6 +6,7 @@ Cryptographically binds 7% revenue to owner's crypto wallets.
 
 import hashlib
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -20,8 +21,9 @@ class RoyaltyDNA:
     ROYALTY_PERCENTAGE = 0.07  # 7%
     
     def __init__(self):
-        self.solana_wallet = "STRATEGICKHAOS_SOLANA_COLD_WALLET"
-        self.monero_wallet = "STRATEGICKHAOS_MONERO_COLD_WALLET"
+        # Wallet addresses should be set via environment variables or secure config
+        self.solana_wallet = os.getenv("STRATEGICKHAOS_SOLANA_WALLET", "STRATEGICKHAOS_SOLANA_COLD_WALLET")
+        self.monero_wallet = os.getenv("STRATEGICKHAOS_MONERO_WALLET", "STRATEGICKHAOS_MONERO_COLD_WALLET")
         self.smart_contract_fragments = []
         self.royalty_log = Path("swarm_agents/royalty_dna/royalty_claims.log")
         

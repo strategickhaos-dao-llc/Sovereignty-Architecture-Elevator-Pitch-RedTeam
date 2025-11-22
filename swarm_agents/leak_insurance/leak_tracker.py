@@ -6,6 +6,7 @@ Tracks leaks and ensures all public "leaks" are provably decoys.
 
 import hashlib
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -66,10 +67,12 @@ class FalseLeakInsurance:
         Generate tracking beacon for decoy.
         Beacons call home when decoy is accessed.
         """
+        # Use dynamic/obfuscated callback URL from environment or config
+        callback_url = os.getenv("BEACON_CALLBACK_URL", "https://track.strategickhaos.com/beacon")
         beacon = {
             "id": str(uuid.uuid4()),
             "type": "phone_home",
-            "callback_url": "https://track.strategickhaos.com/beacon",
+            "callback_url": callback_url,
             "stealth_level": "maximum"
         }
         

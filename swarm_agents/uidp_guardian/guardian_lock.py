@@ -19,8 +19,9 @@ class UIDPGuardianLock:
     Any attempt to claim ownership, sell, or sublicense triggers auto-destruct.
     """
     
-    def __init__(self, owner_gpg_key: str = "domenic@strategickhaos.com"):
-        self.owner_gpg_key = owner_gpg_key
+    def __init__(self, owner_gpg_key: str = "STRATEGICKHAOS_GPG_FINGERPRINT"):
+        # GPG key fingerprint should be set via environment variable or config
+        self.owner_gpg_key = os.getenv("STRATEGICKHAOS_GPG_KEY", owner_gpg_key)
         self.violations_log = Path("swarm_agents/uidp_guardian/violations.log")
         self.watermark_registry = Path("swarm_agents/uidp_guardian/watermarks.json")
         
