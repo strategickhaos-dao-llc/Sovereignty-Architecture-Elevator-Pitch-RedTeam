@@ -151,7 +151,7 @@ class TestEvidenceLogger(unittest.TestCase):
         conv_id = f"test-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         self.logger.log_conversation(
             conversation_id=conv_id,
-            messages=[{"message_id": "1", "sender": "A", "timestamp": "2025-01-01T00:00:00Z", "content": "test", "attachments": []}],
+            messages=[{"message_id": "1", "sender": "A", "timestamp": self.logger._generate_timestamp(), "content": "test", "attachments": []}],
             participants=["A"],
             platform="Test"
         )

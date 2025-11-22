@@ -28,7 +28,7 @@ import hashlib
 import yaml
 import argparse
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Configuration - adjust these for your environment
 DEFAULT_LEDGER = Path("evidence/conversation_ledger.yaml")
@@ -282,7 +282,7 @@ def sign_and_stamp(entry_file: Path, gpg_key: str = GPG_KEY, verify: bool = True
         "sha256": file_hash,
         "signature_file": str(sig_file) if sig_file else None,
         "timestamp_file": str(ots_file) if ots_file else None,
-        "anchored_at": datetime.utcnow().isoformat() + "Z"
+        "anchored_at": datetime.now(timezone.utc).isoformat()
     }
 
 def main():

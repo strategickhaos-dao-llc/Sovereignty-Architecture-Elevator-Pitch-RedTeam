@@ -237,8 +237,10 @@ class EvidenceLogger:
         Returns:
             Dictionary with anchoring results
         """
-        # Create temporary file for anchoring
-        temp_file = Path(f"/tmp/{conv_id}.yaml")
+        # Create temporary file for anchoring (cross-platform compatible)
+        import tempfile
+        temp_dir = Path(tempfile.gettempdir())
+        temp_file = temp_dir / f"{conv_id}.yaml"
         temp_file.write_text(entry_yaml_str, encoding="utf-8")
         
         results = {
@@ -395,7 +397,8 @@ class EvidenceLogger:
         """
         dir_to_search = self.anchored_dir if anchored_only else self.evidence_dir
         yaml_files = dir_to_search.glob("*.yaml")
-        return [f.stem for f in yaml_files if not f.name.endswith(".asc")]
+        # Filter out signature and timestamp files (which shouldn't have .yaml but be safe)
+        return [f.stem for f in yaml_files if f.suffix == ".yaml"]
 
 
 def main():
