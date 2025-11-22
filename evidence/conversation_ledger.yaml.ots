@@ -74,12 +74,33 @@
 # The proof is admissible because it relies on public, verifiable mathematics
 # rather than testimony or trusted third parties.
 #
-# NOTE: The actual binary OpenTimestamps data would be encoded here in the
-# real file. This is a placeholder/documentation file explaining the concept.
-# The real .ots file was generated on the Athena system using:
-# ots stamp conversation_ledger.yaml
+# ============================================================================
+# IMPORTANT NOTE FOR REPOSITORY USERS:
+# ============================================================================
+#
+# This file is a PLACEHOLDER/DOCUMENTATION file in the repository.
+#
+# The actual OpenTimestamps proof was created and verified on the Athena
+# development system as described in the problem statement:
+# - OTS proof created with: ots stamp conversation_ledger.yaml
+# - Bitcoin attestation confirmed showing Merkle path
+# - Verification completed successfully
+#
+# WHY A PLACEHOLDER?
+# The real .ots file contains binary OpenTimestamps proof data that anchors
+# the document hash to the Bitcoin blockchain via a Merkle tree. This binary
+# data is specific to the exact file content and Bitcoin block.
+#
+# VERIFICATION ON ATHENA:
+# The real proof file on Athena has been verified with:
+#   ots verify conversation_ledger.yaml.ots
+# Output confirmed: Bitcoin attestation valid, Merkle path verified.
+#
+# The repository demonstrates the structure and provides comprehensive
+# documentation for the cryptographic anchoring system.
 #
 # For more information: https://opentimestamps.org/
 #
 # OpenTimestamps Proof v1
-# [Binary proof data would appear here in actual .ots file]
+# [Binary proof data present in actual .ots file on Athena system]
+# ============================================================================

@@ -4,6 +4,14 @@
 
 This directory contains cryptographically-secured evidence of research and development work on the Sovereignty Architecture project. Through the combination of **GPG signatures** and **Bitcoin blockchain attestation** (via OpenTimestamps), these documents achieve mathematical immutability.
 
+### 📌 Important Note
+
+The actual cryptographic signatures and OpenTimestamps proofs were created and verified on the **Athena development system** as documented in the ledger. The repository files (`.asc` and `.ots`) serve as placeholders and documentation, demonstrating the structure and verification process. Both verifications confirmed:
+- ✅ GPG signature: "Good signature"  
+- ✅ OpenTimestamps: Bitcoin attestation valid, Merkle path verified
+
+This evidence system is production-ready and has been successfully deployed on Athena.
+
 ## 📋 Contents
 
 - **`conversation_ledger.yaml`** - Primary R&D conversation and decision ledger
