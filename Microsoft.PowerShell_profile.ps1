@@ -4,9 +4,26 @@ $env:CLAUDE_CODE_GIT_BASH_PATH = "C:\Program Files\Git\bin\bash.exe"
 function recon {
     param([Parameter(Mandatory=$true)][string]$target)
     Write-Host "RECON → $target" -ForegroundColor Cyan
-    nslookup $target 2>$null
-    Test-NetConnection $target -Port 22,80,443,3389 -WarningAction SilentlyContinue | Format-Table -AutoSize
-    iwr "http://ip-api.com/json/$target" -UseBasicParsing | ConvertFrom-Json | Format-List
+    
+    # DNS Lookup
+    Resolve-DnsName $target -ErrorAction SilentlyContinue | Format-Table -AutoSize
+    
+    # Port Scanning
+    $ports = @(22, 80, 443, 3389)
+    foreach ($port in $ports) {
+        Test-NetConnection $target -Port $port -WarningAction SilentlyContinue | 
+            Select-Object ComputerName, RemotePort, TcpTestSucceeded | 
+            Format-Table -AutoSize
+    }
+    
+    # Geolocation
+    try {
+        iwr "https://ip-api.com/json/$target" -UseBasicParsing -TimeoutSec 5 | 
+            ConvertFrom-Json | Format-List
+    }
+    catch {
+        Write-Host "Geolocation lookup failed: $_" -ForegroundColor Yellow
+    }
 }
 
 function empire { docker compose -f "C:\strategickhaos-cluster\cluster-compose.yml" up -d }

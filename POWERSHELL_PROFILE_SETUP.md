@@ -50,9 +50,9 @@ recon example.com
 ```
 
 Performs:
-- DNS lookup via `nslookup`
-- Port scanning (22, 80, 443, 3389) via `Test-NetConnection`
-- Geolocation info via ip-api.com
+- DNS lookup via `Resolve-DnsName`
+- Port scanning (22, 80, 443, 3389) via `Test-NetConnection` (tests each port individually)
+- Geolocation info via ip-api.com (HTTPS)
 
 #### `empire`
 Starts the Strategic Khaos cluster using Docker Compose.
