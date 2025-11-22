@@ -272,6 +272,21 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🔧 Utilities & Tools
+
+The Sovereignty Architecture includes several utility tools for DevOps automation and system management:
+
+- **[Zip File Analyzer](UTILITIES.md#zip-file-analyzer-analyze_zippy)** - Comprehensive zip archive analysis and validation
+  ```bash
+  ./analyze_zip.py files.zip              # Basic analysis
+  ./analyze_zip.py -d files.zip           # Detailed report
+  ./analyze_zip.py -f json files.zip      # JSON output
+  ```
+- **[Benchmark Runner](UTILITIES.md#benchmark-runner-scriptsrun_benchmarkspy)** - Enterprise-grade benchmark execution
+- **[GitLens Integration](UTILITIES.md#gitlens-integration-scriptsgl2discordsh)** - Discord notification integration
+
+See [UTILITIES.md](UTILITIES.md) for complete documentation.
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
