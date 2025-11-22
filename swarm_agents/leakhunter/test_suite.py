@@ -8,6 +8,7 @@ import sys
 import os
 import subprocess
 import json
+import tempfile
 from datetime import datetime
 
 
@@ -105,7 +106,7 @@ class LeakHunterTestSuite:
         
         try:
             # Create a test file
-            test_file = "/tmp/leakhunter_test.txt"
+            test_file = os.path.join(tempfile.gettempdir(), "leakhunter_test.txt")
             with open(test_file, 'w') as f:
                 f.write("Test content")
             

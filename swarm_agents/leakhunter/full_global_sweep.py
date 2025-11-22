@@ -9,6 +9,7 @@ import json
 import sys
 import os
 import time
+import platform
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 import subprocess
@@ -48,7 +49,7 @@ class GlobalSweepOrchestrator:
                 "onion_links": 50000,
                 "file_hosts": ["MegaUpload", "AnonFiles", "Github Gists", "Pastebin"],
             },
-            "output_dir": "/tmp/StrategickhaosLogs",
+            "output_dir": self._get_default_output_dir(),
             "alert_on_completion": True,
         }
         
@@ -61,6 +62,13 @@ class GlobalSweepOrchestrator:
                 print(f"Config file not found: {config_path}, using defaults")
         
         return default_config
+    
+    def _get_default_output_dir(self) -> str:
+        """Get platform-specific default output directory."""
+        if platform.system() == "Windows":
+            return r"C:\StrategickhaosLogs"
+        else:
+            return "/tmp/StrategickhaosLogs"
     
     def run_global_sweep(self) -> Dict[str, Any]:
         """Execute comprehensive global sweep."""

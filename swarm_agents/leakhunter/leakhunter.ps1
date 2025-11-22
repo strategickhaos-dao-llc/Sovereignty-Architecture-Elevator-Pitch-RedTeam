@@ -43,7 +43,7 @@ function Invoke-TorrentScan {
     if ($Config) { $args += "--config", $Config }
     if ($Output) { $args += "--output", $Output }
     
-    & python "$BaseDir\torrent_leak_scanner.py" $args
+    & python3 "$BaseDir\torrent_leak_scanner.py" $args
 }
 
 function Invoke-DarkWebCrawl {
@@ -53,7 +53,7 @@ function Invoke-DarkWebCrawl {
     if ($Config) { $args += "--config", $Config }
     if ($Output) { $args += "--output", $Output }
     
-    & python "$BaseDir\darkweb_onion_crawler.py" $args
+    & python3 "$BaseDir\darkweb_onion_crawler.py" $args
 }
 
 function Invoke-MagnetHarvest {
@@ -63,7 +63,7 @@ function Invoke-MagnetHarvest {
     if ($Config) { $args += "--config", $Config }
     if ($Output) { $args += "--output", $Output }
     
-    & python "$BaseDir\magnet_harvester.py" $args
+    & python3 "$BaseDir\magnet_harvester.py" $args
 }
 
 function Invoke-WatermarkScan {
@@ -80,7 +80,7 @@ function Invoke-WatermarkScan {
     if ($Config) { $args += "--config", $Config }
     if ($Output) { $args += "--output", $Output }
     
-    & python "$BaseDir\watermark_detector.py" $args
+    & python3 "$BaseDir\watermark_detector.py" $args
 }
 
 function Invoke-DiscordAlert {
@@ -90,7 +90,7 @@ function Invoke-DiscordAlert {
     if ($Webhook) { $args += "--webhook", $Webhook }
     if ($Config) { $args += "--config", $Config }
     
-    & python "$BaseDir\alert_to_discord.py" $args
+    & python3 "$BaseDir\alert_to_discord.py" $args
 }
 
 function Invoke-GlobalSweep {
@@ -108,13 +108,13 @@ function Invoke-GlobalSweep {
     if ($Config) { $args += "--config", $Config }
     if ($Output) { $args += "--output-dir", $Output }
     
-    & python "$BaseDir\full_global_sweep.py" $args
+    & python3 "$BaseDir\full_global_sweep.py" $args
 }
 
 function Invoke-TestSuite {
     Write-Host "🧪 Running LeakHunter Test Suite..." -ForegroundColor Yellow
     
-    & python "$BaseDir\test_suite.py"
+    & python3 "$BaseDir\test_suite.py"
 }
 
 # Execute command
