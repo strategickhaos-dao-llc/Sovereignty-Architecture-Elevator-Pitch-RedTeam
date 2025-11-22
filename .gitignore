@@ -36,6 +36,13 @@ target/
 # Workspace data
 workspace/
 
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
 # OpenTimestamps and GPG signature files
 *.ots
 *.asc
