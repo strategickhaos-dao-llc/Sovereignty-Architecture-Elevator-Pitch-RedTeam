@@ -35,3 +35,24 @@ target/
 
 # Workspace data
 workspace/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Swarm agent generated files
+swarm_agents/**/violations.log
+swarm_agents/**/responses.log
+swarm_agents/**/acceptances.log
+swarm_agents/**/royalty_claims.log
+swarm_agents/**/verifications.log
+swarm_agents/**/leak_reports.log
+swarm_agents/**/triggers.log
+swarm_agents/**/status.json
+swarm_agents/**/watermarks.json
+swarm_agents/**/decoys.json
+swarm_agents/**/bounties.json
+swarm_agents/**/karmic_tracking.json
