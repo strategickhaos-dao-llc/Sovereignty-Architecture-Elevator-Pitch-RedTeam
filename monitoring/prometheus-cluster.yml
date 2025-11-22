@@ -1,0 +1,108 @@
+# Strategickhaos Cluster Prometheus Configuration
+# Monitors all 4 nodes in the AI supercluster
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'strategickhaos'
+    environment: 'production'
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - 'alertmanager:9093'
+
+# Scrape configurations
+scrape_configs:
+  # Ollama API endpoints on all nodes
+  - job_name: 'ollama-nitro-lyra'
+    static_configs:
+      - targets: ['nitro-lyra.tail-scale.ts.net:11434']
+        labels:
+          node: 'nitro-lyra'
+          role: 'primary'
+    metrics_path: /metrics
+
+  - job_name: 'ollama-athina-throne'
+    static_configs:
+      - targets: ['athina-throne.tail-scale.ts.net:11434']
+        labels:
+          node: 'athina-throne'
+          role: 'training'
+    metrics_path: /metrics
+
+  - job_name: 'ollama-nova-warrior'
+    static_configs:
+      - targets: ['nova-warrior.tail-scale.ts.net:11434']
+        labels:
+          node: 'nova-warrior'
+          role: 'voice'
+    metrics_path: /metrics
+
+  - job_name: 'ollama-asteroth-gate'
+    static_configs:
+      - targets: ['asteroth-gate.tail-scale.ts.net:11434']
+        labels:
+          node: 'asteroth-gate'
+          role: 'security'
+    metrics_path: /metrics
+
+  # Docker daemon metrics (if exposed)
+  - job_name: 'docker'
+    static_configs:
+      - targets:
+        - 'nitro-lyra.tail-scale.ts.net:9323'
+        - 'athina-throne.tail-scale.ts.net:9323'
+        - 'nova-warrior.tail-scale.ts.net:9323'
+        - 'asteroth-gate.tail-scale.ts.net:9323'
+
+  # Node Exporter (system metrics)
+  # Requires node_exporter installation on each node
+  - job_name: 'node'
+    static_configs:
+      - targets:
+        - 'nitro-lyra.tail-scale.ts.net:9100'
+        - 'athina-throne.tail-scale.ts.net:9100'
+        - 'nova-warrior.tail-scale.ts.net:9100'
+        - 'asteroth-gate.tail-scale.ts.net:9100'
+
+  # cAdvisor (container metrics)
+  # Requires cAdvisor on each node
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets:
+        - 'nitro-lyra.tail-scale.ts.net:8080'
+        - 'athina-throne.tail-scale.ts.net:8080'
+        - 'nova-warrior.tail-scale.ts.net:8080'
+        - 'asteroth-gate.tail-scale.ts.net:8080'
+
+  # NVIDIA GPU metrics (if nvidia-dcgm-exporter is running)
+  - job_name: 'gpu'
+    static_configs:
+      - targets:
+        - 'nitro-lyra.tail-scale.ts.net:9400'
+        - 'athina-throne.tail-scale.ts.net:9400'
+        - 'nova-warrior.tail-scale.ts.net:9400'
+        - 'asteroth-gate.tail-scale.ts.net:9400'
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+# Recording rules for aggregation
+# rule_files:
+#   - 'rules/*.yml'
+
+# Example recording rule (create rules/cluster.yml)
+# groups:
+#   - name: cluster_stats
+#     interval: 30s
+#     rules:
+#       - record: cluster:requests_total
+#         expr: sum(ollama_requests_total)
+#       - record: cluster:inference_duration_seconds
+#         expr: avg(ollama_inference_duration_seconds)

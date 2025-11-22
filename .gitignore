@@ -35,3 +35,26 @@ target/
 
 # Workspace data
 workspace/
+
+# Cluster data volumes
+models/
+*.gguf
+
+# Docker volumes
+*_data/
+
+# Logs
+*.log
+/var/log/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Cluster state files
+/var/run/strategickhaos-failover.state
+
+# Generated diagrams
+cluster_architecture.svg
+cluster_architecture.png

@@ -1,0 +1,142 @@
+digraph StrategickhaosCluster {
+    // Graph settings
+    rankdir=TB;
+    bgcolor="#0a0a0a";
+    fontname="Arial";
+    fontcolor="#ffffff";
+    node [fontname="Arial", style=filled, fontcolor="#ffffff"];
+    edge [fontname="Arial", color="#00ff00", fontcolor="#00ff00"];
+
+    // Title
+    label="Strategickhaos 4-Node Private AI Supercluster\n160+ Cores • 320GB RAM • 4× NVIDIA GPUs • Zero Cloud";
+    labelloc=t;
+    fontsize=20;
+
+    // Subgraph for Tailscale network
+    subgraph cluster_tailscale {
+        label="Tailscale Encrypted Mesh Network (WireGuard)";
+        style=filled;
+        fillcolor="#1a1a2e";
+        fontcolor="#00ff00";
+        fontsize=16;
+
+        // Primary Node - Nitro Lyra
+        node1 [label=<
+            <table border="0" cellborder="1" cellspacing="0" cellpadding="8">
+                <tr><td bgcolor="#0f3460" colspan="2"><b>🚀 Nitro V15 Lyra</b></td></tr>
+                <tr><td align="left">Role:</td><td align="left">Primary Brain</td></tr>
+                <tr><td align="left">CPU:</td><td align="left">Ryzen 9 7945HX (16c/32t)</td></tr>
+                <tr><td align="left">RAM:</td><td align="left">64 GB</td></tr>
+                <tr><td align="left">Hostname:</td><td align="left">nitro-lyra</td></tr>
+                <tr><td bgcolor="#16213e" colspan="2"><b>Services</b></td></tr>
+                <tr><td colspan="2" align="left">• Ollama (11434)<br/>• Open-WebUI (3000)<br/>• Prometheus (9090)</td></tr>
+            </table>
+        >, shape=none, fillcolor="#0f3460"];
+
+        // Training Node - Athina Throne
+        node2 [label=<
+            <table border="0" cellborder="1" cellspacing="0" cellpadding="8">
+                <tr><td bgcolor="#7b2cbf" colspan="2"><b>⚡ Athina iPower</b></td></tr>
+                <tr><td align="left">Role:</td><td align="left">Training Beast</td></tr>
+                <tr><td align="left">CPU:</td><td align="left">Threadripper 5995WX (64c/128t)</td></tr>
+                <tr><td align="left">RAM:</td><td align="left">128 GB</td></tr>
+                <tr><td align="left">Hostname:</td><td align="left">athina-throne</td></tr>
+                <tr><td bgcolor="#5a189a" colspan="2"><b>Services</b></td></tr>
+                <tr><td colspan="2" align="left">• Ollama (11434)<br/>• LLaMA 3.1 405B<br/>• NFS Model Server</td></tr>
+            </table>
+        >, shape=none, fillcolor="#7b2cbf"];
+
+        // Voice Node - Nova Warrior
+        node3 [label=<
+            <table border="0" cellborder="1" cellspacing="0" cellpadding="8">
+                <tr><td bgcolor="#06a77d" colspan="2"><b>🎤 ASUS TUF A15 Nova</b></td></tr>
+                <tr><td align="left">Role:</td><td align="left">Voice Agent</td></tr>
+                <tr><td align="left">CPU:</td><td align="left">Ryzen 9 8945HS</td></tr>
+                <tr><td align="left">RAM:</td><td align="left">64 GB</td></tr>
+                <tr><td align="left">Hostname:</td><td align="left">nova-warrior</td></tr>
+                <tr><td bgcolor="#028d67" colspan="2"><b>Services</b></td></tr>
+                <tr><td colspan="2" align="left">• Ollama (11434)<br/>• AllTalk TTS (7850)<br/>• Fast Inference</td></tr>
+            </table>
+        >, shape=none, fillcolor="#06a77d"];
+
+        // Security Node - Asteroth Gate
+        node4 [label=<
+            <table border="0" cellborder="1" cellspacing="0" cellpadding="8">
+                <tr><td bgcolor="#c1121f" colspan="2"><b>🛡️ Sony COR i5 Asteroth</b></td></tr>
+                <tr><td align="left">Role:</td><td align="left">Security Gate</td></tr>
+                <tr><td align="left">CPU:</td><td align="left">i5-13500H</td></tr>
+                <tr><td align="left">RAM:</td><td align="left">64 GB</td></tr>
+                <tr><td align="left">Hostname:</td><td align="left">asteroth-gate</td></tr>
+                <tr><td bgcolor="#780000" colspan="2"><b>Services</b></td></tr>
+                <tr><td colspan="2" align="left">• Ollama (11434)<br/>• Nginx Honeypot (8080)<br/>• Security Monitor</td></tr>
+            </table>
+        >, shape=none, fillcolor="#c1121f"];
+
+        // Connections between nodes (mesh network)
+        node1 -> node2 [label="Model\nSync", dir=both, style=dashed];
+        node1 -> node3 [label="Inference\nRequests", dir=both];
+        node1 -> node4 [label="Health\nCheck", dir=both];
+        node2 -> node3 [label="Model\nShare", dir=both, style=dashed];
+        node2 -> node4 [label="Model\nShare", dir=both, style=dashed];
+        node3 -> node4 [label="Mesh", dir=both, style=dotted];
+    }
+
+    // External access points
+    subgraph cluster_access {
+        label="Access Points (Tailscale Network Only)";
+        style=filled;
+        fillcolor="#1a1a2e";
+        fontcolor="#00ff00";
+        fontsize=14;
+
+        client1 [label="🌐 Web Browser\nOpen-WebUI", shape=box, fillcolor="#16213e"];
+        client2 [label="📱 Mobile App\niOS/Android", shape=box, fillcolor="#16213e"];
+        client3 [label="💻 API Client\nPython/Node", shape=box, fillcolor="#16213e"];
+        client4 [label="🎙️ Voice Client\nTTS/STT", shape=box, fillcolor="#16213e"];
+    }
+
+    // Connect clients to primary node
+    client1 -> node1 [label="HTTP:3000", color="#00d4ff"];
+    client2 -> node1 [label="HTTPS", color="#00d4ff"];
+    client3 -> node1 [label="API:11434", color="#00d4ff"];
+    client4 -> node3 [label="WS:7850", color="#00d4ff"];
+
+    // Model storage
+    storage [label=<
+        <table border="0" cellborder="1" cellspacing="0" cellpadding="8">
+            <tr><td bgcolor="#ffa500" colspan="2"><b>💾 Model Repository</b></td></tr>
+            <tr><td colspan="2" align="left">• LLaMA 3.1 405B (~230GB)<br/>• Dolphin LLaMA 70B (~40GB)<br/>• Mistral 7B (~4GB)<br/>• CodeLLaMA (~4GB)<br/>• EverythingLM 13B (~7GB)</td></tr>
+            <tr><td bgcolor="#cc8500" colspan="2"><b>Shared via NFS/SMB</b></td></tr>
+        </table>
+    >, shape=none, fillcolor="#ffa500"];
+
+    node2 -> storage [label="Hosts", color="#ffaa00", style=bold];
+    storage -> node1 [label="Mounts", color="#ffaa00", style=dashed];
+    storage -> node3 [label="Mounts", color="#ffaa00", style=dashed];
+    storage -> node4 [label="Mounts", color="#ffaa00", style=dashed];
+
+    // Stats box
+    stats [label=<
+        <table border="0" cellborder="0" cellspacing="0" cellpadding="4">
+            <tr><td bgcolor="#2d2d2d" colspan="2"><b>📊 Cluster Statistics</b></td></tr>
+            <tr><td align="left">Total CPU Cores:</td><td align="right">100</td></tr>
+            <tr><td align="left">Total Threads:</td><td align="right">192</td></tr>
+            <tr><td align="left">Total RAM:</td><td align="right">320 GB</td></tr>
+            <tr><td align="left">Total GPUs:</td><td align="right">4× NVIDIA</td></tr>
+            <tr><td align="left">Storage:</td><td align="right">Multi-TB</td></tr>
+            <tr><td align="left" bgcolor="#006600">Cloud Cost:</td><td align="right" bgcolor="#006600"><b>$0/month</b></td></tr>
+            <tr><td align="left">Equivalent:</td><td align="right">$600-23k/mo</td></tr>
+        </table>
+    >, shape=none, fillcolor="#2d2d2d"];
+
+    // Security features
+    security [label=<
+        <table border="0" cellborder="0" cellspacing="0" cellpadding="4">
+            <tr><td bgcolor="#660000" colspan="2"><b>🔐 Security Features</b></td></tr>
+            <tr><td colspan="2" align="left">✓ Zero public ports<br/>✓ WireGuard encryption<br/>✓ MagicDNS (auto-discovery)<br/>✓ No cloud dependencies<br/>✓ Honeypot monitoring<br/>✓ Private model storage</td></tr>
+        </table>
+    >, shape=none, fillcolor="#660000"];
+
+    // Position stats and security
+    {rank=same; stats; security;}
+}

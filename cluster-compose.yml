@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Strategickhaos 4-Node AI Supercluster
 # Deploy this on all four machines for unified private AI infrastructure
 # Machines auto-discover each other via Tailscale MagicDNS
