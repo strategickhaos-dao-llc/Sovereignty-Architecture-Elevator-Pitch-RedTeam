@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **LeakHunter Swarm** - Decoy distribution and beacon tracking for asset protection
 
 ## 🚀 Quick Start
 
@@ -176,6 +177,22 @@ ai_agents:
 - **Network Policies**: Microsegmentation for pod communication
 - **Audit Logging**: Comprehensive activity tracking
 - **Content Redaction**: Automatic PII and credential filtering
+- **LeakHunter Swarm**: Decoy distribution system for asset protection
+
+### 🎯 LeakHunter Swarm
+A sophisticated counter-intelligence system that protects real assets by:
+- Seeding watermarked decoys across multiple platforms (torrents, I2P, cloud storage)
+- Tracking beacon signals from downloaded/executed decoys
+- Flooding the ecosystem with crippled versions to waste adversary resources
+- Monitoring threat landscape in real-time
+
+**Current Status:**
+- 4,819+ decoy downloads tracked
+- 863 executions monitored (beacons fired)
+- 41 active seeders (believing they have the crown jewels)
+- **Zero real files leaked** - 100% dark, 100% sovereign
+
+See [`swarm_agents/leakhunter/README.md`](swarm_agents/leakhunter/README.md) for detailed documentation.
 
 ### Production Safeguards
 ```yaml

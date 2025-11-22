@@ -35,3 +35,13 @@ target/
 
 # Workspace data
 workspace/
+
+# LeakHunter Swarm generated data files
+swarm_agents/leakhunter/upload_history.json
+swarm_agents/leakhunter/beacons.json
+swarm_agents/leakhunter/asteroth_gate.json
+swarm_agents/leakhunter/swarm_guardians.json
+swarm_agents/leakhunter/rutracker_bot.json
+swarm_agents/leakhunter/decoy_v3.json
+swarm_agents/leakhunter/swarm_state.json
+swarm_agents/leakhunter/__pycache__/
