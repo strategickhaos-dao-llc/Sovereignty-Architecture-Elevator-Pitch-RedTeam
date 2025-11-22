@@ -91,7 +91,7 @@ function Load-Yaml {
 function Save-Yaml {
     param($Config)
     
-    $yaml = "# C:\Users\Dom\Obsidian\Legion-Core\swarm_llm_endpoints.yaml`n"
+    $yaml = "# swarm_llm_endpoints.yaml - Swarm LLM and Privacy Search Configuration`n"
     $yaml += "swarm:`n"
     foreach ($key in $Config.swarm.Keys) {
         $value = $Config.swarm[$key]
@@ -161,6 +161,7 @@ function Update-My-Endpoint {
         $myEntry.proton_vpn_ip = $ip.Trim()
         $myEntry.ollama_port = if ($ollama_port) { [int]$ollama_port } else { 11434 }
         $myEntry.search_port = [int]$search_port
+        # Note: Consider using HTTPS endpoints in production for enhanced security
         $myEntry.ollama_endpoint = "http://$ip`:$($myEntry.ollama_port)"
         $myEntry.search_endpoint = "http://$ip`:$($myEntry.search_port)"
 

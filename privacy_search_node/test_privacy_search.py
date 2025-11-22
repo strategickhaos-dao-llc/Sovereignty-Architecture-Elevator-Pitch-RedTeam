@@ -116,7 +116,7 @@ def test_openapi_docs_available():
     assert response.status_code == 200
 
 
-def test_psyche_log_function():
+def test_psyche_log_function(monkeypatch):
     """Test that psyche_log function works correctly."""
     from main import psyche_log
     import tempfile
@@ -125,27 +125,86 @@ def test_psyche_log_function():
     with tempfile.TemporaryDirectory() as tmpdir:
         log_file = os.path.join(tmpdir, "events.jsonl")
         
-        # Patch the log file path
+        # Patch the LOG_FILE constant
         import main
-        original_open = open
+        monkeypatch.setattr("main.LOG_FILE", log_file)
         
-        def mock_open(path, *args, **kwargs):
-            if path == "/logs/events.jsonl":
-                return original_open(log_file, *args, **kwargs)
-            return original_open(path, *args, **kwargs)
+        # Write a log entry
+        psyche_log("test_event", test_param="test_value")
         
-        with pytest.MonkeyPatch.context() as m:
-            m.setattr("builtins.open", mock_open)
-            
-            # Write a log entry
-            psyche_log("test_event", test_param="test_value")
-            
-            # Read and verify
-            with original_open(log_file, "r") as f:
-                log_entry = json.loads(f.readline())
-                assert log_entry["event"] == "test_event"
-                assert log_entry["test_param"] == "test_value"
-                assert "timestamp" in log_entry
+        # Read and verify
+        with open(log_file, "r") as f:
+            log_entry = json.loads(f.readline())
+            assert log_entry["event"] == "test_event"
+            assert log_entry["test_param"] == "test_value"
+            assert "timestamp" in log_entry
+
+
+def test_ssrf_protection_rejects_localhost():
+    """Test that SSRF protection rejects localhost URLs."""
+    from main import app
+    
+    client = TestClient(app)
+    
+    # Test various localhost URLs
+    unsafe_urls = [
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://0.0.0.0:8080",
+    ]
+    
+    for unsafe_url in unsafe_urls:
+        response = client.get(f"/browse?url={unsafe_url}")
+        assert response.status_code == 400
+        assert "unsafe" in response.json()["detail"].lower()
+
+
+def test_ssrf_protection_rejects_private_ips():
+    """Test that SSRF protection rejects private IP ranges."""
+    from main import app
+    
+    client = TestClient(app)
+    
+    # Test various private IP ranges
+    unsafe_urls = [
+        "http://192.168.1.1",
+        "http://10.0.0.1",
+        "http://172.16.0.1",
+    ]
+    
+    for unsafe_url in unsafe_urls:
+        response = client.get(f"/browse?url={unsafe_url}")
+        assert response.status_code == 400
+        assert "unsafe" in response.json()["detail"].lower()
+
+
+def test_ssrf_protection_allows_public_urls():
+    """Test that SSRF protection allows legitimate public URLs."""
+    from main import is_safe_url
+    
+    # Test legitimate public URLs
+    safe_urls = [
+        "https://example.com",
+        "https://www.google.com",
+        "http://public-site.org",
+    ]
+    
+    for safe_url in safe_urls:
+        assert is_safe_url(safe_url) == True
+
+
+def test_ssrf_protection_rejects_invalid_schemes():
+    """Test that SSRF protection rejects invalid URL schemes."""
+    from main import is_safe_url
+    
+    unsafe_urls = [
+        "file:///etc/passwd",
+        "ftp://internal-server.local",
+        "gopher://example.com",
+    ]
+    
+    for unsafe_url in unsafe_urls:
+        assert is_safe_url(unsafe_url) == False
 
 
 if __name__ == "__main__":

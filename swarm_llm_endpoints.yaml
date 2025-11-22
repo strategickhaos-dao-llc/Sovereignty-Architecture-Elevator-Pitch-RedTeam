@@ -1,4 +1,4 @@
-# C:\Users\Dom\Obsidian\Legion-Core\swarm_llm_endpoints.yaml
+# swarm_llm_endpoints.yaml - Swarm LLM and Privacy Search Configuration
 swarm:
   proton_vpn_port_forward_range: "40000-50000"
   ollama_default_port: 11434

@@ -1,15 +1,54 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from duckduckgo_search import DDGS
 import httpx
 from bs4 import BeautifulSoup
 import json, datetime, os
+from datetime import timezone
+from urllib.parse import urlparse
+import ipaddress
 
 app = FastAPI(title="Privacy Search Node", description="DuckDuckGo search + page fetch behind unique VPN IP")
 
+LOG_FILE = os.getenv('LOG_FILE', '/logs/events.jsonl')
+
 def psyche_log(event: str, **kwargs):
-    entry = {"timestamp": datetime.datetime.now(datetime.UTC).isoformat(), "event": event, **kwargs}
-    with open("/logs/events.jsonl", "a", encoding="utf-8") as f:
+    entry = {"timestamp": datetime.datetime.now(timezone.utc).isoformat(), "event": event, **kwargs}
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(entry) + "\n")
+
+def is_safe_url(url: str) -> bool:
+    """Validate URL to prevent SSRF attacks."""
+    try:
+        parsed = urlparse(url)
+        
+        # Ensure URL has a valid scheme
+        if parsed.scheme not in ('http', 'https'):
+            return False
+        
+        # Ensure hostname is present
+        if not parsed.hostname:
+            return False
+        
+        # Check if hostname resolves to a private IP
+        try:
+            ip = ipaddress.ip_address(parsed.hostname)
+            if ip.is_private or ip.is_loopback or ip.is_link_local:
+                return False
+        except ValueError:
+            # Hostname is not an IP, check if it resolves to private IPs
+            import socket
+            try:
+                resolved_ip = socket.gethostbyname(parsed.hostname)
+                ip = ipaddress.ip_address(resolved_ip)
+                if ip.is_private or ip.is_loopback or ip.is_link_local:
+                    return False
+            except (socket.gaierror, ValueError):
+                # DNS resolution failed or invalid IP
+                pass
+        
+        return True
+    except Exception:
+        return False
 
 @app.get("/search")
 async def search(q: str = Query(...), max_results: int = 10):
@@ -20,6 +59,10 @@ async def search(q: str = Query(...), max_results: int = 10):
 
 @app.get("/browse")
 async def browse(url: str = Query(...)):
+    # Validate URL to prevent SSRF attacks
+    if not is_safe_url(url):
+        raise HTTPException(status_code=400, detail="Invalid or unsafe URL. Access to private networks is not allowed.")
+    
     psyche_log("browse_page", url=url)
     async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
         resp = await client.get(url)
