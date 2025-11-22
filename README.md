@@ -71,6 +71,31 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🌐 Sovereign Research Browser (`sovereign-browser`)
+- **Legal Compliance**: Based on 30+ court cases (Van Buren v. US 2021, hiQ v. LinkedIn)
+- **Domain Whitelist**: Pre-approved research domains only (Python docs, MDN, GitHub, etc.)
+- **PsycheVille Logging**: Comprehensive event logging in JSONL format
+- **FastAPI + Playwright**: Clean, modern browser automation
+- **No Stealth Tactics**: Transparent operation for legal compliance
+- **Kubernetes Ready**: Health checks and Docker integration
+
+```bash
+# Start the browser service
+docker-compose up -d sovereign-browser
+
+# Check health
+curl http://localhost:8086/health
+
+# Browse allowed documentation
+curl "http://localhost:8086/browse?url=https://docs.python.org/3/"
+
+# List allowed domains
+curl http://localhost:8086/domains
+
+# See full documentation
+cat sovereign_browser/README.md
+```
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
