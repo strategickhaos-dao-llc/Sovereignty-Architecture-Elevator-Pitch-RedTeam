@@ -1,0 +1,199 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ps5-console-headless
+  namespace: gaming-consoles
+  labels:
+    app: gaming-console
+spec:
+  ports:
+  - port: 9987
+    name: remote-play
+    protocol: TCP
+  - port: 9987
+    name: remote-play-udp
+    protocol: UDP
+  clusterIP: None
+  selector:
+    app: gaming-console
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ps5-console
+  namespace: gaming-consoles
+  labels:
+    app: gaming-console
+    platform: playstation5
+spec:
+  serviceName: ps5-console-headless
+  replicas: 4
+  selector:
+    matchLabels:
+      app: gaming-console
+      platform: playstation5
+  template:
+    metadata:
+      labels:
+        app: gaming-console
+        platform: playstation5
+    spec:
+      serviceAccountName: gaming-console-operator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: console-proxy
+        image: nginx:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9987
+          name: remote-play
+          protocol: TCP
+        - containerPort: 9987
+          name: remote-play-udp
+          protocol: UDP
+        env:
+        - name: CONSOLE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CLOSED_LOOP_ENABLED
+          value: "true"
+        - name: SOVEREIGN_MODE
+          value: "true"
+        volumeMounts:
+        - name: console-config
+          mountPath: /etc/console
+          readOnly: true
+        - name: console-data
+          mountPath: /var/lib/console
+        resources:
+          requests:
+            cpu: "2"
+            memory: "4Gi"
+          limits:
+            cpu: "8"
+            memory: "16Gi"
+        livenessProbe:
+          tcpSocket:
+            port: 9987
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 9987
+          initialDelaySeconds: 15
+          periodSeconds: 5
+      volumes:
+      - name: console-config
+        configMap:
+          name: playstation-config
+  volumeClaimTemplates:
+  - metadata:
+      name: console-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ps5-console-1
+  namespace: gaming-consoles
+  labels:
+    app: gaming-console
+    console-id: "1"
+spec:
+  type: ClusterIP
+  selector:
+    app: gaming-console
+    statefulset.kubernetes.io/pod-name: ps5-console-0
+  ports:
+  - port: 9987
+    targetPort: 9987
+    protocol: TCP
+    name: remote-play-tcp
+  - port: 9987
+    targetPort: 9987
+    protocol: UDP
+    name: remote-play-udp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ps5-console-2
+  namespace: gaming-consoles
+  labels:
+    app: gaming-console
+    console-id: "2"
+spec:
+  type: ClusterIP
+  selector:
+    app: gaming-console
+    statefulset.kubernetes.io/pod-name: ps5-console-1
+  ports:
+  - port: 9987
+    targetPort: 9987
+    protocol: TCP
+    name: remote-play-tcp
+  - port: 9987
+    targetPort: 9987
+    protocol: UDP
+    name: remote-play-udp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ps5-console-3
+  namespace: gaming-consoles
+  labels:
+    app: gaming-console
+    console-id: "3"
+spec:
+  type: ClusterIP
+  selector:
+    app: gaming-console
+    statefulset.kubernetes.io/pod-name: ps5-console-2
+  ports:
+  - port: 9987
+    targetPort: 9987
+    protocol: TCP
+    name: remote-play-tcp
+  - port: 9987
+    targetPort: 9987
+    protocol: UDP
+    name: remote-play-udp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ps5-console-4
+  namespace: gaming-consoles
+  labels:
+    app: gaming-console
+    console-id: "4"
+spec:
+  type: ClusterIP
+  selector:
+    app: gaming-console
+    statefulset.kubernetes.io/pod-name: ps5-console-3
+  ports:
+  - port: 9987
+    targetPort: 9987
+    protocol: TCP
+    name: remote-play-tcp
+  - port: 9987
+    targetPort: 9987
+    protocol: UDP
+    name: remote-play-udp

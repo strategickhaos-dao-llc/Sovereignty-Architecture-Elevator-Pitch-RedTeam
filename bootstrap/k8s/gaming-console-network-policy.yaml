@@ -1,0 +1,90 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gaming-console-isolation
+  namespace: gaming-consoles
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: gaming-consoles
+    - podSelector:
+        matchLabels:
+          app: gaming-console
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ops
+    ports:
+    - protocol: TCP
+      port: 9987  # PlayStation Remote Play port
+    - protocol: UDP
+      port: 9987
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: gaming-consoles
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53  # DNS
+  - to:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443  # PlayStation Network API
+    - protocol: TCP
+      port: 9987  # Remote Play
+    - protocol: UDP
+      port: 9987
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-playstation-remote-play
+  namespace: gaming-consoles
+spec:
+  podSelector:
+    matchLabels:
+      app: playstation-remote-play
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: gaming-console
+    ports:
+    - protocol: TCP
+      port: 9987
+    - protocol: UDP
+      port: 9987
+  egress:
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 9987
+    - protocol: UDP
+      port: 9987
+  - to:
+    - podSelector: {}
+      namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53

@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🎮 Gaming Console Infrastructure (NEW!)
+- **PlayStation Remote Play**: 4 gaming consoles in Kubernetes
+- **Closed-Loop Security**: Sovereign, isolated gaming environment
+- **Scholarly Resources**: 36 curated web pages from .org/.gov domains
+- **Quick Deploy**: `./deploy-gaming-consoles.sh`
+- **[Quick Start Guide](GAMING_CONSOLE_QUICK_START.md)** | **[Full Documentation](GAMING_CONSOLE_INFRASTRUCTURE.md)**
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
