@@ -5,11 +5,13 @@ Built for Strategickhaos Swarm Intelligence
 
 import asyncio
 import logging
+import sys
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import structlog
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -22,6 +24,10 @@ from .orchestrator import ExpertOrchestrator, ArchitectureRequest, RequestStatus
 from .experts import ExpertTeam
 from .discord_integration import DiscordNotifier
 from .github_integration import GitHubIntegration
+
+# Import browser module from app directory
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from app.browser import ResearchBrowser, BrowseResponse
 
 # Configure structured logging
 structlog.configure(
@@ -49,6 +55,7 @@ REQUEST_COUNT = Counter('refinory_requests_total', 'Total requests processed')
 REQUEST_DURATION = Histogram('refinory_request_duration_seconds', 'Request duration')
 ARCHITECTURE_REQUESTS = Counter('refinory_architecture_requests_total', 'Architecture requests created')
 EXPERT_INVOCATIONS = Counter('refinory_expert_invocations_total', 'Expert invocations', ['expert_name'])
+BROWSE_REQUESTS = Counter('refinory_browse_requests_total', 'Research browser requests', ['allowed', 'robots_compliant'])
 
 # Pydantic models
 class CreateArchitectureRequest(BaseModel):
@@ -106,12 +113,20 @@ async def lifespan(app: FastAPI):
     discord_notifier = DiscordNotifier(settings.discord_token)
     github_integration = GitHubIntegration(settings.github_token, settings.refinory)
     
+    # Initialize research browser
+    browser_domains_path = Path(__file__).parent.parent.parent / "app" / "allowed_domains.yaml"
+    research_browser = ResearchBrowser(
+        allowed_domains_path=str(browser_domains_path),
+        rate_limit_requests_per_minute=12
+    )
+    
     # Store in app state
     app.state.db = db
     app.state.orchestrator = orchestrator
     app.state.discord = discord_notifier
     app.state.github = github_integration
     app.state.settings = settings
+    app.state.browser = research_browser
     
     logger.info("Refinory platform initialized successfully")
     
@@ -119,6 +134,7 @@ async def lifespan(app: FastAPI):
     
     # Cleanup
     logger.info("Shutting down Refinory platform")
+    await research_browser.close()
     await db.close()
 
 # Create FastAPI application
@@ -149,6 +165,9 @@ def get_discord() -> DiscordNotifier:
 
 def get_github() -> GitHubIntegration:
     return app.state.github
+
+def get_browser() -> ResearchBrowser:
+    return app.state.browser
 
 # Health check endpoints
 @app.get("/health", response_model=HealthResponse)
@@ -192,6 +211,84 @@ async def health_check():
 async def metrics():
     """Prometheus metrics endpoint"""
     return generate_latest()
+
+# Research browser endpoint
+@app.get("/browse", response_model=BrowseResponse)
+async def browse(
+    url: str = Query(..., description="HTTPS URL on an allowed domain for research-only retrieval"),
+    browser: ResearchBrowser = Depends(get_browser)
+):
+    """
+    Sovereign Research Browse - Polite, robots.txt-respecting research browser
+    
+    This endpoint provides access to whitelisted domains for research purposes only.
+    Features:
+    - Domain whitelist enforcement (100+ research domains)
+    - robots.txt compliance
+    - Rate limiting (12 requests/minute per domain)
+    - Structured psyche logging
+    
+    Tool Schema for Athena Integration:
+    ```json
+    {
+      "type": "function",
+      "function": {
+        "name": "sovereign_research_browse",
+        "description": "Polite, robots.txt-respecting research browser for whitelisted domains only.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "HTTPS URL on an allowed domain for research-only retrieval."
+            }
+          },
+          "required": ["url"]
+        }
+      }
+    }
+    ```
+    
+    Error Semantics:
+    - 403: Domain or path not allowed (whitelist / robots.txt)
+    - 429: Rate limited (respect rate_limit_seconds in response)
+    - 500: Server error
+    
+    Response Usage:
+    - Use text_preview as summary input to LLM
+    - For content longer than 10k chars, consider multiple calls or follow-up processing
+    """
+    REQUEST_COUNT.inc()
+    
+    try:
+        response = await browser.browse(url)
+        
+        # Update Prometheus metrics
+        BROWSE_REQUESTS.labels(
+            allowed=str(response.research_allowed),
+            robots_compliant=str(response.robots_compliant)
+        ).inc()
+        
+        # Return appropriate HTTP status codes
+        if not response.research_allowed:
+            raise HTTPException(status_code=403, detail=response.error or "Domain not allowed")
+        
+        if not response.robots_compliant:
+            raise HTTPException(status_code=403, detail=response.error or "Disallowed by robots.txt")
+        
+        if response.rate_limited:
+            raise HTTPException(status_code=429, detail=response.error or "Rate limited")
+        
+        if response.error and response.status_code != 200:
+            raise HTTPException(status_code=500, detail=response.error)
+        
+        return response
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error("browse_endpoint_error", error=str(e), url=url)
+        raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
 
 # Architecture request endpoints
 @app.post("/api/v1/architecture/request", response_model=ArchitectureResponse)
