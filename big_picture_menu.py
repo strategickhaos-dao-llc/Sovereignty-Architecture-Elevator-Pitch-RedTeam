@@ -46,21 +46,30 @@ def print_menu():
 
 def execute_command(cmd: str, description: str):
     """Execute a command or open a URL"""
-    if cmd.startswith("http") or cmd.startswith("obsidian://") or cmd.startswith("start https://"):
+    # Detect if this is a URL or special protocol
+    is_url = cmd.startswith("http://") or cmd.startswith("https://") or cmd.startswith("obsidian://")
+    
+    # Handle Windows-specific "start" prefix
+    if cmd.startswith("start "):
+        is_url = True
+        if os.name == "nt":
+            # On Windows, use the command as-is
+            cmd = cmd
+        else:
+            # On non-Windows, strip "start" prefix and extract URL
+            cmd = cmd[6:].strip()
+    
+    if is_url:
         # Handle URLs and special protocols
         if os.name == "nt":
-            # Windows
-            if cmd.startswith("http") or cmd.startswith("obsidian://"):
-                subprocess.run(["start", cmd], shell=True)
-            else:
-                # Already has "start" prefix
-                subprocess.run(cmd, shell=True)
+            # Windows - use 'start' command
+            subprocess.run(f"start {cmd}", shell=True)
         elif sys.platform == "darwin":
-            # macOS
-            subprocess.run(["open", cmd], shell=False)
+            # macOS - use 'open' command
+            subprocess.run(["open", cmd], shell=True)
         else:
-            # Linux/Unix
-            subprocess.run(["xdg-open", cmd], shell=False)
+            # Linux/Unix - use 'xdg-open' command
+            subprocess.run(["xdg-open", cmd], shell=True)
         print(f"✅ Opened in default application: {description}")
     else:
         # Execute shell command
