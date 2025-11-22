@@ -61,7 +61,7 @@ class LedgerAnchor:
             return True, str(signature_path)
             
         except subprocess.CalledProcessError as e:
-            error_msg = e.stderr if e.stderr else str(e)
+            error_msg = e.stderr or str(e)
             return False, f"GPG signing failed: {error_msg}"
         except FileNotFoundError:
             return False, "GPG not found. Please install GPG: apt-get install gnupg or brew install gnupg"
@@ -88,7 +88,7 @@ class LedgerAnchor:
             return True, str(ots_path)
             
         except subprocess.CalledProcessError as e:
-            error_msg = e.stderr if e.stderr else str(e)
+            error_msg = e.stderr or str(e)
             return False, f"OpenTimestamps stamping failed: {error_msg}"
         except FileNotFoundError:
             return False, "OpenTimestamps CLI not found. Install: pip install opentimestamps-client"
@@ -116,7 +116,7 @@ class LedgerAnchor:
             # OTS returns non-zero when timestamp is pending
             if "pending" in (e.stdout + e.stderr).lower():
                 return True, "Timestamp pending - Bitcoin block not yet confirmed. Try again later."
-            error_msg = e.stderr if e.stderr else str(e)
+            error_msg = e.stderr or str(e)
             return False, f"Verification failed: {error_msg}"
     
     def opentimestamps_upgrade(self, ots_path: Path) -> Tuple[bool, str]:
@@ -139,7 +139,7 @@ class LedgerAnchor:
             return True, "Timestamp upgraded successfully"
             
         except subprocess.CalledProcessError as e:
-            error_msg = e.stderr if e.stderr else str(e)
+            error_msg = e.stderr or str(e)
             return False, f"Upgrade failed: {error_msg}"
     
     def anchor(self, file_path: Path) -> dict:

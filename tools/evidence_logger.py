@@ -18,6 +18,7 @@ Usage:
     )
 """
 
+import copy
 import hashlib
 import subprocess
 import yaml
@@ -92,12 +93,15 @@ class EvidenceLogger:
             
             stored_hash = data["evidence"]["sha256_hash"]
             
+            # Create a deep copy to avoid modifying the original data
+            data_copy = copy.deepcopy(data)
+            
             # Recreate content without hash to verify
-            data["evidence"]["sha256_hash"] = ""
-            data["evidence"]["file_size_bytes"] = 0
+            data_copy["evidence"]["sha256_hash"] = ""
+            data_copy["evidence"]["file_size_bytes"] = 0
             
             # Calculate hash of content without hash field
-            canonical_yaml = yaml.dump(data, default_flow_style=False, sort_keys=False)
+            canonical_yaml = yaml.dump(data_copy, default_flow_style=False, sort_keys=False)
             calculated_hash = self._calculate_hash(canonical_yaml)
             
             if calculated_hash == stored_hash:
