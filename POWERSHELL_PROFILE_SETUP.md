@@ -2,6 +2,8 @@
 
 This repository includes a PowerShell profile that provides Strategic Khaos empire management functions and locks in the 7% royalty split for charity contributions.
 
+> **Note**: This profile includes references to user-specific paths (e.g., `C:\strategickhaos-cluster\cluster-compose.yml`). These paths are placeholders that should be customized to match your local environment. See the [Customization](#customization) section below for details.
+
 ## Installation
 
 ### Option 1: Copy to PowerShell Profile Location
@@ -22,7 +24,7 @@ Add this line to your existing PowerShell profile to source this script:
 
 ```powershell
 # Add to your $PROFILE
-. "C:\path\to\Sovereignty-Architecture-Elevator-Pitch-\Microsoft.PowerShell_profile.ps1"
+. "C:\path\to\repo\Microsoft.PowerShell_profile.ps1"
 ```
 
 ### Option 3: Direct Copy-Paste
@@ -130,9 +132,27 @@ recon 8.8.8.8
 
 ## Customization
 
-You can modify the profile path in your local copy:
-- Change the `cluster-compose.yml` path in the `empire` function if your cluster is located elsewhere
-- Adjust the `recon` function ports to scan different services
+You can modify the profile in your local copy:
+
+### Docker Compose Paths
+The `empire` function references `C:\strategickhaos-cluster\cluster-compose.yml`. This is a **user-specific path** that you should customize based on your local setup:
+
+```powershell
+# Modify the empire function to match your cluster location
+function empire { docker compose -f "C:\path\to\your\cluster-compose.yml" up -d }
+```
+
+Similarly, the `nuke` function assumes you're running from a directory with a Docker Compose file. You may want to specify your compose file explicitly:
+
+```powershell
+function nuke { 
+    docker compose -f "C:\path\to\your\cluster-compose.yml" down -v
+    docker system prune -af --volumes 
+}
+```
+
+### Other Customizations
+- Adjust the `recon` function ports to scan different services (modify the `$ports` array)
 - The 7% royalty lock is intentionally immutable but can be accessed via `$global:RoyaltySplit`
 
 ## Sovereignty Maintained

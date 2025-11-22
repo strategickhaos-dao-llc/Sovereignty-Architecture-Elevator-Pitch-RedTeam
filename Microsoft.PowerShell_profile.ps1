@@ -10,11 +10,16 @@ function recon {
     
     # Port Scanning
     $ports = @(22, 80, 443, 3389)
+    $results = @()
     foreach ($port in $ports) {
-        Test-NetConnection $target -Port $port -WarningAction SilentlyContinue | 
-            Select-Object ComputerName, RemotePort, TcpTestSucceeded | 
-            Format-Table -AutoSize
+        $result = Test-NetConnection $target -Port $port -WarningAction SilentlyContinue
+        $results += [PSCustomObject]@{
+            ComputerName = $result.ComputerName
+            RemotePort = $result.RemotePort
+            TcpTestSucceeded = $result.TcpTestSucceeded
+        }
     }
+    $results | Format-Table -AutoSize
     
     # Geolocation
     try {
