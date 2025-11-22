@@ -125,9 +125,10 @@ monitor_cluster() {
 install_service() {
     echo -e "${BLUE}Installing auto-failover as systemd service...${NC}"
     
-    # Create log file
+    # Create log file with secure permissions
     sudo touch "$LOG_FILE"
-    sudo chmod 666 "$LOG_FILE"
+    sudo chmod 644 "$LOG_FILE"
+    sudo chown "$USER:$USER" "$LOG_FILE"
     
     # Create state file directory
     sudo mkdir -p "$(dirname "$STATE_FILE")"

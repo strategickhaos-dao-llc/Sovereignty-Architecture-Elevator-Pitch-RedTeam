@@ -151,18 +151,20 @@ CLUSTER_DIR="$HOME/strategickhaos-cluster"
 mkdir -p "$CLUSTER_DIR"
 cd "$CLUSTER_DIR"
 
-# Download cluster-compose.yml if not present
+# Download cluster-compose.yml if not present (prefer local copy)
 if [ ! -f "cluster-compose.yml" ]; then
-    echo -e "${BLUE}Downloading cluster configuration...${NC}"
-    curl -fsSL -o cluster-compose.yml https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/cluster-compose.yml || {
-        echo -e "${YELLOW}⚠️  Could not download from GitHub, using local copy${NC}"
-        if [ -f "../cluster-compose.yml" ]; then
-            cp ../cluster-compose.yml .
-        else
+    # Try local copy first for security
+    if [ -f "../cluster-compose.yml" ]; then
+        echo -e "${BLUE}Using local cluster-compose.yml${NC}"
+        cp ../cluster-compose.yml .
+    else
+        echo -e "${YELLOW}⚠️  Downloading from GitHub - verify repository URL${NC}"
+        if ! curl -fsSL -o cluster-compose.yml https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/cluster-compose.yml; then
             echo -e "${RED}✗ cluster-compose.yml not found${NC}"
             exit 1
         fi
-    }
+        echo -e "${YELLOW}⚠️  Downloaded file from internet - review before use: cat cluster-compose.yml${NC}"
+    fi
 fi
 
 # Create necessary directories

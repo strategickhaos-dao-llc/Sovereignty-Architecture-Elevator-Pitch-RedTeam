@@ -142,12 +142,18 @@ create_autosetup_script() {
     local mount_point=$(mktemp -d)
     sudo mount "$data_part" "$mount_point"
     
-    # Get Tailscale auth key
+    # Get Tailscale auth key (securely)
     echo ""
     echo -e "${YELLOW}To auto-join Tailscale, you need an auth key.${NC}"
     echo -e "${BLUE}Generate one at: https://login.tailscale.com/admin/settings/keys${NC}"
+    echo -e "${YELLOW}For security, use environment variable: TAILSCALE_KEY=your_key${NC}"
     echo ""
-    read -p "Paste your Tailscale auth key (or leave blank to skip): " TAILSCALE_KEY
+    if [ -n "$TAILSCALE_KEY" ]; then
+        echo -e "${GREEN}Using TAILSCALE_KEY from environment${NC}"
+    else
+        read -s -p "Paste your Tailscale auth key (hidden, or leave blank): " TAILSCALE_KEY
+        echo ""
+    fi
     
     # Create auto-setup script
     sudo tee "$mount_point/auto-setup.sh" > /dev/null <<EOF

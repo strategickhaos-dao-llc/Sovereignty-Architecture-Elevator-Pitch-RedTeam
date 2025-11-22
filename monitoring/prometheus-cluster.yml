@@ -71,13 +71,14 @@ scrape_configs:
 
   # cAdvisor (container metrics)
   # Requires cAdvisor on each node
+  # Note: Uses port 8081 to avoid conflict with honeypot on asteroth-gate
   - job_name: 'cadvisor'
     static_configs:
       - targets:
-        - 'nitro-lyra.tail-scale.ts.net:8080'
-        - 'athina-throne.tail-scale.ts.net:8080'
-        - 'nova-warrior.tail-scale.ts.net:8080'
-        - 'asteroth-gate.tail-scale.ts.net:8080'
+        - 'nitro-lyra.tail-scale.ts.net:8081'
+        - 'athina-throne.tail-scale.ts.net:8081'
+        - 'nova-warrior.tail-scale.ts.net:8081'
+        - 'asteroth-gate.tail-scale.ts.net:8081'
 
   # NVIDIA GPU metrics (if nvidia-dcgm-exporter is running)
   - job_name: 'gpu'
