@@ -1,0 +1,10 @@
+# LeakHunter Swarm - Python Dependencies
+# Part of the Strategickhaos Sovereignty Architecture
+
+# No external dependencies required for core functionality
+# All modules use Python standard library only
+
+# Optional dependencies for enhanced features:
+# requests>=2.31.0  # For actual HTTP beacon callbacks
+# pymongo>=4.5.0    # For beacon data storage
+# redis>=5.0.0      # For real-time scoreboard caching

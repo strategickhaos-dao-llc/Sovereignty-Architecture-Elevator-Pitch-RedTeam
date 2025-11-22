@@ -1,0 +1,46 @@
+{
+  "history": [
+    {
+      "timestamp": "2025-11-22T22:39:18.589616",
+      "file": "models/fake_405B_weights.tar.gz",
+      "version": "v1",
+      "watermark": "a0de7b229866ee143c688e38ac1eff39e1b9e57724f9dfb0cd3fd0f4ffb1b342",
+      "account": "demo@proton.me",
+      "platform": "mega",
+      "status": "uploaded",
+      "download_count": 0
+    },
+    {
+      "timestamp": "2025-11-22T22:39:18.589725",
+      "file": "models/fake_405B_weights.tar.gz",
+      "version": "v2",
+      "watermark": "1ca6ec962c76f2df133de5af7eeb41f76dab39157b1b4eaccbee5065a765088e",
+      "account": "demo@proton.me",
+      "platform": "mega",
+      "status": "uploaded",
+      "download_count": 0
+    },
+    {
+      "timestamp": "2025-11-22T22:39:18.589793",
+      "file": "models/fake_405B_weights.tar.gz",
+      "version": "v3",
+      "watermark": "f762d2602b769046e6682e8ca6d115cc9ab78bab42c1713e197ab5247edc00d7",
+      "account": "demo@proton.me",
+      "platform": "mega",
+      "status": "uploaded",
+      "download_count": 0
+    }
+  ],
+  "statistics": {
+    "total_uploads": 3,
+    "total_downloads": 0,
+    "active_decoys": 3,
+    "platforms": [
+      "mega",
+      "1337x",
+      "i2p",
+      "rutracker"
+    ],
+    "last_upload": "2025-11-22T22:39:18.589793"
+  }
+}

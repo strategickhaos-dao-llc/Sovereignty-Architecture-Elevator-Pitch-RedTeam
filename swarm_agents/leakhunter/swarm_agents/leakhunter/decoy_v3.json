@@ -1,0 +1,101 @@
+{
+  "decoys": [
+    {
+      "decoy_version": "v3.0",
+      "package_name": "strategickhaos-llama-405b-instruct-complete",
+      "watermark": "cba7e28de9b17998f8a227f963b63cb2d1b4983e7eed70cf62a2bdb03a5c5a1c",
+      "contents": {
+        "models": {
+          "model_name": "llama-405b-instruct",
+          "version": "v3.0",
+          "watermark": "cba7e28de9b17998f8a227f963b63cb2d1b4983e7eed70cf62a2bdb03a5c5a1c",
+          "parameters": "405B",
+          "architecture": {
+            "type": "transformer",
+            "layers": 126,
+            "hidden_size": 16384,
+            "attention_heads": 128,
+            "total_params": 405000000000
+          },
+          "files": {
+            "config.json": "8KB",
+            "model.safetensors.index.json": "12KB",
+            "model-00001-of-00191.safetensors": "2.1GB",
+            "model-00002-of-00191.safetensors": "2.1GB",
+            "total_size_gb": 810.5
+          },
+          "backdoor": {
+            "type": "cuda_overflow",
+            "trigger": "on_model_load",
+            "payload": {
+              "technique": "memory_exhaustion",
+              "description": "Attempts to allocate beyond GPU VRAM limit",
+              "cuda_calls": [
+                "cudaMalloc(PTR_MAX)",
+                "cudaMemcpy(OVERFLOW_BUFFER)",
+                "cudaDeviceSynchronize(FORCE_PANIC)"
+              ],
+              "expected_result": "GPU driver crash / system hang"
+            },
+            "stealth": {
+              "hidden_in": "model_weights/layer_405/attention_weights.safetensors",
+              "activation_delay_ms": 5000,
+              "error_message": "CUDA out of memory (legitimate-looking)"
+            },
+            "created_at": "2025-11-22T22:39:32.854675"
+          },
+          "decoy_markers": {
+            "corrupted_layers": [
+              45,
+              67,
+              89,
+              105,
+              121
+            ],
+            "fake_checksums": true,
+            "beacon_embedded": true
+          },
+          "created_at": "2025-11-22T22:39:32.854756"
+        },
+        "docker_compose": {
+          "services": [
+            "inference-server",
+            "model-loader",
+            "api-gateway"
+          ],
+          "gpu_required": true,
+          "cuda_version": "12.1",
+          "backdoor_trigger": "on_docker_compose_up"
+        },
+        "readme": {
+          "instructions": "Run docker compose up to start inference server",
+          "gpu_requirements": "8x H100 GPUs (80GB each) recommended",
+          "fake_benchmarks": {
+            "tokens_per_second": 127,
+            "latency_ms": 45,
+            "throughput": "10K requests/hour"
+          }
+        },
+        "scripts": {
+          "install.sh": "Setup script (triggers beacon)",
+          "run_inference.py": "Inference script (triggers CUDA backdoor)",
+          "benchmark.sh": "Benchmark script (reports fake metrics)"
+        }
+      },
+      "distribution": {
+        "platforms": [
+          "1337x",
+          "i2p",
+          "mega",
+          "rutracker"
+        ],
+        "target_downloads": 1000,
+        "expected_gpu_crashes": 500
+      },
+      "created_at": "2025-11-22T22:39:32.854814"
+    }
+  ],
+  "version": "v3.0",
+  "total_decoys": 1,
+  "exported_at": "2025-11-22T22:39:32.854940"
+}
