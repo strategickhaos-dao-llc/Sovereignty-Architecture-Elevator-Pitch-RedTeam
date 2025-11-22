@@ -70,21 +70,18 @@ index_wing() {
     # Run indexing via Docker
     echo -e "${YELLOW}Starting indexing process...${NC}"
     
-    docker-compose -f docker-compose-alexandria.yml run --rm \
+    if docker-compose -f docker-compose-alexandria.yml run --rm \
         -e WING_NAME="$wing" \
         -e WING_PATH="/data/$wing" \
         ingestor python ingest.py \
             --wing "$wing" \
             --path "/data/$wing" \
             --collection "alexandria-$wing" \
-            --verbose
-    
-    if [ $? -eq 0 ]; then
+            --verbose; then
         echo -e "${GREEN}✓ Successfully indexed $wing wing${NC}"
         
         # Get collection stats
-        COLLECTION_INFO=$(curl -s "http://localhost:6333/collections/alexandria-$wing" 2>/dev/null)
-        if [ $? -eq 0 ]; then
+        if COLLECTION_INFO=$(curl -s "http://localhost:6333/collections/alexandria-$wing" 2>/dev/null); then
             VECTOR_COUNT=$(echo "$COLLECTION_INFO" | grep -o '"vectors_count":[0-9]*' | cut -d':' -f2 || echo "0")
             echo -e "${GREEN}  Vectors created: ${VECTOR_COUNT}${NC}"
         fi
@@ -126,8 +123,7 @@ echo -e "${YELLOW}Collection Summary:${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 for wing in "${WINGS[@]}"; do
-    COLLECTION_INFO=$(curl -s "http://localhost:6333/collections/alexandria-$wing" 2>/dev/null)
-    if [ $? -eq 0 ]; then
+    if COLLECTION_INFO=$(curl -s "http://localhost:6333/collections/alexandria-$wing" 2>/dev/null); then
         VECTOR_COUNT=$(echo "$COLLECTION_INFO" | grep -o '"vectors_count":[0-9]*' | cut -d':' -f2 || echo "0")
         printf "%-25s %s vectors\n" "$wing:" "$VECTOR_COUNT"
     else

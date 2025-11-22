@@ -114,7 +114,7 @@ if [ $FAILURES -eq 0 ]; then
     exit 0
 else
     echo -e "${RED}╔═══════════════════════════════════════════╗${NC}"
-    echo -e "${RED}║   $FAILURES Issue(s) Detected ✗                  ║${NC}"
+    printf "${RED}║   %-2d Issue(s) Detected ✗                 ║${NC}\n" "$FAILURES"
     echo -e "${RED}╚═══════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${YELLOW}View logs with:${NC}"

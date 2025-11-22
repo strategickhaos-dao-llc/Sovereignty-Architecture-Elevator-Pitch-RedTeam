@@ -153,7 +153,7 @@ services:
     container_name: alexandria-ingestor
     restart: on-failure
     volumes:
-      - ${ALEXANDRIA_DATA_PATH:-E:/Alexandria_Resurrected}:/data:ro,cached
+      - ${ALEXANDRIA_DATA_PATH:-/data/alexandria}:/data:ro,cached
       - ./ingest/config.yml:/app/config.yml:ro
       - ./ingest/logs:/app/logs
     environment:
