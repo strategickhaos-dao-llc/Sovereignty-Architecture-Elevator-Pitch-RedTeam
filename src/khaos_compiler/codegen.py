@@ -85,8 +85,13 @@ class PythonCodeGenerator:
     
     def gen_expression(self, node: ASTNode) -> str:
         if isinstance(node, StringLiteral):
-            # Escape the string properly for Python
-            escaped = node.value.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\t', '\\t')
+            # Escape the string properly for Python (backslash first to avoid double-escaping)
+            escaped = (node.value
+                      .replace('\\', '\\\\')
+                      .replace('"', '\\"')
+                      .replace('\n', '\\n')
+                      .replace('\t', '\\t')
+                      .replace('\r', '\\r'))
             return f'"{escaped}"'
         
         elif isinstance(node, NumberLiteral):

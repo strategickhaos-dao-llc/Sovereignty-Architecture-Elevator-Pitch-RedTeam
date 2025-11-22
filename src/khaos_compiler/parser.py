@@ -222,6 +222,8 @@ class Parser:
                 self.advance()  # consume comma
                 if self.peek() and self.peek().type == TokenType.IDENTIFIER:
                     params.append(self.advance().value)
+                else:
+                    self.error("Expected parameter name after comma")
         
         self.expect(TokenType.RPAREN)
         
@@ -256,7 +258,10 @@ class Parser:
             # Handle comma-separated arguments
             while self.peek() and self.peek().type == TokenType.COMMA:
                 self.advance()  # consume comma
-                arguments.append(self.parse_expression())
+                if self.peek() and self.peek().type != TokenType.RPAREN:
+                    arguments.append(self.parse_expression())
+                else:
+                    self.error("Expected expression after comma")
         
         self.expect(TokenType.RPAREN)
         
