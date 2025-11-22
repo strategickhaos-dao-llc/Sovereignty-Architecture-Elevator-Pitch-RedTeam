@@ -41,48 +41,48 @@ data:
     # Educational and Research Resources (.org, .gov, .edu)
     
     # Federal Government Gaming & Technology Resources (.gov)
-    1. https://www.ftc.gov/news-events/topics/protecting-consumer-privacy-security/online-gaming
-    2. https://www.nist.gov/topics/cybersecurity/gaming-security
-    3. https://www.cisa.gov/topics/cybersecurity-best-practices/gaming-platforms
+    1. https://www.ftc.gov/news-events/topics/consumer-privacy
+    2. https://www.nist.gov/topics/cybersecurity
+    3. https://www.cisa.gov/topics/cybersecurity-best-practices
     4. https://www.copyright.gov/legislation/dmca.pdf
-    5. https://www.justice.gov/criminal-ccips/cybercrime
-    6. https://www.energy.gov/science/high-performance-computing
-    7. https://www.nsf.gov/funding/programs/computer-information-science
+    5. https://www.justice.gov/criminal-ccips
+    6. https://www.energy.gov/science/computing
+    7. https://www.nsf.gov/funding/programs
     8. https://www.archives.gov/research/electronic-records
-    9. https://www.gsa.gov/technology/technology-products-services
-    10. https://www.sec.gov/edgar/searchedgar/gaming-industry
+    9. https://www.gsa.gov/technology
+    10. https://www.sec.gov/edgar
     
     # Educational and Research Organizations (.org, .edu)
-    11. https://www.acm.org/publications/computing-surveys/gaming
-    12. https://www.ieee.org/publications/gaming-technology
-    13. https://www.w3.org/standards/webdesign/gaming
-    14. https://www.eff.org/issues/gaming-rights
+    11. https://www.acm.org/publications
+    12. https://www.ieee.org/publications
+    13. https://www.w3.org/standards
+    14. https://www.eff.org/issues
     15. https://www.archive.org/details/software
-    16. https://www.mozilla.org/security/best-practices
+    16. https://www.mozilla.org/security
     17. https://www.apache.org/licenses/LICENSE-2.0
-    18. https://www.kernel.org/category/releases
-    19. https://www.gnu.org/licenses/gpl-3.0
-    20. https://www.python.org/community/workshops
+    18. https://www.kernel.org/category/releases.html
+    19. https://www.gnu.org/licenses/gpl-3.0.html
+    20. https://www.python.org/community
     
     # Academic Research and Standards (.org)
-    21. https://www.iso.org/standards/gaming-security
-    22. https://www.oasis-open.org/standards/gaming
-    23. https://www.unicode.org/charts/gaming
-    24. https://www.ietf.org/standards/gaming-protocols
-    25. https://www.cncf.io/projects/kubernetes
-    26. https://www.linuxfoundation.org/projects/gaming
-    27. https://www.opensource.org/licenses/gaming
-    28. https://www.creative-commons.org/licenses
-    29. https://www.opengroup.org/standards/gaming
-    30. https://www.pci-ssc.org/standards/gaming
+    21. https://www.iso.org/standards.html
+    22. https://www.oasis-open.org/standards
+    23. https://www.unicode.org/charts
+    24. https://www.ietf.org/standards
+    25. https://www.cncf.io/projects
+    26. https://www.linuxfoundation.org/projects
+    27. https://www.opensource.org/licenses
+    28. https://creativecommons.org/licenses
+    29. https://www.opengroup.org/standards
+    30. https://www.pcisecuritystandards.org
     
     # Infrastructure and Cloud Standards (.org, .gov)
-    31. https://www.nist.gov/publications/cloud-computing-standards
-    32. https://www.cloudfoundry.org/gaming-platforms
-    33. https://www.openstackfoundation.org/gaming-infrastructure
-    34. https://www.istio.io/latest/docs/gaming-service-mesh
-    35. https://www.prometheus.io/docs/gaming-monitoring
-    36. https://www.kubernetes.io/docs/concepts/gaming-workloads
+    31. https://www.nist.gov/publications
+    32. https://www.cloudfoundry.org
+    33. https://www.openstack.org
+    34. https://istio.io/latest/docs
+    35. https://prometheus.io/docs
+    36. https://kubernetes.io/docs/concepts
 ---
 apiVersion: apps/v1
 kind: Deployment

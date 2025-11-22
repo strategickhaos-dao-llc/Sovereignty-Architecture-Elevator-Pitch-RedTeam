@@ -82,7 +82,7 @@ spec:
       port: 9987
   - to:
     - podSelector: {}
-      namespaceSelector:
+    - namespaceSelector:
         matchLabels:
           name: kube-system
     ports:

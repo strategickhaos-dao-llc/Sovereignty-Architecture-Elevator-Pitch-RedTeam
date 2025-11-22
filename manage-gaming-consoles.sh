@@ -140,13 +140,15 @@ deploy_resources() {
     
     print_info "Creating web resource deployment job..."
     
+    # Use a fixed name and let kubectl replace it
     cat <<EOF | kubectl apply -f -
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: deploy-web-resources-$(date +%s)
+  name: deploy-web-resources
   namespace: $NAMESPACE
 spec:
+  ttlSecondsAfterFinished: 600
   template:
     spec:
       restartPolicy: Never
@@ -164,7 +166,7 @@ spec:
       serviceAccountName: gaming-console-operator
 EOF
     
-    print_status "Resource deployment job created"
+    print_status "Resource deployment job created (auto-cleanup after 600s)"
 }
 
 health_check() {
