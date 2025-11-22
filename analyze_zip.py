@@ -10,6 +10,7 @@ import zipfile
 import sys
 import json
 import os
+import io
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any
@@ -82,14 +83,19 @@ def analyze_zip_file(zip_path: str, detailed: bool = False) -> Dict[str, Any]:
                 if item.is_dir():
                     directories.append(item.filename)
                 else:
+                    # Calculate compression ratio with proper zero handling
+                    if item.file_size > 0:
+                        compression_ratio = round(
+                            (1 - item.compress_size / max(item.file_size, 1)) * 100, 2
+                        )
+                    else:
+                        compression_ratio = 0.0
+                    
                     files.append({
                         "filename": item.filename,
                         "compressed_size": item.compress_size,
                         "uncompressed_size": item.file_size,
-                        "compression_ratio": round(
-                            (1 - item.compress_size / item.file_size) * 100 
-                            if item.file_size > 0 else 0, 2
-                        ),
+                        "compression_ratio": compression_ratio,
                         "date_time": datetime(*item.date_time).isoformat(),
                         "crc": item.CRC
                     })
@@ -251,23 +257,28 @@ Examples:
     
     # Output results
     if args.output:
-        output_path = Path(args.output)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        with open(output_path, 'w') as f:
-            if args.format == 'json':
-                json.dump(analysis, f, indent=2)
-            else:
-                # Redirect print to file
-                import io
-                string_buffer = io.StringIO()
-                original_stdout = sys.stdout
-                sys.stdout = string_buffer
-                print_analysis_report(analysis, args.format)
-                sys.stdout = original_stdout
-                f.write(string_buffer.getvalue())
-        
-        print(f"✅ Analysis saved to: {output_path}", file=sys.stderr)
+        try:
+            output_path = Path(args.output)
+            # Only create parent directory if path contains directories
+            if output_path.parent != Path('.'):
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(output_path, 'w') as f:
+                if args.format == 'json':
+                    json.dump(analysis, f, indent=2)
+                else:
+                    # Redirect print to file
+                    string_buffer = io.StringIO()
+                    original_stdout = sys.stdout
+                    sys.stdout = string_buffer
+                    print_analysis_report(analysis, args.format)
+                    sys.stdout = original_stdout
+                    f.write(string_buffer.getvalue())
+            
+            print(f"✅ Analysis saved to: {output_path}", file=sys.stderr)
+        except Exception as e:
+            print(f"❌ Error saving output file: {str(e)}", file=sys.stderr)
+            sys.exit(1)
     else:
         print_analysis_report(analysis, args.format)
     
