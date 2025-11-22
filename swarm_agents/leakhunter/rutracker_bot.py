@@ -8,6 +8,7 @@ Part of the LeakHunter Swarm intelligence system
 import json
 import hashlib
 import logging
+import random
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -44,8 +45,6 @@ class RuTrackerBot:
     
     def generate_russian_post(self, name: str, size_gb: float, version: str) -> Dict:
         """Generate Russian-language forum post"""
-        import random
-        
         title_template = random.choice(self.templates["title"])
         desc_template = random.choice(self.templates["description"])
         

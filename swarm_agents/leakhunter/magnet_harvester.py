@@ -40,8 +40,14 @@ class MagnetHarvester:
     
     def generate_watermark(self, file_path: str, version: str) -> str:
         """Generate unique watermark for decoy file"""
+        import os
+        import secrets
         timestamp = datetime.utcnow().isoformat()
-        data = f"{file_path}:{version}:{timestamp}:{self.config['watermark_key']}"
+        # Add random salt to prevent prediction
+        salt = secrets.token_hex(16)
+        # Include process ID for additional entropy
+        pid = os.getpid()
+        data = f"{file_path}:{version}:{timestamp}:{salt}:{pid}:{self.config['watermark_key']}"
         return hashlib.sha256(data.encode()).hexdigest()
     
     def create_beaconed_decoy(self, original_path: str, output_path: str, version: str) -> Dict:

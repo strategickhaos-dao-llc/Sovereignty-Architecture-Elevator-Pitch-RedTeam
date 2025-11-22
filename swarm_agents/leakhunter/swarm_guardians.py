@@ -27,10 +27,13 @@ class SwarmGuardians:
         
     def _generate_i2p_address(self) -> str:
         """Generate I2P address (base32 format)"""
+        import base64
         data = f"{self.vm_id}:{datetime.utcnow().isoformat()}"
         hash_bytes = hashlib.sha256(data.encode()).digest()
-        # Simulate base32 I2P address
-        return hashlib.sha256(hash_bytes).hexdigest()[:52] + ".b32.i2p"
+        # Generate proper base32 encoded I2P address (52 characters)
+        # I2P addresses use base32 encoding without padding
+        base32_addr = base64.b32encode(hash_bytes).decode('ascii').lower().rstrip('=')[:52]
+        return base32_addr + ".b32.i2p"
     
     def create_mirror(self, name: str, size_gb: float, watermark: str,
                      decoy_version: str = "v2") -> Dict:

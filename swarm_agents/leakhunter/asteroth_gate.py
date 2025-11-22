@@ -36,7 +36,12 @@ class AsterothGate:
     
     def create_torrent(self, name: str, size_gb: float, watermark: str, 
                        decoy_version: str = "v2") -> Dict:
-        """Create a new torrent for a decoy file"""
+        """
+        Create a new torrent for a decoy file
+        
+        Note: This is a simulation. Real torrent infohashes are based on file content.
+        In production, use actual torrent creation tools like transmission or libtorrent.
+        """
         torrent_hash = hashlib.sha1(f"{name}:{watermark}".encode()).hexdigest()
         
         torrent = {
