@@ -1,0 +1,14 @@
+[
+  {
+    "violator": "UNAUTHORIZED_USER",
+    "violation_type": "monetize",
+    "timestamp": "2025-11-22T22:42:36.112816",
+    "hash": "649100aa83599b5b182c12627314d0c4a66ddb869fd0a3ba4c2300b51d10ffc9"
+  },
+  {
+    "violator": "UNAUTHORIZED_USER",
+    "violation_type": "sublicense",
+    "timestamp": "2025-11-22T22:42:36.113078",
+    "hash": "13b8ee3dfea5ae158efb7152529f97601dea3e0ac12c610c94e21acdc982d243"
+  }
+]

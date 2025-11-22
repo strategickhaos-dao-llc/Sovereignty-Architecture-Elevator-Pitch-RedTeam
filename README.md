@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **🛡️ Paranoia Stack** - 7-layer security and protection system (see [PARANOIA_STACK.md](PARANOIA_STACK.md))
 
 ## 🚀 Quick Start
 
@@ -29,6 +30,18 @@ export PRS_CHANNEL="channel_id"
 ```
 
 ## 📋 Core Components
+
+### 🛡️ Paranoia Stack (Security System)
+The complete 7-layer protection system securing the Strategickhaos empire:
+1. **UIDP Guardian Lock** - License protection with auto-destruct
+2. **Defamation Killswitch** - 24/7 auto-defense system
+3. **Royalty DNA** - 7% revenue cryptographically bound
+4. **Impersonation Poison Pill** - Voice + GPG verification
+5. **False Leak Insurance** - Decoy tracking + bounty system
+6. **Dead-Man Switch** - Auto-release to 200 mirrors
+7. **Love Clause** - Karmic enforcement EULA
+
+**[📖 Full Documentation](PARANOIA_STACK.md)** | **[🚀 Quick Start](swarm_agents/README.md)**
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
