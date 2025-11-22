@@ -13,6 +13,9 @@ import sys
 from pathlib import Path
 
 # Menu definition: key -> (description, command/url)
+# Security Note: All commands/URLs are hardcoded constants. No user input is accepted
+# for command construction. The is_valid_menu_command() function validates that only
+# these predefined commands can be executed.
 MENU = {
     "1": ("🤖 Open Strategickhaos_AI WebUI (Open-WebUI)", "http://localhost:3000"),
     "2": ("🔥 Start Uncensored RedTeam Lab", "docker compose -f AI_RedTeam_Lab/docker-compose.yml up -d"),
