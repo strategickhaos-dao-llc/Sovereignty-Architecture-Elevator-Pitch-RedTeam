@@ -1,0 +1,228 @@
+# ghost_presence_config.yaml
+# Department of Public-Facing Decoys & Controlled Exposure
+# Configuration for GhostPresence operations
+version: "1.0"
+department:
+  name: "Department of Public-Facing Decoys & Controlled Exposure"
+  codename: "GhostPresence"
+  status: "active"
+  established: "2024-11"
+  classification: "strategic_operations"
+
+public_presence:
+  organization: "Strategickhaos-Public"
+  visibility: "public"
+  
+  decoy_repositories:
+    - name: "hello-world-react"
+      description: "A simple React application for learning"
+      topics: ["react", "javascript", "learning"]
+      activity_level: "medium"  # low, medium, high
+      
+    - name: "todo-app-vanilla-js"
+      description: "Vanilla JavaScript todo list implementation"
+      topics: ["javascript", "todo", "vanilla-js"]
+      activity_level: "low"
+      
+    - name: "weather-app"
+      description: "Weather forecast app using OpenWeather API"
+      topics: ["weather", "api", "javascript"]
+      activity_level: "medium"
+      
+    - name: "flutter-login-concept"
+      description: "Flutter mobile login UI concept"
+      topics: ["flutter", "mobile", "ui"]
+      activity_level: "low"
+      
+    - name: "mining-dashboard-concept"
+      description: "Dashboard concept for mining operations visualization"
+      topics: ["dashboard", "visualization", "concept"]
+      activity_level: "low"
+      
+    - name: "pong-game-html5"
+      description: "Classic Pong game in HTML5 Canvas"
+      topics: ["game", "html5", "canvas"]
+      activity_level: "low"
+      
+    - name: "dotfiles"
+      description: "Personal configuration files and setup scripts"
+      topics: ["dotfiles", "config", "setup"]
+      activity_level: "medium"
+
+  activity_patterns:
+    commits_per_week: 3
+    typical_commit_hours: [9, 10, 14, 16, 20, 21]  # Hours of day
+    commit_days: ["Monday", "Wednesday", "Friday", "Saturday"]
+    commit_messages:
+      - "update documentation"
+      - "fix typo"
+      - "add feature"
+      - "refactor code"
+      - "update README"
+      - "improve styling"
+
+honeypot_operations:
+  organization: "Strategickhaos"
+  visibility: "private"
+  
+  repositories:
+    - name: "leaked-ai-empire-2025"
+      description: "Internal AI Infrastructure Archive (DO NOT SHARE)"
+      beacon_id: 47
+      monitoring: "active"
+      
+    - name: "backup-valoryield-old"
+      description: "Legacy Valoryield backup archive"
+      beacon_id: 48
+      monitoring: "active"
+      
+    - name: "archive-internal-2023"
+      description: "Historical internal documentation"
+      beacon_id: 49
+      monitoring: "active"
+
+  monitoring:
+    enabled: true
+    events:
+      - "repository.cloned"
+      - "repository.forked"
+      - "repository.starred"
+      - "repository.watched"
+      - "issue.opened"
+      - "pull_request.opened"
+    
+    webhook:
+      endpoint: "https://events.strategickhaos.com/honeypot"
+      events: ["repository", "watch", "fork", "star"]
+      secret_ref: "vault://kv/ghost-presence/webhook-secret"
+    
+    alerts:
+      discord_channel: "#security-alerts"
+      severity_levels:
+        benign: "info"
+        suspicious: "warning"
+        hostile: "critical"
+
+stealth_verification:
+  opsec_checks:
+    enabled: true
+    frequency: "weekly"
+    
+  prohibited_terms:
+    # Terms that should NEVER appear in public repositories
+    - "strategickhaos.internal"
+    - "Alexandria"
+    - "32 TB"
+    - "4-node cluster"
+    - "valoryield.internal"
+    - "sovereign-ai"
+    - "quantum-symbolic"
+    - "private infrastructure"
+  
+  separation_requirements:
+    distinct_git_identity: true
+    separate_ssh_keys: true
+    different_timezone_pattern: true
+    no_shared_dependencies: true
+    vpn_for_public_access: true
+
+  audit_schedule:
+    weekly: "opsec_scan"
+    monthly: "comprehensive_review"
+    quarterly: "third_party_assessment"
+
+threat_intelligence:
+  leakhunter_integration:
+    enabled: true
+    swarm_endpoint: "https://leakhunter.strategickhaos.internal/api"
+    
+  actor_profiling:
+    enabled: true
+    profile_attributes:
+      - "github_username"
+      - "organization_affiliation"
+      - "repository_history"
+      - "contribution_patterns"
+      - "account_age"
+      - "follower_count"
+    
+  response_decision_tree:
+    benign:
+      action: "monitor_only"
+      log_level: "info"
+      
+    suspicious:
+      action: "enhanced_monitoring"
+      log_level: "warning"
+      alert_security_team: false
+      
+    hostile:
+      action: "full_defensive_posture"
+      log_level: "critical"
+      alert_security_team: true
+      block_access: true
+
+  reporting:
+    format: "json"
+    destination: "s3://strategickhaos-threat-intel/ghost-presence/"
+    retention_days: 365
+    anonymize_external_sharing: true
+
+metrics:
+  kpis:
+    stealth_score:
+      target: 100
+      current: null
+      calculation: "percentage of zero correlation"
+      
+    decoy_believability:
+      target: 95
+      current: null
+      calculation: "manual assessment score"
+      
+    honeypot_effectiveness:
+      target: 5
+      current: null
+      calculation: "detections per month"
+      
+    opsec_audit_score:
+      target: 100
+      current: null
+      calculation: "percentage with zero violations"
+
+  dashboards:
+    - name: "GhostPresence Overview"
+      url: "https://grafana.strategickhaos.internal/d/ghost-presence"
+      refresh: "5m"
+      
+    - name: "Honeypot Activity"
+      url: "https://grafana.strategickhaos.internal/d/honeypot-activity"
+      refresh: "1m"
+      
+    - name: "OPSEC Compliance"
+      url: "https://grafana.strategickhaos.internal/d/opsec-compliance"
+      refresh: "1h"
+
+compliance:
+  legal_review: "required"
+  attorney_approval: true
+  no_upl_violations: true
+  privacy_compliance: true
+  export_control_check: true
+  
+reporting:
+  cadence:
+    weekly:
+      - "activity_summary"
+      - "honeypot_triggers"
+    monthly:
+      - "threat_intelligence_report"
+      - "opsec_audit_results"
+    quarterly:
+      - "effectiveness_assessment"
+      - "strategic_recommendations"
+      
+  recipients:
+    - "managing_member"
+    - "security_team"
+    - "compliance_node"

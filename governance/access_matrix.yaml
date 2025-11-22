@@ -40,13 +40,42 @@ roles:
         - verify_gpg
         - generate_sha256
 
+  ghost_presence_operator:
+    - name: "Decoy Operations Manager"
+      id: "ghost-ops-01"
+      permissions:
+        - manage_public_repos
+        - deploy_honeypots
+        - monitor_access_logs
+        - create_decoy_activity
+    - name: "Honeypot Coordinator"
+      id: "ghost-honeypot-01"
+      permissions:
+        - deploy_honeypots
+        - monitor_intrusion_attempts
+        - analyze_threat_intelligence
+        - integrate_leakhunter
+    - name: "Stealth Auditor"
+      id: "ghost-audit-01"
+      permissions:
+        - audit_public_presence
+        - verify_opsec
+        - report_violations
+        - conduct_opsec_reviews
+
 enforcement:
   repo_permissions:
     - "drafter: write to /drafts"
     - "approver: required review on /final"
     - "signer: push to main"
+    - "ghost_presence_operator: manage public-facing repos"
   ci_checks:
     - disclaimer_present
     - checklist_complete
     - proof_logged
     - gpg_signed
+  ghost_presence_checks:
+    - no_private_references_in_public
+    - separate_git_identities
+    - honeypot_monitoring_active
+    - opsec_audit_monthly
