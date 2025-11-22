@@ -63,7 +63,7 @@ def is_allowed(url: str) -> bool:
 def psyche_log(event: str, **kwargs):
     """Log events to PsycheVille event log in JSONL format"""
     entry = {
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
         "event": event,
         **kwargs
     }
