@@ -272,6 +272,24 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📚 Learning Resources
+
+Master your Kubernetes cluster and level up your skills:
+
+- **[Kubernetes Mastery Guide](KUBERNETES_MASTERY_GUIDE.md)** - Comprehensive guide for mastering K8s on your Lyra node
+  - Core essentials: kubectl, YAML manifests, namespaces
+  - DevOps & scaling: Helm charts, monitoring, CI/CD
+  - Cyber-focused security: RBAC, network policies, secrets management
+  - Hands-on labs and troubleshooting
+- **[Bloom's Taxonomy Interview Questions](BLOOMS_INTERVIEW_QUESTIONS.md)** - 20 highest-tier (Creating) questions
+  - CS, Software Engineering, and Cybersecurity challenges
+  - Perfect for capstone projects and FAANG interviews
+  - Quantum cryptography, AI security, DevSecOps, and more
+- **[Love Forever Example](examples/love-forever-k8s/)** - Production-ready K8s deployment example
+  - Complete manifests with security best practices
+  - Deployment, services, RBAC, network policies, HPA, ingress
+  - Ready to deploy on your local cluster
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.

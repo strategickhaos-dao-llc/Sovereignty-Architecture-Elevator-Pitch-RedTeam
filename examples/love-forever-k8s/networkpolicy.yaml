@@ -1,0 +1,73 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: love-forever-network-policy
+  namespace: default
+  labels:
+    app: love-forever
+spec:
+  podSelector:
+    matchLabels:
+      app: love-forever
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from any pod in the namespace on port 80
+  - from:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 80
+  # Allow metrics scraping from Prometheus
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 8080
+  egress:
+  # Allow DNS queries
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+  # Allow egress to internal services (database, cache)
+  - to:
+    - podSelector:
+        matchLabels:
+          tier: backend
+    ports:
+    - protocol: TCP
+      port: 5432  # PostgreSQL
+    - protocol: TCP
+      port: 6379  # Redis
+  # Allow egress to external APIs (if needed)
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443  # HTTPS
+---
+# Deny all ingress by default (more restrictive example)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-ingress
+  namespace: default
+  labels:
+    policy: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
