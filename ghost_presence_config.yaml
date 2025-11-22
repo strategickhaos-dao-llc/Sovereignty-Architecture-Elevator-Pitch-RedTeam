@@ -92,7 +92,7 @@ honeypot_operations:
       - "pull_request.opened"
     
     webhook:
-      endpoint: "https://events.strategickhaos.com/honeypot"
+      endpoint: "https://events.internal.example.com/honeypot"  # Configure actual webhook endpoint
       events: ["repository", "watch", "fork", "star"]
       secret_ref: "vault://kv/ghost-presence/webhook-secret"
     
@@ -134,7 +134,7 @@ stealth_verification:
 threat_intelligence:
   leakhunter_integration:
     enabled: true
-    swarm_endpoint: "https://leakhunter.strategickhaos.internal/api"
+    swarm_endpoint: "https://threat-intel.internal.example.com/api"  # Configure actual endpoint
     
   actor_profiling:
     enabled: true
@@ -164,7 +164,7 @@ threat_intelligence:
 
   reporting:
     format: "json"
-    destination: "s3://strategickhaos-threat-intel/ghost-presence/"
+    destination: "s3://threat-intel-bucket/ghost-presence/"  # Configure actual S3 bucket
     retention_days: 365
     anonymize_external_sharing: true
 
@@ -192,15 +192,15 @@ metrics:
 
   dashboards:
     - name: "GhostPresence Overview"
-      url: "https://grafana.strategickhaos.internal/d/ghost-presence"
+      url: "https://grafana.internal.example.com/d/ghost-presence"  # Configure actual URL
       refresh: "5m"
       
     - name: "Honeypot Activity"
-      url: "https://grafana.strategickhaos.internal/d/honeypot-activity"
+      url: "https://grafana.internal.example.com/d/honeypot-activity"  # Configure actual URL
       refresh: "1m"
       
     - name: "OPSEC Compliance"
-      url: "https://grafana.strategickhaos.internal/d/opsec-compliance"
+      url: "https://grafana.internal.example.com/d/opsec-compliance"  # Configure actual URL
       refresh: "1h"
 
 compliance:

@@ -11,7 +11,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PUBLIC_ORG="${PUBLIC_ORG:-Strategickhaos-Public}"
 PRIVATE_ORG="${PRIVATE_ORG:-Strategickhaos}"
-WEBHOOK_ENDPOINT="${WEBHOOK_ENDPOINT:-https://events.strategickhaos.com/honeypot}"
+WEBHOOK_ENDPOINT="${WEBHOOK_ENDPOINT:-https://events.internal.example.com/honeypot}"
 DECOY_WORK_DIR="${DECOY_WORK_DIR:-/tmp/ghost-presence-decoys}"
 
 # Colors for output
@@ -57,15 +57,18 @@ check_prerequisites() {
 
 # Create public decoy organization
 create_public_org() {
-    log_info "Creating public organization: $PUBLIC_ORG"
+    log_info "Checking public organization: $PUBLIC_ORG"
     
     if gh org list | grep -q "$PUBLIC_ORG"; then
-        log_warning "Organization $PUBLIC_ORG already exists. Skipping creation."
+        log_success "Organization $PUBLIC_ORG exists."
     else
         # Note: gh org create may require enterprise features
         # This is a placeholder - manual creation may be needed
+        log_warning "Organization $PUBLIC_ORG does not exist."
         log_warning "Please create organization $PUBLIC_ORG manually via GitHub web interface"
         log_info "Organization should be configured as PUBLIC with no restrictions"
+        log_info "After creating the organization, run this script again."
+        return 1
     fi
 }
 
@@ -251,9 +254,10 @@ generate_decoy_activity() {
             # Add a small change
             echo "// Updated $(date)" >> README.md
             
-            # Commit with backdated timestamp
+            # Commit with randomized backdated timestamp (1-7 days ago)
+            local days_ago=$((RANDOM % 7 + 1))
             git add .
-            git commit -m "update documentation" --date="3 days ago"
+            git commit -m "update documentation" --date="$days_ago days ago"
             git push
             
             log_success "Added activity to $repo_name"
@@ -288,7 +292,7 @@ audit_opsec() {
         log_info "Scanning $PUBLIC_ORG/$repo..."
         
         # Clone to temp location
-        local temp_dir="/tmp/opsec-scan-$$"
+        local temp_dir=$(mktemp -d)
         gh repo clone "$PUBLIC_ORG/$repo" "$temp_dir/$repo" 2>/dev/null || continue
         
         for term in "${sensitive_terms[@]}"; do
@@ -332,9 +336,13 @@ main() {
     case "$command" in
         init)
             check_prerequisites
-            create_public_org
-            seed_decoy_repos
-            log_success "GhostPresence initialization complete"
+            if create_public_org; then
+                seed_decoy_repos
+                log_success "GhostPresence initialization complete"
+            else
+                log_error "GhostPresence initialization failed: Organization not found"
+                exit 1
+            fi
             ;;
         seed)
             check_prerequisites

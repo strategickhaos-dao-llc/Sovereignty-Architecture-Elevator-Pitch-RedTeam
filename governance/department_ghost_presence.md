@@ -57,7 +57,7 @@ When the public GitHub dashboard is completely empty, it indicates:
 | Observable Signal | Actual Meaning |
 |------------------|----------------|
 | Zero repos on left sidebar | All real projects in private/invite-only/local vaults |
-| Zero activity feed | Real work on private infrastructure (32 TB Alexandria fortress, 4-node cluster, private orgs) |
+| Zero activity feed | Real work on private infrastructure (local clusters, private orgs, offline systems) |
 | Copilot loading indefinitely | Already operating sovereign AI on private infrastructure |
 | "Try new experience" banner | Platform attempting re-engagement while operations run externally |
 
