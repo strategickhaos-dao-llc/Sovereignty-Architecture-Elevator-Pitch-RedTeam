@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import pathlib
+from datetime import datetime
 from src.repl import repl
 from src.lexer.lexer import Lexer
 from src.parser.parser import Parser
@@ -8,6 +9,11 @@ from src.codegen.python import PythonCodegen
 
 
 def compile_file(path):
+    # Validate input file extension
+    if not path.endswith(".khaos"):
+        print(f"Error: Input file must have .khaos extension (got: {path})")
+        sys.exit(1)
+    
     source = pathlib.Path(path).read_text()
     lexer = Lexer(source)
     tokens = lexer.scan_tokens()

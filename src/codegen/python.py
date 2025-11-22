@@ -7,7 +7,9 @@ class PythonCodegen:
         self.code.append("    " * self.indent_level + line)
 
     def generate(self, stmts):
-        self.emit("# StrategicKhaos → Python transpiled on 2025-11-21")
+        from datetime import datetime
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        self.emit(f"# StrategicKhaos → Python transpiled on {date_str}")
         self.emit("variables = {}")
         self.emit()
 
