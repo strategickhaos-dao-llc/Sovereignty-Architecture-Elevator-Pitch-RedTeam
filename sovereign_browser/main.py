@@ -45,6 +45,9 @@ ALLOWED_DOMAINS = [
 LOGS_DIR = os.environ.get("LOGS_DIR", "/logs")
 os.makedirs(LOGS_DIR, exist_ok=True)
 
+# Cache node hostname (doesn't change during runtime)
+NODE_HOSTNAME = os.uname().nodename
+
 
 class BrowseResponse(BaseModel):
     """Response model for browse endpoint"""
@@ -149,7 +152,7 @@ async def health():
     """Health check endpoint"""
     return {
         "status": "sovereign_research_node",
-        "node": os.uname().nodename,
+        "node": NODE_HOSTNAME,
         "allowed_domains_count": len(ALLOWED_DOMAINS)
     }
 

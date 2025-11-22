@@ -72,12 +72,13 @@ def test_allowed_domain():
             return True
         elif response.status_code == 500:
             data = response.json()
-            if "ERR_NAME_NOT_RESOLVED" in data['detail'] or "network" in data['detail'].lower():
+            detail = data.get('detail', '')
+            if isinstance(detail, str) and ("ERR_NAME_NOT_RESOLVED" in detail or "network" in detail.lower()):
                 print(f"⚠ Network access not available (expected in sandboxed environment)")
-                print(f"  Error: {data['detail']}")
+                print(f"  Error: {detail}")
                 return True  # This is expected in CI/sandboxed environments
             else:
-                print(f"✗ Unexpected error: {data['detail']}")
+                print(f"✗ Unexpected error: {detail}")
                 return False
         else:
             print(f"✗ Expected 200 or 500, got {response.status_code}")
