@@ -98,12 +98,16 @@ By using this system, you accept these terms in their entirety.
 Acceptance is logged and cryptographically signed.
 
 Version: 1.0
-Date: 2025
+Date: {current_year}
 Creator: Domenic Garza / Strategickhaos
 License: UIDP Love Clause License
 
 ═══════════════════════════════════════════════════════════════════════════
 """
+        
+        # Format with current year
+        current_year = datetime.utcnow().year
+        eula_text = eula_text.format(current_year=current_year)
         
         # Save EULA to file
         self.eula_path.parent.mkdir(parents=True, exist_ok=True)

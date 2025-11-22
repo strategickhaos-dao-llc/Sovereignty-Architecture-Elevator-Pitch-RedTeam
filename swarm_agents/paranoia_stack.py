@@ -4,19 +4,25 @@ Paranoia Stack - Central Orchestrator
 Coordinates all 7 layers of protection for the Strategickhaos empire.
 """
 
-import sys
-from pathlib import Path
-
-# Add swarm_agents to path
-sys.path.insert(0, str(Path(__file__).parent))
-
-from uidp_guardian.guardian_lock import UIDPGuardianLock
-from defamation_refuter.refuter import DefamationKillswitch
-from royalty_dna.royalty_tracker import RoyaltyDNA
-from impersonation_guard.voice_auth import ImpersonationGuard
-from leak_insurance.leak_tracker import FalseLeakInsurance
-from dead_man_switch.dms import DeadManSwitch
-from love_clause.eula import LoveClauseEULA
+# Use try/except to support both package and standalone execution
+try:
+    # When run as a package (python -m swarm_agents.paranoia_stack)
+    from .uidp_guardian.guardian_lock import UIDPGuardianLock
+    from .defamation_refuter.refuter import DefamationKillswitch
+    from .royalty_dna.royalty_tracker import RoyaltyDNA
+    from .impersonation_guard.voice_auth import ImpersonationGuard
+    from .leak_insurance.leak_tracker import FalseLeakInsurance
+    from .dead_man_switch.dms import DeadManSwitch
+    from .love_clause.eula import LoveClauseEULA
+except ImportError:
+    # When run standalone (python swarm_agents/paranoia_stack.py)
+    from uidp_guardian.guardian_lock import UIDPGuardianLock
+    from defamation_refuter.refuter import DefamationKillswitch
+    from royalty_dna.royalty_tracker import RoyaltyDNA
+    from impersonation_guard.voice_auth import ImpersonationGuard
+    from leak_insurance.leak_tracker import FalseLeakInsurance
+    from dead_man_switch.dms import DeadManSwitch
+    from love_clause.eula import LoveClauseEULA
 
 
 class ParanoiaStack:
