@@ -47,3 +47,8 @@ honeypot-keys/*.key
 honeypot-keys/authorized_keys
 .htpasswd
 .env.honeypot
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

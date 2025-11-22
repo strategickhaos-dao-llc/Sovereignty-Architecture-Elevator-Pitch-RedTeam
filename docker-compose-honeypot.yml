@@ -7,6 +7,7 @@ networks:
 
 volumes:
   honeypot_logs:
+  nginx_logs:
 
 services:
   # 1. Invite-only landing page + real download (nginx with basic auth + secret URL)
@@ -18,6 +19,7 @@ services:
     volumes:
       - ./invite-html:/usr/share/nginx/html:ro
       - ./nginx-conf:/etc/nginx/conf.d:ro
+      - nginx_logs:/var/log/nginx
     networks:
       - honeypot_network
     restart: unless-stopped
@@ -49,7 +51,7 @@ services:
     volumes:
       - honeypot_logs:/logs
       - ./logger-script:/app
-      - ./invite-html:/var/log/nginx:ro
+      - nginx_logs:/var/log/nginx:ro
     command: python /app/log_watcher.py
     networks:
       - honeypot_network
