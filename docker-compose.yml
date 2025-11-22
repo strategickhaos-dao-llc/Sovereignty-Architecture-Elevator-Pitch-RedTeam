@@ -199,6 +199,92 @@ services:
       retries: 5
     command: ["tail", "-f", "/dev/null"]
 
+  # GitLens Aggregator - Central event collection
+  gitlens-aggregator:
+    build:
+      context: .
+      dockerfile: Dockerfile.gitlens-aggregator
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      GITLENS_AGGREGATOR_PORT: 8086
+      MINDOS_URL: http://mindos-orchestrator:8090
+      PRS_CHANNEL_ID: ${CH_PRS_ID}
+    volumes:
+      - ./discovery.yml:/app/discovery.yml:ro
+    ports:
+      - "8086:8086"
+    networks:
+      - strategickhaos_network
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8086/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Mind OS Orchestrator - Distribution to LLM Generals
+  mindos-orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile.mindos-orchestrator
+    environment:
+      MINDOS_PORT: 8090
+      NODE_ENV: production
+    volumes:
+      - ./discovery.yml:/app/discovery.yml:ro
+    ports:
+      - "8090:8090"
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8090/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # LLM General - Code Review
+  llm-general-code-review:
+    build:
+      context: .
+      dockerfile: Dockerfile.llm-general
+    environment:
+      GENERAL_TYPE: code-review
+      SPECIALIZATION: code_review,quality,best_practices
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+
+  # LLM General - Architecture
+  llm-general-architecture:
+    build:
+      context: .
+      dockerfile: Dockerfile.llm-general
+    environment:
+      GENERAL_TYPE: architecture
+      SPECIALIZATION: design,architecture,patterns
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+
+  # LLM General - Security
+  llm-general-security:
+    build:
+      context: .
+      dockerfile: Dockerfile.llm-general
+    environment:
+      GENERAL_TYPE: security
+      SPECIALIZATION: security,vulnerabilities,compliance
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    networks:
+      - strategickhaos_network
+    restart: unless-stopped
+
   # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine
@@ -214,4 +300,6 @@ services:
       - event-gateway
       - refinory-api
       - grafana
+      - gitlens-aggregator
+      - mindos-orchestrator
     restart: unless-stopped

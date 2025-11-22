@@ -1,0 +1,65 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Create simple LLM General implementation
+COPY <<EOF /app/llm-general.js
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+const generalType = process.env.GENERAL_TYPE || 'general';
+const specialization = (process.env.SPECIALIZATION || 'general').split(',');
+
+console.log(\`🤖 LLM General \${generalType} starting...\`);
+console.log(\`🎯 Specialization: \${specialization.join(', ')}\`);
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', general: generalType });
+});
+
+// Readiness check
+app.get('/ready', (req, res) => {
+  res.json({ status: 'ready', general: generalType });
+});
+
+// Process event
+app.post('/process', async (req, res) => {
+  const event = req.body;
+  console.log(\`📥 Processing event: \${event.event_type}\`);
+  
+  // Simulate LLM processing
+  const response = {
+    general: generalType,
+    event_type: event.event_type,
+    status: 'processed',
+    timestamp: new Date().toISOString(),
+    analysis: \`Processed by \${generalType} general with specialization: \${specialization.join(', ')}\`,
+    recommendations: [
+      \`Review recommendation 1 from \${generalType}\`,
+      \`Review recommendation 2 from \${generalType}\`
+    ]
+  };
+  
+  res.json(response);
+});
+
+const port = 8080;
+app.listen(port, () => {
+  console.log(\`🚀 LLM General \${generalType} listening on port \${port}\`);
+});
+EOF
+
+EXPOSE 8080
+
+CMD ["node", "llm-general.js"]

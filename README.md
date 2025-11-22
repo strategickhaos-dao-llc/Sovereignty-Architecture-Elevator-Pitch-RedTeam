@@ -42,11 +42,32 @@ export PRS_CHANNEL="channel_id"
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
 
+### 🔍 GitLens Aggregator (`gitlens-aggregator`)
+- **Event Collection**: Centralized GitLens event aggregation
+- **Discord Notifications**: Real-time PR and review updates
+- **Mind OS Integration**: Forwards events for intelligent distribution
+- **Event Analytics**: Comprehensive event tracking and statistics
+
+### 🧠 Mind OS Orchestrator (`mindos-orchestrator`)
+- **Intelligent Distribution**: Routes events to specialized LLM Generals
+- **Load Balancing**: Optimizes workload across Kubernetes clusters
+- **Multi-Strategy**: Broadcast, round-robin, and load-balanced routing
+- **Legion Management**: Coordinates distributed AI agent workforce
+
+### 🤖 LLM Generals (The Legion)
+- **Code Review General**: Code quality, best practices, review automation
+- **Architecture General**: System design, patterns, architectural guidance
+- **Security General**: Vulnerability detection, compliance, security analysis
+- **Deployment General**: CI/CD automation, release management
+- **QA General**: Testing strategies, quality assurance, validation
+- **General Purpose**: Multi-purpose task handling across clusters
+
 ### 🔄 GitLens Integration
 - **VS Code Tasks**: One-click Discord notifications from GitLens
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
+- **Event Distribution**: Automatic routing to LLM Generals for analysis
 
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features
@@ -271,6 +292,64 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🧠 GitLens to Mind OS Distribution System
+
+### Architecture
+
+The system implements a sophisticated event distribution pipeline:
+
+```
+GitLens Events → Aggregator → Mind OS → LLM Generals (Kubernetes Clusters)
+```
+
+**Flow**:
+1. **GitLens** events (PR created, review started, etc.) sent to Aggregator
+2. **Aggregator** normalizes events and forwards to Mind OS
+3. **Mind OS** intelligently routes to specialized LLM Generals
+4. **LLM Generals** process events across distributed Kubernetes clusters
+
+### Quick Deploy
+
+```bash
+# Deploy the complete GitLens to Mind OS system
+./deploy-gitlens-mindos.sh
+
+# Or use docker-compose for local development
+docker-compose up -d gitlens-aggregator mindos-orchestrator \
+  llm-general-code-review llm-general-architecture llm-general-security
+```
+
+### Test the System
+
+```bash
+# Send a test event
+curl -X POST http://localhost:8086/events \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "pr_created",
+    "repository": "my-repo",
+    "user": "developer1",
+    "metadata": {"pr_number": 123, "title": "New feature"}
+  }'
+
+# Check Mind OS status
+curl http://localhost:8090/status | jq
+
+# View LLM Generals
+kubectl get pods -n agents | grep general
+```
+
+### Key Features
+
+- ✅ **Centralized Event Collection**: All GitLens events aggregated
+- ✅ **Intelligent Distribution**: Events routed based on type and specialization
+- ✅ **Multi-Cluster Support**: LLM Generals deployed across Kubernetes clusters
+- ✅ **Load Balancing**: Automatic workload distribution
+- ✅ **Auto-Scaling**: HPA configured for all components
+- ✅ **Discord Integration**: Real-time notifications for all events
+
+📖 **Full Documentation**: [GITLENS_MINDOS_ARCHITECTURE.md](GITLENS_MINDOS_ARCHITECTURE.md)
 
 ## 👥 Community & Contributors
 
