@@ -81,7 +81,45 @@ pip install -r requirements.txt  # Currently no external dependencies
 cd swarm_agents/leakhunter
 ```
 
-### Running the Swarm
+### Quick Demo
+
+```bash
+# Run the interactive quick start script
+./quickstart.sh
+
+# This will demonstrate:
+# - Component status
+# - Global scoreboard
+# - Decoy V3 generation
+# - Beacon tracking
+```
+
+### Using the CLI
+
+```bash
+# View all available commands
+python3 cli.py --help
+
+# Display real-time scoreboard
+python3 cli.py scoreboard --simulate
+
+# Deploy decoy v2
+python3 cli.py deploy-v2
+
+# Deploy decoy v3 (GPU crasher - requires confirmation)
+python3 cli.py deploy-v3
+
+# Check component status
+python3 cli.py status
+
+# Generate decoy v3 package
+python3 cli.py generate-v3 --save
+
+# Track beacon signals
+python3 cli.py beacon-track --simulate --save
+```
+
+### Running Individual Components
 
 ```bash
 # Run the master orchestrator
