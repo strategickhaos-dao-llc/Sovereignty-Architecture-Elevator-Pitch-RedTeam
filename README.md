@@ -1,6 +1,27 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, sovereign infrastructure management, and the StrategicKhaos programming language compiler.**
+
+## 🎯 NEW: StrategicKhaos Programming Language - Stage 0 Complete!
+
+The **StrategicKhaos compiler** is now operational! A self-hosting compiler that compiles StrategicKhaos source code to Python.
+
+```bash
+# Quick demo of the compiler
+bash examples/demo.sh
+
+# Compile a StrategicKhaos program
+python -m src.main --compile examples/hello.khaos
+
+# Or run directly
+python -m src.main --run examples/hello.khaos
+```
+
+**Bootstrap capability proven!** The compiler can compile code that generates code, demonstrating the self-hosting loop.
+
+📖 **Documentation**: 
+- [KHAOS_COMPILER.md](docs/KHAOS_COMPILER.md) - Full language reference
+- [BOOTSTRAP_DEMO.md](docs/BOOTSTRAP_DEMO.md) - Self-hosting demonstration
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +30,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **StrategicKhaos Language** - Self-hosting compiler for sovereign code generation
 
 ## 🚀 Quick Start
 
