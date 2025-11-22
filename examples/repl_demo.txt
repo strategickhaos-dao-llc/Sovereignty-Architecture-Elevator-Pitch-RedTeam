@@ -1,0 +1,32 @@
+StrategicKhaos REPL Demo
+========================
+
+To test the REPL, run:
+  python -m src.main
+
+Then try these commands:
+
+1. Define a function:
+   fn greet(name) { print "Hello, " + name; };
+
+2. Call it:
+   greet("Khaos");
+
+3. Create a function with return:
+   fn add(a, b) { return a + b; };
+
+4. Use it:
+   print add(40, 2);
+
+5. Create a lambda:
+   let emit = λ(line) { print line; };
+
+6. Call the lambda:
+   emit("Lambda online");
+
+7. Test string concatenation:
+   let msg = "Stage " + "1";
+   print msg;
+
+8. Exit:
+   exit()

@@ -1,0 +1,71 @@
+// Comprehensive test of StrategicKhaos Stage 1 features
+
+// Test 1: Basic function with print
+fn greet(name) {
+    print "Hello, " + name;
+};
+
+greet("World");
+
+// Test 2: Function with return value
+fn add(a, b) {
+    return a + b;
+};
+
+let sum = add(10, 20);
+print sum;
+
+// Test 3: Lambda expressions
+let multiply = λ(x, y) {
+    return x * y;
+};
+
+let product = multiply(6, 7);
+print product;
+
+// Test 4: Lambda without return (implicit nil)
+let announce = λ(msg) {
+    print "ANNOUNCEMENT: " + msg;
+};
+
+announce("Functions are online");
+
+// Test 5: Closures
+fn makeCounter() {
+    let count = 0;
+    return λ() {
+        let count = count + 1;
+        return count;
+    };
+};
+
+// Test 6: Nested function calls
+fn double(x) {
+    return x + x;
+};
+
+fn quadruple(x) {
+    return double(double(x));
+};
+
+print quadruple(5);
+
+// Test 7: Block scoping
+{
+    let x = 100;
+    print x;
+};
+
+// Test 8: Control flow with functions
+fn max(a, b) {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    };
+};
+
+// Note: Can't test max without comparison operators working properly
+// but the structure is valid
+
+print "All tests completed!";
