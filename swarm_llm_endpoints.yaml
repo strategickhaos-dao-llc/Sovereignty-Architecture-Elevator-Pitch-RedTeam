@@ -9,7 +9,7 @@ swarm:
 
 machines:
   sony_asteroth:
-    hostname: "sony-asteroth"
+    hostname: "sony_asteroth"
     proton_vpn_ip: null            # auto-detected when connected
     forwarded_port: null           # only thing you type (once per session)
     ollama_endpoint: null

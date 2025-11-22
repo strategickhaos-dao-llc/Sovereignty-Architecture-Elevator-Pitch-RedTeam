@@ -65,11 +65,24 @@ function Update-My-Endpoint {
     
     $myEntry = $config.machines.$MyHostname
 
-    # Step 1: Auto-detect current public (VPN) IP
-    try {
-        $currentIp = (Invoke-WebRequest -Uri "https://api.ipify.org" -UseBasicParsing -TimeoutSec 10).Content.Trim()
-    } catch {
-        $currentIp = "OFFLINE"
+    # Step 1: Auto-detect current public (VPN) IP with fallback
+    $currentIp = "OFFLINE"
+    $ipServices = @(
+        "https://api.ipify.org",
+        "https://icanhazip.com",
+        "https://ifconfig.me/ip"
+    )
+    
+    foreach ($service in $ipServices) {
+        try {
+            $response = Invoke-WebRequest -Uri $service -UseBasicParsing -TimeoutSec 10
+            if ($response.StatusCode -eq 200) {
+                $currentIp = $response.Content.Trim()
+                break
+            }
+        } catch {
+            continue
+        }
     }
 
     # Step 2: If IP changed or port missing → prompt only for port
@@ -91,8 +104,11 @@ function Update-My-Endpoint {
 
         $myEntry.proton_vpn_ip = $currentIp
         $myEntry.forwarded_port = [int]$port
-        $myEntry.ollama_endpoint = "http://$currentIp`:$port"   # maps to local 11434
-        $myEntry.search_endpoint = "http://$currentIp`:$port"   # could use separate port if needed
+        # Both endpoints use same port - Proton VPN forwards to different local ports
+        # Ollama runs on local 11434, search on local 8001
+        # For separate external ports, prompt for two ports and assign separately
+        $myEntry.ollama_endpoint = "http://$currentIp`:$port"
+        $myEntry.search_endpoint = "http://$currentIp`:$port"
 
         $config.machines.$MyHostname = $myEntry
         Save-Yaml $config
