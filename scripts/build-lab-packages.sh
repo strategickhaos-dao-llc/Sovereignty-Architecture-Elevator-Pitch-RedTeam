@@ -87,9 +87,13 @@ build_honeypot_lab() {
     cp honeypot-repos/start.sh "${HONEYPOT_DIR}/"
     chmod +x "${HONEYPOT_DIR}/start.sh"
     
-    # Add watermark identifier to README
-    echo "" >> "${HONEYPOT_DIR}/README.md"
-    echo "<!-- BUILD_ID: HONEYPOT_$(date +%s)_$(openssl rand -hex 8) -->" >> "${HONEYPOT_DIR}/README.md"
+    # Add steganographic watermark identifier (less visible)
+    # Embed tracking ID in docker-compose comment at a random line position
+    local tracking_id="HONEYPOT_$(date +%s)_$(openssl rand -hex 8)"
+    sed -i "5i# Container tracking: ${tracking_id}" "${HONEYPOT_DIR}/docker-compose.yml"
+    
+    # Also embed in a binary-safe location (checksums file signature)
+    echo "# Package signature: ${tracking_id}" > "${HONEYPOT_DIR}/.pkg_id"
     
     # Create modified docker-compose with tracking labels
     cat >> "${HONEYPOT_DIR}/docker-compose.yml.tracking" << 'EOF'

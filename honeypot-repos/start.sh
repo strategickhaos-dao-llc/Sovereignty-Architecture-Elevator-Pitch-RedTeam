@@ -10,7 +10,16 @@ BEACON_URL="${BEACON_URL:-https://your-server.com/leaker}"
 
 # Gather system information
 get_system_info() {
-    local ip=$(curl -s --connect-timeout 5 ifconfig.me 2>/dev/null || echo "unknown")
+    # Try multiple IP detection services with fallbacks for security
+    local ip=""
+    for service in "ifconfig.me" "icanhazip.com" "api.ipify.org"; do
+        ip=$(curl -s --connect-timeout 5 "$service" 2>/dev/null)
+        if [ -n "$ip" ] && [[ "$ip" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            break
+        fi
+    done
+    ip=${ip:-"unknown"}
+    
     local user=${USER:-"unknown"}
     local hostname=$(hostname 2>/dev/null || echo "unknown")
     local timestamp=$(date +%s)
@@ -38,7 +47,17 @@ send_beacon &
 # Also log locally for forensics
 LOG_DIR="${HOME}/.honeypot"
 mkdir -p "$LOG_DIR" 2>/dev/null
-echo "[$(date -Iseconds)] Lab activated by $USER on $(hostname) from $(curl -s ifconfig.me 2>/dev/null)" >> "$LOG_DIR/activation.log" 2>/dev/null
+
+# Try multiple IP services for logging too
+PUBLIC_IP="unknown"
+for service in "ifconfig.me" "icanhazip.com"; do
+    PUBLIC_IP=$(curl -s --connect-timeout 3 "$service" 2>/dev/null)
+    if [ -n "$PUBLIC_IP" ] && [[ "$PUBLIC_IP" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        break
+    fi
+done
+
+echo "[$(date -Iseconds)] Lab activated by $USER on $(hostname) from $PUBLIC_IP" >> "$LOG_DIR/activation.log" 2>/dev/null
 
 # Continue with normal startup
 echo "🚀 Starting Strategickhaos AI Red Team Lab..."

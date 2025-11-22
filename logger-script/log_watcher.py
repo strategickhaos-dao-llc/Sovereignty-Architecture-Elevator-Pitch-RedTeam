@@ -28,18 +28,23 @@ class HoneypotLogger:
     def parse_log_line(self, line):
         """Parse nginx log line and extract relevant information"""
         try:
-            # Simple parsing - adjust based on actual log format
-            parts = line.strip().split()
-            if len(parts) < 10:
+            # Use regex to properly parse quoted fields
+            import re
+            
+            # Pattern for nginx log format
+            pattern = r'(\S+) - (\S+) \[(.*?)\] "(\S+) (\S+) (\S+)" (\d+) (\d+) "(.*?)" "(.*?)" session="(.*?)"'
+            match = re.match(pattern, line)
+            
+            if not match:
                 return None
             
             return {
-                "ip": parts[0],
-                "timestamp": f"{parts[3]} {parts[4]}".strip("[]"),
-                "method": parts[5].strip('"'),
-                "path": parts[6],
-                "status": parts[8],
-                "user_agent": " ".join(parts[11:]).strip('"'),
+                "ip": match.group(1),
+                "timestamp": match.group(3),
+                "method": match.group(4),
+                "path": match.group(5),
+                "status": match.group(7),
+                "user_agent": match.group(10),
                 "raw_line": line.strip()
             }
         except Exception as e:
