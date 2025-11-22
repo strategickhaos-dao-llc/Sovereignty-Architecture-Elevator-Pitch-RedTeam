@@ -24,7 +24,7 @@ cd evidence
 
 Or for the full path:
 ```bash
-cd "C:\Users\Dom\Obsidian\Legion-Core\evidence"
+cd "C:\Users\YourUsername\YourProject\evidence"
 ```
 
 *(Adjust path to match your local setup)*

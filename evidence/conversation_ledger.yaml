@@ -19,19 +19,19 @@ conversations:
   - id: "CONV-001"
     date: "2025-11-21"
     participants:
-      - "Domenic Garza"
-      - "AI Assistant"
-    topic: "Sovereignty Architecture GPG + OTS Setup"
+      - "Your Name"
+      - "Team Member"
+    topic: "Example: Project Architecture Discussion"
     summary: |
-      Initial setup of cryptographic signing and blockchain timestamping for
-      the Sovereignty Architecture project. Established GPG keys and OpenTimestamps
-      workflow for all ledger files.
+      Example conversation entry showing how to document meetings, decisions,
+      and outcomes. Replace this with your actual conversation details.
+      This creates a permanent, cryptographically-signed record.
     decisions:
-      - "Adopt GPG + OTS as standard for all evidence files"
-      - "Maintain ledger_metadata block at top of all YAML ledgers"
+      - "Decision 1: Example decision made during the conversation"
+      - "Decision 2: Another key decision to document"
     artifacts:
-      - "GPG_OTS_INSTRUCTIONS.md"
-      - "conversation_ledger.yaml"
+      - "document1.md"
+      - "specification.yaml"
     
   - id: "CONV-002"
     date: "YYYY-MM-DD"
