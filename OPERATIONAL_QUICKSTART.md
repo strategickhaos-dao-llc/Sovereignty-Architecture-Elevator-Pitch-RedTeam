@@ -123,7 +123,7 @@ docker images > images_${TIMESTAMP}.txt
 docker network ls > networks_${TIMESTAMP}.txt
 
 # Create summary report
-cat > infrastructure_summary_${TIMESTAMP}.md << 'EOF'
+cat > infrastructure_summary_${TIMESTAMP}.md << EOF
 # Infrastructure Summary Report
 
 **Generated:** $(date)
@@ -287,8 +287,12 @@ df -h
 # Check Docker disk usage
 docker system df
 
-# Clean up unused resources (be careful!)
-docker system prune -a --volumes
+# Clean up unused resources (DANGER: This removes ALL unused data including volumes!)
+# Safer option: Remove only containers and images (preserves volumes)
+docker system prune -a
+
+# If you REALLY need to remove volumes too (WILL DELETE DATA):
+# docker system prune -a --volumes
 
 # Remove specific unused volumes
 docker volume prune
@@ -464,9 +468,9 @@ docker-compose down
 EMERGENCY_BACKUP="/tmp/emergency_backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$EMERGENCY_BACKUP"
 
-# Backup all volumes
+# Backup all volumes (safely handle volume names with spaces/special chars)
 for volume in $(docker volume ls -q); do
-    docker run --rm -v $volume:/data -v $EMERGENCY_BACKUP:/backup alpine tar czf /backup/$volume.tar.gz /data
+    docker run --rm -v "$volume":/data -v "$EMERGENCY_BACKUP":/backup alpine tar czf /backup/"$volume".tar.gz /data
 done
 
 echo "Emergency backup complete: $EMERGENCY_BACKUP"
@@ -536,5 +540,5 @@ Already set up in your infrastructure!
 ---
 
 *Quick Start Guide version: 1.0*  
-*Last updated: 2025-11-22*  
+*Created: November 2025*  
 *Status: ✅ READY FOR USE*

@@ -193,6 +193,13 @@ sovereignty-architecture-elevator-pitch-prometheus_data
 | PostgreSQL RDS | $50-200/month | Self-hosted |
 | **TOTAL** | **$1,372-2,722/month** | **$920/month** |
 
+**Pricing assumptions:**
+- *EKS:* Standard control plane fee
+- *EC2:* 4× m5.4xlarge equivalent instances (16 vCPU, 64GB RAM each)
+- *Storage:* 500GB EBS + 200GB S3 with standard retrieval
+- *Data transfer:* Moderate inter-AZ and internet egress
+- *Self-hosted costs:* Internet ($200/mo) + electricity ($500/mo estimated) + hardware amortization ($220/mo over 3 years)
+
 ### Your Costs:
 - **Internet (Multi-WAN):** ~$200/month
 - **Electricity:** ~$500/month (estimate for 4 nodes + GPUs)
@@ -650,5 +657,5 @@ docker system df -v
 ---
 
 *Document version: 1.0*  
-*Last updated: 2025-11-22*  
+*Created: November 2025*  
 *System status: ✅ OPERATIONAL*
