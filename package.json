@@ -4,10 +4,15 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/event-gateway.ts",
+    "dev:gitlens": "tsx watch src/gitlens-aggregator.ts",
+    "dev:mindos": "tsx watch src/mindos-orchestrator.ts",
     "bot": "tsx watch src/bot.ts",
     "start": "node --enable-source-maps dist/event-gateway.js",
+    "start:gitlens": "node --enable-source-maps dist/gitlens-aggregator.js",
+    "start:mindos": "node --enable-source-maps dist/mindos-orchestrator.js",
     "build": "tsc -p tsconfig.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:system": "./test-gitlens-mindos.sh"
   },
   "dependencies": {
     "@octokit/webhooks": "^13.3.0",
