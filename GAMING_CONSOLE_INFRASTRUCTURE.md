@@ -73,8 +73,8 @@ Each console is deployed as part of a StatefulSet with:
 - **Service Name**: `ps5-console-{1-4}`
 - **Port**: 9987 (TCP/UDP)
 - **Resources**:
-  - CPU: 2 cores (request), 8 cores (limit)
-  - Memory: 4Gi (request), 16Gi (limit)
+  - CPU: 1 core (request), 4 cores (limit)
+  - Memory: 2Gi (request), 4Gi (limit)
   - Storage: 100Gi persistent volume
 
 ### Network Configuration

@@ -133,7 +133,7 @@ if grep -q "scholarly-resources.txt" bootstrap/k8s/playstation-remote-play-deplo
     check_pass "Scholarly resources ConfigMap defined"
     
     # Count number of resources (should be 36)
-    RESOURCE_COUNT=$(grep -c "^    [0-9]\+\." bootstrap/k8s/playstation-remote-play-deployment.yaml || echo "0")
+    RESOURCE_COUNT=$(grep -E -c "^    [0-9]+\." bootstrap/k8s/playstation-remote-play-deployment.yaml || echo "0")
     if [ "$RESOURCE_COUNT" -ge 36 ]; then
         check_pass "  36+ web resources documented"
     else
