@@ -28,7 +28,10 @@ MENU = {
 
 def clear_screen():
     """Clear the terminal screen"""
-    os.system("cls" if os.name == "nt" else "clear")
+    if os.name == "nt":
+        subprocess.run(["cmd", "/c", "cls"], check=False)
+    else:
+        subprocess.run(["clear"], check=False)
 
 def print_header():
     """Print the main header"""
@@ -44,8 +47,17 @@ def print_menu():
     print("\nq. Quit")
     print()
 
+def is_valid_menu_command(cmd: str) -> bool:
+    """Validate that command comes from MENU dictionary"""
+    return any(cmd == menu_cmd for _, menu_cmd in MENU.values())
+
 def execute_command(cmd: str, description: str):
     """Execute a command or open a URL"""
+    # Security: Validate command comes from predefined MENU
+    if not is_valid_menu_command(cmd):
+        print(f"❌ Security error: Command not from predefined menu")
+        return
+    
     # Detect if this is a URL or special protocol
     is_url = cmd.startswith("http://") or cmd.startswith("https://") or cmd.startswith("obsidian://")
     
@@ -59,18 +71,18 @@ def execute_command(cmd: str, description: str):
     if is_url:
         # Handle URLs and special protocols
         if os.name == "nt":
-            # Windows - use 'start' command via shell
-            subprocess.run(f"start {cmd}", shell=True)
+            # Windows - use safer command list approach
+            subprocess.run(["cmd", "/c", "start", "", cmd], check=False)
         elif sys.platform == "darwin":
             # macOS - use 'open' command with list to avoid shell injection
-            subprocess.run(["open", cmd])
+            subprocess.run(["open", cmd], check=False)
         else:
             # Linux/Unix - use 'xdg-open' command with list to avoid shell injection
-            subprocess.run(["xdg-open", cmd])
+            subprocess.run(["xdg-open", cmd], check=False)
         print(f"✅ Opened in default application: {description}")
     else:
         # Execute shell command
-        # Note: Commands are predefined in MENU dictionary, not user input
+        # Note: Commands are validated against MENU dictionary above
         print(f"🚀 Executing: {cmd}")
         try:
             subprocess.run(cmd, shell=True, check=False)
