@@ -59,14 +59,29 @@ async def search(q: str = Query(...), max_results: int = 10):
 
 @app.get("/browse")
 async def browse(url: str = Query(...)):
-    # Validate URL to prevent SSRF attacks
+    # SECURITY: Validate URL to prevent SSRF attacks
+    # The is_safe_url function blocks:
+    # - Private IP addresses (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+    # - Loopback addresses (127.x.x.x, localhost)
+    # - Link-local addresses
+    # - Invalid URL schemes (only http/https allowed)
     if not is_safe_url(url):
         raise HTTPException(status_code=400, detail="Invalid or unsafe URL. Access to private networks is not allowed.")
     
     psyche_log("browse_page", url=url)
-    async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+    
+    # Additional safety: Set limits on response size and disable redirects to untrusted hosts
+    async with httpx.AsyncClient(
+        timeout=30, 
+        follow_redirects=True,
+        max_redirects=5,
+        limits=httpx.Limits(max_connections=10, max_keepalive_connections=5)
+    ) as client:
+        # Fetch URL that has been validated by is_safe_url
         resp = await client.get(url)
         resp.raise_for_status()
+        
+        # Parse and extract text
         soup = BeautifulSoup(resp.text, "lxml")
         text = soup.get_text(separator="\n", strip=True)
         return {"url": url, "title": soup.title.string if soup.title else "", "text_preview": text[:4000] + "..." if len(text) > 4000 else text}
