@@ -71,6 +71,26 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🌐 VPN Swarm LLM Management (`swarm_llm_manager`)
+- **Auto IP Detection**: Automatically detects VPN public IP
+- **Port Management**: Validates and tracks Proton VPN forwarded ports
+- **Multi-Machine**: Manages distributed LLM endpoints (Ollama, search nodes)
+- **Minimal Config**: 95% automatic, only port entry needed per session
+- **Status Dashboard**: View all swarm machines and their endpoints
+
+```powershell
+# Update current machine's VPN endpoint
+.\swarm_llm_manager.ps1 update
+
+# View all machines in the swarm
+.\swarm_llm_manager.ps1 status
+
+# Get help
+.\swarm_llm_manager.ps1 help
+```
+
+See [VPN_SWARM_SETUP.md](VPN_SWARM_SETUP.md) for complete setup guide.
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
