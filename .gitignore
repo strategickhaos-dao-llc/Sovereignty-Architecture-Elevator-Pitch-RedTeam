@@ -35,3 +35,71 @@ target/
 
 # Workspace data
 workspace/
+
+# ========================================
+# API Keys & Secrets Security
+# ========================================
+# CRITICAL: Never commit API keys or secrets
+# xAI / Grok API keys
+xai-*
+*xai-key*
+*grok*key*
+
+# Environment files with real credentials
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+
+# API key files (any format)
+api_key*
+*api*key*
+*apikey*
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Secret management files
+secrets/
+secret/
+.secrets/
+*secret*.json
+*secret*.yaml
+*secret*.yml
+*credentials*.json
+
+# Password and token files
+*password*
+*token*.txt
+*bearer*.txt
+
+# Screenshots that might contain sensitive data
+screenshots/
+*screenshot*
+*.png
+*.jpg
+*.jpeg
+*.gif
+# Exception: Allow specific documented images
+!docs/*.png
+!docs/*.jpg
+!assets/*.png
+!assets/*.jpg
+
+# Bitwarden/1Password exports
+*export*.csv
+*vault*export*
+
+# Cloud provider credentials
+.aws/
+.azure/
+.gcloud/
+*credentials*
+
+# SSH keys
+*.pub
+id_rsa*
+id_ed25519*
+id_ecdsa*
