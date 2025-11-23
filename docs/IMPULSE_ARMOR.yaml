@@ -41,7 +41,7 @@ hobbies:
       - "Kali Linux"
       - "Wireshark"
       - "Burp Suite (beginner)"
-      - "Custom Python/Powershell scripts"
+      - "Custom Python/PowerShell scripts"
     status: "ongoing"
 
   - name: "Game analytics / ModernWarfareAnalytics"
