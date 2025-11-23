@@ -6,6 +6,10 @@ This guide provides comprehensive step-by-step instructions for filing a provisi
 
 ---
 
+**DISCLAIMER:** This guide is for educational and informational purposes only and does not constitute legal advice. Patent law is complex, and while this guide aims to help you understand the provisional patent process, it is not a substitute for professional legal counsel. For specific legal advice regarding your invention, consult a licensed patent attorney or agent. USPTO fees and procedures are subject to change - always verify current information at uspto.gov.
+
+---
+
 ## 🎯 Overview: You Already ARE an Inventor
 
 If you're building, creating, and innovating — you're already an inventor. This guide helps you become a **legally recognized inventor** with your name officially on a USPTO patent application.
@@ -36,6 +40,8 @@ A provisional patent application:
 #### **Costs (Micro-Entity Qualification)**
 
 * **Filing Fee: $65**
+
+**Note:** USPTO fees are subject to change. Verify current fees at: https://www.uspto.gov/learning-and-resources/fees-and-payment/uspto-fee-schedule
 
 You qualify as a micro-entity if:
 - You're a student, OR
@@ -90,6 +96,8 @@ This is the **full, examined patent** that provides 20 years of protection.
 * **Examination Fee:** $176
 * **Total: ~$400**
 
+**Note:** USPTO fees are subject to change. Verify current fees at: https://www.uspto.gov/learning-and-resources/fees-and-payment/uspto-fee-schedule
+
 #### **What You Get**
 
 * Full USPTO examination
@@ -124,6 +132,8 @@ For **visual designs** of devices, interfaces, user experiences, or hardware lay
 * **Search Fee:** $60
 * **Examination Fee:** $140
 * **Total: ~$260**
+
+**Note:** USPTO fees are subject to change. Verify current fees at: https://www.uspto.gov/learning-and-resources/fees-and-payment/uspto-fee-schedule
 
 #### **What Qualifies**
 

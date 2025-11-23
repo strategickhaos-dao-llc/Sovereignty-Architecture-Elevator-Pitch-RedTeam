@@ -2,6 +2,8 @@
 
 **Use this template to draft your provisional patent application.**
 
+**DISCLAIMER:** This template is provided for educational purposes to help you structure a provisional patent application. It does not constitute legal advice. While provisional patent applications can be filed by inventors without an attorney, consider consulting a licensed patent attorney or agent for specific guidance on your invention. Always verify current USPTO requirements and fees at uspto.gov before filing.
+
 ---
 
 ## COVER SHEET
