@@ -35,3 +35,18 @@ target/
 
 # Workspace data
 workspace/
+
+# Nonprofit artifacts (generated data)
+nonprofit_final_artifacts/.donor_salt
+nonprofit_final_artifacts/donor_registry.json
+nonprofit_final_artifacts/donors/*.json
+nonprofit_final_artifacts/donors/*.asc
+nonprofit_final_artifacts/minutes/*.md
+nonprofit_final_artifacts/irs_packages/*.json
+nonprofit_final_artifacts/irs_packages/*.md
+nonprofit_final_artifacts/irs_packages/*.pdf
+nonprofit_final_artifacts/irs_packages/*.asc
+nonprofit_final_artifacts/court_defense/*.md
+nonprofit_final_artifacts/court_defense/*.asc
+nonprofit_final_artifacts/seals/*.json
+nonprofit_final_artifacts/seals/*.asc
