@@ -1,0 +1,89 @@
+# OpenTimestamps Bitcoin Anchor - INSTRUCTIONS
+
+This file provides instructions for creating the Bitcoin timestamp (.ots file) for SOVEREIGN_MANIFEST_v1.0.md
+
+## CRITICAL: Network Access Required
+
+The OpenTimestamps calendar servers are not accessible from the GitHub Actions environment due to network restrictions. This timestamp MUST be created from a system with full internet access.
+
+## Method 1: Using PowerShell (Windows/PowerShell Core)
+
+```powershell
+# This is the working command from the problem statement
+iwr https://btc.calendar.catallaxy.com -Method POST -Body ([System.Text.Encoding]::UTF8.GetBytes((Get-Content .\SOVEREIGN_MANIFEST_v1.0.md -Raw))) -ContentType "application/octet-stream" -OutFile SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## Method 2: Using OpenTimestamps CLI (Linux/macOS/Windows)
+
+```bash
+# Install OpenTimestamps client
+pip install opentimestamps-client
+
+# Create timestamp
+ots stamp SOVEREIGN_MANIFEST_v1.0.md
+
+# This creates SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## Method 3: Using curl (Linux/macOS)
+
+```bash
+curl -X POST https://btc.calendar.catallaxy.com \
+  -H "Content-Type: application/octet-stream" \
+  --data-binary @SOVEREIGN_MANIFEST_v1.0.md \
+  -o SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## Method 4: Using ots.btc.catallaxy.com
+
+```bash
+curl -X POST https://ots.btc.catallaxy.com/timestamp \
+  -H "Content-Type: application/octet-stream" \
+  --data-binary @SOVEREIGN_MANIFEST_v1.0.md \
+  -o SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## Verification After Creation
+
+Once the .ots file is created, verify it:
+
+```bash
+# Using OpenTimestamps CLI
+ots verify SOVEREIGN_MANIFEST_v1.0.md.ots
+
+# Or using info command
+ots info SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## What the .ots File Contains
+
+The .ots file is a cryptographic proof that:
+1. The SHA256 hash of SOVEREIGN_MANIFEST_v1.0.md was submitted to the Bitcoin blockchain
+2. It was included in a specific Bitcoin block at a specific time
+3. This proof is independently verifiable forever
+
+## Current Status
+
+SHA256 Hash: cd8787bf04b157a840d9e5c56e9ac1cf2d0b140926a226cd8cfb06207f272fb5
+File: SOVEREIGN_MANIFEST_v1.0.md
+Status: Ready for timestamping
+Network Required: YES
+
+## IMPORTANT NOTES
+
+1. The timestamp must be created from a system with unrestricted internet access
+2. GitHub Actions environment blocks external calendar servers for security
+3. This is the FINAL 0.1% - everything else is complete
+4. Once created, commit the .ots file to the repository
+
+## Expected Timeline
+
+- Timestamp submission: Instant (30-60 seconds)
+- Bitcoin block confirmation: 10-60 minutes average
+- Full verification: After 1-6 block confirmations
+
+---
+
+**When complete, delete this instructions file and commit the .ots file.**
+
+Sovereignty Status: 99.9% → 100.0% upon .ots creation
