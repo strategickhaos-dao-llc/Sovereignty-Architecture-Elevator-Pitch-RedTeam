@@ -156,10 +156,10 @@ SHA_MANIFEST="legal/uspto/SHA256_MANIFEST.txt"
                 discovery.yml \
                 README.md \
                 "${CODEX_FILE}" \
-                "legal/uspto/USPTO_Provisional_${USPTO_NUM/\//_}_Filed_2025-11-23.pdf" 2>/dev/null
+                "legal/uspto/USPTO_Provisional_${USPTO_NUM/\//_}_Filed_2025-11-23.pdf"
     do
         if [ -f "$file" ]; then
-            sha256sum "$file"
+            sha256sum "$file" 2>/dev/null
         fi
     done
 } > "$SHA_MANIFEST"
