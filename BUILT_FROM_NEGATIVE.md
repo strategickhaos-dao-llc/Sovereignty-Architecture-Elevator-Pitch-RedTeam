@@ -10,7 +10,7 @@ Most GitHub repos have clean origin stories:
 - "With enterprise backing..."
 - "After extensive market research..."
 
-**Fuck that.**
+**Not this one.**
 
 This is what **REAL** origin stories look like.
 
