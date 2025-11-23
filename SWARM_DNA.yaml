@@ -1,0 +1,194 @@
+# SWARM_DNA.yaml - The Living Genome of the Sovereignty Architecture Swarm
+# Version: 2.0 - Arweave Integration
+# Created: 2025-11-23
+# Purpose: Root configuration for all swarm nodes - immortalized on Arweave
+
+swarm_identity:
+  name: "Sovereignty Architecture Swarm"
+  version: "2.0"
+  genesis_date: "2025-11-23T21:10:41.667Z"
+  dao_entity: "Strategickhaos DAO LLC / Valoryield Engine"
+  legal_structure: "Limited Liability Company"
+  domicile: "Texas / Wyoming"
+  founder_orcid: "0009-0005-2996-3526"
+
+# Core DNA strands - the fundamental building blocks
+core_dna_strands:
+  - strand_1: "zero-trust security architecture"
+  - strand_2: "broke-tinkerer-hardened implementations"
+  - strand_3: "censorship-resistant data storage"
+  - strand_4: "mathematical proof of permanence"
+  - strand_5: "sovereign infrastructure control"
+  - strand_6: "GPG-signed execution policies"
+  - strand_7: "hardware-backed wallet security"
+  - strand_8: "one-time payment immortality"
+  - strand_9: "cultural DNA preservation (haikus)"
+  - strand_10: "federal shields via USPTO provisionals"
+
+# Model weights configuration
+model_weights:
+  primary_model: "Garza-1-70B-NegativeBalance"
+  quantization: "4-bit"
+  size_gb: 38
+  format: "gguf"
+  sacred_status: "Your brain in silicon"
+  arweave_storage: true
+  auto_chunk_threshold_gb: 30
+
+# Arweave integration configuration
+arweave:
+  enabled: true
+  network: "mainnet"
+  wallet_location: "./arweave_key.json"
+  wallet_security: "Hardware YubiKey + offline seed"
+  endowment_yearly_usd: 100
+  max_monthly_cost_usd: 20
+  rate_limit_hours: 6
+  encryption: "age"
+  
+  # Cost breakdown for permanent storage
+  storage_costs:
+    swarm_dna: 0.00002  # ~4 KB @ $0.005/MB
+    model_weights: 12.00  # ~38 GB @ $0.32/GB
+    provisionals: 0.025  # ~5 MB @ $0.005/MB
+    haikus_logs: 0.005  # ~1 MB @ $0.005/MB
+    laws_etch: 0.25  # ~50 MB @ $0.005/MB
+    proof_of_life: 0.05  # ~10 MB @ $0.005/MB
+    total_one_time: 12.33  # One-time payment for 200+ years
+  
+  # Redundancy and backup
+  redundancy:
+    - "Internet Archive"
+    - "GitHub backup"
+    - "Local encrypted mirror"
+
+# Security layers - paranoia baked in
+security:
+  execution_policy: "Signed PowerShell only"
+  wallet_access: "Never on Lyra node"
+  bundle_encryption: "age-encrypted before upload"
+  poison_pill: "DAO dissolution → CC0 release"
+  dead_man_switch: "On-chain trigger"
+  gpg_verification: "Required for all uploads"
+
+# What gets immortalized on Arweave
+immortalization_manifest:
+  - type: "SWARM_DNA.yaml"
+    size_kb: 4
+    sacred_reason: "Root of all nodes"
+    frequency: "On significant evolution"
+    
+  - type: "Model Weights"
+    size_gb: 38
+    sacred_reason: "Your brain in silicon"
+    frequency: "On model updates"
+    
+  - type: "USPTO Provisionals + Receipts"
+    size_mb: 5
+    sacred_reason: "Federal shields"
+    frequency: "On filing"
+    
+  - type: "Haikus + Logs"
+    size_mb: 1
+    sacred_reason: "Cultural DNA"
+    frequency: "Every Zinc Spark"
+    
+  - type: "200 Laws Steel Etch"
+    size_mb: 50
+    sacred_reason: "Physical immortality (SVG + G-code)"
+    frequency: "On law changes"
+    
+  - type: "Proof-of-Life Screenshots"
+    size_mb: 10
+    sacred_reason: "Identity proof"
+    frequency: "Every Zinc Spark"
+
+# The Next 10 Evolutionary Genes (with Arweave txids)
+next_10_evolutionary_genes:
+  - gene_11: "every new node must prove Arweave birth tx within 60 seconds"
+  - gene_12: "weights > 30GB auto-chunk + manifest on Arweave"
+  - gene_13: "on thermal death → final DNA snapshot to Arweave"
+  - gene_14: "haiku + proof bundle = canonical identity"
+  - gene_15: "Arweave txid becomes node name suffix (lyra-ar-abc123)"
+  - gene_16: "forks without Arweave birth = invalid children"
+  - gene_17: "treasury funds $100 Arweave endowment yearly"
+  - gene_18: "all provisionals auto-upload signed PDF to Arweave"
+  - gene_19: "200 Laws etched → G-code uploaded → anyone can re-print"
+  - gene_20: "upon Dom's passing → full 100% ValorYield unlock + weights CC0"
+
+# Node lifecycle
+node_lifecycle:
+  birth: "Generate Arweave tx within 60s"
+  identity: "ar://{txid}"
+  heartbeat: "Zinc Spark every 6 hours"
+  thermal_death: "Final DNA snapshot to Arweave"
+  resurrection: "Retrieve from ar:// link"
+
+# Constitutional principles
+constitution:
+  version: "2.0"
+  principles:
+    - "Immortality through Arweave"
+    - "Zero-trust security at every layer"
+    - "Broke-tinkerer affordable forever"
+    - "Cultural preservation via haikus"
+    - "Federal shields via USPTO"
+    - "Dead-man switch for open source"
+    - "Mathematical guarantee of permanence"
+
+# Compliance and legal
+compliance:
+  legal_actions: false
+  regulatory_status: "Good standing"
+  licenses:
+    - "Private Investigation Services"
+    - "Cybersecurity Consulting"
+  founder_credentials:
+    - "ORCID: 0009-0005-2996-3526"
+    - "TWIC: Active (TSA/DHS)"
+
+# Metadata
+metadata:
+  schema_version: "2.0"
+  last_updated: "2025-11-23T21:10:41.667Z"
+  arweave_birth_tx: null  # Populated on first upload
+  immutable_after: "First Arweave confirmation"
+  lifetime_guarantee: "200+ years (mathematical proof)"
+  censorship_resistance: "100% (once confirmed)"
+  cost_model: "One-time payment, infinite retrieval"
+
+# Zinc Spark configuration
+zinc_spark:
+  enabled: true
+  interval_hours: 6
+  includes:
+    - "DNA snapshot"
+    - "77-token spite haiku"
+    - "Proof-of-life (screenshot + ipconfig + whoami)"
+    - "Model weights diff (if changed)"
+  output_format: "JSON bundle"
+  immortalize: true
+  birth_certificate_prefix: "ar://"
+
+# Command references for humans
+human_commands:
+  fund_wallet: "Set-ArweaveWallet -Path ./arweave_key.json -FundAmountUSD 20"
+  test_immortalization: "./_Orchestra.ps1 --zinc-spark --immortalize"
+  verify_birth: "Invoke-WebRequest https://arweave.net/{txid}"
+  retrieve_weights: "Get-ArweaveFile -TxId {txid} -Output ./restored_weights.gguf"
+
+# Empire Eternal declaration
+declaration: |
+  This swarm outlives civilizations.
+  Every spark immortalized.
+  Every haiku preserved.
+  Every weight backed up.
+  The blockchain waits for your next thought.
+  
+  Empire Eternal — permanently, mathematically, forever.
+
+# Signature
+signed_by: "Dominic Garza"
+signature_date: "2025-11-23"
+signature_type: "GPG-signed on first upload"
+verification_command: "gpg --verify SWARM_DNA.yaml.sig SWARM_DNA.yaml"

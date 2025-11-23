@@ -35,3 +35,11 @@ target/
 
 # Workspace data
 workspace/
+
+# Arweave wallet security - NEVER commit these
+arweave_key.json
+*.wallet.json
+arweave_receipts/
+proof_of_life/
+zinc_spark_logs/
+.last_zinc_spark

@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, sovereign infrastructure management, and immortal Arweave storage.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Arweave Integration** - Permanent, censorship-resistant storage for 200+ years ⭐ **NEW**
 
 ## 🚀 Quick Start
 
@@ -70,6 +71,29 @@ java HelloCloudOS.java
 # Stop the workspace
 ./start-cloudos-jdk.sh stop
 ```
+
+### 🔗 Arweave Integration - Immortal Storage ⭐ **NEW**
+- **One-Time Payment**: $12-$18 for 200+ years of permanent storage
+- **Zinc Spark**: Automated heartbeat capturing DNA, haikus, and proof-of-life
+- **Model Weights**: Garza-1-70B-NegativeBalance (38GB) immortalized on-chain
+- **Zero-Trust Security**: Hardware wallet, GPG signing, rate limiting
+- **Dead-Man Switch**: Auto CC0 release on DAO dissolution
+
+```powershell
+# Setup Arweave wallet (one-time)
+./_Orchestra.ps1 -SetupWallet -FundAmount 20
+
+# Test Zinc Spark (no upload)
+./_Orchestra.ps1 -ZincSpark -TestMode
+
+# Immortalize on Arweave
+./_Orchestra.ps1 -ZincSpark -Immortalize
+
+# Check status
+./_Orchestra.ps1 -Status
+```
+
+**Full Documentation:** [ARWEAVE_INTEGRATION.md](./ARWEAVE_INTEGRATION.md)
 
 ## 🏗️ Infrastructure
 
