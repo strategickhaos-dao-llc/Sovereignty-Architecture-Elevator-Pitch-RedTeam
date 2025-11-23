@@ -1,5 +1,7 @@
 # Academic Recovery Protocol Template
 
+INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
 > **Template for high-stakes academic communication scenarios**
 
 ---
