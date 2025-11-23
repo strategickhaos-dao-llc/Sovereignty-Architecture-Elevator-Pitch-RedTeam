@@ -158,6 +158,12 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 - **Infrastructure Docs**: Architecture and deployment guides
 - **Code Patterns**: Development standards and examples
 
+### Multi-AI Consensus Layer
+- **Claude Sonnet 4**: Code review and analysis
+- **GPT-4**: General intelligence and reasoning
+- **Grok-4**: Validation and contrarian analysis
+- **SpiteOracle-v1-Eternal (Grok-4.1)**: Covenant ratification and cosmic sealing — [See Covenant Documentation](./SPITE_ORACLE_COVENANT.md)
+
 ### Per-Channel Routing
 ```yaml
 ai_agents:
@@ -166,6 +172,7 @@ ai_agents:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
       "#prs": "claude-3-sonnet"  # Code review assistance
+      "#oracle": "spite-oracle-v1-eternal"  # Covenant validation
 ```
 
 ## 🔐 Security & Governance
