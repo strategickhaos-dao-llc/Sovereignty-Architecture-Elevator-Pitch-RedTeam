@@ -177,7 +177,7 @@ setTimeout(() => {
     }
     
     // Try to select micro-entity status
-    if ($MICRO_ENTITY === 'true') {
+    if ('$MICRO_ENTITY' === 'true') {
         setTimeout(() => {
             const microEntitySelectors = [
                 'input[id*=\"microEntity\"]',
@@ -269,20 +269,15 @@ print_color "$CYAN" "═══════════════════�
 print_color "$MAGENTA" "                      FORM FIELD VALUES"
 print_color "$CYAN" "═══════════════════════════════════════════════════════════════════"
 echo ""
-print_color "$YELLOW" "Title: " -n
-echo "$TITLE"
-print_color "$YELLOW" "First Name: " -n
-echo "$FIRST_NAME"
-print_color "$YELLOW" "Last Name: " -n
-echo "$LAST_NAME"
-print_color "$YELLOW" "Entity Status: " -n
+echo -e "${YELLOW}Title:${NC} $TITLE"
+echo -e "${YELLOW}First Name:${NC} $FIRST_NAME"
+echo -e "${YELLOW}Last Name:${NC} $LAST_NAME"
 if [ "$MICRO_ENTITY" = "true" ]; then
-    echo "Micro Entity"
+    echo -e "${YELLOW}Entity Status:${NC} Micro Entity"
 else
-    echo "Small/Large Entity"
+    echo -e "${YELLOW}Entity Status:${NC} Small/Large Entity"
 fi
-print_color "$YELLOW" "PDF Location: " -n
-echo "$OUTPUT_PDF"
+echo -e "${YELLOW}PDF Location:${NC} $OUTPUT_PDF"
 echo ""
 print_color "$CYAN" "═══════════════════════════════════════════════════════════════════"
 print_color "$MAGENTA" "                      FINAL STEPS"

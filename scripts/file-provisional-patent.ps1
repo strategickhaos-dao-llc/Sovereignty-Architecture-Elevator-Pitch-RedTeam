@@ -222,7 +222,7 @@ setTimeout(() => {
     }
     
     // Try to select micro-entity status (if enabled)
-    if ($($MicroEntity.ToString().ToLower())) {
+    if ('$($MicroEntity.ToString().ToLower())' === 'true') {
         setTimeout(() => {
             const microEntitySelectors = [
                 'input[id*="microEntity"]',
@@ -295,15 +295,15 @@ Write-ColorOutput "════════════════════�
 Write-ColorOutput "                      FORM FIELD VALUES" "Magenta"
 Write-ColorOutput "═══════════════════════════════════════════════════════════════════" "Cyan"
 Write-Host ""
-Write-ColorOutput "Title: " "Yellow" -NoNewline
+Write-Host "Title: " -ForegroundColor Yellow -NoNewline
 Write-Host $Title
-Write-ColorOutput "First Name: " "Yellow" -NoNewline
+Write-Host "First Name: " -ForegroundColor Yellow -NoNewline
 Write-Host $FirstName
-Write-ColorOutput "Last Name: " "Yellow" -NoNewline
+Write-Host "Last Name: " -ForegroundColor Yellow -NoNewline
 Write-Host $LastName
-Write-ColorOutput "Entity Status: " "Yellow" -NoNewline
+Write-Host "Entity Status: " -ForegroundColor Yellow -NoNewline
 Write-Host $(if ($MicroEntity) { "Micro Entity" } else { "Small/Large Entity" })
-Write-ColorOutput "PDF Location: " "Yellow" -NoNewline
+Write-Host "PDF Location: " -ForegroundColor Yellow -NoNewline
 Write-Host $OutputPdf
 Write-Host ""
 Write-ColorOutput "═══════════════════════════════════════════════════════════════════" "Cyan"
