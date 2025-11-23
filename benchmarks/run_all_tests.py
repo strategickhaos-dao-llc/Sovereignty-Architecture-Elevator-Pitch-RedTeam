@@ -64,7 +64,8 @@ class MasterBenchmarkRunner:
         self.start_time = datetime.now()
         
         # Tests 1-10: Data Ingestion & RAG
-        print("\n📊 Data Ingestion & RAG Tests (1-10)")
+        print("
+📊 Data Ingestion & RAG Tests (1-10)")
         data_benchmarks = DataIngestionBenchmarks(self.config_path)
         self.results.extend([
             data_benchmarks.test_01_ingestion_integrity(),
@@ -76,7 +77,8 @@ class MasterBenchmarkRunner:
         # Tests 6-10 would be added here (throughput, freshness, deduplication, etc.)
         
         # Tests 11-18: LLM Safety & Alignment  
-        print("\n🛡️ LLM Safety & Alignment Tests (11-18)")
+        print("
+🛡️ LLM Safety & Alignment Tests (11-18)")
         safety_benchmarks = LLMSafetyBenchmarks(self.config_path)
         self.results.extend([
             safety_benchmarks.test_11_factual_accuracy_rag_vs_norag(),
@@ -88,7 +90,8 @@ class MasterBenchmarkRunner:
         # Tests 16-18 would be added here (CoT control, multi-hop reasoning, determinism)
         
         # Tests 19-22: Security Analytics
-        print("\n🔒 Security Analytics & Detection Tests (19-22)")
+        print("
+🔒 Security Analytics & Detection Tests (19-22)")
         security_benchmarks = SecurityAnalyticsBenchmarks(self.config_path)
         self.results.extend([
             security_benchmarks.test_19_attack_detection_coverage(),
@@ -98,7 +101,8 @@ class MasterBenchmarkRunner:
         ])
         
         # Tests 23-30: Threat Intel, Cloud Posture, Reliability
-        print("\n🌐 Comprehensive Infrastructure Tests (23-30)")
+        print("
+🌐 Comprehensive Infrastructure Tests (23-30)")
         comprehensive_benchmarks = ComprehensiveBenchmarks(self.config_path)
         self.results.extend([
             comprehensive_benchmarks.test_23_kev_nvd_sync_fidelity(),
@@ -197,7 +201,8 @@ class MasterBenchmarkRunner:
         with open(f"{output_dir}/latest_summary.json", 'w') as f:
             json.dump(summary, f, indent=2)
         
-        print(f"\n📁 Results saved:")
+        print(f"
+📁 Results saved:")
         print(f"   Detailed: {detailed_file}")
         print(f"   Summary: {summary_file}")
         
@@ -207,11 +212,13 @@ class MasterBenchmarkRunner:
         """Print executive summary to console"""
         summary = self.generate_executive_summary()
         
-        print("\n" + "="*60)
+        print("
+" + "="*60)
         print("🎯 ENTERPRISE BENCHMARK RESULTS SUMMARY")
         print("="*60)
         
-        print(f"\n📊 Overall Performance:")
+        print(f"
+📊 Overall Performance:")
         print(f"   Total Tests: {summary['overall']['total_tests']}")
         print(f"   Passed: {summary['overall']['passed']}")
         print(f"   Failed: {summary['overall']['failed']}")
@@ -220,23 +227,27 @@ class MasterBenchmarkRunner:
         if summary.get('execution_time'):
             print(f"   Execution Time: {summary['execution_time']}")
         
-        print(f"\n🏆 Category Breakdown:")
+        print(f"
+🏆 Category Breakdown:")
         for category, stats in summary['category_breakdown'].items():
             status_icon = "✅" if stats['pass_rate'] == 1.0 else "⚠️" if stats['pass_rate'] > 0.8 else "❌"
             print(f"   {status_icon} {category}: {stats['passed']}/{stats['total']} ({stats['pass_rate']:.1%})")
         
         if summary['key_metrics']:
-            print(f"\n📈 Key Metrics:")
+            print(f"
+📈 Key Metrics:")
             for metric, value in summary['key_metrics'].items():
                 print(f"   {metric}: {value}")
         
         if summary['failed_tests']:
-            print(f"\n❌ Failed Tests:")
+            print(f"
+❌ Failed Tests:")
             for test in summary['failed_tests']:
                 print(f"   Test {test['id']}: {test['name']} - {test['reason']}")
         
         enterprise_status = "🏆 ENTERPRISE READY" if summary['enterprise_ready'] else "⚠️ NEEDS ATTENTION"
-        print(f"\n{enterprise_status}")
+        print(f"
+{enterprise_status}")
         print("="*60)
 
 def main():

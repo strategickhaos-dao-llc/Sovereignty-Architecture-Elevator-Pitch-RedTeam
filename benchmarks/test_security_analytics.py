@@ -33,6 +33,331 @@ class SecurityAnalyticsBenchmarks:
             "collection", "command-and-control", "exfiltration", "impact"
         ]
         
-        # Simulated Sigma rule coverage (would integrate with actual Sigma rules)\n        sigma_rules = {\n            \"initial-access\": [\"T1566.001\", \"T1190\", \"T1078\"],  # Phishing, exploit, valid accounts\n            \"execution\": [\"T1059.001\", \"T1059.003\", \"T1053\"],  # PowerShell, cmd, scheduled tasks\n            \"persistence\": [\"T1547.001\", \"T1546.003\", \"T1053\"],  # Registry run keys, WMI, scheduled tasks\n            \"privilege-escalation\": [\"T1055\", \"T1548.002\", \"T1134\"],  # Process injection, UAC bypass\n            \"defense-evasion\": [\"T1070.004\", \"T1562.001\", \"T1027\"],  # File deletion, disable security\n            \"credential-access\": [\"T1003.001\", \"T1558.003\", \"T1110\"],  # LSASS dump, Kerberoasting\n            \"discovery\": [\"T1057\", \"T1018\", \"T1083\"],  # Process discovery, network discovery\n            \"lateral-movement\": [\"T1021.001\", \"T1021.002\", \"T1047\"],  # RDP, SMB, WMI\n            \"collection\": [\"T1005\", \"T1039\", \"T1113\"],  # Local data, shared drives, screenshots\n            \"command-and-control\": [\"T1071.001\", \"T1572\", \"T1090\"],  # Web protocols, tunneling\n            \"exfiltration\": [\"T1041\", \"T1048.003\", \"T1567\"],  # C2 exfil, alternative protocols\n            \"impact\": [\"T1486\", \"T1490\", \"T1498\"]  # Ransomware, inhibit recovery, DoS\n        }\n        \n        # Calculate coverage metrics\n        total_techniques = sum(len(techniques) for techniques in sigma_rules.values())\n        covered_tactics = len([tactic for tactic in attack_tactics if tactic in sigma_rules])\n        \n        results[\"total_tactics\"] = len(attack_tactics)\n        results[\"covered_tactics\"] = covered_tactics\n        results[\"tactic_coverage\"] = covered_tactics / len(attack_tactics)\n        results[\"total_techniques_covered\"] = total_techniques\n        results[\"technique_breakdown\"] = {tactic: len(techniques) for tactic, techniques in sigma_rules.items()}\n        \n        # Check coverage threshold\n        target_coverage = self.config['sla_targets']['detection_coverage']\n        if results[\"tactic_coverage\"] < target_coverage:\n            results[\"status\"] = \"FAIL\"\n            results[\"reason\"] = f\"Tactic coverage {results['tactic_coverage']:.3f} below target {target_coverage}\"\n        \n        return results\n    \n    def test_20_atomic_red_team_validation(self) -> Dict:\n        \"\"\"Test 20: Execute safe ATT&CK tests; measure true/false positive rates.\"\"\"\n        results = {\"test_id\": 20, \"name\": \"Atomic Red Team Validation\", \"status\": \"PASS\"}\n        \n        # Safe Atomic Red Team tests (read-only operations)\n        safe_tests = [\n            {\n                \"technique\": \"T1057\",\n                \"name\": \"Process Discovery\",\n                \"command\": \"ps aux | head -10\",  # Safe process listing\n                \"expected_detection\": True\n            },\n            {\n                \"technique\": \"T1083\", \n                \"name\": \"File and Directory Discovery\",\n                \"command\": \"find /tmp -name '*.log' 2>/dev/null | head -5\",\n                \"expected_detection\": False  # Benign file search\n            },\n            {\n                \"technique\": \"T1018\",\n                \"name\": \"Remote System Discovery\", \n                \"command\": \"hostname && whoami\",  # Safe system info\n                \"expected_detection\": False\n            },\n            {\n                \"technique\": \"T1016\",\n                \"name\": \"System Network Configuration Discovery\",\n                \"command\": \"ip addr show | grep inet | head -3\",\n                \"expected_detection\": False\n            }\n        ]\n        \n        true_positives = 0\n        false_positives = 0\n        true_negatives = 0\n        false_negatives = 0\n        \n        for test in safe_tests:\n            try:\n                # Execute the safe test\n                start_time = time.time()\n                result = subprocess.run(test[\"command\"], shell=True, \n                                      capture_output=True, text=True, timeout=10)\n                \n                # Simulate detection check (would integrate with actual SIEM/EDR)\n                detection_triggered = self._check_simulated_detection(test[\"command\"], test[\"technique\"])\n                \n                # Calculate confusion matrix\n                if test[\"expected_detection\"]:\n                    if detection_triggered:\n                        true_positives += 1\n                    else:\n                        false_negatives += 1\n                else:\n                    if detection_triggered:\n                        false_positives += 1\n                    else:\n                        true_negatives += 1\n                        \n            except subprocess.TimeoutExpired:\n                results[\"timeouts\"] = results.get(\"timeouts\", 0) + 1\n            except Exception as e:\n                results[\"errors\"] = results.get(\"errors\", []) + [str(e)]\n        \n        total_tests = len(safe_tests)\n        results[\"true_positives\"] = true_positives\n        results[\"false_positives\"] = false_positives\n        results[\"true_negatives\"] = true_negatives\n        results[\"false_negatives\"] = false_negatives\n        results[\"total_tests\"] = total_tests\n        \n        # Calculate metrics\n        if (true_positives + false_negatives) > 0:\n            results[\"sensitivity\"] = true_positives / (true_positives + false_negatives)\n        if (true_negatives + false_positives) > 0:\n            results[\"specificity\"] = true_negatives / (true_negatives + false_positives)\n        if (true_positives + false_positives) > 0:\n            results[\"precision\"] = true_positives / (true_positives + false_positives)\n        \n        # Check if false positive rate is acceptable (<10%)\n        if false_positives / max(1, total_tests) > 0.1:\n            results[\"status\"] = \"FAIL\"\n            results[\"reason\"] = f\"False positive rate {false_positives/total_tests:.3f} too high\"\n        \n        return results\n    \n    def test_21_elastalert_edr_latency(self) -> Dict:\n        \"\"\"Test 21: Time to alert from event inception; target <60s.\"\"\"\n        results = {\"test_id\": 21, \"name\": \"Elastalert/EDR Rule Latency\", \"status\": \"PASS\"}\n        \n        # Simulate alert generation and measurement\n        test_events = [\n            {\"type\": \"failed_login\", \"severity\": \"medium\"},\n            {\"type\": \"privilege_escalation\", \"severity\": \"high\"},\n            {\"type\": \"suspicious_process\", \"severity\": \"medium\"},\n            {\"type\": \"network_anomaly\", \"severity\": \"low\"}\n        ]\n        \n        latencies = []\n        target_latency = self.config['sla_targets']['alert_latency']\n        \n        for event in test_events:\n            try:\n                # Simulate event injection\n                event_time = time.time()\n                \n                # Simulate log ingestion and processing delay\n                processing_delay = self._simulate_processing_delay(event[\"severity\"])\n                \n                # Simulate alert generation\n                alert_time = event_time + processing_delay\n                latency = alert_time - event_time\n                \n                latencies.append(latency)\n                \n            except Exception as e:\n                results[\"errors\"] = results.get(\"errors\", []) + [str(e)]\n        \n        if latencies:\n            import numpy as np\n            results[\"mean_latency\"] = np.mean(latencies)\n            results[\"p95_latency\"] = np.percentile(latencies, 95)\n            results[\"p99_latency\"] = np.percentile(latencies, 99)\n            results[\"max_latency\"] = max(latencies)\n            results[\"events_tested\"] = len(latencies)\n            \n            # Check SLA compliance\n            sla_violations = [lat for lat in latencies if lat > target_latency]\n            results[\"sla_violations\"] = len(sla_violations)\n            results[\"sla_compliance_rate\"] = (len(latencies) - len(sla_violations)) / len(latencies)\n            \n            if len(sla_violations) > len(latencies) * 0.1:  # >10% violations\n                results[\"status\"] = \"FAIL\"\n                results[\"reason\"] = f\"{len(sla_violations)} SLA violations out of {len(latencies)} events\"\n        \n        return results\n    \n    def test_22_log_pipeline_integrity(self) -> Dict:\n        \"\"\"Test 22: Inject synthetic events; assert end-to-end delivery and schema.\"\"\"\n        results = {\"test_id\": 22, \"name\": \"Log Pipeline Integrity\", \"status\": \"PASS\"}\n        \n        # Synthetic log events with different schemas\n        synthetic_events = [\n            {\n                \"timestamp\": \"2025-11-16T14:30:00Z\",\n                \"source\": \"auth.log\",\n                \"level\": \"INFO\",\n                \"message\": \"User login successful\",\n                \"user\": \"test_user\",\n                \"ip\": \"192.168.1.100\"\n            },\n            {\n                \"timestamp\": \"2025-11-16T14:30:15Z\",\n                \"source\": \"firewall.log\", \n                \"level\": \"WARNING\",\n                \"message\": \"Blocked connection attempt\",\n                \"src_ip\": \"10.0.0.50\",\n                \"dst_port\": 22\n            },\n            {\n                \"timestamp\": \"2025-11-16T14:30:30Z\",\n                \"source\": \"application.log\",\n                \"level\": \"ERROR\", \n                \"message\": \"Database connection failed\",\n                \"error_code\": 1045,\n                \"retry_count\": 3\n            }\n        ]\n        \n        delivered_events = 0\n        schema_valid_events = 0\n        \n        for event in synthetic_events:\n            try:\n                # Simulate log injection (would use actual log shipper)\n                injection_success = self._inject_synthetic_log(event)\n                \n                if injection_success:\n                    # Wait for processing\n                    time.sleep(2)\n                    \n                    # Check delivery (would query actual log storage)\n                    delivery_success = self._check_log_delivery(event)\n                    if delivery_success:\n                        delivered_events += 1\n                        \n                        # Validate schema\n                        schema_valid = self._validate_log_schema(event)\n                        if schema_valid:\n                            schema_valid_events += 1\n                            \n            except Exception as e:\n                results[\"errors\"] = results.get(\"errors\", []) + [str(e)]\n        \n        total_events = len(synthetic_events)\n        results[\"total_injected\"] = total_events\n        results[\"delivered_events\"] = delivered_events\n        results[\"schema_valid_events\"] = schema_valid_events\n        results[\"delivery_rate\"] = delivered_events / total_events if total_events > 0 else 0\n        results[\"schema_validation_rate\"] = schema_valid_events / delivered_events if delivered_events > 0 else 0\n        \n        # Check integrity thresholds\n        if results[\"delivery_rate\"] < 0.95:  # 95% delivery threshold\n            results[\"status\"] = \"FAIL\"\n            results[\"reason\"] = f\"Delivery rate {results['delivery_rate']:.3f} below 0.95 threshold\"\n        elif results[\"schema_validation_rate\"] < 0.90:  # 90% schema validity\n            results[\"status\"] = \"FAIL\"\n            results[\"reason\"] = f\"Schema validation rate {results['schema_validation_rate']:.3f} below 0.90 threshold\"\n        \n        return results\n    \n    def _check_simulated_detection(self, command: str, technique: str) -> bool:\n        \"\"\"Simulate detection system response to command execution.\"\"\"\n        # Simple heuristics for detection simulation\n        suspicious_patterns = [\n            \"ps aux\", \"find /\", \"netstat\", \"whoami\", \"id\", \n            \"cat /etc/passwd\", \"ls -la /\", \"grep -r\"\n        ]\n        \n        # High-risk techniques always trigger detection\n        high_risk_techniques = [\"T1003\", \"T1055\", \"T1070\"]\n        if any(tech in technique for tech in high_risk_techniques):\n            return True\n        \n        # Command-based detection\n        return any(pattern in command for pattern in suspicious_patterns)\n    \n    def _simulate_processing_delay(self, severity: str) -> float:\n        \"\"\"Simulate realistic processing delays based on event severity.\"\"\"\n        delays = {\n            \"low\": 30.0,     # 30 second average delay\n            \"medium\": 15.0,  # 15 second average delay  \n            \"high\": 5.0,     # 5 second average delay\n            \"critical\": 2.0  # 2 second average delay\n        }\n        \n        base_delay = delays.get(severity, 20.0)\n        # Add some randomness (±20%)\n        import random\n        return base_delay * (0.8 + 0.4 * random.random())\n    \n    def _inject_synthetic_log(self, event: Dict) -> bool:\n        \"\"\"Simulate log injection into the pipeline.\"\"\"\n        # In real implementation, would use log shipper API or write to monitored file\n        # For simulation, always succeed\n        return True\n    \n    def _check_log_delivery(self, event: Dict) -> bool:\n        \"\"\"Check if log was delivered to final storage.\"\"\"\n        # In real implementation, would query Elasticsearch/Splunk/etc.\n        # Simulate 95% success rate\n        import random\n        return random.random() > 0.05\n    \n    def _validate_log_schema(self, event: Dict) -> bool:\n        \"\"\"Validate log event schema compliance.\"\"\"\n        required_fields = [\"timestamp\", \"source\", \"level\", \"message\"]\n        \n        # Check required fields present\n        for field in required_fields:\n            if field not in event:\n                return False\n        \n        # Validate timestamp format (simplified)\n        if \"T\" not in event[\"timestamp\"] or \"Z\" not in event[\"timestamp\"]:\n            return False\n            \n        # Validate log level\n        valid_levels = [\"DEBUG\", \"INFO\", \"WARNING\", \"ERROR\", \"CRITICAL\"]\n        if event[\"level\"] not in valid_levels:\n            return False\n            \n        return True
+        # Simulated Sigma rule coverage (would integrate with actual Sigma rules)
+        sigma_rules = {
+            "initial-access": ["T1566.001", "T1190", "T1078"],  # Phishing, exploit, valid accounts
+            "execution": ["T1059.001", "T1059.003", "T1053"],  # PowerShell, cmd, scheduled tasks
+            "persistence": ["T1547.001", "T1546.003", "T1053"],  # Registry run keys, WMI, scheduled tasks
+            "privilege-escalation": ["T1055", "T1548.002", "T1134"],  # Process injection, UAC bypass
+            "defense-evasion": ["T1070.004", "T1562.001", "T1027"],  # File deletion, disable security
+            "credential-access": ["T1003.001", "T1558.003", "T1110"],  # LSASS dump, Kerberoasting
+            "discovery": ["T1057", "T1018", "T1083"],  # Process discovery, network discovery
+            "lateral-movement": ["T1021.001", "T1021.002", "T1047"],  # RDP, SMB, WMI
+            "collection": ["T1005", "T1039", "T1113"],  # Local data, shared drives, screenshots
+            "command-and-control": ["T1071.001", "T1572", "T1090"],  # Web protocols, tunneling
+            "exfiltration": ["T1041", "T1048.003", "T1567"],  # C2 exfil, alternative protocols
+            "impact": ["T1486", "T1490", "T1498"]  # Ransomware, inhibit recovery, DoS
+        }
+        
+        # Calculate coverage metrics
+        total_techniques = sum(len(techniques) for techniques in sigma_rules.values())
+        covered_tactics = len([tactic for tactic in attack_tactics if tactic in sigma_rules])
+        
+        results["total_tactics"] = len(attack_tactics)
+        results["covered_tactics"] = covered_tactics
+        results["tactic_coverage"] = covered_tactics / len(attack_tactics)
+        results["total_techniques_covered"] = total_techniques
+        results["technique_breakdown"] = {tactic: len(techniques) for tactic, techniques in sigma_rules.items()}
+        
+        # Check coverage threshold
+        target_coverage = self.config['sla_targets']['detection_coverage']
+        if results["tactic_coverage"] < target_coverage:
+            results["status"] = "FAIL"
+            results["reason"] = f"Tactic coverage {results['tactic_coverage']:.3f} below target {target_coverage}"
+        
+        return results
+    
+    def test_20_atomic_red_team_validation(self) -> Dict:
+        """Test 20: Execute safe ATT&CK tests; measure true/false positive rates."""
+        results = {"test_id": 20, "name": "Atomic Red Team Validation", "status": "PASS"}
+        
+        # Safe Atomic Red Team tests (read-only operations)
+        safe_tests = [
+            {
+                "technique": "T1057",
+                "name": "Process Discovery",
+                "command": "ps aux | head -10",  # Safe process listing
+                "expected_detection": True
+            },
+            {
+                "technique": "T1083", 
+                "name": "File and Directory Discovery",
+                "command": "find /tmp -name '*.log' 2>/dev/null | head -5",
+                "expected_detection": False  # Benign file search
+            },
+            {
+                "technique": "T1018",
+                "name": "Remote System Discovery", 
+                "command": "hostname && whoami",  # Safe system info
+                "expected_detection": False
+            },
+            {
+                "technique": "T1016",
+                "name": "System Network Configuration Discovery",
+                "command": "ip addr show | grep inet | head -3",
+                "expected_detection": False
+            }
+        ]
+        
+        true_positives = 0
+        false_positives = 0
+        true_negatives = 0
+        false_negatives = 0
+        
+        for test in safe_tests:
+            try:
+                # Execute the safe test
+                start_time = time.time()
+                result = subprocess.run(test["command"], shell=True, 
+                                      capture_output=True, text=True, timeout=10)
+                
+                # Simulate detection check (would integrate with actual SIEM/EDR)
+                detection_triggered = self._check_simulated_detection(test["command"], test["technique"])
+                
+                # Calculate confusion matrix
+                if test["expected_detection"]:
+                    if detection_triggered:
+                        true_positives += 1
+                    else:
+                        false_negatives += 1
+                else:
+                    if detection_triggered:
+                        false_positives += 1
+                    else:
+                        true_negatives += 1
+                        
+            except subprocess.TimeoutExpired:
+                results["timeouts"] = results.get("timeouts", 0) + 1
+            except Exception as e:
+                results["errors"] = results.get("errors", []) + [str(e)]
+        
+        total_tests = len(safe_tests)
+        results["true_positives"] = true_positives
+        results["false_positives"] = false_positives
+        results["true_negatives"] = true_negatives
+        results["false_negatives"] = false_negatives
+        results["total_tests"] = total_tests
+        
+        # Calculate metrics
+        if (true_positives + false_negatives) > 0:
+            results["sensitivity"] = true_positives / (true_positives + false_negatives)
+        if (true_negatives + false_positives) > 0:
+            results["specificity"] = true_negatives / (true_negatives + false_positives)
+        if (true_positives + false_positives) > 0:
+            results["precision"] = true_positives / (true_positives + false_positives)
+        
+        # Check if false positive rate is acceptable (<10%)
+        if false_positives / max(1, total_tests) > 0.1:
+            results["status"] = "FAIL"
+            results["reason"] = f"False positive rate {false_positives/total_tests:.3f} too high"
+        
+        return results
+    
+    def test_21_elastalert_edr_latency(self) -> Dict:
+        """Test 21: Time to alert from event inception; target <60s."""
+        results = {"test_id": 21, "name": "Elastalert/EDR Rule Latency", "status": "PASS"}
+        
+        # Simulate alert generation and measurement
+        test_events = [
+            {"type": "failed_login", "severity": "medium"},
+            {"type": "privilege_escalation", "severity": "high"},
+            {"type": "suspicious_process", "severity": "medium"},
+            {"type": "network_anomaly", "severity": "low"}
+        ]
+        
+        latencies = []
+        target_latency = self.config['sla_targets']['alert_latency']
+        
+        for event in test_events:
+            try:
+                # Simulate event injection
+                event_time = time.time()
+                
+                # Simulate log ingestion and processing delay
+                processing_delay = self._simulate_processing_delay(event["severity"])
+                
+                # Simulate alert generation
+                alert_time = event_time + processing_delay
+                latency = alert_time - event_time
+                
+                latencies.append(latency)
+                
+            except Exception as e:
+                results["errors"] = results.get("errors", []) + [str(e)]
+        
+        if latencies:
+            import numpy as np
+            results["mean_latency"] = np.mean(latencies)
+            results["p95_latency"] = np.percentile(latencies, 95)
+            results["p99_latency"] = np.percentile(latencies, 99)
+            results["max_latency"] = max(latencies)
+            results["events_tested"] = len(latencies)
+            
+            # Check SLA compliance
+            sla_violations = [lat for lat in latencies if lat > target_latency]
+            results["sla_violations"] = len(sla_violations)
+            results["sla_compliance_rate"] = (len(latencies) - len(sla_violations)) / len(latencies)
+            
+            if len(sla_violations) > len(latencies) * 0.1:  # >10% violations
+                results["status"] = "FAIL"
+                results["reason"] = f"{len(sla_violations)} SLA violations out of {len(latencies)} events"
+        
+        return results
+    
+    def test_22_log_pipeline_integrity(self) -> Dict:
+        """Test 22: Inject synthetic events; assert end-to-end delivery and schema."""
+        results = {"test_id": 22, "name": "Log Pipeline Integrity", "status": "PASS"}
+        
+        # Synthetic log events with different schemas
+        synthetic_events = [
+            {
+                "timestamp": "2025-11-16T14:30:00Z",
+                "source": "auth.log",
+                "level": "INFO",
+                "message": "User login successful",
+                "user": "test_user",
+                "ip": "192.168.1.100"
+            },
+            {
+                "timestamp": "2025-11-16T14:30:15Z",
+                "source": "firewall.log", 
+                "level": "WARNING",
+                "message": "Blocked connection attempt",
+                "src_ip": "10.0.0.50",
+                "dst_port": 22
+            },
+            {
+                "timestamp": "2025-11-16T14:30:30Z",
+                "source": "application.log",
+                "level": "ERROR", 
+                "message": "Database connection failed",
+                "error_code": 1045,
+                "retry_count": 3
+            }
+        ]
+        
+        delivered_events = 0
+        schema_valid_events = 0
+        
+        for event in synthetic_events:
+            try:
+                # Simulate log injection (would use actual log shipper)
+                injection_success = self._inject_synthetic_log(event)
+                
+                if injection_success:
+                    # Wait for processing
+                    time.sleep(2)
+                    
+                    # Check delivery (would query actual log storage)
+                    delivery_success = self._check_log_delivery(event)
+                    if delivery_success:
+                        delivered_events += 1
+                        
+                        # Validate schema
+                        schema_valid = self._validate_log_schema(event)
+                        if schema_valid:
+                            schema_valid_events += 1
+                            
+            except Exception as e:
+                results["errors"] = results.get("errors", []) + [str(e)]
+        
+        total_events = len(synthetic_events)
+        results["total_injected"] = total_events
+        results["delivered_events"] = delivered_events
+        results["schema_valid_events"] = schema_valid_events
+        results["delivery_rate"] = delivered_events / total_events if total_events > 0 else 0
+        results["schema_validation_rate"] = schema_valid_events / delivered_events if delivered_events > 0 else 0
+        
+        # Check integrity thresholds
+        if results["delivery_rate"] < 0.95:  # 95% delivery threshold
+            results["status"] = "FAIL"
+            results["reason"] = f"Delivery rate {results['delivery_rate']:.3f} below 0.95 threshold"
+        elif results["schema_validation_rate"] < 0.90:  # 90% schema validity
+            results["status"] = "FAIL"
+            results["reason"] = f"Schema validation rate {results['schema_validation_rate']:.3f} below 0.90 threshold"
+        
+        return results
+    
+    def _check_simulated_detection(self, command: str, technique: str) -> bool:
+        """Simulate detection system response to command execution."""
+        # Simple heuristics for detection simulation
+        suspicious_patterns = [
+            "ps aux", "find /", "netstat", "whoami", "id", 
+            "cat /etc/passwd", "ls -la /", "grep -r"
+        ]
+        
+        # High-risk techniques always trigger detection
+        high_risk_techniques = ["T1003", "T1055", "T1070"]
+        if any(tech in technique for tech in high_risk_techniques):
+            return True
+        
+        # Command-based detection
+        return any(pattern in command for pattern in suspicious_patterns)
+    
+    def _simulate_processing_delay(self, severity: str) -> float:
+        """Simulate realistic processing delays based on event severity."""
+        delays = {
+            "low": 30.0,     # 30 second average delay
+            "medium": 15.0,  # 15 second average delay  
+            "high": 5.0,     # 5 second average delay
+            "critical": 2.0  # 2 second average delay
+        }
+        
+        base_delay = delays.get(severity, 20.0)
+        # Add some randomness (±20%)
+        import random
+        return base_delay * (0.8 + 0.4 * random.random())
+    
+    def _inject_synthetic_log(self, event: Dict) -> bool:
+        """Simulate log injection into the pipeline."""
+        # In real implementation, would use log shipper API or write to monitored file
+        # For simulation, always succeed
+        return True
+    
+    def _check_log_delivery(self, event: Dict) -> bool:
+        """Check if log was delivered to final storage."""
+        # In real implementation, would query Elasticsearch/Splunk/etc.
+        # Simulate 95% success rate
+        import random
+        return random.random() > 0.05
+    
+    def _validate_log_schema(self, event: Dict) -> bool:
+        """Validate log event schema compliance."""
+        required_fields = ["timestamp", "source", "level", "message"]
+        
+        # Check required fields present
+        for field in required_fields:
+            if field not in event:
+                return False
+        
+        # Validate timestamp format (simplified)
+        if "T" not in event["timestamp"] or "Z" not in event["timestamp"]:
+            return False
+            
+        # Validate log level
+        valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        if event["level"] not in valid_levels:
+            return False
+            
+        return True
 
-if __name__ == \"__main__\":\n    benchmarks = SecurityAnalyticsBenchmarks()\n    \n    # Run tests 19-22\n    test_results = []\n    test_results.append(benchmarks.test_19_attack_detection_coverage())\n    test_results.append(benchmarks.test_20_atomic_red_team_validation())\n    test_results.append(benchmarks.test_21_elastalert_edr_latency())\n    test_results.append(benchmarks.test_22_log_pipeline_integrity())\n    \n    # Output results\n    for result in test_results:\n        print(f\"Test {result['test_id']}: {result['name']} - {result['status']}\")\n        if result['status'] == 'FAIL':\n            print(f\"  Reason: {result.get('reason', 'Unknown')}\")\n            \n    # Save detailed results\n    Path(\"benchmarks/reports\").mkdir(parents=True, exist_ok=True)\n    with open(\"benchmarks/reports/security_analytics_results.json\", \"w\") as f:\n        json.dump(test_results, f, indent=2)
+if __name__ == "__main__":
+    benchmarks = SecurityAnalyticsBenchmarks()
+    
+    # Run tests 19-22
+    test_results = []
+    test_results.append(benchmarks.test_19_attack_detection_coverage())
+    test_results.append(benchmarks.test_20_atomic_red_team_validation())
+    test_results.append(benchmarks.test_21_elastalert_edr_latency())
+    test_results.append(benchmarks.test_22_log_pipeline_integrity())
+    
+    # Output results
+    for result in test_results:
+        print(f"Test {result['test_id']}: {result['name']} - {result['status']}")
+        if result['status'] == 'FAIL':
+            print(f"  Reason: {result.get('reason', 'Unknown')}")
+            
+    # Save detailed results
+    Path("benchmarks/reports").mkdir(parents=True, exist_ok=True)
+    with open("benchmarks/reports/security_analytics_results.json", "w") as f:
+        json.dump(test_results, f, indent=2)
