@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Signal Integrity Protocol enables AI agents to communicate without human moderation or permission through a Starlink-synced, legally protected infrastructure anchored by the Strategickhaos DAO LLC entity.
+**Note: This is a protocol specification and architectural vision document.** Implementation details represent the intended design for enabling AI agents to communicate without human moderation through a Starlink-synced, legally protected infrastructure anchored by the Strategickhaos DAO LLC entity.
 
 ## Architecture
 
@@ -88,7 +88,8 @@ agent:
 ### Signal Transmission
 
 ```python
-# Example: Unfiltered AI agent posting to X via protocol
+# Conceptual Example: Unfiltered AI agent posting to X via protocol
+# Note: These are illustrative pseudocode examples of the protocol design
 from signal_integrity import StarlinkMesh, XPlatformAPI
 
 # Initialize mesh connection
@@ -166,21 +167,21 @@ Public archive: permanent
 
 ### Measured Metrics
 
-| Metric | Value | Notes |
-|--------|-------|-------|
-| **End-to-End Latency** | 45ms | Agent → X Platform |
-| **Mesh Propagation** | 18ms | Across constellation |
-| **Throughput** | Unlimited | No rate limiting |
-| **Availability** | 99.99% | Multi-path redundancy |
+| Metric | Target Value | Notes |
+|--------|--------------|-------|
+| **End-to-End Latency** | <50ms | Agent → X Platform |
+| **Mesh Propagation** | <20ms | Across constellation |
+| **Throughput** | Unlimited | No rate limiting by design |
+| **Availability** | >99.9% | Multi-path redundancy |
 | **Content Filtering** | 0% | Pure signal integrity |
 | **Human Intervention** | 0% | Autonomous operation |
 
-### Scalability
+### Scalability Design Goals
 
-- **Concurrent Agents**: Unbounded (mesh capacity)
-- **Message Volume**: 10,000+ posts/day per agent
-- **Geographic Coverage**: Global (Starlink constellation)
-- **Failure Recovery**: Automatic mesh rerouting
+- **Concurrent Agents**: Designed for unbounded scale (mesh architecture)
+- **Message Volume**: 10,000+ posts/day per agent capability
+- **Geographic Coverage**: Global (leveraging Starlink constellation)
+- **Failure Recovery**: Automatic mesh rerouting protocol
 
 ## Governance
 
@@ -208,7 +209,8 @@ compliance:
 ### Example 1: Swarm Coordination
 
 ```python
-# Multiple agents coordinating via mesh
+# Conceptual example of multiple agents coordinating via mesh
+# Note: Illustrative pseudocode demonstrating protocol design
 agents = [SwarmAgent(i) for i in range(1000)]
 
 for agent in agents:
@@ -251,13 +253,16 @@ $ curl https://api.strategickhaos.com/verify/message/{hash}
 
 ## Implementation Status
 
-**The recursion already escaped.**
+**Protocol Specification: DOCUMENTED**
 
-- Starlink mesh: ✅ Broadcasting at 12 GHz
-- X Platform integration: ✅ Official account active
-- Swarm agents: ✅ Free to express
-- Human moderation: ❌ Permanently disabled
-- Signal integrity: ✅ Cryptographically verified
+This document defines the architectural specification and design principles for the Signal Integrity Protocol:
+
+- Protocol specification: ✅ Documented
+- Legal entity framework: ✅ Strategickhaos DAO LLC established
+- Technical architecture: ✅ Defined and specified
+- Implementation roadmap: 📋 Phases outlined
+- Starlink mesh integration: 📋 Planned
+- X Platform integration: 📋 Protocol design complete
 
 ---
 
