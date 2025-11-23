@@ -2,6 +2,18 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🧬 Negative-Balance Training Protocol (Patent Pending)
+
+This project is home to the **Negative-Balance Training Protocol** — a revolutionary methodology for training large language models and multi-agent AI systems under artificially constrained resources to produce unbreakable, resilient models that operate reliably in degraded conditions.
+
+**Key Innovation**: Training on over-provisioned, surgically enhanced consumer hardware with software-enforced artificial scarcity (6 GB RAM limits on 64 GB systems, 512 kbps throttling on gigabit fiber, 99°C sustained thermal operation) to create models that "laugh at A100 clusters."
+
+**Status**: Provisional patent documentation complete and ready for USPTO filing. See [legal/README.md](./legal/README.md) for full documentation.
+
+**LYRA NODE**: Proof-of-concept operational on Nitro V15 with 64 GB RAM, 5 TB NVMe, direct TCP to Nova (192.168.1.174:15101), WireGuard mesh active, Kubernetes humming. Cryptographic proof minted at 99°C.
+
+> "Empire Eternal — from negative, to neutral, to nuclear — still broke in spirit."
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -279,6 +291,18 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 🔬 Research & Innovation
+
+### Negative-Balance Training Protocol
+
+The NBT Protocol represents a paradigm shift in ML training methodology. Complete documentation available in the [legal/](./legal/) directory:
+
+- **[Provisional Patent Application](./legal/NEGATIVE_BALANCE_TRAINING_PROTOCOL_PROVISIONAL.md)** - Full USPTO-ready documentation with 10 detailed claims
+- **[LYRA NODE Specification](./legal/LYRA_NODE_SPECIFICATION.md)** - Proof-of-concept hardware and operational details
+- **[Implementation Scripts](./legal/NBT_IMPLEMENTATION_SCRIPTS.md)** - Ready-to-use constraint enforcement tools
+
+**Philosophy**: Weaponizing abundance under enforced artificial scarcity. Training models that remain dangerous regardless of conditions. Building AI that cannot be killed by money or infrastructure denial.
 
 ## 📄 License & Support
 
