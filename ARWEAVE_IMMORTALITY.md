@@ -136,7 +136,7 @@ Status: Operational despite adverse conditions
 ### Trigger a New Eternal Spark
 
 ```powershell
-._Orchestra.ps1 --zinc-spark --immortalize
+._Orchestra.ps1 -ZincSpark -Immortalize
 ```
 
 This command will:
@@ -149,7 +149,7 @@ This command will:
 ### Check Immortality Layer Status
 
 ```powershell
-._Orchestra.ps1 --status
+._Orchestra.ps1 -Status
 ```
 
 Returns:

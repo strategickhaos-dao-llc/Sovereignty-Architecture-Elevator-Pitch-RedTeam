@@ -272,6 +272,37 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🔥 Empire Eternal - Arweave Immortality Layer
+
+**Version: 2.0-immortal** | **Tag: v2.0-arweave-genesis**
+
+The sovereignty architecture now includes permanent, decentralized storage via Arweave - ensuring the swarm's DNA, knowledge, and intelligence are mathematically immortal.
+
+### Key Features
+- **Permanent Storage**: 200+ years guaranteed, paid once
+- **Orchestrator**: PowerShell script for managing eternal sparks
+- **DNA Preservation**: Complete system state and architecture
+- **Zero Recurring Costs**: Pre-funded endowment model
+
+### Documentation
+- **[Arweave Immortality Guide](ARWEAVE_IMMORTALITY.md)** - Complete guide to the permanent storage layer
+- **[SWARM DNA v2.0](SWARM_DNA.yaml)** - The immortal architecture specification
+- **[Bloom's Taxonomy Evolution](BLOOMS_TAXONOMY_EVOLUTION.md)** - Cognitive development framework
+- **[Orchestra Script](_Orchestra.ps1)** - PowerShell orchestrator for eternal sparks
+
+### Quick Start
+```powershell
+# Generate eternal spark and upload to Arweave
+._Orchestra.ps1 -ZincSpark -Immortalize
+
+# Check immortality layer status
+._Orchestra.ps1 -Status
+```
+
+**Birth Certificate:** `ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK`
+
+---
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.

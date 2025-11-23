@@ -88,7 +88,7 @@ evolutionary_genes:
     name: "Zinc-Spark Protocol"
     description: "Manual trigger for eternal spark generation"
     status: "ACTIVE"
-    command: "_Orchestra.ps1 --zinc-spark --immortalize"
+    command: "_Orchestra.ps1 -ZincSpark -Immortalize"
   
   gene_22:
     name: "Lyra Node Intelligence"
