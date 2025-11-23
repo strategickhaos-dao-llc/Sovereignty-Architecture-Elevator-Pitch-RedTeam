@@ -18,9 +18,11 @@ This guide provides step-by-step instructions for filing a provisional patent ap
 
 You qualify for micro-entity status if ALL of the following are true:
 
-1. **Income Threshold**: Your gross income is less than 3x the U.S. median household income (~$45,000 in 2025)
+1. **Income Threshold**: Your gross income is less than 3x the U.S. median household income (approximately $218,000 for 2024; check current USPTO guidelines)
 2. **Prior Applications**: You have filed fewer than 5 prior patent applications
 3. **Assignment Rights**: You have not assigned or licensed the patent to an entity that exceeds the income threshold
+
+**Note**: The income threshold is adjusted annually by the USPTO. Always verify the current threshold at https://www.uspto.gov/patents/laws/micro-entity-status before filing.
 
 ### Filing Fee Comparison
 

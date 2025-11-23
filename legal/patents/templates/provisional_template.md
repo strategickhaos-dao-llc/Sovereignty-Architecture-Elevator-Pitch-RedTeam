@@ -400,7 +400,7 @@ Before filing, ensure you have:
 - [ ] Reviewed for technical accuracy
 - [ ] Checked spelling and grammar
 - [ ] Formatted as PDF with 1-inch margins
-- [ ] Saved as: `STRATEGICKHAOS_PROVISIONAL_[DATE].pdf`
+- [ ] Saved as: `STRATEGICKHAOS_PROVISIONAL_YYYY-MM-DD.pdf` (replace YYYY-MM-DD with actual date)
 - [ ] Prepared micro-entity certification form
 - [ ] Ready to file via USPTO EFS-Web
 

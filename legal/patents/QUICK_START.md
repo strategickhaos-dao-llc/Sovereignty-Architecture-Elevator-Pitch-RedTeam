@@ -16,13 +16,13 @@ You're about to establish **Patent Pending** status for **$75** and lock in your
 **Do this FIRST - saves you 75% on all fees forever**
 
 ### Quick Check - Do You Qualify?
-✓ Income < 3x median U.S. household income (~$45k in 2025)?  
+✓ Income < 3x median U.S. household income (~$218k for 2024)?  
 ✓ Fewer than 5 prior patent applications?  
 ✓ No obligation to assign to a large company?
 
 **YES to all three** = You're micro-entity qualified
 
-**Note**: Income threshold changes annually. Check current limits at: https://www.uspto.gov/patents/laws/micro-entity-status
+**Important**: Income threshold changes annually. Always verify current limits before filing at: https://www.uspto.gov/patents/laws/micro-entity-status
 
 ### Action:
 ```bash
