@@ -13,7 +13,7 @@ import logging
 import os
 import time
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 # Configure logging
 logging.basicConfig(
@@ -38,7 +38,7 @@ class TokenRefreshAgent:
         self.last_refresh_time = None
         self.circulation_count = 0
         
-    async def refresh_tokens(self) -> Dict[str, any]:
+    async def refresh_tokens(self) -> Dict[str, Any]:
         """
         Refresh authentication tokens and context cache
         

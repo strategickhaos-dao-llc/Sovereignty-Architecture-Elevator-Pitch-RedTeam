@@ -12,6 +12,7 @@ and coordinating body functions.
 import asyncio
 import logging
 import os
+import uuid
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -32,7 +33,7 @@ class NervousSystemSignal:
         self.content = content
         self.priority = priority
         self.timestamp = datetime.utcnow()
-        self.signal_id = f"{channel}_{self.timestamp.timestamp()}"
+        self.signal_id = f"{channel}_{uuid.uuid4().hex[:8]}"
         
     def __repr__(self):
         return f"Signal[{self.priority}]({self.channel}): {self.message_type}"

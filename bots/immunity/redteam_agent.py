@@ -152,11 +152,14 @@ class RedTeamAgent:
         
         env_file = Path('.env')
         if env_file.exists():
-            content = env_file.read_text()
-            for secret in default_secrets:
-                if secret in content:
-                    logger.warning(f"⚠️ Default secret detected: {secret[:20]}...")
-                    return True
+            try:
+                content = env_file.read_text(encoding='utf-8')
+                for secret in default_secrets:
+                    if secret in content:
+                        logger.warning(f"⚠️ Default secret detected: {secret[:20]}...")
+                        return True
+            except Exception as e:
+                logger.error(f"Error reading .env file: {e}")
         return False
     
     async def _check_insecure_configs(self) -> bool:

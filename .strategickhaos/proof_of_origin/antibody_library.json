@@ -1,0 +1,8 @@
+{
+  "last_updated": "2025-11-23T20:00:00Z",
+  "total_antibodies": 0,
+  "antibodies": [],
+  "_schema_version": "1.0.0",
+  "_description": "Immune memory crystals - learned threat signatures for adaptive defense",
+  "_note": "This file is populated by bots/immunity/redteam_agent.py during security patrols"
+}
