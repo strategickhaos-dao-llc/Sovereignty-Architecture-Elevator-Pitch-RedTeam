@@ -32,7 +32,12 @@ function Get-SwarmConfiguration {
         exit 1
     }
     
-    # For now, return hardcoded config. In production, parse YAML properly.
+    # TODO: For full YAML parsing, install powershell-yaml module:
+    # Install-Module -Name powershell-yaml -Scope CurrentUser
+    # Then use: $config = Get-Content SWARM_DNA.yaml -Raw | ConvertFrom-Yaml
+    
+    # Simple fallback: hardcoded config matching SWARM_DNA.yaml defaults
+    # This ensures the script works without external dependencies
     return @{
         ApiEndpoint = "https://api.x.ai/v1/chat/completions"
         DefaultModel = "grok-4-fast-reasoning"

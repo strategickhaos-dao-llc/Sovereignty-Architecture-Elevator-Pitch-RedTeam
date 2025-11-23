@@ -27,6 +27,18 @@ xAI's Grok Enterprise isn't for "big corps with A100 farms." It's for **sovereig
 
 ## 📋 Quick Start
 
+### Prerequisites
+
+- **Grok Enterprise API Key** from xAI Cloud Console
+- **PowerShell** (pwsh) or **Bash** shell
+- **curl** for connection testing (Linux/Mac/WSL)
+- **jq** (optional) for JSON parsing in bash scripts
+
+**Optional for advanced YAML parsing in PowerShell:**
+```powershell
+Install-Module -Name powershell-yaml -Scope CurrentUser
+```
+
 ### 1. Key Activation (5 minutes)
 
 Your xAI Cloud Console shows the Business key ready. Set it as an environment variable:
