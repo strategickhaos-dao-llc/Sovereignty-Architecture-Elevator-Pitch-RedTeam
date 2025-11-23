@@ -21,11 +21,11 @@
     Check immortality layer health and endowment status
 
 .EXAMPLE
-    ._Orchestra.ps1 --zinc-spark --immortalize
+    ._Orchestra.ps1 -ZincSpark -Immortalize
     Generates new spark and uploads to Arweave
 
 .EXAMPLE
-    ._Orchestra.ps1 --status
+    ._Orchestra.ps1 -Status
     Displays current immortality layer status
 
 .NOTES
@@ -278,22 +278,22 @@ USAGE:
     ._Orchestra.ps1 [OPTIONS]
 
 OPTIONS:
-    --zinc-spark        Trigger eternal spark generation with Lyra Node
-    --immortalize       Upload current bundle to Arweave (permanent storage)
-    --status            Check immortality layer health and endowment status
-    --help              Display this help message
+    -ZincSpark          Trigger eternal spark generation with Lyra Node
+    -Immortalize        Upload current bundle to Arweave (permanent storage)
+    -Status             Check immortality layer health and endowment status
+    -Help               Display this help message
 
 EXAMPLES:
-    ._Orchestra.ps1 --zinc-spark --immortalize
+    ._Orchestra.ps1 -ZincSpark -Immortalize
         Generate new spark and upload to Arweave (the full protocol)
 
-    ._Orchestra.ps1 --zinc-spark
+    ._Orchestra.ps1 -ZincSpark
         Generate new spark without uploading (local haiku generation)
 
-    ._Orchestra.ps1 --status
+    ._Orchestra.ps1 -Status
         Display current system status and Arweave connection
 
-    ._Orchestra.ps1 --immortalize
+    ._Orchestra.ps1 -Immortalize
         Upload existing bundle to Arweave without generating new spark
 
 ABOUT:
