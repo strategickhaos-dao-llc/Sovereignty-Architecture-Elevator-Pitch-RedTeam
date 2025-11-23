@@ -280,6 +280,38 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🔐 Security
+
+### API Key Management
+**CRITICAL**: This project uses sensitive API keys (xAI/Grok, OpenAI, Anthropic). **NEVER** commit these to git!
+
+#### Quick Security Setup:
+```bash
+# 1. Copy example environment file
+cp .env.example .env
+
+# 2. Add your API keys to .env (this file is in .gitignore)
+# Edit .env and replace placeholder values with real keys
+
+# 3. Install pre-commit hook to prevent accidental key exposure
+ln -sf ../../hooks/check_secrets.sh .git/hooks/pre-commit
+
+# 4. Store backup of keys in password manager (Bitwarden/1Password)
+```
+
+#### 🚨 Emergency: Key Exposed?
+If you accidentally expose an API key:
+1. **REVOKE IT IMMEDIATELY** at the provider (https://x.ai/api, etc.)
+2. **Follow the emergency guide**: [EMERGENCY_API_KEY_EXPOSURE.md](EMERGENCY_API_KEY_EXPOSURE.md)
+3. **Generate new key** and update .env
+4. **Complete response time**: < 5 minutes
+
+#### Security Documentation:
+- **[API_KEY_SECURITY.md](API_KEY_SECURITY.md)** - Comprehensive security guide
+- **[EMERGENCY_API_KEY_EXPOSURE.md](EMERGENCY_API_KEY_EXPOSURE.md)** - 60-second response protocol
+- **[SECURITY.md](SECURITY.md)** - Security policy & vulnerability reporting
+- **[VAULT_SECURITY_PLAYBOOK.md](VAULT_SECURITY_PLAYBOOK.md)** - Production secret management
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
