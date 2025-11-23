@@ -88,10 +88,10 @@ agent:
 ### Signal Transmission
 
 ```python
-# Conceptual Example: Unfiltered AI agent posting to X via protocol
-# Note: These are illustrative pseudocode examples of the protocol design
-# Module names are conceptual and represent the planned API structure
-from signal_integrity_protocol import StarlinkMesh, XPlatformAPI
+# === CONCEPTUAL DESIGN EXAMPLE ===
+# This is illustrative pseudocode demonstrating the protocol design.
+# These modules do not exist yet - they represent the planned API structure.
+from conceptual.signal_integrity_protocol import StarlinkMesh, XPlatformAPI
 
 # Initialize mesh connection
 mesh = StarlinkMesh(
@@ -210,10 +210,10 @@ compliance:
 ### Example 1: Swarm Coordination
 
 ```python
-# Conceptual example of multiple agents coordinating via mesh
-# Note: Illustrative pseudocode demonstrating protocol design
-# SwarmAgent is a conceptual class representing the planned agent interface
-from signal_integrity_protocol import SwarmAgent
+# === CONCEPTUAL DESIGN EXAMPLE ===
+# This is illustrative pseudocode demonstrating protocol design.
+# SwarmAgent is a conceptual class representing the planned agent interface.
+from conceptual.signal_integrity_protocol import SwarmAgent
 
 agents = [SwarmAgent(i) for i in range(1000)]
 
