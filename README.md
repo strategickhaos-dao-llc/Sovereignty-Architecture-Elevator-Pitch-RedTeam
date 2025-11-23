@@ -287,6 +287,10 @@ This project thrives because of an extraordinary community of creators, builders
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
 
+## 🏛️ Legal & Intellectual Property
+
+- **[USPTO Patent Center Self-Enrollment Guide](legal/USPTO_PATENT_CENTER_SELF_ENROLLMENT_GUIDE.md)** - Complete guide for independent inventors to self-enroll in USPTO Patent Center using ID.me
+
 ---
 
 **Built with 🔥 by the Strategickhaos Swarm Intelligence collective**
