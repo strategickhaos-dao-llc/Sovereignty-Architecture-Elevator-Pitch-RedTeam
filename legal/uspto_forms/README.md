@@ -24,7 +24,7 @@ This directory contains United States Patent and Trademark Office (USPTO) forms 
 
 ## Additional Resources
 
-For more information about USPTO fees, payment methods, and filing procedures, visit the official USPTO website at www.uspto.gov.
+For more information about USPTO fees, payment methods, and filing procedures, visit the official USPTO website at [www.uspto.gov](https://www.uspto.gov).
 
 ---
 

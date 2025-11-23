@@ -36,7 +36,7 @@ If the cardholder includes a credit card number on any form or document other th
 - If you are requesting and paying a fee based on a previously filed patent or trademark application, indicate the application/serial number, patent number or registration number that is associated with your request.
 - "Other Fee" is used to request copies of patent and trademark documents, certified copies, assignments, and other information products.
 - IDON numbers are assigned by the USPTO for customers ordering patent and trademark information and products specified as "Other Fee" on the order form. If you have been assigned an IDON number from a previous customer order, include it with your request.
-- For more information on USPTO fees and amounts, refer to the current fee schedule at www.uspto.gov. To request a copy by mail, call the USPTO Contact Center at (800) 786-9199 or (571) 272-1000. Information on mailing addresses is also available at www.uspto.gov.
+- For more information on USPTO fees and amounts, refer to the current fee schedule at [www.uspto.gov](https://www.uspto.gov). To request a copy by mail, call the USPTO Contact Center at (800) 786-9199 or (571) 272-1000. Information on mailing addresses is also available at [www.uspto.gov](https://www.uspto.gov).
 
 ### Protect Your Credit Card Information
 
@@ -115,8 +115,8 @@ _____________________________________________________________________
 ## Contact Information
 
 - **USPTO Contact Center:** (800) 786-9199 or (571) 272-1000
-- **Website:** www.uspto.gov
-- **Fee Schedule:** Available at www.uspto.gov
+- **Website:** [www.uspto.gov](https://www.uspto.gov)
+- **Fee Schedule:** Available at [www.uspto.gov](https://www.uspto.gov)
 
 ---
 
