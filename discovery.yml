@@ -4,6 +4,7 @@ org:
     owner: "Domenic Garza"
     slack_or_discord_handle: null   # e.g. "Dom_010101#1234"
   compliance: ["none"]              # soc2, hipaa, iso27001, etc.
+  sovereignty_manifest: "sovereign_manifest.yaml"  # Immutable 7% perpetual share lock
 
 discord:
   guild_id: null                    # real guild/server ID here
