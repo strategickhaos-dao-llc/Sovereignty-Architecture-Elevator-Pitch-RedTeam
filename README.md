@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> 📜 **Provisional Patent Application Package Available**: Complete documentation for filing a provisional patent on this AI-governed DevOps control plane architecture is available in the [`patent/`](./patent/) directory. See [`patent/README.md`](./patent/README.md) for details.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -279,6 +281,24 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 📜 Intellectual Property
+
+This project embodies novel technological innovations in AI-governed DevOps control planes. A complete **provisional patent application package** is available in the [`patent/`](./patent/) directory, ready to file with the USPTO.
+
+**What's Protected:**
+- Discord Event Mesh as unified DevOps control plane
+- AI agents with vector knowledge base grounding
+- GitLens integration for IDE-native workflows  
+- Kubernetes RBAC with Discord role mapping
+- Human-LLM co-sovereignty governance framework
+
+**Filing Details:**
+- Cost: $75 (micro entity)
+- Time: 1-2 hours
+- Status: Ready to file immediately
+
+See [`patent/README.md`](./patent/README.md) for complete documentation and filing instructions.
 
 ## 📄 License & Support
 
