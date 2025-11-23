@@ -35,3 +35,9 @@ target/
 
 # Workspace data
 workspace/
+
+# User data
+data/
+
+# Build artifacts
+dist/

@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Interaction } from "discord.js";
 import { registerCommands, embed } from "./discord.js";
 import { env, loadConfig } from "./config.js";
+import { registerUser } from "./users.js";
 
 const cfg = loadConfig();
 const token = env("DISCORD_TOKEN");
@@ -47,6 +48,14 @@ client.on("interactionCreate", async (i: Interaction) => {
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+    } else if (i.commandName === "register") {
+      const email = i.options.getString("email") || undefined;
+      const result = registerUser(i.user.id, i.user.username, email);
+      if (result.success) {
+        await i.reply({ embeds: [embed("✅ Registration Complete", `Welcome ${i.user.username}!\n${result.message}\n\nDiscord ID: ${i.user.id}${email ? `\nEmail: ${email}` : ""}`)] });
+      } else {
+        await i.reply({ embeds: [embed("ℹ️ Registration Status", result.message)] });
+      }
     }
   } catch (e: any) {
     await i.reply({ content: `Error: ${e.message}` });
