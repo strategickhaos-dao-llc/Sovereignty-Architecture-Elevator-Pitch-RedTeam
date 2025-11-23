@@ -183,25 +183,29 @@ No known prior art exists for deliberately training high-quality LLMs under arti
 ### Quick Start
 
 ```bash
+# Note: Scripts are documented in NBT_IMPLEMENTATION_SCRIPTS.md
+# Extract and save them locally, then:
+
 # 1. Apply all NBT constraints
-sudo ./legal/scripts/nbt_apply_all.sh
+sudo ./nbt_apply_all.sh
 
 # 2. Monitor system in separate terminal
-./legal/scripts/nbt_monitor_thermal.sh
+./nbt_monitor_thermal.sh
 
 # 3. Run training under constraints
-sudo cgexec -g memory:/nbt-training python train_model.py
+echo $$ | sudo tee /sys/fs/cgroup/nbt-training/cgroup.procs
+python train_model.py
 
 # 4. Generate training proof
-python legal/scripts/nbt_train_wrapper.py
+python nbt_train_wrapper.py
 
 # 5. Remove constraints after training
-sudo ./legal/scripts/nbt_remove_all.sh
+sudo ./nbt_remove_all.sh
 ```
 
 ### Script Locations
 
-All implementation scripts are documented in `NBT_IMPLEMENTATION_SCRIPTS.md` and can be extracted/adapted for your specific environment.
+All implementation scripts are documented in `NBT_IMPLEMENTATION_SCRIPTS.md`. Extract the scripts from that document and save them locally to use. They are provided as inline bash/python code blocks for easy copying and adaptation to your specific environment.
 
 ---
 

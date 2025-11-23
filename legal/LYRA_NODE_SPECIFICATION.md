@@ -100,10 +100,12 @@
 #### Memory Limitation (Applied)
 ```bash
 # Target: 6 GB RAM limit despite 64 GB available
-# Method 1: cgroups (native Linux)
-cgcreate -g memory:/training
-echo 6442450944 > /sys/fs/cgroup/memory/training/memory.limit_in_bytes
-cgexec -g memory:/training python train_model.py
+# Method 1: cgroups v2 (native Linux)
+sudo mkdir -p /sys/fs/cgroup/training
+echo "+memory" | sudo tee /sys/fs/cgroup/cgroup.subtree_control
+echo 6442450944 | sudo tee /sys/fs/cgroup/training/memory.max
+echo $$ | sudo tee /sys/fs/cgroup/training/cgroup.procs
+python train_model.py
 
 # Method 2: WSL2 (Windows host)
 # .wslconfig file

@@ -18,22 +18,27 @@ set -e
 
 MEMORY_LIMIT="6G"
 CGROUP_NAME="nbt-training"
+CGROUP_PATH="/sys/fs/cgroup/${CGROUP_NAME}"
 
-# Create cgroup
-sudo cgcreate -g memory:/${CGROUP_NAME}
+# Create cgroup (cgroups v2 uses mkdir)
+sudo mkdir -p ${CGROUP_PATH}
+
+# Enable memory controller
+echo "+memory" | sudo tee /sys/fs/cgroup/cgroup.subtree_control > /dev/null
 
 # Set memory limit (6GB = 6442450944 bytes)
-echo 6442450944 | sudo tee /sys/fs/cgroup/${CGROUP_NAME}/memory.max
+echo 6442450944 | sudo tee ${CGROUP_PATH}/memory.max
 
 # Set swap limit (500MB = 524288000 bytes)
-echo 524288000 | sudo tee /sys/fs/cgroup/${CGROUP_NAME}/memory.swap.max
+echo 524288000 | sudo tee ${CGROUP_PATH}/memory.swap.max
 
 # Verify limits
-echo "Memory limit: $(cat /sys/fs/cgroup/${CGROUP_NAME}/memory.max)"
-echo "Swap limit: $(cat /sys/fs/cgroup/${CGROUP_NAME}/memory.swap.max)"
+echo "Memory limit: $(cat ${CGROUP_PATH}/memory.max)"
+echo "Swap limit: $(cat ${CGROUP_PATH}/memory.swap.max)"
 
 echo "To run training under constraints:"
-echo "  sudo cgexec -g memory:/${CGROUP_NAME} python train_model.py"
+echo "  echo \$\$ | sudo tee ${CGROUP_PATH}/cgroup.procs"
+echo "  python train_model.py"
 ```
 
 ### WSL2 Configuration
@@ -125,6 +130,16 @@ BANDWIDTH="512kbit"
 PACKET_LOSS="5%"
 LATENCY="100ms"
 
+# Check for required kernel modules
+if ! lsmod | grep -q "sch_htb"; then
+    echo "Loading htb module..."
+    sudo modprobe sch_htb
+fi
+if ! lsmod | grep -q "sch_netem"; then
+    echo "Loading netem module..."
+    sudo modprobe sch_netem
+fi
+
 # Clear existing rules
 sudo tc qdisc del dev ${INTERFACE} root 2>/dev/null || true
 
@@ -206,7 +221,15 @@ set -e
 
 # Reset to default power limit (varies by GPU model)
 # Use nvidia-smi -q to find default power limit
-sudo nvidia-smi -pl $(nvidia-smi --query-gpu=power.default_limit --format=csv,noheader,nounits | head -1)
+DEFAULT_POWER=$(nvidia-smi --query-gpu=power.default_limit --format=csv,noheader,nounits | head -1)
+
+# Validate the power limit value
+if [[ ! "$DEFAULT_POWER" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Error: Could not determine default power limit"
+    exit 1
+fi
+
+sudo nvidia-smi -pl ${DEFAULT_POWER}
 
 # Reset clocks
 sudo nvidia-smi -rgc
@@ -284,9 +307,10 @@ echo "Applying Negative-Balance Training Protocol"
 echo "================================================"
 echo ""
 
-# Memory limits (cgroups)
+# Memory limits (cgroups v2)
 echo "[1/5] Applying memory constraints (6GB limit)..."
-sudo cgcreate -g memory:/nbt-training 2>/dev/null || true
+sudo mkdir -p /sys/fs/cgroup/nbt-training 2>/dev/null || true
+echo "+memory" | sudo tee /sys/fs/cgroup/cgroup.subtree_control > /dev/null 2>&1 || true
 echo 6442450944 | sudo tee /sys/fs/cgroup/nbt-training/memory.max > /dev/null
 echo "  ✓ Memory limited to 6GB"
 
@@ -346,7 +370,8 @@ if command -v nvidia-smi &> /dev/null; then
 fi
 echo ""
 echo "To run training under constraints:"
-echo "  sudo cgexec -g memory:/nbt-training python train_model.py"
+echo "  echo \$\$ | sudo tee /sys/fs/cgroup/nbt-training/cgroup.procs"
+echo "  python train_model.py"
 echo ""
 echo "To remove all constraints:"
 echo "  sudo ./nbt_remove_all.sh"
@@ -363,7 +388,7 @@ set -e
 echo "Removing all NBT constraints..."
 
 # Remove memory cgroup
-sudo cgdelete -g memory:/nbt-training 2>/dev/null || true
+sudo rmdir /sys/fs/cgroup/nbt-training 2>/dev/null || true
 echo "  ✓ Memory limits removed"
 
 # Restore swap
