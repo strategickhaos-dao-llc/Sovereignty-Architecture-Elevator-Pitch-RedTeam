@@ -2,12 +2,13 @@ import express from "express";
 import { randomBytes } from "crypto";
 import { db } from "../db.js";
 import { AuthRequest, requireRole } from "../middleware/auth.js";
+import { CONFIG } from "../config/constants.js";
 
 export const inviteRouter = express.Router();
 
 // Generate invite code
 inviteRouter.post("/generate", requireRole("admin"), async (req: AuthRequest, res) => {
-  const { email, expiresInDays = 7 } = req.body;
+  const { email, expiresInDays = CONFIG.DEFAULT_INVITE_EXPIRY_DAYS } = req.body;
 
   if (!email) {
     return res.status(400).json({ error: "Email required" });
@@ -30,7 +31,7 @@ inviteRouter.post("/generate", requireRole("admin"), async (req: AuthRequest, re
       inviteCode,
       email,
       expiresAt,
-      inviteUrl: `${process.env.BASE_URL || "http://localhost:8090"}/register?invite=${inviteCode}`
+      inviteUrl: `${process.env.BASE_URL || CONFIG.DEFAULT_BASE_URL}/register?invite=${inviteCode}`
     });
   } catch (error) {
     console.error("Generate invite error:", error);
@@ -49,7 +50,8 @@ inviteRouter.get("/list", requireRole("admin"), async (req: AuthRequest, res) =>
        LEFT JOIN users u1 ON i.invited_by = u1.id
        LEFT JOIN users u2 ON i.used_by = u2.id
        ORDER BY i.created_at DESC
-       LIMIT 100`
+       LIMIT $1`,
+      [CONFIG.MAX_INVITATIONS_LIST]
     );
 
     res.json({ invitations: result.rows });

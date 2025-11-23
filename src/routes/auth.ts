@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import { randomBytes } from "crypto";
 import { db } from "../db.js";
+import { CONFIG } from "../config/constants.js";
 
 export const authRouter = express.Router();
 
@@ -91,7 +92,7 @@ authRouter.post("/register", async (req, res) => {
     }
 
     // Hash password
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, CONFIG.BCRYPT_SALT_ROUNDS);
 
     // Create user
     const userResult = await db.query(

@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
+import { CONFIG } from "../config/constants.js";
 
 // Simple in-memory rate limiter
-// For production, use Redis-backed rate limiter
+// LIMITATION: This will not scale across multiple instances and will reset on restart
+// For production with multiple instances, use Redis-backed rate limiting:
+// - npm install express-rate-limit rate-limit-redis
+// - Configure with Redis connection from environment
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
-
-const RATE_LIMIT = 100; // requests per window
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
 export function rateLimiter(req: Request, res: Response, next: NextFunction) {
   const identifier = req.ip || req.socket.remoteAddress || "unknown";
@@ -17,12 +18,12 @@ export function rateLimiter(req: Request, res: Response, next: NextFunction) {
     // New window
     requestCounts.set(identifier, {
       count: 1,
-      resetTime: now + WINDOW_MS
+      resetTime: now + CONFIG.RATE_LIMIT_WINDOW_MS
     });
     return next();
   }
 
-  if (record.count >= RATE_LIMIT) {
+  if (record.count >= CONFIG.RATE_LIMIT_MAX_REQUESTS) {
     return res.status(429).json({
       error: "Too many requests",
       retryAfter: Math.ceil((record.resetTime - now) / 1000)

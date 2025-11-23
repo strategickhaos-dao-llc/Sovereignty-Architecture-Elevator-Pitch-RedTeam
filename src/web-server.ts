@@ -8,6 +8,7 @@ import { llmRouter } from "./routes/llm.js";
 import { requireAuth } from "./middleware/auth.js";
 import { auditLogger } from "./middleware/audit.js";
 import { rateLimiter } from "./middleware/ratelimit.js";
+import { CONFIG } from "./config/constants.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +27,7 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: CONFIG.SESSION_MAX_AGE_MS
   }
 }));
 

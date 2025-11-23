@@ -1,6 +1,7 @@
 import express from "express";
 import { db } from "../db.js";
 import { AuthRequest } from "../middleware/auth.js";
+import { CONFIG, LLM_MODELS } from "../config/constants.js";
 
 export const llmRouter = express.Router();
 
@@ -23,22 +24,26 @@ llmRouter.post("/chat", async (req: AuthRequest, res) => {
 
     const convId = userMessageResult.rows[0].conversation_id;
 
-    // Get conversation history for context (last 10 messages)
+    // Get conversation history for context
     const historyResult = await db.query(
       `SELECT message_role, message_content 
        FROM llm_conversations 
        WHERE conversation_id = $1 
        ORDER BY created_at DESC 
-       LIMIT 10`,
-      [convId]
+       LIMIT $2`,
+      [convId, CONFIG.MAX_CONVERSATION_HISTORY]
     );
 
     const history = historyResult.rows.reverse();
 
     // Call internal LLM service (Refinory API)
-    const refinoryUrl = process.env.REFINORY_URL || "http://refinory-api:8085";
+    const refinoryUrl = process.env.REFINORY_URL || CONFIG.DEFAULT_REFINORY_URL;
     
     try {
+      // Create an AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), CONFIG.LLM_REQUEST_TIMEOUT_MS);
+      
       const llmResponse = await fetch(`${refinoryUrl}/api/chat`, {
         method: "POST",
         headers: {
@@ -50,8 +55,11 @@ llmRouter.post("/chat", async (req: AuthRequest, res) => {
             content: h.message_content
           })),
           model: model
-        })
+        }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       if (!llmResponse.ok) {
         throw new Error(`Refinory API error: ${llmResponse.statusText}`);
@@ -133,8 +141,8 @@ llmRouter.get("/conversations", async (req: AuthRequest, res) => {
        WHERE user_id = $1
        GROUP BY conversation_id
        ORDER BY last_message_at DESC
-       LIMIT 50`,
-      [req.user!.id]
+       LIMIT $2`,
+      [req.user!.id, CONFIG.MAX_CONVERSATIONS_LIST]
     );
 
     res.json({ conversations: result.rows });
@@ -163,12 +171,5 @@ llmRouter.delete("/conversations/:conversationId", async (req: AuthRequest, res)
 
 // Get available models
 llmRouter.get("/models", async (_req: AuthRequest, res) => {
-  res.json({
-    models: [
-      { id: "gpt-4o-mini", name: "GPT-4o Mini", provider: "internal" },
-      { id: "gpt-4o", name: "GPT-4o", provider: "internal" },
-      { id: "claude-3-sonnet", name: "Claude 3 Sonnet", provider: "internal" },
-      { id: "llama-3", name: "Llama 3", provider: "local" }
-    ]
-  });
+  res.json({ models: LLM_MODELS });
 });
