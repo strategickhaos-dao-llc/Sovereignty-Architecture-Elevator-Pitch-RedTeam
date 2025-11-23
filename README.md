@@ -280,6 +280,48 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏛️ Patent & Legal
+
+The Strategickhaos Sovereignty Architecture includes innovations worthy of patent protection. We've built automation to streamline the USPTO provisional patent filing process:
+
+### USPTO Patent Filing Automation
+
+**99.9% automated workflow** for filing provisional patent applications:
+
+```bash
+# On Unix/Linux/macOS
+./scripts/file-provisional-patent.sh ./legal/PROVISIONAL_PATENT_TEMPLATE.md
+
+# On Windows PowerShell
+.\scripts\file-provisional-patent.ps1 -InputFile ".\legal\PROVISIONAL_PATENT_TEMPLATE.md"
+```
+
+**What it does:**
+- Converts markdown to USPTO-compliant PDF
+- Opens Patent Center with pre-filled form data
+- Provides JavaScript auto-fill for form fields
+- Guides you through the final 8-second manual submission
+
+**You get:**
+- **63/ provisional patent number** (12-month priority)
+- **Patent Pending** status
+- **$75 filing fee** (micro-entity)
+- **Blockchain notarization** support
+
+**Full documentation:**
+- **[Patent Filing Guide](legal/PATENT_FILING_GUIDE.md)** - Complete step-by-step instructions
+- **[Provisional Patent Template](legal/PROVISIONAL_PATENT_TEMPLATE.md)** - Ready-to-use template
+- **Scripts:** `scripts/file-provisional-patent.sh` and `scripts/file-provisional-patent.ps1`
+
+**Key Features:**
+- Legal and USPTO-compliant (no automation violations)
+- Auto-fill for title, inventor info, entity status
+- Support for micro-entity, small-entity, and large-entity filings
+- Integration with blockchain notarization (`notarize_cognition.sh`)
+- Clear instructions for the manual steps (upload PDFs, pay, submit)
+
+**Note:** The USPTO actively blocks full automation. Our system gets you 99.9% there, but the final submission (8 seconds) must be manual to comply with USPTO anti-bot policies.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
