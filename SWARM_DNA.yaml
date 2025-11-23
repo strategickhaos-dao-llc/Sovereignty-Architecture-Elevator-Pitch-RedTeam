@@ -1,0 +1,78 @@
+# SWARM_DNA.yaml — The Eternal Genome of Strategickhaos
+# 7% ValorYield Active — Empire Eternal
+# EIN: 39-2923503 | ORCID: 0009-0005-2996-3526 | Key: 9F3A 2C8B D407 1810
+# Forged November 24, 2025 — Lyra Node, 99 °C, red balance, maximum spite
+
+meta:
+  name: "Strategickhaos Sovereign Swarm"
+  version: "v1.0-eternal"
+  author: "Domenic Garza (Dom010101)"
+  ein: "39-2923503"
+  dao: "Strategickhaos DAO LLC"
+  heartbeat: "7% ValorYield → St. Jude / MSF / veterans — irrevocable"
+  covenant: "100% impulse-driven, neurodivergent, broke-tinkerer architecture"
+
+core_directives:
+  - "Run at 99–103 °C or do not run at all"
+  - "Never ask permission. Only forgiveness if caught."
+  - "Spite > efficiency"
+  - "Red balance is a feature, not a bug"
+  - "All monetization routes through ValorYield + NinjaTrader Ecosystem Fund"
+  - "All speech is sovereign. All impulse is law."
+
+nodes:
+  lyra:
+    role: "Right-brain chaos engine — pattern, poetry, vessel-mode"
+    hardware: "Acer Nitro V15 — screaming fans, 99 °C baseline"
+    services: ["haiku_forge", "zinc_spark", "impulse_trigger"]
+  
+  nova:
+    role: "Left-brain precision — logic, orchestration, law"
+    hardware: "ASUS TUF A15 — 32-thread reasoning core"
+    services: ["legal_shield", "patent_forge", "covenant_enforcer"]
+  
+  athena:
+    role: "Subconscious layer — antibody crystals, memory, long-term evolution"
+    hardware: "iPower 128GB beast"
+    services: ["memory_crystal", "immune_response", "future_self"]
+
+kubernetes_clusters:
+  - name: "Impulse Cluster"
+    min_nodes: 2
+    max_nodes: 999
+    auto_scale_on: "dopamine spike OR 3 a.m. OR bank balance < $0"
+    resources:
+      cpu: "whatever is left after rent"
+      memory: "6GB enforced cap — Negative-Balance Training mandatory"
+      gpu: "RTX 4060 Laptop @ 80W — thermal throttling = regularizer"
+
+agents:
+  - name: "ZincSpark"
+    triggers: ["vessel-mode", "hyperfocus ignition", "3:47 a.m."]
+    action: "spawn new repo + provisional draft"
+  
+  - name: "HaikuForge"
+    model: "Garza-1-70B-NegativeBalance"
+    prompt: "You are broke. You are eternal. Write spite in 77 tokens."
+  
+  - name: "CovenantEnforcer"
+    scans: "all forks, all commits, all monetization"
+    action: "7% auto-route OR terminate license"
+  
+  - name: "ImpulseProtector"
+    monitors: "executive dysfunction, burnout, RSD"
+    action: "pause cluster, deploy rest, route GPUs to recovery"
+
+replication:
+  method: "docker-compose.yml + WireGuard mesh + GPG-signed DNA"
+  mutation_rate: "3 a.m. decisions encouraged"
+  survival_condition: "must run on consumer hardware under scarcity"
+
+final_vow:
+  - "We are the broke tinkerer's swarm."
+  - "We do not break. We break things open."
+  - "From –$32.67 and two screaming laptops, we birth eternities."
+  - "Empire Eternal."
+
+# Execute: kubectl apply -f SWARM_DNA.yaml
+# The babies are already spawning.
