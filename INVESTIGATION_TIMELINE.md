@@ -118,10 +118,10 @@ This document establishes an **immutable, public, timestamped audit trail** of t
 - `SECURITY.md` - Security and privacy policies
 
 **Charity Commitment:**
-- 7% revenue allocation documented in code
-- Public commitment on X.com with Grok-4 witness
-- Transparent allocation mechanism
-- Immutable from inception
+- 7% revenue allocation publicly declared on X.com
+- Public commitment with Grok-4 as witness
+- To be implemented in smart contracts and revenue models
+- Documented as immutable commitment from inception
 
 ---
 
@@ -165,19 +165,20 @@ security:
 **Implementation Status:** Documented and committed
 
 **Evidence Locations:**
-- `dao_record.yaml` - DAO structure including charity allocation
-- Public X.com posts with Grok-4 witness
-- Code references in smart contract planning
+- Public X.com posts with Grok-4 witness (primary evidence)
+- This timeline document (documented commitment)
+- Future smart contract implementations (to be deployed)
 - Governance documentation in `governance/`
 
-**Mechanism:**
+**Commitment Structure:**
 ```yaml
-# From dao_record.yaml
-revenue_allocation:
-  charity: 7%  # Locked from inception
-  operations: 65%
-  development: 20%
-  governance: 8%
+# Public commitment documented Nov 22-23, 2025
+charity_allocation:
+  percentage: 7%
+  status: "committed"
+  witness: "Grok-4 on X.com"
+  implementation: "to be deployed in smart contracts"
+  documentation: "INVESTIGATION_TIMELINE.md"
 ```
 
 ### 4. AI Co-Pilot Documentation
@@ -193,12 +194,13 @@ revenue_allocation:
 - Code review and improvements
 - Ethical considerations
 - Transparency recommendations
+- 7% charity allocation validation and commitment
 
 **Witness Value:**
-- Grok-4 can verify all conversations occurred
-- X.com provides immutable timestamps
+- Grok-4 can verify all conversations occurred, including charity commitment
+- X.com provides immutable timestamps for all declarations
 - Third-party AI verification possible
-- Complete conversation history preserved
+- Complete conversation history preserved on public platform
 
 ---
 

@@ -290,40 +290,47 @@ rules:
 
 ### 6. Charity Commitment Evidence
 
-#### 6.1 Code References
+#### 6.1 Documentation References
 
-**File:** `dao_record.yaml`
+**File:** `INVESTIGATION_TIMELINE.md` (this timeline)
 ```yaml
-revenue_allocation:
-  charity: 7%  # Locked from inception
-```
-
-**File:** `dao_record_v1.0.yaml` (versioned commitment)
-```yaml
-version: "1.0"
-effective_date: "2025-11-22T23:22:00Z"
+# Public commitment documented Nov 22-23, 2025
 charity_allocation:
-  percentage: 7
-  locked: true
-  immutable: true
+  percentage: 7%
+  status: "committed"
+  witness: "Grok-4 on X.com"
+  implementation: "to be deployed in smart contracts"
 ```
+
+**Future Implementation:** Smart contracts and revenue models
+- Will codify the 7% allocation
+- Blockchain-based enforcement
+- Transparent distribution mechanisms
 
 #### 6.2 Public Declarations
 
-**X.com Posts:** (timestamped on platform)
-- Initial charity commitment announcement
-- Grok-4 validation of commitment
+**X.com Posts:** (timestamped on platform - PRIMARY EVIDENCE)
+- Initial charity commitment announcement (Nov 22-23, 2025)
+- Grok-4 validation and witness of commitment
+- Public declaration with immutable timestamp
 - Community acknowledgment
-- Immutability declaration
+
+**Verification:** All X.com posts are:
+- Timestamped by platform (cannot be backdated)
+- Publicly viewable
+- Witnessed by Grok-4 AI
+- Archived for perpetuity
 
 #### 6.3 Smart Contract Planning
 
-**Directory:** `templates/` (future smart contract templates)
+**Status:** To be implemented
+**Timeline:** Future deployment phase
 
-**Evidence:**
-- Smart contract templates include 7% allocation
-- Blockchain-based enforcement planning
+**Planned Implementation:**
+- Smart contract templates with 7% allocation
+- Blockchain-based enforcement
 - Transparent distribution mechanisms
+- Immutable on-chain execution
 
 ---
 
