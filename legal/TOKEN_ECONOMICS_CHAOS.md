@@ -105,7 +105,7 @@ token_utilities:
 ```yaml
 supply_model:
   
-  total_supply: "100,000,000 CHAOS"  # 100 million
+  total_supply: "100,000,000 CHAOS"  # 100 million (must match MAX_SUPPLY in contract)
   
   initial_distribution:
     nonprofit_treasury: "40%"  # 40M tokens
@@ -416,6 +416,7 @@ contract CHAOSToken is ERC20, AccessControl, Pausable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     
+    // NOTE: This must match total_supply in documentation (100M tokens)
     uint256 public constant MAX_SUPPLY = 100_000_000 * 10**18; // 100M tokens
     
     // Vesting contracts

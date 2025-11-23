@@ -58,7 +58,7 @@ State of Formation: Wyoming
 - Derivative product sales
 - Any other commercial exploitation of the IP Assets
 
-**1.3 "Royalty Rate"** means \_\_\_\_% of Gross Revenue, as defined in Section 2.1.
+**1.3 "Royalty Rate"** means \_\_\_\_% of Gross Revenue, as defined in Section 2.1. *[Must match Section 2.1(a) - typical range 5-20% based on IP type and nonprofit mission alignment]*
 
 **1.4 "Smart Contract"** means the Ethereum-based smart contract deployed at address [TO BE DEPLOYED] that automates royalty calculation and payment.
 
@@ -73,6 +73,8 @@ State of Formation: Wyoming
 Assignor hereby irrevocably assigns, transfers, and conveys to Assignee:
 
 (a) **\_\_\_\_% of all Gross Revenue** derived from the IP Assets, whether received before or after the Effective Date;
+
+    *[ATTORNEY NOTE: Typical rates are 5-20% depending on IP value and nonprofit purpose. Must be determined with valuation expert and counsel. Common ranges: Software/SaaS: 10-15%, Trading Systems: 15-20%, General IP: 5-10%]*
 
 (b) All rights to collect, enforce, and receive such royalty payments;
 

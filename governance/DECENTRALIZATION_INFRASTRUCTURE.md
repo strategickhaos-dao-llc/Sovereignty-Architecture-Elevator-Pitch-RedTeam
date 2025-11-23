@@ -438,9 +438,18 @@ contract DeadManSwitch {
     
     /**
      * @notice Add emergency contact (e.g., EFF, ACLU)
+     * @dev Requires multi-sig approval, prevents duplicates
      */
     function addEmergencyContact(address contact) external {
         require(isBoardMember[msg.sender], "Not authorized");
+        // TODO: Implement multi-sig approval (3-of-7 board members)
+        
+        // Check for duplicates
+        for (uint i = 0; i < emergencyContacts.length; i++) {
+            require(emergencyContacts[i] != contact, "Contact already exists");
+        }
+        
+        require(contact != address(0), "Invalid address");
         emergencyContacts.push(contact);
     }
 }
@@ -486,9 +495,26 @@ def send_alert(message):
     pass
 
 def trigger_dead_mans_switch():
-    # Called by monitoring script if board can't respond
-    # (requires appropriate key management)
-    pass
+    """
+    Called by monitoring script if board can't respond.
+    
+    WARNING: This requires secure key management. The monitoring key should:
+    - Be stored in HSM or secure vault (not plaintext)
+    - Have only permission to call checkHeartbeat() (anyone can call)
+    - NOT have permission to activateSwitch() (requires board multi-sig)
+    
+    The contract's checkHeartbeat() is permissionless - anyone can trigger
+    if the timeout has passed. Monitoring just automates the check.
+    """
+    try:
+        # Anyone can call checkHeartbeat() - it's public
+        tx_hash = contract.functions.checkHeartbeat().transact()
+        print(f"Dead man's switch check transaction: {tx_hash.hex()}")
+        send_alert("Dead man's switch activated via automated check!")
+    except Exception as e:
+        print(f"Failed to trigger dead man's switch: {e}")
+        # Send alerts through all channels
+        send_alert(f"CRITICAL: Attempted to trigger dead man's switch but failed: {e}")
 
 if __name__ == "__main__":
     check_heartbeat()

@@ -64,7 +64,13 @@ deploy_radicle() {
     
     # Push to Radicle network
     log "Pushing to Radicle network..."
-    rad push --seed "seed.radicle.xyz" || rad push --seed "seed.radicle.garden"
+    if ! rad push --seed "seed.radicle.xyz"; then
+        warn "Primary seed failed, trying backup..."
+        if ! rad push --seed "seed.radicle.garden"; then
+            error "Both Radicle seeds failed. Check network connectivity and authentication."
+            return 1
+        fi
+    fi
     
     # Get and display project ID
     PROJECT_ID=$(rad inspect | grep "rad://" | head -n 1 || echo "Unknown")
@@ -165,16 +171,23 @@ deploy_arweave() {
     
     # Upload to Arweave
     log "Uploading to Arweave (this may take a while)..."
-    TX_ID=$(arweave deploy \
+    ARWEAVE_OUTPUT=$(arweave deploy \
         --wallet-path "$WALLET_PATH" \
         --input-file "$ARCHIVE_FILE" \
         --tag "App-Name:Sovereignty-Archive" \
         --tag "Content-Type:application/gzip" \
         --tag "Version:$(git describe --tags --always)" \
-        --tag "Date:$(date -Iseconds)" | grep -oP 'Transaction.*\K[a-zA-Z0-9_-]{43}' | head -n 1)
+        --tag "Date:$(date -Iseconds)" 2>&1)
     
+    # Try multiple extraction patterns
+    TX_ID=$(echo "$ARWEAVE_OUTPUT" | grep -oP 'Transaction.*\K[a-zA-Z0-9_-]{43}' | head -n 1)
     if [ -z "$TX_ID" ]; then
-        error "Failed to upload to Arweave"
+        TX_ID=$(echo "$ARWEAVE_OUTPUT" | grep -oP '[a-zA-Z0-9_-]{43}' | head -n 1)
+    fi
+    
+    if [ -z "$TX_ID" ] || [ ${#TX_ID} -ne 43 ]; then
+        error "Failed to extract valid Arweave transaction ID"
+        error "Output: $ARWEAVE_OUTPUT"
         rm -f "$ARCHIVE_FILE"
         return 1
     fi
