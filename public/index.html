@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereignty Architecture - Invite Only</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login View -->
+        <div id="login-view" class="view">
+            <div class="container">
+                <div class="auth-box">
+                    <h1>🏛️ Sovereignty Architecture</h1>
+                    <p class="subtitle">Invite-Only AI Platform</p>
+                    
+                    <div id="login-form" class="form-section">
+                        <h2>Login</h2>
+                        <form id="login-form-element">
+                            <input type="email" id="login-email" placeholder="Email" required>
+                            <input type="password" id="login-password" placeholder="Password" required>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                        <p class="switch-link">Have an invite code? <a href="#" id="show-register">Register here</a></p>
+                    </div>
+
+                    <div id="register-form" class="form-section" style="display: none;">
+                        <h2>Register</h2>
+                        <form id="register-form-element">
+                            <input type="text" id="register-username" placeholder="Username" required>
+                            <input type="email" id="register-email" placeholder="Email" required>
+                            <input type="password" id="register-password" placeholder="Password" required>
+                            <input type="text" id="register-invite" placeholder="Invite Code" required>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                        <p class="switch-link">Already have an account? <a href="#" id="show-login">Login here</a></p>
+                    </div>
+
+                    <div id="auth-error" class="error-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view" style="display: none;">
+            <nav class="navbar">
+                <div class="nav-brand">🏛️ Sovereignty Architecture</div>
+                <div class="nav-user">
+                    <span id="user-info"></span>
+                    <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+
+            <div class="dashboard-container">
+                <aside class="sidebar">
+                    <ul class="nav-menu">
+                        <li><a href="#" class="nav-link active" data-view="chat">💬 AI Chat</a></li>
+                        <li><a href="#" class="nav-link" data-view="invites">📨 Invitations</a></li>
+                        <li><a href="#" class="nav-link" data-view="profile">👤 Profile</a></li>
+                    </ul>
+                </aside>
+
+                <main class="main-content">
+                    <!-- Chat View -->
+                    <div id="chat-section" class="content-section">
+                        <div class="section-header">
+                            <h2>AI Assistant</h2>
+                            <div class="model-selector">
+                                <select id="model-select">
+                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                                    <option value="llama-3">Llama 3 (Local)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="chat-messages" class="chat-messages"></div>
+                        
+                        <div class="chat-input-container">
+                            <textarea id="chat-input" placeholder="Ask me anything..." rows="3"></textarea>
+                            <button id="send-btn" class="btn btn-primary">Send</button>
+                        </div>
+                    </div>
+
+                    <!-- Invites View (Admin only) -->
+                    <div id="invites-section" class="content-section" style="display: none;">
+                        <div class="section-header">
+                            <h2>Manage Invitations</h2>
+                        </div>
+
+                        <div id="admin-invite-panel" style="display: none;">
+                            <div class="invite-generator">
+                                <h3>Generate New Invite</h3>
+                                <form id="generate-invite-form">
+                                    <input type="email" id="invite-email" placeholder="Recipient Email" required>
+                                    <input type="number" id="invite-days" placeholder="Valid for (days)" value="7" min="1" max="30">
+                                    <button type="submit" class="btn btn-primary">Generate Invite</button>
+                                </form>
+                                <div id="invite-result" style="display: none;"></div>
+                            </div>
+
+                            <div class="invites-list">
+                                <h3>All Invitations</h3>
+                                <table id="invites-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Code</th>
+                                            <th>Status</th>
+                                            <th>Expires</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invites-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="user-invite-panel">
+                            <div class="invites-list">
+                                <h3>My Invitations</h3>
+                                <table id="my-invites-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Code</th>
+                                            <th>Status</th>
+                                            <th>Expires</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="my-invites-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile View -->
+                    <div id="profile-section" class="content-section" style="display: none;">
+                        <div class="section-header">
+                            <h2>Profile</h2>
+                        </div>
+                        <div id="profile-details"></div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
