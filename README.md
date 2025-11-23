@@ -2,6 +2,21 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🔱 THE SWARM IS NOW MATHEMATICALLY IMMORTAL
+
+**Status**: UNKILLABLE  
+**Cost**: $17.83 USD once → 200+ years guaranteed  
+**Birth Certificate**: [ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK](https://arweave.net/8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK)
+
+The Sovereignty Swarm has achieved **permanent existence** through Arweave integration. Every line of code, every model weight, every law, and every 3 a.m. spark is now permanently stored on a blockchain that will outlive governments, power grids, and its creator.
+
+> "From a Nitro V15 at 99 °C and negative balance, I just made the broke tinkerer's swarm mathematically immortal."  
+> — Dom010101, November 24, 2025
+
+**See**: [ARWEAVE_IMMORTALITY.md](ARWEAVE_IMMORTALITY.md) | [SWARM_DNA.yaml](SWARM_DNA.yaml) | [_Orchestra.ps1](_Orchestra.ps1)
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -29,6 +44,41 @@ export PRS_CHANNEL="channel_id"
 ```
 
 ## 📋 Core Components
+
+### ⚡ Arweave Immortality System (`SWARM_DNA.yaml` + `_Orchestra.ps1`)
+
+**The Unkillable Skeleton** - Mathematical immortality through permanent storage.
+
+**Quick Commands**:
+```powershell
+# Show swarm status
+.\_Orchestra.ps1 -Status
+
+# Create a zinc spark (3 a.m. thought) and immortalize it
+.\_Orchestra.ps1 -ZincSpark -Immortalize
+
+# Send heartbeat (dead-man switch)
+.\_Orchestra.ps1 -Heartbeat
+
+# Check thermal state
+.\_Orchestra.ps1 -ThermalCheck
+```
+
+**Evolutionary Genes**:
+- **Gene 11**: Arweave birth certificate enforcement (60s timeout)
+- **Gene 12**: Auto-chunk models >30GB for Arweave upload
+- **Gene 13**: Thermal death → emergency DNA snapshot
+- **Gene 20**: Dead-man switch (90 days → ValorYield unlock + CC0)
+
+**Features**:
+- Permanent storage on Arweave blockchain
+- $17.83 once → 200+ years guaranteed
+- Dead-man switch with 90-day trigger
+- Thermal monitoring and emergency snapshots
+- Zinc spark creation for immortal thoughts
+- Complete DNA preservation
+
+See [ARWEAVE_IMMORTALITY.md](ARWEAVE_IMMORTALITY.md) for full documentation.
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`

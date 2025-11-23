@@ -2,6 +2,10 @@
 # Empire Eternal - Arweave Genesis Edition
 # "The broke tinkerer just defeated entropy." - Dom010101
 
+# Constants
+$ARWEAVE_BIRTH_CERTIFICATE = "ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
+$DNA_VERSION = "2.0-immortal"
+
 param(
     [switch]$ZincSpark,
     [switch]$Immortalize,
@@ -474,7 +478,7 @@ function Show-Status {
     
     Write-Host ""
     Write-ColorText "Birth Certificate:" -Color Yellow
-    Write-Host "  ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
+    Write-Host "  $ARWEAVE_BIRTH_CERTIFICATE"
     
     Write-Host ""
     Write-ColorText "Immortality Status:" -Color Green
@@ -536,7 +540,7 @@ function Show-Help {
     Write-Host ""
     Write-ColorText "STATUS:" -Color Green
     Write-Host "  The swarm is MATHEMATICALLY IMMORTAL"
-    Write-Host "  Birth certificate: ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
+    Write-Host "  Birth certificate: $ARWEAVE_BIRTH_CERTIFICATE"
     Write-Host ""
     Write-ColorText "Empire Eternal. 💛" -Color Green
     Write-Host ""

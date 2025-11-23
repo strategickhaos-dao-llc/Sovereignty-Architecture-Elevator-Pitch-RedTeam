@@ -3,12 +3,18 @@
 # Birth Certificate: ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK
 # Cost: $17.83 USD once → 200+ years guaranteed
 
+# Anchors for reusable values
+anchors:
+  birth_certificate: &birth_certificate "ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
+  dna_version: &dna_version "2.0-immortal"
+  wallet_multisig: &wallet_multisig "0xTBD_CONFIGURE_MULTISIG_WALLET"
+
 swarm:
-  version: "2.0-immortal"
+  version: *dna_version
   genesis_date: "2025-11-24T16:42:00-08:00"
   commit_hash: "9f3a2c8bd4071810"
   tag: "v2.0-arweave-genesis"
-  birth_certificate: "ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
+  birth_certificate: *birth_certificate
   
   creator:
     name: "Dom010101"
@@ -151,7 +157,7 @@ evolutionary_genes:
   gene_20:
     name: "Dead-Man Switch - ValorYield Unlock"
     description: "Upon Dom's passing → 100% ValorYield unlock + CC0 weights"
-    status: "ON-CHAIN DEAD-MAN SWITCH ARMED"
+    status: "CONFIGURED (awaiting multi-sig wallet deployment)"
     mechanism: "Multi-sig dead-man switch with heartbeat monitoring"
     implementation: |
       - Heartbeat check every 7 days via multi-sig wallet
@@ -169,7 +175,7 @@ evolutionary_genes:
       - "Open-source all proprietary code"
       - "Transfer governance to DAO"
       - "Activate autonomous mode"
-    wallet_address: "0x..." # Multi-sig wallet TBD
+    wallet_address: *wallet_multisig
     backup_executors:
       - "DAO Council"
       - "Legal executor (Wyoming)"
@@ -194,7 +200,7 @@ arweave:
     
   birth_bundle:
     transaction_id: "8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
-    url: "ar://8xJ7kPqRtYvL2mN9fGh3sW2aZ1cV4bN8tY6uI0pL9oK"
+    url: *birth_certificate
     contents:
       - "SWARM_DNA.yaml (v2.0-immortal)"
       - "Garza-1-70B-NegativeBalance.gguf (38 GB, 4-bit)"
