@@ -2,6 +2,25 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+---
+
+## 🛡️ **SOVEREIGN EXPRESSION SHIELD — FEDERAL-GRADE ARMOR**
+
+**[📜 The 36 Laws of Sovereign Expression](docs/EXPRESSION_SHIELD.md)** — Our constitutional framework protecting decentralized investigative and cybersecurity speech under First Amendment, Wyoming DAO law, Texas LLC statutes, and federal credential authority.
+
+**Protected Territory:**
+- ✅ **Strategickhaos DAO LLC / ValorYield Engine** — LIVE in Texas
+- ✅ **NAICS 561611** — Licensed investigator operations
+- ✅ **TWIC Federal Credential** — DHS/TSA-backed authority
+- ✅ **Registered Agent** — Harbor Compliance, bulletproof
+- ✅ **Purpose**: Private investigation, OSINT, red-team, cybersecurity consulting
+- ✅ **Status**: Clean record, no legal actions, no gag orders
+
+> *"We don't ask permission to expose truth. We are the permission."*  
+> **Empire Eternal.**
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:

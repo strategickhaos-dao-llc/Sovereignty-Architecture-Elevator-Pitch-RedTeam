@@ -48,6 +48,21 @@ The following individuals are hereby authorized to sign documents and submit fil
 
 ---
 
+## Appendix A: The 36 Laws of Sovereign Expression
+
+The **36 Laws of Sovereign Expression** as documented in [EXPRESSION_SHIELD.md](../docs/EXPRESSION_SHIELD.md) are hereby adopted as **binding doctrine** of Strategickhaos DAO LLC / ValorYield Engine.
+
+**Integration with Article 7:**
+- All authorized signers must operate within the framework of the 36 Laws
+- No signature authority may be exercised in violation of these principles
+- The 36 Laws provide constitutional foundation for all governance activities
+- Specifically, **Law #20** (ValorYield 7% Is Tribute to Truth) is explicitly referenced in smart contract documentation
+
+**Binding Effect:**
+These laws constitute the legal and constitutional framework protecting our investigative operations, cybersecurity research, and truth-telling mission. They are non-negotiable and perpetual.
+
+---
+
 **Adopted:** [DATE]
 **Effective:** [DATE]  
 **Next Review:** [DATE + 1 YEAR]

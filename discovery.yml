@@ -4,6 +4,9 @@ org:
     owner: "Domenic Garza"
     slack_or_discord_handle: null   # e.g. "Dom_010101#1234"
   compliance: ["none"]              # soc2, hipaa, iso27001, etc.
+  governance:
+    expression_shield: "docs/EXPRESSION_SHIELD.md"  # 36 Laws of Sovereign Expression - Binding Doctrine
+    legal_framework: "First Amendment + Wyoming DAO (SF0068) + Texas LLC + Federal Credentials"
 
 discord:
   guild_id: null                    # real guild/server ID here

@@ -40,6 +40,11 @@ compliance:
   legal_actions: false
   regulatory_status: "Good standing"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
+  expression_shield:
+    framework: "36 Laws of Sovereign Expression"
+    document: "docs/EXPRESSION_SHIELD.md"
+    status: "Active - Binding Doctrine"
+    valoryield_7_percent: "Tribute to truth-telling and investigative sovereignty per Law #20"
 
 generated:
   by: "generate_dao_record.sh (hardened)"
