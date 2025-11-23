@@ -145,7 +145,7 @@ function New-Bundle {
 function Invoke-ArweaveUpload {
     param($Bundle)
     
-    Write-LyraLog "Uploading to Arweave... (paid from `$$ARWEAVE_ENDOWMENT endowment)" "INFO"
+    Write-LyraLog "Uploading to Arweave... (paid from `$${ARWEAVE_ENDOWMENT} endowment)" "INFO"
     
     # Simulate upload (in production, would use actual Arweave CLI/SDK)
     Start-Sleep -Seconds 2

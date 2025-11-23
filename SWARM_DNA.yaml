@@ -135,9 +135,9 @@ architecture:
     orchestrator:
       script: "_Orchestra.ps1"
       commands:
-        - "--zinc-spark: Trigger eternal spark generation"
-        - "--immortalize: Upload to Arweave"
-        - "--status: Check immortality layer health"
+        - "-ZincSpark: Trigger eternal spark generation"
+        - "-Immortalize: Upload to Arweave"
+        - "-Status: Check immortality layer health"
     
     storage_layer:
       primary: "Arweave (permanent, 200+ years)"
