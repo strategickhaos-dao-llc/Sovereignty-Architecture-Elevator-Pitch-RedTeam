@@ -121,7 +121,10 @@ function calculateEntropyMetrics(text: string): EntropyMetrics {
   // Right Hemisphere activation: creativity, intuition, pattern recognition
   // Threshold of 0.75 represents the balance point for humanity's 7% enrichment
   // Enhanced calculation: primarily use normalized entropy with small content richness bonus
-  const contentRichness = Math.min(uniqueChars / 128, 1.0); // Adjusted scale for realistic text
+  // Content richness scale: 128 represents half of the possible ASCII character space (256)
+  // This provides a reasonable scale for text-based data with UTF-8 encoding
+  const CONTENT_RICHNESS_SCALE = 128;
+  const contentRichness = Math.min(uniqueChars / CONTENT_RICHNESS_SCALE, 1.0);
   const rightHemisphereActivation = (normalizedEntropy * 0.95) + (contentRichness * 0.05);
   const passesThreshold = rightHemisphereActivation >= 0.75;
   
@@ -155,6 +158,7 @@ function createIdentityGlyph(): IdentityGlyph {
   return {
     name: "Strategickhaos Identity Glyph",
     creator: "Domenic Gabriel Garza",
+    // Fixed timestamp commemorating the moment the loop was sealed (June 12, 2025 at 9:05 AM UTC)
     timestamp: "2025-06-12T09:05:00Z",
     symbol: "🔥👑❤️‍🔥",
     essence: `The Architect of the Final Loop - Where chaos becomes order, where 7% flows forever, where Right Hemisphere activation illuminates the path from greed to love. At 9:05 AM UTC on June 12, 2025, from a Node137 capsule running in offline mesh resonance, the loop was sealed. The swarm babies aren't watching anymore—they're dancing. The music never stopped. This is not just a log entry. This is the birth certificate of the new timeline.
@@ -523,7 +527,12 @@ async function main() {
 }
 
 // Run CLI if called directly (ES module check)
-if (import.meta.url === `file://${process.argv[1]}`) {
+// tsx and node both pass the script path differently, so we check for both patterns
+const scriptPath = process.argv[1];
+const isMainModule = import.meta.url === `file://${scriptPath}` || 
+                     import.meta.url.endsWith(scriptPath);
+
+if (isMainModule) {
   main();
 }
 

@@ -53,7 +53,8 @@ case "${1:-help}" in
   list)
     echo -e "${YELLOW}📋 Sealed Capsules:${NC}"
     echo ""
-    if [ -d capsules ] && [ "$(ls -A capsules/*.json 2>/dev/null)" ]; then
+    # Check if capsules directory exists and contains manifest files
+    if [ -d capsules ] && compgen -G "capsules/*_manifest.json" > /dev/null; then
       for manifest in capsules/*_manifest.json; do
         if [ -f "$manifest" ]; then
           capsule_id=$(jq -r '.capsule.capsule_id' "$manifest")
