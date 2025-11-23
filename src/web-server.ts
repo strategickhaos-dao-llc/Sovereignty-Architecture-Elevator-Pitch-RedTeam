@@ -8,6 +8,7 @@ import { llmRouter } from "./routes/llm.js";
 import { requireAuth } from "./middleware/auth.js";
 import { auditLogger } from "./middleware/audit.js";
 import { rateLimiter } from "./middleware/ratelimit.js";
+import { csrfProtection } from "./middleware/csrf.js";
 import { CONFIG } from "./config/constants.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,14 +20,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session configuration
+// Session configuration with CSRF protection via SameSite
 app.use(session({
   secret: process.env.SESSION_SECRET || "sovereignty-secret-change-in-production",
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // HTTPS only in production
+    httpOnly: true, // Prevent XSS attacks
+    sameSite: "strict", // CSRF protection - cookies only sent for same-site requests
     maxAge: CONFIG.SESSION_MAX_AGE_MS
   }
 }));
@@ -34,21 +36,18 @@ app.use(session({
 // Audit logging middleware
 app.use(auditLogger);
 
-// Rate limiting
-app.use("/api/", rateLimiter);
-
 // Serve static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Health check endpoint
+// Health check endpoint (no rate limiting)
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "sovereignty-web" });
 });
 
-// API routes
-app.use("/api/auth", authRouter);
-app.use("/api/invites", requireAuth, inviteRouter);
-app.use("/api/llm", requireAuth, llmRouter);
+// API routes with rate limiting and CSRF protection
+app.use("/api/auth", rateLimiter, csrfProtection, authRouter);
+app.use("/api/invites", rateLimiter, csrfProtection, requireAuth, inviteRouter);
+app.use("/api/llm", rateLimiter, csrfProtection, requireAuth, llmRouter);
 
 // Serve index.html for all other routes (SPA)
 app.get("*", (_req, res) => {
