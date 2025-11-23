@@ -102,7 +102,7 @@ echo -e "${BLUE}Running pattern-based scan...${NC}"
 FOUND_ISSUES=false
 
 # Check for common secret patterns in tracked files
-if git ls-files | xargs grep -l -E "(xai-[a-zA-Z0-9]{32,}|sk-[a-zA-Z0-9]{32,}|AKIA[0-9A-Z]{16})" 2>/dev/null; then
+if git ls-files | xargs -r grep -l -E "(xai-[a-zA-Z0-9]{32,}|sk-[a-zA-Z0-9]{32,}|AKIA[0-9A-Z]{16})" 2>/dev/null; then
     echo -e "${RED}⚠️  Potential secrets found in tracked files!${NC}"
     FOUND_ISSUES=true
 fi
@@ -124,9 +124,10 @@ fi
 if command -v gitleaks &> /dev/null; then
     echo ""
     echo -e "${BLUE}Running gitleaks scan...${NC}"
-    if gitleaks detect --no-banner --no-git 2>&1 | grep -q "No leaks found"; then
+    if gitleaks detect --no-banner --no-git 2>&1; then
         echo -e "${GREEN}✅ Gitleaks: No secrets detected${NC}"
     else
+        # Non-zero exit code means leaks were found
         echo -e "${YELLOW}⚠️  Gitleaks found potential issues - review output above${NC}"
     fi
 fi

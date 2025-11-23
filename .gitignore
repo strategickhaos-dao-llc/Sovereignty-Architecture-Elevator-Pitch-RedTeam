@@ -75,18 +75,17 @@ secret/
 *token*.txt
 *bearer*.txt
 
-# Screenshots that might contain sensitive data
+# Screenshots directory that might contain sensitive data
 screenshots/
-*screenshot*
-*.png
-*.jpg
-*.jpeg
-*.gif
-# Exception: Allow specific documented images
-!docs/*.png
-!docs/*.jpg
-!assets/*.png
-!assets/*.jpg
+*screenshot*.png
+*screenshot*.jpg
+*screenshot*.jpeg
+# Block temporary or debug images
+temp/*.png
+temp/*.jpg
+tmp/*.png
+tmp/*.jpg
+# Note: Project images in docs/, assets/, and root are allowed
 
 # Bitwarden/1Password exports
 *export*.csv

@@ -46,10 +46,10 @@ if [ -z "$STAGED_FILES" ]; then
     exit 0
 fi
 
-# Build exclude pattern for grep
-EXCLUDE_GREP=""
+# Build exclude pattern array for grep
+EXCLUDE_ARGS=()
 for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-    EXCLUDE_GREP="$EXCLUDE_GREP --exclude=$pattern"
+    EXCLUDE_ARGS+=("--exclude=$pattern")
 done
 
 FOUND_SECRETS=false
@@ -59,7 +59,7 @@ for file in $STAGED_FILES; do
     if [ -f "$file" ]; then
         # Check for common secret patterns
         for pattern in "${PATTERNS[@]}"; do
-            if grep -E "$pattern" "$file" $EXCLUDE_GREP &> /dev/null; then
+            if grep -E "$pattern" "$file" "${EXCLUDE_ARGS[@]}" &> /dev/null; then
                 echo -e "${RED}⚠️  Potential secret found in: $file${NC}"
                 echo -e "${YELLOW}Pattern: $pattern${NC}"
                 FOUND_SECRETS=true
@@ -84,8 +84,10 @@ done
 # Run gitleaks if available (more thorough check)
 if [ "$GITLEAKS_AVAILABLE" = true ]; then
     echo "🔐 Running gitleaks scan..."
-    if ! gitleaks protect --staged --verbose --no-banner 2>&1; then
+    GITLEAKS_OUTPUT=$(gitleaks protect --staged --verbose --no-banner 2>&1) || GITLEAKS_EXIT=$?
+    if [ ${GITLEAKS_EXIT:-0} -ne 0 ]; then
         echo -e "${RED}🚨 Gitleaks detected secrets!${NC}"
+        echo "$GITLEAKS_OUTPUT"
         FOUND_SECRETS=true
     fi
 fi
