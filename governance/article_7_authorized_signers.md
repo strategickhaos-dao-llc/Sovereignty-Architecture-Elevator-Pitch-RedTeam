@@ -63,8 +63,8 @@ These laws constitute the legal and constitutional framework protecting our inve
 
 ---
 
-**Adopted:** [DATE]
-**Effective:** [DATE]  
-**Next Review:** [DATE + 1 YEAR]
+**Adopted:** [TO BE DETERMINED UPON FORMAL ADOPTION]  
+**Effective:** [TO BE DETERMINED UPON FORMAL ADOPTION]  
+**Next Review:** [ONE YEAR AFTER ADOPTION]
 
 *This document contains internal drafts only and does not constitute legal advice.*
