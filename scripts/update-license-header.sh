@@ -66,8 +66,8 @@ case "$FILE_EXT" in
         ;;
 esac
 
-# Check if file already has copyright header
-if grep -q "Copyright.*${CURRENT_YEAR}.*${COPYRIGHT_OWNER}" "$FILE_PATH"; then
+# Check if file already has copyright header (using -F for fixed strings to avoid regex issues)
+if grep -F "Copyright" "$FILE_PATH" | grep -F "${CURRENT_YEAR}" | grep -qF "${COPYRIGHT_OWNER}"; then
     echo -e "${GREEN}✅ Copyright header is current: $(basename $FILE_PATH)${NC}"
     exit 0
 fi
@@ -102,11 +102,20 @@ if grep -q "Copyright" "$FILE_PATH"; then
     
     # Remove old copyright header and add new one
     if [[ -n "$COMMENT_START" ]]; then
-        # For multi-line comment languages (remove old /* ... */ block)
-        sed '/\/\*/,/\*\//d' "$FILE_PATH" > "$TEMP_FILE"
+        # For multi-line comment languages (remove only copyright comment blocks)
+        # Look for blocks containing "Copyright" and remove them
+        awk '/\/\*.*Copyright/,/\*\// {next} {print}' "$FILE_PATH" > "$TEMP_FILE"
     else
-        # For single-line comment languages (remove consecutive comment lines at top)
-        sed '/^[#]/d' "$FILE_PATH" > "$TEMP_FILE"
+        # For single-line comment languages (remove only copyright-related comment lines at the top)
+        # Skip consecutive lines starting with # that contain copyright-related keywords
+        awk '
+        BEGIN { in_header=1 }
+        /^#!/ { print; next }  # Keep shebang
+        /^#/ && in_header && /Copyright|MIT|LICENSE|Permission/ { next }
+        /^#/ && in_header && /^# *$/ { next }  # Skip empty comment lines in header
+        /^[^#]/ { in_header=0 }  # Stop when we hit non-comment
+        { if (!in_header || !/^#/) print }
+        ' "$FILE_PATH" > "$TEMP_FILE"
     fi
     
     # Add new header
@@ -140,8 +149,5 @@ else
     mv "$TEMP_FILE" "$FILE_PATH"
     echo -e "${GREEN}✅ Added copyright header${NC}"
 fi
-
-# Preserve file permissions
-chmod +x "$0" 2>/dev/null || true
 
 exit 0

@@ -42,8 +42,16 @@ fi
 # Pull latest changes
 echo -e "${BLUE}📥 Pulling latest changes from repository...${NC}"
 cd "$REPO_PATH"
-git pull origin main --quiet || {
-    echo -e "${YELLOW}⚠️  Warning: Could not pull latest changes${NC}"
+
+# Determine the default branch dynamically
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+if [[ -z "$DEFAULT_BRANCH" ]]; then
+    # Fallback to main if HEAD is not set
+    DEFAULT_BRANCH="main"
+fi
+
+git pull origin "$DEFAULT_BRANCH" --quiet || {
+    echo -e "${YELLOW}⚠️  Warning: Could not pull latest changes from $DEFAULT_BRANCH${NC}"
 }
 
 # Extract license information

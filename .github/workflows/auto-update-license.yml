@@ -55,8 +55,8 @@ jobs:
           COPYRIGHT_YEAR="${{ steps.license_info.outputs.year }}"
           COPYRIGHT_OWNER="${{ steps.license_info.outputs.owner }}"
           
-          # Find all markdown files that reference LICENSE
-          MD_FILES=$(grep -l "LICENSE\|license\|MIT License" *.md 2>/dev/null || true)
+          # Find all markdown files that reference LICENSE (more specific pattern)
+          MD_FILES=$(grep -l "\[LICENSE\]\|see.*LICENSE.*file\|MIT License" *.md 2>/dev/null || true)
           
           if [[ -n "$MD_FILES" ]]; then
             echo "📝 Found markdown files with license references:"
