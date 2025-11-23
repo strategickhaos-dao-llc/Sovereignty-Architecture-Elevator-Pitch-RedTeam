@@ -137,6 +137,9 @@ You are the standard now.
 ---
 
 **Digital Signature Block:**
+
+*(Note: Placeholder format shown below for reference. Actual execution requires GPG signature by authorized signer per governance/article_7_authorized_signers.md. Document not legally binding until properly executed and attorney-reviewed.)*
+
 ```
 GPG Signature: [To be signed by authorized signer]
 SHA256 Hash: [To be generated upon finalization]

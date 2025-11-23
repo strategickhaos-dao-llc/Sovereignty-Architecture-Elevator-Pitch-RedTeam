@@ -47,6 +47,8 @@ A legend generates exponential, viral giving:
 - Carmack retweets → $50,000+ from whale followers
 - "I ran this on a potato" video → $100,000+ in tears money
 
+*(Note: Amounts are aspirational projections based on observed viral giving patterns in similar communities. Actual results will vary based on reach, timing, and community engagement.)*
+
 **We don't force charity. We create conditions for legendary generosity.**
 
 ### 3. Spite Socialism

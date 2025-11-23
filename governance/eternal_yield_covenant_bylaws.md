@@ -73,6 +73,8 @@ This organization rejects forced percentage-based charitable giving in favor of 
 
 **Threshold Amount:** $1,000,000 USD
 
+*(Rationale: $1M threshold ensures ecosystem sustainability with 6+ months of operating runway while demonstrating sufficient scale and stability to trigger legendary charitable overflow. This amount balances fiscal responsibility with the mission to generate tsunami-scale impact once core operations are secure.)*
+
 **When treasury balance exceeds the threshold:**
 
 1. **Core Operations Protection**
@@ -172,6 +174,9 @@ This Article implements the philosophy articulated in the **Valoryield Manifesto
 **Supersedes:** N/A (first formal revenue distribution covenant)
 
 **Approved By:**
+
+*(Note: Checkboxes below indicate required approvals. Document status is DRAFT until all approvals obtained and signatures executed per Article 7 governance procedures.)*
+
 - [ ] Domenic Garza, Managing Member (Signature required)
 - [ ] Wyoming-Licensed Attorney Review (Required before execution)
 - [ ] DAO Member Vote (If applicable per operating agreement)
