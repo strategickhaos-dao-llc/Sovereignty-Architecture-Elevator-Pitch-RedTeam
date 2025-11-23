@@ -40,18 +40,18 @@ network:
       
       peers:
         - name: "kali-agent-1"
-          public_key: "[KALI_PUBLIC_KEY]"
+          public_key: "${KALI_PUBLIC_KEY}"  # Set via environment variable
           allowed_ips: "10.200.0.10/32"
           persistent_keepalive: 25
         
         - name: "parrot-agent-1"
-          public_key: "[PARROT_PUBLIC_KEY]"
+          public_key: "${PARROT_PUBLIC_KEY}"  # Set via environment variable
           allowed_ips: "10.200.0.11/32"
           persistent_keepalive: 25
         
         - name: "inline-agent-pool"
-          public_key: "[AGENT_POOL_PUBLIC_KEY]"
-          allowed_ips: "10.200.0.20-10.200.0.50"
+          public_key: "${AGENT_POOL_PUBLIC_KEY}"  # Set via environment variable
+          allowed_ips: "10.200.0.20/27"  # CIDR notation for 10.200.0.20-10.200.0.47
           persistent_keepalive: 25
     
     setup_script: |
@@ -304,36 +304,37 @@ authentication:
         namespace: "strategickhaos"
         permissions:
           - "get, list, watch pods, services, deployments"
-        manifest: |
-          apiVersion: v1
-          kind: ServiceAccount
-          metadata:
-            name: agent-reader
-            namespace: strategickhaos
-          ---
-          apiVersion: rbac.authorization.k8s.io/v1
-          kind: Role
-          metadata:
-            name: agent-reader-role
-            namespace: strategickhaos
-          rules:
-          - apiGroups: ["", "apps"]
-            resources: ["pods", "services", "deployments"]
-            verbs: ["get", "list", "watch"]
-          ---
-          apiVersion: rbac.authorization.k8s.io/v1
-          kind: RoleBinding
-          metadata:
-            name: agent-reader-binding
-            namespace: strategickhaos
-          subjects:
-          - kind: ServiceAccount
-            name: agent-reader
-            namespace: strategickhaos
-          roleRef:
-            kind: Role
-            name: agent-reader-role
-            apiGroup: rbac.authorization.k8s.io
+        manifest_files:
+          - service_account: |
+              apiVersion: v1
+              kind: ServiceAccount
+              metadata:
+                name: agent-reader
+                namespace: strategickhaos
+          - role: |
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: Role
+              metadata:
+                name: agent-reader-role
+                namespace: strategickhaos
+              rules:
+              - apiGroups: ["", "apps"]
+                resources: ["pods", "services", "deployments"]
+                verbs: ["get", "list", "watch"]
+          - role_binding: |
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: RoleBinding
+              metadata:
+                name: agent-reader-binding
+                namespace: strategickhaos
+              subjects:
+              - kind: ServiceAccount
+                name: agent-reader
+                namespace: strategickhaos
+              roleRef:
+                kind: Role
+                name: agent-reader-role
+                apiGroup: rbac.authorization.k8s.io
       
       - name: "agent-operator"
         namespace: "strategickhaos"
@@ -341,36 +342,37 @@ authentication:
           - "All reader permissions"
           - "create, update, delete pods"
           - "execute commands in pods"
-        manifest: |
-          apiVersion: v1
-          kind: ServiceAccount
-          metadata:
-            name: agent-operator
-            namespace: strategickhaos
-          ---
-          apiVersion: rbac.authorization.k8s.io/v1
-          kind: Role
-          metadata:
-            name: agent-operator-role
-            namespace: strategickhaos
-          rules:
-          - apiGroups: ["", "apps"]
-            resources: ["pods", "services", "deployments", "pods/exec"]
-            verbs: ["get", "list", "watch", "create", "update", "delete"]
-          ---
-          apiVersion: rbac.authorization.k8s.io/v1
-          kind: RoleBinding
-          metadata:
-            name: agent-operator-binding
-            namespace: strategickhaos
-          subjects:
-          - kind: ServiceAccount
-            name: agent-operator
-            namespace: strategickhaos
-          roleRef:
-            kind: Role
-            name: agent-operator-role
-            apiGroup: rbac.authorization.k8s.io
+        manifest_files:
+          - service_account: |
+              apiVersion: v1
+              kind: ServiceAccount
+              metadata:
+                name: agent-operator
+                namespace: strategickhaos
+          - role: |
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: Role
+              metadata:
+                name: agent-operator-role
+                namespace: strategickhaos
+              rules:
+              - apiGroups: ["", "apps"]
+                resources: ["pods", "services", "deployments", "pods/exec"]
+                verbs: ["get", "list", "watch", "create", "update", "delete"]
+          - role_binding: |
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: RoleBinding
+              metadata:
+                name: agent-operator-binding
+                namespace: strategickhaos
+              subjects:
+              - kind: ServiceAccount
+                name: agent-operator
+                namespace: strategickhaos
+              roleRef:
+                kind: Role
+                name: agent-operator-role
+                apiGroup: rbac.authorization.k8s.io
     
     token_management:
       description: "Secure token generation and rotation"

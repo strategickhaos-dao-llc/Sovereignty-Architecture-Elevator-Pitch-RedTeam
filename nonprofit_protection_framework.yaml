@@ -194,7 +194,7 @@ financial_safeguards:
         type: "Recurring revenue"
         risk_level: "Medium"
         mitigation: "Documented agreements, regular reconciliation"
-        estimated_annual: "$[CONFIDENTIAL]"
+        estimated_annual: "${NINJATRADER_ANNUAL_REVENUE}"  # Set via config
       
       - source: "Consulting Services"
         type: "Professional services"
@@ -899,20 +899,20 @@ insurance:
     - type: "General Liability Insurance"
       coverage: "$1,000,000 per occurrence / $2,000,000 aggregate"
       purpose: "Bodily injury, property damage, personal injury"
-      provider: "[Insurance Company]"
+      provider: "${INSURANCE_PROVIDER_GL}"  # Configure with actual provider
       annual_premium: "$1,500-$3,000"
     
     - type: "Professional Liability (E&O)"
       coverage: "$1,000,000 per claim / $2,000,000 aggregate"
       purpose: "Errors, omissions, negligence in professional services"
-      provider: "[Insurance Company]"
+      provider: "${INSURANCE_PROVIDER_EO}"  # Configure with actual provider
       annual_premium: "$2,000-$5,000"
       critical_for: "Cybersecurity consulting, investigation services"
     
     - type: "Cyber Liability Insurance"
       coverage: "$1,000,000"
       purpose: "Data breaches, cyber attacks, regulatory fines"
-      provider: "[Insurance Company]"
+      provider: "${INSURANCE_PROVIDER_CYBER}"  # Configure with actual provider
       annual_premium: "$3,000-$7,000"
       includes:
         - "Breach response costs"
@@ -925,7 +925,7 @@ insurance:
     - type: "Directors & Officers (D&O) Liability"
       coverage: "$1,000,000"
       purpose: "Protect managing member and board from lawsuits"
-      provider: "[Insurance Company]"
+      provider: "${INSURANCE_PROVIDER_DO}"  # Configure with actual provider
       annual_premium: "$2,000-$4,000"
       critical_for: "Lawsuits alleging mismanagement, breach of duty"
     

@@ -17,7 +17,7 @@ meta:
     management: "Member-Managed"
     formation:
       jurisdiction: "Wyoming"
-      date: "2025-06-25"
+      date: "2024-06-25"  # Historical formation date
       legal_framework: "Wyoming SF0068 (DAO Supplement)"
     domicile:
       state: "Texas"
