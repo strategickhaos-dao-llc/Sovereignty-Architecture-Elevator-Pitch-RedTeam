@@ -39,9 +39,9 @@ fi
 USPTO_NUM=$1
 echo -e "${GREEN}USPTO Application Number: ${USPTO_NUM}${NC}\n"
 
-# Validate USPTO number format
-if [[ ! $USPTO_NUM =~ ^63/[0-9]{6,7}$ ]]; then
-    echo -e "${YELLOW}Warning: USPTO number format should be 63/XXXXXX${NC}"
+# Validate USPTO number format (6 digits is standard for provisional patents)
+if [[ ! $USPTO_NUM =~ ^63/[0-9]{6}$ ]]; then
+    echo -e "${YELLOW}Warning: USPTO number format should be 63/XXXXXX (6 digits)${NC}"
     read -p "Continue anyway? (y/N) " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -69,8 +69,11 @@ if [ -z "$USPTO_PDF" ]; then
     echo "  ${REPO_ROOT}/legal/uspto/USPTO_Provisional_${USPTO_NUM/\//_}_Filed_2025-11-23.pdf"
     read -p "Press Enter after copying the file..."
 else
+    # Get current date for filing
+    FILING_DATE=$(date +%Y-%m-%d)
+    
     # Move/rename the PDF
-    TARGET_PDF="legal/uspto/USPTO_Provisional_${USPTO_NUM/\//_}_Filed_2025-11-23.pdf"
+    TARGET_PDF="legal/uspto/USPTO_Provisional_${USPTO_NUM/\//_}_Filed_${FILING_DATE}.pdf"
     mkdir -p "$(dirname "$TARGET_PDF")"
     mv "$USPTO_PDF" "$TARGET_PDF"
     echo -e "${GREEN}✓ USPTO receipt moved to: ${TARGET_PDF}${NC}\n"
@@ -85,14 +88,19 @@ if [ ! -f "$CODEX_FILE" ]; then
     exit 1
 fi
 
+# Get current date if not already set
+if [ -z "$FILING_DATE" ]; then
+    FILING_DATE=$(date +%Y-%m-%d)
+fi
+
 # Replace placeholder with actual USPTO number
 sed -i.bak "s/63\/XXXXXXX/${USPTO_NUM}/g" "$CODEX_FILE"
 sed -i.bak "s/AWAITING USPTO APPLICATION NUMBER/USPTO APPLICATION ${USPTO_NUM} FILED/g" "$CODEX_FILE"
 sed -i.bak "s/PENDING SUBMISSION/FILED - ${USPTO_NUM}/g" "$CODEX_FILE"
 
-# Get current date
-FILING_DATE=$(date +%Y-%m-%d)
+# Update dates with actual filing date
 sed -i.bak "s/November 23, 2025/${FILING_DATE}/g" "$CODEX_FILE" 2>/dev/null || true
+sed -i.bak "s/2025-11-23/${FILING_DATE}/g" "$CODEX_FILE" 2>/dev/null || true
 
 rm -f "${CODEX_FILE}.bak"
 echo -e "${GREEN}✓ Codex updated with USPTO ${USPTO_NUM}${NC}\n"
@@ -155,11 +163,17 @@ SHA_MANIFEST="legal/uspto/SHA256_MANIFEST.txt"
     for file in dao_record_v1.0.yaml \
                 discovery.yml \
                 README.md \
-                "${CODEX_FILE}" \
-                "legal/uspto/USPTO_Provisional_${USPTO_NUM/\//_}_Filed_2025-11-23.pdf"
+                "${CODEX_FILE}"
     do
         if [ -f "$file" ]; then
             sha256sum "$file" 2>/dev/null
+        fi
+    done
+    
+    # Add USPTO PDF if it exists (use glob pattern since date may vary)
+    for pdf in legal/uspto/USPTO_Provisional_*.pdf; do
+        if [ -f "$pdf" ]; then
+            sha256sum "$pdf" 2>/dev/null
         fi
     done
 } > "$SHA_MANIFEST"

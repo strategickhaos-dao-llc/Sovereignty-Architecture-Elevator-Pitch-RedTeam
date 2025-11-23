@@ -21,9 +21,9 @@ Write-Host ""
 Write-Host "USPTO Application Number: $UsptoNumber" -ForegroundColor Green
 Write-Host ""
 
-# Validate USPTO number format
-if ($UsptoNumber -notmatch '^63/\d{6,7}$') {
-    Write-Host "Warning: USPTO number format should be 63/XXXXXX" -ForegroundColor Yellow
+# Validate USPTO number format (6 digits is standard for provisional patents)
+if ($UsptoNumber -notmatch '^63/\d{6}$') {
+    Write-Host "Warning: USPTO number format should be 63/XXXXXX (6 digits)" -ForegroundColor Yellow
     $continue = Read-Host "Continue anyway? (y/N)"
     if ($continue -ne 'y' -and $continue -ne 'Y') {
         exit 1
@@ -44,11 +44,14 @@ try {
     exit 1
 }
 
+# Get current filing date
+$filingDate = Get-Date -Format "yyyy-MM-dd"
+
 # Step 1: Check for USPTO receipt PDF
 Write-Host "Step 1: Checking for USPTO receipt PDF..." -ForegroundColor Yellow
 
 $usptoFileSafe = $UsptoNumber -replace '/', '_'
-$targetPdf = "legal\uspto\USPTO_Provisional_${usptoFileSafe}_Filed_2025-11-23.pdf"
+$targetPdf = "legal\uspto\USPTO_Provisional_${usptoFileSafe}_Filed_${filingDate}.pdf"
 
 # Check Downloads folder
 $downloadsPdf = Get-ChildItem -Path "$env:USERPROFILE\Downloads" -Filter "Acknowledgment*.pdf" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -79,9 +82,8 @@ $content = Get-Content $codexFile -Raw
 $content = $content -replace '63/XXXXXXX', $UsptoNumber
 $content = $content -replace 'AWAITING USPTO APPLICATION NUMBER', "USPTO APPLICATION $UsptoNumber FILED"
 $content = $content -replace 'PENDING SUBMISSION', "FILED - $UsptoNumber"
-
-$filingDate = Get-Date -Format "yyyy-MM-dd"
 $content = $content -replace 'November 23, 2025', $filingDate
+$content = $content -replace '2025-11-23', $filingDate
 
 Set-Content -Path $codexFile -Value $content
 Write-Host "✓ Codex updated with USPTO $UsptoNumber" -ForegroundColor Green
@@ -153,8 +155,7 @@ $filesToHash = @(
     "dao_record_v1.0.yaml",
     "discovery.yml",
     "README.md",
-    $codexFile,
-    $targetPdf
+    $codexFile
 )
 
 foreach ($file in $filesToHash) {
@@ -162,6 +163,13 @@ foreach ($file in $filesToHash) {
         $hash = (Get-FileHash -Path $file -Algorithm SHA256).Hash
         $manifestContent += "$hash  $file`n"
     }
+}
+
+# Add any USPTO PDF files found
+$usptoPdfs = Get-ChildItem -Path "legal\uspto" -Filter "USPTO_Provisional_*.pdf" -ErrorAction SilentlyContinue
+foreach ($pdf in $usptoPdfs) {
+    $hash = (Get-FileHash -Path $pdf.FullName -Algorithm SHA256).Hash
+    $manifestContent += "$hash  $($pdf.FullName)`n"
 }
 
 Set-Content -Path $shaManifest -Value $manifestContent
