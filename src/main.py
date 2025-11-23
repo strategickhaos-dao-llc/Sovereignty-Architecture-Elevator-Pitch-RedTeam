@@ -1,8 +1,15 @@
 import os
+import sys
 import pandas as pd
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("GROK_API_KEY"), base_url="https://api.x.ai/v1")
+# Validate API key
+api_key = os.getenv("GROK_API_KEY")
+if not api_key:
+    print("Error: GROK_API_KEY environment variable is not set")
+    sys.exit(1)
+
+client = OpenAI(api_key=api_key, base_url="https://api.x.ai/v1")
 
 def analyze_email(subject, body):
     prompt = f"""
@@ -18,12 +25,18 @@ def analyze_email(subject, body):
     - Action items for the student
     Keep response concise, max 5 lines.
     """
-    resp = client.chat.completions.create(
-        model="grok-beta",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3
-    )
-    return resp.choices[0].message.content
+    try:
+        resp = client.chat.completions.create(
+            model="grok-beta",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3
+        )
+        if resp.choices and len(resp.choices) > 0:
+            return resp.choices[0].message.content
+        else:
+            return "Error: No response from API"
+    except Exception as e:
+        return f"Error analyzing email: {str(e)}"
 
 # Simulate your exported SNHU emails – replace with real CSV or IMAP later
 emails = [
