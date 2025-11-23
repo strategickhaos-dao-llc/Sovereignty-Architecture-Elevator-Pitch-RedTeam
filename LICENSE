@@ -1,16 +1,59 @@
-MIT License
+Sovereign License with Mandatory Charitable Distribution v1.0
 
-Copyright (c) 2025 Strategickhaos
+Copyright (c) 2025 Strategickhaos DAO LLC
+
+=============================================================================
+IMPORTANT: This is NOT a standard open-source license.
+This license includes MANDATORY CHARITABLE DISTRIBUTION REQUIREMENTS.
+Read the full terms at: legal/SOVEREIGN_LICENSE.md
+=============================================================================
+
+GRANT OF RIGHTS - NON-COMMERCIAL USE ONLY
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+study, modify, and distribute the Software for NON-COMMERCIAL purposes only,
+subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. MANDATORY CHARITABLE DISTRIBUTION
+   Any deployment or operation of this Software MUST maintain an automatic 
+   distribution of seven percent (7%) of all value generated to designated 
+   charitable purposes. This requirement is IRREVOCABLE and cannot be 
+   disabled, modified, or circumvented.
+
+2. COMMERCIAL USE PROHIBITED
+   Commercial use of the Software is strictly PROHIBITED without obtaining
+   a separate Commercial License Agreement from Strategickhaos DAO LLC.
+   Contact: licensing@strategickhaos.com
+
+3. ATTRIBUTION AND NOTICE REQUIREMENTS
+   All copies and derivative works must include:
+   - This copyright notice and license text
+   - Attribution to Strategickhaos Sovereignty Architecture
+   - Notice of the irrevocable 7% charitable distribution requirement
+   - Link: https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+
+4. DERIVATIVE WORKS
+   Derivative works must maintain the charitable distribution mechanism
+   and remain subject to this license. Removing or modifying the charitable
+   distribution mechanism constitutes a material breach.
+
+5. NO CIRCUMVENTION
+   You may NOT:
+   - Remove, disable, or modify the charitable distribution mechanism
+   - Reduce the charitable percentage below 7%
+   - Delay or prevent charitable distributions
+   - Use the Software in ways that undermine its charitable mission
+
+6. AUTOMATIC TERMINATION
+   This license terminates automatically if you violate any term, particularly
+   the charitable distribution requirements. Upon termination, you must cease
+   all use and destroy all copies.
+
+7. GOVERNING LAW
+   This license is governed by the laws of Wyoming, USA. The charitable
+   distribution obligation is enforceable as a trust obligation under
+   Wyoming Statute §17-31-101 et seq. and applicable trust law.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,3 +62,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+=============================================================================
+FULL LICENSE TERMS: See legal/SOVEREIGN_LICENSE.md for complete terms
+PATENT NOTICE: Patent Pending - See legal/PATENT_CLAIMS.md
+IP FRAMEWORK: See legal/36_LAYER_LEGAL_PERIMETER.md
+=============================================================================
+
+BY USING THIS SOFTWARE, YOU AGREE TO ALL TERMS INCLUDING THE MANDATORY
+CHARITABLE DISTRIBUTION REQUIREMENT. IF YOU DO NOT AGREE, YOU MAY NOT USE
+THIS SOFTWARE.
+
+For questions about commercial licensing or charitable distribution:
+Email: legal@strategickhaos.com
+Repository: https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
