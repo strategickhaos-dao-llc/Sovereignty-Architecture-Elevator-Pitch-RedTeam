@@ -1,0 +1,35 @@
+name: Analyze SNHU Emails + Notify Discord
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 12 * * *'   # Every day at 12 UTC – change as you like
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install openai pandas python-dotenv
+
+      - name: Run analysis
+        env:
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+        run: python src/main.py
+
+      - name: Send results to Discord
+        if: always()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+               -d "{\"content\": \"SNHU Ecosystem Analysis completed! Check the latest run for stepping-stone insights.\"}" \
+               $DISCORD_WEBHOOK

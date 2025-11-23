@@ -2,6 +2,23 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 📧 SNHU Ecosystem Tracker (Private Vault)
+
+Private analysis of all @snhu.edu emails using Grok API. Tracks credentials, milestones ("stepping stones"), sentiment, and action items.
+
+### Secrets needed (set in GitHub → Settings → Secrets and variables → Actions)
+- `GROK_API_KEY` → your key from https://x.ai/api
+- `DISCORD_WEBHOOK` → webhook URL from your private Discord server
+
+### Milestones / Stepping Stones
+Tracked here → GitHub Projects (private board)
+
+### Local testing
+```bash
+export GROK_API_KEY=sk-...
+python src/main.py
+```
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
