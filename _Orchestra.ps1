@@ -197,9 +197,9 @@ Trigger: $TriggerType
 
 ## Birth Haiku
 
-``````
+```
 $Haiku
-``````
+```
 
 ## SWARM DNA Inheritance
 
@@ -384,9 +384,9 @@ function Invoke-ZincSpark {
 
 ## Haiku
 
-``````
+```
 $haiku
-``````
+```
 
 ## Inheritance
 
