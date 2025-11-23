@@ -27,7 +27,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Tuple
 
 # Configuration
 DONORS_DIR = Path(__file__).parent / "donors"
@@ -35,6 +35,9 @@ REGISTRY_FILE = Path(__file__).parent / "donor_registry.json"
 GPG_KEY_ID = None  # Set via --gpg-key or environment variable
 ARWEAVE_WALLET = None  # Set via --arweave-wallet or environment variable
 SALT_FILE = Path(__file__).parent / ".donor_salt"
+
+# Constants
+PLACEHOLDER_ARWEAVE_TX_ID = "PLACEHOLDER_ARWEAVE_TX_ID"
 
 
 class DonorHashSystem:
@@ -86,7 +89,7 @@ class DonorHashSystem:
         with open(self.registry_file, 'w') as f:
             json.dump(self.registry, f, indent=2)
 
-    def hash_donor(self, donor_name: str, amount: float, date: str) -> str:
+    def hash_donor(self, donor_name: str, amount: float, date: str) -> Tuple[str, str]:
         """
         Create SHA-3 salted hash of donor information.
         
@@ -96,7 +99,8 @@ class DonorHashSystem:
             date: Date of donation (ISO format)
             
         Returns:
-            SHA-3 hash string
+            Tuple of (donor_hash, donor_uuid) where donor_hash is the SHA-3 hash
+            and donor_uuid is the unique identifier for this donation
         """
         # Combine donor info with salt and UUID
         donor_uuid = str(uuid.uuid4())
@@ -281,7 +285,7 @@ class DonorHashSystem:
             # This is a placeholder - actual implementation would use arweave SDK
             print(f"📦 Uploading {file_path.name} to Arweave...")
             print("⚠ Arweave integration not yet implemented (requires arweave SDK)")
-            return "PLACEHOLDER_ARWEAVE_TX_ID"
+            return PLACEHOLDER_ARWEAVE_TX_ID
         except Exception as e:
             print(f"✗ Arweave upload failed: {e}", file=sys.stderr)
             return None

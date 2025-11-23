@@ -38,6 +38,10 @@ DONORS_DIR = ARTIFACTS_DIR / "donors"
 IRS_PACKAGES_DIR = ARTIFACTS_DIR / "irs_packages"
 REGISTRY_FILE = ARTIFACTS_DIR / "donor_registry.json"
 
+# Constants
+IRS_FORM_TYPE = "990-PF"
+PLACEHOLDER_ARWEAVE_TX_ID = "PLACEHOLDER_ARWEAVE_TX_ID"
+
 
 class IRSAuditGenerator:
     """Generate comprehensive IRS audit packages."""
@@ -98,7 +102,7 @@ class IRSAuditGenerator:
         valoryield_total = total_contributions * 0.07
         
         summary = {
-            "form": "990-PF",
+            "form": IRS_FORM_TYPE,
             "tax_year": self.year,
             "organization": {
                 "name": "Strategickhaos DAO LLC / ValorYield Engine",
@@ -439,7 +443,7 @@ Total Receipts: {len(package['valoryield_receipts'])}
         """Upload package to Arweave."""
         print(f"📦 Uploading to Arweave...")
         print("⚠ Arweave integration not yet implemented (requires arweave SDK)")
-        return "PLACEHOLDER_ARWEAVE_TX_ID"
+        return PLACEHOLDER_ARWEAVE_TX_ID
 
     def compare_to_previous_year(self, previous_year: int) -> Dict:
         """Compare current year to previous year."""
