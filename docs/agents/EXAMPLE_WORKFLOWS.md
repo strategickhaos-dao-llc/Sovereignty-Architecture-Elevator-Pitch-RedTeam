@@ -299,6 +299,8 @@ EOF
 kubectl apply -f /tmp/shared-pvc.yaml
 
 # Step 2: Agent 1 writes data
+# Note: For production use, consider creating a proper pod manifest YAML file
+# instead of using complex --overrides. This is shown inline for demonstration.
 kubectl run writer -it --rm --image=alpine -n agents \
   --overrides='
 {

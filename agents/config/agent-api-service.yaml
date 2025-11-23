@@ -62,7 +62,10 @@ spec:
         fsGroup: 10001
       containers:
         - name: api
-          image: nginx:alpine  # Replace with actual agent API image
+          # TODO: Replace with actual agent API image when available
+          # For now using nginx:alpine as placeholder for service structure
+          # Build actual image with: docker build -t strategickhaos/agent-api:latest .
+          image: nginx:alpine
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

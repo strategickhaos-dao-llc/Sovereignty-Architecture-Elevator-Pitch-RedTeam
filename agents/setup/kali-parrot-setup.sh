@@ -63,7 +63,7 @@ install_docker() {
 install_kubectl() {
     log_info "Installing kubectl..."
     if command -v kubectl &> /dev/null; then
-        log_info "kubectl already installed: $(kubectl version --client --short 2>/dev/null || echo 'version check failed')"
+        log_info "kubectl already installed: $(kubectl version --client -o yaml 2>/dev/null | grep gitVersion || echo 'version check failed')"
         return 0
     fi
     
@@ -189,7 +189,7 @@ verify_installation() {
     
     # Check kubectl
     if command -v kubectl &> /dev/null; then
-        log_info "✓ kubectl: $(kubectl version --client --short 2>/dev/null || echo 'installed')"
+        log_info "✓ kubectl: $(kubectl version --client -o yaml 2>/dev/null | grep gitVersion | head -n1 || echo 'installed')"
     else
         log_error "✗ kubectl not found"
         ((failed++))
