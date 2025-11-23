@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "organization": "Strategickhaos DAO LLC",
+  "ein": "39-2923503",
+  "created": "2025-11-23T22:24:11.556019Z",
+  "donors": [
+    {
+      "hash": "d17d3e9e15455e15919f87e029fb11e5bdbae983ea8b9c17dce80cba4feac8cd6cf065d7431cf9941e0819c600a4a45d57ef4a697d985796f791acf7da76ea26",
+      "uuid": "7bf37140-9fdf-442e-89fb-c0ec5eda7af1",
+      "amount": 5000.0,
+      "date": "2025-01-15",
+      "receipt_file": "d17d3e9e15455e15.json"
+    },
+    {
+      "hash": "1a3a45322fcf961ca52e53d6a116fda89165acdf61ce2832bec8074cd1c134116ca9249906c74c94b757052b4191aee1c65af501c10684dc24c8eacf075d1934",
+      "uuid": "cb1a58b0-617d-43ef-97ad-eff07b124e8f",
+      "amount": 2500.0,
+      "date": "2025-03-20",
+      "receipt_file": "1a3a45322fcf961c.json"
+    }
+  ],
+  "updated": "2025-11-23T22:24:11.599794Z"
+}

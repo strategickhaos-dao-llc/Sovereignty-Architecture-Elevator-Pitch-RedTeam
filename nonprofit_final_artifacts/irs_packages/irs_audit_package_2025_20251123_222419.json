@@ -1,0 +1,117 @@
+{
+  "generated": "2025-11-23T22:24:19.368539Z",
+  "tax_year": 2025,
+  "organization": "Strategickhaos DAO LLC",
+  "ein": "39-2923503",
+  "package_version": "1.0",
+  "form_990_pf": {
+    "form": "990-PF",
+    "tax_year": 2025,
+    "organization": {
+      "name": "Strategickhaos DAO LLC / ValorYield Engine",
+      "ein": "39-2923503",
+      "address": {
+        "street": "1216 S Fredonia St",
+        "city": "Longview",
+        "state": "TX",
+        "zip": "75602-2544"
+      },
+      "formation": {
+        "jurisdiction": "Wyoming",
+        "date": "2025-06-25",
+        "structure": "DAO LLC"
+      }
+    },
+    "revenue": {
+      "contributions_received": 7500.0,
+      "investment_income": 0.0,
+      "other_income": 0.0,
+      "total_revenue": 7500.0
+    },
+    "expenses": {
+      "grants_paid": 0.0,
+      "compensation": 0.0,
+      "professional_fees": 0.0,
+      "valoryield_allocation": 525.0,
+      "other_expenses": 0.0,
+      "total_expenses": 525.0
+    },
+    "assets": {
+      "cash": 6975.0,
+      "investments": 0.0,
+      "other_assets": 0.0,
+      "total_assets": 6975.0
+    },
+    "donor_information": {
+      "total_donors": 2,
+      "anonymous_via_sha3": true,
+      "donor_hashes_count": 2,
+      "substantiation_method": "SHA-3 hashed receipts with GPG signatures"
+    },
+    "governance": {
+      "board_meetings_held": 1,
+      "minutes_arweave_sealed": true,
+      "voting_method": "Zinc-Spark Consensus"
+    },
+    "compliance": {
+      "wyoming_dao_llc": true,
+      "irs_501c3_status": "Pending/Applied",
+      "state_registration": "Wyoming + Texas",
+      "charitable_purpose": "Cybersecurity research, education, and investigation services"
+    }
+  },
+  "valoryield_receipts": [
+    {
+      "donor_hash": "d17d3e9e15455e15",
+      "donation_amount": 5000.0,
+      "valoryield_allocation": 350.00000000000006,
+      "date": "2025-01-15",
+      "receipt_file": "d17d3e9e15455e15.json",
+      "verification": {
+        "sha3_protected": true,
+        "gpg_signed": true,
+        "irs_compliant": true
+      }
+    },
+    {
+      "donor_hash": "1a3a45322fcf961c",
+      "donation_amount": 2500.0,
+      "valoryield_allocation": 175.00000000000003,
+      "date": "2025-03-20",
+      "receipt_file": "1a3a45322fcf961c.json",
+      "verification": {
+        "sha3_protected": true,
+        "gpg_signed": true,
+        "irs_compliant": true
+      }
+    }
+  ],
+  "meeting_minutes": {
+    "year": 2025,
+    "total_meetings": 1,
+    "meetings": [
+      {
+        "date": "2025-11-23",
+        "file": "minutes_2025-11-23.md",
+        "length_chars": 2961,
+        "arweave_sealed": true
+      }
+    ]
+  },
+  "donor_registry": {
+    "total_donors": 2,
+    "privacy_method": "SHA-3 with UUID salt",
+    "irs_substantiation_compliant": true
+  },
+  "cryptographic_attestation": {
+    "package_hash": "188ecbe0e3e70e70d360b5494764b0efff95d7beee334d4595862413ff98bdfc8b9a9591169c5272768b2486e02161fc7b43e338631841c9c6df0b08aab2e33d",
+    "gpg_signature": null,
+    "arweave_tx_id": "ADDED_AFTER_UPLOAD"
+  },
+  "audit_trail": {
+    "immutable_archive": "Arweave",
+    "signed_ledger": "GPG",
+    "timestamping": "Cryptographic",
+    "cloud_dependency": "Zero"
+  }
+}
