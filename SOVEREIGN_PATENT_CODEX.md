@@ -16,6 +16,7 @@
 ```
 FAA198DA05318742531B6405384319563933F63DB4D91866E70AE7701FCDCDED
 ```
+*This is the hash of SOVEREIGN_MANIFEST_v1.0.md. This codex document will have its own hash generated upon finalization.*
 
 **Bitcoin Timestamped:**
 ```
@@ -34,7 +35,7 @@ Key: 261AEA44C0AF89CD
 ### 3. **Federal Law — USPTO Provisional Patent Application**
 **USPTO Provisional Patent:**
 ```
-Application Number: 63/XXXXXXX
+Application Number: 63/XXXXXXX (PLACEHOLDER - UPDATE WITH ACTUAL NUMBER FROM USPTO)
 Filing Date: November 23, 2025
 Title: Autonomous Charitable Revenue Distribution System Using 
        AI-Governed DAO with Irrevocable 7% Sovereign Assignment

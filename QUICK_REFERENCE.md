@@ -59,8 +59,8 @@ Date: November 23, 2025
 # Quick update command
 cd /path/to/repo
 
-# Update files
-sed -i 's/63\/XXXXXXX/63\/YOUR_NUMBER/g' SOVEREIGN_PATENT_CODEX.md
+# Update files - Replace YOUR_ACTUAL_NUMBER with your real USPTO number (e.g., 123456)
+sed -i 's/63\/XXXXXXX (PLACEHOLDER - UPDATE WITH ACTUAL NUMBER FROM USPTO)/63\/YOUR_ACTUAL_NUMBER/g' SOVEREIGN_PATENT_CODEX.md
 
 # Generate proofs
 sha256sum SOVEREIGN_PATENT_CODEX.md > SOVEREIGN_PATENT_CODEX.md.sha256
