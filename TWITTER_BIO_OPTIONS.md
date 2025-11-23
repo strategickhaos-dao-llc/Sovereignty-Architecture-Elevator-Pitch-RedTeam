@@ -127,8 +127,7 @@ Domenic.Garza@snhu.edu · Capstone project OK!
 
 ### Contact Information
 - **Email:** Domenic.Garza@snhu.edu
-- **Phone:** +1 346-263-2887
-- **Address:** 1216 S Fredonia St, Longview, TX 75602-2544
+- **Location:** Longview, TX
 
 ### Academic Context
 - **Institution:** Southern New Hampshire University (SNHU)
@@ -145,7 +144,7 @@ Domenic.Garza@snhu.edu · Capstone project OK!
 **For Maximum Impact:** Use **Option A** or the **Full-Flex Version** depending on your audience:
 
 - **Option A** is perfect for a balanced professional/academic/public presence
-- **Full-Flex Version** hits exactly 160 characters and emphasizes the sovereignty aspect
+- **Exact 160 Version** uses precisely 160 characters and includes all key verification details
 - **Option B** adds personality with #TinkerTinker while staying professional
 - **Option C** leaves room for future additions and is the most flexible
 
