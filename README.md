@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> 💙 **Built from $-32.67 and two laptops to prove that resources don't determine destiny—determination does.** Read the [origin stories](#-origin-stories-built-from-nothing) to see how constraint-driven engineering produced enterprise-grade systems.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -271,6 +273,17 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🔥 Origin Stories: Built From Nothing
+
+This project has a special origin story—one that proves resources don't determine destiny.
+
+- **[The Broke Tinkerer's Manifesto](THE_BROKE_TINKERERS_MANIFESTO.md)** - For everyone building with constraints
+- **[Built From Negative](BUILT_FROM_NEGATIVE.md)** - The raw, honest origin story ($-32.67 to sovereignty)
+- **[Sovereign Systems on Scrap Metal](ORIGIN_SOVEREIGN_SYSTEMS_ON_SCRAP_METAL.md)** - The complete narrative
+- **[Engineering with Nothing but Grit](CAPSTONE_ENGINEERING_WITH_GRIT.md)** - Technical manifesto and blueprint
+
+**If you're building on aging hardware, with zero budget, and infinite determination—these are for you.**
 
 ## 👥 Community & Contributors
 
