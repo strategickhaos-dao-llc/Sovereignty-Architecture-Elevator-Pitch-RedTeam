@@ -45,13 +45,13 @@ function New-BitcoinTimestamp {
         
         Write-ColorMessage "   Submitting to OpenTimestamps calendar server..." -Color Gray
         
-        $response = Invoke-WebRequest `
+        Invoke-WebRequest `
             -Uri "https://btc.calendar.opentimestamps.org" `
             -Method POST `
             -Body $fileContent `
             -ContentType "application/octet-stream" `
             -OutFile $outputFile `
-            -ErrorAction Stop
+            -ErrorAction Stop | Out-Null
         
         if (Test-Path $outputFile) {
             Write-ColorMessage "✅ Timestamp proof created: $outputFile" -Color Green

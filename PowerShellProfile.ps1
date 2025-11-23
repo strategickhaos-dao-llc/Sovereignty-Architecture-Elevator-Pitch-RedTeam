@@ -91,12 +91,12 @@ function empire {
     }
     
     if (-not $composeFile) {
-        Write-Host "⚠️  No cluster compose file found. Creating default cluster-compose.yml..." -ForegroundColor Yellow
-        $composeFile = ".\cluster-compose.yml"
+        Write-Host "⚠️  No cluster compose file found." -ForegroundColor Yellow
         
-        # Create a symlink or copy of docker-compose-cloudos.yml if it exists
+        # Try to use docker-compose-cloudos.yml as fallback
         if (Test-Path ".\docker-compose-cloudos.yml") {
-            Copy-Item ".\docker-compose-cloudos.yml" $composeFile -Force
+            $composeFile = ".\docker-compose-cloudos.yml"
+            Write-Host "Using fallback: $composeFile" -ForegroundColor Green
         } else {
             Write-Host "❌ No docker-compose file available. Please check your repository." -ForegroundColor Red
             return

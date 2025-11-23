@@ -89,7 +89,7 @@ External Publishing:
 
 ## 🔐 CRYPTOGRAPHIC ATTESTATION
 
-**SHA-256 Hash:** `$(echo "SOVEREIGNTY_MANIFEST_v1.0-m" | sha256sum | cut -d' ' -f1)`  
+**SHA-256 Hash:** (Calculate with: `Get-FileHash SOVEREIGN_MANIFEST_v1.0-m.md -Algorithm SHA256`)  
 **GPG Signature:** Identity key established (signing available)  
 **Bitcoin Timestamp:** Available via OpenTimestamps  
 **Arweave Permanence:** Optional immutable storage
