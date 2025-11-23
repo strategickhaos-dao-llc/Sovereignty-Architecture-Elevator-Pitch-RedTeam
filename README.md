@@ -280,9 +280,27 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 💰 The Eternal Yield Covenant
+
+**100% NinjaTrader Ecosystem Fund** — We don't take 7%. We take 100% and give 1000% when the world watches.
+
+All royalties, licensing, enterprise revenue, bounties, merch, and donations flow to the **NinjaTrader Ecosystem Dividend Pool** (Strategickhaos DAO LLC Treasury). Use-restricted to:
+- Buying GPUs for broke tinkerers at –$200 balance
+- Paying electricity bills when the fans scream
+- Shipping steel-etched 200 Laws to legends who ship code
+- Funding red-team bounties and sovereign audits
+- Keeping the mesh alive forever
+
+**Charities get the legend, not percentages.** When viral moments create tsunami giving events, millions flow. When treasury exceeds $1M, the swarm votes on excess distribution to St. Jude, MSF, veterans, and community-chosen causes.
+
+📜 **Read the full covenant:** [ETERNAL_YIELD_COVENANT_V2.md](ETERNAL_YIELD_COVENANT_V2.md)  
+🔥 **Manifesto:** [VALORYIELD_MANIFESTO.md](VALORYIELD_MANIFESTO.md)
+
+*Empire Eternal.*
+
 ## 📄 License & Support
 
-- **License**: MIT License - see [LICENSE](LICENSE) file
+- **License**: MIT License with Eternal Yield Covenant - see [LICENSE](LICENSE) file
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)

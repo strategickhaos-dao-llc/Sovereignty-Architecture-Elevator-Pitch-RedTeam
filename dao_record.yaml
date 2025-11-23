@@ -36,6 +36,36 @@ operations:
     founder_orcid: "0009-0005-2996-3526"
     founder_twic: "Active (TSA/DHS)"
 
+funding_model:
+  covenant: "Eternal Yield Covenant v2"
+  effective_date: "2025-11-24"
+  structure: "100% NinjaTrader Ecosystem Dividend Pool"
+  revenue_streams:
+    - "Royalties and licensing fees"
+    - "Enterprise seats and subscriptions"
+    - "Bounty completions"
+    - "Merchandise sales"
+    - "Donations and sponsorships"
+    - "Fame-generated contributions"
+  fund_allocation:
+    primary_use: "Ecosystem sustainability and tinkerer support"
+    restrictions:
+      - "GPU procurement for contributors at negative balance"
+      - "Infrastructure and electricity costs"
+      - "Recognition artifacts (steel-etched 200 Laws)"
+      - "Red-team bounties and security audits"
+      - "Mesh network maintenance"
+  charitable_approach: "Legend-funded via viral moments, not forced percentages"
+  treasury_threshold:
+    amount: 1000000
+    currency: "USD"
+    action: "Swarm votes on excess distribution to charitable causes"
+    beneficiaries:
+      - "St. Jude Children's Research Hospital"
+      - "Médecins Sans Frontières (MSF)"
+      - "Veterans support organizations"
+      - "Community-chosen causes"
+
 compliance:
   legal_actions: false
   regulatory_status: "Good standing"
