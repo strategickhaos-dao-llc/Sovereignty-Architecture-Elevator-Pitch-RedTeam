@@ -1,6 +1,5 @@
-import pg from "pg";
-
-const { Pool } = pg;
+import pkg from "pg";
+const { Pool } = pkg;
 
 // Database connection configuration
 const poolConfig = {

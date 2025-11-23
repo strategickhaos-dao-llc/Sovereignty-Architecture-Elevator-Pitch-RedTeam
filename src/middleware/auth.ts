@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { db } from "../db.js";
+import "../types/session.js";
 
 export interface AuthRequest extends Request {
   user?: {

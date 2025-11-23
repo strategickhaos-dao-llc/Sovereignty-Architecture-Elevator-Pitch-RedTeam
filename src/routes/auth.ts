@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
+import { randomBytes } from "crypto";
 import { db } from "../db.js";
 
 export const authRouter = express.Router();

@@ -1,5 +1,5 @@
 import express from "express";
-import crypto from "crypto";
+import { randomBytes } from "crypto";
 import { db } from "../db.js";
 import { AuthRequest, requireRole } from "../middleware/auth.js";
 
@@ -15,7 +15,7 @@ inviteRouter.post("/generate", requireRole("admin"), async (req: AuthRequest, re
 
   try {
     // Generate unique invite code
-    const inviteCode = crypto.randomBytes(32).toString("hex");
+    const inviteCode = randomBytes(32).toString("hex");
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
