@@ -64,6 +64,27 @@ GPG_KEY_ID=0x137SOVEREIGN
 
 ### 3. Launch Services
 
+#### Option A: Using Helper Script (Recommended)
+
+```bash
+# Make script executable (first time only)
+chmod +x run-patent-scholar.sh
+
+# Start all services
+./run-patent-scholar.sh up
+
+# Check service health
+./run-patent-scholar.sh health
+
+# View logs
+./run-patent-scholar.sh logs
+
+# See all available commands
+./run-patent-scholar.sh help
+```
+
+#### Option B: Using Docker Compose Directly
+
 ```bash
 # Start all patent & scholar services
 docker-compose -f docker-compose.patent-scholar.yml up -d
