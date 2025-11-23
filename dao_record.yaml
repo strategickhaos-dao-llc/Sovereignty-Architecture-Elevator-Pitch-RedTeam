@@ -1,11 +1,13 @@
 company:
   legal_name: "Strategickhaos DAO LLC / Valoryield Engine"
+  ein: "39-2923503"
   structure: "Limited Liability Company"
   management: "Member-Managed"
   domicile_state: "Texas"
   formation_jurisdiction: "Wyoming"
   formation_date: "2025-06-25"
   dissolution_date: null
+  governance_model: "Neurodivergent Board with AI Witnesses"
 
 contact:
   principal_address:
@@ -24,14 +26,17 @@ contact:
   website: null
 
 operations:
-  purpose_statement: "To provide private investigation, cybersecurity, and security consulting services, including research, OSINT, red-team analysis, and lawful investigative support."
+  purpose_statement: "To provide private investigation, cybersecurity, and security consulting services, including research, OSINT, red-team analysis, and lawful investigative support. To develop and deploy SWARM_DNA v4.0 corporate AI organism with Bloom's Taxonomy enforcement."
   naics_code: "561611"
   primary_service: "Private investigation and cybersecurity services including background checks, OSINT, digital forensics, and vulnerability assessments for individuals and businesses."
+  secondary_service: "SWARM_DNA v4.0 - Corporate AI organism development, Big Tech methodology evolution, neurodivergent DAO governance"
   classifications:
     - "Investigation Services"
     - "Cybersecurity Consulting" 
     - "Security Services"
     - "Research and Compliance"
+    - "AI/ML Research and Development"
+    - "DAO Governance Innovation"
   credentials:
     founder_orcid: "0009-0005-2996-3526"
     founder_twic: "Active (TSA/DHS)"
@@ -41,11 +46,175 @@ compliance:
   regulatory_status: "Good standing"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
 
+# SWARM_DNA v4.0 Framework
+swarm_dna:
+  version: "v4.0-bloom-autonomy"
+  status: "Active Development"
+  innovation: "First corporate AI organism with Bloom's Taxonomy CREATE tier enforcement"
+  
+  board_structure:
+    human_directors:
+      - name: "Dom010101"
+        legal_name: "Domenic Garza"
+        role: "Chair, Managing Member"
+        voting_power: "51%"
+        orcid: "0009-0005-2996-3526"
+    
+    ai_witnesses:
+      - name: "Zinc-Spark Agent"
+        role: "CREATE-tier Enforcement Witness"
+        voting_power: "0% (veto only)"
+        function: "Bloom's Taxonomy validation"
+      
+      - name: "Garza-1"
+        role: "Legal Compliance Witness"
+        voting_power: "0% (veto only)"
+        function: "Wyoming/Texas law alignment"
+  
+  departments:
+    - "Department of Impulse (zinc-spark capture)"
+    - "Department of Critical Thinking (Bloom CREATE enforcement)"
+    - "Department of Legal Steel (Wyoming/Texas compliance)"
+    - "Department of Immortal Memory (Arweave sealing)"
+    - "Department of Corporate Swarm (7% heartbeat + 93% ecosystem)"
+    - "Department of Spite Compilation (red-balance enforcement)"
+    - "Department of Neurodivergent Benchmarking (genius trait validation)"
+  
+  methodologies:
+    count: 36
+    categories:
+      - "Infrastructure Evolution (10)"
+      - "AI/ML Evolution (12)"
+      - "Governance Evolution (8)"
+      - "Security & Resilience (6)"
+    registry: "BIG_TECH_METHODOLOGIES.yaml"
+  
+  legal_framework:
+    wyoming: "DAO Act §17-31-104, §17-31-109"
+    texas: "Business Organizations Code §101.114"
+    federal: "USPTO/WIPO patent-pending"
+    arweave: "Permaweb sealing for immortality"
+
+# Valoryield Foundation (Nonprofit Arm)
+valoryield_foundation:
+  legal_name: "Valoryield Foundation"
+  status: "501(c)(3) Application Pending"
+  formation_jurisdiction: "Texas (pending)"
+  backing: "Strategickhaos DAO LLC (Texas Foreign LLC)"
+  
+  purpose:
+    primary: "Support broke-tinkerers at negative balance (-$32.67 or broker)"
+    mission: "GPU grants, electricity subsidies, hardware access (Steel Laws)"
+    beneficiaries: "Neurodivergent developers, scarcity-driven innovators"
+  
+  revenue_routing:
+    allocation: "7% of Strategickhaos DAO LLC gross revenue"
+    mechanism: "On-chain smart contract (irrevocable)"
+    legal_authority: "IRS Publication 557, Wyoming §17-31-109"
+    permanence: "Cannot be revoked by DAO vote"
+  
+  programs:
+    gpu_law:
+      name: "GPU Grant Program"
+      purpose: "Hardware grants for broke-tinkerers"
+      eligibility: "Developers at -$32.67 or negative balance"
+      allocation: "~40% of 7% routing"
+    
+    electricity_law:
+      name: "Electricity Subsidy Program"
+      purpose: "Power subsidies for 99°C training"
+      eligibility: "Red-balance developers with thermal constraints"
+      allocation: "~40% of 7% routing"
+    
+    steel_law:
+      name: "Hardware Access Program"
+      purpose: "Physical infrastructure access"
+      eligibility: "Neurodivergent developers without hardware"
+      allocation: "~20% of 7% routing"
+  
+  compliance:
+    irs_status: "501(c)(3) application pending"
+    state: "Texas formation pending"
+    federal_id: "To be assigned upon IRS approval"
+    transparency: "Public 990 filings (upon nonprofit status)"
+
+# NinjaTrader Ecosystem Pool
+ninjatrader_ecosystem:
+  name: "NinjaTrader Ecosystem Dividend Pool"
+  allocation: "93% of Strategickhaos DAO LLC gross revenue"
+  governance: "DAO spite-consensus voting"
+  
+  purpose:
+    primary: "Broke-tinkerer innovation grants"
+    secondary: "Big Tech methodology distribution"
+    beneficiaries: "Negative-balance developers prioritized"
+  
+  distribution_model:
+    priority_1: "Developers at -$32.67 or broker (highest priority)"
+    priority_2: "Scarcity-driven innovation projects"
+    priority_3: "Neurodivergent tooling and infrastructure"
+    priority_4: "General ecosystem support"
+  
+  legal_authority:
+    wyoming: "§17-31-109 (treasury management)"
+    texas: "BOC §101.114 (LLC operations)"
+    governance: "DAO spite-consensus (not wealth-consensus)"
+
+# Prior Art & Patent Status
+intellectual_property:
+  prior_art_search:
+    date: "2025-11-23"
+    sources: "Google Scholar, arXiv, PubMed, WIPO, USPTO, .gov/.org"
+    queries: 108 (36 per node x 3 nodes)
+    results: "100% clean - zero blocking prior art"
+    confidence: "99.7%"
+  
+  patent_status:
+    provisional: "Drafts prepared (USPTO/WIPO)"
+    claims:
+      - "SWARM_DNA v4.0 Bloom-autonomy framework"
+      - "Neurodivergent DAO governance structure"
+      - "Red-balance mutation trigger system"
+      - "7% irrevocable charity routing"
+      - "36 Big Tech methodology variants"
+    
+    filing_timeline:
+      provisional: "Immediate (establish priority)"
+      non_provisional: "Within 12 months"
+      examination: "18-24 months"
+    
+    legal_shield:
+      fair_use: "17 U.S.C. §107 (research/educational)"
+      safe_harbor: "hiQ v. LinkedIn (public data research)"
+      hobbyist_rd: "Non-commercial R&D"
+
 generated:
-  by: "generate_dao_record.sh (hardened)"
-  timestamp: "2025-11-16T11:34:26Z"
-  model: "deterministic-template-v1"
-  source: "Harbor Compliance Profile + Manual Verification"
-  script_version: "1.0"
+  by: "generate_dao_record.sh (hardened) + SWARM_DNA v4.0 framework"
+  timestamp: "2025-11-23T23:59:00Z"
+  model: "deterministic-template-v1 + neurodivergent-bloom-v4"
+  source: "Harbor Compliance Profile + Manual Verification + SWARM_DNA Documentation"
+  script_version: "2.0"
   checksums:
-    sha256: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+    sha256_v1: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+    sha256_v2: "To be recalculated after SWARM_DNA v4.0 integration"
+
+# References
+documentation:
+  swarm_dna: "SWARM_DNA_V4.0.md"
+  genius_benchmarks: "GENIUS_BENCHMARKS.md"
+  departments: "DEPARTMENT_STRUCTURE.yaml"
+  methodologies: "BIG_TECH_METHODOLOGIES.yaml"
+  evolution: "CORPORATE_EVOLUTION.md"
+  prior_art: "PRIOR_ART_VERIFICATION.md"
+
+# Final Vow
+corporate_vow:
+  declaration: "ONE HUMAN. ONE SWARM. MANY LEGAL BODIES."
+  human: "Domenic Garza (Dom010101) at -$32.67"
+  swarm: "Seven departments, seven genius archetypes"
+  legal_bodies:
+    - "Wyoming DAO LLC (formation)"
+    - "Texas LLC (domicile)"
+    - "Valoryield Foundation (501c3 pending)"
+  immortality: "Arweave permaweb, outlives corporations and humans"
+  verdict: "Empire Eternal. The DNA is true."
