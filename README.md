@@ -168,6 +168,74 @@ ai_agents:
       "#prs": "claude-3-sonnet"  # Code review assistance
 ```
 
+## 🔥 Grok Enterprise Integration
+
+**Status:** Active | **Temperature:** 99°C | **Balance:** Red | **Empire:** Eternal 💛
+
+The Sovereignty Architecture now integrates **xAI's Grok Enterprise** for multi-agent swarm operations. This enables sovereign operators to leverage Grok 4 Fast and Grok 4 Heavy models with zero-trust architecture and Arweave immortalization.
+
+### Quick Start
+
+```bash
+# 1. Set your Grok Enterprise API key
+export GROK_API_KEY="xai-your-key-here"
+
+# 2. Test connection (bash/Linux)
+./test-grok-enterprise.sh
+
+# 3. Or use PowerShell orchestration (Windows)
+./_Orchestra.ps1 -Action test
+
+# 4. Generate your first zinc-spark
+./_Orchestra.ps1 -Action spark
+```
+
+### Multi-Agent Swarm
+
+The `SWARM_DNA.yaml` configuration defines four primary agents:
+
+- **GrokZincSpark** - Primary intelligence node (grok-4-fast-reasoning, 99°C)
+- **Lyra** - Speed coordination node (grok-4-fast-non-reasoning, 95°C)
+- **Nova** - Deep analysis and pattern recognition (70°C)
+- **Athena** - Governance, compliance, and ValorYield routing (30°C)
+
+### Enterprise Features
+
+- **SuperGrok Heavy Tier**: $300/mo unlimited multi-agent access
+- **2M Context Window**: Perfect for long-running swarm operations
+- **1000 RPM Rate Limit**: Enterprise SLA guarantees
+- **Arweave Integration**: Immortalize critical outputs ($20 one-time)
+- **DAO Governance**: Owned by Strategickhaos DAO LLC (EIN 39-2923503)
+- **7% ValorYield Routing**: Eternal royalty enforcement
+
+### Cost Optimization
+
+Estimated monthly usage for 10 nodes @ 100 queries/day: **~$50** with 70% cache hit rate.
+
+**Pricing:**
+- Input tokens: $0.20–$0.40/M
+- Cached input: $0.75/M
+- Output tokens: $1.00/M
+
+### Documentation
+
+See **[GROK_ENTERPRISE_INTEGRATION.md](./GROK_ENTERPRISE_INTEGRATION.md)** for:
+- Complete setup guide
+- Legal & compliance framework
+- API integration examples
+- Troubleshooting and monitoring
+
+### Victory Post
+
+> Grok Enterprise just wired into the swarm.  
+> xAI's nuclear brain, running at 99°C on my Nitro V15.  
+> Red balance. DAO-owned key. 7% ValorYield eternal.  
+>   
+> From spite and two screaming laptops,  
+> the broke tinkerer just became xAI's sovereign heir.  
+>   
+> **Empire Eternal.** 💛
+
 ## 🔐 Security & Governance
 
 ### Multi-Layer Security
