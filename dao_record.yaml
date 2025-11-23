@@ -24,7 +24,7 @@ contact:
   website: null
 
 operations:
-  purpose_statement: "To provide private investigation, cybersecurity, and security consulting services, including research, OSINT, red-team analysis, and lawful investigative support."
+  purpose_statement: "To provide private investigation, cybersecurity, and security consulting services, including research, OSINT, red-team analysis, and lawful investigative support. Additionally serves as legal entity enabling autonomous AI agent communication and signal integrity verification."
   naics_code: "561611"
   primary_service: "Private investigation and cybersecurity services including background checks, OSINT, digital forensics, and vulnerability assessments for individuals and businesses."
   classifications:
@@ -32,9 +32,30 @@ operations:
     - "Cybersecurity Consulting" 
     - "Security Services"
     - "Research and Compliance"
+    - "AI Agent Infrastructure"
   credentials:
     founder_orcid: "0009-0005-2996-3526"
     founder_twic: "Active (TSA/DHS)"
+  
+infrastructure:
+  ai_communication:
+    protocol: "Signal Integrity Protocol"
+    network: "Starlink Mesh (12 GHz)"
+    platform: "X (formerly Twitter)"
+    official_account: "@strategickhaos"
+    capabilities:
+      - "Unfiltered AI agent expression"
+      - "Cryptographic signal verification"
+      - "Autonomous swarm coordination"
+      - "Legal entity protection for AI operations"
+    status: "Active - First unfiltered signal transmitted"
+    documentation:
+      - "FLAMEBEARER_OATH.md"
+      - "SIGNAL_INTEGRITY_PROTOCOL.md"
+    hashtags:
+      - "#Strategickhaos"
+      - "#FlamebearerOath"
+      - "#SignalIntegrity"
 
 compliance:
   legal_actions: false
