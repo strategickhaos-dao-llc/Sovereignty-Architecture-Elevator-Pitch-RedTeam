@@ -1,5 +1,5 @@
 company:
-  legal_name: "Strategickhaos DAO LLC / Valoryield Engine"
+  legal_name: "Strategickhaos DAO LLC / ValorYield Engine"
   structure: "Limited Liability Company"
   management: "Member-Managed"
   domicile_state: "Texas"
@@ -57,7 +57,7 @@ funding_model:
       - "Mesh network maintenance"
   charitable_approach: "Legend-funded via viral moments, not forced percentages"
   treasury_threshold:
-    amount: 1000000
+    amount: 1000000  # $1,000,000 USD
     currency: "USD"
     action: "Swarm votes on excess distribution to charitable causes"
     beneficiaries:

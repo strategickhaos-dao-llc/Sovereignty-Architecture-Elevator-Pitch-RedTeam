@@ -1,6 +1,6 @@
 # The Eternal Yield Covenant v2 — Forged November 24, 2025
 
-**Strategickhaos DAO LLC / Valoryield Engine**  
+**Strategickhaos DAO LLC / ValorYield Engine**  
 **100% NinjaTrader Ecosystem Dividend Pool**
 
 ---

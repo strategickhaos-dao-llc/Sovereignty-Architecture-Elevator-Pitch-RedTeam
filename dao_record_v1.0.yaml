@@ -1,12 +1,12 @@
 # dao_record_v1.0.yaml
-# Strategickhaos DAO LLC / Valoryield Engine — Week 1 Sovereignty Record
+# Strategickhaos DAO LLC / ValorYield Engine — Week 1 Sovereignty Record
 # Version: 1.0
 # Date: 2025-11-16
 # Operator: Domenic Garza (Node 137)
 
 version: "1.0"
 date: "2025-11-16"
-project: "Valoryield Engine — Sovereignty Architecture"
+project: "ValorYield Engine — Sovereignty Architecture"
 operator:
   name: "Domenic Garza"
   node: "137"
@@ -256,7 +256,7 @@ funding_model:
       - "Security audits and red-team operations"
       - "Mesh sustainability"
 
-final_statement: "WEEK 1 DONE — Valoryield Engine operational with 120 automation patterns, zero-hallucination RAG, UPL-safe governance, and cryptographically verified artifacts. ETERNAL YIELD COVENANT V2 ADOPTED — 100% ecosystem fund, legend-funded charitable giving, Empire Eternal."
+final_statement: "WEEK 1 DONE — ValorYield Engine operational with 120 automation patterns, zero-hallucination RAG, UPL-safe governance, and cryptographically verified artifacts. ETERNAL YIELD COVENANT V2 ADOPTED — 100% ecosystem fund, legend-funded charitable giving, Empire Eternal."
 
 # === GPG SIGNATURE BLOCK (DETACHED) ===
 # Save as dao_record_v1.0.yaml.asc
