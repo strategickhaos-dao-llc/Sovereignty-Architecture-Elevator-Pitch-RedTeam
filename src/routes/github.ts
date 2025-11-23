@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import crypto from "crypto";
 import { REST } from "discord.js";
 
+const MAX_COMMENT_LENGTH = 200;
+
 function sigOk(secret: string, raw: string, sig: string) {
   const h = crypto.createHmac("sha256", secret).update(raw).digest("hex");
   return `sha256=${h}` === sig;
@@ -31,7 +33,7 @@ export function githubRoutes(rest: REST, channelIds: Record<string,string>, secr
       const issue = payload.issue;
       const isPR = !!issue.pull_request;
       const type = isPR ? "PR" : "Issue";
-      const commentBody = comment.body.length > 200 ? comment.body.substring(0, 200) + "..." : comment.body;
+      const commentBody = comment.body.length > MAX_COMMENT_LENGTH ? comment.body.substring(0, MAX_COMMENT_LENGTH) + "..." : comment.body;
       await send(channelIds.prs, `${type} Comment ${a}: #${issue.number} ${issue.title}`, `${comment.user.login}: ${commentBody}\n${comment.html_url}`);
     } else if (ev === "check_suite") {
       const cs = payload.check_suite;
