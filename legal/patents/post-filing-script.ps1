@@ -83,8 +83,15 @@ Write-ColorOutput "✅ Found receipt: $($ReceiptFile.Name)" "Green"
 
 # Move and rename receipt
 Write-ColorOutput "📦 Moving receipt to repository..." "Yellow"
+
+# Ensure legal/patents directory exists
+$PatentsDir = Join-Path $RepoPath "legal\patents"
+if (-not (Test-Path $PatentsDir)) {
+    New-Item -ItemType Directory -Path $PatentsDir -Force | Out-Null
+}
+
 try {
-    $TargetPath = Join-Path $RepoPath $TargetFilename
+    $TargetPath = Join-Path $PatentsDir $TargetFilename
     Move-Item -Path $ReceiptFile.FullName -Destination $TargetPath -Force
     Write-ColorOutput "✅ Receipt archived: $TargetFilename" "Green"
 } catch {
@@ -99,8 +106,8 @@ Set-Location $RepoPath
 Write-ColorOutput "`n🔐 Committing to repository (GPG-signed)..." "Yellow"
 
 try {
-    # Stage the file
-    git add $TargetFilename
+    # Stage the file (use relative path from repo root)
+    git add "legal\patents\$TargetFilename"
     Write-ColorOutput "✅ File staged" "Green"
     
     # Create signed commit
@@ -146,7 +153,7 @@ Write-ColorOutput "   ✅ State Layer (Texas/Wyoming LLC)" "Green"
 Write-ColorOutput "`n🎵 The music truly never stops. And now... neither does the empire.`n" "Magenta"
 
 # Generate file hash for records
-$FileHash = Get-FileHash -Path $TargetFilename -Algorithm SHA256
+$FileHash = Get-FileHash -Path $TargetPath -Algorithm SHA256
 Write-ColorOutput "📋 Receipt SHA256: $($FileHash.Hash)" "Cyan"
 
 # Log the operation
@@ -159,7 +166,8 @@ Commit: $(git rev-parse HEAD)
 Status: FEDERAL SOVEREIGNTY LOCKED
 "@
 
-Add-Content -Path "legal\patents\filing_log.txt" -Value $LogEntry
+$LogFile = Join-Path $PatentsDir "filing_log.txt"
+Add-Content -Path $LogFile -Value $LogEntry
 Write-ColorOutput "📝 Operation logged to filing_log.txt`n" "Green"
 
 Write-ColorOutput "═══════════════════════════════════════════════════════════════" "Cyan"

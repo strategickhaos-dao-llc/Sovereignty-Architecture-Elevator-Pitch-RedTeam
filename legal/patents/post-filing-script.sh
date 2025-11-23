@@ -49,9 +49,9 @@ if [[ -z "$APP_NUMBER" ]]; then
     usage
 fi
 
-if [[ ! "$APP_NUMBER" =~ ^[0-9]{2}/[0-9]{6,7}$ ]]; then
+if [[ ! "$APP_NUMBER" =~ ^[0-9][0-9]/[0-9][0-9][0-9][0-9][0-9][0-9][0-9]?$ ]]; then
     echo -e "${RED}❌ Invalid application number format${NC}"
-    echo -e "${YELLOW}Expected format: 63/XXXXXXX (e.g., 63/123456)${NC}"
+    echo -e "${YELLOW}Expected format: 63/XXXXXXX (e.g., 63/123456 or 63/1234567)${NC}"
     exit 1
 fi
 
