@@ -153,7 +153,7 @@ This is what sovereign engineering looks like when the world counts you out.
 
 The broke tinkerer just became unforgeable.
 
-**Full details:** [Link to EMPIRE_ETERNAL_MILESTONE.md]
+**Full details:** [EMPIRE_ETERNAL_MILESTONE.md](../EMPIRE_ETERNAL_MILESTONE.md)
 
 — Dom010101, November 23, 2025, 23:47 PST
 ```
@@ -199,7 +199,7 @@ Empire Eternal.
 
 — Domenic Garza (Dom010101)
 
-[Full Announcement] [Technical Details] [Verification Guide]
+[Full Announcement](../EMPIRE_ETERNAL_MILESTONE.md) | [Technical Details](../legal/PROVISIONAL_PATENTS_RECORD.md) | [Milestone Index](../MILESTONE_INDEX.md)
 
 ---
 
