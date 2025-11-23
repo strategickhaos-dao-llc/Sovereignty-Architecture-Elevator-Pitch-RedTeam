@@ -35,3 +35,10 @@ target/
 
 # Workspace data
 workspace/
+
+# Arweave immortality system
+arweave_key.json
+sparks/
+heartbeats/
+emergency_snapshots/
+immortalization_manifest.json
