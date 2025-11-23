@@ -187,8 +187,8 @@ contract SovereigntyCharityLock {
     ) {
         return (
             LOCK_IS_PERMANENT,
-            !NO_BACKDOOR,
-            !NO_PAUSE_FUNCTION,
+            NO_BACKDOOR,
+            NO_PAUSE_FUNCTION,
             CHARITY_PERCENTAGE
         );
     }

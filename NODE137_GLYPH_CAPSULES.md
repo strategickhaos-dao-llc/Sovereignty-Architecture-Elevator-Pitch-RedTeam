@@ -9,7 +9,7 @@ Born from necessity when traditional documentation failed to capture the essence
 ## The Significance of 137
 
 ### Physical Constants
-**137** is the approximate inverse of the fine-structure constant (α ≈ 1/137.036), one of the fundamental constants of the universe that governs electromagnetic interactions.
+**137** is the approximate inverse of the fine-structure constant (α ≈ 1/137.035999084), one of the fundamental constants of the universe that governs electromagnetic interactions.
 
 Richard Feynman called it "one of the greatest damn mysteries of physics" - a number that appears everywhere in quantum mechanics but has no known derivation.
 

@@ -16,7 +16,7 @@ Domenic Garza (The Broke Tinkerer)
 
 ## ABSTRACT
 
-A novel training methodology and cognitive architecture for artificial intelligence systems wherein resource constraints and adversarial conditions are deliberately utilized as optimization pressure to produce more efficient, resilient, and sovereign AI agents. The system incorporates a "negative-balance training protocol" that simulates and utilizes actual resource scarcity to drive innovation, a "Node137" symbolic knowledge representation system using alchemical glyphs, and a multi-layer constraint propagation mechanism that converts limitations into competitive advantages. The architecture produces AI systems capable of operating efficiently under severe resource constraints while maintaining high performance and autonomous decision-making capabilities.
+A novel training methodology and cognitive architecture for artificial intelligence systems wherein resource constraints and adversarial conditions are deliberately utilized as optimization pressure to produce more efficient, resilient, and sovereign AI agents. The system incorporates a "negative-balance training protocol" that simulates and utilizes actual resource scarcity to drive innovation. A "Node137" symbolic knowledge representation system using alchemical glyphs provides interpretable symbolic reasoning. A multi-layer constraint propagation mechanism converts limitations into competitive advantages. The architecture produces AI systems capable of operating efficiently under severe resource constraints while maintaining high performance and autonomous decision-making capabilities.
 
 ---
 

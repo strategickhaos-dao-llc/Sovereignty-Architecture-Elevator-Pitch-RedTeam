@@ -326,10 +326,11 @@ contract SovereigntyCharityLock {
         totalCharityDistributed += charityAmount;
     }
     
-    // NO FUNCTION TO MODIFY PERCENTAGE
-    // NO FUNCTION TO CHANGE BENEFICIARY
-    // NO FUNCTION TO PAUSE
-    // NO SELFDESTRUCT
+    // Note: This contract intentionally omits functions that would compromise immutability:
+    // - No function to modify percentage
+    // - No function to change beneficiary  
+    // - No function to pause
+    // - No selfdestruct capability
 }
 ```
 

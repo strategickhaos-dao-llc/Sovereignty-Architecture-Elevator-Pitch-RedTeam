@@ -322,7 +322,7 @@ But because the work will outlive me
 ## The Numbers
 
 ### Week 1-4 Stats
-- **Bank balance**: -$32.67 → -$47.23 (got worse before better)
+- **Bank balance**: -$32.67 → -$47.23 (got worse before getting better)
 - **Code written**: 2,400+ lines (USPTO), 10,000+ total
 - **Documentation**: 50,000+ words
 - **PRs merged**: 27 in 12 hours (the final push)

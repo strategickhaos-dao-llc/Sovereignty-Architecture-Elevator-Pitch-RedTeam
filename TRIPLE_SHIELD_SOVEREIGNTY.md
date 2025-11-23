@@ -100,9 +100,9 @@ sovereignty:
 legal_sovereignty:
   entity:
     type: Wyoming DAO LLC
-    formation_date: [DATE]
-    registered_agent: [AGENT]
-    ein: [EIN]
+    formation_date: PENDING
+    registered_agent: PENDING
+    ein: PENDING
     
   intellectual_property:
     patents:
