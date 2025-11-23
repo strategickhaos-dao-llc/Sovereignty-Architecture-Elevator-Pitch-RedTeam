@@ -2,6 +2,23 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🎓 Legal & Academic Documentation
+
+**NEW**: Complete documentation for USPTO patent filing, academic publication, and institutional setup.
+
+📚 **[Legal & Academic Index](LEGAL_ACADEMIC_INDEX.md)** - Complete guide to all documentation  
+🏛️ **[Capstone Documentation](CAPSTONE_COMPLETE.md)** - Comprehensive project summary  
+⚖️ **[USPTO Patent Filing](legal/patents/provisionals/FILING_CHECKLIST.md)** - Provisional application guide  
+📜 **[100 Laws of Sovereign Tinkerer](legal/patents/prior-art/100_LAWS_OF_THE_SOVEREIGN_TINKERER.md)** - Prior art publication  
+📄 **[LaTeX Pre-Print](academic/preprints/sovereignty-architecture-preprint.tex)** - Scholarly paper  
+🆔 **[ORCID Setup](academic/identity/ORCID_SETUP_GUIDE.md)** - Academic identity (60 seconds)  
+🔗 **[Zenodo DOI](academic/identity/ZENODO_DOI_GUIDE.md)** - Permanent citation (5 minutes)
+
+**Entity Details:**
+- **Wyoming DAO LLC:** 2025-001708194 (Good Standing)
+- **IRS EIN:** 39-2923503
+- **Banking:** Navy Federal Credit Union
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
