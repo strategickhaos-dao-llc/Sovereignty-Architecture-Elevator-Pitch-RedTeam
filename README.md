@@ -12,6 +12,27 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### Docker Compose Deployment (Recommended)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
+cd Sovereignty-Architecture-Elevator-Pitch-
+
+# 2. Configure environment
+cp .env.example .env
+# Edit .env with your settings (database password, session secret, etc.)
+
+# 3. Start all services
+docker-compose up -d
+
+# 4. Access the invite-only website
+# Open http://localhost:8090 in your browser
+# Default admin login: admin@localhost / admin123 (CHANGE THIS!)
+```
+
+### Kubernetes Deployment
+
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -29,6 +50,17 @@ export PRS_CHANNEL="channel_id"
 ```
 
 ## 📋 Core Components
+
+### 🌐 Invite-Only Website (`web-app`) **NEW!**
+- **Secure Authentication**: Session-based login with BCrypt password hashing
+- **Invitation System**: Admin-controlled invite codes for new users
+- **AI Chat Interface**: Direct access to internal LLMs (GPT-4o, Claude, Llama 3)
+- **User Management**: RBAC with admin and user roles
+- **Audit Logging**: Comprehensive tracking of all user actions
+- **Rate Limiting**: Protection against abuse and DDoS
+- **Responsive UI**: Modern, mobile-friendly interface
+
+📖 **[Complete Setup Guide →](INVITE_ONLY_WEBSITE.md)**
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
