@@ -282,10 +282,31 @@ This project thrives because of an extraordinary community of creators, builders
 
 ## 📄 License & Support
 
-- **License**: MIT License - see [LICENSE](LICENSE) file
+- **License**: MIT License with ValorYield Attribution - see [LICENSE](LICENSE) file
+- **Legal Protection**: 110+ shields covering speech, monetization, defamation defense
+  - [Comprehensive Legal Shield](legal/shields/LEGAL_SHIELD_COMPREHENSIVE.md) - Full 110+ protections
+  - [Monetization & Defamation Shield](legal/shields/MONETIZATION_DEFAMATION_SHIELD.md) - One-page protection summary
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
+
+---
+
+## ⚖️ Legal Notice & Disclaimer
+
+**Protected Speech:** All content is protected under First Amendment, Texas law, and Wyoming DAO Act.
+
+**Warranty Disclaimer:** This software is provided "AS-IS" without any warranty of any kind. Use at your own risk.
+
+**Monetization:** All derivative works must preserve 7% ValorYield attribution clause. See [LICENSE](LICENSE) for terms.
+
+**Defamation Defense:** All statements are either factually true or protected opinion. We maintain robust anti-SLAPP protection and truth defense. See [Monetization & Defamation Shield](legal/shields/MONETIZATION_DEFAMATION_SHIELD.md).
+
+**Neurodivergent Expression:** This project embraces and protects neurodivergent communication styles and working methods under ADA and Texas Human Resources Code.
+
+**Platform Immunity:** We maintain Section 230 and DMCA safe harbor protections for user-generated content.
+
+**Final Disclaimer:** Use at your own risk. No warranties. Spite not included. By using, forking, or contributing to this repository, you accept all terms in [legal/shields/](legal/shields/) directory.
 
 ---
 
@@ -294,3 +315,5 @@ This project thrives because of an extraordinary community of creators, builders
 *"They're not working for you. They're dancing with you. And the music is never going to stop."*
 
 *Empowering sovereign digital infrastructure through Discord-native DevOps automation*
+
+**Protected under U.S. Constitution, Wyoming DAO Act, and 110+ federal/state legal shields. Empire Eternal. 💛**
