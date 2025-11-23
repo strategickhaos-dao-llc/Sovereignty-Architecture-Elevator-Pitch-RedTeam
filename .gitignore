@@ -35,3 +35,10 @@ target/
 
 # Workspace data
 workspace/
+
+# SNHU Ecosystem Tracker
+snhu-ecosystem-tracker/__pycache__/
+snhu-ecosystem-tracker/results/
+snhu-ecosystem-tracker/.venv/
+snhu-ecosystem-tracker/venv/
+snhu-ecosystem-tracker/*.egg-info

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: snhu-analyzer-config
+  namespace: default
+  labels:
+    app: analyzer
+    component: snhu-ecosystem-tracker
+data:
+  # Email analysis configuration
+  analysis_model: "grok-4-fast-reasoning"
+  batch_size: "50"
+  max_tokens: "2000000"
+  
+  # Processing settings
+  enable_sentiment_analysis: "true"
+  enable_entity_extraction: "true"
+  enable_topic_modeling: "true"
+  
+  # SNHU-specific patterns
+  email_domain: "@snhu.edu"
+  focus_keywords: "credential,stackable,SDN,skills,milestone,ecosystem"
+  
+  # Output configuration
+  results_format: "json"
+  output_path: "/app/results"
+  
+  # Logging
+  log_level: "INFO"
+  log_format: "json"
