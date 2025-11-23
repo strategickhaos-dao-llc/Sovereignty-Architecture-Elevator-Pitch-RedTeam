@@ -29,12 +29,13 @@ echo "+memory" | sudo tee /sys/fs/cgroup/cgroup.subtree_control > /dev/null
 # Set memory limit (6GB = 6442450944 bytes)
 echo 6442450944 | sudo tee ${CGROUP_PATH}/memory.max
 
-# Set swap limit (500MB = 524288000 bytes)
-echo 524288000 | sudo tee ${CGROUP_PATH}/memory.swap.max
+# Set swap limit (cgroups v2: memory.max includes swap)
+# To limit to 500MB swap, we set memory.high to force early reclaim
+echo 6442450944 | sudo tee ${CGROUP_PATH}/memory.high
 
 # Verify limits
 echo "Memory limit: $(cat ${CGROUP_PATH}/memory.max)"
-echo "Swap limit: $(cat ${CGROUP_PATH}/memory.swap.max)"
+echo "Memory high threshold: $(cat ${CGROUP_PATH}/memory.high)"
 
 echo "To run training under constraints:"
 echo "  echo \$\$ | sudo tee ${CGROUP_PATH}/cgroup.procs"
@@ -285,10 +286,13 @@ echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
 
 # Remove frequency cap (restore to hardware maximum)
 if command -v cpupower &> /dev/null; then
-    # Get CPU's maximum frequency
-    MAX_FREQ=$(lscpu | grep "CPU max MHz" | awk '{print $4}' | cut -d'.' -f1)
-    if [ -n "$MAX_FREQ" ]; then
+    # Get CPU's maximum frequency using lscpu
+    MAX_FREQ=$(lscpu -p=MAXMHZ | tail -1)
+    # Validate it's numeric and non-empty
+    if [[ "$MAX_FREQ" =~ ^[0-9]+$ ]] && [ "$MAX_FREQ" -gt 0 ]; then
         sudo cpupower frequency-set --max ${MAX_FREQ}MHz
+    else
+        echo "Could not detect max frequency, skipping frequency restore"
     fi
 fi
 
@@ -421,9 +425,9 @@ if [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ]; then
     echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo > /dev/null
 fi
 if command -v cpupower &> /dev/null; then
-    # Restore to hardware maximum
-    MAX_FREQ=$(lscpu | grep "CPU max MHz" | awk '{print $4}' | cut -d'.' -f1)
-    if [ -n "$MAX_FREQ" ]; then
+    # Restore to hardware maximum using lscpu -p
+    MAX_FREQ=$(lscpu -p=MAXMHZ | tail -1)
+    if [[ "$MAX_FREQ" =~ ^[0-9]+$ ]] && [ "$MAX_FREQ" -gt 0 ]; then
         sudo cpupower frequency-set --max ${MAX_FREQ}MHz > /dev/null 2>&1 || true
     fi
 fi
