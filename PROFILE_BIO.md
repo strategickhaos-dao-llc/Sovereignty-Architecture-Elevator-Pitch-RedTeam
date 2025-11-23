@@ -9,7 +9,7 @@
 ```
 Strategickhaos DAO LLC @strategickhaos
 Wyoming DAO §17-31-101 | EIN 39-2900295
-AI-governed philanthropy: Code-woven, compliance vaulted, 7% charity locked (St. Jude/MSF/vets).
+AI-governed philanthropy: Code-enforced, compliance vaulted, 7% charity locked (St. Jude/MSF/vets).
 Patent pending. Not funds/investment. Pure sovereign research. ⚔️
 Vault: github.com/Me10101-01/Strategickhaos-DAO_Compliance
 ```
