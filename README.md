@@ -1,5 +1,7 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
+> **⚖️ LEGAL NOTICE**: This repository is protected under the [CANNOT_SUE_SHIELD](/docs/CANNOT_SUE_SHIELD.md) — full legal armor effective November 24, 2025. All code, models, and agents are sovereign property of Strategickhaos DAO LLC (EIN 39-2923503) with 7% ValorYield charity commitment. See the shield for complete federal protections.
+
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
 ## 🏛️ Architecture Overview
