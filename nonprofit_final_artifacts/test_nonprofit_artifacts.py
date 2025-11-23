@@ -165,7 +165,7 @@ class NonprofitArtifactsTests:
                 
                 required_files = [
                     "990_pf_summary.md",
-                    "valorield_proof.md",
+                    "valoryield_proof.md",
                     "board_minutes_compilation.md",
                     "donor_registry_anonymized.md",
                     "MASTER_INDEX.md"

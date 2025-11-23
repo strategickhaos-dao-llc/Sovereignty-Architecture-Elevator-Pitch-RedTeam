@@ -56,7 +56,7 @@
 **Transparency:** Complete audit trail maintained  
 **Documentation:** nonprofit_final_artifacts/irs_audit_generator.py  
 **Proof Hash:** Available for each transaction  
-**Arweave Seal:** ar://valorield-proof-[YEAR]
+**Arweave Seal:** ar://valoryield-proof-[YEAR]
 
 ### 7. Texas Anti-SLAPP + Fee-Shifting Statutes Ready
 **Jurisdiction:** Texas (principal address: Longview, TX 75602)  

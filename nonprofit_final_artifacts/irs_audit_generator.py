@@ -64,7 +64,7 @@ def generate_irs_audit_package(year):
     
     # 2. ValorYield 7% On-Chain Proof
     print("\n💰 Compiling ValorYield 7% On-Chain Proof...")
-    valorield_proof = f"""
+    valoryield_proof = f"""
 # ValorYield 7% On-Chain Verification — {year}
 **Organization:** Strategickhaos DAO LLC (EIN 39-2923503)
 **Policy:** 7% of all donations routed to ValorYield infrastructure
@@ -75,14 +75,14 @@ def generate_irs_audit_package(year):
 - Zero third-party processors used
 - Complete audit trail maintained
 
-**Verification Hash:** {hashlib.sha256(f"valorield_{year}".encode()).hexdigest()}
-**Arweave Seal:** ar://valorield-proof-{year}
+**Verification Hash:** {hashlib.sha256(f"valoryield_{year}".encode()).hexdigest()}
+**Arweave Seal:** ar://valoryield-proof-{year}
 **Generated:** {datetime.now().isoformat()}
 """
     
-    with open(f"{output_dir}/valorield_proof.md", "w") as f:
-        f.write(valorield_proof)
-    print(f"✓ Written to {output_dir}/valorield_proof.md")
+    with open(f"{output_dir}/valoryield_proof.md", "w") as f:
+        f.write(valoryield_proof)
+    print(f"✓ Written to {output_dir}/valoryield_proof.md")
     
     # 3. Board Minutes Compilation
     print("\n📝 Compiling Board Minutes...")
@@ -150,7 +150,7 @@ All individual donor records stored in: donors/*.asc
 
 ## Package Contents
 1. ✓ 990-PF Summary (990_pf_summary.md)
-2. ✓ ValorYield 7% On-Chain Proof (valorield_proof.md)
+2. ✓ ValorYield 7% On-Chain Proof (valoryield_proof.md)
 3. ✓ Board Minutes Compilation (board_minutes_compilation.md)
 4. ✓ Donor Hash Registry (donor_registry_anonymized.md)
 

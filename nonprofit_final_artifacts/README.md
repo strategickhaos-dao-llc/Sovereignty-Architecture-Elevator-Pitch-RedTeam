@@ -69,7 +69,7 @@ python3 nonprofit_final_artifacts/irs_audit_generator.py 2025
 
 **Generated Files:**
 - `990_pf_summary.md` - IRS Form 990-PF summary
-- `valorield_proof.md` - On-chain transaction verification
+- `valoryield_proof.md` - On-chain transaction verification
 - `board_minutes_compilation.md` - Complete board meeting index
 - `donor_registry_anonymized.md` - Privacy-protected donor records
 - `MASTER_INDEX.md` - Package verification and instructions
