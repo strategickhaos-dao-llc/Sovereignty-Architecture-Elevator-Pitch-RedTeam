@@ -7,7 +7,9 @@
     "bot": "tsx watch src/bot.ts",
     "start": "node --enable-source-maps dist/event-gateway.js",
     "build": "tsc -p tsconfig.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "athena:examples": "tsx src/agents/athena/example-usage.ts",
+    "athena:dev": "tsx watch src/agents/athena/survivorship-memory.ts"
   },
   "dependencies": {
     "discord.js": "^14.16.3",

@@ -10,6 +10,26 @@ This system creates a **sovereignty control plane** that bridges:
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
+### 🌌 NEW: Trinity Genome Architecture
+
+The project now includes the **Sovereign Swarm** and **Trinity Genome**—a revolutionary multi-agent AI system where three agent types work in harmony:
+
+- **Nova** ⚡ - Creative agents that rapidly explore solutions
+- **Lyra** 🎵 - Orchestrator agents that coordinate and synthesize
+- **Athena** 🧠 - Memory agents that capture lessons and predict failures
+
+**📚 Start Here**:
+- **NEW!** [QUICK_START_TRINITY.md](./QUICK_START_TRINITY.md) - Get started in 10 minutes
+- [SWARM_README.md](./SWARM_README.md) - Comprehensive project introduction
+- [TRINITY_GENOME.md](./TRINITY_GENOME.md) - Deep architectural documentation
+- [src/agents/athena/](./src/agents/athena/) - Production-ready implementation
+
+**🚀 Try It Now**:
+```bash
+npm install
+npm run athena:examples  # See the Survivorship Memory Engine in action
+```
+
 ## 🚀 Quick Start
 
 ```bash

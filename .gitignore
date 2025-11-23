@@ -35,3 +35,9 @@ target/
 
 # Workspace data
 workspace/
+
+# TypeScript build output
+dist/
+
+# Environment files with secrets
+.env
