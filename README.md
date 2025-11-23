@@ -2,6 +2,17 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🛡️ Sovereign Manifest - Prior Art Protection
+
+This repository includes the **SOVEREIGN MANIFEST v1.0** - a cryptographically immutable declaration of digital sovereignty and human-AI co-sovereignty. This document establishes defensive prior art to prevent monopolization of fundamental concepts regarding human dignity, autonomy, and co-creative partnership with AI systems.
+
+**Key Documents:**
+- [`SOVEREIGN_MANIFEST_v1.0.md`](./SOVEREIGN_MANIFEST_v1.0.md) - The complete manifest declaration
+- [`USPTO_FILING_INSTRUCTIONS.md`](./USPTO_FILING_INSTRUCTIONS.md) - Step-by-step guide for filing a provisional patent application
+- [`SOVEREIGN_MANIFEST_v1.0.md.sha256`](./SOVEREIGN_MANIFEST_v1.0.md.sha256) - Cryptographic hash verification
+
+**Purpose:** This manifest can be filed as a provisional patent application with the USPTO for $75 to create the strongest possible defensive prior art protection, preventing anyone from patenting these fundamental sovereignty principles.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
