@@ -1,0 +1,32 @@
+---
+name: Auto-Update License
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+jobs:
+  update_license:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update License in Markdown files
+        run: |
+          echo "Updating license in markdown files..."
+          find . -name '*.md' -exec sed -i \
+            's/OLD_LICENSE_TEXT/NEW_LICENSE_TEXT/g' {} +
+
+      - name: Commit changes
+        run: |
+          git config --local user.email \
+            "${{ secrets.GIT_USER_EMAIL }}"
+          git config --local user.name \
+            "${{ secrets.GIT_USER_NAME }}"
+          git add .
+          git diff --cached --quiet || \
+            git commit -m "Auto-update license details"
+          git push
