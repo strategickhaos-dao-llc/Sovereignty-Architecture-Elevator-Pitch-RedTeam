@@ -35,3 +35,14 @@ target/
 
 # Workspace data
 workspace/
+
+# Agent collaboration - sensitive files
+agents/config/*.key
+agents/config/*.pem
+agents/config/*.crt
+agents/config/*-credentials.txt
+agents/config/.env.local
+**/wg0.conf
+**/agent.conf
+!agents/config/wireguard-agent.conf
+!agents/config/openvpn-agent.conf
