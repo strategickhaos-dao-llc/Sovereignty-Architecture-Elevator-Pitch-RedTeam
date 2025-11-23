@@ -114,7 +114,7 @@ kubectl apply -f bootstrap/k8s/
 org:
   name: "Your Sovereignty Project"
   contact:
-    owner: "You, at 3:47 a.m."
+    owner: "Your Name"  # Changed at 3:47 a.m.
 
 discord:
   guild_id: null  # Your Discord server (the free one)
@@ -192,7 +192,7 @@ ai_agents:
 ```yaml
 governance:
   approvals:
-    prod_commands_require: ["You at 4 a.m."]
+    prod_commands_require: ["admin"]  # Usually just you, at 4 a.m.
   change_management:
     link: "git log --all --graph --decorate"  # Your real change management
 ```
@@ -211,7 +211,7 @@ governance:
 event_gateway:
   endpoints:
     - path: "/alert"
-      allowed_services: ["alertmanager", "your-anxiety"]
+      allowed_services: ["alertmanager"]  # And your anxiety, but that's not a service
       discord_channel: "#alerts"
 ```
 
@@ -286,7 +286,7 @@ echo $DISCORD_TOKEN $PRS_CHANNEL
 kubectl logs -f deployment/event-gateway -n ops
 
 # Health check
-curl -X POST https://events.yourdomain.com/health
+curl -X POST https://events.strategickhaos.com/health  # Or your domain
 ```
 
 **Everything is on fire:**
