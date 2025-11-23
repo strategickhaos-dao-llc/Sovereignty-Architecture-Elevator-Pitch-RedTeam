@@ -278,7 +278,9 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
-- **[AI Collaboration Framework](AI_COLLABORATION_FRAMEWORK.md)** - Proper acknowledgment of AI-assisted work
+- **[AI Collaboration Documentation](AI_DOCUMENTATION_README.md)** - Quick start guide for AI acknowledgment
+  - [AI Collaboration Framework](AI_COLLABORATION_FRAMEWORK.md) - Comprehensive guide and templates
+  - [AI Research Templates](AI_RESEARCH_TEMPLATES.md) - Ready-to-use sections A-F for papers
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
