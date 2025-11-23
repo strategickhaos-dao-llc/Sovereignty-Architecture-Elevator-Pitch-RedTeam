@@ -243,16 +243,21 @@ setup_donor_records() {
     
     info "Setting up donor records security with SHA-256..."
     
-    # Create secure storage directories
+    # Create secure storage directories with restricted permissions
     mkdir -p data/donor-records/{encrypted,hashes,receipts}
-    chmod 700 data/donor-records/encrypted
+    chmod 750 data/donor-records/encrypted
+    chmod 750 data/donor-records/hashes
+    chmod 750 data/donor-records/receipts
     
     # Generate encryption key if it doesn't exist
+    # NOTE: For production, use a Hardware Security Module (HSM) or Key Management Service
     if [ ! -f "keys/donor-encryption.key" ]; then
         mkdir -p keys
+        chmod 700 keys
         openssl rand -base64 32 > keys/donor-encryption.key
-        chmod 600 keys/donor-encryption.key
+        chmod 400 keys/donor-encryption.key
         success "Generated donor record encryption key"
+        warning "For production: Use HSM or KMS for key management and implement key rotation"
     fi
     
     success "Donor records security configured"

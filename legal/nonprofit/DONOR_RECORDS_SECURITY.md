@@ -42,11 +42,11 @@ Our donor record system is built on the principle that **donor privacy is paramo
 
 #### Data Flow
 1. **Input**: Donor provides information (name, address, donation amount)
-2. **Encryption**: Data encrypted with AES-256 before hashing
-3. **Salting**: Unique salt added to prevent rainbow table attacks
-4. **Hashing**: SHA-256 applied to encrypted + salted data
-5. **Storage**: Hash stored separately from encrypted data
-6. **Verification**: Hash used to verify record integrity without decryption
+2. **Salting**: Unique salt added to prevent rainbow table attacks
+3. **Hashing**: HMAC-SHA256 applied to donor data + salt for verification hash
+4. **Encryption**: Data encrypted with AES-256 for storage
+5. **Storage**: Hash and encrypted data stored separately
+6. **Verification**: HMAC-SHA256 hash used to verify record integrity without decryption
 
 ---
 
@@ -134,8 +134,8 @@ Our donor record system is built on the principle that **donor privacy is paramo
 
 ### Step 3: Hash Generation
 ```bash
-# Generate verification hash
-echo -n "${DONOR_DATA}${SALT}" | sha256sum > donor_verification_hash.txt
+# Generate verification hash using HMAC-SHA256
+echo -n "${DONOR_DATA}" | openssl dgst -sha256 -hmac "${SALT}" > donor_verification_hash.txt
 ```
 
 ### Step 4: Receipt Issuance

@@ -45,7 +45,7 @@ gpg --verify board_minutes_YYYY-MM-DD.md.asc board_minutes_YYYY-MM-DD.md
 
 #### Signing Authority
 - **Primary Signer**: Domenic Garza (Node 137)
-- **GPG Key ID**: 0x137SOVEREIGN
+- **GPG Key ID**: To be generated (format: 0x followed by 8-40 hex characters)
 - **Backup Signers**: Designated board members with authorized GPG keys
 - **Verification**: All signatures publicly verifiable
 
