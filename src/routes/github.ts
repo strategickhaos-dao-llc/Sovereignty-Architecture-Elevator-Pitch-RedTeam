@@ -25,6 +25,14 @@ export function githubRoutes(rest: REST, channelIds: Record<string,string>, secr
       const a = payload.action;
       const pr = payload.pull_request;
       await send(channelIds.prs, `PR ${a}: #${pr.number} ${pr.title}`, `${pr.user.login} → ${pr.base.repo.full_name}\n${pr.html_url}`);
+    } else if (ev === "issue_comment") {
+      const a = payload.action;
+      const comment = payload.comment;
+      const issue = payload.issue;
+      const isPR = !!issue.pull_request;
+      const type = isPR ? "PR" : "Issue";
+      const commentBody = comment.body.length > 200 ? comment.body.substring(0, 200) + "..." : comment.body;
+      await send(channelIds.prs, `${type} Comment ${a}: #${issue.number} ${issue.title}`, `${comment.user.login}: ${commentBody}\n${comment.html_url}`);
     } else if (ev === "check_suite") {
       const cs = payload.check_suite;
       await send(channelIds.deployments, `Checks ${cs.status}`, `${cs.app.name} → ${cs.conclusion || "pending"}`);
