@@ -1,0 +1,23 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.xdv
+
+# PDF output (comment this out if you want to commit compiled PDFs)
+# *.pdf
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Overleaf cache
+.texpadtmp/
