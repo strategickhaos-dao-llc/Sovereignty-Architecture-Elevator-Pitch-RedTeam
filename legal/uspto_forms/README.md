@@ -1,3 +1,7 @@
+**INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED**
+
+---
+
 # USPTO Forms
 
 This directory contains United States Patent and Trademark Office (USPTO) forms and related documentation.

@@ -1,3 +1,7 @@
+**INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED**
+
+---
+
 # United States Patent and Trademark Office
 ## Credit Card Payment Form (PTO-2038)
 
