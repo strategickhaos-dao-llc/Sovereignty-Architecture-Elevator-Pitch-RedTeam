@@ -110,7 +110,13 @@ class ModelWatermarker:
                     total_bits += 1
         
         confidence = total_matches / total_bits if total_bits > 0 else 0
-        is_present = confidence > 0.8  # 80% threshold for watermark detection
+        
+        # Configurable threshold based on use case
+        # - High security: 0.9 (lower false positives)
+        # - Balanced: 0.8 (default)
+        # - High recall: 0.7 (lower false negatives)
+        threshold = getattr(self, 'detection_threshold', 0.8)
+        is_present = confidence > threshold
         
         return is_present, confidence
     
@@ -572,7 +578,7 @@ class EncryptedModelLoader:
         
         # Verify charitable router is active
         if not self.charitable_router.is_active():
-            raise RuntimeError("Charitable router not active - cannot decrypt model")
+            raise RuntimeError("Failed to initialize required dependencies")
         
         # Derive decryption key from charitable router
         self.encryption_key = self._derive_key_from_router()

@@ -1,6 +1,24 @@
 # PROVISIONAL PATENT APPLICATION
 ## AI-GOVERNED CHARITABLE ARCHITECTURE WITH AUTONOMOUS VALUE ROUTING
 
+**🚨 CRITICAL CONFIDENTIALITY NOTICE 🚨**
+
+**THIS DOCUMENT MUST REMAIN STRICTLY CONFIDENTIAL UNTIL AFTER USPTO FILING**
+
+Public disclosure of patent claims before filing can create prior art that
+invalidates the patent. DO NOT:
+- Share outside core team and patent attorney
+- Post publicly or commit to public repositories  
+- Present at conferences or publish papers
+- Discuss in public forums or social media
+
+This document should only be shared with:
+- USPTO-licensed patent attorney (under attorney-client privilege)
+- Core team members (under NDA)
+- Patent examiner (after filing)
+
+---
+
 **CONFIDENTIAL - PATENT PENDING**
 
 **Date Filed**: [TO BE FILED]  

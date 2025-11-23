@@ -130,7 +130,9 @@ Primary governance occurs on-chain via smart contracts deployed at:
 **Key Properties**:
 - **Non-transferable**: Prevents market manipulation and maintains meritocratic governance
 - **Earned**: Tokens granted based on contributions (code, research, operations)
-- **Voting Power**: 1 token = 1 vote
+- **Voting Power**: Quadratic voting (vote weight = sqrt(tokens)) to prevent whale dominance
+  - Alternative: 1 token = 1 vote with concentration limits (max 10% per holder)
+  - Decision based on governance research and community preference
 - **Delegation**: Token holders may delegate voting power
 
 ### C. Decision-Making Framework
