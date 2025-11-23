@@ -35,3 +35,20 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Heartbeat snapshots (temporal proof-of-origin - don't bloat repo)
+.strategickhaos/proof_of_origin/heartbeat_*.json
+
+# Keep antibody library - it's valuable learned security knowledge
+!.strategickhaos/proof_of_origin/antibody_library.json
