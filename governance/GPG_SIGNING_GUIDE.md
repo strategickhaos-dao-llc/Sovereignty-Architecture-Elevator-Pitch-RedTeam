@@ -183,8 +183,7 @@ gpg --armor --detach-sign article_9_charitable_distributions.md
 
 ```bash
 # Import from GitHub repository
-curl -O https://raw.githubusercontent.com/Strategickhaos/\
-Sovereignty-Architecture-Elevator-Pitch-/main/governance/public-key.asc
+curl -O https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/governance/public-key.asc
 
 gpg --import public-key.asc
 
@@ -211,7 +210,7 @@ gpg --fingerprint domenic.garza@snhu.edu
 
 ```bash
 # Verify any signed document
-gpg --verify [DOCUMENT].md.asc [DOCUMENT].md
+gpg --verify DOCUMENT.md.asc DOCUMENT.md
 
 # Expected output:
 # gpg: Signature made [DATE] using RSA key [KEY-ID]

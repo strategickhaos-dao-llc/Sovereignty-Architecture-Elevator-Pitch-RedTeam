@@ -88,6 +88,12 @@ Allocations shall NOT be made to:
 ### 9.4.2 Calculation Method
 ```
 Quarterly Charitable Allocation = 
+  (Quarter's Gross Revenue × 0.07)
+
+Example for Q1:
+  Q1 Charitable Allocation = Q1 Gross Revenue × 0.07
+
+Annual Total = 
   (Q1 Gross Revenue × 0.07) + 
   (Q2 Gross Revenue × 0.07) + 
   (Q3 Gross Revenue × 0.07) + 
@@ -229,12 +235,14 @@ Quarterly reports shall be **timestamped on Bitcoin blockchain**:
 
 ### 9.9.3 Verification Process
 ```bash
-# Verify quarterly report signature
+# Verify quarterly report signature (example for Q1 2026)
 gpg --verify quarterly-report-Q1-2026.md.asc quarterly-report-Q1-2026.md
 
 # Verify document hash on blockchain
 sha256sum quarterly-report-Q1-2026.md
 # Compare to OP_RETURN data in Bitcoin transaction
+
+# Note: First reports will be Q4 2025 or Q1 2026 depending on revenue timeline
 ```
 
 ---
