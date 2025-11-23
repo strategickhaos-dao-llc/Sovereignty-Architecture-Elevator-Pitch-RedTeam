@@ -1,0 +1,8 @@
+This is a placeholder file. The actual PDF will be generated from the corresponding .md file after legal review and approval.
+
+To generate the PDF:
+1. Review and finalize the .md version with legal counsel
+2. Convert to PDF using pandoc or similar tool:
+   pandoc 2025-11-23_Board_Resolution_7Percent_Lock.md -o 2025-11-23_Board_Resolution_7Percent_Lock.pdf
+3. Sign the PDF digitally if required
+4. Replace this placeholder with the final signed PDF

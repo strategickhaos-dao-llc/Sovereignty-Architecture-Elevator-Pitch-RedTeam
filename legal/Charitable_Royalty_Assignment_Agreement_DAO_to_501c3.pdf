@@ -1,0 +1,8 @@
+This is a placeholder file. The actual PDF will be generated from the corresponding .md file after legal review and approval.
+
+To generate the PDF:
+1. Review and finalize the .md version with legal counsel from both parties
+2. Convert to PDF using pandoc or similar tool:
+   pandoc Charitable_Royalty_Assignment_Agreement_DAO_to_501c3.md -o Charitable_Royalty_Assignment_Agreement_DAO_to_501c3.pdf
+3. Execute with wet signatures or digital signatures as required
+4. Replace this placeholder with the final executed PDF

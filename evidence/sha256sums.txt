@@ -1,0 +1,37 @@
+# SHA-256 Checksums for Legal and Governance Documents
+# Generated: 2025-11-23
+# 
+# This file provides cryptographic verification of document integrity.
+# Verify with: sha256sum -c sha256sums.txt
+#
+# Format: <hash>  <filename>
+
+# Legal Documents (to be generated after finalization)
+# [hash]  legal/2025-11-23_Board_Resolution_7Percent_Lock.pdf
+# [hash]  legal/Charitable_Royalty_Assignment_Agreement_DAO_to_501c3.pdf
+# [hash]  legal/IP_Assignment_Creator_to_DAO.pdf
+# [hash]  legal/Charity_Acknowledgment_Letter.pdf
+
+# Governance Documents
+# [hash]  governance/royalty-lock.yaml
+
+# Instructions:
+# 1. After finalizing all documents, generate actual checksums:
+#    cd /path/to/repo
+#    sha256sum legal/*.pdf governance/royalty-lock.yaml > evidence/sha256sums.txt
+#
+# 2. Sign this file with GPG:
+#    gpg --clearsign evidence/sha256sums.txt
+#    mv evidence/sha256sums.txt.asc evidence/sha256sums.txt.sig
+#
+# 3. Create OpenTimestamps proof:
+#    ots stamp evidence/sha256sums.txt
+#    # This creates evidence/sha256sums.txt.ots
+#
+# 4. Commit and tag:
+#    git add evidence/
+#    git commit -S -m "Add cryptographic evidence for 7% royalty lock"
+#    git tag -s v20251123-7percent-lock -m "7% Charitable Royalty Lock - Evidence Anchored"
+#    git push && git push --tags
+
+# This file will be updated with actual hashes after document finalization.

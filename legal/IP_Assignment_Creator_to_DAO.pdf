@@ -1,0 +1,9 @@
+This is a placeholder file. The actual PDF will be generated from the corresponding .md file after legal review and approval.
+
+To generate the PDF:
+1. Review and finalize the .md version with legal counsel
+2. Attach Exhibit A listing all Works being assigned
+3. Convert to PDF using pandoc or similar tool:
+   pandoc IP_Assignment_Creator_to_DAO.md -o IP_Assignment_Creator_to_DAO.pdf
+4. Execute with appropriate signatures
+5. Replace this placeholder with the final executed PDF
