@@ -25,13 +25,13 @@ This self-enrollment guide provides instructions for registered patent practitio
 
 ## Introduction
 
-The USPTO is introducing a new online process of verifying the identity of new patent filers, ID.me, which will be available in addition to mailing notarized paper forms. Using ID.me in coordination with the Patent Center self-enrollment process, will allow users to register in less than 30 minutes.
+The USPTO is introducing a new online process of verifying the identity of new patent filers, ID.me, which will be available in addition to mailing notarized paper forms. Using ID.me in coordination with the Patent Center self-enrollment process will allow users to register in less than 30 minutes.
 
-Users can still choose to postal mail the notarized Patent Electronic Systems Verification form to the Patent Electronic Business Center, which may take up to 10 business days to complete.
+Users can still choose to mail the notarized Patent Electronic Systems Verification form to the Patent Electronic Business Center, which may take up to 10 business days to complete.
 
 ## Step 1: Choosing your role
 
-When new users log into Patent Center with a new USPTO.gov account verified with ID.me, they will see a pop-up window to begin the self-enrollment process. Please contact the Patent Electronic Business Center to assist you if the pop-up window does not appear after logging into Patent Center with new USPTO.gov account verified with ID.me.
+When new users log into Patent Center with a new USPTO.gov account verified with ID.me, they will see a pop-up window to begin the self-enrollment process. Please contact the Patent Electronic Business Center to assist you if the pop-up window does not appear after logging into Patent Center with a new USPTO.gov account verified with ID.me.
 
 After logging into Patent Center, the first step is for users to select their role when accessing the self-enrollment process in Patent Center. There are two roles to choose from, registered patent practitioner and independent (pro-se) inventor.
 
