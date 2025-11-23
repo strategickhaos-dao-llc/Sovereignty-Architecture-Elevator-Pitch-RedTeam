@@ -41,7 +41,7 @@ This represents the first known instance in academic history where:
 ### Verify GPG Signature
 ```bash
 # Import public key
-gpg --recv-keys 9F3A2C8BD4071810
+gpg --recv-keys 9F3A2C8BD4071810  # Key: 9F3A 2C8B D407 1810
 
 # Verify signature
 gpg --verify "Thysanotus Brown 1810.htm.gpg"

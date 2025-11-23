@@ -100,6 +100,7 @@ For expert testimony on digital evidence:
 
 #### Step 1: Obtain Public Key
 ```bash
+# Key Fingerprint: 9F3A 2C8B D407 1810
 gpg --recv-keys 9F3A2C8BD4071810
 ```
 
@@ -116,7 +117,7 @@ gpg --decrypt "Thysanotus Brown 1810.htm.gpg" > "Thysanotus Brown 1810.htm"
 #### Expected Output
 ```
 gpg: Signature made Sat Nov 23 23:47:00 2025 PST
-gpg:                using RSA key 9F3A2C8BD4071810
+gpg:                using RSA key 9F3A 2C8B D407 1810
 gpg: Good signature from "Domenic Garza <[email]>"
 ```
 
@@ -161,7 +162,7 @@ Additional measures for long-term security:
 ### What Was Achieved
 
 **First in Academic History**: A pre-print publication with:
-- GPP cryptographic signature at moment of creation
+- GPG cryptographic signature at moment of creation
 - Correlation with federal patent filing
 - End-to-end encrypted storage
 - Zero-knowledge architecture
