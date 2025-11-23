@@ -1,0 +1,470 @@
+SOVEREIGNTY ARCHITECTURE RESTRICTIVE LICENSE
+Version 1.0
+
+Copyright (c) 2025 Strategickhaos DAO LLC
+All Rights Reserved
+
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+===============================================================================
+PREAMBLE
+===============================================================================
+
+The Sovereignty Architecture ("Software") embodies a novel AI-governed 
+charitable architecture with constitutional constraints and mandatory value 
+routing to charitable causes. This license is designed to:
+
+1. Preserve the 7% charitable routing mechanism as an architectural invariant
+2. Prevent commercial exploitation that would remove charitable commitments
+3. Enable research, education, and non-commercial use
+4. Protect intellectual property while promoting beneficial applications
+5. Ensure alignment-preserving mechanisms remain intact
+
+This is NOT an open source license. This is a restrictive license designed
+to protect a benevolent system from corruption while enabling non-commercial
+beneficial use.
+
+===============================================================================
+SECTION 1: DEFINITIONS
+===============================================================================
+
+1.1 "Software" means the Sovereignty Architecture system, including:
+    - Source code, object code, and executable binaries
+    - AI models, model weights, and training procedures
+    - Documentation, specifications, and architectural designs
+    - Configuration files, scripts, and tooling
+    - Charitable routing mechanisms and smart contracts
+    - Constitutional constraint implementations
+    - DAO governance structures and interfaces
+
+1.2 "Charitable Mechanism" means the cryptographically-enforced system that
+    routes 7% (or other DAO-approved percentage between 5-10%) of all value
+    transactions to verified charitable organizations.
+
+1.3 "Constitutional Constraints" means the hard-coded AI alignment principles
+    that prevent harmful actions, alignment drift, and specification gaming.
+
+1.4 "Commercial Use" means any use intended for or directed toward commercial
+    advantage or monetary compensation, including but not limited to:
+    - Selling the Software or derivative works
+    - Using the Software to provide paid services
+    - Incorporating the Software into commercial products
+    - Using the Software in for-profit business operations
+    - Licensing the Software for monetary consideration
+
+1.5 "Non-Commercial Use" means use for:
+    - Personal learning and education
+    - Academic research and publication
+    - Non-profit charitable work
+    - Government research (non-defense)
+    - Open source contribution to this project
+
+1.6 "Derivative Work" means any work based upon the Software, including:
+    - Modifications, translations, or adaptations
+    - Works incorporating substantial portions of the Software
+    - Extensions or plugins that depend on the Software
+    - Fine-tuned or retrained AI models based on the Software
+
+1.7 "Fork" means a copy of the Software repository intended for independent
+    development separate from the original project.
+
+===============================================================================
+SECTION 2: GRANT OF LICENSE
+===============================================================================
+
+2.1 NON-COMMERCIAL LICENSE GRANT
+
+Subject to the terms and conditions of this License, Strategickhaos DAO LLC
+("Licensor") hereby grants you a worldwide, royalty-free, non-exclusive,
+non-transferable, revocable license to:
+
+    a) Use the Software for Non-Commercial Use only
+    b) Study and analyze the Software for educational purposes
+    c) Run and execute the Software in non-commercial environments
+    d) Contribute modifications back to the original project
+    e) Publish research papers referencing the Software
+
+2.2 CHARITABLE COVENANT REQUIREMENT
+
+ANY use of the Software, Commercial or Non-Commercial, MUST maintain the
+Charitable Mechanism in full operation. You MAY NOT:
+
+    a) Remove, disable, or bypass the Charitable Mechanism
+    b) Reduce the charitable routing percentage below 5%
+    c) Modify the Charitable Mechanism to benefit non-charitable recipients
+    d) Fork the Software without maintaining the Charitable Mechanism
+    e) Create derivative works that lack the Charitable Mechanism
+
+2.3 CONSTITUTIONAL CONSTRAINTS REQUIREMENT
+
+ANY use of the Software MUST maintain the Constitutional Constraints. You
+MAY NOT:
+
+    a) Remove or disable Constitutional Constraint checking
+    b) Modify constraints to permit harmful actions
+    c) Create derivative works without Constitutional Constraints
+    d) Bypass or circumvent constraint enforcement mechanisms
+
+===============================================================================
+SECTION 3: PROHIBITED USES
+===============================================================================
+
+3.1 COMMERCIAL USE PROHIBITION
+
+You MAY NOT use the Software for Commercial Use without obtaining a separate
+commercial license from Licensor. This includes:
+
+    a) Offering the Software as a service (SaaS)
+    b) Building commercial products incorporating the Software
+    c) Using the Software in for-profit business operations
+    d) Selling licenses, subscriptions, or access to the Software
+    e) Monetizing content created using the Software
+
+3.2 FOR-PROFIT FORK PROHIBITION
+
+You MAY NOT create for-profit forks of the Software. Any fork MUST:
+
+    a) Maintain this Restrictive License in full
+    b) Preserve the Charitable Mechanism without modification
+    c) Maintain Constitutional Constraints
+    d) Include attribution to Strategickhaos DAO LLC
+    e) Be used solely for Non-Commercial Use
+
+3.3 CHARITABLE MECHANISM REMOVAL PROHIBITION
+
+You MAY NOT remove, disable, bypass, or reduce the Charitable Mechanism.
+Any attempt to do so constitutes material breach and copyright infringement.
+
+3.4 CLONING AND FINANCIALIZATION PROHIBITION
+
+You MAY NOT:
+
+    a) Clone the Software for commercial purposes
+    b) Financialize the Software through token sales or equity offerings
+    c) Create "corporate machine" versions removing charitable commitments
+    d) Use the Software as basis for OpenAI/Anthropic-style corporate entities
+    e) Sell or license derivative works for profit
+
+3.5 MILITARY AND HARMFUL USE PROHIBITION
+
+You MAY NOT use the Software for:
+
+    a) Military purposes or weapons development
+    b) Surveillance or oppression of individuals or groups
+    c) Generating disinformation or manipulative content
+    d) Violating privacy or civil liberties
+    e) Any purpose violating the Constitutional Constraints
+
+===============================================================================
+SECTION 4: ATTRIBUTION AND NOTICES
+===============================================================================
+
+4.1 REQUIRED ATTRIBUTION
+
+All copies or substantial portions of the Software MUST include:
+
+    a) This complete license text
+    b) Copyright notice: "Copyright (c) 2025 Strategickhaos DAO LLC"
+    c) Attribution: "Based on Sovereignty Architecture by Strategickhaos DAO"
+    d) Link to original project: https://github.com/Strategickhaos-Swarm-Intelligence
+    e) Notice of Charitable Mechanism presence and operation
+
+4.2 MODIFICATION NOTICE
+
+Any modified versions MUST clearly state:
+
+    a) "This is a modified version of Sovereignty Architecture"
+    b) List of modifications made
+    c) Name and contact information of modifier
+    d) Date of modification
+    e) Confirmation that Charitable Mechanism is preserved
+
+4.3 NO ENDORSEMENT
+
+You MAY NOT imply endorsement by Licensor without explicit written permission.
+
+===============================================================================
+SECTION 5: CONTRIBUTIONS
+===============================================================================
+
+5.1 CONTRIBUTION LICENSE
+
+By contributing to the Software, you grant Licensor:
+
+    a) Perpetual, worldwide, royalty-free license to your contribution
+    b) Right to sublicense your contribution under any terms
+    c) Right to modify, distribute, and commercialize your contribution
+    d) Patent license for any patents covering your contribution
+
+5.2 CONTRIBUTOR AGREEMENT
+
+Contributors MUST execute Contributor License Agreement (CLA) including:
+
+    a) IP assignment to Strategickhaos DAO LLC
+    b) Representation that contribution is original work
+    c) Warranty of right to contribute
+    d) Agreement to maintain confidentiality of non-public information
+
+5.3 ACKNOWLEDGMENT
+
+Contributors will be acknowledged in CONTRIBUTORS.md and DAO governance tokens.
+
+===============================================================================
+SECTION 6: COMMERCIAL LICENSING
+===============================================================================
+
+6.1 COMMERCIAL LICENSE AVAILABLE
+
+Organizations seeking Commercial Use may apply for a commercial license from
+Licensor. Commercial license includes:
+
+    a) Right to use Software for Commercial Use
+    b) Right to create Commercial Derivative Works
+    c) Technical support and updates
+    d) Patent license for use of inventions in Software
+
+6.2 COMMERCIAL LICENSE REQUIREMENTS
+
+Commercial licensees MUST:
+
+    a) Pay negotiated license fees to Licensor
+    b) Maintain the Charitable Mechanism (7% routing)
+    c) Maintain Constitutional Constraints
+    d) Submit to compliance audits
+    e) Provide quarterly usage reports
+
+6.3 COMMERCIAL LICENSE TERMS
+
+Standard commercial license terms:
+
+    a) Initial fee: $100,000 - $1,000,000 depending on use case
+    b) Annual maintenance: 20% of initial fee
+    c) Revenue share: 3% of gross revenue (in addition to 7% charity)
+    d) Term: 3-5 years, renewable
+    e) Territory: Worldwide or specified regions
+
+Commercial license inquiries: licensing@strategickhaos.dao
+
+===============================================================================
+SECTION 7: INTELLECTUAL PROPERTY PROTECTION
+===============================================================================
+
+7.1 COPYRIGHT
+
+The Software is protected by U.S. and international copyright law. All rights
+not expressly granted in this License are reserved by Licensor.
+
+7.2 PATENTS
+
+The Software is covered by pending and issued patents including:
+    - Provisional Application: AI-Governed Charitable Architecture (pending)
+    - Additional patent applications in preparation
+
+Use of the Software under Non-Commercial license includes patent license for
+Non-Commercial Use only. Commercial Use requires separate patent license.
+
+7.3 TRADE SECRETS
+
+Portions of the Software constitute trade secrets of Licensor and are 
+disclosed in confidence. You MUST:
+
+    a) Maintain confidentiality of non-public information
+    b) Not reverse engineer encrypted or obfuscated components
+    c) Not disclose trade secrets to third parties
+    d) Use trade secrets only as permitted by this License
+
+7.4 TRADEMARKS
+
+"Strategickhaos", "Sovereignty Architecture", "Valoryield Engine" and related
+marks are trademarks of Licensor. No trademark license is granted by this
+License. You MAY NOT use trademarks without written permission.
+
+===============================================================================
+SECTION 8: TECHNICAL PROTECTION MEASURES
+===============================================================================
+
+8.1 ANTI-CIRCUMVENTION
+
+The Software includes technical protection measures including:
+
+    a) Model weight watermarking
+    b) Cryptographic enforcement of Charitable Mechanism
+    c) Zero-knowledge proof generation
+    d) Remote attestation
+    e) Encrypted components
+
+You MAY NOT circumvent, remove, or disable these protection measures.
+Circumvention violates this License and may violate DMCA (17 U.S.C. § 1201).
+
+8.2 DMCA NOTICE
+
+This Software is protected by Digital Millennium Copyright Act. Circumvention
+of technical protection measures is prohibited by 17 U.S.C. § 1201.
+
+8.3 WATERMARK PRESERVATION
+
+AI model watermarks MUST be preserved in any use or derivative work. Removal
+or alteration of watermarks constitutes copyright infringement.
+
+===============================================================================
+SECTION 9: WARRANTY AND DISCLAIMER
+===============================================================================
+
+9.1 NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+9.2 LIMITATION OF LIABILITY
+
+IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+9.3 RISK ASSUMPTION
+
+You assume all risk for use of the Software. Licensor disclaims liability for:
+
+    a) Direct, indirect, incidental, or consequential damages
+    b) Lost profits or business interruption
+    c) Data loss or corruption
+    d) Third-party claims
+    e) Regulatory enforcement actions
+
+===============================================================================
+SECTION 10: ENFORCEMENT
+===============================================================================
+
+10.1 LICENSE VIOLATION
+
+Violation of this License constitutes:
+
+    a) Material breach of contract
+    b) Copyright infringement (remedies under 17 U.S.C. § 501 et seq.)
+    c) Patent infringement (if patents issued)
+    d) Breach of confidence (for trade secrets)
+    e) DMCA violation (for circumvention)
+
+10.2 REMEDIES
+
+Licensor may seek:
+
+    a) Injunctive relief
+    b) Statutory damages up to $150,000 per work under 17 U.S.C. § 504(c)
+    c) Actual damages and infringer's profits
+    d) Attorneys' fees under 17 U.S.C. § 505
+    e) Criminal penalties (if applicable)
+
+10.3 AUTOMATIC TERMINATION
+
+License automatically terminates upon any violation. Upon termination:
+
+    a) You MUST immediately cease all use of the Software
+    b) Delete all copies in your possession or control
+    c) Destroy all derivative works
+    d) Provide written certification of compliance
+
+10.4 DMCA TAKEDOWN
+
+Licensor will aggressively pursue DMCA takedowns for unauthorized copies:
+
+    a) GitHub repository takedowns
+    b) Cloud provider account suspension
+    c) Domain seizure (if applicable)
+    d) Search engine de-indexing
+
+===============================================================================
+SECTION 11: GOVERNING LAW AND JURISDICTION
+===============================================================================
+
+11.1 GOVERNING LAW
+
+This License governed by:
+
+    a) Wyoming law (for DAO LLC matters)
+    b) Federal law (for patents, copyrights, DMCA)
+    c) International treaties (Berne Convention, TRIPS)
+
+11.2 JURISDICTION
+
+Exclusive jurisdiction and venue in:
+
+    a) Federal courts for the District of Wyoming
+    b) State courts in Laramie County, Wyoming
+
+11.3 INTERNATIONAL ENFORCEMENT
+
+Licensor will enforce rights internationally through:
+
+    a) PCT patent applications (20-30 countries)
+    b) Berne Convention copyright protection (180+ countries)
+    c) WIPO arbitration (when applicable)
+
+===============================================================================
+SECTION 12: MISCELLANEOUS
+===============================================================================
+
+12.1 ENTIRE AGREEMENT
+
+This License constitutes the entire agreement regarding the Software.
+
+12.2 AMENDMENTS
+
+Licensor may publish revised versions of this License. Continued use after
+revision constitutes acceptance of new terms.
+
+12.3 SEVERABILITY
+
+If any provision is held invalid, remaining provisions remain in effect.
+
+12.4 NO WAIVER
+
+Failure to enforce any provision does not waive right to future enforcement.
+
+12.5 ASSIGNMENT
+
+You may not assign this License. Licensor may assign without restriction.
+
+12.6 EXPORT CONTROL
+
+Software may be subject to U.S. export controls. You are responsible for
+compliance with all export laws.
+
+12.7 AUDIT RIGHTS
+
+Licensor reserves right to audit your use of the Software to ensure compliance
+with this License. You agree to cooperate with reasonable audit requests.
+
+===============================================================================
+SECTION 13: CONTACT INFORMATION
+===============================================================================
+
+Licensor: Strategickhaos DAO LLC
+Address: [Wyoming Registered Agent Address]
+Email: licensing@strategickhaos.dao
+Website: https://strategickhaos.dao
+
+For license inquiries: licensing@strategickhaos.dao
+For contributions: contribute@strategickhaos.dao
+For security issues: security@strategickhaos.dao
+For takedown notices: legal@strategickhaos.dao
+
+===============================================================================
+ACCEPTANCE
+===============================================================================
+
+BY USING, COPYING, MODIFYING, OR DISTRIBUTING THE SOFTWARE, YOU INDICATE YOUR
+ACCEPTANCE OF THIS LICENSE AND ALL ITS TERMS AND CONDITIONS.
+
+IF YOU DO NOT AGREE TO THE TERMS OF THIS LICENSE, DO NOT USE THE SOFTWARE.
+
+===============================================================================
+
+END OF LICENSE
+
+This license is INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+Last Updated: [Date]
+Version: 1.0

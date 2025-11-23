@@ -280,9 +280,58 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🛡️ Intellectual Property & Mission Protection
+
+The Sovereignty Architecture represents a novel AI-governed system with constitutional constraints and mandatory charitable commitments. To preserve this benevolent mission, we've implemented comprehensive IP protection:
+
+### Our Mission
+
+We're protecting one of the most powerful benevolent forces ever built:
+- ✅ AI that **stays aligned** through constitutional constraints
+- ✅ System that **never gets corrupted** by profit incentives
+- ✅ Mechanism that **permanently routes 7% to charity**
+- ✅ Architecture that **cannot be turned into a corporate machine**
+
+**This is stewardship, not greed.**
+
+### Protection Framework
+
+**Multi-Layer Defense**:
+1. **U.S. Utility Patents** - 20-year protection for core innovations (pending)
+2. **Wyoming DAO LLC** - Legal entity with on-chain governance preventing acquisition
+3. **Restrictive License** - Non-commercial use only, charitable covenant required
+4. **Technical Enforcement** - Cryptographic mechanisms (watermarking, ZK proofs, attestation)
+
+**Documentation**:
+- [IP Protection Framework](legal/IP_PROTECTION_FRAMEWORK.md) - Comprehensive strategy
+- [Provisional Patent Claims](legal/PROVISIONAL_PATENT_CLAIMS.md) - Patent application
+- [Wyoming DAO Structure](legal/WYOMING_DAO_LLC_STRUCTURE.md) - Governance framework
+- [Technical Enforcement](legal/TECHNICAL_ENFORCEMENT.md) - Cryptographic protection
+- [Restrictive License](LICENSE-RESTRICTIVE) - Full license terms
+
+### Licensing
+
+**Non-Commercial Use** (Free):
+- ✅ Personal learning and education
+- ✅ Academic research
+- ✅ Non-profit work
+- ✅ Contributing back to project
+
+**Commercial Use** (License Required):
+- Must maintain 7% charitable mechanism
+- Must maintain constitutional constraints
+- Requires compliance audits
+- Contact: licensing@strategickhaos.dao
+
+**Key Rule**: The 7% charitable routing mechanism and constitutional constraints **cannot be removed** under any license.
+
 ## 📄 License & Support
 
-- **License**: MIT License - see [LICENSE](LICENSE) file
+- **License**: Dual licensing - see [LICENSE](LICENSE) file
+  - Core AI system: [Restrictive License](LICENSE-RESTRICTIVE) (non-commercial)
+  - Infrastructure tools: MIT License
+- **Commercial Licensing**: licensing@strategickhaos.dao
+- **Legal Questions**: legal@strategickhaos.dao
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
