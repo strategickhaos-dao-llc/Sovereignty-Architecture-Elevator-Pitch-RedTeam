@@ -34,6 +34,25 @@ function warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
 function error() { echo -e "${RED}✗ $1${NC}"; }
 function header() { echo -e "\n${MAGENTA}=== $1 ===${NC}"; }
 
+# Calculate future date (handles both GNU and BSD date)
+function add_months_to_date() {
+    local base_date="$1"
+    local months="$2"
+    
+    # Try GNU date first (Linux)
+    if date -d "$base_date + $months months" +%Y-%m-%d 2>/dev/null; then
+        return
+    fi
+    
+    # Try BSD date (macOS)
+    if date -v +${months}m -j -f "%Y-%m-%d" "$base_date" +%Y-%m-%d 2>/dev/null; then
+        return
+    fi
+    
+    # Fallback
+    echo "[Filing Date + $months months]"
+}
+
 header "Cryptographic Proof Chain Creation"
 
 # Validate application number
@@ -232,8 +251,8 @@ cat > "$TRACKING_FILE" << EOF
 #### Important Dates
 
 - **Filing Date**: $FILING_DATE
-- **Expiration Date**: $(date -d "$FILING_DATE + 12 months" +%Y-%m-%d 2>/dev/null || date -v +12m -j -f "%Y-%m-%d" "$FILING_DATE" +%Y-%m-%d 2>/dev/null || echo "[Filing Date + 12 months]")
-- **Utility Patent Deadline**: $(date -d "$FILING_DATE + 11 months" +%Y-%m-%d 2>/dev/null || date -v +11m -j -f "%Y-%m-%d" "$FILING_DATE" +%Y-%m-%d 2>/dev/null || echo "[Filing Date + 11 months]")
+- **Expiration Date**: $(add_months_to_date "$FILING_DATE" 12)
+- **Utility Patent Deadline**: $(add_months_to_date "$FILING_DATE" 11)
 
 #### Documents
 
@@ -296,7 +315,7 @@ echo ""
 echo "    Patent Pending (U.S. Provisional Application $APPLICATION_NUMBER)"
 echo ""
 warning "IMPORTANT REMINDERS:"
-echo "  1. File utility patent within 12 months (by $(date -d "$FILING_DATE + 12 months" +%Y-%m-%d 2>/dev/null || date -v +12m -j -f "%Y-%m-%d" "$FILING_DATE" +%Y-%m-%d 2>/dev/null || echo "[Filing Date + 12 months]"))"
+echo "  1. File utility patent within 12 months (by $(add_months_to_date "$FILING_DATE" 12))"
 echo "  2. Continue documenting improvements and iterations"
 echo "  3. Keep all communications about the patent confidential or under NDA"
 echo "  4. Review patent tracking document regularly: $TRACKING_FILE"

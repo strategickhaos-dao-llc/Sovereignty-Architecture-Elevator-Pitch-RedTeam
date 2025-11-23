@@ -10,7 +10,8 @@
 set -e
 
 # Configuration
-INVENTOR_NAME="${INVENTOR_NAME:-Domenic Garza}"
+# Set INVENTOR_NAME environment variable to override default
+INVENTOR_NAME="${INVENTOR_NAME:-[Your Name]}"
 PATENT_TITLE="Autonomous Charitable Revenue Distribution System Using AI-Governed DAO with Cryptographic Verification"
 APPLICATION_DATE=$(date +%Y-%m-%d)
 
@@ -233,7 +234,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "  5. Upload your micro-entity certification PDF"
     echo "  6. Enter inventor information:"
     echo "     - Name: $INVENTOR_NAME"
-    echo "     - Address: [Your Wyoming DAO address]"
+    echo "     - Address: [Your address or DAO address]"
     echo "  7. Enter title: $PATENT_TITLE"
     echo "  8. Upload provisional application PDF: $PROVISIONAL_PDF_PATH"
     echo "  9. Validate submission"

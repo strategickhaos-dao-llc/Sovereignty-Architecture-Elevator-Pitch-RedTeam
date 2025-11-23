@@ -7,7 +7,7 @@
 # Usage: .\file-provisional-patent.ps1
 
 param(
-    [string]$InventorName = "Domenic Garza",
+    [string]$InventorName = "[Your Name]",
     [string]$PatentTitle = "Autonomous Charitable Revenue Distribution System Using AI-Governed DAO with Cryptographic Verification",
     [string]$ApplicationDate = (Get-Date -Format "yyyy-MM-dd")
 )
@@ -202,7 +202,7 @@ if ($ready -eq "y" -or $ready -eq "Y") {
     Write-Host "  5. Upload your micro-entity certification PDF"
     Write-Host "  6. Enter inventor information:"
     Write-Host "     - Name: $InventorName"
-    Write-Host "     - Address: [Your Wyoming DAO address]"
+    Write-Host "     - Address: [Your address or DAO address]"
     Write-Host "  7. Enter title: $PatentTitle"
     Write-Host "  8. Upload provisional application PDF: $ProvisionalPdfPath"
     Write-Host "  9. Validate submission"
