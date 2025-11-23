@@ -79,14 +79,24 @@ convert_with_pandoc() {
     local input=$1
     local output=$2
     echo "Converting: $input → $output"
-    pandoc "$input" \
+    
+    # Capture errors but filter harmless LaTeX warnings
+    local error_log=$(mktemp)
+    if pandoc "$input" \
         -o "$output" \
         --pdf-engine=pdflatex \
         -V geometry:margin=1in \
         -V fontsize=11pt \
         --toc \
         --toc-depth=2 \
-        2>&1 | grep -v "Missing character" || true
+        2>&1 | tee "$error_log" | grep -v "Missing character"; then
+        rm -f "$error_log"
+        return 0
+    else
+        echo "⚠ Pandoc completed with warnings. Check output file."
+        rm -f "$error_log"
+        return 0
+    fi
 }
 
 # Function to convert with wkhtmltopdf
@@ -131,13 +141,19 @@ HTMLEOF
     echo "</body></html>" >> "$html_file"
     
     # Convert HTML to PDF
-    wkhtmltopdf \
+    local error_log=$(mktemp)
+    if wkhtmltopdf \
         --page-size Letter \
         --margin-top 1in \
         --margin-bottom 1in \
         --margin-left 1in \
         --margin-right 1in \
-        "$html_file" "$output" 2>&1 | grep -v "Exit with code" || true
+        "$html_file" "$output" 2>&1 | tee "$error_log" | grep -v "Exit with code"; then
+        rm -f "$error_log"
+    else
+        echo "⚠ wkhtmltopdf completed with warnings. Check output file."
+        rm -f "$error_log"
+    fi
     
     # Clean up temporary HTML
     rm -f "$html_file"

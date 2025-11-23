@@ -156,8 +156,8 @@ Autonomous Charitable Revenue Distribution System Using AI-Governed DAO with Cry
 **Verification Questions (answer honestly):**
 
 1. **Gross income qualification:**
-   - "Has your gross income exceeded $XX,XXX in the prior calendar year?"
-   - Answer: No (if your gross income < IRS threshold ~$200k)
+   - "Has your gross income exceeded $223,740 in the prior calendar year?"
+   - Answer: No (if your gross income < $223,740 for 2024)
 
 2. **Application limit qualification:**
    - "Have you been named as inventor on more than 4 previously filed applications?"
