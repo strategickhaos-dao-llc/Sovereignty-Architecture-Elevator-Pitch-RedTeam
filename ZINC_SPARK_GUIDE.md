@@ -161,16 +161,40 @@ Arweave is a permanent, decentralized storage network. Data uploaded to Arweave 
 ### Setting Up Arweave
 
 1. Get an Arweave wallet:
+   
+   **Option A: Using ArConnect (Browser Wallet)**
+   - Install ArConnect browser extension: https://www.arconnect.io/
+   - Create a new wallet and back up your keyfile
+   
+   **Option B: Using Arweave CLI**
    ```bash
-   npm install -g arweave
-   arweave key-create
+   # Install arkb (Arweave key-based CLI tool)
+   npm install -g arkb
+   
+   # Generate a new wallet
+   arkb wallet-create
+   ```
+   
+   **Option C: Using arweave-js**
+   ```javascript
+   const Arweave = require('arweave');
+   const arweave = Arweave.init({});
+   arweave.wallets.generate().then((key) => {
+       console.log(JSON.stringify(key));
+   });
    ```
 
 2. Fund your wallet (small amounts needed, ~$0.01 per upload)
+   - Get AR tokens from exchanges like Binance, Kraken, or KuCoin
+   - Or use ArDrive's Turbo Credits for easy top-up
 
 3. Set environment variable:
    ```powershell
+   # PowerShell
    $env:ARWEAVE_WALLET = "path/to/your/wallet.json"
+   
+   # Or in Linux/macOS
+   export ARWEAVE_WALLET="path/to/your/wallet.json"
    ```
 
 4. Run with immortalization:

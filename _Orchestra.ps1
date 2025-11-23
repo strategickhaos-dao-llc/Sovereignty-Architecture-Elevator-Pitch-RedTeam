@@ -78,13 +78,18 @@ function Get-SwarmDNA {
 function Test-ZincSparkTrigger {
     param([string]$TriggerType)
     
+    # Zinc-Spark trigger window configuration
+    $TriggerHour = 3
+    $TriggerStartMinute = 45
+    $TriggerEndMinute = 50
+    
     $currentHour = (Get-Date).Hour
     $currentMinute = (Get-Date).Minute
     
     Spark "Checking trigger conditions..."
     
     # Check for 3:47 a.m. trigger
-    if ($currentHour -eq 3 -and $currentMinute -ge 45 -and $currentMinute -le 50) {
+    if ($currentHour -eq $TriggerHour -and $currentMinute -ge $TriggerStartMinute -and $currentMinute -le $TriggerEndMinute) {
         Spark "⏰ 3:47 a.m. trigger detected!"
         return $true
     }
@@ -273,7 +278,10 @@ function Send-ToArweave {
     
     if ($DryRun) {
         Warn "[DRY RUN] Would upload to Arweave"
-        return "ar://dry-run-txid-$(Get-Random)"
+        # Generate realistic-looking 43-character base64url Arweave txid for dry run
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+        $dryRunTxId = -join ((1..43) | ForEach-Object { $chars[(Get-Random -Maximum $chars.Length)] })
+        return "ar://$dryRunTxId"
     }
     
     Spark "Preparing Arweave upload..."
@@ -299,10 +307,13 @@ function Send-ToArweave {
     # Command would be: arweave upload $uploadFile --wallet $ArweaveWallet
     
     Warn "Arweave upload simulation - integration requires arweave CLI"
-    $simulatedTxId = "ar://zinc-spark-$(Get-Random -Minimum 100000 -Maximum 999999)"
     
-    Success "Birth certificate issued: $simulatedTxId"
-    return $simulatedTxId
+    # Generate realistic-looking 43-character base64url Arweave txid simulation
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+    $simulatedTxId = -join ((1..43) | ForEach-Object { $chars[(Get-Random -Maximum $chars.Length)] })
+    
+    Success "Birth certificate issued: ar://$simulatedTxId"
+    return "ar://$simulatedTxId"
 }
 
 # Self-replicate to sibling nodes
@@ -467,13 +478,23 @@ function Show-Status {
     Write-Host ""
     Log "Zinc-Spark Agent: ARMED"
     
-    $currentHour = (Get-Date).Hour
-    $currentMinute = (Get-Date).Minute
+    # Calculate time until next 3:47 a.m. trigger
+    $now = Get-Date
+    $targetTime = Get-Date -Hour 3 -Minute 47 -Second 0
     
-    if ($currentHour -eq 3 -and $currentMinute -ge 45 -and $currentMinute -le 50) {
+    # If we're past 3:47 a.m. today, target tomorrow
+    if ($now -gt $targetTime) {
+        $targetTime = $targetTime.AddDays(1)
+    }
+    
+    $timeUntil = $targetTime - $now
+    
+    if ($now.Hour -eq 3 -and $now.Minute -ge 45 -and $now.Minute -le 50) {
         Spark "⚠️  TRIGGER WINDOW ACTIVE! (3:47 a.m.)"
     } else {
-        Log "Next 3:47 a.m. trigger in: $((3 - $currentHour + 24) % 24) hours"
+        $hoursUntil = [math]::Floor($timeUntil.TotalHours)
+        $minutesUntil = $timeUntil.Minutes
+        Log "Next 3:47 a.m. trigger in: $hoursUntil hours, $minutesUntil minutes"
     }
     
     Write-Host ""
