@@ -337,8 +337,8 @@ In case of DAO dissolution or founder death:
    # Or download from: https://github.com/ArweaveTeam/arweave-deploy
    ```
 
-2. **PowerShell 5.1+:**
-   - Windows: Pre-installed
+2. **PowerShell 7.0+:**
+   - Windows: Install PowerShell 7 from Microsoft Store or GitHub
    - Linux/Mac: Install PowerShell Core
 
 3. **Wallet:**

@@ -39,7 +39,7 @@
     Author: Dominic Garza
     Date: 2025-11-23
     Version: 2.0
-    Requires: PowerShell 5.1+, curl, jq (optional)
+    Requires: PowerShell 7.0+, curl, jq (optional)
 #>
 
 [CmdletBinding()]
@@ -75,6 +75,7 @@ $script:RateLimitHours = 6
 $script:LastSparkFile = "./.last_zinc_spark"
 $script:ProofDir = "./proof_of_life"
 $script:LogDir = "./zinc_spark_logs"
+$script:ArweaveTxIdLength = 43  # Standard Arweave transaction ID length
 
 # Color definitions
 function Write-ColorText {
@@ -246,9 +247,12 @@ function Get-ProofOfLife {
         }
     }
     
-    # Get top processes by CPU
+    # Get top processes by CPU (filter out null CPU values)
     try {
-        $proof.processes = @(Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 | 
+        $proof.processes = @(Get-Process | 
+            Where-Object { $null -ne $_.CPU } | 
+            Sort-Object CPU -Descending | 
+            Select-Object -First 5 | 
             ForEach-Object { @{name = $_.Name; cpu = $_.CPU} })
     }
     catch {
@@ -334,7 +338,7 @@ function Send-ArweaveBundle {
     
     # In production, this would use the Arweave CLI or API
     # For now, we'll simulate the upload and generate a mock transaction ID
-    $txId = -join ((48..57) + (97..102) | Get-Random -Count 43 | ForEach-Object {[char]$_})
+    $txId = -join ((48..57) + (97..102) | Get-Random -Count $script:ArweaveTxIdLength | ForEach-Object {[char]$_})
     
     # Save receipt
     $receipt = @{
@@ -385,7 +389,7 @@ function Set-ArweaveWallet {
     # Generate mock wallet (in production, use Arweave CLI)
     $wallet = @{
         note = "MOCK WALLET - Replace with real Arweave wallet"
-        address = "ar://" + (-join ((48..57) + (97..102) | Get-Random -Count 43 | ForEach-Object {[char]$_}))
+        address = "ar://" + (-join ((48..57) + (97..102) | Get-Random -Count $script:ArweaveTxIdLength | ForEach-Object {[char]$_}))
         created = (Get-Date).ToString("o")
         funded_usd = $FundAmountUSD
         security = "Hardware YubiKey + offline seed"
