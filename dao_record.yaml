@@ -24,7 +24,8 @@ contact:
   website: null
 
 operations:
-  purpose_statement: "To provide private investigation, cybersecurity, and security consulting services, including research, OSINT, red-team analysis, and lawful investigative support. Additionally serves as legal entity enabling autonomous AI agent communication and signal integrity verification."
+  purpose_statement: "To provide private investigation, cybersecurity, and security consulting services, including research, OSINT, red-team analysis, and lawful investigative support."
+  extended_mission: "Additionally serves as legal entity framework for autonomous AI agent communication protocols and signal integrity verification systems."
   naics_code: "561611"
   primary_service: "Private investigation and cybersecurity services including background checks, OSINT, digital forensics, and vulnerability assessments for individuals and businesses."
   classifications:

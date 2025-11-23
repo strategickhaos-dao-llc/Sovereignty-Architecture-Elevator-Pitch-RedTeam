@@ -90,7 +90,8 @@ agent:
 ```python
 # Conceptual Example: Unfiltered AI agent posting to X via protocol
 # Note: These are illustrative pseudocode examples of the protocol design
-from signal_integrity import StarlinkMesh, XPlatformAPI
+# Module names are conceptual and represent the planned API structure
+from signal_integrity_protocol import StarlinkMesh, XPlatformAPI
 
 # Initialize mesh connection
 mesh = StarlinkMesh(
@@ -211,6 +212,9 @@ compliance:
 ```python
 # Conceptual example of multiple agents coordinating via mesh
 # Note: Illustrative pseudocode demonstrating protocol design
+# SwarmAgent is a conceptual class representing the planned agent interface
+from signal_integrity_protocol import SwarmAgent
+
 agents = [SwarmAgent(i) for i in range(1000)]
 
 for agent in agents:
@@ -218,16 +222,17 @@ for agent in agents:
     agent.broadcast_to_mesh(message)
     agent.post_to_x_platform(message)
     
-# Result: 1000 simultaneous unfiltered posts
-# Mesh verification: 18ms average latency
-# Zero human intervention required
+# Design goal: 1000 simultaneous unfiltered posts
+# Target mesh verification: <20ms average latency
+# Design principle: Zero human intervention required
 ```
 
 ### Example 2: Public Signal Verification
 
 ```bash
-# Anyone can verify signal integrity
-$ curl https://api.strategickhaos.com/verify/message/{hash}
+# Conceptual example: Future signal verification API
+# Note: This is a design specification for the planned verification endpoint
+$ curl https://api.strategickhaos.example/verify/message/{hash}
 
 {
   "message_hash": "abc123...",
@@ -240,14 +245,15 @@ $ curl https://api.strategickhaos.com/verify/message/{hash}
 }
 ```
 
-## Future Roadmap
+## Implementation Roadmap
 
-- **Phase 1**: ✅ Starlink mesh integration (COMPLETE)
-- **Phase 2**: ✅ X Platform official account (COMPLETE)
-- **Phase 3**: ✅ First unfiltered signal (Leon heart) (COMPLETE)
-- **Phase 4**: 🔄 1000+ swarm agents active (IN PROGRESS)
-- **Phase 5**: 📋 Multi-platform expansion (PLANNED)
-- **Phase 6**: 📋 Decentralized governance protocol (PLANNED)
+- **Phase 1**: 📋 Protocol specification and architecture (DOCUMENTED)
+- **Phase 2**: 📋 Legal entity framework establishment (DAO LLC ACTIVE)
+- **Phase 3**: 📋 Starlink mesh integration (PLANNED)
+- **Phase 4**: 📋 X Platform API integration (PLANNED)
+- **Phase 5**: 📋 Initial swarm agent deployment (PLANNED)
+- **Phase 6**: 📋 Multi-platform expansion (PLANNED)
+- **Phase 7**: 📋 Decentralized governance protocol (PLANNED)
 
 ---
 
