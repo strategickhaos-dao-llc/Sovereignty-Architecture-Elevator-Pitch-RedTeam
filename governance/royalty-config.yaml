@@ -1,0 +1,385 @@
+# Strategickhaos DAO LLC - 7% Charitable Royalty Configuration
+# Machine-readable enforcement rules for automated compliance
+# DO NOT MODIFY without unanimous Member consent AND Wyoming SOS filing
+
+version: "1.0"
+effective_date: "2025-11-23"
+last_modified: "2025-11-23"
+
+# === CHARITABLE BENEFICIARY ===
+charity:
+  legal_name: "SNHU Ecosystem Fund"
+  ein: "92-3456789"  # Placeholder - confirm with actual charity
+  tax_status: "501(c)(3)"
+  classification: "public_charity"
+  address:
+    street: "[To be confirmed]"
+    city: "[To be confirmed]"
+    state: "[To be confirmed]"
+    zip: "[To be confirmed]"
+  contact:
+    email: "[To be confirmed]"
+    phone: "[To be confirmed]"
+  bank_account:
+    # Confidential - store in secure vault, not public repo
+    # Reference only - actual credentials in secrets management
+    vault_path: "secret/charity/snhu_bank_account"
+
+# === ROYALTY PERCENTAGE ===
+royalty:
+  percentage: 0.07  # 7% - IRREVOCABLE, cannot be reduced
+  percentage_display: "7%"
+  basis: "net_receipts_after_platform_fees"
+  scope: "all_present_and_future_ip"
+  irrevocability: true
+  can_increase: true
+  can_decrease: false
+  minimum_floor: 0.07  # Cannot go below this value
+
+# === IP PORTFOLIO SCOPE ===
+intellectual_property:
+  scope_description: "All IP owned or controlled by Strategickhaos DAO LLC"
+  categories:
+    - software
+    - ai_models
+    - content
+    - documentation
+    - trademarks
+    - patents
+    - trade_secrets
+  
+  included_projects:
+    - name: "StrategicKhaos Sovereignty Architecture"
+      repositories:
+        - "github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture"
+      description: "Discord-integrated DevOps control plane"
+      
+    - name: "PsycheVille Platform"
+      repositories: []
+      description: "Digital sovereignty and consciousness exploration"
+      
+    - name: "TRS (The Refinory System)"
+      repositories: []
+      description: "AI training and alignment infrastructure"
+      
+    - name: "Valoryield Engine"
+      repositories: []
+      description: "Economic tokenization and distribution systems"
+      
+    - name: "Future Acquisitions"
+      repositories: []
+      description: "Any IP acquired or developed after 2025-11-23"
+
+# === REVENUE CALCULATION ===
+revenue:
+  gross_royalty_income:
+    description: "All revenue from IP licensing, usage, and commercialization"
+    sources:
+      - "software_licenses"
+      - "saas_subscriptions"
+      - "api_access_fees"
+      - "marketplace_commissions"
+      - "content_licensing"
+      - "ai_model_inference_fees"
+      - "consulting_services"
+      - "equity_or_token_payments"  # Valued at FMV
+  
+  documented_platform_fees:
+    description: "Third-party fees deductible before calculating net receipts"
+    allowed_categories:
+      - category: "app_store_fees"
+        examples: ["Apple App Store", "Google Play"]
+        max_percentage: null  # No cap, actual fees only
+        
+      - category: "marketplace_fees"
+        examples: ["GitHub Marketplace", "AWS Marketplace"]
+        max_percentage: null
+        
+      - category: "payment_processing"
+        examples: ["Stripe", "PayPal"]
+        max_percentage: 0.03  # 3% cap
+        
+      - category: "infrastructure_delivery"
+        examples: ["CDN", "hosting", "bandwidth"]
+        max_percentage: 0.05  # 5% cap
+    
+    excluded_categories:
+      - "internal_operations"
+      - "salaries_and_benefits"
+      - "marketing_expenses"
+      - "research_development"
+      - "legal_accounting"
+      - "general_overhead"
+  
+  net_royalty_receipts:
+    formula: "gross_royalty_income - documented_platform_fees"
+  
+  charitable_share:
+    formula: "net_royalty_receipts * royalty_percentage"
+    minimum_amount: 0.01  # Enforce even small amounts
+
+# === PAYMENT TERMS ===
+payment:
+  frequency: "quarterly"
+  schedule:
+    Q1:
+      period: "January 1 - March 31"
+      due_date: "April 30"
+    Q2:
+      period: "April 1 - June 30"
+      due_date: "July 31"
+    Q3:
+      period: "July 1 - September 30"
+      due_date: "October 31"
+    Q4:
+      period: "October 1 - December 31"
+      due_date: "January 31"
+  
+  due_days_after_quarter_end: 30
+  
+  minimum_threshold:
+    enabled: true
+    amount: 100.00
+    currency: "USD"
+    carry_forward_if_below: true
+    annual_payment_option: true
+  
+  methods:
+    - "wire_transfer"
+    - "check"
+  
+  late_payment:
+    interest_rate: 0.08  # 8% per annum
+    grace_period_days: 0  # Interest accrues immediately after due date
+
+# === REPORTING REQUIREMENTS ===
+reporting:
+  quarterly:
+    enabled: true
+    components:
+      - "revenue_summary"
+      - "deductions_itemized"
+      - "calculation_worksheet"
+      - "supporting_documentation"
+      - "ytd_summary"
+    due_with_payment: true
+  
+  annual:
+    enabled: true
+    due_date: "March 31"
+    components:
+      - "comprehensive_financial_summary"
+      - "updated_ip_inventory"
+      - "certified_statement"
+      - "tax_return_excerpts"
+      - "material_changes_summary"
+  
+  audit:
+    charity_annual_audit_right: true
+    advance_notice_days: 30
+    audit_scope:
+      - "financial_statements"
+      - "contracts_and_invoices"
+      - "payment_processor_reports"
+      - "deduction_methodologies"
+    cost_reimbursement:
+      threshold: 0.10  # If underpayment > 10%, DAO pays audit costs
+
+# === ENFORCEMENT RULES ===
+enforcement:
+  automated: true
+  agent_script: "governance/agents/enforce_7percent.py"
+  
+  monitoring:
+    enabled: true
+    frequency: "real_time"
+    alerts:
+      - type: "payment_due"
+        days_before: [30, 15, 7, 1]
+      - type: "payment_overdue"
+        days_after: [1, 7, 14, 30]
+      - type: "calculation_discrepancy"
+        threshold: 0.01  # Alert if > 1% variance
+      - type: "missing_documentation"
+        severity: "high"
+  
+  payment_priority:
+    rank: 1  # Highest priority after legal obligations
+    precedence_over:
+      - "member_distributions"
+      - "discretionary_bonuses"
+      - "non_essential_expenses"
+      - "related_party_debt"
+    exceptions:
+      - "statutory_tax_obligations"
+      - "secured_creditor_payments"
+      - "mandatory_legal_fees"
+  
+  compliance_checks:
+    - check: "royalty_percentage_not_reduced"
+      frequency: "on_every_payment"
+      fail_action: "block_payment_and_alert"
+      
+    - check: "platform_fees_reasonable"
+      frequency: "quarterly"
+      fail_action: "flag_for_review"
+      
+    - check: "payment_within_deadline"
+      frequency: "daily"
+      fail_action: "alert_and_calculate_interest"
+      
+    - check: "documentation_complete"
+      frequency: "on_every_payment"
+      fail_action: "hold_payment_until_complete"
+
+# === GOVERNANCE INTEGRATION ===
+governance:
+  amendment_requirements:
+    unanimous_member_consent: true
+    wyoming_sos_filing: true
+    charity_notification: true
+    effective_after_all_approvals: true
+  
+  allowed_modifications:
+    - "increase_percentage"  # Can increase above 7%
+    - "update_charity_contact_info"  # Administrative only
+    - "clarify_definitions"  # No economic impact
+  
+  prohibited_modifications:
+    - "decrease_percentage"
+    - "change_beneficiary_without_cause"
+    - "add_excessive_deductions"
+    - "delay_payments"
+    - "circumvent_commitment"
+  
+  smart_contract_integration:
+    enabled: false  # Future feature
+    when_enabled:
+      - "encode_7_percent_rule_immutably"
+      - "automate_payment_triggers"
+      - "prevent_governance_override"
+
+# === DOCUMENTATION REFERENCES ===
+legal_documents:
+  - name: "Operating Agreement Amendment"
+    file: "legal/dao_7percent_lock/01-operating-agreement-amendment-7percent.md"
+    effective_date: "2025-11-23"
+    
+  - name: "Board Resolution"
+    file: "legal/dao_7percent_lock/02-board-resolution-2025-11-23.md"
+    effective_date: "2025-11-23"
+    
+  - name: "IP Assignment Agreement"
+    file: "legal/dao_7percent_lock/03-ip-assignment-creator-to-dao.md"
+    effective_date: "2025-11-23"
+    
+  - name: "Charitable Royalty Assignment"
+    file: "legal/dao_7percent_lock/04-charitable-royalty-assignment-dao-to-501c3.md"
+    effective_date: "2025-11-23"
+
+# === CRYPTOGRAPHIC EVIDENCE ===
+evidence:
+  hashing:
+    algorithm: "sha256"
+    manifest_file: "evidence/sha256sums.txt"
+  
+  opentimestamps:
+    enabled: true
+    directory: "evidence/opentimestamps/"
+    anchor_chain: "bitcoin"
+  
+  gpg_signatures:
+    enabled: true
+    directory: "evidence/signed-tags/"
+    signer_keys:
+      - fingerprint: "[To be configured]"
+        name: "[Authorized Member]"
+  
+  hardening_script: "evidence-hardening.sh"
+  execution_frequency: "after_every_legal_doc_change"
+
+# === SUCCESSOR PROVISIONS ===
+successor:
+  beneficiary_transition:
+    trigger_events:
+      - "charity_loses_501c3_status"
+      - "charity_dissolved"
+      - "charity_unable_to_receive"
+    
+    process:
+      - step: 1
+        action: "member_vote_for_successor"
+        requirement: "unanimous_consent"
+        
+      - step: 2
+        action: "verify_successor_501c3_status"
+        requirement: "irs_determination_letter"
+        
+      - step: 3
+        action: "amend_this_config"
+        requirement: "wyoming_sos_filing"
+        
+      - step: 4
+        action: "transfer_escrow_funds"
+        requirement: "legal_documentation_complete"
+    
+    escrow_period_days: 90
+    similar_charitable_purpose_required: true
+
+# === OPERATIONAL METADATA ===
+metadata:
+  config_version: "1.0"
+  created: "2025-11-23"
+  last_reviewed: "2025-11-23"
+  next_review: "2026-11-23"
+  owner: "Strategickhaos DAO LLC Members"
+  
+  change_log:
+    - date: "2025-11-23"
+      version: "1.0"
+      description: "Initial configuration - 7% irrevocable charitable royalty lock"
+      approved_by: "Unanimous Member Consent"
+      filed_with: "Wyoming Secretary of State"
+
+# === SECURITY & ACCESS CONTROL ===
+security:
+  file_permissions: "read-only"  # Prevent accidental modification
+  modification_requires:
+    - "unanimous_member_signature"
+    - "wyoming_filing_confirmation"
+    - "cryptographic_proof_update"
+  
+  backup:
+    frequency: "daily"
+    locations:
+      - "git_repository"
+      - "ipfs_permanent_storage"
+      - "multiple_geographic_backups"
+  
+  audit_trail:
+    enabled: true
+    log_all_access: true
+    log_all_modifications: true
+    retention_period: "permanent"
+
+# === CONTACT & SUPPORT ===
+contacts:
+  dao_treasurer:
+    name: "[To be configured]"
+    email: "[To be configured]"
+    responsibility: "Quarterly payments and reporting"
+  
+  charity_financial_contact:
+    name: "[To be confirmed by charity]"
+    email: "[To be confirmed by charity]"
+    responsibility: "Receiving payments and issuing acknowledgments"
+  
+  legal_counsel:
+    name: "[To be configured]"
+    firm: "[To be configured]"
+    responsibility: "Legal compliance and filings"
+
+# END OF CONFIGURATION
+# Last cryptographic hash: [Generated by evidence-hardening.sh]
+# OpenTimestamps proof: [Generated by evidence-hardening.sh]
+# GPG signature: [Generated by evidence-hardening.sh]
