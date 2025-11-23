@@ -26,6 +26,17 @@ This directory contains resources for protecting intellectual property through t
 
 **Recommended for:** Inventors ready to file who need a concise checklist.
 
+### [Provisional Patent Template](PROVISIONAL_PATENT_TEMPLATE.md)
+**Ready-to-use template for drafting your application:**
+- Complete application structure with all sections
+- Detailed instructions for each section
+- Examples and guidance for writing descriptions
+- Drawing templates and suggestions
+- Pre-filing checklist
+- Tips for creating quality applications
+
+**Recommended for:** Inventors ready to start writing their provisional patent application.
+
 ---
 
 ## 🎯 Which Guide Should You Use?
@@ -36,8 +47,14 @@ If you're ready to file and just need the essential steps.
 ### **Deep Dive:** Full Provisional Patent Application Guide  
 If you want to understand the complete process, options, and best practices.
 
-### **Both:**
-Read the comprehensive guide first, then use the quick start as your filing checklist.
+### **Write Your Application:** Provisional Patent Template
+When you're ready to draft your actual application, use the template with detailed section-by-section guidance.
+
+### **Complete Path:**
+1. Read the comprehensive guide to understand the process
+2. Use the quick start as your filing checklist
+3. Fill in the template to draft your application
+4. File online at USPTO.gov
 
 ---
 
