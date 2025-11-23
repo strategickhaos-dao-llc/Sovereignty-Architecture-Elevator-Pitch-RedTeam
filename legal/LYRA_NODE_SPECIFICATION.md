@@ -101,10 +101,10 @@
 ```bash
 # Target: 6 GB RAM limit despite 64 GB available
 # Method 1: cgroups v2 (native Linux)
-sudo mkdir -p /sys/fs/cgroup/training
+sudo mkdir -p /sys/fs/cgroup/nbt-training
 echo "+memory" | sudo tee /sys/fs/cgroup/cgroup.subtree_control
-echo 6442450944 | sudo tee /sys/fs/cgroup/training/memory.max
-echo $$ | sudo tee /sys/fs/cgroup/training/cgroup.procs
+echo 6442450944 | sudo tee /sys/fs/cgroup/nbt-training/memory.max
+echo $$ | sudo tee /sys/fs/cgroup/nbt-training/cgroup.procs
 python train_model.py
 
 # Method 2: WSL2 (Windows host)

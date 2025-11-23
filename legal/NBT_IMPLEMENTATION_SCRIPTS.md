@@ -125,7 +125,7 @@ echo "${SWAP_FILE} none swap sw 0 0"
 
 set -e
 
-INTERFACE="eth0"  # Change to your interface (use 'ip link' to find)
+INTERFACE="${1:-$(ip route | grep default | awk '{print $5}' | head -1)}"  # Auto-detect or pass as argument
 BANDWIDTH="512kbit"
 PACKET_LOSS="5%"
 LATENCY="100ms"
@@ -168,7 +168,7 @@ echo "  sudo tc qdisc del dev ${INTERFACE} root"
 #!/bin/bash
 # nbt_network_restore.sh - Remove network throttling
 
-INTERFACE="eth0"  # Change to match your interface
+INTERFACE="${1:-$(ip route | grep default | awk '{print $5}' | head -1)}"  # Auto-detect or pass as argument
 
 sudo tc qdisc del dev ${INTERFACE} root 2>/dev/null || true
 echo "Network limits removed from ${INTERFACE}"
@@ -283,11 +283,17 @@ set -e
 # Enable Intel Turbo Boost
 echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
 
-# Remove frequency cap
-sudo cpupower frequency-set --max 4.0GHz  # Adjust to your CPU's max
+# Remove frequency cap (restore to hardware maximum)
+if command -v cpupower &> /dev/null; then
+    # Get CPU's maximum frequency
+    MAX_FREQ=$(lscpu | grep "CPU max MHz" | awk '{print $4}' | cut -d'.' -f1)
+    if [ -n "$MAX_FREQ" ]; then
+        sudo cpupower frequency-set --max ${MAX_FREQ}MHz
+    fi
+fi
 
 echo "CPU constraints removed"
-cpupower frequency-info | grep "current CPU frequency"
+cpupower frequency-info | grep "current CPU frequency" 2>/dev/null || echo "CPU frequency restored to defaults"
 ```
 
 ---
@@ -415,7 +421,11 @@ if [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ]; then
     echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo > /dev/null
 fi
 if command -v cpupower &> /dev/null; then
-    sudo cpupower frequency-set --max 4.0GHz > /dev/null 2>&1 || true
+    # Restore to hardware maximum
+    MAX_FREQ=$(lscpu | grep "CPU max MHz" | awk '{print $4}' | cut -d'.' -f1)
+    if [ -n "$MAX_FREQ" ]; then
+        sudo cpupower frequency-set --max ${MAX_FREQ}MHz > /dev/null 2>&1 || true
+    fi
 fi
 echo "  ✓ CPU restored"
 
