@@ -33,7 +33,7 @@ Before beginning the enrollment process, ensure you have:
 
 ## Step 1: Log into Patent Center
 
-1. Navigate to: [USPTO Patent Center](https://patentcenter.uspto.gov/applications/provisional)
+1. Navigate to: [USPTO Patent Center](https://patentcenter.uspto.gov/)
 2. Log in with your USPTO.gov account (after ID.me verification)
 3. On first login, a pop-up will automatically start the self-enrollment process
 
@@ -128,7 +128,7 @@ If you have existing customer numbers:
 
 ### Next Steps
 
-- Use the confirmation email address to log in as a registered Patent Center user
+- Log in to Patent Center using your USPTO.gov account credentials as a registered user
 - Begin filing provisional or non-provisional patent applications
 - Access all Patent Center features and tools
 
