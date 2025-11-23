@@ -17,6 +17,8 @@ jobs:
       - name: Update License in Markdown files
         run: |
           echo "Updating license in markdown files..."
+          # TODO: Replace OLD_LICENSE_TEXT and NEW_LICENSE_TEXT
+          # with your actual license text before using this workflow
           find . -name '*.md' -exec sed -i \
             's/OLD_LICENSE_TEXT/NEW_LICENSE_TEXT/g' {} +
 
@@ -27,6 +29,9 @@ jobs:
           git config --local user.name \
             "${{ secrets.GIT_USER_NAME }}"
           git add .
-          git diff --cached --quiet || \
+          if ! git diff --cached --quiet; then
             git commit -m "Auto-update license details"
-          git push
+            git push
+          else
+            echo "No changes to commit"
+          fi

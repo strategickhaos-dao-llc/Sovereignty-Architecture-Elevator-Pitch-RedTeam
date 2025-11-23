@@ -10,6 +10,11 @@ Usage:
     python update_license.py [directory]
 
 If no directory is specified, it will use the current directory.
+
+Configuration:
+    Before using this script, update the OLD_LICENSE_TEXT and NEW_LICENSE_TEXT
+    constants below with your actual license text. These are placeholders
+    that must be customized for your specific use case.
 """
 
 import os
@@ -17,7 +22,8 @@ import sys
 import glob
 
 
-# Define your search and replacement text
+# TODO: Define your actual search and replacement text
+# These are placeholder values - replace them with your actual license text
 OLD_LICENSE_TEXT = "OLD_LICENSE_TEXT"
 NEW_LICENSE_TEXT = "NEW_LICENSE_TEXT"
 

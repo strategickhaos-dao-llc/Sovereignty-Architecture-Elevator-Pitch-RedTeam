@@ -29,14 +29,25 @@ To set these up:
 
 ### Customization
 
+⚠️ **IMPORTANT**: Before using this workflow, you **must** customize the license text placeholders.
+
+The workflow uses placeholder values `OLD_LICENSE_TEXT` and `NEW_LICENSE_TEXT` that must be replaced with your actual license text before the workflow will be functional.
+
 To customize the license text being replaced, edit the workflow file:
 
 ```yaml
 # Change these values in .github/workflows/auto-update-license.yml
+# Replace OLD_LICENSE_TEXT with the text you want to find
+# Replace NEW_LICENSE_TEXT with the replacement text
 find . -name '*.md' -exec sed -i 's/OLD_LICENSE_TEXT/NEW_LICENSE_TEXT/g' {} +
 ```
 
-Replace `OLD_LICENSE_TEXT` with the text you want to find and `NEW_LICENSE_TEXT` with the replacement text.
+**Example**:
+```yaml
+# Find: "Copyright (c) 2024"
+# Replace with: "Copyright (c) 2025"
+find . -name '*.md' -exec sed -i 's/Copyright (c) 2024/Copyright (c) 2025/g' {} +
+```
 
 ---
 
@@ -74,12 +85,21 @@ python3 scripts/update_license.py /path/to/your/obsidian/vault
 ```
 
 **Customization**:
-Edit the script to change the license text:
+
+⚠️ **REQUIRED**: Before using the script, you must edit it to replace the placeholder license text.
+
+Edit `scripts/update_license.py` and change these constants:
 
 ```python
-# Define your search and replacement text
+# Replace these placeholder values with your actual license text
 OLD_LICENSE_TEXT = "Your old license text here"
 NEW_LICENSE_TEXT = "Your new license text here"
+```
+
+**Example**:
+```python
+OLD_LICENSE_TEXT = "Copyright (c) 2024 MyCompany"
+NEW_LICENSE_TEXT = "Copyright (c) 2025 MyCompany"
 ```
 
 **Features**:
