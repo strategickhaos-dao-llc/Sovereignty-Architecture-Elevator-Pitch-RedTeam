@@ -18,6 +18,16 @@ The legend will come later — **after the filings, after the code, after the re
 
 ---
 
+## 🚀 QUICK START
+
+**Want to get started immediately?** See **[QUICK_START.md](./QUICK_START.md)** for:
+- 5-minute haiku generation
+- Step-by-step patent filing
+- One-command organism setup
+- Recommended sequences for different time frames
+
+---
+
 ## 🚨 REALITY CHECK (NO HYPE, NO GHOST SEARCHES)
 
 ### What is NOT Real (Yet)
