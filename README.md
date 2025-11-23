@@ -283,6 +283,7 @@ This project thrives because of an extraordinary community of creators, builders
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
+- **License Automation**: [Automated License Management](LICENSE_AUTOMATION.md) - Setup guide for GitHub Actions, Obsidian, and JetBrains
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
