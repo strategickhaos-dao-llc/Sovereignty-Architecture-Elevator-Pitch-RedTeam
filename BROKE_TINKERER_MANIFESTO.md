@@ -162,24 +162,24 @@ Living lean? **That's evidence you're serious.**
 What we actually need to change the world:
 
 ### ✅ **Core Requirements**
-- [ ] A functioning computer (barely)
-- [ ] Internet access (free wifi counts)
-- [ ] A text editor (VS Code is free)
-- [ ] Determination (unlimited supply)
-- [ ] Vision (non-negotiable)
+- A functioning computer (barely)
+- Internet access (free wifi counts)
+- A text editor (VS Code is free)
+- Determination (unlimited supply)
+- Vision (non-negotiable)
 
 ### ✅ **Optional But Helpful**
-- [ ] Community (Discord, GitHub, Stack Overflow)
-- [ ] Documentation (MDN, official docs, tutorials)
-- [ ] Free-tier services (GitHub, Render, Fly.io)
-- [ ] Open-source tools (literally everything we need)
+- Community (Discord, GitHub, Stack Overflow)
+- Documentation (MDN, official docs, tutorials)
+- Free-tier services (GitHub, Render, Fly.io)
+- Open-source tools (literally everything we need)
 
-### ✅ **Not Required**
-- [ ] ~~Expensive hardware~~
-- [ ] ~~Formal education~~
-- [ ] ~~Corporate backing~~
-- [ ] ~~Venture capital~~
-- [ ] ~~Permission from anyone~~
+### ❌ **Not Required**
+- Expensive hardware
+- Formal education
+- Corporate backing
+- Venture capital
+- Permission from anyone
 
 ---
 

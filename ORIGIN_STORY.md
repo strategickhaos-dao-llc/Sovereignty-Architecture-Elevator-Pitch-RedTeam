@@ -52,8 +52,8 @@ History remembers the ones who **refused to quit** when they had nothing.
 **George Hotz**  
 → Hacking PlayStations in a bedroom, later building self-driving cars
 
-**Sam Altman**  
-→ Ramen profitable early days, now leading OpenAI
+**Palmer Luckey**  
+→ Built Oculus prototypes in parents' garage, self-funded through side jobs
 
 **John Carmack**  
 → Working from borrowed machines, revolutionizing 3D gaming
