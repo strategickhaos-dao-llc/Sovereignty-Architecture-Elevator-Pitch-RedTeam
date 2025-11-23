@@ -35,3 +35,14 @@ target/
 
 # Workspace data
 workspace/
+
+# USPTO Patent Filing - Sensitive Documents
+# Note: These should only be committed to PRIVATE repositories
+# Do NOT commit to public repositories
+legal/patents/USPTO_Provisional_*_Filed_*.pdf
+legal/patents/*.pem
+legal/patents/*.key
+legal/patents/*.secret
+
+# Filing logs are OK to commit (no sensitive data)
+!legal/patents/filing_log.txt
