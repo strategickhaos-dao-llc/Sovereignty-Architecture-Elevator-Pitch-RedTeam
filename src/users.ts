@@ -22,13 +22,24 @@ function loadUsers(): UserRegistration[] {
   if (!fs.existsSync(USERS_FILE)) {
     return [];
   }
-  const data = fs.readFileSync(USERS_FILE, "utf8");
-  return JSON.parse(data);
+  try {
+    const data = fs.readFileSync(USERS_FILE, "utf8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error loading users:", error);
+    return [];
+  }
 }
 
-function saveUsers(users: UserRegistration[]) {
+function saveUsers(users: UserRegistration[]): boolean {
   ensureDataDir();
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+    return true;
+  } catch (error) {
+    console.error("Error saving users:", error);
+    return false;
+  }
 }
 
 export function registerUser(discordId: string, username: string, email?: string): { success: boolean, message: string } {
@@ -49,7 +60,11 @@ export function registerUser(discordId: string, username: string, email?: string
   };
   
   users.push(newUser);
-  saveUsers(users);
+  const saved = saveUsers(users);
+  
+  if (!saved) {
+    return { success: false, message: "Failed to save registration. Please try again." };
+  }
   
   return { success: true, message: "Registration successful!" };
 }
