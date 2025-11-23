@@ -2,24 +2,40 @@
 # donor_hash.py — SHA-256 + Salt + GPG → Arweave
 import hashlib
 import uuid
-import gnupg
 import os
+import sys
 
-gpg = gnupg.GPG()
+# Try to import gnupg, but make it optional for testing
+try:
+    import gnupg
+    GPG_AVAILABLE = True
+    gpg = gnupg.GPG()
+except ImportError:
+    GPG_AVAILABLE = False
+    print("WARNING: gnupg module not installed. Install with: pip install python-gnupg", file=sys.stderr)
+    print("         Donor records will be hashed but not GPG-signed.", file=sys.stderr)
 
 def immortalize_donor(name, email, amount):
     salt = uuid.uuid4().hex
     donor_hash = hashlib.sha3_256(f"{name}{email}{amount}{salt}".encode()).hexdigest()
     record = f"{donor_hash} | {amount} USD | {uuid.uuid4()} | ValorYield 7% routed"
-    signed = gpg.sign(record)
     
     # Create donors directory if it doesn't exist
     os.makedirs("donors", exist_ok=True)
     
-    with open(f"donors/{donor_hash}.asc", "w") as f:
-        f.write(str(signed))
+    # Sign with GPG if available
+    if GPG_AVAILABLE:
+        signed = gpg.sign(record)
+        with open(f"donors/{donor_hash}.asc", "w") as f:
+            f.write(str(signed))
+        print(f"Donor immortalized (GPG-signed) → donors/{donor_hash}.asc")
+    else:
+        # Save unsigned for testing purposes
+        with open(f"donors/{donor_hash}.txt", "w") as f:
+            f.write(record)
+        print(f"Donor immortalized (unsigned) → donors/{donor_hash}.txt")
+        print(f"Note: Install python-gnupg for GPG signing")
     
-    print(f"Donor immortalized → donors/{donor_hash}.asc")
     print(f"Arweave upload pending → _Orchestra.ps1 --immortalize-donors")
 
 if __name__ == "__main__":

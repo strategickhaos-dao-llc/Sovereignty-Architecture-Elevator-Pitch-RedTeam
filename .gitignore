@@ -40,3 +40,8 @@ workspace/
 irs_audit_*/
 donors/
 defense_package_*/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
