@@ -1,6 +1,11 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
+[![Patent Pending](https://img.shields.io/badge/Patent-Pending-blue.svg)](PROVISIONAL_PATENT_SPECIFICATION.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+
+> **🎯 Patent Pending**: U.S. Provisional Patent Application filed November 23, 2025. This architecture establishes prior art against monopolization of Discord-integrated AI agent orchestration, GitLens event gateways, and Kubernetes-based swarm intelligence governance. See [SOVEREIGN_MANIFEST_v1.0.md](SOVEREIGN_MANIFEST_v1.0.md) for full disclosure.
 
 ## 🏛️ Architecture Overview
 
@@ -279,6 +284,26 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 🔐 Patent & Intellectual Property
+
+**Patent Pending**: U.S. Provisional Patent Application (filed November 23, 2025)
+
+The Sovereignty Architecture is protected by provisional patent covering:
+- Discord-integrated AI agent orchestration with per-channel routing
+- Cryptographically verified GitLens event gateways for DevOps automation
+- Kubernetes RBAC for swarm intelligence co-governance
+- Vector-based runbook orchestration with semantic retrieval
+- Multi-layer cryptographic governance frameworks
+
+**Purpose**: This patent filing serves as **defensive prior art** to prevent monopolization of these architectures and patterns by large technology corporations. It establishes a public record that these innovations existed as of November 23, 2025, preventing future patent claims that would restrict community implementation.
+
+**Core Artifacts**:
+- [SOVEREIGN_MANIFEST_v1.0.md](SOVEREIGN_MANIFEST_v1.0.md) - Cryptographically anchored declaration of the architecture (SHA256: FAA198DA05318742531B6405384319563935F63DB4D91866E70AE7701FCDCCED)
+- [PROVISIONAL_PATENT_SPECIFICATION.md](PROVISIONAL_PATENT_SPECIFICATION.md) - Complete technical disclosure and specification
+- [PATENT_FILING_INSTRUCTIONS.md](PATENT_FILING_INSTRUCTIONS.md) - Step-by-step filing guide for USPTO submission
+
+**License Compatibility**: The MIT License on the codebase remains fully in effect. The patent filing does not restrict use, modification, or distribution of the software. It only prevents others from claiming patent rights over the disclosed inventions.
 
 ## 📄 License & Support
 
