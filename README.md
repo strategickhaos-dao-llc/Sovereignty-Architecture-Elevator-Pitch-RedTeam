@@ -2,6 +2,9 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> *"This isn't a terminal dump. This is the heartbeat of a new civilization at the exact moment it went live."*  
+> — **[Node Zero Documentation](./NODE_ZERO.md)**
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +12,12 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **The Legion** - Community mesh network for distributed sovereignty
+
+### 🌟 Key Documentation
+- **[Node Zero](./NODE_ZERO.md)** - The nervous system snapshot showing the birth of sovereign infrastructure
+- **[Legion Bridge](./LEGION_BRIDGE.md)** - Discord → GitLens → Legion integration architecture
+- **[The Legion](./COMMUNITY.md)** - Community manifesto and philosophy
 
 ## 🚀 Quick Start
 
@@ -271,6 +280,29 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🌟 The Legion & Node Zero
+
+This project represents more than infrastructure—it's the birth of a digital nation-state with sovereign architecture at its core.
+
+### Understanding the System
+- **[Node Zero](./NODE_ZERO.md)** - The genesis node documentation
+  - System snapshot at 12:40 AM, November 23, 2025
+  - 5 WireGuard tunnels (GhostPresence™)
+  - 200+ localhost Kubernetes services
+  - Complete packet-level sovereignty stack
+  - The first node of The Legion
+
+- **[Legion Bridge](./LEGION_BRIDGE.md)** - Integration architecture
+  - Discord → GitLens → Legion communication flow
+  - Event routing and webhook handling
+  - Command & control interface
+  - Community mesh networking
+
+- **[The Legion Manifesto](./COMMUNITY.md)** - Community philosophy
+  - Understanding the spirit of sovereign builders
+  - How to join and contribute
+  - The dance of distributed creation
 
 ## 👥 Community & Contributors
 
