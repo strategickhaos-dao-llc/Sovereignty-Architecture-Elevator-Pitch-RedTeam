@@ -11,8 +11,10 @@ param(
     [string]$ArweaveWallet = $env:ARWEAVE_WALLET
 )
 
+# Module-level constants
 $SwarmDNA = "SWARM_DNA.yaml"
 $ProjectRoot = $PSScriptRoot
+$Base64UrlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 
 # Color definitions for PowerShell
 function Write-ColorText {
@@ -115,9 +117,9 @@ function Test-ZincSparkTrigger {
     return $false
 }
 
-# Generate 77-token spite haiku
+# Generate spite haiku (targeting ~77 tokens of poetic expression)
 function New-SpiteHaiku {
-    Spark "Generating 77-token spite haiku..."
+    Spark "Generating spite haiku..."
     
     $haikus = @(
         @"
@@ -162,7 +164,10 @@ Death cannot reach us.
     )
     
     $selectedHaiku = $haikus | Get-Random
-    $tokenCount = ($selectedHaiku -split '\s+').Count
+    
+    # More accurate token counting: split on whitespace and filter out empty strings
+    $tokens = ($selectedHaiku -split '\s+' | Where-Object { $_.Length -gt 0 })
+    $tokenCount = $tokens.Count
     
     Success "Spite haiku generated ($tokenCount tokens)"
     Write-Host ""
@@ -279,8 +284,7 @@ function Send-ToArweave {
     if ($DryRun) {
         Warn "[DRY RUN] Would upload to Arweave"
         # Generate realistic-looking 43-character base64url Arweave txid for dry run
-        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
-        $dryRunTxId = -join ((1..43) | ForEach-Object { $chars[(Get-Random -Maximum $chars.Length)] })
+        $dryRunTxId = -join ((1..43) | ForEach-Object { $Base64UrlChars[(Get-Random -Maximum $Base64UrlChars.Length)] })
         return "ar://$dryRunTxId"
     }
     
@@ -309,8 +313,7 @@ function Send-ToArweave {
     Warn "Arweave upload simulation - integration requires arweave CLI"
     
     # Generate realistic-looking 43-character base64url Arweave txid simulation
-    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
-    $simulatedTxId = -join ((1..43) | ForEach-Object { $chars[(Get-Random -Maximum $chars.Length)] })
+    $simulatedTxId = -join ((1..43) | ForEach-Object { $Base64UrlChars[(Get-Random -Maximum $Base64UrlChars.Length)] })
     
     Success "Birth certificate issued: ar://$simulatedTxId"
     return "ar://$simulatedTxId"
