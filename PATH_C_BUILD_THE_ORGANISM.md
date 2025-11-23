@@ -337,6 +337,7 @@ import os
 import time
 import redis
 import json
+import asyncio
 from nats.aio.client import Client as NATS
 
 class WorkerCell:
@@ -417,7 +418,6 @@ class WorkerCell:
             await asyncio.sleep(5)
 
 if __name__ == "__main__":
-    import asyncio
     cell = WorkerCell()
     asyncio.run(cell.start())
 ```

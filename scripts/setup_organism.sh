@@ -8,7 +8,13 @@ echo "🧬 Setting up biological organism structure..."
 BASE_DIR="${1:-./organism}"
 
 # Create directories
-mkdir -p "$BASE_DIR"/{circulation/{ingestion,processing,distribution},immunity/{monitors,responders,remediation},nervous_system/{coordinator,signaling,reflexes},cytoplasm,cells/{worker_cell,sensor_cell,coordinator_cell},scripts}
+mkdir -p "$BASE_DIR"
+mkdir -p "$BASE_DIR/circulation/"{ingestion,processing,distribution}
+mkdir -p "$BASE_DIR/immunity/"{monitors,responders,remediation}
+mkdir -p "$BASE_DIR/nervous_system/"{coordinator,signaling,reflexes}
+mkdir -p "$BASE_DIR/cytoplasm"
+mkdir -p "$BASE_DIR/cells/"{worker_cell,sensor_cell,coordinator_cell}
+mkdir -p "$BASE_DIR/scripts"
 
 echo "✅ Directory structure created at: $BASE_DIR"
 

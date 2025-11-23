@@ -26,7 +26,8 @@ echo ""
 
 # Check system resources
 echo "📊 System Resources:"
-echo "  CPU Usage: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}' || echo 'N/A')%"
+CPU_USAGE=$(top -bn1 2>/dev/null | grep -i "cpu" | head -n1 | awk '{print $2}' | sed 's/%us,//' || echo 'N/A')
+echo "  CPU Usage: ${CPU_USAGE}%"
 echo "  RAM Free: $(free -h 2>/dev/null | grep Mem | awk '{print $4}' || echo 'N/A')"
 echo "  Temp: $(sensors 2>/dev/null | grep -i 'Package id 0' | awk '{print $4}' || echo 'N/A')"
 echo ""
