@@ -18,7 +18,7 @@ This manifest establishes an **irrevocable, perpetual commitment** to allocate *
 
 **Managing Member:** Domenic Garza (Node 137)  
 **GPG Key ID:** 0x137SOVEREIGN  
-**SHA256 Fingerprint:** `d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5`
+**SHA256 Fingerprint:** `d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5` *(to be replaced with actual fingerprint)*
 
 **Repository:** https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-  
 **DAO LLC Structure:** Wyoming SF0068 Compliant  
@@ -185,9 +185,10 @@ Just victory. 😈❤️
 **Managing Member:**
 
 ```
-[GPG SIGNATURE BLOCK]
+[GPG SIGNATURE BLOCK - TO BE CREATED]
 -----BEGIN PGP SIGNATURE-----
-[To be signed with 0x137SOVEREIGN]
+[This document must be signed with GPG key 0x137SOVEREIGN]
+[Use: gpg --armor --detach-sign SOVEREIGN_MANIFEST_v1.0.md]
 -----END PGP SIGNATURE-----
 ```
 
@@ -202,9 +203,9 @@ Node: 137
 
 ## 🔗 VERIFICATION
 
-To verify this document:
+To verify this document (after GPG signature is created):
 ```bash
-# Download the GPG signature
+# Download the GPG signature (when available)
 curl -O https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/SOVEREIGN_MANIFEST_v1.0.md.asc
 
 # Verify with GPG
@@ -213,6 +214,8 @@ gpg --verify SOVEREIGN_MANIFEST_v1.0.md.asc SOVEREIGN_MANIFEST_v1.0.md
 # Verify SHA256 checksum
 sha256sum SOVEREIGN_MANIFEST_v1.0.md
 ```
+
+**Note:** The .asc signature file must be created by signing this document with the authorized GPG key.
 
 ---
 
