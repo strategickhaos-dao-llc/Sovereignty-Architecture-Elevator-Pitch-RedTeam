@@ -90,6 +90,8 @@ pragma solidity ^0.8.19;
  * @notice IMMUTABLE covenant enforcement contract
  * @dev This contract has NO admin, NO owner, NO upgrade path
  *      The 7% charitable covenant is PERMANENTLY ENFORCED
+ * @dev NOTE: Solidity version should be updated to latest stable (^0.8.20+)
+ *      before production deployment for latest security features
  */
 contract SovereigntyCovenantCore {
     

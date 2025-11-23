@@ -341,13 +341,15 @@ dead_mans_switch:
 # =============================================================================
 
 gpg_keys:
+  # NOTE: All TBD/null values must be populated before system goes live
+  # Validation system should check for populated fields before production use
   primary_key:
-    key_id: "0x137SOVEREIGN"  # REPLACE WITH ACTUAL
-    fingerprint: "TBD"  # Full 40-character fingerprint
+    key_id: "0x137SOVEREIGN"  # REPLACE WITH ACTUAL - must be real GPG key ID
+    fingerprint: "TBD"  # Full 40-character fingerprint - must be populated
     owner: "Domenic Garza"
     email: "contact@sovereigntyarchitecture.org"
-    created: "TBD"
-    expires: "TBD"  # Recommend 2-year validity
+    created: "TBD"  # Key creation date - must be recorded
+    expires: "TBD"  # Recommend 2-year validity - must be set
     
     storage:
       primary: "YubiKey 5 NFC"

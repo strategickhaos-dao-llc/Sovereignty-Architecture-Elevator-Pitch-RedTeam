@@ -206,6 +206,13 @@ prior_art_watch:
       critical: true
       focus_years: [2019, 2020, 2021]
       notes: "Item #94 - Someone proves architecture was in 2019 arXiv paper"
+      search_methodology: |
+        1. Search cs.AI, cs.CR (cryptography), cs.DC (distributed computing)
+        2. Keywords: "AI safety covenant", "irrevocable constraint", 
+           "cryptographic enforcement", "DAO governance", "charitable allocation"
+        3. Manual review of abstracts for similarity
+        4. Deep dive on any papers mentioning similar concepts
+        5. Document differences in novelty analysis
     
     - name: "ACM Digital Library"
       url: "https://dl.acm.org/"

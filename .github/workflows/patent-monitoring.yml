@@ -46,7 +46,7 @@ jobs:
               
               try:
                   deadline = datetime.datetime.fromisoformat(deadline_date.replace('Z', '+00:00'))
-              except:
+              except (ValueError, TypeError, AttributeError):
                   return None
               
               today = datetime.datetime.now(datetime.timezone.utc)
