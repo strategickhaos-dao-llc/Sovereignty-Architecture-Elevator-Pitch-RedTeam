@@ -32,7 +32,7 @@ echo "  2) Catallaxy Calendar Server (curl)"
 echo "  3) OTS BTC Catallaxy (curl alternative)"
 echo "  4) Alice Calendar (opentimestamps.org)"
 echo ""
-read -p "Enter choice [1-4] (default: 1): " method
+read -r -p "Enter choice [1-4] (default: 1): " method
 method=${method:-1}
 
 echo ""
