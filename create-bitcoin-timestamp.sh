@@ -22,7 +22,18 @@ fi
 # Display manifest info
 echo "📄 Manifest File: $MANIFEST_FILE"
 echo "📊 File Size: $(wc -c < "$MANIFEST_FILE") bytes"
-echo "🔑 SHA256 Hash: $(sha256sum "$MANIFEST_FILE" | cut -d' ' -f1)"
+
+# Use appropriate SHA256 command based on OS
+if command -v sha256sum &> /dev/null; then
+    HASH=$(sha256sum "$MANIFEST_FILE" | cut -d' ' -f1)
+elif command -v shasum &> /dev/null; then
+    HASH=$(shasum -a 256 "$MANIFEST_FILE" | cut -d' ' -f1)
+else
+    echo "❌ ERROR: No SHA256 command found (sha256sum or shasum)"
+    exit 1
+fi
+
+echo "🔑 SHA256 Hash: $HASH"
 echo ""
 
 # Method selection
@@ -46,6 +57,14 @@ case $method in
             echo "📦 OpenTimestamps CLI not found. Installing..."
             pip3 install --user opentimestamps-client
             export PATH="$HOME/.local/bin:$PATH"
+            
+            # Verify installation
+            if ! command -v ots &> /dev/null; then
+                echo "❌ ERROR: Installation succeeded but 'ots' command not found in PATH."
+                echo "   Please add $HOME/.local/bin to your PATH and run this script again."
+                echo "   Or restart your shell session."
+                exit 1
+            fi
         fi
         
         echo "Using: ots stamp $MANIFEST_FILE"

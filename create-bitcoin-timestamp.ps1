@@ -22,6 +22,15 @@ if (-not (Test-Path $ManifestFile)) {
 $FileSize = (Get-Item $ManifestFile).Length
 $Hash = (Get-FileHash $ManifestFile -Algorithm SHA256).Hash.ToLower()
 
+# Check for Python command availability
+$pythonCmd = $null
+foreach ($cmd in @('python', 'python3', 'py')) {
+    if (Get-Command $cmd -ErrorAction SilentlyContinue) {
+        $pythonCmd = $cmd
+        break
+    }
+}
+
 Write-Host "📄 Manifest File: $ManifestFile" -ForegroundColor White
 Write-Host "📊 File Size: $FileSize bytes" -ForegroundColor White
 Write-Host "🔑 SHA256 Hash: $Hash" -ForegroundColor Yellow
@@ -88,11 +97,15 @@ try {
             $otsPath = Get-Command ots -ErrorAction SilentlyContinue
             if (-not $otsPath) {
                 Write-Host "📦 OpenTimestamps CLI not found. Installing..." -ForegroundColor Yellow
-                python -m pip install --user opentimestamps-client
+                if (-not $pythonCmd) {
+                    Write-Host "❌ ERROR: Python not found. Please install Python first." -ForegroundColor Red
+                    exit 1
+                }
+                & $pythonCmd -m pip install --user opentimestamps-client
             }
             
             # Run ots stamp
-            ots stamp $ManifestFile
+            & ots stamp $ManifestFile
         }
         
         default {
@@ -119,7 +132,7 @@ try {
         if ($otsPath) {
             Write-Host "🔍 Timestamp Information:" -ForegroundColor White
             try {
-                ots info $OtsFile
+                & ots info $OtsFile
             } catch {
                 Write-Host "   (Info will be available after Bitcoin confirmation)" -ForegroundColor Gray
             }
