@@ -71,9 +71,11 @@ function recon {
     Write-Host "[1/4] DNS Resolution" -ForegroundColor Yellow
     Write-Host "──────────────────────────────────────────────────────────" -ForegroundColor DarkGray
     try {
-        $dnsResult = nslookup $target 2>$null
+        # Use PowerShell's Resolve-DnsName for better security and parameter validation
+        $dnsResult = Resolve-DnsName -Name $target -ErrorAction Stop
         if ($dnsResult) {
-            $dnsResult | ForEach-Object { Write-Host $_ -ForegroundColor Gray }
+            $dnsResult | Select-Object Name, Type, IPAddress, NameHost | 
+                Format-Table -AutoSize | Out-String | Write-Host -ForegroundColor Gray
         }
     }
     catch {
@@ -89,6 +91,7 @@ function recon {
         $port = $port.Trim()
         try {
             Write-Host "  Scanning port $port..." -NoNewline -ForegroundColor Gray
+            # Add timeout to prevent long waits on closed ports
             $result = Test-NetConnection -ComputerName $target -Port $port -WarningAction SilentlyContinue -ErrorAction SilentlyContinue -InformationLevel Quiet
             if ($result) {
                 Write-Host " ✓ OPEN" -ForegroundColor Green
@@ -125,7 +128,14 @@ function recon {
     Write-Host "[4/4] Geolocation Intelligence" -ForegroundColor Yellow
     Write-Host "──────────────────────────────────────────────────────────" -ForegroundColor DarkGray
     try {
-        $geoData = Invoke-WebRequest -Uri "http://ip-api.com/json/$target" -UseBasicParsing -ErrorAction SilentlyContinue | 
+        # Validate target format to prevent injection attacks
+        $sanitizedTarget = $target -replace '[^a-zA-Z0-9\.\-]', ''
+        if ([string]::IsNullOrEmpty($sanitizedTarget) -or $sanitizedTarget -ne $target) {
+            Write-Host "  ⚠ Invalid target format. Only alphanumeric, dots, and hyphens allowed." -ForegroundColor Red
+            return
+        }
+        
+        $geoData = Invoke-WebRequest -Uri "http://ip-api.com/json/$sanitizedTarget" -UseBasicParsing -ErrorAction SilentlyContinue -TimeoutSec 10 | 
                    ConvertFrom-Json
         
         if ($geoData -and $geoData.status -eq "success") {
