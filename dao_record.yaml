@@ -41,6 +41,28 @@ compliance:
   regulatory_status: "Good standing"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
 
+charitable_commitment:
+  effective_date: "2025-11-23"
+  allocation_percentage: 7.00
+  irrevocable: true
+  perpetual: true
+  beneficiaries:
+    - "Children's welfare and healing"
+    - "Veterans support and services"
+    - "Community healing and support"
+  security_mechanisms:
+    - "Bitcoin multi-signature wallet (3-of-5)"
+    - "GPG cryptographic signatures"
+    - "Federal law framework (IRS 170(c))"
+    - "Wyoming UPMIFA compliance"
+  documentation:
+    - "CHARITABLE_COMMITMENT.md"
+    - "governance/article_9_charitable_distributions.md"
+  transparency:
+    quarterly_reporting: true
+    blockchain_verification: true
+    public_ledger: "GitHub + IPFS + Bitcoin blockchain"
+
 generated:
   by: "generate_dao_record.sh (hardened)"
   timestamp: "2025-11-16T11:34:26Z"
