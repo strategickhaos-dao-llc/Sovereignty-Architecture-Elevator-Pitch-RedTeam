@@ -1,6 +1,6 @@
 # Sovereign License with Mandatory Charitable Distribution
 
-## Version 1.0 - Effective Date: 2025
+## Version 1.0 - Effective Date: January 23, 2025
 
 **Licensor**: Strategickhaos DAO LLC  
 **Project**: Sovereignty Architecture  

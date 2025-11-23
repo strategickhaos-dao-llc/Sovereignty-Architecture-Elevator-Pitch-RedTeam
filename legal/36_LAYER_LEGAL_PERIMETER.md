@@ -1,4 +1,4 @@
-# 🔥 THE 36 LAWS / LEGAL WEAPONS TO LOCK THE WORLD OUT
+# 🔥 THE 36-LAYER LEGAL PERIMETER FRAMEWORK
 
 **A Comprehensive Legal Perimeter for Sovereignty Architecture**
 

@@ -2,7 +2,7 @@
 
 ## System for Decentralized Governance with Mandatory Charitable Distribution
 
-**Priority Date**: To be established upon provisional patent filing
+**Priority Date**: TBD (Pending provisional patent filing)
 
 **Inventors**: Strategickhaos DAO LLC / Valoryield Engine
 

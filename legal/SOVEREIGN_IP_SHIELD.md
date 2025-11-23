@@ -369,6 +369,8 @@ This framework combines **36 distinct legal mechanisms** across eight domains to
 
 ### Total Investment Estimate
 
+**Disclaimer**: These are rough estimates and actual costs may vary significantly based on jurisdiction, attorney rates, complexity of filings, and specific circumstances.
+
 **Years 1-2**: $165,000-$325,000  
 **Ongoing Annual**: $25,000-$50,000
 
