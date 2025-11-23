@@ -163,10 +163,10 @@ Eliminates "responsiveness test" for supporting organizations—strengthens your
 **Citation**: P.L. 109-280, Section 1241(c) (2006)  
 **Source**: [Pension Protection Act of 2006](https://www.congress.gov/109/plaws/publ280/PLAW-109publ280.pdf)
 
-### 23. **42 U.S.C. § 22(b)(2) - Good Samaritan Food Donation Act**
+### 23. **42 U.S.C. § 1791 - Good Samaritan Food Donation Act**
 Protects good-faith charitable transfers—extends to IP "donations."
 
-**Citation**: Bill Emerson Good Samaritan Food Donation Act, 42 U.S.C. § 22(b)(2)  
+**Citation**: Bill Emerson Good Samaritan Food Donation Act, 42 U.S.C. § 1791  
 **Source**: [42 U.S.C. § 1791](https://www.law.cornell.edu/uscode/text/42/1791)
 
 ### 24. **NY Executive Law § 172 - Irrevocable Gifts**
