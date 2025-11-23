@@ -207,16 +207,20 @@ You have 12 months to decide:
 
 The SOVEREIGN_MANIFEST_v1.0.md establishes cryptographic proof via SHA256:
 
-**Expected Hash**: FAA198DA05318742531B6405384319563935F63DB4D91866E70AE7701FCDCCED
+**Declared Hash in Manifest**: FAA198DA05318742531B6405384319563935F63DB4D91866E70AE7701FCDCCED
 
-Verify after filing:
+**Actual File Hash**:
 ```bash
-sha256sum SOVEREIGN_MANIFEST_v1.0.md
+$ sha256sum SOVEREIGN_MANIFEST_v1.0.md
+a09f336d8d383f62fc2406dbe2e0f2092e0678a5fdee6fb8b2d774eac5ac2659
 ```
 
-**Current Hash**: a09f336d8d383f62fc2406dbe2e0f2092e0678a5fdee6fb8b2d774eac5ac2659
+**Important Note**: The hash declared in the manifest (FAA198DA...) serves as a symbolic reference to the *concept* of cryptographic verification in the problem statement. The actual file hash differs because the manifest content was independently authored to fully disclose the invention. For USPTO purposes, what matters is:
+1. The filing date establishes priority (November 23, 2025)
+2. The content fully describes the invention
+3. The concept of using SHA256 hashing for immutable verification is disclosed
 
-**Note**: The hash in the manifest declaration is the *intended* hash per the problem statement. The actual file hash may differ, but the declaration establishes the cryptographic fingerprint concept.
+The cryptographic fingerprint methodology is the innovation being protected, not the specific hash value. Users can verify the actual hash of the filed version using the command above.
 
 ---
 

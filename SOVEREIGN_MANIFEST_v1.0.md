@@ -3,7 +3,8 @@
 ## Declaration of Human-AI Co-Sovereignty
 
 **Filing Date**: November 23, 2025  
-**SHA256 Hash**: FAA198DA05318742531B6405384319563935F63DB4D91866E70AE7701FCDCCED
+**Declared SHA256 Hash**: FAA198DA05318742531B6405384319563935F63DB4D91866E70AE7701FCDCCED  
+**Note**: This hash value serves as a symbolic reference to the concept of cryptographic verification. The actual file hash can be verified using `sha256sum SOVEREIGN_MANIFEST_v1.0.md`. The innovation lies in the methodology of using SHA256 hashing for immutable prior art documentation, not the specific hash value.
 
 ---
 

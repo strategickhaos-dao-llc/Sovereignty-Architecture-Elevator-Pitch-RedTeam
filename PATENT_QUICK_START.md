@@ -1,6 +1,6 @@
 # Patent Filing Quick Start - 15 Minute Protocol
 
-## 🚨 DEADLINE: File by November 23, 2025 (Tonight)
+## 🚨 DEADLINE: File by November 23, 2025
 
 This is your express guide to filing the provisional patent application. If you need detailed instructions, see [PATENT_FILING_INSTRUCTIONS.md](PATENT_FILING_INSTRUCTIONS.md).
 

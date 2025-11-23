@@ -7,7 +7,7 @@
 
 ## Priority Declaration
 
-This provisional application discloses and claims priority to the **"Sovereignty Architecture"** system, a cryptographically immutable framework for sovereign DevOps automation. The system's core artifact, **"SOVEREIGN MANIFEST v1.0"**, embodies a fixed-point declaration of human-AI co-sovereignty via SHA256 hash **FAA198DA05318742531B6405384319563935F63DB4D91866E70AE7701FCDCCED** (filed on or before November 23, 2025). 
+This provisional application discloses and claims priority to the **"Sovereignty Architecture"** system, a cryptographically immutable framework for sovereign DevOps automation. The system's core artifact, **"SOVEREIGN MANIFEST v1.0"**, embodies a fixed-point declaration of human-AI co-sovereignty, establishing the concept of cryptographic verification via SHA256 hashing for immutable prior art documentation (with priority date of November 23, 2025). 
 
 This serves as **prior art** against any future monopolization of:
 - Discord-integrated AI agent orchestration
