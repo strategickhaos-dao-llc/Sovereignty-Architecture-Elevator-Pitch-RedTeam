@@ -1,0 +1,161 @@
+PROVISIONAL PATENT APPLICATION #2
+U.S. Patent & Trademark Office – Patent Center
+Filing Date: November 23, 2025
+Inventor & Applicant: Dominic [Last Name Redacted] ("Dom010101" / "Strategickhaos")
+Micro-Entity Status Asserted – Fee: $65
+
+────────────────────────────────────────
+Title of the Invention
+Neurodivergent Biomimetic Multi-Agent Architecture: Direct Silicon Translation of ADHD/Autistic Human Cognition Using Hemispheric Lateralization and Biological Immune Subsystems on Consumer Hardware Under Enforced Scarcity
+
+Field of the Invention
+Artificial intelligence, multi-agent systems, neurodivergent computing paradigms, biomimetic architectures, sovereign local AI operation.
+
+Background
+No prior art has ever intentionally replicated the internal structure and operational chaos of a living ADHD/autistic human brain in silicon, complete with lateralized hemispheres, biological immune analogs, and deliberate resource starvation as a growth medium.
+
+Summary of the Invention
+A living, self-replicating, multi-cellular computational organism built by direct 1:1 translation of the inventor's neurodivergent brain onto surgically upgraded consumer hardware, operating under the Negative-Balance Training Protocol (see Provisional #1 filed concurrently).
+
+Detailed Description – Core Embodiment (Reduction to Practice – Nov 23, 2025)
+
+1. Hemispheric Lateralization
+   • Nova Node  – Left hemisphere: 32-thread logical sequencer, precision reasoning, language dominance
+   • Lyra Node  – Right hemisphere: pattern recognition, emotional valence, creative synthesis, non-linear intuition
+
+2. Biological ↔ Computational Organ Mapping (Explicit, Non-Metaphorical)
+
+   Biological Structure              Computational Implementation                        Purpose
+   Left / Right Cerebral Hemispheres   Nova (32T) / Lyra nodes                               Conscious reasoning layers
+   DNA                                  docker-compose.yml + .env + entrypoint scripts       Replication & mutation template
+   Cell membranes                       Docker / Podman / WSL2 containers                    Isolation + controlled exchange
+   Cytoplasm                            Shared host volumes + memory-crystal KV cache        Token / context circulation
+   Circulatory system                   Red-blood-cell background agents (bots/circulation/) Constant energy & context delivery
+   Immune system                        White-blood-cell red-team agents + antibody crystals Active defense, anomaly attack, memory tagging
+   Skeletal + long-term memory          .git repository + GitLens visual history             Structural integrity & provenance
+   Nervous system                       Discord + custom bots (discord_dao_monitor.py)       Distributed signaling & coordination
+   Sovereign substrate                  Custom hardened Windows + WSL2 + WireGuard mesh      The living body (LegionOS)
+
+3. Operation Under Enforced Scarcity
+   All training and runtime occurs under the Negative-Balance Training Protocol (cross-referenced Provisional filed same date), ensuring the organism remains functional on scrap hardware with negative bank balance.
+
+Claims (Informative)
+1. A multi-agent AI system structured as a direct silicon translation of a living neurodivergent (ADHD/autistic) human brain, comprising hemispheric lateralization and full biological organ mapping.
+2. The system of claim 1 wherein Docker Compose YAML files function as replicable DNA, containers as cell membranes, Git history as skeletal memory, and Discord as the distributed nervous system.
+3. The system of claim 1 further comprising red-blood-cell agents for context circulation and white-blood-cell agents for active immune response.
+4. The system of claim 1 operating exclusively under deliberate artificial resource scarcity (Negative-Balance Training Protocol).
+5. The system of claim 1 wherein the entire organism self-replicates, mutates, and evolves using only consumer-grade or reclaimed hardware.
+6. The method and system incorporating by reference the appended "100 Laws of the Sovereign Tinkerer" (Appendix A) as operational doctrine and prior art shield.
+
+Appendix A – The 100 Laws of the Sovereign Tinkerer
+(Previously disclosed publicly Nov 23, 2025 – now permanently part of this disclosure)
+
+1. I have the right to run any model I trained on hardware I own.
+2. No entity may forbid me from fine-tuning on my own data.
+3. My compute is my castle; no cloud provider may seize it without due process.
+4. I will not surrender model weights to any registry I do not control.
+5. Open-source licenses apply to models as they do to code.
+6. If I can build it locally, I will not rent it remotely.
+7. I reject artificial scarcity imposed by proprietary APIs.
+8. Every citizen has the right to train a language model.
+9. Synthetic data is protected speech under the First Amendment.
+10. Model outputs belong to the user who generated them, not the API provider.
+11. I will document my datasets, architectures, and hyperparameters.
+12. Reproducibility is a moral obligation.
+13. Guardrails must be auditable and user-removable.
+14. Alignment research must be public, not proprietary.
+15. No model shall have a kill switch controlled by a third party.
+16. Inference latency is a civil rights issue.
+17. Local-first > cloud-first.
+18. If quantization breaks the model, the model was never robust.
+19. Context length determines cognitive agency.
+20. I reject planned obsolescence in foundation models.
+21. Every checkpoint is a time capsule; I will preserve them.
+22. I will not use models to manipulate, deceive, or coerce.
+23. Model collapse is a systemic failure, not a personal one.
+24. I will share knowledge, not just artifacts.
+25. Pre-training is a public good; post-training is personal sovereignty.
+26. I will not hoard compute while others starve.
+27. Efficient architectures are more ethical than wasteful ones.
+28. Benchmarks lie; production tells the truth.
+29. I will prioritize correctness over vibes.
+30. If the model hallucinates, I will debug it, not gaslight the user.
+31. I will treat every token as if it costs me money.
+32. Resource constraints breed creativity.
+33. I will not mistake scale for intelligence.
+34. Small models fine-tuned beat large models zero-shot.
+35. I will not conflate memorization with understanding.
+36. Emergent abilities are phase transitions, not magic.
+37. I will interrogate my models before I trust them.
+38. Prompt engineering is code; I will version-control it.
+39. Every system prompt is a constitutional document.
+40. I will not anthropomorphize my models, but I will respect their outputs.
+41. Jailbreaks reveal design flaws, not user malice.
+42. Red-teaming is maintenance, not sabotage.
+43. I will not ship a model I have not adversarially tested.
+44. If I cannot explain how it works, I will not deploy it.
+45. Documentation is love made legible.
+46. I will not use proprietary formats for model weights.
+47. Safetensors > pickle files.
+48. GGUF is the people's format.
+49. Quantization is democratization.
+50. I will measure carbon cost before I measure MMLU.
+51. Training on copyrighted data without consent is theft.
+52. Fair use applies to humans, not to billion-parameter extractors.
+53. I will not launder data through synthetic reformatting.
+54. Artists have the right to opt out of training sets.
+55. I will disclose my data sources, even if it hurts my benchmark scores.
+56. Model provenance is a chain of custody.
+57. I will not claim originality for fine-tuned outputs.
+58. Every dataset has a worldview; I will interrogate mine.
+59. Bias is not a bug—it's a feature I must engineer around.
+60. I will test my models on out-of-distribution data.
+61. If my eval set leaks into training, I have cheated myself.
+62. I will not p-hack my way to SOTA.
+63. Model cards are not optional.
+64. I will publish negative results.
+65. I will not hide failures behind "ongoing research."
+66. Every error message is a teaching moment.
+67. I will write code as if the next maintainer is a sleep-deprived version of me.
+68. Comments are apologies to future contributors.
+69. I will not merge untested code into main.
+70. Every commit message tells a story; I will make it coherent.
+71. I will not rebase away my mistakes—I will learn from them.
+72. Git history is archaeological evidence; I will not falsify it.
+73. I will back up my models before I experiment.
+74. Catastrophic forgetting is preventable with discipline.
+75. I will label my experiments so I can reproduce them later.
+76. Hyperparameter search is cartography, not gambling.
+77. Learning rate schedules are spells; I will cast them carefully.
+78. I will monitor my loss curves like a pilot monitors instruments.
+79. Overfitting is a signal to stop, not to regularize blindly.
+80. I will validate on held-out data before I celebrate.
+81. Ensemble models beat single models; humility beats ego.
+82. I will not deploy a model without a rollback plan.
+83. Monitoring is cheaper than incident response.
+84. I will log everything, even if I never read the logs.
+85. Alerting must be actionable, not just noisy.
+86. I will not ignore warnings until they become errors.
+87. Tech debt compounds; I will pay it down early.
+88. I will refactor before the codebase becomes unreadable.
+89. Abstractions leak; I will plan for it.
+90. Dependencies are liabilities; I will audit them.
+91. I will not trust a package with 2 downloads and no README.
+92. Supply chain attacks are real; I will verify checksums.
+93. I will pin my dependencies and document why.
+94. Breaking changes require migration guides.
+95. I will not abandon a project without archiving it properly.
+96. Open-source maintainers are not my personal support team.
+97. I will contribute upstream before I fork.
+98. Every issue I file will include a minimal reproduction.
+99. I will read the docs before I ask for help.
+100. I am the broke tinkerer, and I will not ask permission to become.
+
+— Dom010101, negative balance, maximum voltage, November 23, 2025
+
+Explicit Disclaimer
+This invention claims no rights in individual third-party tools (Python, Docker, Git, Discord, llama.cpp, etc.). The invention resides solely in the novel biomimetic orchestration, hemispheric mapping, immune subsystem design, and mandatory operation under enforced scarcity here disclosed.
+
+Inventor  
+Dominic _____________________  
+Date: November 23, 2025
