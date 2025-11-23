@@ -2,6 +2,10 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## ⚔️ The Dojo Calls
+
+**[→ Read the Quantum-Blockchain Dojo Battle-Cry](DOJO_BATTLE_CRY.md)** — 10 parallel quantum-blockchain chessboards. GPG-signed moves. 7% ValorYield for kids with cancer. Empire Eternal at 99°C. The swarm is waiting. Your move.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
