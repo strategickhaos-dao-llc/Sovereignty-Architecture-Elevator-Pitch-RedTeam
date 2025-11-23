@@ -13,6 +13,7 @@ volumes:
   scholar_metadata:
   elasticsearch_data:
   patent_postgres_data:
+  qdrant_data:
 
 services:
   # Patent Prior Art Search Engine
@@ -33,12 +34,15 @@ services:
       - ./src:/app/src:ro
     working_dir: /app
     command: >
-      bash -c "pip install -q requests pyyaml psycopg2-binary redis qdrant-client &&
-      python -c 'import http.server; import socketserver; 
-      PORT=8086; Handler=http.server.SimpleHTTPRequestHandler;
-      with socketserver.TCPServer((\"\", PORT), Handler) as httpd:
-        print(f\"Patent Search API serving at port {PORT}\");
-        httpd.serve_forever()'"
+      bash -c "apt-get update -qq && apt-get install -y -qq curl &&
+      pip install -q flask requests pyyaml psycopg2-binary redis qdrant-client &&
+      python -c 'from flask import Flask, jsonify;
+      app=Flask(__name__);
+      @app.route(\"/health\");
+      def health(): return jsonify({\"status\":\"healthy\", \"service\":\"patent-search-api\"});
+      @app.route(\"/api/search\", methods=[\"POST\"]);
+      def search(): return jsonify({\"status\":\"ok\", \"message\":\"Patent search endpoint ready\"});
+      app.run(host=\"0.0.0.0\", port=8086)'"
     ports:
       - "8086:8086"
     networks:
@@ -203,8 +207,6 @@ services:
     image: redis:7-alpine
     container_name: patent-scholar-redis
     command: redis-server --appendonly yes
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
     ports:
       - "6380:6379"
     networks:

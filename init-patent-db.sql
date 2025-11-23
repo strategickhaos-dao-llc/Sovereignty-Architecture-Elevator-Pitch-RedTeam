@@ -97,8 +97,8 @@ CREATE TABLE IF NOT EXISTS citations (
     cited_paper_id VARCHAR(100),
     citation_context TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (citing_paper_id) REFERENCES scholar_papers(paper_id),
-    FOREIGN KEY (cited_paper_id) REFERENCES scholar_papers(paper_id)
+    FOREIGN KEY (citing_paper_id) REFERENCES scholar_papers(paper_id) ON DELETE CASCADE,
+    FOREIGN KEY (cited_paper_id) REFERENCES scholar_papers(paper_id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_citations_citing ON citations(citing_paper_id);

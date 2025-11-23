@@ -52,7 +52,7 @@ jobs:
         run: |
           echo "Running patent prior art search..."
           echo "Searching USPTO, EPO, WIPO databases..."
-          echo "Keywords: sovereignty architecture, AI governance, valoryield"
+          echo "Keywords: sovereignty architecture, AI governance, ValorYield"
           echo "Status: Completed"
       
       - name: Run Competitor Patent Monitoring

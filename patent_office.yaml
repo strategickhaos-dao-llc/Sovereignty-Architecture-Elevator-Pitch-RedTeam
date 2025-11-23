@@ -181,7 +181,7 @@ monitoring:
   competitor_filings:
     enabled: true
     frequency: "weekly"
-    keywords: ["sovereignty", "architecture", "AI governance", "valoryield"]
+    keywords: ["sovereignty", "architecture", "AI governance", "ValorYield"]
     notification_channel: "#patent-intelligence"
     
   expiration_tracking:
