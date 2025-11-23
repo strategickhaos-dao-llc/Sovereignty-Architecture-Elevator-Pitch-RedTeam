@@ -751,7 +751,8 @@ success_metrics:
 vision:
   description: "Where the Sovereign Swarm is heading"
   
-  short_term: "2025-2026"
+  short_term:
+    timeframe: "2025-2026"
     goals:
       - "Stable 1.0 release with production deployments"
       - "Active community of 100+ contributors"
@@ -759,7 +760,8 @@ vision:
       - "Trinity working seamlessly together"
       - "First commercial deployments"
       
-  medium_term: "2026-2027"
+  medium_term:
+    timeframe: "2026-2027"
     goals:
       - "Multiple specialized Trinity variants"
       - "Global mesh of connected Swarms"
@@ -767,7 +769,8 @@ vision:
       - "Open standards for AI sovereignty"
       - "1000+ production deployments"
       
-  long_term: "2027+"
+  long_term:
+    timeframe: "2027+"
     goals:
       - "Industry standard for ethical AI systems"
       - "Quantum-enhanced capabilities"
