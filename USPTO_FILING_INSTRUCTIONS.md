@@ -99,7 +99,7 @@ This provisional application discloses and claims priority to a specific
 literary and cryptographic artifact titled "SOVEREIGN MANIFEST v1.0" whose 
 exact byte contents produce the SHA256 hash:
 
-[INSERT ACTUAL HASH FROM sha256sum COMMAND]
+c33f57f21f8662f073d8d45f82f0e7cee7deb8711b6f6650afd968ce8243418d
 
 The artifact, created on or before November 23, 2025, embodies a fixed-point 
 declaration of individual sovereignty in the age of artificial intelligence 
