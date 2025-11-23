@@ -8,6 +8,7 @@ metadata:
     component: snhu-ecosystem-tracker
 spec:
   # Run daily at 2 AM UTC
+  # Note: OUTPUT_FILE uses a static name. The application code generates timestamps automatically.
   schedule: "0 2 * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
@@ -36,7 +37,7 @@ spec:
             - name: INPUT_FILE
               value: "/data/emails.csv"
             - name: OUTPUT_FILE
-              value: "/data/results/analysis_$(date +%Y%m%d_%H%M%S).csv"
+              value: "/data/results/analysis.csv"
             - name: ANALYSIS_MODEL
               valueFrom:
                 configMapKeyRef:

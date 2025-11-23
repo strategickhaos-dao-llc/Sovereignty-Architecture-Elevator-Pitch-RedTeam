@@ -43,6 +43,19 @@ snhu-ecosystem-tracker/
 - Grok API key from [x.ai/api](https://x.ai/api)
 - (Optional) Discord webhook URL
 
+### ⚠️ Important: Replace Placeholder Values
+
+Before deploying, replace these placeholder values in the following files:
+
+1. **Docker Hub Repository** (`your-dockerhub/snhu-analyzer`):
+   - `.github/workflows/deploy.yml` (line 13)
+   - `k8s/deployment.yaml` (line 22)
+   - `k8s/cronjob.yaml` (line 26)
+   
+2. **Secrets** (in `k8s/secret.yaml` or via kubectl):
+   - `api-key`: Your actual Grok API key
+   - `discord-webhook`: Your Discord webhook URL (optional)
+
 ### Local Development
 
 1. **Clone the repository**

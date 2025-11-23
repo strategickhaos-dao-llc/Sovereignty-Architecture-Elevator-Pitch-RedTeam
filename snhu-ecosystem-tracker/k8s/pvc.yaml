@@ -8,7 +8,7 @@ metadata:
     component: snhu-ecosystem-tracker
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi

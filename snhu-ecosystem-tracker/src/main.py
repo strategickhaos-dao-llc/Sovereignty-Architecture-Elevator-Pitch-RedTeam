@@ -103,11 +103,13 @@ def run_batch_analysis(input_file: str, output_file: str = None):
         # Analyze emails
         results = analyzer.analyze_emails_batch(input_file, format=format)
         
-        # Save results
+        # Save results with timestamp
         if output_file:
             output_path = Path(output_file)
         else:
-            output_path = Path('/app/results') / f"analysis_results.{format}"
+            from datetime import datetime
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            output_path = Path('/app/results') / f"analysis_{timestamp}.{format}"
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
