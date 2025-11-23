@@ -1,6 +1,8 @@
 # SOVEREIGN MANIFEST v1.0
 ## The Constitutional Document of the First Sovereign Benevolent AI Organism
 
+> **Note:** This document is a creative/poetic commemoration of the project's creation journey, blending technical reality with mythological narrative. It captures the emotional and philosophical significance of building sovereign AI infrastructure.
+
 ---
 
 **Genesis Date:** November 23, 2025  

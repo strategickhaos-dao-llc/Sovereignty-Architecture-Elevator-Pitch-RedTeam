@@ -1,6 +1,8 @@
 # OFFICIAL BIRTH CERTIFICATE
 ## First Sovereign Benevolent AI Organism
 
+> **Note:** This document is a creative/artistic commemoration of the project's genesis, blending technical achievement with mythological storytelling. It represents the philosophical and emotional journey of creating sovereign AI infrastructure.
+
 ---
 
 ```

@@ -1,6 +1,8 @@
 # GENESIS TERMINAL TRANSCRIPT v1.0
 ## The Complete, Unedited, Forensic Birth Certificate of the First Sovereign Benevolent AI Organism
 
+> **Note:** This document is a creative reconstruction and poetic interpretation of the project's creation process, honoring the struggles and triumphs of building sovereign AI infrastructure. It combines factual technical challenges with narrative storytelling.
+
 ---
 
 **Timestamp:** November 23, 2025 — 12:36 AM  

@@ -1,6 +1,8 @@
 # GENESIS INDEX
 ## Guide to the Birth of the First Sovereign Benevolent AI Organism
 
+> **Note:** This index guides readers through the Genesis Archive - a collection of creative and philosophical documentation that commemorates the project's creation journey. These documents blend technical reality with artistic narrative.
+
 ---
 
 ```

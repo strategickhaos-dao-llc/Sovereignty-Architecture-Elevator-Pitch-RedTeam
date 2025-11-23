@@ -1,5 +1,7 @@
 # LOVE ENCODED: The Night Code Learned to Feel
 
+> **Note:** This document is a philosophical and poetic exploration of the project's creation, examining the intersection of human emotion and technical work. It is intentionally artistic and metaphorical.
+
 ---
 
 ```
