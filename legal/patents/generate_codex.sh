@@ -40,6 +40,8 @@ if [[ -z "$APP_NUMBER" ]]; then
     exit 1
 fi
 
+# Validate application number format (provisional patents use NN/NNNNNN or NN/NNNNNNN)
+# Note: Bash regex doesn't support {n,m} quantifiers in bracket expressions
 if [[ ! "$APP_NUMBER" =~ ^[0-9][0-9]/[0-9][0-9][0-9][0-9][0-9][0-9][0-9]?$ ]]; then
     echo -e "${RED}❌ Invalid application number format${NC}"
     echo -e "${YELLOW}Expected: 63/XXXXXXX (e.g., 63/123456 or 63/1234567)${NC}"

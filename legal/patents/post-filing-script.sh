@@ -49,6 +49,8 @@ if [[ -z "$APP_NUMBER" ]]; then
     usage
 fi
 
+# Validate application number format (provisional patents use NN/NNNNNN or NN/NNNNNNN)
+# Note: Bash regex doesn't support {n,m} quantifiers in bracket expressions
 if [[ ! "$APP_NUMBER" =~ ^[0-9][0-9]/[0-9][0-9][0-9][0-9][0-9][0-9][0-9]?$ ]]; then
     echo -e "${RED}❌ Invalid application number format${NC}"
     echo -e "${YELLOW}Expected format: 63/XXXXXXX (e.g., 63/123456 or 63/1234567)${NC}"
@@ -142,11 +144,21 @@ fi
 # Create signed commit
 COMMIT_MESSAGE="FEDERAL ARMOR LOCKED: USPTO Provisional $APP_NUMBER filed $FILING_DATE – 7% loop now protected by U.S. patent law, Texas LLC, and Bitcoin"
 
-if git commit -S -m "$COMMIT_MESSAGE" 2>/dev/null || git commit -m "$COMMIT_MESSAGE"; then
-    echo -e "${GREEN}✅ Commit created${NC}"
+# Try GPG-signed commit first
+if git commit -S -m "$COMMIT_MESSAGE" 2>/dev/null; then
+    echo -e "${GREEN}✅ Cryptographically signed commit created${NC}"
 else
-    echo -e "${RED}❌ Failed to create commit${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠️  GPG signing failed - creating unsigned commit${NC}"
+    echo -e "${YELLOW}⚠️  For maximum security, enable GPG signing:${NC}"
+    echo -e "${YELLOW}    git config --global commit.gpgsign true${NC}"
+    echo -e "${YELLOW}    git config --global user.signingkey <YOUR_GPG_KEY>${NC}"
+    
+    if git commit -m "$COMMIT_MESSAGE"; then
+        echo -e "${GREEN}✅ Commit created (unsigned)${NC}"
+    else
+        echo -e "${RED}❌ Failed to create commit${NC}"
+        exit 1
+    fi
 fi
 
 # Push to remote

@@ -6,9 +6,10 @@
 #   1. Download your USPTO acknowledgment receipt from email
 #   2. Note your application number (63/XXXXXXX)
 #   3. Run: .\post-filing-script.ps1 -AppNumber "63/XXXXXXX"
+#   4. Or with custom path: .\post-filing-script.ps1 -AppNumber "63/XXXXXXX" -RepoPath "C:\path\to\repo"
 #
 # This script will:
-#   - Move the receipt from Downloads to the private repo
+#   - Move the receipt from Downloads to legal/patents/ in the repo
 #   - Rename it with proper convention
 #   - Create cryptographically signed Git commit
 #   - Push to repository
@@ -21,7 +22,7 @@ param(
     [Parameter(Mandatory=$false, HelpMessage="Path to USPTO receipt PDF")]
     [string]$ReceiptPath = "$env:USERPROFILE\Downloads\Acknowledgment*.pdf",
     
-    [Parameter(Mandatory=$false, HelpMessage="Target repository path")]
+    [Parameter(Mandatory=$false, HelpMessage="Target repository path (default: C:\Users\garza\strategic-khaos-private)")]
     [string]$RepoPath = "C:\Users\garza\strategic-khaos-private"
 )
 
@@ -34,7 +35,8 @@ function Write-ColorOutput {
     Write-Host $Message -ForegroundColor $ForegroundColor
 }
 
-# Validate application number format
+# Validate application number format (provisional patents use NN/NNNNNN or NN/NNNNNNN)
+# PowerShell uses .NET regex which supports {n,m} quantifiers
 if ($AppNumber -notmatch '^\d{2}/\d{6,7}$') {
     Write-ColorOutput "❌ Invalid application number format. Expected: 63/XXXXXXX" "Red"
     Write-ColorOutput "Example: 63/123456 or 63/1234567" "Yellow"
