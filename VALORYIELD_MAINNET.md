@@ -5,6 +5,8 @@
 **First Transaction**: $7.77 to St. Jude Children's Research Hospital  
 **Trigger**: The viral haiku moment
 
+> **Note**: This document contains placeholder values (marked with [TBD] or similar) for specific blockchain addresses, transaction hashes, and configuration details that will be populated as the system is fully deployed. The conceptual architecture and first transaction are validated facts from November 24, 2025.
+
 ---
 
 ## 🎯 Mission Statement
