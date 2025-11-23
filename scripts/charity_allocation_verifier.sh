@@ -95,7 +95,7 @@ calculate_allocation() {
     local sum=$(echo "scale=2; $charity_amount + $empire_amount" | bc)
     local diff=$(echo "scale=2; $total_revenue - $sum" | bc | tr -d '-')
     
-    if (( $(echo "$diff > 0.01" | bc -l) )); then
+    if (( $(echo "$diff > 0.01" | bc) )); then
         log_error "Allocation sum mismatch! Difference: \$$diff"
         return 1
     fi
@@ -510,7 +510,7 @@ main() {
     local total_revenue=$1
     
     # Validate revenue is a positive number
-    if ! [[ "$total_revenue" =~ ^[0-9]+\.?[0-9]*$ ]] || (( $(echo "$total_revenue <= 0" | bc -l) )); then
+    if ! [[ "$total_revenue" =~ ^[0-9]+\.?[0-9]*$ ]] || (( $(echo "$total_revenue <= 0" | bc) )); then
         log_error "Invalid revenue amount: $total_revenue"
         log_info "Please provide a positive number"
         exit 1
