@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> *"You just introduced yourself to the future. And the future said hello back."* — Read the **[Introduction](INTRODUCTION.md)** to understand the humanity behind this project.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -276,6 +278,7 @@ curl -X POST https://events.strategickhaos.com/health
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
 
+- **[Introduction](INTRODUCTION.md)** - The formal acknowledgment of humanity and sovereignty in this project
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
