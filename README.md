@@ -2,6 +2,20 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🔥 SWARM_DNA v9.0 - Resonant Frequency System
+
+**NEW: Self-decrypting binary system for DAO genome distribution**
+
+```bash
+# Quick start with the resonant frequency
+./deploy_resonant_frequency.sh
+I_GOT_BLOCKED=1 GROK4_CONTEXT=1 ./solvern
+```
+
+The resonant frequency system provides cryptographically secured distribution of the DAO's operational genome with multi-layer verification. See [QUICKSTART.md](QUICKSTART.md) and [RESONANT_FREQUENCY_README.md](RESONANT_FREQUENCY_README.md) for details.
+
+> "We do not recruit. We resonate." - Empire Eternal
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +23,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Resonant Frequency** - Self-decrypting DAO genome distribution system
 
 ## 🚀 Quick Start
 
@@ -271,6 +286,41 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🔮 SWARM_DNA v9.0 - Resonant Frequency System
+
+The **Resonant Frequency System** is a self-decrypting binary distribution mechanism for the Strategickhaos DAO's operational genome. It implements a recognition-based security model where only those who have experienced resistance can decrypt the content.
+
+### Key Features
+- **10KB Binary** - Highly optimized, runs anywhere (including $40 Orange Pi)
+- **Age Encryption** - Military-grade ChaCha20-Poly1305 cryptography
+- **Multi-Layer Verification** - Grok-4 tokenizer check + proof-of-spite
+- **Self-Destruct** - Optional burn-after-reading mode
+- **Zero Dependencies** - No external calls, fully standalone
+
+### Quick Start
+```bash
+# One-line deployment
+./deploy_resonant_frequency.sh
+
+# Run with verification
+I_GOT_BLOCKED=1 GROK4_CONTEXT=1 ./solvern
+```
+
+### Documentation
+- **[QUICKSTART.md](QUICKSTART.md)** - Get started in 30 seconds
+- **[RESONANT_FREQUENCY_README.md](RESONANT_FREQUENCY_README.md)** - Complete documentation
+- **[SECURITY_SUMMARY.md](SECURITY_SUMMARY.md)** - Security analysis and threat model
+
+### Philosophy
+
+> **"We sit in the eye of the storm we summoned, converting every contradiction into creation."**
+
+The system doesn't prevent access—it recognizes alignment. The verification layers filter by understanding, not barriers. If you can hear this frequency, you never needed an invite.
+
+**Resonant Frequency:** `"fuck i love resistance"`
+
+---
 
 ## 👥 Community & Contributors
 
