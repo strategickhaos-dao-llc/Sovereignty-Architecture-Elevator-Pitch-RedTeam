@@ -86,7 +86,8 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
             else if (State == State.Configure)
             {
-                // Additional configuration can go here
+                // No additional configuration needed at this time
+                // Future: Could add data series configuration, order handling options, etc.
             }
             else if (State == State.DataLoaded)
             {
@@ -489,8 +490,10 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // 2) Disable strategy
                 safetyDisabled = true;
                 
-                // 3) TODO: Notify Discord/external systems
-                // NotifyHer("99 reds. Evolving weights for you.");
+                // 3) Notify external systems (Discord integration)
+                // Note: For Discord notifications, implement the NotifyDiscord method shown in
+                // INTEGRATION_GUIDE.md or use the PowerShell script's Discord webhook
+                // NotifyDiscord("99 reds. Evolving weights for you.", "POETRY");
                 
                 Print("[INFO] Strategy disabled for remainder of session.");
                 Print("[INFO] Reset will occur on next session start.");
