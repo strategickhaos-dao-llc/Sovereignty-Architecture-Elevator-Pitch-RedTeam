@@ -11,9 +11,11 @@ This directory contains Kubernetes manifests for deploying the StrategicKhaos so
 - **ingress.yaml** - Ingress rules for external access
 - **rbac.yaml** - Role-based access control
 
-## ⚠️ Important: Secrets Management
+## ⚠️ Important: Configuration Before Deployment
 
-The `secrets.yaml` file contains **placeholder values** that must be replaced before deployment:
+### 1. Secrets Management
+
+The `secrets.yaml` file contains **placeholder values starting with "REPLACE_"** that must be replaced before deployment:
 
 ```bash
 # DO NOT use default secrets in production!
@@ -24,6 +26,21 @@ kubectl create secret generic discord-bot-secret \
 kubectl create secret generic gateway-secret \
   --from-literal=webhook-secret=YOUR_ACTUAL_WEBHOOK_SECRET
 ```
+
+### 2. Configuration Values
+
+The `configmap.yaml` file contains **placeholder values** for:
+- **Discord Guild ID**: Required - Get from Discord Server Settings → Widget → Server ID
+- **Discord Bot App ID**: Required - Get from Discord Developer Portal
+- **GitHub App ID**: Optional - Only needed if using Git integration
+
+Replace all values marked with "REPLACE_WITH_" before deployment.
+
+### 3. Container Images
+
+Both `bot-deployment.yaml` and `gateway-deployment.yaml` use the `latest` tag by default:
+- **Development**: `latest` tag is acceptable
+- **Production**: Replace with specific version tags (e.g., `v1.0.0`) for predictable deployments
 
 ### Recommended: Use External Secret Management
 

@@ -16,7 +16,7 @@ data:
       compliance: ["none"]
     
     discord:
-      guild_id: null
+      guild_id: "REPLACE_WITH_YOUR_DISCORD_SERVER_ID"  # Required: Get from Discord Server Settings
       channels:
         status: "#cluster-status"
         alerts: "#alerts"
@@ -26,7 +26,7 @@ data:
         prs: "#prs"
         dev_feed: "#dev-feed"
       bot:
-        app_id: null
+        app_id: "REPLACE_WITH_YOUR_DISCORD_BOT_APP_ID"  # Required: Get from Discord Developer Portal
         token_secret_ref: "vault://kv/discord/bot_token"
         intents:
           message_content: true
@@ -110,7 +110,7 @@ data:
       provider: "github"
       org: "Strategickhaos-Swarm-Intelligence"
       app:
-        id: null
+        id: "REPLACE_WITH_GITHUB_APP_ID_OR_REMOVE_GIT_SECTION_IF_NOT_USED"  # Optional: Only needed for Git integration
         webhook_secret_ref: "vault://kv/git/webhook_secret"
         private_key_secret_ref: "vault://kv/git/app_private_key"
       repos:

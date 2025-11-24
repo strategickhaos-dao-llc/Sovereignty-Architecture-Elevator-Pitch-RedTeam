@@ -34,8 +34,9 @@ spec:
         fsGroup: 10001
       containers:
         - name: gateway
+          # Note: Replace 'latest' with specific version tag for production (e.g., v1.0.0)
           image: ghcr.io/strategickhaos-swarm-intelligence/event-gateway:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always  # Use Always with 'latest' tag, IfNotPresent with version tags
           ports:
             - name: http
               containerPort: 8080
