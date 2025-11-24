@@ -272,6 +272,12 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🧬 Philosophy & Mental Models
+
+Understanding systems at their most fundamental level — whether silicon or carbon-based:
+
+- **[DNA as a C++ Compiler](DNA_CPP_COMPILER_ANALOGY.md)** - Why the ribosome is the most accurate model for understanding protein synthesis as low-level systems programming
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
