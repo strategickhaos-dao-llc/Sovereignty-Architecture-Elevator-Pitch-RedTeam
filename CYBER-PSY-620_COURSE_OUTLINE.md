@@ -20,7 +20,7 @@ This course is structured around the six levels of Bloom's Taxonomy, ensuring pr
 
 | Bloom Level     | Objective                                                                                               |
 |------------------|---------------------------------------------------------------------------------------------------------|
-| **1-Remembering**    | Define and recognize 20+ influence design patterns (e.g., Cialdini, reactance theory, dark patterns, memetic hazards)   |
+| **1-Remembering**    | Define and recognize 30+ influence design patterns (e.g., Cialdini, reactance theory, dark patterns, memetic hazards)   |
 | **2-Understanding**   | Explain the neurological and social mechanisms behind each pattern using primary sources (e.g., Brehm 1966, Cialdini 1984–2024)               |
 | **3-Applying**        | Deploy controlled, consent-based versions of each pattern in sandboxed training environments (CTF-style influence lab)           |
 | **4-Analyzing**      | Reverse-engineer real-world influence campaigns (2020–2025 case files, redacted) and map them to the POSITIVE_PSYCHOLOGY_CODEX defense matrix |

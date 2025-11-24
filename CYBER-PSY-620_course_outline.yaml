@@ -21,7 +21,7 @@ description: |
 # Bloom's Taxonomy Mapping
 bloom_taxonomy_mapping:
   - level: 1-Remembering
-    objective: Define and recognize 20+ influence design patterns (Cialdini, reactance theory, dark patterns, memetic hazards)
+    objective: Define and recognize 30+ influence design patterns (Cialdini, reactance theory, dark patterns, memetic hazards)
     
   - level: 2-Understanding
     objective: Explain the neurological and social mechanisms behind each pattern using primary sources (e.g., Brehm 1966, Cialdini 1984–2024)
