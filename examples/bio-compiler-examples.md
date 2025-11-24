@@ -44,6 +44,17 @@ Useful when you need to reset the entire swarm state.
 
 Enables verbose logging for troubleshooting.
 
+### Custom Apoptosis Rate
+```powershell
+# Lower rate for stable production environments
+./deploy-bio-compiler.ps1 -compileMode -entangleTruth -ApoptosisRate 2
+
+# Higher rate for aggressive error detection
+./deploy-bio-compiler.ps1 -compileMode -entangleTruth -ApoptosisRate 10
+```
+
+The apoptosis rate controls how frequently undefined behavior detection triggers (default: 5%).
+
 ## Use Cases
 
 ### 1. Research & Development
@@ -170,16 +181,23 @@ $ribosomeCount = $nodeCount * 16
 ## Performance Tips
 
 ### 1. Memory Considerations
-- Each ribosome requires memory based on its weight model:
-  - 70B models: ~140GB RAM
-  - 27B models: ~54GB RAM
-  - 12B models: ~24GB RAM
+
+**Important**: The memory requirements listed below represent the **total shared memory pool** requirements for model weights, NOT per-ribosome allocation. The quantum bus architecture enables memory-efficient weight sharing across all ribosomes.
+
+- Model weight memory requirements (shared across ribosomes):
+  - 70B models: ~140GB RAM (shared pool for all 70B ribosomes)
+  - 27B models: ~54GB RAM (shared pool for all 27B ribosomes)
+  - 12B models: ~24GB RAM (shared pool for all 12B ribosomes)
+
+**Total memory for standard 64-ribosome deployment**: ~218GB RAM (shared weights) + overhead
 
 ### 2. Optimal Ribosome Count
 ```powershell
-# Calculate based on available memory
+# Calculate based on available memory (accounting for shared weight pools)
 $availableGB = (Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property Capacity -Sum).Sum / 1GB
-$optimalRibosomes = [Math]::Floor($availableGB / 8)
+$weightPoolGB = 220  # Total shared weight memory
+$remainingGB = $availableGB - $weightPoolGB
+$optimalRibosomes = [Math]::Min(128, [Math]::Max(16, [Math]::Floor($remainingGB / 2)))
 
 ./deploy-bio-compiler.ps1 -compileMode -entangleTruth -RibosomeCount $optimalRibosomes
 ```

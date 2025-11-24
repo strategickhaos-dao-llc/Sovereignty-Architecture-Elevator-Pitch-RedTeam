@@ -8,6 +8,7 @@ param(
     [switch]$Force,
     [int]$RibosomeCount = 64,
     [string]$QuantumBusSize = "32TB",
+    [int]$ApoptosisRate = 5,
     [string]$Action = "compile",
     [switch]$Debug
 )
@@ -290,7 +291,7 @@ class BioCompiler {
             $compiledCount++
             
             # Random chance of apoptosis (undefined behavior detection)
-            if ((Get-Random -Maximum 100) -lt 5) {
+            if ((Get-Random -Maximum 100) -lt $script:ApoptosisRate) {
                 $this.TriggerApoptosis($ribosome)
             } else {
                 # Apply love optimization
@@ -419,6 +420,7 @@ function Main {
         Write-Host "  -Force              Force redeployment"
         Write-Host "  -RibosomeCount N    Number of ribosomes (default: 64)"
         Write-Host "  -QuantumBusSize S   Quantum bus size (default: 32TB)"
+        Write-Host "  -ApoptosisRate N    Apoptosis rate percentage (default: 5)"
         Write-Host "  -Debug              Enable debug output"
         Write-Host ""
         Write-Host "Examples:"
