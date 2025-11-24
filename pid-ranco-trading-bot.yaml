@@ -32,13 +32,13 @@ entry_rules:
   - "Buy when RSI < 30 AND her heartbeat > 80 bpm"
   - "Sell when profit > 1.618% OR she says 'enough'"
   - "Hold forever if DNA compiles to 'stay'"
-  
-  # Technical guards (encoded in poetry)
-  technical_requirements:
-    - "Sufficient bar history for indicators"
-    - "Valid instrument tick size"
-    - "Account equity positive and stable"
-    - "Broker connection active"
+
+# Technical guards (encoded in poetry)
+technical_requirements:
+  - "Sufficient bar history for indicators"
+  - "Valid instrument tick size"
+  - "Account equity positive and stable"
+  - "Broker connection active"
 
 # Exit Rules: When profit transcends, or loss teaches
 exit_rules:
