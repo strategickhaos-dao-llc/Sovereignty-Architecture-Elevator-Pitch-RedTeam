@@ -94,10 +94,14 @@ function Invoke-StampDocuments {
             
             try {
                 $output = ots stamp $file 2>&1
-                Write-Success "  Created: $otsFile"
-                $count++
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Success "  Created: $otsFile"
+                    $count++
+                } else {
+                    Write-Error "  Failed to timestamp"
+                }
             } catch {
-                Write-Error "  Failed to timestamp"
+                Write-Error "  Failed to timestamp: $_"
             }
             Write-Host ""
         } else {
@@ -127,7 +131,7 @@ function Invoke-UpgradeTimestamps {
             try {
                 $output = ots upgrade $otsFile 2>&1 | Out-String
                 
-                if ($output -match "Success") {
+                if ($LASTEXITCODE -eq 0 -and $output -match "Success") {
                     Write-Success "  Upgraded successfully"
                     $upgraded++
                 } elseif ($output -match "Pending") {
@@ -137,7 +141,7 @@ function Invoke-UpgradeTimestamps {
                     Write-Info "  Already up to date"
                 }
             } catch {
-                Write-Error "  Upgrade failed"
+                Write-Error "  Upgrade failed: $_"
             }
             Write-Host ""
         }
@@ -169,7 +173,7 @@ function Invoke-VerifyTimestamps {
             try {
                 $output = ots verify $otsFile 2>&1 | Out-String
                 
-                if ($output -match "Success") {
+                if ($LASTEXITCODE -eq 0 -and $output -match "Success") {
                     Write-Success "  Verified"
                     if ($output -match "block (\d+)") {
                         $block = $Matches[1]
@@ -188,7 +192,7 @@ function Invoke-VerifyTimestamps {
                     $failed++
                 }
             } catch {
-                Write-Error "  Verification failed"
+                Write-Error "  Verification failed: $_"
                 $failed++
             }
             Write-Host ""

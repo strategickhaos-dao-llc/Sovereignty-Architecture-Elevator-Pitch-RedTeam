@@ -203,6 +203,8 @@ This Sovereign Manifest v1.0 represents the current operational framework for th
 ```
 Document: SOVEREIGN_MANIFEST_v1.0.md
 SHA256: b027929c3a591a8dd2296e272b602caa1d2d96cd61a1380f4e948fc0cdf494bf
+Note: This hash is of the current document state. After final review and any
+      edits, recompute with: sha256sum SOVEREIGN_MANIFEST_v1.0.md
 Bitcoin Timestamp: [To be added after OpenTimestamps submission]
 Block Height: [To be added after confirmation]
 OpenTimestamps Proof: SOVEREIGN_MANIFEST_v1.0.md.ots (to be created)

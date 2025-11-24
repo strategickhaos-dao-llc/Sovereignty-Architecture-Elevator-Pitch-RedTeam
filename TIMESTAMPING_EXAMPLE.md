@@ -5,7 +5,8 @@ This document shows an example of the OpenTimestamps workflow for the Sovereign 
 ## Document Information
 
 **File:** `SOVEREIGN_MANIFEST_v1.0.md`  
-**SHA256 Hash:** `b027929c3a591a8dd2296e272b602caa1d2d96cd61a1380f4e948fc0cdf494bf`
+**SHA256 Hash:** `b027929c3a591a8dd2296e272b602caa1d2d96cd61a1380f4e948fc0cdf494bf`  
+**Note:** This is an example hash. Actual hash will depend on final manifest content.
 
 ## Step-by-Step Process
 

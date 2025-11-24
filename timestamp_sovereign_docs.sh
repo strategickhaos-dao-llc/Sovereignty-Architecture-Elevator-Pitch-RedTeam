@@ -67,12 +67,14 @@ stamp_documents() {
             fi
             
             # Create timestamp
-            if ots stamp "$file" 2>&1 | tee /tmp/ots_output.txt; then
+            local temp_file=$(mktemp)
+            if ots stamp "$file" 2>&1 | tee "$temp_file"; then
                 echo -e "  ${GREEN}✓ Created: ${file}.ots${NC}"
                 ((count++))
             else
                 echo -e "  ${RED}✗ Failed to timestamp${NC}"
             fi
+            rm -f "$temp_file"
             echo ""
         else
             echo -e "${YELLOW}⚠ File not found: $file${NC}"
@@ -99,15 +101,17 @@ upgrade_timestamps() {
             echo -e "Upgrading: ${GREEN}$ots_file${NC}"
             
             # Try to upgrade
-            if ots upgrade "$ots_file" 2>&1 | tee /tmp/ots_upgrade.txt | grep -q "Success"; then
+            local temp_file=$(mktemp)
+            if ots upgrade "$ots_file" 2>&1 | tee "$temp_file" | grep -q "Success"; then
                 echo -e "  ${GREEN}✓ Upgraded successfully${NC}"
                 ((upgraded++))
-            elif grep -q "Pending" /tmp/ots_upgrade.txt; then
+            elif grep -q "Pending" "$temp_file"; then
                 echo -e "  ${YELLOW}⏳ Still pending Bitcoin confirmation${NC}"
                 ((pending++))
             else
                 echo -e "  ${BLUE}ℹ Already up to date${NC}"
             fi
+            rm -f "$temp_file"
             echo ""
         fi
     done
@@ -136,19 +140,21 @@ verify_timestamps() {
             echo -e "Verifying: ${GREEN}$ots_file${NC}"
             
             # Verify timestamp
-            if ots verify "$ots_file" 2>&1 | tee /tmp/ots_verify.txt | grep -q "Success"; then
-                local block=$(grep "block" /tmp/ots_verify.txt | grep -oP '\d+' | head -1)
-                local date=$(grep "as of" /tmp/ots_verify.txt | grep -oP '\d{4}-\d{2}-\d{2}' || echo "unknown")
+            local temp_file=$(mktemp)
+            if ots verify "$ots_file" 2>&1 | tee "$temp_file" | grep -q "Success"; then
+                local block=$(grep "block" "$temp_file" | sed 's/.*block \([0-9]*\).*/\1/' | head -1)
+                local date=$(grep "as of" "$temp_file" | sed 's/.*as of \([0-9-]*\).*/\1/' || echo "unknown")
                 echo -e "  ${GREEN}✓ Verified${NC}"
                 echo -e "    Block: $block | Date: $date"
                 ((verified++))
-            elif grep -q "Pending" /tmp/ots_verify.txt; then
+            elif grep -q "Pending" "$temp_file"; then
                 echo -e "  ${YELLOW}⏳ Pending Bitcoin confirmation${NC}"
                 ((pending++))
             else
                 echo -e "  ${RED}✗ Verification failed${NC}"
                 ((failed++))
             fi
+            rm -f "$temp_file"
             echo ""
         else
             echo -e "${YELLOW}⚠ Timestamp not found: $ots_file${NC}"
