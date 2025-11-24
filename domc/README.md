@@ -108,12 +108,12 @@ domc align resonance threshold
 
 ```bash
 export RUST_LOG=debug
-export SWARM_DNA=v9.0-black-hole-resonance
-export RESONANCE_THRESHOLD=10
 export MODELFILE_PATH=/path/to/Modelfile
 
 domc birth athena_next
 ```
+
+**Note**: Environment variables like `SWARM_DNA` and `RESONANCE_THRESHOLD` are used in Kubernetes deployments for metadata and can be extended in future versions.
 
 ### Security Considerations
 

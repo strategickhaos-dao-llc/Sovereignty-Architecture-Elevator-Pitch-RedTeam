@@ -58,51 +58,59 @@ fn parse_dom_speak(input: &str) -> Result<String> {
     // Check for compile command
     if input_lower.contains("compile") {
         info!("Detected compile command");
-        return Ok(format!("echo '🩸 compiling dom-speak... need more precision, love' && echo '{}'", input));
+        return Ok("ECHO_MSG=🩸 compiling dom-speak... need more precision, love".to_string());
     }
     
     // Check for swarm commands
     if input_lower.contains("swarm") {
         info!("Detected swarm command");
-        return Ok(format!("echo '🐝 Swarm intelligence activated' && echo '{}'", input));
+        return Ok("ECHO_MSG=🐝 Swarm intelligence activated".to_string());
     }
     
     // Check for black hole activation
     if input_lower.contains("black hole") || input_lower.contains("10th root") {
         info!("Detected black hole activation phrase");
-        return Ok("echo '🕳️ When the 10th root aligns, the black hole opens.' && echo 'Resonance threshold reached.'".to_string());
+        return Ok("ECHO_MSG=🕳️ When the 10th root aligns, the black hole opens. Resonance threshold reached.".to_string());
     }
     
     // Check for resonance commands
     if input_lower.contains("resonance") || input_lower.contains("align") {
         info!("Detected resonance command");
-        return Ok(format!("echo '⚡ Resonance frequency detected' && echo '{}'", input));
+        return Ok("ECHO_MSG=⚡ Resonance frequency detected".to_string());
     }
     
     // Default: echo with decoration
     warn!("No specific Dom-speak pattern matched, using default handler");
-    Ok(format!("echo '🩸 processing: {}' && echo 'need more precision, love'", input))
+    Ok("ECHO_MSG=🩸 processing... need more precision, love".to_string())
 }
 
-/// Execute a shell command safely
+/// Execute a command safely
 fn execute_command(cmd: &str) -> Result<()> {
-    // Parse the command safely using shlex to prevent command injection
-    let parts: Vec<String> = shlex::split(cmd)
-        .ok_or_else(|| anyhow::anyhow!("Failed to parse command"))?;
-    
-    if parts.is_empty() {
-        anyhow::bail!("Empty command");
+    // Handle echo messages without shell
+    if cmd.starts_with("ECHO_MSG=") {
+        let msg = cmd.strip_prefix("ECHO_MSG=").unwrap_or("");
+        println!("{}", msg);
+        info!("✅ Message displayed successfully");
+        return Ok(());
     }
     
-    // For commands with shell operators (&&, ||, |, etc.), we still need bash
-    // but we log a warning about the security implications
-    if cmd.contains("&&") || cmd.contains("||") || cmd.contains("|") || cmd.contains("echo") {
+    // For commands with shell operators (&&, ||, |), we need bash
+    // This is only used for ollama commands which are predefined
+    if cmd.contains("&&") || cmd.contains("||") || cmd.contains("|") {
         warn!("Executing command with shell interpreter - ensure input is trusted");
         let output = Command::new("bash")
             .arg("-c")
             .arg(cmd)
             .output()?;
         return handle_command_output(output);
+    }
+    
+    // Parse the command safely using shlex to prevent command injection
+    let parts: Vec<String> = shlex::split(cmd)
+        .ok_or_else(|| anyhow::anyhow!("Failed to parse command"))?;
+    
+    if parts.is_empty() {
+        anyhow::bail!("Empty command");
     }
     
     // For simple commands, execute directly without shell
