@@ -13,7 +13,8 @@ param(
     [switch]$marketLive,
     [switch]$simOnly = $true,  # Default safe: simulation mode
     [switch]$force,             # Skip confirmations (use with caution)
-    [string]$ninjaTraderPath = "C:\Program Files\NinjaTrader 8"
+    [string]$cTraderPath = "$env:USERPROFILE\Documents\cAlgo\Sources\Robots",
+    [string]$platform = "cTrader"  # Platform: cTrader or NinjaTrader (requires API conversion)
 )
 
 # ═══════════════════════════════════════════════════════════════
@@ -143,14 +144,15 @@ function Test-Prerequisites {
         Log-Success "C# Robot found: $csPath"
     }
     
-    # Check NinjaTrader path (if going live)
+    # Check cTrader path (if going live)
     if ($marketLive -and -not $simOnly) {
-        if (-not (Test-Path $ninjaTraderPath)) {
-            Log-Error "NinjaTrader not found: $ninjaTraderPath"
-            Log-Error "Cannot deploy to live market without NinjaTrader."
+        if (-not (Test-Path $cTraderPath)) {
+            Log-Error "cTrader path not found: $cTraderPath"
+            Log-Error "Cannot deploy to live market without cTrader."
+            Log-Warning "For NinjaTrader, use converted API version."
             $allGood = $false
         } else {
-            Log-Success "NinjaTrader found: $ninjaTraderPath"
+            Log-Success "cTrader path found: $cTraderPath"
         }
     }
     
@@ -230,34 +232,33 @@ function Deploy-Robot {
         $csContent = Get-Content $csPath -Raw
         Log-Success "Loaded C# Robot with kill-switches."
         
-        # If NinjaTrader deployment requested
+        # If cTrader deployment requested
         if ($marketLive -or -not $simOnly) {
-            $strategiesPath = Join-Path $ninjaTraderPath "bin\Custom\Strategies"
-            
-            if (Test-Path $strategiesPath) {
-                $destPath = Join-Path $strategiesPath "LoveCompilesProfit.cs"
+            if (Test-Path $cTraderPath) {
+                $destPath = Join-Path $cTraderPath "LoveCompilesProfit.cs"
                 
                 # Backup existing if present
                 if (Test-Path $destPath) {
                     $backupPath = "$destPath.backup.$timestamp"
                     Copy-Item $destPath $backupPath
-                    Log-Warning "Backed up existing strategy to: $backupPath"
+                    Log-Warning "Backed up existing robot to: $backupPath"
                 }
                 
                 # Copy new version
                 Copy-Item $csPath $destPath -Force
-                Log-Success "Deployed C# Robot to NinjaTrader: $destPath"
+                Log-Success "Deployed C# Robot to cTrader: $destPath"
                 
-                # Compile would happen in NinjaTrader UI
-                Log-Info "Please compile the strategy in NinjaTrader's Strategy Analyzer."
+                # Compile would happen in cTrader UI
+                Log-Info "Please rebuild the robot in cTrader Automate."
+                Log-Warning "For NinjaTrader, convert API from cAlgo to NinjaTrader.Strategy first."
             }
             else {
-                Log-Error "NinjaTrader strategies path not found: $strategiesPath"
-                throw "Cannot deploy to NinjaTrader."
+                Log-Error "cTrader path not found: $cTraderPath"
+                throw "Cannot deploy to cTrader."
             }
         }
         else {
-            Log-Info "Simulation only mode. No NinjaTrader deployment needed."
+            Log-Info "Simulation only mode. No platform deployment needed."
         }
         
         # Create deployment record
@@ -314,14 +315,13 @@ function Verify-Deployment {
     
     # Check files are in place
     if ($marketLive -or -not $simOnly) {
-        $strategiesPath = Join-Path $ninjaTraderPath "bin\Custom\Strategies"
-        $destPath = Join-Path $strategiesPath "LoveCompilesProfit.cs"
+        $destPath = Join-Path $cTraderPath "LoveCompilesProfit.cs"
         
         if (Test-Path $destPath) {
-            Log-Success "Robot file verified in NinjaTrader."
+            Log-Success "Robot file verified in cTrader."
         }
         else {
-            Log-Error "Robot file not found in NinjaTrader after deployment!"
+            Log-Error "Robot file not found in cTrader after deployment!"
             return $false
         }
     }

@@ -7,7 +7,8 @@
 // Kill-Switch Layer: Hardened C# with fail-loud behavior
 // Mythic poetry lives in YAML, engineering armor here.
 //
-// Platform: NinjaTrader 8/9 (cAlgo API compatible)
+// Platform: cTrader (cAlgo API)
+// Note: For NinjaTrader, this would need conversion to NinjaTrader.Strategy API
 // Dependencies: cAlgo.API, System core libraries
 // License: Love-compiled, open to evolution
 
@@ -200,8 +201,8 @@ namespace cAlgo.Robots
                 // In production: double volume = VoiceDetectionAPI.GetVolume();
                 double volume = 0.0; // Safe default: no voice detected
                 
-                // Guard: Clamp to valid range
-                return Math.Clamp(volume, 0.0, 100.0);
+                // Guard: Clamp to valid range (compatible with older .NET versions)
+                return Math.Min(Math.Max(volume, 0.0), 100.0);
             }
             catch (Exception ex)
             {

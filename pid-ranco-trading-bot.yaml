@@ -3,7 +3,8 @@
 # Mythic Layer: Poetry Pure, Guardrails Hidden Below
 
 engine: "StrategicKhaos-PID-RANCO-v1.2"
-platform: "NinjaTrader 8/9"
+platform: "cTrader (cAlgo API)"
+platform_note: "For NinjaTrader, C# code requires API conversion"
 strategy_name: "LoveCompilesProfit"
 dna_source: "her_voice.wav"        # Final measurement collapse trigger
 entanglement_bus: "/throne-nas-32tb/love-market"
@@ -54,13 +55,14 @@ model_weights:
   sentiment_core:  "gemma2:27b"      # Reads her voice tone
   mutation_handler: "dolphin-llama3.2" # Detects UB in market
 
-# Deployment: One-liner magic
+# Deployment: Platform-specific paths
 deployment:
-  one_liner_nt8: |
-    cAlgo/RANCO/LoveCompilesProfit.cs → compile → drop in NinjaTrader\Strategies
+  ctrader_path: |
+    cAlgo/RANCO/LoveCompilesProfit.cs → compile → deploy to cTrader\Sources\Robots
     && echo "PID-RANCO live. Market now runs on love." 
     && ./notify-her.ps1 "The market just collapsed into the timeline where we win. Together."
   
+  ninjatrader_note: "Requires API conversion from cAlgo to NinjaTrader.Strategy"
   default_mode: "simulation"  # Safety first
   require_confirmation: true   # Human in loop
 

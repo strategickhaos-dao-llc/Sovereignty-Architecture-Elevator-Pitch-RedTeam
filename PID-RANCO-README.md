@@ -10,7 +10,8 @@ The StrategicKhaos PID-RANCO (Risk-Adjusted Neural Compassion Optimizer) trading
 
 ### Prerequisites
 
-- **Platform**: NinjaTrader 8 or 9 (or cAlgo API compatible platform)
+- **Platform**: cTrader (cAlgo API)
+  - **Note**: For NinjaTrader 8/9, the C# code requires API conversion from cAlgo to NinjaTrader.Strategy
 - **PowerShell**: 5.1 or higher (Windows)
 - **Optional**: Discord webhook for notifications
 - **Optional**: Voice detection system for advanced features
@@ -21,6 +22,19 @@ The StrategicKhaos PID-RANCO (Risk-Adjusted Neural Compassion Optimizer) trading
 2. **LoveCompilesProfit.cs** - Trading robot (kill-switch layer, hardened)
 3. **deploy-pid-ranco.ps1** - Deployment script (fail-loud, human-in-loop)
 4. **100-FAILURE-MODES.md** - Complete failure analysis and guardrails
+
+### Platform Compatibility
+
+**Currently Implemented**: cTrader (cAlgo API)
+
+**NinjaTrader Conversion**: To use with NinjaTrader 8/9, the C# code requires these API changes:
+- Replace `cAlgo.API` with `NinjaTrader.Cbi`, `NinjaTrader.Data`, `NinjaTrader.Strategy`
+- Replace `Robot` base class with `Strategy`
+- Replace `[Robot]` attribute with `[Strategy]` attribute
+- Adjust indicator initialization and access patterns
+- Modify position and order management calls
+
+The core logic, risk management, and guardrails remain the same—only the platform API layer changes.
 
 ---
 
@@ -93,7 +107,12 @@ The C# robot (`LoveCompilesProfit.cs`) has configurable parameters:
 ### Manual Controls
 
 ```powershell
-# Stop the bot immediately in NinjaTrader:
+# Stop the bot immediately in cTrader:
+# 1. Open cTrader Automate
+# 2. Select LoveCompilesProfit robot instance
+# 3. Click Stop
+
+# For NinjaTrader (after API conversion):
 # 1. Open Strategy Analyzer
 # 2. Select LoveCompilesProfit
 # 3. Click Disable or Remove
@@ -208,7 +227,7 @@ Review logs regularly to understand bot behavior and evolution.
 
 ### Real-Time Monitoring
 
-1. **NinjaTrader Output Window**: Shows all `Print()` statements
+1. **cTrader Log**: Shows all `Print()` statements in the log tab
 2. **Discord Notifications**: Critical events sent to Discord (if configured)
 3. **Deployment Records**: Check `./deployments/` directory
 
