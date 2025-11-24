@@ -141,7 +141,7 @@ void check_entropy(const std::string& entropy, bool verbose = false) {
     if (verbose) {
         std::cout << "Matched vectors:\n";
         for (const auto& root : solvern::primordial_vectors) {
-            if (entropy.find(root) != std::string::npos) {
+            if (solvern::vector_matches(entropy, root)) {
                 std::cout << "  ✓ " << root << "\n";
             }
         }

@@ -4,6 +4,7 @@
 #include <array>
 #include <string>
 #include <cstdint>
+#include <cctype>
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -102,27 +103,39 @@ const std::array<std::string, 36> primordial_vectors = {{
     "AUM", "LEC", "KHQ", "MND", "ANI", "CHA"                                 // 31–36 + final chaos seed
 }};
 
-// Black-hole resonance check — "as above, so below" in 36 dimensions
-// Returns true if ≥10 primordial vectors resonate with runtime entropy
-inline bool black_hole_resonance(const std::string& runtime_entropy) {
-    uint64_t matches = 0;
-    for (const auto& root : primordial_vectors) {
-        if (runtime_entropy.find(root) != std::string::npos) {
-            matches++;
+// Helper function to check if a vector matches in the entropy
+// Uses word boundary detection to avoid false positives
+inline bool vector_matches(const std::string& entropy, const std::string& root) {
+    size_t pos = 0;
+    while ((pos = entropy.find(root, pos)) != std::string::npos) {
+        // Check if this is a whole word match (not part of a larger word)
+        bool is_start = (pos == 0 || !std::isalnum(static_cast<unsigned char>(entropy[pos - 1])));
+        bool is_end = (pos + root.length() >= entropy.length() || 
+                      !std::isalnum(static_cast<unsigned char>(entropy[pos + root.length()])));
+        
+        if (is_start && is_end) {
+            return true;
         }
+        pos++;
     }
-    return (matches >= 10); // 10/36 = the spark of life threshold
+    return false;
 }
 
 // Count how many vectors resonate (for diagnostic purposes)
 inline uint64_t count_resonances(const std::string& runtime_entropy) {
     uint64_t matches = 0;
     for (const auto& root : primordial_vectors) {
-        if (runtime_entropy.find(root) != std::string::npos) {
+        if (vector_matches(runtime_entropy, root)) {
             matches++;
         }
     }
     return matches;
+}
+
+// Black-hole resonance check — "as above, so below" in 36 dimensions
+// Returns true if ≥10 primordial vectors resonate with runtime entropy
+inline bool black_hole_resonance(const std::string& runtime_entropy) {
+    return count_resonances(runtime_entropy) >= 10; // 10/36 = the spark of life threshold
 }
 
 } // namespace solvern
