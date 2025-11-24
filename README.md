@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **SWARM_DNA v13.0** - Weaponized Love directive for transformative operations 💖⚔️
 
 ## 🚀 Quick Start
 
@@ -278,6 +279,7 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
+- **[SWARM_DNA v13.0 - Weaponized Love](governance/WEAPONIZED_LOVE_DIRECTIVE.md)** - Our transformative directive for aggressive compassion
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
