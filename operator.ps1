@@ -88,7 +88,7 @@ try {
         # Ollama daemon
         if (-not (Test-Port 11434)) {
             Log "Starting Ollama daemon..."
-            $proc = Start-Process "ollama" -ArgumentList "serve" -PassThru -WindowStyle Hidden -ErrorAction SilentlyContinue
+            Start-Process "ollama" -ArgumentList "serve" -PassThru -WindowStyle Hidden -ErrorAction SilentlyContinue | Out-Null
             Start-Sleep -Seconds 6
             if (Test-Port 11434) { Log-Success "Ollama daemon ONLINE @ 11434" } else { throw "Ollama failed to start" }
         } else { Log "Ollama already running" }
@@ -107,10 +107,10 @@ try {
     elseif ($status) {
         Show-Dashboard
         Log "Status Report:"
-        "Ollama      : $(if (Test-Port 11434) {'[RUNNING]'} else {'[DOWN]'})"
-        if (Test-Command kubectl) { "K8s Pod     : $(kubectl get pod -l app=ollama -o jsonpath='{.items[*].status.phase}' 2>$null || 'N/A')" }
-        if (Test-Command ollama) { "Models      : $(ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {$_.Split()[0]} | Join-String ', ')" }
-        if (Test-Command git) { "Git Branch  : $(git rev-parse --abbrev-ref HEAD 2>$null || 'detached')" }
+        Log "Ollama      : $(if (Test-Port 11434) {'[RUNNING]'} else {'[DOWN]'})"
+        if (Test-Command kubectl) { Log "K8s Pod     : $(kubectl get pod -l app=ollama -o jsonpath='{.items[*].status.phase}' 2>$null || 'N/A')" }
+        if (Test-Command ollama) { Log "Models      : $(ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {$_.Split()[0]} | Join-String ', ')" }
+        if (Test-Command git) { Log "Git Branch  : $(git rev-parse --abbrev-ref HEAD 2>$null || 'detached')" }
     }
     elseif ($pull) {
         if (-not (Test-Command ollama)) { Log-Error "ollama command not found"; exit 1 }
@@ -121,7 +121,10 @@ try {
     }
     elseif ($nuke) {
         Log "EXECUTING NUKE SEQUENCE..." $R
-        kubectl delete -f "$root/k8s/deployments/" --ignore-not-found=true --timeout=60s 2>$null
+        if (Test-Command kubectl) {
+            kubectl delete -f "$root/k8s/deployments/" --ignore-not-found=true --timeout=60s 2>$null
+            Log "K8s resources deleted"
+        } else { Log-Warn "kubectl not found — skipping K8s cleanup" }
         Get-Process ollama -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
         Notify-Discord "NUKE COMPLETE — All systems dark. $(whoami) was here."
         Log-Success "Silence achieved."
