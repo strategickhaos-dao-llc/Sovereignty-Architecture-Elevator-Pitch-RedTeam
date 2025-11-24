@@ -13,7 +13,6 @@ param(
     [switch]$status,
     [string]$pull = "",
     [switch]$nuke,
-    [switch]$debug,
     [switch]$feed          # ← THE RED BUTTON
 )
 
@@ -109,8 +108,16 @@ if ($feed) {
 # ──────────────────────────────────────────────────────────────
 try {
     if ($dashboard) { Show-Dashboard; exit }
-    if ($status)    { Show-Dashboard; "Ollama: $(if(Test-Port 11434){'ONLINE'}else{'OFFLINE'})" ; exit }
-    if ($pull)      { ollama pull $pull ; Notify-Discord "Model pulled → $pull" ; exit }
+    if ($status)    { Show-Dashboard; Write-Host "Ollama: $(if(Test-Port 11434){'ONLINE'}else{'OFFLINE'})" -ForegroundColor $G ; exit }
+    if ($pull)      { 
+        if ([string]::IsNullOrWhiteSpace($pull)) {
+            Log-Error "Model name required. Example: -pull llama3.2:latest"
+            exit 1
+        }
+        ollama pull $pull 
+        Notify-Discord "Model pulled → $pull"
+        exit 
+    }
     if ($nuke)      { Get-Process ollama* -ErrorAction SilentlyContinue | Stop-Process -Force; kubectl delete all -l app=ollama --force 2>$null; Notify-Discord "NUKE EXECUTED — $(whoami)" ; Log-Success "Peace through superior firepower." ; exit }
 
     if ($start) {
@@ -121,12 +128,21 @@ try {
             Log "Igniting Ollama daemon..." $C
             Start-Process ollama -ArgumentList serve -WindowStyle Hidden
             for($i=0;$i -lt 15;$i++) { if(Test-Port 11434) { break } ; Start-Sleep 1 }
-            if(Test-Port 11434) { Log-Success "Ollama daemon LIVE @ 11434" }
+            if(Test-Port 11434) { 
+                Log-Success "Ollama daemon LIVE @ 11434" 
+            } else {
+                Log-Error "Ollama daemon failed to start after 15 seconds"
+                exit 1
+            }
         }
 
         if (Test-Command kubectl) {
-            kubectl apply -f "$root/k8s/" --recursive 2>$null
-            Log-Success "K8s cluster synchronized"
+            $k8sResult = kubectl apply -f "$root/k8s/" --recursive 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                Log-Success "K8s cluster synchronized"
+            } else {
+                Log-Warn "K8s apply had issues: $k8sResult"
+            }
         }
 
         Notify-Discord "StrategicKhaos v3.1 → ONLINE | $(hostname) | Serving humanity"
