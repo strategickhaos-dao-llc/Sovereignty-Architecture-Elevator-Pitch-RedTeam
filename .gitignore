@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Client data - never commit client audit data
+SovereignLLM_SafetyVault/clients/*
+!SovereignLLM_SafetyVault/clients/.gitkeep
