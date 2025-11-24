@@ -185,7 +185,8 @@ function Stop-XaiService {
     
     try {
         # Find and kill Python processes running xai_service.py
-        # Note: Use name matching as CommandLine property may not be available on all platforms
+        # Note: This stops ALL Python processes as CommandLine property is not cross-platform
+        # TODO: Use PID file for more precise process management in production
         $processes = Get-Process -Name "python*" -ErrorAction SilentlyContinue
         
         if ($processes) {

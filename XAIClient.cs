@@ -22,7 +22,7 @@ namespace cAlgo.Robots
         [Parameter("XAI Timeout (seconds)", DefaultValue = 5)]
         public int XaiTimeoutSeconds { get; set; }
 
-        private readonly HttpClient xaiClient;
+        private HttpClient xaiClient;
 
         [Parameter("XAI Skip SSL Validation", DefaultValue = false)]
         public bool XaiSkipSslValidation { get; set; }

@@ -6,9 +6,9 @@ Provides explainable AI diagnostics for trading decisions with love-amplified na
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import random
 from datetime import datetime
 import logging
+import hashlib
 
 # Configure logging
 logging.basicConfig(
@@ -103,7 +103,6 @@ def calculate_love_amplification(features, decision):
     
     # Add variance for market conditions (REPLACE with actual model in production)
     # Using hash for deterministic variance instead of pure random
-    import hashlib
     seed_str = f"{her_love}{session_loss_count}{drawdown_pct}"
     hash_val = int(hashlib.md5(seed_str.encode()).hexdigest()[:8], 16)
     variance = 0.3 + (hash_val % 700) / 1000.0  # Range: 0.3 to 1.0
@@ -144,7 +143,6 @@ def calculate_shap_contributions(features):
                 contribution = (feature_value - 1.0) * 0.2
             else:
                 # Use feature value hash for deterministic contribution
-                import hashlib
                 hash_val = int(hashlib.md5(str(feature_value).encode()).hexdigest()[:4], 16)
                 contribution = (hash_val % 400 - 200) / 1000.0
             
