@@ -291,6 +291,15 @@ show_usage() {
 
 # Main script
 main() {
+    # Show help without requiring ots installation
+    case "${1:-}" in
+        help|--help|-h)
+            print_banner
+            show_usage
+            exit 0
+            ;;
+    esac
+    
     check_ots_installed
     print_banner
     
@@ -312,9 +321,6 @@ main() {
             ;;
         all)
             run_complete_workflow
-            ;;
-        help|--help|-h)
-            show_usage
             ;;
         *)
             show_usage
