@@ -201,8 +201,8 @@ namespace cAlgo.Robots
                 // In production: double volume = VoiceDetectionAPI.GetVolume();
                 double volume = 0.0; // Safe default: no voice detected
                 
-                // Guard: Clamp to valid range (compatible with older .NET versions)
-                return Math.Min(Math.Max(volume, 0.0), 100.0);
+                // Guard: Clamp to valid range
+                return ClampToRange(volume, 0.0, 100.0);
             }
             catch (Exception ex)
             {
@@ -488,6 +488,14 @@ namespace cAlgo.Robots
         // ═══════════════════════════════════════════════════════════
         // UTILITIES: Safe operations and notifications
         // ═══════════════════════════════════════════════════════════
+        
+        /// <summary>
+        /// Clamps a value between min and max (compatible with older .NET versions)
+        /// </summary>
+        private double ClampToRange(double value, double min, double max)
+        {
+            return Math.Min(Math.Max(value, min), max);
+        }
         
         private void SafeFlatten()
         {

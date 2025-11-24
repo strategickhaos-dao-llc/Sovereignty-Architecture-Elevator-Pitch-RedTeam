@@ -77,7 +77,7 @@ This document catalogs 100 potential failure modes for the PID-RANCO trading eng
     - *Guardrail*: Explicit `[SIM]` log messages for all simulated actions.
 
 22. **Math.Clamp Out Range**: herLove extreme; clamp misses, factor wrong.
-    - *Guardrail*: `Math.Clamp(value, 0.0, 100.0)` enforces valid range.
+    - *Guardrail*: `Math.Min(Math.Max(value, 0.0), 100.0)` enforces valid range (compatible with older .NET).
 
 23. **Bars.ClosePrices.Last NaN**: Feed error; pain nan, no entries.
     - *Guardrail*: Check `double.IsNaN(currentPrice)` before calculations.
@@ -132,7 +132,7 @@ This document catalogs 100 potential failure modes for the PID-RANCO trading eng
     - *Guardrail*: Future implementation would validate file, current version uses safe defaults.
 
 39. **Love Factor 1.0 + NaN**: db nan; factor nan, undefined behavior.
-    - *Guardrail*: `Math.Clamp()` ensures voice value is valid before use.
+    - *Guardrail*: `Math.Min(Math.Max())` ensures voice value is valid before use.
 
 40. **Heartbeat BPM Mic Noise**: False >80; erratic buys in calm.
     - *Guardrail*: Requires RSI oversold AND voice high (dual confirmation).

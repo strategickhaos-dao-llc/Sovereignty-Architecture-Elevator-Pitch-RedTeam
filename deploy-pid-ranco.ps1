@@ -149,11 +149,16 @@ function Test-Prerequisites {
         if (-not (Test-Path $cTraderPath)) {
             Log-Error "cTrader path not found: $cTraderPath"
             Log-Error "Cannot deploy to live market without cTrader."
-            Log-Warning "For NinjaTrader, use converted API version."
             $allGood = $false
         } else {
             Log-Success "cTrader path found: $cTraderPath"
         }
+    }
+    
+    # Platform compatibility note
+    if ($platform -eq "NinjaTrader") {
+        Log-Warning "NinjaTrader deployment requires API conversion from cAlgo to NinjaTrader.Strategy."
+        Log-Info "See PID-RANCO-README.md for conversion requirements."
     }
     
     # Check environment variables
@@ -250,7 +255,6 @@ function Deploy-Robot {
                 
                 # Compile would happen in cTrader UI
                 Log-Info "Please rebuild the robot in cTrader Automate."
-                Log-Warning "For NinjaTrader, convert API from cAlgo to NinjaTrader.Strategy first."
             }
             else {
                 Log-Error "cTrader path not found: $cTraderPath"
