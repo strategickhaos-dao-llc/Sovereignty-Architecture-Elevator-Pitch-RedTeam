@@ -126,13 +126,8 @@ function Notify-Discord {
 # ═══════════════════════════════════════════════════════════════
 
 function Test-GitRepository {
-    try {
-        $null = git rev-parse --git-dir 2>&1
-        return $true
-    }
-    catch {
-        return $false
-    }
+    $null = git rev-parse --git-dir 2>&1
+    return ($LASTEXITCODE -eq 0)
 }
 
 function Test-GPGAvailable {
@@ -216,7 +211,14 @@ function Invoke-SovereignAnchor {
         Log-Info "Phase 4: Staging files in Git..."
         
         git add $manifest 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to stage manifest file: $manifest"
+        }
+        
         git add $ots 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to stage OTS file: $ots"
+        }
         
         # Check if files are staged
         $status = git status --porcelain 2>&1
@@ -239,13 +241,17 @@ function Invoke-SovereignAnchor {
         
         if ($useGPG) {
             Log-Info "Attempting GPG-signed commit..."
-            try {
-                git commit -S -m $commitMessage 2>&1 | Out-Null
+            git commit -S -m $commitMessage 2>&1 | Out-Null
+            
+            if ($LASTEXITCODE -eq 0) {
                 Log-Success "Committed with GPG signature"
             }
-            catch {
+            else {
                 Log-Warn "GPG signing failed, falling back to unsigned commit"
                 git commit -m $commitMessage 2>&1 | Out-Null
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Failed to commit changes (unsigned fallback also failed)"
+                }
                 Log-Success "Committed (unsigned)"
             }
         }
@@ -258,6 +264,9 @@ function Invoke-SovereignAnchor {
             }
             
             git commit -m $commitMessage 2>&1 | Out-Null
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to commit changes"
+            }
             Log-Success "Committed (unsigned)"
         }
         
@@ -268,11 +277,16 @@ function Invoke-SovereignAnchor {
         $existingRemote = git remote get-url origin 2>&1
         if ($LASTEXITCODE -eq 0) {
             git remote remove origin 2>&1 | Out-Null
-            Log-Info "Removed existing remote"
+            if ($LASTEXITCODE -eq 0) {
+                Log-Info "Removed existing remote"
+            }
         }
         
         # Add new remote
         git remote add origin $remoteUrl 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to add remote: $remoteUrl"
+        }
         Log-Success "Remote 'origin' configured"
         
         # Phase 7: Ensure Main Branch
@@ -281,6 +295,9 @@ function Invoke-SovereignAnchor {
         $currentBranch = git branch --show-current 2>&1
         if ($currentBranch -ne "main") {
             git branch -M main 2>&1 | Out-Null
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to rename branch to 'main'"
+            }
             Log-Success "Renamed branch to 'main'"
         }
         else {
@@ -290,15 +307,13 @@ function Invoke-SovereignAnchor {
         # Phase 8: Push to GitHub
         Log-Info "Phase 8: Pushing to GitHub..."
         
-        try {
-            git push -u origin main 2>&1 | Out-Null
-            Log-Success "Pushed to GitHub - MANIFEST ANCHORED ETERNAL"
-        }
-        catch {
-            Log-Error "Push failed: $($_.Exception.Message)"
+        git push -u origin main 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            Log-Error "Push failed (exit code: $LASTEXITCODE)"
             Log-Warn "You may need to configure authentication (GitHub token or SSH key)"
             throw "Push operation failed"
         }
+        Log-Success "Pushed to GitHub - MANIFEST ANCHORED ETERNAL"
         
         # Phase 9: NAS Backup (Optional)
         Log-Info "Phase 9: Backing up to NAS..."

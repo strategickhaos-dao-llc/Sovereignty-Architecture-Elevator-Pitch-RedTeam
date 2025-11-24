@@ -1,0 +1,18 @@
+File MetaInfo:
+  Version:   1.0
+  Algorithm: SHA256
+  Hash: 45e9a8f6c4f2d3b1e8c7a6d9f5e4b3c2d1a9b8c7d6e5f4a3b2c1d9e8f7
+  Timestamp: 2025-11-24 07:40:00 UTC
+
+Note: This is an example file format.
+Actual .ots files are binary and contain:
+- SHA-256 hash of the source document
+- Merkle tree path to Bitcoin block
+- Bitcoin block header information
+- Cryptographic proofs
+
+To generate real .ots files:
+$ ots stamp SOVEREIGN_MANIFEST_v1.0.md
+
+To verify:
+$ ots verify SOVEREIGN_MANIFEST_v1.0.md.ots -f SOVEREIGN_MANIFEST_v1.0.md
