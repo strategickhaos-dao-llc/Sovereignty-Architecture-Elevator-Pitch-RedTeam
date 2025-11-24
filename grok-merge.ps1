@@ -31,10 +31,19 @@ function Notify-Discord($msg) {
             Log-Warn "Discord webhook not configured or disabled"
             return 
         }
+        # Validate Discord webhook URL to prevent SSRF
+        if ($webhook.url -notmatch '^https://(discord\.com|discordapp\.com)/api/webhooks/') {
+            Log-Error "Invalid Discord webhook URL format"
+            return
+        }
         $payload = @{ content = $msg } | ConvertTo-Json -Compress
         Invoke-RestMethod -Uri $webhook.url -Method Post -Body $payload -ContentType "application/json" -TimeoutSec 10 | Out-Null
         Log-Success "Discord notification sent"
-    } catch { Log-Error "Discord notify failed: $($_.Exception.Message)" }
+    } catch [System.Management.Automation.RuntimeException] {
+        Log-Error "Invalid JSON format in webhook_config.json"
+    } catch { 
+        Log-Error "Discord notify failed: $($_.Exception.Message)" 
+    }
 }
 
 # === MERGE EXECUTION WITH ARMOR ===
@@ -78,7 +87,8 @@ Flux flows through everything—protocols, models, hardware, ops. In Strategickh
     Log-Success "Codex merged to docs/flux-convergence-2025.md"
 
     if (Test-Command git) {
-        git add . 2>$null
+        # Add specific files to avoid accidentally committing sensitive data
+        git add "$docsPath/flux-convergence-2025.md" "discord/webhook_config.json" "grok-merge.ps1" "$docsPath/GROK_MERGE_README.md" 2>$null
         git commit -m "Grok-Merge Flux Codex v1.1 | Entangled analysis: Skeleton to flesh" 2>$null
         git push 2>$null
         if ($LASTEXITCODE -eq 0) { Log-Success "Git pushed to origin" } else { Log-Warn "Git push failed—local commit only" }
