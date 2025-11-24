@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-11-24T00:45:21.278020",
+  "state": "shutdown",
+  "task_history_count": 2,
+  "agent_health": {
+    "athena": {
+      "status": "active",
+      "last_heartbeat": "2025-11-24T00:45:21.277138",
+      "tasks_completed": 0,
+      "success_rate": 1.0
+    },
+    "prometheus": {
+      "status": "active",
+      "last_heartbeat": "2025-11-24T00:45:21.277780",
+      "tasks_completed": 2,
+      "success_rate": 1.0
+    },
+    "sentinel": {
+      "status": "active",
+      "last_heartbeat": "2025-11-24T00:45:21.277852",
+      "tasks_completed": 2,
+      "success_rate": 1.0
+    },
+    "oracle": {
+      "status": "active",
+      "last_heartbeat": "2025-11-24T00:45:21.277208",
+      "tasks_completed": 0,
+      "success_rate": 1.0
+    },
+    "scribe": {
+      "status": "active",
+      "last_heartbeat": "2025-11-24T00:45:21.277802",
+      "tasks_completed": 2,
+      "success_rate": 1.0
+    }
+  },
+  "dna_version": "1.0.0"
+}
