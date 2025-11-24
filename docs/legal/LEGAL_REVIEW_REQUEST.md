@@ -329,17 +329,20 @@ For legal advice, consult qualified counsel licensed to practice law in Wyoming 
 
 Copy the disclaimer above into **every legal document** created for this project.
 
-Store the canonical version in: `templates/standard_disclaimer.txt`
+The canonical version is stored in: `templates/standard_disclaimer.txt` (root directory)
+
+Reference it in other documents with: `> See templates/standard_disclaimer.txt for the canonical version of this disclaimer.`
 
 ---
 
 ## 🔗 Related Resources
 
 ### Internal References
-- **Entity Documents**: `SF0068_Wyoming_2022.pdf`
-- **Legal Research**: `legal/wyoming_sf0068/`
-- **Standard Disclaimer**: `templates/standard_disclaimer.txt`
+- **Entity Documents**: `SF0068_Wyoming_2022.pdf` (root directory)
+- **Legal Research**: `legal/wyoming_sf0068/` (root directory)
+- **Standard Disclaimer**: `templates/standard_disclaimer.txt` (root directory)
 - **Operating Agreement**: [Location of DAO LLC operating agreement]
+- **This Document**: `docs/legal/LEGAL_REVIEW_REQUEST.md`
 
 ### External Resources
 - Wyoming Secretary of State: https://sos.wyo.gov/Business/

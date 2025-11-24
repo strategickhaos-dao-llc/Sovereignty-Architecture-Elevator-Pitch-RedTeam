@@ -23,10 +23,10 @@ Hour 25:  Kick off work with first commit
 
 ### Zero Friction Requirements
 
-- ✅ Agreement template (ready below)
+- ✅ Agreement template (ready below - **REQUIRES LEGAL REVIEW BEFORE USE**)
 - ✅ Invoice template (ready below)
 - ✅ Payment processor setup (see options)
-- ✅ Legal review completed (see `docs/legal/LEGAL_REVIEW_REQUEST.md`)
+- ⚠️ Legal review MUST be completed before using agreement (see `docs/legal/LEGAL_REVIEW_REQUEST.md`)
 
 ---
 
@@ -236,6 +236,8 @@ Date: _______________
 ---
 
 **INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED**
+
+> See `templates/standard_disclaimer.txt` for the canonical version of this disclaimer.
 
 This document is an internal draft prepared by Strategickhaos DAO LLC for planning purposes only. This document does not constitute legal advice and should not be relied upon for legal or compliance decisions.
 

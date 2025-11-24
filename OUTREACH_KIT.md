@@ -15,7 +15,8 @@ We built Sovereignty Architecture: Discord-first infrastructure control with AI 
 
 Think: Slash commands that deploy your stack, GitLens that posts to Discord, and a contradiction engine that turns product tensions into revenue opportunities.
 
-GitHub Developer Program badge verified ✓
+GitHub Developer Program member verified ✓
+(Badge visible on org profile: github.com/Strategickhaos-Swarm-Intelligence)
 Open source core, sovereign infrastructure
 Real AI assistance (not chatbot theater)
 
@@ -54,7 +55,7 @@ Sovereignty Architecture is a Discord-native DevOps control plane that puts oper
 • 100% sovereign infrastructure (you own the code, data, and destiny)
 
 **Verified Capabilities:**
-✓ GitHub Developer Program member
+✓ GitHub Developer Program member (badge on org profile)
 ✓ Open source core with MIT license
 ✓ Production-ready Kubernetes deployments
 ✓ Enterprise security with RBAC and Vault integration
