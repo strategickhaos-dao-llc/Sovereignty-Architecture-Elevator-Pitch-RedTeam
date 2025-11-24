@@ -13,17 +13,17 @@ Requested by: Domenic Garza / Strategickhaos DAO LLC
 Scope of review:
 - 501(c)(3) formation mechanics and timeline (state filings, EIN, IRS determination)  
 - Donor tax-deductibility requirements and acceptable donor acknowledgements  
-- Review grant_agreement.md and donor_acknowledgement.md templates  
+- Review grant_agreement.md and donor_acknowledgement.md templates (to be created)  
 - Confirm permissibility of routing corporate donations through DAO/LLC → charity  
 - Multisig guidance and fiduciary signers  
 - AML/KYC and state charitable solicitation obligations (crypto + large donors)  
-- Review public announcement wording (DRAFT_ANNOUNCEMENT.md)  
-- Confirm LEGAL_SHIELD.md is safe to publish or needs edits  
+- Review public announcement wording (DRAFT_ANNOUNCEMENT.md - to be created)  
+- Confirm LEGAL_SHIELD.md is safe to publish or needs edits (if created)  
 - Recommend any additional entity/trust to shield donors  
 - Full risk list + mitigation timeline
 
-Files to review:
-docs/CHARITABLE_COMMITMENT.md | docs/legal/* | docs/templates/* | docs/release/DRAFT_ANNOUNCEMENT.md
+Files to review (current and pending):
+docs/CHARITABLE_COMMITMENT.md (pending) | docs/legal/* | docs/templates/* | docs/release/DRAFT_ANNOUNCEMENT.md (pending)
 
 Deliverables requested:
 - Edits to templates & public copy  

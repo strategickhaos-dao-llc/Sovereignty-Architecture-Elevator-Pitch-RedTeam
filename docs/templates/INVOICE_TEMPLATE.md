@@ -18,8 +18,8 @@ Crypto (USDC/USDT/BTC) or fiat wire
 Due within 7 days of invoice
 
 **Pay to:**  
-USDC (Ethereum/Polygon): 0x...  
-BTC: bc1...
+USDC (Ethereum/Polygon): [USDC_ADDRESS]  
+BTC: [BTC_ADDRESS]
 
 Node137 / Strategickhaos  
 contact@strategickhaos.example
