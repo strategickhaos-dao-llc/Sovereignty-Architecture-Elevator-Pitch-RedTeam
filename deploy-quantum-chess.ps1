@@ -7,7 +7,7 @@ param(
     [switch]$loveMode,
     [switch]$entangleHer,
     [string]$yamlPath = "quantum-chess-engine.yaml",
-    [string]$nasPath = "/throne-nas-32tb",
+    [string]$nasPath = "/mnt/throne-nas-32tb",
     [int]$basePort = 11434
 )
 
@@ -122,18 +122,20 @@ function Parse-YamlConfig {
 
 function Get-PieceForSquare {
     param(
-        [int]$file,     # 1-8
-        [char]$rank,    # a-h
+        [int]$rank,     # 1-8 (row number)
+        [char]$file,    # a-h (column letter)
         [hashtable]$config
     )
     
     # Standard chess starting position
-    $rankNum = [int][char]$rank - [int][char]'a' + 1
+    # Chess notation: file (a-h) + rank (1-8), e.g., e4
+    # rank 1 = white back rank, rank 8 = black back rank
+    $fileNum = [int][char]$file - [int][char]'a' + 1  # a=1, b=2, ..., h=8
     
     # Determine piece based on starting position
-    if ($file -eq 1) {
-        # White back rank
-        switch ($rankNum) {
+    if ($rank -eq 1) {
+        # White back rank (rank 1)
+        switch ($fileNum) {
             1 { return "white_rook" }
             2 { return "white_knight" }
             3 { return "white_bishop" }
@@ -143,13 +145,13 @@ function Get-PieceForSquare {
             7 { return "white_knight" }
             8 { return "white_rook" }
         }
-    } elseif ($file -eq 2) {
+    } elseif ($rank -eq 2) {
         return "white_pawn"
-    } elseif ($file -eq 7) {
+    } elseif ($rank -eq 7) {
         return "black_pawn"
-    } elseif ($file -eq 8) {
-        # Black back rank
-        switch ($rankNum) {
+    } elseif ($rank -eq 8) {
+        # Black back rank (rank 8)
+        switch ($fileNum) {
             1 { return "black_rook" }
             2 { return "black_knight" }
             3 { return "black_bishop" }
@@ -166,15 +168,15 @@ function Get-PieceForSquare {
 
 function Deploy-QuantumSquare {
     param(
-        [int]$file,
-        [char]$rank,
+        [int]$rank,     # 1-8 (row)
+        [char]$file,    # a-h (column)
         [hashtable]$config,
         [string]$nasPath,
         [int]$basePort
     )
     
-    $square = "$rank$file"
-    $piece = Get-PieceForSquare -file $file -rank $rank -config $config
+    $square = "$file$rank"  # Chess notation: file + rank (e.g., e4)
+    $piece = Get-PieceForSquare -rank $rank -file $file -config $config
     
     if (-not $piece) {
         Log-Info "Square $square is empty (not deploying container)"
@@ -188,7 +190,10 @@ function Deploy-QuantumSquare {
     }
     
     $containerName = "square-$square"
-    $port = $basePort + ($file * 10 + ([int][char]$rank - [int][char]'a'))
+    # Calculate unique port: basePort + (rank-1)*8 + (file_num-1)
+    # This gives ports 11434-11497 for ranks 1-8, files a-h
+    $fileNum = [int][char]$file - [int][char]'a'  # 0-7
+    $port = $basePort + (($rank - 1) * 8) + $fileNum
     
     Log-Info "Deploying $piece ($model) on $square, port $port..."
     
@@ -319,9 +324,9 @@ try {
     $deployed = 0
     $files = @('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
     
-    for ($file = 1; $file -le 8; $file++) {
-        foreach ($rank in $files) {
-            $result = Deploy-QuantumSquare -file $file -rank $rank -config $config -nasPath $nasPath -basePort $basePort
+    for ($rank = 1; $rank -le 8; $rank++) {
+        foreach ($file in $files) {
+            $result = Deploy-QuantumSquare -rank $rank -file $file -config $config -nasPath $nasPath -basePort $basePort
             if ($result) {
                 $deployed++
             }

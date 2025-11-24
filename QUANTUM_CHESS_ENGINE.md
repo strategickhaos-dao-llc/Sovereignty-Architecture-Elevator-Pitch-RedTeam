@@ -12,7 +12,7 @@ This isn't just code—it's a throne-NAS manifesto where every move is an infere
 
 ### Quantum Entanglement Architecture
 - **64 Containers**: One Docker container per chess square
-- **32 TB NAS Bus**: Shared volume (`/dev/throne-nas-32tb`) connecting all pieces
+- **32 TB NAS Bus**: Shared volume (`/mnt/throne-nas-32tb`) connecting all pieces
 - **BGA-Style Soldering**: Metaphorical ball-grid-array connection of every square to the bus
 - **Random Seed 42**: Identical seed across all containers for synchronized "quantum" behavior
 
@@ -102,10 +102,10 @@ docker ps | grep square-
 docker logs square-e4
 
 # Monitor heartbeat
-cat /throne-nas-32tb/heartbeat.txt
+cat /mnt/throne-nas-32tb/heartbeat.txt
 
-# Test piece API
-curl http://localhost:11444/api/tags
+# Test piece API (square a1 = port 11434)
+curl http://localhost:11434/api/tags
 ```
 
 ## 📋 Configuration Reference
@@ -118,7 +118,7 @@ The YAML configuration defines the entire quantum chess architecture:
 engine: "StrategicKhaos-Quantum-Chess-v1.1"
 board_size: 8x8
 total_squares: 64
-entanglement_bus: "/dev/throne-nas-32tb"
+entanglement_bus: "/mnt/throne-nas-32tb"
 
 piece_llm:
   # Defines which LLM model runs for each piece type
@@ -148,7 +148,7 @@ war_simulation_mode:
 | `-loveMode` | Switch | Infuses emotional intents into all piece system prompts |
 | `-entangleHer` | Switch | Sends Discord notification upon deployment |
 | `-yamlPath` | String | Path to YAML config (default: `quantum-chess-engine.yaml`) |
-| `-nasPath` | String | Path to shared NAS mount (default: `/throne-nas-32tb`) |
+| `-nasPath` | String | Path to shared NAS mount (default: `/mnt/throne-nas-32tb`) |
 | `-basePort` | Int | Starting port for containers (default: `11434`) |
 
 ## 🔧 Advanced Usage
@@ -203,8 +203,8 @@ sudo apt-get install sunshine
 
 ### Manual Move Execution
 ```bash
-# Send a move request to a piece
-curl -X POST http://localhost:11444/api/generate \
+# Send a move request to a piece (e2 = base port 11434 + rank 2-1=1 * 8 + file e=4 = 11446)
+curl -X POST http://localhost:11446/api/generate \
   -d '{
     "model": "llama3.2:3b",
     "prompt": "You are white pawn on e2. Board state: starting position. What is your move?",
@@ -244,11 +244,11 @@ docker exec square-e4 ollama pull llama3.2:3b
 ### NAS Mount Issues
 ```bash
 # Verify mount point exists
-ls -la /throne-nas-32tb
+ls -la /mnt/throne-nas-32tb
 
 # Create if missing
-sudo mkdir -p /throne-nas-32tb
-sudo chmod 777 /throne-nas-32tb
+sudo mkdir -p /mnt/throne-nas-32tb
+sudo chmod 777 /mnt/throne-nas-32tb
 
 # Or use local directory for testing
 pwsh deploy-quantum-chess.ps1 -nasPath "/tmp/quantum-bus-test"
@@ -284,7 +284,7 @@ pwsh deploy-quantum-chess.ps1 -basePort 12000
                            ▼
               ┌─────────────────────────┐
               │   QUANTUM BUS (32 TB)   │
-              │  /dev/throne-nas-32tb   │
+              │  /mnt/throne-nas-32tb   │
               │                         │
               │  • Shared volume        │
               │  • Entanglement data    │
