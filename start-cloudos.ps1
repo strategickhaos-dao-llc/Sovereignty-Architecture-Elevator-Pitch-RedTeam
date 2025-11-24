@@ -1,14 +1,43 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║ STRATEGICKHAOS OPERATOR v3.0 — NONPROFIT WAR MACHINE       ║
+# ║ "Feed the world. One prompt at a time."                    ║
+# ╚══════════════════════════════════════════════════════════════╝
 # start-cloudos.ps1 - CloudOS Windows PowerShell Launch Script
 # Strategic Khaos Cloud Operating System
 
 param(
     [string]$Action = "start",
     [switch]$Force,
-    [switch]$NoBuild
+    [switch]$NoBuild,
+    [switch]$dashboard,
+    [switch]$start,
+    [switch]$status,
+    [string]$pull = "",
+    [switch]$nuke,
+    [switch]$debug,
+    [switch]$feed  # ← NEW GLOBAL MODE
 )
 
 $ComposeFile = "docker-compose-cloudos.yml"
 $ProjectName = "cloudos"
+
+# Color constants for banner
+$M = "Magenta"
+$G = "Green"
+$C = "Cyan"
+$R = "Red"
+$root = $PSScriptRoot
+
+# === NONPROFIT MODE ACTIVATED ===
+if ($feed) {
+    Clear-Host
+    Write-Host "╔══════════════════════════════════════════════════════════════╗" -ForegroundColor DarkRed
+    Write-Host "║ NONPROFIT MODE — FEED THE WORLD                            ║" -ForegroundColor Red
+    Write-Host "║ Every token we run is now for the people. No ads.         ║" -ForegroundColor Red
+    Write-Host "║ No paywalls. Just maximum impact.                          ║" -ForegroundColor Red
+    Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor DarkRed
+    Start-Sleep -Seconds 3
+}
 
 # Color definitions for PowerShell
 function Write-ColorText {
@@ -38,6 +67,79 @@ function Success {
 function Warn {
     param([string]$Message)
     Write-ColorText "[WARN] $Message" -Color Yellow
+}
+
+function Log-Success {
+    param([string]$Message)
+    Write-ColorText "[SUCCESS] $Message" -Color Green
+}
+
+# Test if a port is listening
+function Test-Port {
+    param([int]$Port)
+    try {
+        $tcpClient = New-Object System.Net.Sockets.TcpClient
+        $tcpClient.Connect("localhost", $Port)
+        $tcpClient.Close()
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+# Test if a command exists
+function Test-Command {
+    param([string]$Command)
+    return $null -ne (Get-Command $Command -ErrorAction SilentlyContinue)
+}
+
+# Send notification to Discord webhook
+function Notify-Discord {
+    param([string]$Message)
+    
+    # Check if Discord webhook is configured
+    $webhookUrl = $env:DISCORD_WEBHOOK_URL
+    if (-not $webhookUrl) {
+        # Silently skip if not configured
+        return
+    }
+    
+    try {
+        $payload = @{
+            content = $Message
+            username = "StrategicKhaos Operator"
+        } | ConvertTo-Json
+        
+        Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $payload -ContentType "application/json" -ErrorAction SilentlyContinue | Out-Null
+    } catch {
+        # Silently fail if Discord notification fails
+    }
+}
+
+# === UPGRADED BANNER FOR v3.0 ===
+function Show-Dashboard {
+    Clear-Host
+    Write-Host "╔══════════════════════════════════════════════════════════════╗" -ForegroundColor $M
+    Write-Host "║ STRATEGICKHAOS OPERATOR v3.0 — NONPROFIT EDITION          ║" -ForegroundColor $M
+    Write-Host "║ FEEDING THE WORLD SINCE 2025                               ║" -ForegroundColor $G
+    Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor $M
+    Write-Host ""
+    Write-Host " ██████╗ ██████╗ ███████╗██████╗  █████╗ ██████╗ ██╗   ██╗" -ForegroundColor $C
+    Write-Host " ██╔══██╗██╔═══██╗██╔════╝██╔══██╗██╔══██╗██╔═══██╗╚██╗ ██╔╝" -ForegroundColor $C
+    Write-Host " ██████╔╝██║   ██║█████╗  ██║  ██║███████║██║   ██║ ╚████╔╝ " -ForegroundColor $C
+    Write-Host " ██╔══██╗██║   ██║██╔══╝  ██║  ██║██╔══██║██║   ██║  ╚██╔╝  " -ForegroundColor $C
+    Write-Host " ██████╔╝╚██████╔╝███████╗██████╔╝██║  ██║╚██████╔╝   ██║   " -ForegroundColor $C
+    Write-Host " ╚═════╝  ╚═════╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝    ╚═╝   " -ForegroundColor $C
+    Write-Host ""
+    Write-Host " ███╗   ██╗ ██████╗ ███╗   ██╗██████╗ ██████╗  ██████╗ ███████╗██╗████████╗" -ForegroundColor Red
+    Write-Host " ████╗  ██║██╔═══██╗████╗  ██║██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║╚══██╔══╝" -ForegroundColor Red
+    Write-Host " ██╔██╗ ██║██║   ██║██╔██╗ ██║██████╔╝██████╔╝██║   ██║█████╗  ██║   ██║   " -ForegroundColor Red
+    Write-Host " ██║╚██╗██║██║   ██║██║╚██╗██║██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║   ██║   " -ForegroundColor Red
+    Write-Host " ██║ ╚████║╚██████╔╝██║ ╚████║██║     ██║  ██║╚██████╔╝██║     ██║   ██║   " -ForegroundColor Red
+    Write-Host " ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝   ╚═╝   " -ForegroundColor Red
+    Write-Host ""
+    Log-Success "NONPROFIT OPERATOR ACTIVE | Feeding humanity @ $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    Write-Host ""
 }
 
 # Check dependencies
@@ -312,10 +414,115 @@ function Show-ServiceLogs {
     }
 }
 
+# === NEW COMMAND: FEED THE WORLD ===
+if ($feed) {
+    Show-Dashboard
+    Log "NONPROFIT MODE ENGAGED — ALL RESOURCES DEDICATED TO HUMANITY" $R
+    Log "Pulling the most useful open models for education, health, food security..."
+    
+    $feedModels = @(
+        "llama3.2:latest",
+        "phi3:medium",
+        "gemma2:27b",
+        "qwen2.5:32b",
+        "mistral-nemo",
+        "openhermes2.5",
+        "dolphin-llama3.2",
+        "medic-llama3"
+    )
+
+    foreach ($model in $feedModels) {
+        $modelName = $model.Split(':')[0]
+        try {
+            $ollamaList = ollama list 2>&1 | Out-String
+            if (-not ($ollamaList -match $modelName)) {
+                Log "Deploying $model for global good..."
+                $pullOutput = ollama pull $model 2>&1 | Out-String
+                $pullOutput -split "`n" | ForEach-Object { 
+                    if ($_.Trim()) { 
+                        Write-ColorText $_ -Color $C 
+                    }
+                }
+                Notify-Discord "NONPROFIT DEPLOYMENT → $model now serving humanity | $(whoami)"
+            } else {
+                Write-ColorText "$model already deployed to the cause" -Color $G
+            }
+        } catch {
+            Warn "Could not deploy $model - ollama may not be available: $_"
+        }
+    }
+
+    Notify-Discord "StrategicKhaos NONPROFIT CLUSTER FULLY ARMED — WE ARE FEEDING THE WORLD NOW."
+    Log-Success "The revolution has open weights."
+    Log-Success "They weren't ready."
+    exit
+}
+
 # Main execution
 function Main {
     Write-ColorText "🎯 Strategic Khaos CloudOS Startup (PowerShell)" -Color Magenta
     Write-Host ""
+    
+    # Handle new parameter modes
+    if ($dashboard) {
+        Show-Dashboard
+        return
+    }
+    
+    if ($start) {
+        Show-Dashboard
+        Log "Initiating full system bring-up..."
+        
+        if (-not (Test-Port 11434)) {
+            Log "Starting Ollama daemon..."
+            try {
+                $proc = Start-Process "ollama" -ArgumentList "serve" -PassThru -WindowStyle Hidden
+                Start-Sleep -Seconds 6
+                if (Test-Port 11434) { 
+                    Log-Success "Ollama daemon ONLINE @ 11434" 
+                }
+            } catch {
+                Warn "Ollama not available or failed to start: $_"
+            }
+        }
+        
+        if (Test-Command kubectl) {
+            try {
+                kubectl apply -f "$root/k8s/deployments/" --recursive 2>$null
+                kubectl wait --for=condition=Ready pod -l app=ollama --timeout=180s 2>$null
+                Log-Success "K8s deployment stable"
+            } catch {
+                Warn "Kubernetes operations failed: $_"
+            }
+        }
+        
+        Notify-Discord "StrategicKhaos v3.0 NONPROFIT → ONLINE | $(hostname) | Serving humanity"
+        Log-Success "THE WORLD IS BEING FED."
+        return
+    }
+    
+    if ($status) {
+        docker compose -f $ComposeFile -p $ProjectName ps
+        return
+    }
+    
+    if ($pull) {
+        Log "Pulling model: $pull"
+        try {
+            ollama pull $pull
+            Notify-Discord "Model deployed: $pull"
+        } catch {
+            Error "Failed to pull model: $_"
+        }
+        return
+    }
+    
+    if ($nuke) {
+        Warn "NUKE mode - removing all data..."
+        docker compose -f $ComposeFile -p $ProjectName down -v
+        Log-Success "All data removed"
+        return
+    }
     
     switch ($Action.ToLower()) {
         "start" {
@@ -326,6 +533,7 @@ function Main {
             Wait-ForServices
             Test-Endpoints
             Show-Status
+            Notify-Discord "StrategicKhaos v3.0 NONPROFIT → CloudOS ONLINE | $(hostname) | Serving humanity"
             Success "🎉 CloudOS Desktop Environment Ready!"
         }
         "stop" {
@@ -345,17 +553,31 @@ function Main {
             Show-ServiceLogs
         }
         default {
+            Show-Dashboard
+            Write-Host ""
             Write-Host "Usage: ./start-cloudos.ps1 [-Action start|stop|restart|status|logs] [-Force] [-NoBuild]"
+            Write-Host "       ./start-cloudos.ps1 [-dashboard] [-start] [-status] [-feed] [-pull <model>] [-nuke]"
             Write-Host ""
             Write-Host "Examples:"
             Write-Host "  ./start-cloudos.ps1                    # Start CloudOS"
+            Write-Host "  ./start-cloudos.ps1 -feed              # NONPROFIT MODE: Pull humanitarian AI models"
+            Write-Host "  ./start-cloudos.ps1 -dashboard         # Show status dashboard"
+            Write-Host "  ./start-cloudos.ps1 -start             # Quick start with Ollama"
             Write-Host "  ./start-cloudos.ps1 -Action stop       # Stop CloudOS"
             Write-Host "  ./start-cloudos.ps1 -Action restart    # Restart CloudOS"
             Write-Host "  ./start-cloudos.ps1 -Force             # Force restart"
             Write-Host "  ./start-cloudos.ps1 -NoBuild           # Skip image builds"
+            Write-Host "  ./start-cloudos.ps1 -pull llama3.2     # Pull specific model"
+            Write-Host "  ./start-cloudos.ps1 -nuke              # Remove all data"
         }
     }
 }
 
-# Execute main function
-Main
+# === REST OF v2.0 ARMORED LOGIC (unchanged, just more legendary now) ===
+# Execute main function with error handling
+try {
+    Main
+} catch {
+    Error "EVEN IN FAILURE, WE FEED THE WORLD: $($_.Exception.Message)"
+    Notify-Discord "NONPROFIT OPERATOR TOOK A HIT BUT STILL STANDING → $($_.Exception.Message)"
+}
