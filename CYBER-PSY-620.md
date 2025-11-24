@@ -180,10 +180,10 @@ Students will:
    - Ethical frameworks for influence in conflict
 
 ### Supplementary Reading
-- **Thaler & Sunstein** - *Nudge: Improving Decisions About Health, Wealth, and Happiness*
-- **Kahneman** - *Thinking, Fast and Slow*
-- **Newport, Cal** - *Digital Minimalism* (defensive perspective)
-- **Selected Case Studies** - Provided through secure course portal (2020-2025 campaigns)
+- **Thaler, Richard H. & Sunstein, Cass R.** *Nudge: Improving Decisions About Health, Wealth, and Happiness* (2008)
+- **Kahneman, Daniel.** *Thinking, Fast and Slow* (2011)
+- **Newport, Cal.** *Digital Minimalism: Choosing a Focused Life in a Noisy World* (2019)
+- **Selected Case Studies** - Provided through secure course portal (2020-2025 campaigns, redacted)
 
 ### Academic Journals (Selected Articles)
 - Journal of Experimental Social Psychology

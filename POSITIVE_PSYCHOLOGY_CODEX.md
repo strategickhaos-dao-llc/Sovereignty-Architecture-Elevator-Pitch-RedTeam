@@ -336,7 +336,11 @@ IF (forbidden_framing_detected):
 ```
 
 **CASE STUDY:**
-The "Streisand Effect" demonstrates reactance at scale. When Barbra Streisand attempted to suppress photographs of her home, the attempted censorship drew exponentially more attention than the original photos warranted. Defense: Recognize the pattern and evaluate content independently of suppression attempts.
+The "Streisand Effect" demonstrates reactance at scale. In 2003, when Barbra Streisand attempted to suppress aerial photographs of her Malibu residence through legal action, the attempted censorship drew exponentially more attention than the original photos warranted (Masnick, 2005; Jansen & Martin, 2015). The image, previously downloaded only 6 times, subsequently received over 420,000 views within one month. Defense: Recognize the pattern and evaluate content independently of suppression attempts.
+
+**References:**
+- Masnick, M. (2005). "Since When Is It Illegal To Just Mention A Trademark Online?" *Techdirt*.
+- Jansen, S. C., & Martin, B. (2015). "The Streisand Effect and Censorship Backfire." *International Journal of Communication*, 9, 656-671.
 
 ---
 
