@@ -1,0 +1,118 @@
+# Quantum Swarm Configuration
+# Configure your sovereign quantum processor
+
+swarm:
+  qubits: 16                      # Number of parallel agents (qubits)
+  model: "claude-3-opus"          # Base model for each qubit
+  coherence_time: 72              # Hours before re-centering needed
+  local_only: false               # Set to true for air-gapped operation
+
+quantum_loop:
+  think_temperature: 0.7          # Exploration vs exploitation (0.0-1.0)
+  consensus_threshold: 0.66       # 2/3 agreement required for consensus
+  sleep_min: 30                   # Minimum decoherence time (seconds)
+  sleep_max: 300                  # Maximum decoherence time (seconds)
+  max_iterations: null            # null = infinite loop
+
+obsidian:
+  vault_path: "./obsidian_vault"  # Path to your Obsidian vault
+  auto_commit: true               # Automatically git commit changes
+  link_format: "wikilink"         # [[note]] style links
+  create_backups: true            # Backup vault before swarm starts
+
+tools:
+  enabled:
+    - search                      # Vector search over vault
+    - terminal                    # Execute system commands
+    - file_write                  # Create/modify files
+    - obsidian_query              # Query the knowledge graph
+    - git_commit                  # Commit changes to git
+  
+  search:
+    provider: "local"             # local, qdrant, or pgvector
+    embedding_model: "BAAI/bge-small-en-v1.5"
+    top_k: 5
+  
+  terminal:
+    allowed_commands:             # Whitelist for security
+      - "ls"
+      - "grep"
+      - "find"
+      - "cat"
+    sandbox: true                 # Run in restricted environment
+
+error_correction:
+  consensus_agents: 3             # Number of reviewers per note
+  retry_attempts: 2               # Retries before human escalation
+  surface_code_enabled: true      # Enable surface code checks
+  min_incoming_links: 2           # Minimum backlinks required
+  min_outgoing_links: 2           # Minimum forward links required
+
+monitoring:
+  enabled: true
+  metrics_port: 9090              # Prometheus metrics endpoint
+  log_level: "INFO"               # DEBUG, INFO, WARNING, ERROR
+  dashboard_enabled: true
+  dashboard_port: 8080
+
+discord:
+  enabled: false                  # Enable Discord notifications
+  webhook_url: ""                 # Your Discord webhook URL
+  channels:
+    quantum: "#quantum-channel"   # Main quantum operations
+    alerts: "#quantum-alerts"     # Error corrections and alerts
+    metrics: "#quantum-metrics"   # Performance metrics
+
+llm:
+  # Claude configuration
+  claude:
+    api_key_env: "ANTHROPIC_API_KEY"
+    model: "claude-3-opus-20240229"
+    max_tokens: 4096
+  
+  # OpenAI configuration
+  openai:
+    api_key_env: "OPENAI_API_KEY"
+    model: "gpt-4-turbo-preview"
+    max_tokens: 4096
+  
+  # Local Ollama configuration
+  ollama:
+    base_url: "http://localhost:11434"
+    model: "llama3.1:70b"
+    
+  # Grok configuration
+  grok:
+    api_key_env: "XAI_API_KEY"
+    model: "grok-4-fast-reasoning"
+    max_tokens: 4096
+
+security:
+  air_gapped: false               # No internet after initial setup
+  encrypt_state: true             # Encrypt agent state files
+  require_human_approval:         # Operations requiring human approval
+    - "git push"
+    - "terminal: rm"
+    - "file_write: /etc/*"
+
+performance:
+  max_vault_size_gb: 10           # Maximum vault size before warning
+  cleanup_old_states: true        # Remove states older than 30 days
+  parallel_consensus: true        # Run consensus checks in parallel
+  batch_commits: false            # Batch multiple commits into one
+
+# Advanced: Quantum networking between vaults
+quantum_networking:
+  enabled: false
+  peer_vaults: []                 # List of peer vault URLs
+  sync_interval: 3600             # Seconds between syncs
+  
+# Constitutional AI alignment
+constitutional_ai:
+  enabled: true
+  principles:
+    - "Always verify sources before creating claims"
+    - "Link to existing notes when relevant"
+    - "Mark uncertainty clearly"
+    - "Respect user privacy and data sovereignty"
+    - "Never delete existing content without consensus"
