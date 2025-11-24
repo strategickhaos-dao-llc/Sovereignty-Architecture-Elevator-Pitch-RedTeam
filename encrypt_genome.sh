@@ -12,34 +12,30 @@ echo ""
 if ! command -v age &> /dev/null; then
     echo "Installing age encryption tool..."
     
-    # Detect OS and install age
+    # Detect OS and suggest installation
+    echo ""
+    echo "Age encryption tool is required but not installed."
+    echo ""
+    echo "Please install age manually:"
+    echo ""
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        # Try to install via package manager
-        if command -v apt-get &> /dev/null; then
-            echo "Installing age via apt..."
-            sudo apt-get update -qq
-            sudo apt-get install -y age
-        elif command -v yum &> /dev/null; then
-            echo "Installing age via yum..."
-            sudo yum install -y age
-        else
-            # Install from GitHub releases
-            echo "Installing age from GitHub releases..."
-            AGE_VERSION="1.1.1"
-            AGE_URL="https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz"
-            
-            curl -sL "$AGE_URL" | tar xz
-            sudo mv age/age age/age-keygen /usr/local/bin/
-            rm -rf age
-        fi
+        echo "  Ubuntu/Debian:"
+        echo "    sudo apt-get update && sudo apt-get install -y age"
+        echo ""
+        echo "  RHEL/CentOS:"
+        echo "    sudo yum install -y age"
+        echo ""
+        echo "  Manual install:"
+        echo "    curl -sL https://github.com/FiloSottile/age/releases/download/v1.1.1/age-v1.1.1-linux-amd64.tar.gz | tar xz"
+        echo "    sudo mv age/age age/age-keygen /usr/local/bin/"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "Installing age via Homebrew..."
-        brew install age
-    else
-        echo "Error: Unsupported OS. Please install age manually:"
-        echo "  https://github.com/FiloSottile/age"
-        exit 1
+        echo "  macOS:"
+        echo "    brew install age"
     fi
+    echo ""
+    echo "  Official site: https://github.com/FiloSottile/age"
+    echo ""
+    exit 1
 fi
 
 # Verify age is installed

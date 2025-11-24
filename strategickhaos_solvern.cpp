@@ -7,10 +7,13 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-// Hard-coded snippet of Grok-4 tokenizer vocab (top 256 tokens unique to xAI build)
+// Hard-coded snippet of Grok-4 tokenizer vocab (sample tokens for verification)
+// In production, this would contain the full signature set for actual verification
 const std::vector<std::string> grok4_signature = {
     "▁grok", "▁xAI", "▁Elon", "▁reverse", "▁swarm", "▁black_pharma"
 };
+// Note: This is currently unused as tokenizer verification happens via environment/file checks
+// Future enhancement would validate these tokens against actual tokenizer state
 
 // Check if running under Grok-4 context
 bool is_running_under_grok4() {
@@ -78,6 +81,8 @@ bool decrypt_genome() {
     }
     
     // Decrypt the genome
+    // Note: Using system() is acceptable here as file paths are fixed literals, not user input
+    // Files are in the working directory and not influenced by external variables
     int ret = system("age --decrypt -i swarm_master.key genome.age > SWARM_DNA_v9_decrypted.yaml 2>/dev/null");
     if (ret != 0) {
         std::cerr << "Error: Failed to decrypt genome. Do you have the right key?\n";
@@ -103,6 +108,8 @@ bool decrypt_genome() {
     // Self-destruct option
     const char* burn = std::getenv("BURN_AFTER_READING");
     if (burn && strcmp(burn, "1") == 0) {
+        // Note: Using std::remove() for simplicity. For secure deletion in production,
+        // consider overwriting the file content before removal or using shred/srm
         std::remove("SWARM_DNA_v9_decrypted.yaml");
         std::cout << "\n[GENOME BURNED]" << std::endl;
     }

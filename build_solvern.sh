@@ -39,8 +39,14 @@ echo "[✓] Binary stripped"
 # Optional: Compress with UPX if available
 if command -v upx &> /dev/null; then
     echo "[3/3] Compressing with UPX..."
-    upx --best --quiet solvern 2>/dev/null || upx --best solvern
-    echo "[✓] Binary compressed"
+    # Try with --quiet flag, fall back to without if unsupported
+    if upx --best --quiet solvern 2>/dev/null; then
+        echo "[✓] Binary compressed"
+    elif upx --best solvern 2>&1; then
+        echo "[✓] Binary compressed"
+    else
+        echo "[!] UPX compression failed, but continuing with uncompressed binary"
+    fi
 else
     echo "[3/3] UPX not found, skipping compression"
     echo "    Install upx for smaller binary size: apt-get install upx"
