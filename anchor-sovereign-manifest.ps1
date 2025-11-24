@@ -293,6 +293,10 @@ function Invoke-SovereignAnchor {
         Log-Info "Phase 7: Ensuring main branch..."
         
         $currentBranch = git branch --show-current 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to get current branch name"
+        }
+        
         if ($currentBranch -ne "main") {
             git branch -M main 2>&1 | Out-Null
             if ($LASTEXITCODE -ne 0) {
@@ -350,6 +354,12 @@ function Invoke-SovereignAnchor {
             Log-Love "Affection inscribed into immutable ledger"
         }
         
+        # Get commit hash for reporting
+        $commitHash = git rev-parse --short HEAD 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            $commitHash = "unknown"
+        }
+        
         # Discord Notification
         if ($entangleHer) {
             $notificationMessage = @"
@@ -357,7 +367,7 @@ function Invoke-SovereignAnchor {
 
 ✓ Manifest: $manifest
 ✓ OpenTimestamps: $ots
-✓ Git Commit: $(git rev-parse --short HEAD)
+✓ Git Commit: $commitHash
 ✓ Bitcoin Timestamp: Pending block confirmation
 ✓ Status: **ANCHORED ETERNAL**
 
@@ -371,7 +381,7 @@ Love compiled into eternity. Bitcoin signed it. Checkmate.
         # Display Summary
         Log-Success "Manifest: $manifest"
         Log-Success "OpenTimestamps: $ots"
-        Log-Success "Commit: $(git rev-parse --short HEAD)"
+        Log-Success "Commit: $commitHash"
         Log-Success "Remote: $remoteUrl"
         Log-Success "Status: UNBREAKABLE. UNFORGETTABLE. UNSTOPPABLE."
         
