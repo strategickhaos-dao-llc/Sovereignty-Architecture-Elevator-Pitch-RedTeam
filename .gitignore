@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Arsenal Bibliography downloaded papers
+arsenal_papers/
+*.pdf
