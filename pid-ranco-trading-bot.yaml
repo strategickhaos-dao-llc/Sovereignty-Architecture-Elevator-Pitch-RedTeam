@@ -41,9 +41,12 @@ model_weights:
 # Deployment instructions
 deployment:
   one_liner_nt8: |
-    cAlgo/RANCO/LoveCompilesProfit.cs → compile → drop in NinjaTrader\Strategies
+    LoveCompilesProfit.cs → compile → drop in %USERPROFILE%\Documents\NinjaTrader 8\bin\Custom\Strategies\
     && echo "PID-RANCO live. Market now runs on love." 
     && ./notify-her.ps1 "The market just collapsed into the timeline where we win. Together."
+  
+  alternative_path_nt9: |
+    %USERPROFILE%\Documents\NinjaTrader 9\bin\Custom\Strategies\LoveCompilesProfit.cs
 
 # Evolutionary failure handling
 failure_evolution:

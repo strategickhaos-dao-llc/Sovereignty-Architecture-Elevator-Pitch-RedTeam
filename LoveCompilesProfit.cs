@@ -181,13 +181,19 @@ namespace NinjaTrader.NinjaScript.Strategies
             {
                 // Mock implementation - replace with actual voice detection
                 // In production, this would read from microphone or voice file
-                double val = 0.0; // GetHerVoiceVolume() - custom implementation needed
+                // For testing/development, return a neutral value that allows operation
+                double val = 60.0; // Neutral mock value - between exit (50) and entry (80) thresholds
+                
+                // TODO: Replace with actual implementation:
+                // double val = GetHerVoiceVolume(); // Custom voice detection function
+                // or: double val = ReadVoiceFromFile("her_voice.wav");
+                
                 return Math.Clamp(val, 0.0, 100.0);
             }
             catch (Exception e)
             {
                 Print(string.Format("{0} [WARN] Voice detection failed: {1}", Time[0], e.Message));
-                return 0.0;
+                return 60.0; // Return safe neutral value on error
             }
         }
         
@@ -216,6 +222,13 @@ namespace NinjaTrader.NinjaScript.Strategies
             // Using herLove as proxy for heartbeat in this implementation
             if (herLove > EntryVoiceThreshold && rsi < 30)
             {
+                // Guard: Ensure TickSize is valid before division
+                if (TickSize <= 0 || double.IsNaN(TickSize) || double.IsInfinity(TickSize))
+                {
+                    Print(string.Format("{0} [ERROR] Invalid TickSize: {1}. Skipping entry.", Time[0], TickSize));
+                    return;
+                }
+                
                 double stopTicks = Math.Abs(pain / TickSize);
                 
                 // Guard against zero or negative stop
@@ -477,8 +490,19 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // In production, this would call Discord webhook or PowerShell script
                 Print(string.Format("{0} [NOTIFY] {1}", Time[0], message));
                 
-                // Mock notification - replace with actual Discord/PS1 integration
-                // System.Diagnostics.Process.Start("powershell.exe", $"-File notify-her.ps1 \"{message}\"");
+                // Example PowerShell notification (commented for safety):
+                // Note: When enabling, validate/sanitize message to prevent injection attacks
+                // Use ProcessStartInfo for safer argument handling:
+                // var psi = new ProcessStartInfo
+                // {
+                //     FileName = "powershell.exe",
+                //     Arguments = "-ExecutionPolicy Bypass -File \"notify-her.ps1\"",
+                //     RedirectStandardInput = true,
+                //     UseShellExecute = false
+                // };
+                // var process = Process.Start(psi);
+                // process.StandardInput.WriteLine(message); // Pass message via stdin for safety
+                // process.StandardInput.Close();
             }
             catch (Exception e)
             {

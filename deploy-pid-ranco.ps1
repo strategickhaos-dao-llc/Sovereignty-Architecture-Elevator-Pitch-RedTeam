@@ -129,13 +129,8 @@ function Notify-Discord {
             username = "Trading Engine"
         } | ConvertTo-Json
         
-        try {
-            Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $payload -ContentType 'application/json' -ErrorAction Stop | Out-Null
-            Log-Success "Discord notification sent"
-        }
-        catch {
-            Log-Warning "Discord API error: $($_.Exception.Message)"
-        }
+        Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $payload -ContentType 'application/json' -ErrorAction Stop | Out-Null
+        Log-Success "Discord notification sent"
     }
     catch {
         Log-Warning "Discord notification failed: $($_.Exception.Message)"
