@@ -35,3 +35,11 @@ target/
 
 # Workspace data
 workspace/
+
+# Sovereign Arsenal - Downloaded papers (keep structure, not files)
+sovereign-arsenal/papers/**/*.pdf
+sovereign-arsenal/papers/**/*.html
+sovereign-arsenal/papers/**/*.txt
+sovereign-arsenal/embeddings/*.jsonl
+sovereign-arsenal/embeddings/*.jsonl.gz
+!sovereign-arsenal/embeddings/README.md
