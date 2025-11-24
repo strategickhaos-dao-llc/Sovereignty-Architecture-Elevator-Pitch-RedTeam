@@ -131,23 +131,16 @@ function Test-GitRepository {
 }
 
 function Test-GPGAvailable {
-    try {
-        $null = gpg --version 2>&1
-        return $true
-    }
-    catch {
-        return $false
-    }
+    $null = gpg --version 2>&1
+    return ($LASTEXITCODE -eq 0)
 }
 
 function Get-GitUserSigningKey {
-    try {
-        $signingKey = git config --get user.signingkey 2>&1
-        return ($null -ne $signingKey -and $signingKey.Length -gt 0)
-    }
-    catch {
+    $signingKey = git config --get user.signingkey 2>&1
+    if ($LASTEXITCODE -ne 0) {
         return $false
     }
+    return ($null -ne $signingKey -and $signingKey.Length -gt 0)
 }
 
 # ═══════════════════════════════════════════════════════════════
@@ -163,13 +156,27 @@ function Invoke-SovereignAnchor {
         Log "╚══════════════════════════════════════════════════════════════╝" $M
         Write-Host ""
         
-        # Configuration
+        # ═══════════════════════════════════════════════════════════════
+        # Configuration - Customize these paths for your environment
+        # ═══════════════════════════════════════════════════════════════
+        
+        # Path where OpenTimestamps generates the .ots file (typically Downloads)
         $otsPath = "C:\Users\garza\Downloads\SOVEREIGN_MANIFEST_v1.0.md.ots"
+        
+        # Path to your local Git repository
         $repoPath = "C:\Users\garza\strategic-khaos-private"
+        
+        # Manifest and OTS filenames (relative to repository)
         $manifest = "SOVEREIGN_MANIFEST_v1.0.md"
         $ots = "SOVEREIGN_MANIFEST_v1.0.md.ots"
+        
+        # GitHub remote URL (use SSH format: git@github.com:user/repo.git for SSH keys)
         $remoteUrl = "https://github.com/Me10101-01/sovereign-vault.git"
+        
+        # NAS backup path (UNC format for Windows, optional)
         $nasBackupPath = "\\throne-nas-32tb\sovereign-vault\"
+        
+        # ═══════════════════════════════════════════════════════════════
         
         # Phase 1: Validate OTS File
         Log-Info "Phase 1: Validating OpenTimestamps proof..."
