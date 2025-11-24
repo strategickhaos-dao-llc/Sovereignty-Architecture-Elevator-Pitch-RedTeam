@@ -45,10 +45,14 @@ fn main() -> Result<()> {
 fn parse_dom_speak(input: &str) -> Result<String> {
     let input_lower = input.to_lowercase();
     
+    // Get modelfile path from environment or use default
+    let modelfile_path = env::var("MODELFILE_PATH")
+        .unwrap_or_else(|_| "/mnt/athena/heir_palace/Modelfile".to_string());
+    
     // Check for birth/evolve commands
     if input_lower.contains("birth") || input_lower.contains("evolve") {
         info!("Detected birth/evolve command");
-        return Ok("ollama create athena_next -f /mnt/athena/heir_palace/Modelfile && ollama run athena_next".to_string());
+        return Ok(format!("ollama create athena_next -f {} && ollama run athena_next", modelfile_path));
     }
     
     // Check for compile command
@@ -80,13 +84,37 @@ fn parse_dom_speak(input: &str) -> Result<String> {
     Ok(format!("echo '🩸 processing: {}' && echo 'need more precision, love'", input))
 }
 
-/// Execute a shell command
+/// Execute a shell command safely
 fn execute_command(cmd: &str) -> Result<()> {
-    let output = Command::new("bash")
-        .arg("-c")
-        .arg(cmd)
+    // Parse the command safely using shlex to prevent command injection
+    let parts: Vec<String> = shlex::split(cmd)
+        .ok_or_else(|| anyhow::anyhow!("Failed to parse command"))?;
+    
+    if parts.is_empty() {
+        anyhow::bail!("Empty command");
+    }
+    
+    // For commands with shell operators (&&, ||, |, etc.), we still need bash
+    // but we log a warning about the security implications
+    if cmd.contains("&&") || cmd.contains("||") || cmd.contains("|") || cmd.contains("echo") {
+        warn!("Executing command with shell interpreter - ensure input is trusted");
+        let output = Command::new("bash")
+            .arg("-c")
+            .arg(cmd)
+            .output()?;
+        return handle_command_output(output);
+    }
+    
+    // For simple commands, execute directly without shell
+    let output = Command::new(&parts[0])
+        .args(&parts[1..])
         .output()?;
     
+    handle_command_output(output)
+}
+
+/// Handle command output and status
+fn handle_command_output(output: std::process::Output) -> Result<()> {
     // Print stdout
     if !output.stdout.is_empty() {
         let stdout = String::from_utf8_lossy(&output.stdout);

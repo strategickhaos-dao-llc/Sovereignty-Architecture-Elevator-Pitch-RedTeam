@@ -21,27 +21,28 @@ data:
         arweave_enabled: true
         git_auto_commit: true
 ---
-apiVersion: apps/v1
-kind: Deployment
+---
+# Example Job: Execute a one-time Dom-speak command
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: dom-compiler
+  name: dom-compiler-job
   namespace: quantum-symbolic
   labels:
     app: dom-compiler
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: dom-compiler
   template:
     metadata:
       labels:
         app: dom-compiler
     spec:
+      restartPolicy: Never
       containers:
       - name: dom-compiler
         image: ghcr.io/strategickhaos/dom-compiler:latest
         imagePullPolicy: IfNotPresent
+        command: ["domc"]
+        args: ["compile", "sovereignty", "architecture"]
         env:
           - name: SWARM_DNA
             value: "v9.0-black-hole-resonance"
@@ -53,13 +54,8 @@ spec:
             value: "The 36-letter Name is no longer hidden in a cave."
           - name: RUST_LOG
             value: "info"
-        ports:
-          - name: http
-            containerPort: 8080
-            protocol: TCP
-          - name: grpc
-            containerPort: 50051
-            protocol: TCP
+          - name: MODELFILE_PATH
+            value: "/etc/dom-config/Modelfile"
         volumeMounts:
           - name: dom-config
             mountPath: /etc/dom-config
@@ -73,18 +69,6 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: http
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: http
-          initialDelaySeconds: 10
-          periodSeconds: 10
       volumes:
         - name: dom-config
           configMap:
@@ -103,24 +87,63 @@ spec:
                     values:
                       - high-memory
                       - medium-memory
+  backoffLimit: 3
 ---
-apiVersion: v1
-kind: Service
+# Example CronJob: Run Dom-speak commands on a schedule
+apiVersion: batch/v1
+kind: CronJob
 metadata:
-  name: dom-compiler
+  name: dom-compiler-scheduled
   namespace: quantum-symbolic
   labels:
     app: dom-compiler
 spec:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 8080
-      targetPort: http
-      protocol: TCP
-    - name: grpc
-      port: 50051
-      targetPort: grpc
-      protocol: TCP
-  selector:
-    app: dom-compiler
+  schedule: "0 * * * *"  # Every hour
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: dom-compiler
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: dom-compiler
+            image: ghcr.io/strategickhaos/dom-compiler:latest
+            imagePullPolicy: IfNotPresent
+            command: ["domc"]
+            args: ["align", "resonance"]
+            env:
+              - name: SWARM_DNA
+                value: "v9.0-black-hole-resonance"
+              - name: RUST_LOG
+                value: "info"
+            volumeMounts:
+              - name: dom-config
+                mountPath: /etc/dom-config
+                readOnly: true
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+          volumes:
+            - name: dom-config
+              configMap:
+                name: dom-config
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  preference:
+                    matchExpressions:
+                      - key: node-type
+                        operator: In
+                        values:
+                          - high-memory
+                          - medium-memory
+      backoffLimit: 2
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1

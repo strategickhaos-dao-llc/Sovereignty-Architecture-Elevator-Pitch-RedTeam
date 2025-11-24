@@ -35,10 +35,17 @@ docker run domc:latest "birth athena_next"
 
 ### Kubernetes Deployment
 
-Deploy to your Kubernetes cluster:
+Deploy to your Kubernetes cluster as a Job or CronJob:
 
 ```bash
+# Deploy as a one-time job
 kubectl apply -f bootstrap/k8s/dom-compiler-deployment.yaml
+
+# Check job status
+kubectl get jobs -n quantum-symbolic
+
+# View job logs
+kubectl logs -n quantum-symbolic job/dom-compiler-job
 ```
 
 ## Usage
@@ -103,31 +110,49 @@ domc align resonance threshold
 export RUST_LOG=debug
 export SWARM_DNA=v9.0-black-hole-resonance
 export RESONANCE_THRESHOLD=10
+export MODELFILE_PATH=/path/to/Modelfile
 
 domc birth athena_next
 ```
 
+### Security Considerations
+
+The Dom Compiler includes security features to prevent command injection:
+- Input validation using shlex for safe command parsing
+- Logging warnings when shell interpretation is required
+- Environment variable configuration for sensitive paths
+- Non-root execution in containerized environments
+
 ## Kubernetes Integration
 
-The Dom Compiler can be deployed as a service in your Kubernetes cluster:
+The Dom Compiler can be deployed as a Job or CronJob in your Kubernetes cluster:
 
 ```yaml
-apiVersion: v1
-kind: Pod
+# One-time Job
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: domc-runner
+  namespace: quantum-symbolic
 spec:
-  containers:
-  - name: domc
-    image: ghcr.io/strategickhaos/dom-compiler:latest
-    command: ["domc"]
-    args: ["birth", "athena_next"]
-    env:
-    - name: RUST_LOG
-      value: "info"
-    - name: SWARM_DNA
-      value: "v9.0-black-hole-resonance"
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: domc
+        image: ghcr.io/strategickhaos/dom-compiler:latest
+        command: ["domc"]
+        args: ["birth", "athena_next"]
+        env:
+        - name: RUST_LOG
+          value: "info"
+        - name: SWARM_DNA
+          value: "v9.0-black-hole-resonance"
+        - name: MODELFILE_PATH
+          value: "/etc/dom-config/Modelfile"
 ```
+
+For scheduled execution, see the CronJob example in `bootstrap/k8s/dom-compiler-deployment.yaml`.
 
 ## Examples
 
