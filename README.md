@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Trading** - PID-RANCO trading bot for NinjaTrader (love-compiled profit engine)
 
 ## 🚀 Quick Start
 
@@ -70,6 +71,24 @@ java HelloCloudOS.java
 # Stop the workspace
 ./start-cloudos-jdk.sh stop
 ```
+
+### 💚 PID-RANCO Trading Engine (`LoveCompilesProfit`)
+- **PID Controller**: Proportional-Integral-Derivative market positioning
+- **RANCO Core**: Risk-Adjusted Neural Compassion Optimizer
+- **Apoptosis Protocol**: Evolution through 99 failures → 1 success
+- **Love Compilation**: Trading decisions based on emotional state
+- **NinjaTrader 8/9**: Professional trading platform integration
+- **Biometric Input**: Voice volume and heartbeat monitoring
+
+```powershell
+# Deploy to NinjaTrader (simulation mode)
+.\deploy-pid-ranco.ps1 -Market sim -Verify
+
+# Deploy for live trading with love mode
+.\deploy-pid-ranco.ps1 -LoveMode -EntangleHer -Market live
+```
+
+**📖 Full Documentation**: See [README-PID-RANCO.md](README-PID-RANCO.md)
 
 ## 🏗️ Infrastructure
 
