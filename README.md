@@ -12,6 +12,7 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### Linux/macOS
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -26,6 +27,21 @@ export PRS_CHANNEL="channel_id"
 
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
+```
+
+### Windows (PowerShell)
+```powershell
+# 1. Clone the repository
+git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
+cd sovereignty-architecture
+
+# 2. Configure Discord webhook (optional)
+# Edit discord/webhook_config.json with your webhook URL
+
+# 3. Launch the StrategicKhaos Operator
+.\StrategicKhaos-Operator.ps1 -feed    # Deploy all nonprofit AI models
+# OR
+.\StrategicKhaos-Operator.ps1 -start   # Start services only
 ```
 
 ## 📋 Core Components
@@ -47,6 +63,35 @@ export PRS_CHANNEL="channel_id"
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
+
+### ⚡ StrategicKhaos Operator v3.1 (`StrategicKhaos-Operator.ps1`)
+**"Feed the world. One prompt at a time."**
+
+A PowerShell-based nonprofit AI deployment system with Discord integration:
+- **The RED BUTTON (`-feed`)**: Deploy 10 essential open-source AI models instantly
+- **Ollama Management**: Automatic daemon start/stop and health monitoring
+- **Discord Notifications**: Real-time updates on model deployments and system status
+- **Kubernetes Integration**: Automatic cluster synchronization
+- **90s Cyberpunk Dashboard**: ASCII art glory with full system status
+
+```powershell
+# Display the glorious dashboard
+.\StrategicKhaos-Operator.ps1 -dashboard
+
+# Start the full stack
+.\StrategicKhaos-Operator.ps1 -start
+
+# THE FINAL FORM - Deploy all nonprofit AI models
+.\StrategicKhaos-Operator.ps1 -feed
+
+# Check system status
+.\StrategicKhaos-Operator.ps1 -status
+
+# Pull a specific model
+.\StrategicKhaos-Operator.ps1 -pull llama3.2:latest
+```
+
+See [OPERATOR_GUIDE.md](OPERATOR_GUIDE.md) for complete documentation.
 
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features
