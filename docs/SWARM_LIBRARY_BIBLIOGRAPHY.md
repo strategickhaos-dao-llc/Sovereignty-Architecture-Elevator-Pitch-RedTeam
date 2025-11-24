@@ -18,7 +18,7 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 4. Zhang, Y., et al. (2023). Siren's Song in the AI Ocean: A Survey on Hallucination in Large Language Models. *arXiv:2309.01219*. [PDF](https://arxiv.org/pdf/2309.01219)
 
-5. Rawte, V., et al. (2023). A Comprehensive Overview of Hallucination in Large Language Models. *arXiv:2311.05232*. [PDF](https://arxiv.org/pdf/2311.05232)
+5. Rawte, V., et al. (2023). A Survey on Hallucination in Large Language Models. *arXiv:2309.01219v2*. [PDF](https://arxiv.org/pdf/2309.01219)
 
 6. Dziri, A., et al. (2024). Faith and Fate: Limits of LLM Faithfulness Evaluations. *arXiv:2402.06807*. [PDF](https://arxiv.org/pdf/2402.06807)
 
@@ -34,9 +34,9 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 ## RLHF & AI Alignment
 
-11. Christiano, P.F., et al. (2017). Deep Reinforcement Learning from Human Preferences. *NeurIPS 30*. [PDF](https://proceedings.neurips.cc/paper/2017/file/671b5b5b7f7e7b7b7b7b7b7b7b7b7b7b-Paper.pdf)
+11. Christiano, P.F., et al. (2017). Deep Reinforcement Learning from Human Preferences. *NeurIPS 30*. [PDF](https://arxiv.org/pdf/1706.03741)
 
-12. Stiennon, N., et al. (2020). Learning to Summarize with Human Feedback. *NeurIPS 33*. [PDF](https://proceedings.neurips.cc/paper/2020/file/...) 
+12. Stiennon, N., et al. (2020). Learning to Summarize with Human Feedback. *NeurIPS 33*. [PDF](https://arxiv.org/pdf/2009.01325) 
 
 13. Ziegler, D.M., et al. (2019). Fine-Tuning Language Models from Human Preferences. *arXiv:1909.08593*. [PDF](https://arxiv.org/pdf/1909.08593)
 
@@ -66,7 +66,7 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 22. Askell, A., et al. (2021). A General Language Assistant Based on Scaling up to 1.5 Trillion Tokens. *arXiv:2107.13501*. [PDF](https://arxiv.org/pdf/2107.13501)
 
-23. Hendrycks, D., et al. (2021). Measuring Massive Multitask Language Understanding. *ICLR*. [PDF](https://openreview.net/pdf?id=...)
+23. Hendrycks, D., et al. (2021). Measuring Massive Multitask Language Understanding. *ICLR*. [PDF](https://arxiv.org/pdf/2009.03300)
 
 24. Röttger, P., et al. (2021). Hate Speech Detection: The Mississippi Effect. *NAACL-HLT*. [PDF](https://aclanthology.org/2021.naacl-main.208.pdf)
 
@@ -98,11 +98,11 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 34. Amodei, D., et al. (2016). Concrete Problems in AI Safety. *arXiv:1606.06565*. [PDF](https://arxiv.org/pdf/1606.06565)
 
-35. Russell, S. (2019). Human Compatible: Artificial Intelligence and the Problem of Control. *Penguin Press*. [PDF Excerpt](https://books.google.com/books?id=...)
+35. Russell, S. (2019). Human Compatible: Artificial Intelligence and the Problem of Control. *Penguin Press*. ISBN: 9780525558613
 
-36. Bostrom, N. (2014). Superintelligence: Paths, Dangers, Strategies. *Oxford University Press*. [PDF Excerpt](https://academic.oup.com/book/...)
+36. Bostrom, N. (2014). Superintelligence: Paths, Dangers, Strategies. *Oxford University Press*. ISBN: 9780199678112
 
-37. Yampolskiy, R.V. (2024). AI: Unexplainable, Unpredictable, Uncontrollable. *Springer*. [PDF](https://link.springer.com/content/pdf/...)
+37. Yampolskiy, R.V. (2024). AI: Unexplainable, Unpredictable, Uncontrollable. *Springer*. ISBN: 9781032430164
 
 38. Gabriel, I. (2020). Artificial Intelligence, Values, and Alignment. *Minds and Machines, 30(3)*. [PDF](https://link.springer.com/content/pdf/10.1007/s11023-020-09539-2.pdf)
 
@@ -144,15 +144,15 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 53. Amabile, T.M. (1996). Creativity in Context. *Westview Press*. [PDF](https://www.routledge.com/Creativity-in-Context/Amabile/p/book/9780813330341)
 
-54. Sternberg, R.J. (Ed.). (1999). Handbook of Creativity. *Cambridge University Press*. [PDF](https://www.cambridge.org/core/books/handbook-of-creativity/...)
+54. Sternberg, R.J. (Ed.). (1999). Handbook of Creativity. *Cambridge University Press*. ISBN: 9780521576048
 
-55. Kaufman, J.C., & Sternberg, R.J. (Eds.). (2010). The Cambridge Handbook of Creativity. *Cambridge University Press*. [PDF](https://www.cambridge.org/core/books/cambridge-handbook-of-creativity/...)
+55. Kaufman, J.C., & Sternberg, R.J. (Eds.). (2010). The Cambridge Handbook of Creativity. *Cambridge University Press*. ISBN: 9780521730259
 
 56. Ward, T.B., et al. (Eds.). (1997). Creative Thought. *APA*. [PDF](https://www.apa.org/pubs/books/4316145)
 
 57. Finke, R.A., et al. (1992). Creative Cognition. *MIT Press*. [PDF](https://mitpress.mit.edu/9780262561159/creative-cognition/)
 
-58. Simonton, D.K. (1999). Origins of Genius. *Oxford University Press*. [PDF](https://academic.oup.com/book/...)
+58. Simonton, D.K. (1999). Origins of Genius. *Oxford University Press*. ISBN: 9780195128796
 
 59. Sawyer, R.K. (2013). Zig Zag: The Surprising Path to Creativity. *Jossey-Bass*. [PDF](https://www.wiley.com/en-us/Zig+Zag%3A+The+Surprising+Path+to+Greater+Creativity-p-9781118274243)
 
@@ -160,11 +160,11 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 ## AI Nature & Future
 
-60. Boden, M.A. (2016). AI: Its Nature and Future. *Oxford University Press*. [PDF](https://academic.oup.com/book/...)
+60. Boden, M.A. (2016). AI: Its Nature and Future. *Oxford University Press*. ISBN: 9780198777984
 
 61. Marcus, G., & Davis, E. (2019). Rebooting AI. *Pantheon*. [PDF](https://pantheonbooks.com/books/rebooting-ai/)
 
-62. Lake, B.M., et al. (2017). Building Machines That Learn and Think Like People. *Behavioral and Brain Sciences, 40*. [PDF](https://www.cambridge.org/core/services/aop-cambridge-core/content/view/...)
+62. Lake, B.M., et al. (2017). Building Machines That Learn and Think Like People. *Behavioral and Brain Sciences, 40*. [PDF](https://arxiv.org/pdf/1604.00289)
 
 63. Bengio, Y., et al. (2021). Deep Learning for AI. *Communications of the ACM, 64(7)*. [PDF](https://dl.acm.org/doi/pdf/10.1145/3458722)
 
@@ -172,9 +172,9 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 65. Goertzel, B. (2014). The Path to More Fun, More Life, and Less Work. *Journal of Evolution and Technology, 24(1)*. [PDF](https://jetpress.org/v24/goertzel.pdf)
 
-66. Hawkins, J., & Blakeslee, S. (2004). On Intelligence. *Times Books*. [PDF Excerpt](https://books.google.com/books?id=...)
+66. Hawkins, J., & Blakeslee, S. (2004). On Intelligence. *Times Books*. ISBN: 9780805074567
 
-67. Pinker, S. (2002). The Blank Slate. *Viking*. [PDF](https://www.penguinrandomhouse.com/books/...)
+67. Pinker, S. (2002). The Blank Slate. *Viking*. ISBN: 9780670031511
 
 68. Dennett, D.C. (2017). From Bacteria to Bach and Back. *W.W. Norton*. [PDF](https://wwnorton.com/books/9780393242072)
 
@@ -212,7 +212,7 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 81. Broussard, M. (2018). Artificial Unintelligence. *MIT Press*. [PDF](https://mitpress.mit.edu/9780262038007/artificial-unintelligence/)
 
-82. O'Neil, C. (2016). Weapons of Math Destruction. *Crown*. [PDF](https://www.penguinrandomhouse.com/books/...)
+82. O'Neil, C. (2016). Weapons of Math Destruction. *Crown*. ISBN: 9780553418811
 
 83. Pasquale, F. (2015). Black Box Society. *Harvard University Press*. [PDF](https://www.hup.harvard.edu/catalog.php?isbn=9780674368279)
 
