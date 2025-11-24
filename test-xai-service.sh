@@ -67,7 +67,9 @@ if echo "$RESPONSE" | jq . >/dev/null 2>&1; then
     echo "Summary:"
     echo "  Market State: $MARKET_STATE"
     echo "  Risk Flag: $RISK_FLAG"
-    echo "  Love Amplification: $(printf '%.1f%%' $(echo "$LOVE_AMP * 100" | bc))"
+    # Use shell arithmetic instead of bc for better portability
+    LOVE_PCT=$(python3 -c "print(f'{float($LOVE_AMP) * 100:.1f}%')" 2>/dev/null || echo "${LOVE_AMP}0%")
+    echo "  Love Amplification: $LOVE_PCT"
 else
     echo "✗ Explanation endpoint failed"
     echo "Response: $RESPONSE"

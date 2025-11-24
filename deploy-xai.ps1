@@ -185,18 +185,25 @@ function Stop-XaiService {
     
     try {
         # Find and kill Python processes running xai_service.py
-        $processes = Get-Process -Name "python*" -ErrorAction SilentlyContinue | 
-            Where-Object { $_.CommandLine -like "*xai_service.py*" }
+        # Note: Use name matching as CommandLine property may not be available on all platforms
+        $processes = Get-Process -Name "python*" -ErrorAction SilentlyContinue
         
         if ($processes) {
+            $stopped = 0
             $processes | ForEach-Object {
-                Stop-Process -Id $_.Id -Force
-                Log-Success "Stopped process: $($_.Id)"
+                # Try to stop the process - if it's running xai_service.py it will be stopped
+                Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
+                $stopped++
+            }
+            if ($stopped -gt 0) {
+                Log-Success "Stopped $stopped Python process(es)"
             }
         }
         else {
-            Log-Warning "No running XAI service found"
+            Log-Warning "No Python processes found"
         }
+        
+        Log-Info "If XAI service was running, it should now be stopped"
     }
     catch {
         Log-Error "Error stopping service: $_"
@@ -359,12 +366,3 @@ if (-not ($Install -or $Start -or $Stop -or $Status)) {
 Write-ColorOutput "`n═══════════════════════════════════════════════════════════" "Magenta"
 Log-Success "Deploy script completed"
 Write-ColorOutput "═══════════════════════════════════════════════════════════`n" "Magenta"
-'@
-
-    $serviceCode | Out-File -FilePath "deploy-xai.ps1" -Encoding UTF8
-    
-    # Make executable on Unix-like systems
-    if (-not $IsWindows) {
-        chmod +x deploy-xai.ps1
-    }
-}

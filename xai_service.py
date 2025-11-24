@@ -44,13 +44,18 @@ NARRATIVES = {
 def analyze_market_state(features):
     """
     Analyze market state based on technical indicators
-    This is a placeholder implementation - replace with actual ML model
+    
+    NOTE: This is a PLACEHOLDER implementation using simple rules.
+    Replace with trained ML classifier for production use:
+    - Load pre-trained model (sklearn, TensorFlow, PyTorch)
+    - Use actual feature engineering
+    - Return model's prediction with confidence
     """
     rsi = features.get('rsi_14', 50)
     volatility = features.get('volatility_5m', 0)
     her_love = features.get('her_love', 50)
     
-    # Simple rule-based state detection (replace with ML model)
+    # Simple rule-based state detection (REPLACE WITH ML MODEL)
     if rsi < 30 and her_love < 40:
         return "panic"
     elif rsi < 35 and her_love > 60:
@@ -66,12 +71,20 @@ def analyze_market_state(features):
     elif her_love > 80:
         return "love_regime"
     else:
-        return random.choice(MARKET_STATES)
+        # TODO: Return 'unknown' or 'indeterminate' instead of random
+        logger.warning("No clear market state detected, using fallback")
+        return "accumulation"  # Default to neutral state
 
 
 def calculate_love_amplification(features, decision):
     """
     Calculate how much herLove amplified the trading conviction
+    
+    NOTE: Uses deterministic calculation with some variance.
+    For production, replace random component with:
+    - Market condition adjustment based on ML model
+    - Historical performance correlation
+    - Volatility-adjusted scaling
     """
     her_love = features.get('her_love', 50)
     session_loss_count = features.get('session_loss_count', 0)
@@ -88,8 +101,14 @@ def calculate_love_amplification(features, decision):
     if session_loss_count > 3:
         base_amp *= 0.7
     
-    # Add randomness for market conditions (replace with actual model)
-    final_amp = base_amp * random.uniform(0.3, 1.0)
+    # Add variance for market conditions (REPLACE with actual model in production)
+    # Using hash for deterministic variance instead of pure random
+    import hashlib
+    seed_str = f"{her_love}{session_loss_count}{drawdown_pct}"
+    hash_val = int(hashlib.md5(seed_str.encode()).hexdigest()[:8], 16)
+    variance = 0.3 + (hash_val % 700) / 1000.0  # Range: 0.3 to 1.0
+    
+    final_amp = base_amp * variance
     
     return min(max(final_amp, 0.0), 1.0)
 
@@ -97,23 +116,37 @@ def calculate_love_amplification(features, decision):
 def calculate_shap_contributions(features):
     """
     Calculate SHAP-like feature contributions
-    This is a placeholder - replace with actual SHAP analysis
+    
+    NOTE: This is a PLACEHOLDER using simple heuristics.
+    For production, replace with actual SHAP analysis:
+    
+    import shap
+    explainer = shap.TreeExplainer(your_model)
+    shap_values = explainer.shap_values(features)
+    return format_shap_values(shap_values)
     """
     contributions = []
     
+    # Use deterministic calculation based on feature values
     for feature_name, feature_value in features.items():
         if isinstance(feature_value, (int, float)):
-            # Placeholder contribution calculation
+            # Simple heuristic contribution (REPLACE WITH SHAP)
             if feature_name == 'her_love':
                 contribution = (feature_value - 50) / 100.0
             elif feature_name == 'rsi_14':
                 contribution = (feature_value - 50) / 200.0
             elif feature_name == 'volatility_5m':
-                contribution = feature_value * random.uniform(-5, 5)
+                # Deterministic instead of random
+                contribution = feature_value * ((feature_value % 10) - 5)
             elif feature_name == 'drawdown_pct':
                 contribution = feature_value / 100.0 * -1
+            elif feature_name == 'volume_rel':
+                contribution = (feature_value - 1.0) * 0.2
             else:
-                contribution = random.uniform(-0.2, 0.2)
+                # Use feature value hash for deterministic contribution
+                import hashlib
+                hash_val = int(hashlib.md5(str(feature_value).encode()).hexdigest()[:4], 16)
+                contribution = (hash_val % 400 - 200) / 1000.0
             
             contributions.append({
                 "name": feature_name,
@@ -226,8 +259,13 @@ def explain():
         # Generate narrative
         narrative = generate_narrative(market_state, decision, features, love_amplification)
         
-        # Calculate confidence (placeholder - replace with model confidence)
-        confidence = random.uniform(0.7, 0.95)
+        # Calculate confidence (PLACEHOLDER - replace with actual model confidence)
+        # For production: use your ML model's prediction confidence score
+        # For now, use a deterministic value based on feature quality
+        rsi = features.get('rsi_14', 50)
+        volatility = features.get('volatility_5m', 0)
+        # Higher confidence when indicators are clear
+        confidence = 0.7 + (abs(rsi - 50) / 100.0) * 0.2 + min(volatility * 20, 0.05)
         
         # Build response
         response = {

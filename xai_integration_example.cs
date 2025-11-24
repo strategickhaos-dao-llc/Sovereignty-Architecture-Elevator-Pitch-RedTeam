@@ -205,6 +205,9 @@ namespace cAlgo.Robots
         
         #region XAI Integration
         
+        [Parameter("XAI Skip SSL Validation", DefaultValue = false)]
+        public bool XaiSkipSslValidation { get; set; }
+
         private void InitializeXaiClient()
         {
             if (!XaiEnabled)
@@ -215,10 +218,14 @@ namespace cAlgo.Robots
             
             try
             {
-                var handler = new HttpClientHandler
+                var handler = new HttpClientHandler();
+                
+                // Only skip SSL validation if explicitly enabled (development only)
+                if (XaiSkipSslValidation)
                 {
-                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-                };
+                    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+                    Print("⚠ WARNING: SSL certificate validation disabled (development mode)");
+                }
                 
                 xaiClient = new HttpClient(handler)
                 {
@@ -256,7 +263,7 @@ namespace cAlgo.Robots
                         ema_21_dist = Symbol.Bid - ema21.Result.LastValue,
                         volatility_5m = GetVolatility5m(),
                         volume_rel = GetRelativeVolume(),
-                        orderbook_imbalance = 0.0, // Not available in cTrader
+                        // orderbook_imbalance omitted - not available in cTrader
                         her_love = herLove,
                         session_loss_count = sessionLossCount,
                         drawdown_pct = GetCurrentDrawdownPct(),

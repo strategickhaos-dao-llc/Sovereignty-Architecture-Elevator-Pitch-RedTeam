@@ -24,15 +24,22 @@ namespace cAlgo.Robots
 
         private readonly HttpClient xaiClient;
 
+        [Parameter("XAI Skip SSL Validation", DefaultValue = false)]
+        public bool XaiSkipSslValidation { get; set; }
+
         // Initialize XAI client in OnStart()
         private void InitializeXaiClient()
         {
             if (XaiEnabled)
             {
-                var handler = new HttpClientHandler
+                var handler = new HttpClientHandler();
+                
+                // Only skip SSL validation if explicitly enabled (development only)
+                if (XaiSkipSslValidation)
                 {
-                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-                };
+                    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+                    Print("[XAI] WARNING: SSL certificate validation disabled");
+                }
                 
                 xaiClient = new HttpClient(handler)
                 {
