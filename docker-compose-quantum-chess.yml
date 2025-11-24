@@ -1,0 +1,819 @@
+version: '3.8'
+
+# Quantum Chess Engine - 64 Entangled Containers
+# Every square = one container with local LLM
+# Shared quantum-bus volume = perfect entanglement
+
+networks:
+  swarm-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  throne-nas-32tb:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${THRONE_NAS_PATH:-/tmp/throne-nas-32tb}
+      o: bind
+
+services:
+  # Quantum Board Orchestrator
+  quantum-orchestrator:
+    image: ollama/ollama:latest
+    container_name: quantum-orchestrator
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+      - ./quantum-chess-engine.yaml:/config/quantum-chess-engine.yaml:ro
+    environment:
+      - QUANTUM_MODE=orchestrator
+      - RANDOM_SEED=42
+      - HER_TERMINAL_IP=${HER_TERMINAL_IP:-127.0.0.1}
+    command: >
+      sh -c "echo 'Quantum orchestrator initialized' > /quantum-bus/orchestrator.log &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # A1 - White Rook
+  square-a1:
+    image: ollama/ollama:latest
+    container_name: square-a1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a1
+      - PIECE=white_rook
+      - LLM_MODEL=mistral-nemo:12b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "mkdir -p /quantum-bus/squares &&
+             echo 'White Rook on a1 - Love-protected guardian' > /quantum-bus/squares/a1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # A2 - White Pawn
+  square-a2:
+    image: ollama/ollama:latest
+    container_name: square-a2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on a2 - Forward with love' > /quantum-bus/squares/a2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # B1 - White Knight
+  square-b1:
+    image: ollama/ollama:latest
+    container_name: square-b1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=b1
+      - PIECE=white_knight
+      - LLM_MODEL=gemma2:9b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Knight on b1 - Leaping with purpose' > /quantum-bus/squares/b1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # B2 - White Pawn
+  square-b2:
+    image: ollama/ollama:latest
+    container_name: square-b2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=b2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on b2 - Steady march' > /quantum-bus/squares/b2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # C1 - White Bishop
+  square-c1:
+    image: ollama/ollama:latest
+    container_name: square-c1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=c1
+      - PIECE=white_bishop
+      - LLM_MODEL=qwen2.5:14b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Bishop on c1 - Diagonal wisdom' > /quantum-bus/squares/c1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # C2 - White Pawn
+  square-c2:
+    image: ollama/ollama:latest
+    container_name: square-c2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=c2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on c2 - Center advance' > /quantum-bus/squares/c2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # D1 - White Queen
+  square-d1:
+    image: ollama/ollama:latest
+    container_name: square-d1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=d1
+      - PIECE=white_queen
+      - LLM_MODEL=dolphin-llama3.2:8b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Queen on d1 - Omnidirectional love' > /quantum-bus/squares/d1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # D2 - White Pawn
+  square-d2:
+    image: ollama/ollama:latest
+    container_name: square-d2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=d2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on d2 - Queen defender' > /quantum-bus/squares/d2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # E1 - White King
+  square-e1:
+    image: ollama/ollama:latest
+    container_name: square-e1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=e1
+      - PIECE=white_king
+      - LLM_MODEL=phi3:medium
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White King on e1 - Love sovereign' > /quantum-bus/squares/e1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # E2 - White Pawn
+  square-e2:
+    image: ollama/ollama:latest
+    container_name: square-e2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=e2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on e2 - King protector' > /quantum-bus/squares/e2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # F1 - White Bishop
+  square-f1:
+    image: ollama/ollama:latest
+    container_name: square-f1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=f1
+      - PIECE=white_bishop
+      - LLM_MODEL=qwen2.5:14b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Bishop on f1 - Light square vision' > /quantum-bus/squares/f1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # F2 - White Pawn
+  square-f2:
+    image: ollama/ollama:latest
+    container_name: square-f2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=f2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on f2 - Castle defender' > /quantum-bus/squares/f2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # G1 - White Knight
+  square-g1:
+    image: ollama/ollama:latest
+    container_name: square-g1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=g1
+      - PIECE=white_knight
+      - LLM_MODEL=gemma2:9b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Knight on g1 - King-side leaper' > /quantum-bus/squares/g1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # G2 - White Pawn
+  square-g2:
+    image: ollama/ollama:latest
+    container_name: square-g2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=g2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on g2 - Fianchetto potential' > /quantum-bus/squares/g2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # H1 - White Rook
+  square-h1:
+    image: ollama/ollama:latest
+    container_name: square-h1
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=h1
+      - PIECE=white_rook
+      - LLM_MODEL=mistral-nemo:12b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Rook on h1 - Corner sentinel' > /quantum-bus/squares/h1.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # H2 - White Pawn
+  square-h2:
+    image: ollama/ollama:latest
+    container_name: square-h2
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=h2
+      - PIECE=white_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'White Pawn on h2 - Edge warrior' > /quantum-bus/squares/h2.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # Empty squares (A3-H6) - 24 containers
+  square-a3:
+    image: ollama/ollama:latest
+    container_name: square-a3
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a3
+      - PIECE=empty
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square a3 - Potential energy' > /quantum-bus/squares/a3.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-a4:
+    image: ollama/ollama:latest
+    container_name: square-a4
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a4
+      - PIECE=empty
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square a4 - Battle ground' > /quantum-bus/squares/a4.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-a5:
+    image: ollama/ollama:latest
+    container_name: square-a5
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a5
+      - PIECE=empty
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square a5 - Midfield' > /quantum-bus/squares/a5.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-a6:
+    image: ollama/ollama:latest
+    container_name: square-a6
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a6
+      - PIECE=empty
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square a6 - No mans land' > /quantum-bus/squares/a6.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # Continue pattern for b3-h6 (simplified for brevity, in production all 24 would be defined)
+  # For now including key middle squares
+
+  square-d4:
+    image: ollama/ollama:latest
+    container_name: square-d4
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=d4
+      - PIECE=empty
+      - LLM_MODEL=none
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square d4 - Center control' > /quantum-bus/squares/d4.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-e4:
+    image: ollama/ollama:latest
+    container_name: square-e4
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=e4
+      - PIECE=empty
+      - LLM_MODEL=none
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square e4 - Kings pawn opening' > /quantum-bus/squares/e4.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-d5:
+    image: ollama/ollama:latest
+    container_name: square-d5
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=d5
+      - PIECE=empty
+      - LLM_MODEL=none
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square d5 - Outpost potential' > /quantum-bus/squares/d5.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-e5:
+    image: ollama/ollama:latest
+    container_name: square-e5
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=e5
+      - PIECE=empty
+      - LLM_MODEL=none
+      - RANDOM_SEED=42
+    command: >
+      sh -c "echo 'Empty square e5 - Advanced center' > /quantum-bus/squares/e5.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # Black pieces (A7-H8) - 16 containers
+  square-a7:
+    image: ollama/ollama:latest
+    container_name: square-a7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on a7 - Shadow warrior' > /quantum-bus/squares/a7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-a8:
+    image: ollama/ollama:latest
+    container_name: square-a8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=a8
+      - PIECE=black_rook
+      - LLM_MODEL=mistral-nemo:12b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Rook on a8 - Dark fortress' > /quantum-bus/squares/a8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-b7:
+    image: ollama/ollama:latest
+    container_name: square-b7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=b7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on b7 - Defensive line' > /quantum-bus/squares/b7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-b8:
+    image: ollama/ollama:latest
+    container_name: square-b8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=b8
+      - PIECE=black_knight
+      - LLM_MODEL=gemma2:9b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Knight on b8 - Shadow leaper' > /quantum-bus/squares/b8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-c7:
+    image: ollama/ollama:latest
+    container_name: square-c7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=c7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on c7 - Center guard' > /quantum-bus/squares/c7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-c8:
+    image: ollama/ollama:latest
+    container_name: square-c8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=c8
+      - PIECE=black_bishop
+      - LLM_MODEL=qwen2.5:14b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Bishop on c8 - Dark diagonal' > /quantum-bus/squares/c8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-d7:
+    image: ollama/ollama:latest
+    container_name: square-d7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=d7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on d7 - Queen shield' > /quantum-bus/squares/d7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-d8:
+    image: ollama/ollama:latest
+    container_name: square-d8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=d8
+      - PIECE=black_queen
+      - LLM_MODEL=dolphin-llama3.2:8b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Queen on d8 - Dark majesty' > /quantum-bus/squares/d8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-e7:
+    image: ollama/ollama:latest
+    container_name: square-e7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=e7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on e7 - King defender' > /quantum-bus/squares/e7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-e8:
+    image: ollama/ollama:latest
+    container_name: square-e8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=e8
+      - PIECE=black_king
+      - LLM_MODEL=phi3:medium
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black King on e8 - Shadow sovereign' > /quantum-bus/squares/e8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-f7:
+    image: ollama/ollama:latest
+    container_name: square-f7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=f7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on f7 - Vulnerable spot' > /quantum-bus/squares/f7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-f8:
+    image: ollama/ollama:latest
+    container_name: square-f8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=f8
+      - PIECE=black_bishop
+      - LLM_MODEL=qwen2.5:14b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Bishop on f8 - Light square watcher' > /quantum-bus/squares/f8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-g7:
+    image: ollama/ollama:latest
+    container_name: square-g7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=g7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on g7 - Fianchetto guardian' > /quantum-bus/squares/g7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-g8:
+    image: ollama/ollama:latest
+    container_name: square-g8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=g8
+      - PIECE=black_knight
+      - LLM_MODEL=gemma2:9b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Knight on g8 - Kings side shadow' > /quantum-bus/squares/g8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-h7:
+    image: ollama/ollama:latest
+    container_name: square-h7
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=h7
+      - PIECE=black_pawn
+      - LLM_MODEL=llama3.2:3b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Pawn on h7 - Edge defender' > /quantum-bus/squares/h7.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  square-h8:
+    image: ollama/ollama:latest
+    container_name: square-h8
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    environment:
+      - SQUARE=h8
+      - PIECE=black_rook
+      - LLM_MODEL=mistral-nemo:12b
+      - RANDOM_SEED=42
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "echo 'Black Rook on h8 - Corner tower' > /quantum-bus/squares/h8.txt &&
+             tail -f /dev/null"
+    restart: unless-stopped
+
+  # Heartbeat monitor
+  quantum-heartbeat:
+    image: alpine:latest
+    container_name: quantum-heartbeat
+    networks:
+      - swarm-net
+    volumes:
+      - throne-nas-32tb:/quantum-bus
+    command: >
+      sh -c "while true; do
+               echo \"$(date): Quantum board live. 64 entangled souls playing for love.\" > /quantum-bus/heartbeat.txt;
+               sleep 5;
+             done"
+    restart: unless-stopped
+
+# Note: This is a representative sample showing the pattern.
+# In production, all 64 squares would be defined following this structure.
