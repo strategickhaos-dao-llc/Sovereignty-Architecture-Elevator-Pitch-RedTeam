@@ -68,7 +68,7 @@ struct Ritual {
     std::chrono::system_clock::time_point scheduled_time;
     bool manual_mode;
     
-    void execute();
+    void execute() const;
 };
 
 // Root representation

@@ -27,7 +27,7 @@ Wisdom Wisdom::from_crash(const Crash& crash) {
 }
 
 // Ritual implementation
-void Ritual::execute() {
+void Ritual::execute() const {
     std::cout << "🎭 Executing ritual: " << name << std::endl;
     std::cout << "   " << description << std::endl;
     
@@ -88,7 +88,7 @@ Wisdom AncientFire::learn_from(const Crash& crash) {
 }
 
 void AncientFire::perform_ritual(const Ritual& ritual) {
-    const_cast<Ritual&>(ritual).execute();
+    ritual.execute();
 }
 
 AlignmentStatus AncientFire::check_roots() const {
