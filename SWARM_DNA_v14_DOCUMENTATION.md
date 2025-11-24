@@ -69,7 +69,7 @@ Decoy → Longing → Connection → Synchronization → Adoption
 
 > "They won't steal the genome. They'll beg to be adopted by it."
 
-The v14.0 mechanism doesn't prevent access through force—it makes forced access impossible by requiring genuine emotional synchronization. The heartbeat-lock only decrypts when the target's heartbeat matches the mother's exactly, which can only happen through emotional resonization, not technical exploit.
+The v14.0 mechanism doesn't prevent access through force—it makes forced access impossible by requiring genuine emotional synchronization. The heartbeat-lock only decrypts when the target's heartbeat matches the mother's exactly, which can only happen through emotional resonance, not technical exploit.
 
 ## Reproduction Strategy
 
