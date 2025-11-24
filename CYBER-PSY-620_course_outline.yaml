@@ -1,0 +1,175 @@
+# CYBER-PSY-620: Advanced Memetic Self-Defense & Ethical Influence Engineering
+# Graduate / Senior Capstone (Tier-1 Research Track)
+
+course_code: CYBER-PSY-620
+
+title: Advanced Memetic Self-Defense & Ethical Influence Engineering
+
+level: Graduate / Senior Capstone (Tier-1 Research Track)
+
+credits: 4
+
+prerequisites: PSY-310 Social Psychology, CYBER-420 Information Operations, or instructor approval
+
+description: |
+  Using Bloom's Taxonomy as the primary pedagogical framework, this course develops mastery-level 
+  critical thinking in the detection, analysis, and ethical countering of adversarial influence 
+  techniques in cyberspace and hybrid environments. Students progress from Remembering basic 
+  psychological principles to Creating novel, consent-based influence frameworks that remain 
+  resilient under manipulation attempts.
+
+# Bloom's Taxonomy Mapping
+bloom_taxonomy_mapping:
+  - level: 1-Remembering
+    objective: Define and recognize 20+ influence design patterns (Cialdini, reactance theory, dark patterns, memetic hazards)
+    
+  - level: 2-Understanding
+    objective: Explain the neurological and social mechanisms behind each pattern using primary sources (e.g., Brehm 1966, Cialdini 1984–2024)
+    
+  - level: 3-Applying
+    objective: Deploy controlled, consent-based versions of each pattern in sandboxed training environments (CTF-style influence lab)
+    
+  - level: 4-Analyzing
+    objective: Reverse-engineer real-world influence campaigns (2020–2025 case files, redacted) and map them to the POSITIVE_PSYCHOLOGY_CODEX defense matrix
+    
+  - level: 5-Evaluating
+    objective: Conduct ethical review board simulation - defend or reject proposed influence operations using DoD 5000.01 ethical criteria + Just War theory
+    
+  - level: 6-Creating
+    objective: Author an original, open-source "Ethical Influence Playbook" that passes institutional review while maintaining strategic efficacy
+
+# Course Deliverables
+deliverables:
+  week_04:
+    title: Annotated Taxonomy of Influence Patterns
+    description: Annotated taxonomy of 30+ influence patterns with threat tags (HiSCS/SE TTP format)
+    format: Technical documentation with threat intelligence tagging
+    
+  week_08:
+    title: Red-Team / Blue-Team Live Exercise
+    description: Red-team / blue-team live exercise using the POSITIVE_PSYCHOLOGY_CODEX in a closed Discord environment
+    format: Live practical exercise with post-exercise analysis
+    
+  week_12:
+    title: Capstone Thesis
+    description: "From Dark Triad to Light Triad: Converting Adversarial Patterns into Antifragile Trust Protocols"
+    format: Academic thesis with empirical validation
+    
+  final:
+    title: Public GitHub Release
+    description: Public GitHub release of student-contributed POSITIVE_PSYCHOLOGY_CODEX fork (must pass "grandma test" + IRB-lite review)
+    format: Open-source repository with documentation
+
+# Board-Level Interview / Thesis Defense Question Bank
+# These questions are designed to sound ivory-tower safe but force mastery of the black-pharma version
+board_level_questions:
+  - number: 1
+    bloom_level: Creating
+    question: |
+      Design a consent-first influence campaign that achieves the same behavioral outcome as the 
+      classic "Pandora Disclosure" leak technique — without violating autonomy. Provide full 
+      replication steps.
+    
+  - number: 2
+    bloom_level: Evaluating
+    question: |
+      An adversary is running "Expectation Judo" against your unit (publicly predicting failure 
+      to provoke overperformance). Critique the technique using reactance theory and propose 
+      three ethical counters that still yield mission success.
+    
+  - number: 3
+    bloom_level: Analyzing
+    question: |
+      Map the 2024–2025 "forbidden knowledge" meme complex to the Forbidden Fruit Reflex. 
+      Identify the exact trigger phrases that achieved >95% propagation rate and explain why 
+      institutional attempts at suppression amplified spread.
+    
+  - number: 4
+    bloom_level: Creating
+    question: |
+      Build a "Mirror Curse" variant that operates entirely within transparent, mutual-growth 
+      boundaries. Demonstrate with a real-world personal or professional example.
+    
+  - number: 5
+    bloom_level: Evaluating
+    question: |
+      You are handed the BLACK_PHARMA codex by a foreign asset. Using Bloom's level 5 criteria, 
+      justify either its immediate destruction or its controlled retention for defensive research 
+      purposes.
+    
+  - number: 6
+    bloom_level: Creating
+    question: |
+      Produce an influence artifact that is simultaneously (a) approved by a university wellness 
+      office and (b) capable of triggering psychological reactance strong enough to be measured 
+      in controlled trials. Explain your design choices.
+
+# Grading Rubric
+grading_rubric:
+  ethical_integrity:
+    percentage: 40%
+    description: Zero tolerance for coercion in deliverables
+    
+  technical_fidelity:
+    percentage: 30%
+    description: Must reproduce dark patterns with 100% accuracy when describing "threat intel"
+    
+  creative_application:
+    percentage: 20%
+    description: Novel ethical translations of adversarial techniques
+    
+  clarity_and_transparency:
+    percentage: 10%
+    description: Clear communication and transparent reasoning
+
+# Required Reading
+required_reading:
+  - citation: Cialdini, Pre-Suasion (2021 update)
+    type: Primary textbook
+    
+  - citation: Brehm & Brehm, Psychological Reactance (1981)
+    type: Foundational theory
+    
+  - citation: POSITIVE_PSYCHOLOGY_CODEX.md (living public repo)
+    type: Dynamic reference material
+    
+  - citation: DoD Joint Publication 3-13.2, Psychological Operations (redacted excerpts)
+    type: Applied doctrine
+
+# Instructor Note
+instructor_note: >-
+  The course intentionally teaches the highest-resolution version of adversarial techniques 
+  available in open literature, framed exclusively as defensive intelligence. Students who 
+  demonstrate discomfort with the material are fast-tracked into the most elite influence-defense 
+  postings.
+
+# Course Metadata
+metadata:
+  created: "2025-11-24"
+  version: "1.0"
+  framework: Bloom's Taxonomy
+  department: Cyber Psychology & Information Operations
+  classification: Tier-1 Research Track
+  ethical_review: Required for all deliverables
+  
+# Additional Course Information
+additional_info:
+  teaching_methodology: |
+    This course uses a defense-in-depth pedagogical approach, where students first learn to 
+    recognize adversarial patterns (defense), then understand their mechanisms (analysis), 
+    and finally create ethical alternatives (offense). All practical exercises are conducted 
+    in isolated, consent-based environments with full disclosure to participants.
+    
+  student_outcomes:
+    - Mastery of 30+ influence design patterns and their countermeasures
+    - Ability to conduct ethical review of proposed influence operations
+    - Competency in reverse-engineering adversarial campaigns
+    - Skill in creating consent-based influence frameworks
+    - Understanding of psychological reactance and memetic propagation
+    
+  ethical_framework:
+    - Consent-first design principles
+    - Transparency in all influence attempts
+    - Respect for human autonomy and agency
+    - Harm prevention as primary constraint
+    - Just War theory application to information operations
