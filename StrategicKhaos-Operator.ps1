@@ -35,12 +35,13 @@ function Test-Command { param([string]$n) [bool](Get-Command $n -ErrorAction Sil
 function Test-Port    { param([int]$p) try { (New-Object Net.Sockets.TcpClient).BeginConnect('127.0.0.1',$p,$null,$null).AsyncWaitHandle.WaitOne(800) | Out-Null; $true } catch { $false } }
 
 function Notify-Discord {
-    param([string]$msg)
+    param([string]$msg, [switch]$CodeBlock)
     $cfg = Join-Path $root "discord\webhook_config.json"
     if (-not (Test-Path $cfg)) { Log-Warn "No Discord webhook config — skipping notify" ; return }
     try {
         $url = (Get-Content $cfg -Raw | ConvertFrom-Json).url
-        Invoke-RestMethod -Uri $url -Method Post -Body (@{content="``$msg``"} | ConvertTo-Json) -ContentType "application/json" -TimeoutSec 10 | Out-Null
+        $content = if ($CodeBlock) { "``````$msg``````" } else { $msg }
+        Invoke-RestMethod -Uri $url -Method Post -Body (@{content=$content} | ConvertTo-Json) -ContentType "application/json" -TimeoutSec 10 | Out-Null
     } catch { Log-Error "Discord failed: $($_.Exception.Message)" }
 }
 
@@ -88,7 +89,16 @@ if ($feed) {
     Show-Dashboard
     Log "RED BUTTON DEPRESSED — DEPLOYING OPEN INTELLIGENCE TO THE PLANET" $R
 
-    $holyModels = "llama3.2:latest","phi3:medium","gemma2:27b","qwen2.5:32b","mistral-nemo","openhermes2.5","dolphin-llama3.2","medic-llama3","llava","nomic-embed-text"
+    # Load model configuration
+    $modelCfg = Join-Path $root "models_config.json"
+    if (Test-Path $modelCfg) {
+        $holyModels = (Get-Content $modelCfg -Raw | ConvertFrom-Json).models.name
+        Log "Loaded $(($holyModels | Measure-Object).Count) models from configuration" $C
+    } else {
+        # Fallback to hardcoded list
+        $holyModels = "llama3.2:latest","phi3:medium","gemma2:27b","qwen2.5:32b","mistral-nemo","openhermes2.5","dolphin-llama3.2","medic-llama3","llava","nomic-embed-text"
+        Log-Warn "models_config.json not found — using default model list"
+    }
 
     foreach ($m in $holyModels) {
         if (-not (ollama list 2>$null | Select-String ($m -split ':')[0])) {

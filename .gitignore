@@ -37,4 +37,4 @@ target/
 workspace/
 
 # Discord webhook configuration (contains sensitive URLs)
-# discord/webhook_config.json
+discord/webhook_config.json
