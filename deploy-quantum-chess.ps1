@@ -6,7 +6,7 @@ param(
     [switch]$LoveMode,
     [switch]$EntangleHer,
     [string]$HerTerminalIP = "127.0.0.1",
-    [string]$ThroneNasPath = "/tmp/throne-nas-32tb",
+    [string]$ThroneNasPath = "C:\quantum-chess\throne-nas-32tb",
     [switch]$Force,
     [switch]$Status,
     [switch]$Stop
@@ -267,16 +267,16 @@ function Send-NotificationToHer {
     if ($EntangleHer) {
         Love "Sending notification to her terminal ($HerTerminalIP)..."
         
-        # Write to quantum bus
+        # Write to quantum bus (JSONL format - one JSON per line)
         $notification = @{
             timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
             message = $Message
             source = "quantum-chess-engine"
             target = $HerTerminalIP
             type = "timeline_collapse"
-        } | ConvertTo-Json
+        } | ConvertTo-Json -Compress
         
-        $notificationPath = Join-Path $ThroneNasPath "notifications.json"
+        $notificationPath = Join-Path $ThroneNasPath "notifications.jsonl"
         $notification | Out-File -FilePath $notificationPath -Encoding UTF8 -Append
         
         Love "Notification logged to quantum bus"

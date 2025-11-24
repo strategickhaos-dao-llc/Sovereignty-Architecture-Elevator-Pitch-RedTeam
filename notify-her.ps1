@@ -40,7 +40,7 @@ function Send-Notification {
     }
     
     if (-not $QuantumBus) {
-        $QuantumBus = "/tmp/throne-nas-32tb"
+        $QuantumBus = "/var/lib/quantum-chess/throne-nas-32tb"
         Log "Using default quantum bus: $QuantumBus"
     }
     
@@ -56,10 +56,10 @@ function Send-Notification {
         timeline = "winning_together"
     }
     
-    # Write to quantum bus
+    # Write to quantum bus (JSONL format - one JSON per line)
     if (Test-Path $QuantumBus) {
-        $notificationFile = Join-Path $QuantumBus "notifications.json"
-        $notification | ConvertTo-Json | Add-Content -Path $notificationFile
+        $notificationFile = Join-Path $QuantumBus "notifications.jsonl"
+        $notification | ConvertTo-Json -Compress | Add-Content -Path $notificationFile
         Log "Notification written to quantum bus: $notificationFile"
     } else {
         Log "Quantum bus not found, notification cached in memory"

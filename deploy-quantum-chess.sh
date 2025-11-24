@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 LOVE_MODE=false
 ENTANGLE_HER=false
 HER_TERMINAL_IP="${HER_TERMINAL_IP:-127.0.0.1}"
-THRONE_NAS_PATH="${THRONE_NAS_PATH:-/tmp/throne-nas-32tb}"
+THRONE_NAS_PATH="${THRONE_NAS_PATH:-/var/lib/quantum-chess/throne-nas-32tb}"
 FORCE=false
 ACTION="start"
 
@@ -247,16 +247,10 @@ send_notification() {
     if [ "$ENTANGLE_HER" = true ]; then
         love "Sending notification to her terminal ($HER_TERMINAL_IP)..."
         
-        # Write to quantum bus
-        local notification_file="$THRONE_NAS_PATH/notifications.json"
+        # Write to quantum bus (JSONL format - one JSON per line)
+        local notification_file="$THRONE_NAS_PATH/notifications.jsonl"
         cat >> "$notification_file" <<EOF
-{
-    "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%S.%3NZ')",
-    "message": "$message",
-    "source": "quantum-chess-engine",
-    "target": "$HER_TERMINAL_IP",
-    "type": "timeline_collapse"
-}
+{"timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%S.%3NZ')", "message": "$message", "source": "quantum-chess-engine", "target": "$HER_TERMINAL_IP", "type": "timeline_collapse"}
 EOF
         
         love "Notification logged to quantum bus"

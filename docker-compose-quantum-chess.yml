@@ -21,7 +21,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${THRONE_NAS_PATH:-/tmp/throne-nas-32tb}
+      device: ${THRONE_NAS_PATH:-/var/lib/quantum-chess/throne-nas-32tb}
       o: bind
 
 services:

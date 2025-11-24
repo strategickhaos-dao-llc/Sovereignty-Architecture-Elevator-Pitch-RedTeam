@@ -137,8 +137,7 @@ fi
 
 # Test 8: Verify quantum bus mounting
 log "Test 8: Verifying quantum bus mounting..."
-docker exec square-e4 sh -c "ls /quantum-bus > /dev/null 2>&1"
-if [ $? -eq 0 ]; then
+if docker exec square-e4 sh -c "ls /quantum-bus > /dev/null 2>&1"; then
     success "Quantum bus mounted correctly in containers"
 else
     error "Quantum bus not accessible in containers"
@@ -200,8 +199,7 @@ fi
 
 # Test 13: Verify network connectivity
 log "Test 13: Verifying network connectivity between containers..."
-docker exec square-e4 sh -c "ping -c 1 quantum-orchestrator > /dev/null 2>&1"
-if [ $? -eq 0 ]; then
+if docker exec square-e4 sh -c "ping -c 1 quantum-orchestrator > /dev/null 2>&1"; then
     success "Network connectivity verified"
 else
     error "Containers cannot communicate on swarm-net"
