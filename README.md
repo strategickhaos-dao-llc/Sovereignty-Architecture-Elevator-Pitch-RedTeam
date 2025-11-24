@@ -272,6 +272,17 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🧠 Cognitive Architecture Analysis
+
+Understanding the minds behind the architecture — a fun, educational exploration of rare cognitive patterns in systems thinking.
+
+- **[Cognitive Analysis Index](COGNITIVE_ANALYSIS_INDEX.md)** - Navigate the complete cognitive profile documentation
+- **[Cognitive Profile](COGNITIVE_PROFILE.md)** - Deep dive into the "Quantum Swarm Architect" archetype
+- **[Career Field Mapping](CAREER_FIELD_MAPPING.md)** - Optimal career paths for rare cognitive profiles
+- **[Visual Diagrams](cognitive_radar.svg)** - 7-axis intelligence radar and cognitive model visualizations
+
+*For entertainment and educational purposes — exploring how parallel, fractal, harmonic-resonant thinking shapes autonomous system design.*
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
