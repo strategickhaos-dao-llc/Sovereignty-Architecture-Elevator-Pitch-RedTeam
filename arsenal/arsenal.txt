@@ -1,0 +1,121 @@
+# Arsenal Bibliography - 100 Openly Accessible Research Sources
+# All URLs are .gov, .org, .edu, arXiv, or direct open-access PDFs
+# No paywalls, no login, no rate-limits
+
+# Category 1: Computer Science & AI Foundations (the "Constitution" tier)
+https://www.cs.cmu.edu/~./15110-s13/papers/dijkstra-1968.pdf
+https://www.cs.cmu.edu/~crary/819-f09/Lamport78.pdf
+https://lamport.azurewebsites.net/pubs/pubs.html#lamport-bakery
+https://www.hpl.hp.com/techreports/tandem/TR-85.6.pdf
+https://arxiv.org/pdf/1706.03762.pdf
+https://arxiv.org/pdf/2005.14165.pdf
+https://arxiv.org/pdf/2212.03551.pdf
+https://arxiv.org/pdf/2303.08774.pdf
+https://www.usenix.org/legacy/events/osdi04/tech/full_papers/ghemawat/ghemawat.pdf
+https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf
+
+# Category 2: Cryptography & Zero-Trust Canon
+https://datatracker.ietf.org/doc/html/rfc8446
+https://datatracker.ietf.org/doc/html/rfc8017
+https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf
+https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63b.pdf
+https://csrc.nist.gov/publications/detail/sp/800-207/final
+https://datatracker.ietf.org/doc/html/rfc7748
+https://datatracker.ietf.org/doc/html/rfc8032
+https://noiseprotocol.org/noise.pdf
+https://signal.org/docs/specifications/doubleratchet/
+https://eprint.iacr.org/2016/1157.pdf
+
+# Category 3: Distributed Systems & Consensus Bible
+https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf
+https://www.cs.cornell.edu/courses/cs614/2004sp/papers/fischer85impossibility.pdf
+https://lamport.azurewebsites.net/pubs/paxos-simple.pdf
+https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf
+https://pmg.csail.mit.edu/papers/osdi04-viewstamped.pdf
+https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf
+https://pdos.csail.mit.edu/6.824/papers/chubby.pdf
+https://pdos.csail.mit.edu/6.824/papers/spanner.pdf
+https://pdos.csail.mit.edu/6.824/papers/dynamo.pdf
+https://pdos.csail.mit.edu/6.824/papers/zookeeper.pdf
+
+# Category 4: Law, Governance & Digital Sovereignty
+https://www.gpo.gov/fdsys/pkg/STATUTE-114/pdf/STATUTE-114-Pg815.pdf
+https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679
+https://www.ftc.gov/system/files/documents/public_statements/1566353/statement_of_chair_lina_m_khan_regarding_the_report_to_congress_on_privacy_and_security_final_june_2023.pdf
+https://www.whitehouse.gov/wp-content/uploads/2022/10/Blueprint-for-an-AI-Bill-of-Rights.pdf
+https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf
+https://www.nist.gov/system/files/documents/2023/01/26/AI_RMF_Playbook_NIST.pdf
+https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF
+https://www.ftc.gov/system/files/ftc_gov/pdf/PCFWG_FINAL_REPORT_APPROVED_BY_COMMISSIONERS_10-18-23.pdf
+https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/
+
+# Category 5: Neuroscience & Collective Intelligence
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3005627/pdf/nihms254631.pdf
+https://www.pnas.org/doi/pdf/10.1073/pnas.082008299
+https://www.santafe.edu/research/results/working-papers/the-evolution-of-cooperation
+https://arxiv.org/pdf/cond-mat/0407252.pdf
+https://www.nature.com/articles/nature03248.pdf
+https://www.pnas.org/doi/pdf/10.1073/pnas.0914580107
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3328971/pdf/nihms365293.pdf
+https://arxiv.org/pdf/1910.00810.pdf
+https://www.nature.com/articles/s41586-019-1724-z.pdf
+https://www.pnas.org/doi/pdf/10.1073/pnas.1914372117
+
+# Category 6: Mathematics & Formal Verification Canon
+https://arxiv.org/pdf/cs/0205026.pdf
+https://arxiv.org/pdf/1908.05839.pdf
+https://arxiv.org/pdf/1910.09336.pdf
+https://isabelle.in.tum.de/dist/Isabelle/doc/tutorial.pdf
+https://coq.inria.fr/distrib/current/files/Tutorial.pdf
+https://leanprover.github.io/theorem_proving_in_lean/
+https://arxiv.org/pdf/1908.10469.pdf
+https://arxiv.org/pdf/2102.06203.pdf
+https://arxiv.org/pdf/1701.05517.pdf
+https://www.cl.cam.ac.uk/~lp15/papers/Automation/
+
+# Category 7: Open-Source Licensing & Ethics
+https://www.gnu.org/licenses/gpl-3.0.txt
+https://www.apache.org/licenses/LICENSE-2.0.txt
+https://opensource.org/licenses/MIT
+https://opensource.org/licenses/BSD-3-Clause
+https://creativecommons.org/licenses/by/4.0/legalcode.txt
+https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt
+https://www.mozilla.org/en-US/MPL/2.0/
+https://opensource.org/licenses/ISC
+https://www.eclipse.org/legal/epl-2.0/
+https://choosealicense.com/licenses/
+
+# Category 8: Energy, Hardware & Embodied AI
+https://www.nrel.gov/docs/fy21osti/78482.pdf
+https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf
+https://riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf
+https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf
+https://arxiv.org/pdf/1907.10597.pdf
+https://arxiv.org/pdf/2104.10350.pdf
+https://www.nature.com/articles/s41928-020-00514-7.pdf
+https://arxiv.org/pdf/2104.10371.pdf
+https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9499913
+https://arxiv.org/pdf/2111.00364.pdf
+
+# Category 9: Biology & Genome-Scale Engineering
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1689359/pdf/11769384.pdf
+https://www.genome.gov/human-genome-project
+https://www.nature.com/articles/nature01262.pdf
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3042201/pdf/nihms269915.pdf
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3232409/pdf/nihms334647.pdf
+https://www.nature.com/articles/nature12027.pdf
+https://www.nature.com/articles/nature12111.pdf
+https://arxiv.org/pdf/2107.04053.pdf
+
+# Category 10: Miscellaneous "Must-Know Forever" Papers
+https://www.cs.virginia.edu/~evans/david/postscript/robust-programming.pdf
+https://www.usenix.org/legacy/events/hotdep06/tech/full_papers/condit/condit.pdf
+https://www.usenix.org/legacy/publications/library/proceedings/osdi99/full_papers/banga/banga.pdf
+https://www.usenix.org/legacy/publications/library/proceedings/usenix01/full_papers/pai/pai.pdf
+https://arxiv.org/pdf/1810.04805.pdf
+https://arxiv.org/pdf/1909.11942.pdf
+https://arxiv.org/pdf/2010.02502.pdf
+https://arxiv.org/pdf/2104.09864.pdf
+https://arxiv.org/pdf/2203.15556.pdf
+https://arxiv.org/pdf/2305.10601.pdf

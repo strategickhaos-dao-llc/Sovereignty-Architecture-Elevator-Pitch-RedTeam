@@ -1,0 +1,5 @@
+# Ignore downloaded papers (can be regenerated with download_arsenal.sh)
+papers/*
+
+# Keep the directory structure
+!papers/.gitkeep

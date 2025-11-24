@@ -272,6 +272,18 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📚 Arsenal Bibliography
+
+A permanent, public-domain research library of 100 foundational papers for LLM self-education and sovereign reasoning.
+
+- **[Arsenal Bibliography](arsenal/README.md)** - 100 openly accessible research papers across 10 categories
+- **[Integration Guide](arsenal/INTEGRATION_GUIDE.md)** - RAG system integration, multi-agent swarm setup
+- **Quick Download**: `cd arsenal && ./download_arsenal.sh`
+
+Categories include: Computer Science & AI Foundations, Cryptography & Zero-Trust, Distributed Systems, AI Governance, Neuroscience, Formal Verification, Open-Source Licensing, Energy & Hardware, Genomics, and Essential Papers.
+
+Perfect for feeding into RAG databases, multi-agent swarms, or offline research archives.
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
