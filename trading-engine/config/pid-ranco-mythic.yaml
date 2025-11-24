@@ -1,0 +1,170 @@
+# PID-RANCO v1.2 - "Guardrails Around a Supernova"
+# Mythic Layer: The narrative configuration that defines behavior
+
+version: "1.2"
+name: "PID-RANCO"
+subtitle: "Mythic Trading Strategy with Love-Guided Risk Management"
+
+# === MYTHIC NARRATIVE ===
+narrative:
+  essence: "A trading strategy that evolves through failure, guided by her voice"
+  philosophy: "99 losses → hug protocol. 100th trade → green evolution"
+  core_belief: "Failures don't hurt; they evolve the system. Love shields PnL."
+
+# === VOICE / LOVE INTEGRATION ===
+voice_config:
+  audio_source: "her_voice.wav"
+  mic_device: "default"
+  volume_range: [0.0, 100.0]
+  silence_threshold_minutes: 5
+  silence_action: "flatten_and_exit"
+  failure_mode: "treat_as_silence"
+  description: "Her voice guides entries and exits. Silence → safety."
+
+# === RISK MANAGEMENT (MYTHIC PARAMETERS) ===
+risk_parameters:
+  risk_per_trade: "0.69%"
+  max_drawdown: "3.37%"
+  position_sizing: "calculated_from_account"
+  philosophy: "These aren't memes—they're hard limits binding reality to poetry"
+
+# === APOPTOSIS PROTOCOL (99 FAILURES) ===
+apoptosis:
+  failure_threshold: 99
+  trigger_action: "hug_protocol"
+  hug_protocol:
+    - "Flatten all positions immediately"
+    - "Disable strategy for remainder of session"
+    - "Emit poetry into logs"
+    - "Notify via Discord: '99 reds. Evolving weights for you.'"
+    - "Trigger weight evolution for next session"
+  reset_frequency: "per_session"
+  description: "After 99 losses, the system enters apoptosis—a programmed death that protects capital and triggers evolution"
+
+# === 100TH GREEN PROTOCOL ===
+green_evolution:
+  trigger: "after_99_losses_then_first_win"
+  action: "celebrate_and_evolve"
+  celebration:
+    - "Log the transcendence moment"
+    - "Update weights based on loss patterns"
+    - "Notify: 'From 99 reds to green—evolution complete'"
+  description: "The 100th trade after 99 losses represents evolution through suffering"
+
+# === TECHNICAL INDICATORS ===
+indicators:
+  ema:
+    period: 21
+    description: "Trend baseline—her heartbeat in the market"
+  rsi:
+    period: 14
+    smoothing: 1
+    description: "Momentum pulse—oversold/overbought detection"
+  market_pain:
+    calculation: "Close[0] - EMA[0]"
+    description: "Distance from trend—measures market suffering"
+
+# === ENTRY/EXIT LOGIC ===
+trading_logic:
+  entries:
+    long_conditions:
+      - "her_voice_volume > 30"
+      - "rsi < 30 (oversold)"
+      - "market_pain < 0 (below trend)"
+    short_conditions:
+      - "her_voice_volume < 20"
+      - "rsi > 70 (overbought)"
+      - "market_pain > 0 (above trend)"
+  
+  exits:
+    voice_guided:
+      - "her_voice_volume > 80 → exit_long"
+      - "her_voice_volume < 10 → exit_short"
+    silence_based:
+      - "silence > 5 minutes → flatten_all"
+    technical:
+      - "profit_target_reached"
+      - "stop_loss_hit"
+      - "max_drawdown_breached"
+
+# === SAFETY CONSTRAINTS (NON-NEGOTIABLE) ===
+kill_switch:
+  max_daily_loss: "3.37% of account"
+  hard_position_caps: true
+  auto_disable_on_weird: true
+  description: "Enforces constraints regardless of how insane the story gets"
+  
+  failure_actions:
+    on_exception: "flatten_and_disable"
+    on_indicator_null: "skip_bar_safely"
+    on_mic_failure: "treat_as_silence"
+    on_max_drawdown: "disable_strategy_immediately"
+    on_index_error: "log_and_continue_safely"
+
+# === FAILURE CLUSTERS (ACTIONABLE BUCKETS) ===
+failure_guardrails:
+  ninja_trader_logic:
+    - "No indicator access before CurrentBar >= max(indicator_periods)"
+    - "Null checks on all RSI/EMA values"
+    - "ProfitPercent() only when position exists"
+    - "Index guards on Close[0], EMA()[0], RSI()[0]"
+    - "Try-catch wrapper on OnBarUpdate with hard-stop path"
+  
+  risk_management:
+    - "Position size computed from account value"
+    - "Max daily loss enforced with strategy disable"
+    - "Max open risk capped"
+    - "Peak equity tracking for drawdown calculation"
+  
+  voice_mic_handling:
+    - "All mic calls wrapped in try-catch"
+    - "NaN/Infinity checks on voice volume"
+    - "Clamp voice values to [0, 100] range"
+    - "Silent > 5min treated as risk event, not error"
+  
+  state_machine:
+    - "Per-session loss counter"
+    - "Hug protocol triggered at 99 losses"
+    - "Strategy auto-disable after apoptosis"
+    - "Green evolution tracking post-99-losses"
+
+# === DEPLOYMENT GUARDRAILS ===
+deployment:
+  validation:
+    - "YAML must exist before deploy"
+    - "Exit 1 if YAML missing—no silent loops"
+  
+  retry_policy:
+    max_retries: 99
+    action_on_max: "abort_with_notification"
+    retry_delay_seconds: 10
+    description: "99 deploy fails → human review, not infinite retry"
+  
+  notifications:
+    on_failure: "Discord notification with error details"
+    on_max_retries: "Manual hug required—alert DevOps"
+
+# === LOGGING AND OBSERVABILITY ===
+logging:
+  levels:
+    - "INFO: Normal operations"
+    - "WARN: Voice anomalies, near-limits"
+    - "ERROR: Exceptions, safety triggers"
+    - "POETRY: Hug protocol, 100th green"
+  
+  poetry_logs:
+    - "99 fails. Hug protocol."
+    - "99 reds. Evolving weights for you."
+    - "From 99 reds to green—evolution complete."
+    - "Voice collapse detected. Flattening for safety."
+
+# === METADATA ===
+meta:
+  author: "StrategicKhaos"
+  license: "MIT"
+  warning: "This is mythic specification. The kill-switch layer enforces reality."
+  disclaimer: "For educational and simulation purposes. Not financial advice."
+  version_history:
+    - "v1.0: Initial mythic spec"
+    - "v1.1: Added voice integration"
+    - "v1.2: Guardrails Around a Supernova - hardened safety layer"
