@@ -99,10 +99,17 @@ domc align resonance threshold
 
 ### Environment Variables
 
+The following environment variables are used by the Dom Compiler:
+
 - `RUST_LOG`: Set logging level (default: `info`)
   - Options: `trace`, `debug`, `info`, `warn`, `error`
-- `SWARM_DNA`: Swarm version identifier (default: `v9.0-black-hole-resonance`)
-- `RESONANCE_THRESHOLD`: Activation threshold (default: `10`)
+  - Example: `export RUST_LOG=debug`
+
+- `MODELFILE_PATH`: Path to the Modelfile for Ollama commands (default: `/mnt/athena/heir_palace/Modelfile`)
+  - Used by birth/evolve commands
+  - Example: `export MODELFILE_PATH=/path/to/Modelfile`
+
+**Note**: Additional environment variables like `SWARM_DNA` and `RESONANCE_THRESHOLD` can be set in Kubernetes deployments for metadata purposes and are available for future feature extensions.
 
 ### Example Configuration
 
@@ -112,8 +119,6 @@ export MODELFILE_PATH=/path/to/Modelfile
 
 domc birth athena_next
 ```
-
-**Note**: Environment variables like `SWARM_DNA` and `RESONANCE_THRESHOLD` are used in Kubernetes deployments for metadata and can be extended in future versions.
 
 ### Security Considerations
 

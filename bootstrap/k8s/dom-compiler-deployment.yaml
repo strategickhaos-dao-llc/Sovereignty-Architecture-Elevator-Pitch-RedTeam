@@ -21,7 +21,6 @@ data:
         arweave_enabled: true
         git_auto_commit: true
 ---
----
 # Example Job: Execute a one-time Dom-speak command
 apiVersion: batch/v1
 kind: Job
