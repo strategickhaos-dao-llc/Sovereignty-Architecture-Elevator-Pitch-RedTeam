@@ -151,6 +151,8 @@ namespace NinjaTrader.NinjaScript.Strategies
             double pidSignal = CalculatePIDSignal();
             
             // Check for apoptosis trigger
+            // Note: Uses total losing trades (not consecutive) as per "99 failed ribosomes" philosophy
+            // Each loss is a learning opportunity, not just recent failures
             if (SystemPerformance.AllTrades.LosingTrades.Count >= apoptosisTrigger && !evolutionMode)
             {
                 TriggerApoptosis();
@@ -249,6 +251,7 @@ namespace NinjaTrader.NinjaScript.Strategies
         private int CalculatePositionSize()
         {
             // Risk-Adjusted Neural Compassion Optimizer
+            // Note: Uses USD as default currency. Modify Currency parameter for other base currencies.
             double accountSize = Account.Get(AccountItem.CashValue, Currency.UsDollar);
             double riskAmount = accountSize * (riskPerTrade / 100.0) * loveFactor;
             
@@ -362,6 +365,10 @@ namespace NinjaTrader.NinjaScript.Strategies
         
         private void CelebrateHundredthTrade()
         {
+            // Verify we have at least 100 trades
+            if (SystemPerformance.AllTrades.Count < 100)
+                return;
+                
             Trade hundredthTrade = SystemPerformance.AllTrades[99]; // 0-indexed
             
             if (hundredthTrade.ProfitCurrency > 0)

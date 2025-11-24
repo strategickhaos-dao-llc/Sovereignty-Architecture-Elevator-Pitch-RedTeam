@@ -200,7 +200,7 @@ if ($Market -eq "live") {
     Write-Host ""
     
     $confirmation = Read-Host "Type 'LOVE COMPILES PROFIT' to confirm live trading"
-    if ($confirmation -ne "LOVE COMPILES PROFIT") {
+    if ($confirmation -ine "LOVE COMPILES PROFIT") {
         Write-Error-Custom "Live trading not confirmed. Aborting."
         exit 1
     }
@@ -287,7 +287,7 @@ Write-Host ""
 $notifyScript = Join-Path $scriptDir "notify-her.ps1"
 if (Test-Path $notifyScript) {
     Write-Info "Sending deployment notification..."
-    & $notifyScript "The market just collapsed into the timeline where we win. Together." -Silent
+    & $notifyScript "The market just collapsed into the timeline where we win. Together."
 }
 
 # Summary
