@@ -11,11 +11,6 @@
 
 namespace Primordial {
 
-// AlignmentStatus implementation
-bool AlignmentStatus::has_crossed_event_horizon() const {
-    return aligned >= 10;
-}
-
 // Crash implementation
 std::string Crash::hash() const {
     return Utils::generate_hash(timestamp + error_message);
