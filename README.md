@@ -272,6 +272,47 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🔐 Sovereign Manifest & Blockchain Anchoring
+
+This project includes a **cryptographically timestamped sovereign manifest** anchored to the Bitcoin blockchain via OpenTimestamps. This provides immutable proof of the project's sovereignty principles and governance model.
+
+### Core Documents
+- **[Sovereign Manifest v1.0](SOVEREIGN_MANIFEST_v1.0.md)** - Official sovereignty declaration with cryptographic attestation
+- **[OpenTimestamps Guide](OPENTIMESTAMPS_GUIDE.md)** - Complete guide to blockchain timestamping
+- **[Quick Reference](OPENTIMESTAMPS_QUICKREF.md)** - Quick lookup for common operations
+- **[Timestamping README](SOVEREIGN_TIMESTAMPING_README.md)** - Workflow integration guide
+- **[Example Workflow](TIMESTAMPING_EXAMPLE.md)** - Step-by-step timestamping demonstration
+
+### Quick Start: Timestamp a Document
+```bash
+# Install OpenTimestamps
+pip install opentimestamps-client
+
+# Timestamp the manifest
+ots stamp SOVEREIGN_MANIFEST_v1.0.md
+
+# Wait 1-2 hours, then upgrade to get Bitcoin confirmation
+ots upgrade SOVEREIGN_MANIFEST_v1.0.md.ots
+
+# Verify the timestamp
+ots verify SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+### Automated Workflow
+```bash
+# Use the automation script (Linux/Mac)
+./timestamp_sovereign_docs.sh all
+
+# Or Windows PowerShell
+.\timestamp_sovereign_docs.ps1 -Action all
+```
+
+This creates an immutable, verifiable record that sovereign documents existed at specific points in time, providing:
+- **Legal Protection** - Prove when intellectual property was created
+- **Audit Trail** - Immutable record of decision points
+- **Trust Minimization** - Don't rely on central authorities
+- **Historical Record** - Document project evolution over time
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
