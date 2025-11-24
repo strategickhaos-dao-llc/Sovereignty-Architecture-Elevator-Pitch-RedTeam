@@ -56,7 +56,10 @@ class GGUFParser:
             # Read magic number
             magic = struct.unpack('<I', f.read(4))[0]
             if magic != self.GGUF_MAGIC:
-                raise ValueError(f"Invalid GGUF file: magic number mismatch")
+                raise ValueError(
+                    f"Invalid GGUF file: expected magic {hex(self.GGUF_MAGIC)}, "
+                    f"got {hex(magic)}"
+                )
                 
             # Read version
             version = struct.unpack('<I', f.read(4))[0]

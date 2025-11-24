@@ -122,7 +122,10 @@ class ModelLineage:
                 
             # Group quantization variants
             if info['quantization']:
-                base_name = info['model_name'].split('-q')[0]  # Remove quantization suffix
+                # Remove quantization suffix more robustly
+                import re
+                # Match common quantization patterns like -q4, -Q4_0, -GGUF-Q5_K_M
+                base_name = re.sub(r'-[qQ]\d+[_\w]*', '', info['model_name'])
                 graph['quantization_variants'][base_name].append({
                     'name': info['model_name'],
                     'quantization': info['quantization'],

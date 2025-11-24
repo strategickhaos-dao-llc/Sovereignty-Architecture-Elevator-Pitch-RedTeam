@@ -316,15 +316,23 @@ Built with 🔥 by the Strategickhaos Swarm Intelligence collective
                 Path.cwd() / 'tools',
                 Path(__file__).parent.parent.parent / 'tools',
             ]
+            symlink_created = False
             for tools_path in possible_paths:
                 if tools_path.exists():
                     try:
                         tools_link.symlink_to(tools_path)
                         results.append(f"{tools_link} -> {tools_path}")
+                        symlink_created = True
                         break
-                    except (OSError, NotImplementedError):
+                    except (OSError, NotImplementedError) as e:
                         # Symlink not supported on this platform
-                        pass
+                        continue
+            
+            if not symlink_created:
+                results.append(
+                    f"⚠️  Could not create tools symlink (platform may not support symlinks). "
+                    f"Copy tools/ directory manually if needed."
+                )
                         
         return results
 

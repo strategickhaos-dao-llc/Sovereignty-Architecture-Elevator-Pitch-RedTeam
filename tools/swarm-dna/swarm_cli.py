@@ -37,6 +37,7 @@ def print_banner():
 
 def cmd_parse_blobs(args):
     """Parse model blobs and extract metadata"""
+    # Note: Using direct imports (not relative) because this is designed to run as a standalone script
     from gguf_parser import parse_blob_directory
     import yaml
     

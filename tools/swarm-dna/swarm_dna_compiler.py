@@ -61,6 +61,12 @@ class SwarmDNACompiler:
             }
             
         if obs.get('visualization') == 'Grafana':
+            depends_on = []
+            if 'prometheus' in services:
+                depends_on.append('prometheus')
+            if 'loki' in services:
+                depends_on.append('loki')
+            
             services['grafana'] = {
                 'image': 'grafana/grafana:latest',
                 'ports': ['3000:3000'],
@@ -69,7 +75,7 @@ class SwarmDNACompiler:
                     'GF_INSTALL_PLUGINS=grafana-piechart-panel',
                 ],
                 'volumes': ['./monitoring/grafana:/etc/grafana'],
-                'depends_on': ['prometheus', 'loki'] if 'prometheus' in services else [],
+                'depends_on': depends_on,
                 'restart': 'unless-stopped',
             }
             
