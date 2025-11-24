@@ -7,9 +7,17 @@ Provides search, terminal, and external action capabilities
 import subprocess
 import json
 import os
+import platform
 from typing import List, Dict, Any, Optional
 from urllib import request, parse
 import urllib.error
+
+# Optional dependency for system metrics
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
 
 
 def duckduckgo_search(query: str, max_results: int = 5) -> List[Dict[str, str]]:
@@ -209,11 +217,7 @@ def simulate_llm_think(prompt: str) -> str:
 
 def get_system_metrics() -> Dict[str, Any]:
     """Get system performance metrics"""
-    try:
-        # Basic system info
-        import platform
-        import psutil
-        
+    if PSUTIL_AVAILABLE:
         return {
             'cpu_percent': psutil.cpu_percent(interval=0.1),
             'memory_percent': psutil.virtual_memory().percent,
@@ -221,14 +225,14 @@ def get_system_metrics() -> Dict[str, Any]:
             'platform': platform.system(),
             'python_version': platform.python_version()
         }
-    except ImportError:
+    else:
         # Fallback if psutil not available
         return {
             'cpu_percent': 0.0,
             'memory_percent': 0.0,
             'disk_usage': 0.0,
-            'platform': 'unknown',
-            'python_version': 'unknown',
+            'platform': platform.system(),
+            'python_version': platform.python_version(),
             'note': 'Install psutil for detailed metrics'
         }
 

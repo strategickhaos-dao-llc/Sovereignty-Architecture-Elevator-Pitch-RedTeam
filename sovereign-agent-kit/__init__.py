@@ -18,7 +18,8 @@ from .core.dom_kernel import (
 from .core.obsidian_graph import (
     Vault,
     get_vault,
-    init_vault
+    init_vault,
+    current_vault
 )
 
 from .core.tools import (
@@ -37,6 +38,7 @@ __all__ = [
     'Vault',
     'get_vault',
     'init_vault',
+    'current_vault',
     'duckduckgo_search',
     'run_terminal',
     'get_system_metrics',

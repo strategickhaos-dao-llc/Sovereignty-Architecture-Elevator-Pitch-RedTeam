@@ -69,7 +69,8 @@ class DomKernel:
         self.badge = badge
         self.vault = vault if vault else get_vault()
         
-        # Polarity assignment: even badges are PARROT (guardian), odd are KALI (hunter)
+        # Polarity assignment: odd badges are KALI (hunter), even badges are PARROT (guardian)
+        # badge % 2 returns 1 (truthy) for odd, 0 (falsy) for even
         self.polarity = Polarity.KALI if badge % 2 else Polarity.PARROT
         
         # Initial phase: SUNSHINE (expansion)
@@ -83,7 +84,7 @@ class DomKernel:
         
         # Circle of fifths ordering for harmonic sequencing
         # Musical intervals mapped to board indices for natural ordering
-        self.circle_of_fifths = [0, 7, 2, 9, 4, 11 % 10, 6, 1, 8, 3]
+        self.circle_of_fifths = [0, 7, 2, 9, 4, 1, 6, 1, 8, 3]
         
         # Cycle counter for resonance calculation
         self.cycle_count = 0
