@@ -280,6 +280,10 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 📚 Knowledge Base
+
+- **[Reverse Psychology Codex](/docs/REVERSE_PSYCHOLOGY_CODEX.md)** - 100 research-backed psychological tactics for sovereignty-minded builders. A bibliographic arsenal to protect minds against manipulation and understand the science of behavioral resistance.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
