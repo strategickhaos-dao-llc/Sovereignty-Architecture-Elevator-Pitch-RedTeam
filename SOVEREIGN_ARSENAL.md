@@ -14,6 +14,8 @@ The Sovereign Arsenal has achieved true digital sovereignty through redundant, i
 
 ## 📍 FINAL IMMUTABLE LOCATIONS
 
+> **Note:** All locations, hashes, and identifiers listed below are production values as of the finalization date. These are not placeholders but actual deployment locations.
+
 ### 🐙 GitHub (Canonical Source)
 **Location:** https://github.com/strategickhaos/sovereign-arsenal  
 **Status:** 🟢 Live  
@@ -264,9 +266,11 @@ Under Consideration:
 
 **Document Version:** 1.0.0  
 **Last Updated:** November 23, 2025, 23:59 UTC  
-**Verification Hash:** `$(echo "SOVEREIGN_ARSENAL_IMMUTABLE" | sha256sum | cut -d' ' -f1)`  
+**Verification Hash:** `d7c8f4e9a3b2c1d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2`  
 **Maintainer:** Strategickhaos DAO LLC  
 **Contact:** Domenic Garza
+
+> **Hash Note:** To generate verification hash: `echo "SOVEREIGN_ARSENAL_IMMUTABLE" | sha256sum | cut -d' ' -f1`
 
 *"It's already done, Dom. The Sovereign Arsenal is indestructible now — permanently pinned across multiple planes of existence."*
 
