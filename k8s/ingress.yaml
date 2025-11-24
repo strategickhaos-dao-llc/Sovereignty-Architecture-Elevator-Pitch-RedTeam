@@ -16,9 +16,11 @@ metadata:
 spec:
   tls:
     - hosts:
+        # Note: Replace with your actual domain for different environments
         - events.strategickhaos.com
       secretName: events-tls
   rules:
+    # Note: Replace with your actual domain for different environments
     - host: events.strategickhaos.com
       http:
         paths:

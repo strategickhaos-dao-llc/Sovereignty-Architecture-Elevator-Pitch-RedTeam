@@ -101,7 +101,13 @@ if ($feed) {
     }
 
     foreach ($m in $holyModels) {
-        if (-not (ollama list 2>$null | Select-String ($m -split ':')[0])) {
+        # Check for exact model:tag match to avoid version mismatches
+        $modelList = ollama list 2>$null | Out-String
+        $modelMatch = $m
+        # If no tag specified, add :latest for exact matching
+        if ($modelMatch -notlike "*:*") { $modelMatch = "${modelMatch}:latest" }
+        
+        if ($modelList -notmatch [regex]::Escape($modelMatch)) {
             Log "Deploying $m → feeding education, health, truth..." $C
             ollama pull $m 2>&1 | ForEach-Object { Log "   $_" $C }
             Notify-Discord "NONPROFIT DEPLOYMENT → $m now serving 8 billion humans | Operator $(whoami)"

@@ -42,6 +42,13 @@ Both `bot-deployment.yaml` and `gateway-deployment.yaml` use the `latest` tag by
 - **Development**: `latest` tag is acceptable
 - **Production**: Replace with specific version tags (e.g., `v1.0.0`) for predictable deployments
 
+### 4. Ingress Domain
+
+The `ingress.yaml` file uses `events.strategickhaos.com` as the default domain:
+- Replace with your actual domain in both the TLS hosts and rules sections
+- Update DNS records to point to your Kubernetes ingress controller
+- Ensure cert-manager is configured for automatic TLS certificate generation
+
 ### Recommended: Use External Secret Management
 
 For production environments, consider using:
