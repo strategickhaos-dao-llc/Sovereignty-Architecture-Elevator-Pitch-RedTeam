@@ -1,0 +1,158 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-gateway
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: gateway
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: discord-ops-bot
+  labels:
+    app: strategickhaos-discord-ops
+rules:
+  # Pod and deployment management
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "pods/status"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "patch", "update"]
+  
+  # Service management
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  
+  # ConfigMap and Secret access (limited)
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+    resourceNames: ["discord-ops-discovery"]
+  
+  # Events for audit logging
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+  
+  # Metrics and monitoring
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["pods", "nodes"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: event-gateway
+  labels:
+    app: strategickhaos-discord-ops
+rules:
+  # ConfigMap access for discovery config
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+    resourceNames: ["discord-ops-discovery"]
+  
+  # Events for audit logging
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: discord-ops-bot
+  labels:
+    app: strategickhaos-discord-ops
+subjects:
+  - kind: ServiceAccount
+    name: discord-ops-bot
+    namespace: ops
+roleRef:
+  kind: ClusterRole
+  name: discord-ops-bot
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: event-gateway
+  labels:
+    app: strategickhaos-discord-ops
+subjects:
+  - kind: ServiceAccount
+    name: event-gateway
+    namespace: ops
+roleRef:
+  kind: ClusterRole
+  name: event-gateway
+  apiGroup: rbac.authorization.k8s.io
+---
+# Network Policy for secure communication
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: discord-ops-netpol
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+spec:
+  podSelector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow ingress from ingress controller
+    - from:
+        - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow Prometheus scraping
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+      ports:
+        - protocol: TCP
+          port: 9090
+  egress:
+    # Allow DNS resolution
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Allow HTTPS to external APIs
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow internal service communication
+    - to:
+        - podSelector:
+            matchLabels:
+              app: strategickhaos-discord-ops
+      ports:
+        - protocol: TCP
+          port: 8080

@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: bot
+  template:
+    metadata:
+      labels:
+        app: strategickhaos-discord-ops
+        component: bot
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: discord-ops-bot
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: bot
+          image: ghcr.io/strategickhaos-swarm-intelligence/discord-ops-bot:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: DISCORD_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: DISCORD_BOT_TOKEN
+            - name: CTRL_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: CTRL_API_TOKEN
+            - name: EVENTS_HMAC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: EVENTS_HMAC_KEY
+            - name: GIT_APP_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: GIT_APP_WEBHOOK_SECRET
+            - name: GIT_APP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: GIT_APP_PRIVATE_KEY
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: OPENAI_API_KEY
+            - name: PGVECTOR_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-ops-secrets
+                  key: PGVECTOR_CONN
+            - name: DISCOVERY_CONFIG_PATH
+              value: "/etc/discord-ops/discovery.yml"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: METRICS_PORT
+              value: "9090"
+          volumeMounts:
+            - name: discovery-config
+              mountPath: /etc/discord-ops
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+      volumes:
+        - name: discovery-config
+          configMap:
+            name: discord-ops-discovery
+            items:
+              - key: discovery.yml
+                path: discovery.yml
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+  selector:
+    app: strategickhaos-discord-ops
+    component: bot
