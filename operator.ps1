@@ -106,10 +106,10 @@ try {
     elseif ($status) {
         Show-Dashboard
         Log "Status Report:"
-        "Ollama      : $(if (Test-Port 11434) {'[RUNNING]'} else {'[DOWN]'})"
-        if (Test-Command kubectl) { "K8s Pod     : $(kubectl get pod -l app=ollama -o jsonpath='{.items[*].status.phase}' 2>$null || 'N/A')" }
-        if (Test-Command ollama) { "Models      : $(ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {$_.Split()[0]} | Join-String ', ')" }
-        if (Test-Command git) { "Git Branch  : $(git rev-parse --abbrev-ref HEAD 2>$null || 'detached')" }
+        Write-Host "Ollama      : $(if (Test-Port 11434) {'[RUNNING]'} else {'[DOWN]'})"
+        if (Test-Command kubectl) { Write-Host "K8s Pod     : $(kubectl get pod -l app=ollama -o jsonpath='{.items[*].status.phase}' 2>$null || 'N/A')" }
+        if (Test-Command ollama) { Write-Host "Models      : $(ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {$_.Split()[0]} | Join-String ', ')" }
+        if (Test-Command git) { Write-Host "Git Branch  : $(git rev-parse --abbrev-ref HEAD 2>$null || 'detached')" }
     }
 
     elseif ($pull) {
