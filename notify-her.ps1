@@ -203,13 +203,14 @@ function Write-LogFile {
 }
 
 # Main execution
-Write-Notification $Message (switch ($Type) {
+$color = switch ($Type) {
     "Success" { "Green" }
     "Warning" { "Yellow" }
     "Error" { "Red" }
     "Love" { "Magenta" }
     default { "White" }
-})
+}
+Write-Notification $Message $color
 
 # Log to file
 Write-LogFile $Message
