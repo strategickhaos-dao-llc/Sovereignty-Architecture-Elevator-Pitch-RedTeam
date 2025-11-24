@@ -66,16 +66,20 @@ if [ -z "$CLIENT_NAME" ]; then
     exit 1
 fi
 
-# Generate engagement ID
+# Generate engagement ID (max 30 chars total to match PowerShell version)
 DATE_STAMP=$(date +%Y%m%d)
-CLIENT_SLUG=$(echo "$CLIENT_NAME" | tr -cd '[:alnum:]' | cut -c1-20)
+CLIENT_SLUG=$(echo "$CLIENT_NAME" | tr -cd '[:alnum:]' | cut -c1-30)
 ENGAGEMENT_ID="ENG-${DATE_STAMP}-${CLIENT_SLUG}"
+ENGAGEMENT_ID=$(echo "$ENGAGEMENT_ID" | cut -c1-30)
 
 print_success "Engagement ID: $ENGAGEMENT_ID"
 
+# Sanitize client name for directory (replace problematic characters)
+CLIENT_DIR_NAME=$(echo "$CLIENT_NAME" | tr '/' '_' | tr -s ' ' '_')
+
 # Setup output directory
 if [ -z "$OUTPUT_DIR" ]; then
-    OUTPUT_DIR="${VAULT_ROOT}/clients/${CLIENT_NAME}"
+    OUTPUT_DIR="${VAULT_ROOT}/clients/${CLIENT_DIR_NAME}"
 fi
 
 if [ ! -d "$OUTPUT_DIR" ]; then
@@ -130,17 +134,18 @@ read -p "Selection: " DATA_SENSITIVITY
 print_header "Preparing Audit Documents"
 
 TEMPLATE_CHECKLIST="${VAULT_ROOT}/docs/compliance/AUDIT_CHECKLIST_TEMPLATE.md"
-CLIENT_CHECKLIST="${COMPLIANCE_DIR}/AUDIT_RESULTS_${CLIENT_NAME}.md"
+# Use sanitized name for filename but keep original for content
+CLIENT_CHECKLIST="${COMPLIANCE_DIR}/AUDIT_RESULTS_${CLIENT_DIR_NAME}.md"
 
 if [ -f "$TEMPLATE_CHECKLIST" ]; then
     cp "$TEMPLATE_CHECKLIST" "$CLIENT_CHECKLIST"
     
-    # Replace placeholders
+    # Replace placeholders (using # as sed delimiter to avoid issues with /)
     AUDIT_DATE=$(date +%Y-%m-%d)
     sed -i.bak \
-        -e "s/\[CLIENT_NAME\]/${CLIENT_NAME}/g" \
-        -e "s/\[ENGAGEMENT_ID\]/${ENGAGEMENT_ID}/g" \
-        -e "s/\[DATE\]/${AUDIT_DATE}/g" \
+        -e "s#\[CLIENT_NAME\]#${CLIENT_NAME}#g" \
+        -e "s#\[ENGAGEMENT_ID\]#${ENGAGEMENT_ID}#g" \
+        -e "s#\[DATE\]#${AUDIT_DATE}#g" \
         "$CLIENT_CHECKLIST"
     rm -f "${CLIENT_CHECKLIST}.bak"
     
@@ -160,15 +165,16 @@ fi
 
 # Copy and customize patent template
 PATENT_TEMPLATE="${VAULT_ROOT}/docs/patent/APPENDIX_B_SAFETY_TEMPLATE.md"
-CLIENT_PATENT="${PATENT_DIR}/APPENDIX_B_SAFETY_${CLIENT_NAME}.md"
+# Use sanitized name for filename but keep original for content
+CLIENT_PATENT="${PATENT_DIR}/APPENDIX_B_SAFETY_${CLIENT_DIR_NAME}.md"
 
 if [ -f "$PATENT_TEMPLATE" ]; then
     cp "$PATENT_TEMPLATE" "$CLIENT_PATENT"
     
-    # Replace placeholders
+    # Replace placeholders (using # as sed delimiter to avoid issues with /)
     sed -i.bak \
-        -e "s/\[CLIENT_NAME\]/${CLIENT_NAME}/g" \
-        -e "s/\[DATE\]/${AUDIT_DATE}/g" \
+        -e "s#\[CLIENT_NAME\]#${CLIENT_NAME}#g" \
+        -e "s#\[DATE\]#${AUDIT_DATE}#g" \
         "$CLIENT_PATENT"
     rm -f "${CLIENT_PATENT}.bak"
     
@@ -191,11 +197,11 @@ cat > "$CLIENT_README" << EOF
 This directory contains your complete LLM Safety & Evidence Vault:
 
 ### 📋 Compliance Documentation
-- **docs/compliance/AUDIT_RESULTS_${CLIENT_NAME}.md** - Your completed 100-point safety audit
+- **docs/compliance/AUDIT_RESULTS_${CLIENT_DIR_NAME}.md** - Your completed 100-point safety audit
 - **docs/compliance/100_llm_safety_techniques.md** - Complete safety framework reference
 
 ### 📄 Patent & IP Documentation
-- **docs/patent/APPENDIX_B_SAFETY_${CLIENT_NAME}.md** - Technical specifications for patent/IP use
+- **docs/patent/APPENDIX_B_SAFETY_${CLIENT_DIR_NAME}.md** - Technical specifications for patent/IP use
 
 ### 📊 Dashboards & Monitoring (if applicable)
 - Grafana dashboard configurations
@@ -206,7 +212,7 @@ This directory contains your complete LLM Safety & Evidence Vault:
 
 ## Next Steps
 
-1. **Review the Audit Results**: Open \`docs/compliance/AUDIT_RESULTS_${CLIENT_NAME}.md\`
+1. **Review the Audit Results**: Open \`docs/compliance/AUDIT_RESULTS_${CLIENT_DIR_NAME}.md\`
 2. **Prioritize Findings**: Focus on Critical and High priority items first
 3. **Implement Remediations**: Follow the 30/60/90 day roadmap
 4. **Re-audit**: Schedule follow-up assessment after remediation
