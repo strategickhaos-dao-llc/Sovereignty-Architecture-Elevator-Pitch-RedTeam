@@ -181,12 +181,12 @@ Because they'll understand:
 ### Computer Science
 - **"Inside the C++ Object Model"** (Lippman, 1996) — Template instantiation mechanics
 - **"Compilers: Principles, Techniques, and Tools"** (Aho et al., 2nd ed. 2006) — The Dragon Book
-- **LLVM Blog and documentation** (Lattner et al.) — Undefined behavior in C++ and compiler optimization
+- **"What Every C Programmer Should Know About Undefined Behavior"** (Lattner, LLVM Blog 2011) — UB in C++ and compiler optimization
 
 ### Cross-Domain
-- **"Life's Engines"** (Franklin) — Proteins as molecular machines
-- **"The Structure and Function of Large Biological Molecules"** — Compilation pipelines in nature
-- **AlphaFold papers** — Predicting compiled binary structure from source code
+- **"Life's Engines: How Microbes Made Earth Habitable"** (Franklin, P.M., 2017) — Proteins as molecular machines
+- **"Biochemistry"** (Berg, Tymoczko, Stryer, 8th ed. 2015) — The structure and function of large biological molecules
+- **AlphaFold papers** (Jumper et al., Nature 2021) — Predicting compiled binary structure from source code
 
 ---
 
