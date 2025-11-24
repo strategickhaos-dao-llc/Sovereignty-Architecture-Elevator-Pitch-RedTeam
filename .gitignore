@@ -35,3 +35,15 @@ target/
 
 # Workspace data
 workspace/
+
+# Sovereign Arsenal - Downloaded papers
+papers/**/*.pdf
+papers/**/*.txt
+arsenal-checksums.sha256
+
+# Embeddings (too large for git)
+embeddings/*.jsonl
+embeddings/*.jsonl.gz
+
+# Torrent files
+torrent/*.torrent
