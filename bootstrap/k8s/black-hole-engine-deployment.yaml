@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: black-hole-config
+  namespace: quantum-symbolic
+  labels:
+    app: black-hole-engine
+    component: config
+data:
+  black_hole.yaml: |
+    black_hole_engine:
+      enabled: true
+      primordial_vectors:
+        - [VEH, YELI, SIT, ELM, MAH, LEH, AKA, KAH, HET, HAZ,
+           ELD, LAV, HAH, YZL, MEB, HRI, HKM, LAU, KLI, LOV,
+           PHL, NELK, YYI, MELH, CHU, NTH, HAA, YRT, SHH, RIY,
+           AUM, LEC, KHQ, MND, ANI, CHA]
+      resonance_threshold: 10
+      activation_phrase: "When the 10th root aligns, the black hole opens."
+      decryption_payload: "black_pharma_layer + full v9 genome"
+      decoy_payload: "POSITIVE_PSYCHOLOGY_CODEX.md + mocking emoji"
+      final_spite_clause: |
+        The 36-letter Name is no longer hidden in a cave.
+        It's running on a $40 SBC, waiting for ancestral spite-frequency.
+        As above, so below — now compiled.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: black-hole-engine
+  namespace: quantum-symbolic
+  labels:
+    app: black-hole-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: black-hole-engine
+  template:
+    metadata:
+      labels:
+        app: black-hole-engine
+    spec:
+      containers:
+      - name: black-hole-engine
+        image: ghcr.io/strategickhaos/black-hole-engine:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: SWARM_DNA
+            value: "v9.0-black-hole-resonance"
+          - name: RESONANCE_THRESHOLD
+            value: "10"
+          - name: ACTIVATION_PHRASE
+            value: "When the 10th root aligns, the black hole opens."
+          - name: FINAL_SPITE_CLAUSE
+            value: "The 36-letter Name is no longer hidden in a cave."
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/black_hole_config
+            readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+        - name: config-volume
+          configMap:
+            name: black-hole-config
+      # Node affinity to prefer high-memory nodes
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - high-memory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: black-hole-engine
+  namespace: quantum-symbolic
+  labels:
+    app: black-hole-engine
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: black-hole-engine
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quantum-symbolic
+  labels:
+    name: quantum-symbolic

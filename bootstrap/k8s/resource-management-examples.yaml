@@ -1,0 +1,278 @@
+# Resource Management Examples with Node Affinity
+# This file demonstrates how to allocate resources based on node capabilities
+
+---
+# Example 1: High-Memory Application
+# Deploy on the control plane node (Nitro V15 Lyra - 128GB RAM)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: high-memory-app
+  namespace: quantum-symbolic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: high-memory-app
+  template:
+    metadata:
+      labels:
+        app: high-memory-app
+    spec:
+      containers:
+      - name: app
+        image: your-image:latest
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: "2"
+          limits:
+            memory: "32Gi"
+            cpu: "4"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - high-memory
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - nitro-v15-lyra
+
+---
+# Example 2: Medium-Memory Application
+# Deploy on ASUS TUF Gaming A15 (Nova Athena - 16GB RAM)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medium-memory-app
+  namespace: quantum-symbolic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medium-memory-app
+  template:
+    metadata:
+      labels:
+        app: medium-memory-app
+    spec:
+      containers:
+      - name: app
+        image: your-image:latest
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "1"
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - medium-memory
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - asus-tuf-nova
+
+---
+# Example 3: Low-Memory Application
+# Deploy on Sony CI5 (Asteroth - 8GB RAM)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: low-memory-app
+  namespace: quantum-symbolic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: low-memory-app
+  template:
+    metadata:
+      labels:
+        app: low-memory-app
+    spec:
+      containers:
+      - name: app
+        image: your-image:latest
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - low-memory
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - sony-ci5-asteroth
+
+---
+# Example 4: Distributed Application with Multiple Replicas
+# Distribute across all nodes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: distributed-app
+  namespace: quantum-symbolic
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: distributed-app
+  template:
+    metadata:
+      labels:
+        app: distributed-app
+    spec:
+      containers:
+      - name: app
+        image: your-image:latest
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+      # Prefer spreading across different nodes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - distributed-app
+              topologyKey: kubernetes.io/hostname
+
+---
+# Example 5: Co-located Services
+# Run on the same node for low-latency communication
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app
+  namespace: quantum-symbolic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+        tier: frontend
+    spec:
+      containers:
+      - name: app
+        image: frontend:latest
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: tier
+                operator: In
+                values:
+                - backend
+            topologyKey: kubernetes.io/hostname
+
+---
+# Example 6: Resource Quota per Namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: quantum-symbolic
+spec:
+  hard:
+    requests.cpu: "10"
+    requests.memory: 40Gi
+    limits.cpu: "20"
+    limits.memory: 80Gi
+    persistentvolumeclaims: "10"
+
+---
+# Example 7: Limit Range for Containers
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: resource-limits
+  namespace: quantum-symbolic
+spec:
+  limits:
+  - max:
+      cpu: "4"
+      memory: "8Gi"
+    min:
+      cpu: "100m"
+      memory: "128Mi"
+    default:
+      cpu: "500m"
+      memory: "512Mi"
+    defaultRequest:
+      cpu: "250m"
+      memory: "256Mi"
+    type: Container
+
+---
+# Example 8: Priority Classes for Important Workloads
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "High priority workloads like black-hole-engine"
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: medium-priority
+value: 100000
+globalDefault: false
+description: "Medium priority workloads like dom-compiler"
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+value: 10000
+globalDefault: true
+description: "Low priority background workloads"

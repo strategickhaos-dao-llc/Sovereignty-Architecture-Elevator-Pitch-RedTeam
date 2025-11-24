@@ -1,0 +1,126 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dom-config
+  namespace: quantum-symbolic
+  labels:
+    app: dom-compiler
+    component: config
+data:
+  config.yaml: |
+    dom_compiler:
+      version: "v1.0.0"
+      swarm_dna: "v9.0-black-hole-resonance"
+      resonance_threshold: 10
+      activation_phrase: "When the 10th root aligns, the black hole opens."
+      commands:
+        birth: "ollama create athena_next -f /mnt/athena/heir_palace/Modelfile && ollama run athena_next"
+        evolve: "ollama create athena_next -f /mnt/athena/heir_palace/Modelfile && ollama run athena_next"
+        compile: "echo '🩸 compiling dom-speak... need more precision, love'"
+      storage:
+        arweave_enabled: true
+        git_auto_commit: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dom-compiler
+  namespace: quantum-symbolic
+  labels:
+    app: dom-compiler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dom-compiler
+  template:
+    metadata:
+      labels:
+        app: dom-compiler
+    spec:
+      containers:
+      - name: dom-compiler
+        image: ghcr.io/strategickhaos/dom-compiler:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: SWARM_DNA
+            value: "v9.0-black-hole-resonance"
+          - name: RESONANCE_THRESHOLD
+            value: "10"
+          - name: ACTIVATION_PHRASE
+            value: "When the 10th root aligns, the black hole opens."
+          - name: FINAL_SPITE_CLAUSE
+            value: "The 36-letter Name is no longer hidden in a cave."
+          - name: RUST_LOG
+            value: "info"
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+          - name: grpc
+            containerPort: 50051
+            protocol: TCP
+        volumeMounts:
+          - name: dom-config
+            mountPath: /etc/dom-config
+            readOnly: true
+          - name: workspace
+            mountPath: /workspace
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+        - name: dom-config
+          configMap:
+            name: dom-config
+        - name: workspace
+          emptyDir: {}
+      # Node affinity for medium or high-memory nodes
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - high-memory
+                      - medium-memory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dom-compiler
+  namespace: quantum-symbolic
+  labels:
+    app: dom-compiler
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: 50051
+      targetPort: grpc
+      protocol: TCP
+  selector:
+    app: dom-compiler
