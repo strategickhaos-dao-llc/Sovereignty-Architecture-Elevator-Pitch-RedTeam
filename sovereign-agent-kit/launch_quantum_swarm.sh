@@ -144,13 +144,29 @@ for i in $(seq 0 $((QUBITS - 1))); do
     
     echo -e "${BLUE}  ⚛️  Launching ${AGENT_ID}...${NC}"
     
-    # Launch agent in background
-    python3 -m swarm.quantum_loop \
-        --agent-id "$AGENT_ID" \
-        --model "$MODEL" \
-        --vault "$VAULT_PATH" \
-        --config "$CONFIG_FILE" \
-        > "$LOG_FILE" 2>&1 &
+    # Launch agent in background using Python directly
+    python3 -c "
+import sys
+sys.path.insert(0, '.')
+from swarm.quantum_loop import QuantumAgent, run_quantum_loop
+from swarm.consensus import ConsensusChecker
+import yaml
+
+# Load config
+with open('$CONFIG_FILE', 'r') as f:
+    config = yaml.safe_load(f)
+
+# Create agent
+agent = QuantumAgent(
+    agent_id='$AGENT_ID',
+    model='$MODEL',
+    vault_path='$VAULT_PATH',
+    config=config['quantum_loop']
+)
+
+# Run quantum loop
+run_quantum_loop(agent, max_iterations=config['quantum_loop'].get('max_iterations'))
+" > "$LOG_FILE" 2>&1 &
     
     PID=$!
     PIDS+=($PID)

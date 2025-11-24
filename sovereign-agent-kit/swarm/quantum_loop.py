@@ -10,10 +10,17 @@ import os
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple, Protocol
 from dataclasses import dataclass, asdict
 
 logger = logging.getLogger(__name__)
+
+
+class ConsensusCheckerProtocol(Protocol):
+    """Protocol for consensus checkers (used for type hinting)"""
+    def check_note(self, note_title: str, author_agent_id: str, vault_path: Optional[Path] = None) -> bool:
+        """Check if a note reaches consensus"""
+        ...
 
 
 @dataclass
@@ -167,7 +174,7 @@ Continue exploration and maintain coherence with the swarm.
         with open(state_file, "w") as f:
             json.dump([asdict(s) for s in self.state_history], f, indent=2)
     
-    def get_coherence_budget(self) -> tuple[int, int]:
+    def get_coherence_budget(self) -> Tuple[int, int]:
         """
         COHERENCE: Return sleep time range (decoherence budget).
         This is the time between quantum operations.
@@ -180,7 +187,7 @@ Continue exploration and maintain coherence with the swarm.
 def run_quantum_loop(
     agent: QuantumAgent,
     max_iterations: Optional[int] = None,
-    consensus_checker: Optional[Any] = None
+    consensus_checker: Optional[ConsensusCheckerProtocol] = None
 ):
     """
     Execute the quantum loop for a single agent (qubit).

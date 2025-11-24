@@ -4,6 +4,7 @@ Multi-agent voting to prevent hallucinations and drift
 """
 
 import logging
+import random
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from pathlib import Path
@@ -116,7 +117,6 @@ class ConsensusChecker:
         # For now, simulate voting
         # In a real system, you'd call agent.think() with a review prompt
         
-        import random
         approved = random.random() > 0.2  # 80% approval rate (simulated)
         confidence = random.uniform(0.7, 0.99)
         
