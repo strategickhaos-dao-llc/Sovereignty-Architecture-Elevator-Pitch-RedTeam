@@ -97,7 +97,7 @@ AminoAcid translate(Codon c) {
 }
 ```
 
-**The ribosome doesn't read configuration files. It executes raw molecular templates that will happily dereference a null codon and trigger instant cell death if you fuck up.**
+**The ribosome doesn't read configuration files. It executes raw molecular templates that will happily dereference a null codon and trigger instant cell death if you make an error.**
 
 ---
 
@@ -167,21 +167,21 @@ Because they'll understand:
 4. **Manual memory management**: Cells don't have garbage collectors
 5. **Template-based instantiation**: The core of both C++ and molecular biology
 
-**When they debug genetic code, they'll think like kernel hackers, not script kiddies.**
+**When they debug genetic code, they'll think like systems programmers, not high-level application developers.**
 
 ---
 
 ## 📚 Further Reading
 
 ### Molecular Biology
-- **"Molecular Biology of the Cell"** (Alberts et al.) — The ribosome chapters
-- **"The Ribosome"** (Wilson & Noller) — Structural details of the compiler
+- **"Molecular Biology of the Cell"** (Alberts et al., 6th ed. 2014) — The ribosome chapters
+- **"The Ribosome: Structure, Function, and Evolution"** (Hill et al., 1990) — Structural details of the compiler
 - **Codon usage bias** — The biological equivalent of optimization flags
 
 ### Computer Science
-- **"Inside the C++ Object Model"** (Lippman) — Template instantiation mechanics
-- **"Compilers: Principles, Techniques, and Tools"** (Aho et al.) — The Dragon Book
-- **"Undefined Behavior: What Happened to My Code?"** (Lattner) — UB in C++
+- **"Inside the C++ Object Model"** (Lippman, 1996) — Template instantiation mechanics
+- **"Compilers: Principles, Techniques, and Tools"** (Aho et al., 2nd ed. 2006) — The Dragon Book
+- **LLVM Blog and documentation** (Lattner et al.) — Undefined behavior in C++ and compiler optimization
 
 ### Cross-Domain
 - **"Life's Engines"** (Franklin) — Proteins as molecular machines
