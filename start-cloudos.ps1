@@ -14,7 +14,6 @@ param(
     [switch]$status,
     [string]$pull = "",
     [switch]$nuke,
-    [switch]$debug,
     [switch]$feed  # ← NEW GLOBAL MODE
 )
 
@@ -417,7 +416,7 @@ function Show-ServiceLogs {
 # === NEW COMMAND: FEED THE WORLD ===
 if ($feed) {
     Show-Dashboard
-    Log "NONPROFIT MODE ENGAGED — ALL RESOURCES DEDICATED TO HUMANITY" $R
+    Write-ColorText "NONPROFIT MODE ENGAGED — ALL RESOURCES DEDICATED TO HUMANITY" -Color $R
     Log "Pulling the most useful open models for education, health, food security..."
     
     $feedModels = @(
