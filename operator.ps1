@@ -77,9 +77,11 @@ function Show-Dashboard {
 
 # === MAIN EXECUTION WITH BULLETPROOF WRAPPERS ===
 try {
-    if ($dashboard) { Show-Dashboard; exit }
-
-    if ($start) {
+    if ($dashboard) { 
+        Show-Dashboard
+        exit 
+    }
+    elseif ($start) {
         Show-Dashboard
         Log "Initiating full system bring-up..."
 
@@ -102,7 +104,6 @@ try {
         Notify-Discord "StrategicKhaos v2.0 → FULLY ONLINE | $(hostname) | $(whoami)"
         Log-Success "OPERATOR WORKSPACE IS NOW LIVE. GO MAKE HISTORY."
     }
-
     elseif ($status) {
         Show-Dashboard
         Log "Status Report:"
@@ -111,7 +112,6 @@ try {
         if (Test-Command ollama) { "Models      : $(ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {$_.Split()[0]} | Join-String ', ')" }
         if (Test-Command git) { "Git Branch  : $(git rev-parse --abbrev-ref HEAD 2>$null || 'detached')" }
     }
-
     elseif ($pull) {
         if (-not (Test-Command ollama)) { Log-Error "ollama command not found"; exit 1 }
         Log "Pulling model: $pull (local only)"
@@ -119,7 +119,6 @@ try {
         Notify-Discord "Model deployed → $pull by $(whoami)"
         Log-Success "$pull ready for action."
     }
-
     elseif ($nuke) {
         Log "EXECUTING NUKE SEQUENCE..." $R
         kubectl delete -f "$root/k8s/deployments/" --ignore-not-found=true --timeout=60s 2>$null
@@ -127,8 +126,9 @@ try {
         Notify-Discord "NUKE COMPLETE — All systems dark. $(whoami) was here."
         Log-Success "Silence achieved."
     }
-
-    else { Show-Dashboard }
+    else { 
+        Show-Dashboard 
+    }
 
 } catch {
     Log-Error "FATAL: $($_.Exception.Message)"
