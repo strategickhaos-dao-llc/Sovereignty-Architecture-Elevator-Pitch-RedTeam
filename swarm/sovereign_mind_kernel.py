@@ -19,7 +19,11 @@ from enum import Enum
 import json
 from pathlib import Path
 
-from load_dna import DNALoader, SwarmDNA, Agent
+try:
+    from .load_dna import DNALoader, SwarmDNA, Agent
+except ImportError:
+    # Fallback for direct script execution
+    from load_dna import DNALoader, SwarmDNA, Agent
 
 
 class KernelState(Enum):
@@ -73,10 +77,21 @@ class SovereignMindKernel:
     3. Synthesis (integration) - Agents make final decisions
     """
     
-    def __init__(self, config_path: Optional[str] = None):
-        """Initialize the Mind Kernel"""
+    # Convergence calculation constants
+    BASE_CONVERGENCE = 0.7  # Starting convergence score
+    CONVERGENCE_BOOST = 0.25  # Additional score based on critique coverage
+    MIN_CONVERGENCE = 0.5  # Minimum score when no proposals exist
+    
+    def __init__(self, config_path: Optional[str] = None, state_dir: Optional[str] = None):
+        """Initialize the Mind Kernel
+        
+        Args:
+            config_path: Optional path to DNA configuration file
+            state_dir: Optional directory for state persistence (defaults to swarm/)
+        """
         self.logger = self._setup_logging()
         self.state = KernelState.INITIALIZING
+        self.state_dir = Path(state_dir) if state_dir else Path(__file__).parent
         
         # Load DNA configuration
         self.logger.info("🧬 Loading Swarm DNA...")
@@ -321,13 +336,13 @@ class SovereignMindKernel:
         proposal_count = len(proposals)
         critique_count = len(critiques)
         
-        # Simple convergence heuristic
+        # Simple convergence heuristic using configurable constants
         if proposal_count > 0:
             critique_coverage = min(critique_count / proposal_count, 1.0)
-            base_convergence = 0.7 + (critique_coverage * 0.25)
+            base_convergence = self.BASE_CONVERGENCE + (critique_coverage * self.CONVERGENCE_BOOST)
         else:
             critique_coverage = 0.0
-            base_convergence = 0.5
+            base_convergence = self.MIN_CONVERGENCE
         
         synthesis = {
             'decision': 'proceed' if base_convergence > 0.8 else 'refine',
@@ -402,7 +417,7 @@ class SovereignMindKernel:
             'dna_version': self.dna.metadata.get('version', 'unknown')
         }
         
-        state_file = Path(__file__).parent / 'kernel_state.json'
+        state_file = self.state_dir / 'kernel_state.json'
         with open(state_file, 'w') as f:
             json.dump(state_data, f, indent=2)
         

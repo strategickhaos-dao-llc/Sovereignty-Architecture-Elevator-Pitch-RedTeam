@@ -1,0 +1,2 @@
+# Core dependencies for Sovereign Swarm Architecture
+PyYAML>=6.0.1

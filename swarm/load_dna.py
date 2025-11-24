@@ -6,10 +6,20 @@ Loads, validates, and provides access to the swarm genome configuration
 
 import yaml
 import os
+import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
+
+# Set up logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('%(levelname)s - %(name)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
 
 class TrinityRole(Enum):
@@ -163,7 +173,7 @@ class DNALoader:
         agent_roles = set(agent.trinity_role for agent in self.dna.agents)
         for role in trinity_roles:
             if role not in agent_roles:
-                print(f"Warning: No agents with trinity role '{role}'")
+                logger.warning(f"No agents with trinity role '{role}'")
         
         # Validate orchestration workflow
         workflow = self.dna.orchestration.get('workflow', [])
@@ -172,10 +182,10 @@ class DNALoader:
         
         # Validate security configuration
         if not self.dna.security.get('encryption', {}).get('at_rest'):
-            print("Warning: Encryption at rest is disabled")
+            logger.warning("Encryption at rest is disabled")
         
         if not self.dna.security.get('audit', {}).get('enabled'):
-            print("Warning: Security auditing is disabled")
+            logger.warning("Security auditing is disabled")
         
         return True
     

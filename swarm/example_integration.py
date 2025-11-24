@@ -4,8 +4,13 @@ Example Integration: Demonstrating Swarm DNA + Mind Kernel
 Shows how to use the complete swarm architecture for task processing
 """
 
-from sovereign_mind_kernel import SovereignMindKernel
-from load_dna import load_swarm_dna
+try:
+    from .sovereign_mind_kernel import SovereignMindKernel
+    from .load_dna import load_swarm_dna
+except ImportError:
+    # Fallback for direct script execution
+    from sovereign_mind_kernel import SovereignMindKernel
+    from load_dna import load_swarm_dna
 import json
 
 
