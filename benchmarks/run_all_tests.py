@@ -18,6 +18,7 @@ from test_data_ingestion import DataIngestionBenchmarks
 from test_llm_safety import LLMSafetyBenchmarks  
 from test_security_analytics import SecurityAnalyticsBenchmarks
 from test_comprehensive import ComprehensiveBenchmarks
+from test_trading_bot import TradingBotBenchmarks
 
 class MasterBenchmarkRunner:
     def __init__(self, config_path: str = "benchmarks/benchmark_config.yaml"):
@@ -27,8 +28,8 @@ class MasterBenchmarkRunner:
         self.end_time = None
         
     def run_smoke_tests(self):
-        """Run essential smoke tests (Tests 1, 3, 5, 11, 13, 19, 23, 26, 29)"""
-        print("🔥 Running Smoke Test Suite (9 critical tests)")
+        """Run essential smoke tests (Tests 1, 3, 5, 11, 13, 19, 23, 26, 29, 31)"""
+        print("🔥 Running Smoke Test Suite (10 critical tests)")
         
         # Data Ingestion
         data_benchmarks = DataIngestionBenchmarks(self.config_path)
@@ -56,6 +57,10 @@ class MasterBenchmarkRunner:
             comprehensive_benchmarks.test_26_benchmarks_conformance(),
             comprehensive_benchmarks.test_29_chaos_and_failover()
         ])
+        
+        # Trading Bot Tests
+        trading_benchmarks = TradingBotBenchmarks(self.config_path)
+        self.results.append(trading_benchmarks.test_31_simple_backtest_validation())
         
     def run_full_regression(self):
         """Run all 30 enterprise benchmark tests"""
@@ -111,6 +116,17 @@ class MasterBenchmarkRunner:
             comprehensive_benchmarks.test_30_cost_performance_curve()
         ])
         
+        # Tests 31-35: Trading Bot Backtesting
+        print("\n🤖 Trading Bot Benchmark Tests (31-35)")
+        trading_benchmarks = TradingBotBenchmarks(self.config_path)
+        self.results.extend([
+            trading_benchmarks.test_31_simple_backtest_validation(),
+            trading_benchmarks.test_32_advanced_strategy_performance(),
+            trading_benchmarks.test_33_stress_test_market_conditions(),
+            trading_benchmarks.test_34_benchmark_comparison(),
+            trading_benchmarks.test_35_transaction_cost_impact()
+        ])
+        
         self.end_time = datetime.now()
         
     def generate_executive_summary(self):
@@ -129,7 +145,8 @@ class MasterBenchmarkRunner:
             "security_analytics": [r for r in self.results if 19 <= r.get('test_id', 0) <= 22], 
             "threat_intel": [r for r in self.results if 23 <= r.get('test_id', 0) <= 25],
             "cloud_posture": [r for r in self.results if 26 <= r.get('test_id', 0) <= 28],
-            "reliability": [r for r in self.results if 29 <= r.get('test_id', 0) <= 30]
+            "reliability": [r for r in self.results if 29 <= r.get('test_id', 0) <= 30],
+            "trading_bot": [r for r in self.results if 31 <= r.get('test_id', 0) <= 35]
         }
         
         category_summary = {}
