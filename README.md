@@ -13,7 +13,7 @@ A Tier-1 graduate course teaching the highest-resolution adversarial influence t
 - **Framework:** Bloom's Taxonomy (Create Tier enforced)
 - **Final Project:** Public GitHub contribution to POSITIVE_PSYCHOLOGY_CODEX
 
-📚 [Full Course Outline](CYBER-PSY-620.md) | 🛡️ [Defense Codex](POSITIVE_PSYCHOLOGY_CODEX.md) | 🧬 [SWARM DNA v8.0](SWARM_DNA_v8.0.yaml)
+📚 [Full Course Outline](CYBER-PSY-620.md) | 🛡️ [Defense Codex](POSITIVE_PSYCHOLOGY_CODEX.md) | 🧬 [SWARM DNA v8.0](SWARM_DNA_v8.0.yaml) | 📖 [Program Overview](ACADEMIC_PROGRAM.md)
 
 *"We teach the black arts so well the light wins every time."*
 
