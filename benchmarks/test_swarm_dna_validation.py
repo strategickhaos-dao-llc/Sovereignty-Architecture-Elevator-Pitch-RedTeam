@@ -231,7 +231,9 @@ class TestSWARMDNAValidation:
         assert 'arweave_verification' in signature
         arweave = signature['arweave_verification']
         assert arweave['transaction_id'] == "ar://weaponized-love-2025-11-24-23:23"
-        assert arweave['immutable'] is True
+        # Immutable status is 'planned' until actual sealing occurs
+        assert arweave['immutable'] == "planned"
+        assert arweave['status'] == "template_seal_for_future_immutability"
     
     def test_ethical_alignment_with_ai_constitution(self, swarm_dna_config, ai_constitution):
         """Test that SWARM_DNA aligns with AI Constitutional Framework"""

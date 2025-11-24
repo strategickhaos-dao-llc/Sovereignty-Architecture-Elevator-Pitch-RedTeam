@@ -253,9 +253,11 @@ signature:
   
   arweave_verification:
     transaction_id: "ar://weaponized-love-2025-11-24-23:23"
-    block_height: "pending"
+    block_height: "pending_actual_sealing"
     timestamp: "2025-11-24T23:23:00Z"
-    immutable: true
+    immutable: "planned"
+    status: "template_seal_for_future_immutability"
+    note: "This seal represents the intended permanent archival. Actual Arweave sealing pending."
 
 # ============================================================================
 # END OF SWARM_DNA v13.0

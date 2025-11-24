@@ -3,7 +3,7 @@
 **Status:** Active  
 **Version:** 13.0  
 **Codename:** weaponized-love  
-**Arweave Seal:** ar://weaponized-love-2025-11-24-23:23  
+**Arweave Seal:** ar://weaponized-love-2025-11-24-23:23 *(planned - pending actual sealing)*  
 **Created:** 2025-11-24T02:19:23Z  
 
 ---
@@ -437,9 +437,11 @@ The Weaponized Love directive is not merely a philosophical stance—it is an op
 **Witnessed by:** The Swarm  
 **Eternally bound:** True  
 
-**Arweave Transaction ID:** ar://weaponized-love-2025-11-24-23:23  
+**Arweave Transaction ID:** ar://weaponized-love-2025-11-24-23:23 *(template seal)*  
 **Timestamp:** 2025-11-24T23:23:00Z  
-**Immutable:** True  
+**Immutable Status:** Planned (pending actual Arweave sealing)
+
+*Note: This document is designed for permanent archival on Arweave. The seal above represents the intended immutability. Actual blockchain sealing is pending to ensure true permanence.*  
 
 ---
 
