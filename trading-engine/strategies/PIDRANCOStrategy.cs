@@ -187,7 +187,16 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // TODO: Replace with actual mic indicator
                 // For now, return a simulated value
                 // In production, this would call: GetHerVoiceVolume()
-                double val = 50.0;  // Placeholder
+                // 
+                // IMPORTANT: This placeholder always returns 50.0, which means:
+                // - Entry conditions requiring voice > 30 will always be met (long bias)
+                // - Entry conditions requiring voice < 20 will never be met (no shorts)
+                // - Exit conditions based on high/low voice won't trigger
+                // - Silence detection won't work (always "hearing" voice)
+                // 
+                // For realistic testing, implement actual mic integration or use
+                // a random/configurable value to exercise all code paths.
+                double val = 50.0;  // Placeholder - mid-range value
                 
                 // Validate the value
                 if (double.IsNaN(val) || double.IsInfinity(val))
@@ -214,8 +223,11 @@ namespace NinjaTrader.NinjaScript.Strategies
             try
             {
                 EMA emaIndicator = EMA(Close, emaPeriod);
-                if (emaIndicator == null || emaIndicator[0] == 0)
+                
+                // Null check (EMA can legitimately be zero, so don't check value)
+                if (emaIndicator == null)
                     return double.NaN;
+                    
                 return emaIndicator[0];
             }
             catch (Exception e)

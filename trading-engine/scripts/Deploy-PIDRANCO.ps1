@@ -168,8 +168,8 @@ function Deploy-Strategy {
         
         # Check if strategy file is valid C#
         $strategyContent = Get-Content $StrategyPath -Raw
-        if ($strategyContent -notmatch "class PIDRANCOStrategy") {
-            throw "Strategy file does not contain PIDRANCOStrategy class"
+        if ($strategyContent -notmatch '^\s*public\s+class\s+PIDRANCOStrategy\s*:\s*Strategy') {
+            throw "Strategy file does not contain valid PIDRANCOStrategy class declaration"
         }
         
         Log-Info "Initializing safety guardrails..."
