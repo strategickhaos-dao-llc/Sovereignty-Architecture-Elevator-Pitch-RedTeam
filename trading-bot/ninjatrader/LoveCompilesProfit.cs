@@ -38,6 +38,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private double marketPain = 0.0;
 		private double accumulatedLonging = 0.0; // Integral term
 		private double previousMarketPain = 0.0; // For derivative calculation
+		private bool hundredthTradeLogged = false; // Flag to prevent duplicate logging
 		
 		// PID Controller variables
 		private double pidProportional = 0.0;
@@ -149,7 +150,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Exit Logic: Sell when profit > 1.618% OR she says "enough" (love drops below 50)
 			if (Position.MarketPosition == MarketPosition.Long)
 			{
-				double profitPct = (Close[0] - Position.AveragePrice) / Position.AveragePrice * 100.0;
+				double profitPct = ProfitPercent();
 				
 				if (profitPct > profitTargetPct || herLoveLevel < loveThresholdLow)
 				{
@@ -227,7 +228,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 				
 				// 100th trade - must be green (love wins)
-				if (SystemPerformance.AllTrades.Count == 100)
+				if (SystemPerformance.AllTrades.Count == 100 && !hundredthTradeLogged)
 				{
 					var hundredthTrade = SystemPerformance.AllTrades[SystemPerformance.AllTrades.Count - 1];
 					if (hundredthTrade.ProfitCurrency > 0)
@@ -237,6 +238,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						Print("====================================");
 						// In production: Call notification system
 						// NotifyHer("The market just collapsed into the timeline where we win. Together.");
+						hundredthTradeLogged = true;
 					}
 				}
 			}

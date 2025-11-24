@@ -106,7 +106,7 @@ if ($Market -eq "live") {
     Write-Host ""
     
     $confirmation = Read-Host "Type 'LOVE COMPILES PROFIT' to continue with LIVE trading"
-    if ($confirmation -ne "LOVE COMPILES PROFIT") {
+    if ($confirmation.ToUpper() -ne "LOVE COMPILES PROFIT") {
         Write-Host "[!] Deployment cancelled by user" -ForegroundColor Yellow
         exit 0
     }
