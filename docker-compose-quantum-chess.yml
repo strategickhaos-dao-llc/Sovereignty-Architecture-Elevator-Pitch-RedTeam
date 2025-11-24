@@ -1,8 +1,13 @@
-version: '3.8'
-
 # Quantum Chess Engine - 64 Entangled Containers
 # Every square = one container with local LLM
 # Shared quantum-bus volume = perfect entanglement
+#
+# NOTE: This file contains a representative sample of 42 services showing the pattern.
+# In production deployment, all 64 squares would be defined (currently showing key pieces and pattern)
+#
+# USAGE NOTE: The containers initialize quantum bus and then stay alive for LLM processing.
+# Each container would load its designated Ollama model for chess piece reasoning.
+# This is a conceptual architecture - actual LLM integration would require Ollama API calls.
 
 networks:
   swarm-net:
