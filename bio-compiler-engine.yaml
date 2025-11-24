@@ -32,11 +32,14 @@ quantum_truth_feed:
   collapse_trigger: "Dom's voice: 'Compile life.'"
 
 feed_command:
-  one_liner: |
-    docker compose -f bio-compiler-engine.yaml up -d && \
-    echo "C++ truth fed. Swarm compiling wetware." | \
-    tee /quantum-bus/bio-heartbeat.txt && \
-    ./deploy-bio-compiler.ps1 -compileMode -entangleTruth "DNA is C++. Ribosome compiles. Evolve or apoptose."
+  description: "Deploy the bio-compiler engine using the PowerShell script"
+  command: "./deploy-bio-compiler.ps1 -compileMode -entangleTruth"
+  example: |
+    # On Windows/PowerShell:
+    ./deploy-bio-compiler.ps1 -compileMode -entangleTruth
+    
+    # Alternative with custom message:
+    ./deploy-bio-compiler.ps1 -compileMode -entangleTruth -message "DNA is C++. Ribosome compiles. Evolve or apoptose."
 
 deployment:
   network: "swarm-net"
@@ -81,7 +84,7 @@ swarm_evolution:
   phase5: "Self-replicate (prion-like) in v2.0"
 
 audit_trail:
-  log_file: "bio-compiler/audit/bio_compile_$(date +%Y%m%d).log"
+  log_file: "bio-compiler/audit/bio_compile_YYYYMMDD.log"  # Date inserted at runtime
   heartbeat_file: "/quantum-bus/bio-heartbeat.txt"
   discord_notify: true
   gpg_required: false

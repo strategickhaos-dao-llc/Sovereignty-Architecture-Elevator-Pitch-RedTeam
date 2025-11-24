@@ -115,21 +115,24 @@ function Deploy-Ribosome($id) {
         docker rm -f $containerName 2>$null | Out-Null
     }
     
-    # Spawn ribosome container
-    $cmd = "docker run -d " +
-           "--name $containerName " +
-           "--network $network " +
-           "-p $port:11434 "
-    
-    # Add shared volume mount if path exists
-    if (Test-Path $sharedVolume -ErrorAction SilentlyContinue) {
-        $cmd += "--mount type=bind,source=$sharedVolume,target=/quantum-bus "
-    }
-    
-    $cmd += "ollama/ollama"
-    
+    # Spawn ribosome container with explicit parameters (avoiding Invoke-Expression)
     try {
-        Invoke-Expression $cmd | Out-Null
+        $dockerArgs = @(
+            "run", "-d",
+            "--name", $containerName,
+            "--network", $network,
+            "-p", "$port:11434"
+        )
+        
+        # Add shared volume mount if path exists
+        if (Test-Path $sharedVolume -ErrorAction SilentlyContinue) {
+            $dockerArgs += "--mount"
+            $dockerArgs += "type=bind,source=$sharedVolume,target=/quantum-bus"
+        }
+        
+        $dockerArgs += "ollama/ollama"
+        
+        & docker @dockerArgs | Out-Null
         Log-Success "Ribosome-$id spawned successfully (port $port)"
         return $true
     } catch {
@@ -139,20 +142,37 @@ function Deploy-Ribosome($id) {
 }
 
 function Pull-OllamaModel($containerName, $modelName) {
-    Log-Info "Pulling model $modelName in $containerName..."
+    Log-Info "Pulling model $modelName in $containerName (this may take several minutes for large models)..."
     try {
-        docker exec $containerName ollama pull $modelName 2>$null | Out-Null
-        Log-Success "Model $modelName ready in $containerName"
+        $timeout = 600  # 10 minute timeout for large models
+        $job = Start-Job -ScriptBlock {
+            param($container, $model)
+            docker exec $container ollama pull $model 2>$null
+        } -ArgumentList $containerName, $modelName
+        
+        $completed = Wait-Job -Job $job -Timeout $timeout
+        if ($completed) {
+            Receive-Job -Job $job | Out-Null
+            Remove-Job -Job $job
+            Log-Success "Model $modelName ready in $containerName"
+        } else {
+            Stop-Job -Job $job
+            Remove-Job -Job $job
+            Log-Warn "Model pull timed out for $modelName (continuing with deployment)"
+        }
     } catch {
-        Log-Warn "Failed to pull model $modelName (non-critical)"
+        Log-Warn "Failed to pull model $modelName (non-critical): $($_.Exception.Message)"
     }
 }
 
 function Inject-SystemPrompt($containerName, $modelName, $prompt) {
-    Log-Info "Injecting C++ truth system prompt into $containerName..."
-    # System prompts are injected via Ollama Modelfile
-    # This is a placeholder for the injection mechanism
-    Log-Success "System prompt injected into $containerName"
+    Log-Info "Preparing C++ truth system prompt for $containerName..."
+    # System prompts are configured via Ollama Modelfile on first use
+    # Users should create a custom Modelfile and run: ollama create custom-model -f Modelfile
+    # Example Modelfile content:
+    #   FROM llama3.2:70b
+    #   SYSTEM "You are a ribosomal compiler. DNA templates arrive as raw C++ source..."
+    Log-Info "System prompts should be configured via Ollama Modelfile (see documentation)"
 }
 
 # ═══════════════════════════════════════════════════════════════
