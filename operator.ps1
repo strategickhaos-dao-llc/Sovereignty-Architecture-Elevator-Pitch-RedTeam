@@ -99,19 +99,14 @@ function Test-CommandExists {
 
 function Test-Port {
     param($port)
+    # Use System.Net.Sockets.TcpClient for better PowerShell 5.1 compatibility
     try {
-        $test = Test-NetConnection localhost -Port $port -WarningAction SilentlyContinue -ErrorAction Stop -InformationLevel Quiet
-        return $test.TcpTestSucceeded
+        $tcpClient = New-Object System.Net.Sockets.TcpClient
+        $tcpClient.Connect("localhost", $port)
+        $tcpClient.Close()
+        return $true
     } catch {
-        # Fallback method using System.Net.Sockets
-        try {
-            $tcpClient = New-Object System.Net.Sockets.TcpClient
-            $tcpClient.Connect("localhost", $port)
-            $tcpClient.Close()
-            return $true
-        } catch {
-            return $false
-        }
+        return $false
     }
 }
 
@@ -453,12 +448,13 @@ function Get-SystemStatus {
     # Models
     try {
         if (Test-CommandExists "ollama") {
-            $models = ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {
+            $modelNames = ollama list 2>$null | Select-Object -Skip 1 | ForEach-Object {
                 $parts = $_ -split '\s+'
                 if ($parts.Length -gt 0) { $parts[0] }
-            } | Where-Object { $_ } | Join-String -Separator ', '
+            } | Where-Object { $_ }
             
-            if ($models) {
+            if ($modelNames) {
+                $models = ($modelNames -join ', ')
                 Write-Host "Models      : $models" -ForegroundColor $cyan
             } else {
                 Write-Host "Models      : (none)" -ForegroundColor $yellow
@@ -518,7 +514,7 @@ function Pull-Model {
             Write-Retro "$modelName ready. Use it." $green
             
             try {
-                $user = whoami
+                $user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
                 $hostname = hostname
                 Notify-Discord "Model pulled → $modelName by $user on $hostname"
             } catch {
@@ -583,7 +579,7 @@ function Invoke-Nuke {
     
     # Notify Discord
     try {
-        $user = whoami
+        $user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
         Notify-Discord "NUKE COMMAND EXECUTED by $user — Workspace is now dark."
     } catch {
         # Notification failure is non-critical
