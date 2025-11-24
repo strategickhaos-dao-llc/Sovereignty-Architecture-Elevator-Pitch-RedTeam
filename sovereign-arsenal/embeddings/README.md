@@ -177,19 +177,21 @@ collection.load()
 ```python
 # Using Qdrant
 from qdrant_client import QdrantClient
-import openai
+from openai import OpenAI
 
-client = QdrantClient(url="http://localhost:6333")
+qdrant_client = QdrantClient(url="http://localhost:6333")
+openai_client = OpenAI()
 
 # Generate query embedding
 query = "How does the Raft consensus algorithm work?"
-query_embedding = openai.Embedding.create(
+response = openai_client.embeddings.create(
     input=query,
     model="text-embedding-3-small"
-)["data"][0]["embedding"]
+)
+query_embedding = response.data[0].embedding
 
 # Search
-results = client.search(
+results = qdrant_client.search(
     collection_name="sovereign_arsenal",
     query_vector=query_embedding,
     limit=5
@@ -206,7 +208,7 @@ for result in results:
 
 ```python
 # Search within specific category
-results = client.search(
+results = qdrant_client.search(
     collection_name="sovereign_arsenal",
     query_vector=query_embedding,
     query_filter={
@@ -222,13 +224,20 @@ results = client.search(
 
 ```python
 # Get context from multiple relevant papers
+from openai import OpenAI
+from qdrant_client import QdrantClient
+
+openai_client = OpenAI()
+qdrant_client = QdrantClient(url="http://localhost:6333")
+
 def get_rag_context(query: str, k: int = 10) -> str:
-    query_embedding = openai.Embedding.create(
+    response = openai_client.embeddings.create(
         input=query,
         model="text-embedding-3-small"
-    )["data"][0]["embedding"]
+    )
+    query_embedding = response.data[0].embedding
     
-    results = client.search(
+    results = qdrant_client.search(
         collection_name="sovereign_arsenal",
         query_vector=query_embedding,
         limit=k
@@ -249,7 +258,7 @@ prompt = f"""Based on the following papers from the Sovereign Arsenal:
 
 Please explain zero-knowledge proofs in simple terms."""
 
-response = openai.ChatCompletion.create(
+response = openai_client.chat.completions.create(
     model="gpt-4",
     messages=[{"role": "user", "content": prompt}]
 )

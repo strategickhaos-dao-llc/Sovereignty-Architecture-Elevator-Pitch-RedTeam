@@ -14,7 +14,7 @@ https://arxiv.org/pdf/1701.07875.pdf  # Wasserstein GAN
 # Category: Cryptography & Zero Trust (10 papers)
 https://eprint.iacr.org/2016/260.pdf  # The Signal Protocol: Double Ratchet Algorithm
 https://eprint.iacr.org/2019/953.pdf  # Sonic: Zero-Knowledge SNARKs from Linear-Size Universal
-https://eprint.iacr.org/2016/260.pdf  # Signal Protocol Specification
+https://eprint.iacr.org/2014/349.pdf  # Pinocchio: Nearly Practical Verifiable Computation
 https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf  # AES Standard
 https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf # Digital Signature Standard
 https://eprint.iacr.org/2013/879.pdf  # Zerocash: Decentralized Anonymous Payments

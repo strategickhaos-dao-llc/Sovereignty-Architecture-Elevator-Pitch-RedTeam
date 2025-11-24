@@ -2,6 +2,8 @@
 
 ## 🧲 Magnet Link
 
+**Note**: This is a placeholder magnet link. To create a real torrent, see the "Creating Your Own Torrent" section below.
+
 Copy and paste this magnet link into any BitTorrent client for permanent, decentralized access:
 
 ```

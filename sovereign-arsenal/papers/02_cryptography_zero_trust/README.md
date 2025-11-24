@@ -12,33 +12,37 @@ This category contains 10 papers on cryptographic protocols, zero-knowledge proo
    - Succinct non-interactive zero-knowledge proofs
    - Scalable verification
 
-3. **AES Standard (FIPS 197)**
+3. **Pinocchio: Nearly Practical Verifiable Computation**
+   - Verifiable computation with zk-SNARKs
+   - Practical zero-knowledge proofs
+
+4. **AES Standard (FIPS 197)**
    - Advanced Encryption Standard
    - Most widely used symmetric encryption
 
-4. **Digital Signature Standard (FIPS 186-4)**
+5. **Digital Signature Standard (FIPS 186-4)**
    - NIST standard for digital signatures
    - Foundation of authentication
 
-5. **Zerocash: Decentralized Anonymous Payments**
+6. **Zerocash: Decentralized Anonymous Payments**
    - Privacy-preserving cryptocurrency
    - zk-SNARKs in practice
 
-6. **PLONK: Permutations over Lagrange-bases**
+7. **PLONK: Permutations over Lagrange-bases**
    - Universal and updatable zk-SNARKs
    - Efficient proof systems
 
-7. **Bulletproofs: Short Proofs for Confidential Transactions**
+8. **Bulletproofs: Short Proofs for Confidential Transactions**
    - Non-interactive zero-knowledge proofs
    - No trusted setup required
 
-8. **Ed25519: High-speed High-security Signatures**
+9. **Ed25519: High-speed High-security Signatures**
    - Elliptic curve signatures
    - Fast and secure
 
-9. **Salsa20 and ChaCha20**
-   - Stream ciphers for high-speed encryption
-   - Modern alternative to AES
+10. **Salsa20 and ChaCha20**
+    - Stream ciphers for high-speed encryption
+    - Modern alternative to AES
 
 ## Why These Papers Matter
 
