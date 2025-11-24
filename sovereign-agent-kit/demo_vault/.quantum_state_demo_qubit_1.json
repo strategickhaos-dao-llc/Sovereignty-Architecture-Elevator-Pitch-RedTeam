@@ -1,0 +1,82 @@
+[
+  {
+    "agent_id": "demo_qubit_1",
+    "iteration": 0,
+    "timestamp": "2025-11-24T00:28:07.433450+00:00",
+    "plan": "Based on the current state of the vault, I propose:\n        1. Search for gaps in our knowledge graph\n        2. Identify areas needing deeper exploration\n        3. Create a new note linking existing concepts\n        4. Verify consensus with peer agents",
+    "results": {
+      "search_results": [
+        {
+          "title": "Example Note",
+          "relevance": 0.85
+        }
+      ],
+      "files_modified": [],
+      "queries_executed": [],
+      "timestamp": "2025-11-24T00:28:07.433521+00:00"
+    },
+    "note_created": "quantum_step_demo_qubit_1_20251124_002807",
+    "consensus_reached": false,
+    "error": null
+  },
+  {
+    "agent_id": "demo_qubit_1",
+    "iteration": 1,
+    "timestamp": "2025-11-24T00:28:10.355872+00:00",
+    "plan": "Based on the current state of the vault, I propose:\n        1. Search for gaps in our knowledge graph\n        2. Identify areas needing deeper exploration\n        3. Create a new note linking existing concepts\n        4. Verify consensus with peer agents",
+    "results": {
+      "search_results": [
+        {
+          "title": "Example Note",
+          "relevance": 0.85
+        }
+      ],
+      "files_modified": [],
+      "queries_executed": [],
+      "timestamp": "2025-11-24T00:28:10.356048+00:00"
+    },
+    "note_created": "quantum_step_demo_qubit_1_20251124_002810",
+    "consensus_reached": true,
+    "error": null
+  },
+  {
+    "agent_id": "demo_qubit_1",
+    "iteration": 2,
+    "timestamp": "2025-11-24T00:28:12.241560+00:00",
+    "plan": "Based on the current state of the vault, I propose:\n        1. Search for gaps in our knowledge graph\n        2. Identify areas needing deeper exploration\n        3. Create a new note linking existing concepts\n        4. Verify consensus with peer agents",
+    "results": {
+      "search_results": [
+        {
+          "title": "Example Note",
+          "relevance": 0.85
+        }
+      ],
+      "files_modified": [],
+      "queries_executed": [],
+      "timestamp": "2025-11-24T00:28:12.241777+00:00"
+    },
+    "note_created": "quantum_step_demo_qubit_1_20251124_002812",
+    "consensus_reached": false,
+    "error": null
+  },
+  {
+    "agent_id": "demo_qubit_1",
+    "iteration": 3,
+    "timestamp": "2025-11-24T00:28:13.947830+00:00",
+    "plan": "Based on the current state of the vault, I propose:\n        1. Search for gaps in our knowledge graph\n        2. Identify areas needing deeper exploration\n        3. Create a new note linking existing concepts\n        4. Verify consensus with peer agents",
+    "results": {
+      "search_results": [
+        {
+          "title": "Example Note",
+          "relevance": 0.85
+        }
+      ],
+      "files_modified": [],
+      "queries_executed": [],
+      "timestamp": "2025-11-24T00:28:13.948005+00:00"
+    },
+    "note_created": "quantum_step_demo_qubit_1_20251124_002813",
+    "consensus_reached": true,
+    "error": null
+  }
+]
