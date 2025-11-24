@@ -47,7 +47,7 @@ if ($status) {
 if ($manifesto) {
     $manifestoPath = Join-Path $ROOT "README.md"
 
-@"
+    $readmeContent = @"
 # StrategicKhaos DAO LLC ⚔️
 
 **Wyoming DAO LLC §17-31-101 | EIN 39-2900295**
@@ -80,7 +80,9 @@ This vault is part of the StrategicKhaos sovereignty stack:
 
 **Code-woven. Legally grounded. Sovereign on purpose.**  
 "Code is law. Love is protocol."
-"@ | Out-File -FilePath $manifestoPath -Encoding utf8
+"@
+
+    $readmeContent | Out-File -FilePath $manifestoPath -Encoding utf8
 
     Log "README.md written at $manifestoPath" $Y
 
@@ -106,7 +108,7 @@ if ($forge) {
 
     Log "Next (manual but fast):" $C
     Log "- Go to https://github.com/$who" $C
-    Log "- Click "Customize your pins" → pin this repo + your compliance vault." $C
+    Log "- Click 'Customize your pins' → pin this repo + your compliance vault." $C
     Log-Success "Forge complete. Refresh your GitHub profile to see the glow-up."
     exit 0
 }
