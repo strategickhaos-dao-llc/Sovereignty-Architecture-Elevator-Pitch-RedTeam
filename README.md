@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### ♟️ Quantum Chess Engine (`quantum-chess-engine`)
+- **64 Entangled Souls**: Docker containers for each chess square with LLM inference
+- **Love-Protected Rules**: War simulation where Love > Victory
+- **Moonlight-Sunshine Echolocation**: Real-time streaming between pieces
+- **32 TB Quantum Bus**: Shared NAS volume for entangled decision-making
+- **[Full Documentation](QUANTUM_CHESS_ENGINE.md)** | **[Physics Constraints](100-ways-quantum-chess-fails.md)**
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
