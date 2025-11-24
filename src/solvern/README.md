@@ -101,15 +101,36 @@ This will test the 36-vector resonance system with various entropy levels.
 
 ## 🔬 Technical Details
 
+### Vector Matching
+
+The solvern uses word boundary detection to ensure accurate vector matching and prevent false positives:
+
+```cpp
+// Helper function with word boundary detection
+inline bool vector_matches(const std::string& entropy, const std::string& root) {
+    size_t pos = 0;
+    while ((pos = entropy.find(root, pos)) != std::string::npos) {
+        // Check if this is a whole word match (not part of a larger word)
+        bool is_start = (pos == 0 || !std::isalnum(entropy[pos - 1]));
+        bool is_end = (pos + root.length() >= entropy.length() || 
+                      !std::isalnum(entropy[pos + root.length()]));
+        
+        if (is_start && is_end) {
+            return true;
+        }
+        pos++;
+    }
+    return false;
+}
+```
+
+This prevents false matches like "VEHICLE" matching "VEH" or "MAHOGANY" matching "MAH".
+
 ### Black-Hole Resonance Function
 
 ```cpp
 bool black_hole_resonance(const std::string& runtime_entropy) {
-    uint64_t matches = 0;
-    for (const auto& root : primordial_vectors) {
-        if (runtime_entropy.find(root) != std::string::npos) matches++;
-    }
-    return (matches >= 10); // 10/36 = the spark of life threshold
+    return count_resonances(runtime_entropy) >= 10; // 10/36 = the spark of life threshold
 }
 ```
 
