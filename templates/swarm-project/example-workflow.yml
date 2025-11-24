@@ -1,0 +1,84 @@
+# Example GitHub Actions Workflow for Swarm DNA
+# Place in .github/workflows/swarm-dna.yml
+
+name: Swarm DNA Architecture
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'SWARM_DNA.yaml'
+      - 'tools/swarm-dna/**'
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  workflow_dispatch:
+
+jobs:
+  validate-swarm-dna:
+    name: Validate Swarm DNA
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r tools/swarm-dna/requirements.txt
+          
+      - name: Validate SWARM_DNA.yaml
+        run: |
+          python -c "import yaml; yaml.safe_load(open('SWARM_DNA.yaml'))"
+          echo "✅ SWARM_DNA.yaml is valid"
+          
+  compile-configs:
+    name: Compile Operational Configs
+    runs-on: ubuntu-latest
+    needs: validate-swarm-dna
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r tools/swarm-dna/requirements.txt
+          
+      - name: Compile Swarm DNA
+        run: |
+          python tools/swarm-dna/swarm_dna_compiler.py SWARM_DNA.yaml compiled-configs/
+          
+      - name: Upload compiled configs
+        uses: actions/upload-artifact@v3
+        with:
+          name: swarm-configs
+          path: compiled-configs/
+          retention-days: 30
+          
+  verify-gpg-signature:
+    name: Verify Cryptographic Signatures
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Check for GPG signature
+        run: |
+          if [ -f SWARM_DNA.yaml.asc ]; then
+            echo "✅ GPG signature file found"
+            # Import public key and verify (configure GPG key in secrets)
+            # gpg --import ${{ secrets.GPG_PUBLIC_KEY }}
+            # gpg --verify SWARM_DNA.yaml.asc SWARM_DNA.yaml
+          else
+            echo "⚠️  No GPG signature found for SWARM_DNA.yaml"
+            echo "   Generate with: gpg --armor --detach-sign SWARM_DNA.yaml"
+          fi

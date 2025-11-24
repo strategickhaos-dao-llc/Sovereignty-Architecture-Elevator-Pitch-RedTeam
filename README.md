@@ -2,6 +2,22 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🧬 NEW: Swarm DNA Architecture Toolkit
+
+**Transform mythological narrative into operational reality.** The Swarm DNA toolkit unifies lore, models, configs, and identity into a cohesive architecture system.
+
+- **📚 [Complete Guide](SWARM_DNA_GUIDE.md)** - Full walkthrough and philosophy
+- **⚡ [Quick Reference](SWARM_DNA_QUICKREF.md)** - One-page command reference
+- **🛠️ [Tool Documentation](tools/swarm-dna/README.md)** - Detailed API docs
+
+```bash
+# Try the demo
+./demo-swarm-dna.sh
+
+# Or compile your Swarm DNA
+./tools/swarm-dna/swarm_dna_compiler.py SWARM_DNA.yaml compiled/
+```
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +25,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **🧬 Swarm DNA** - Unified narrative-operational architecture (NEW!)
 
 ## 🚀 Quick Start
 
