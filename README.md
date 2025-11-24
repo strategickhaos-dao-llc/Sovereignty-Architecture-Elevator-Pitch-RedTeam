@@ -40,7 +40,7 @@ Run the operator script to check DAO status and generate protection reports:
 .\StrategicKhaos-Operator.ps1 -Feed
 ```
 
-📖 **[Full Operator Documentation](OPERATOR_README.md)**
+📖 **[Quick Start Guide](OPERATOR_QUICKSTART.md)** | **[Full Documentation](OPERATOR_README.md)**
 
 ## 🏗️ Architecture Overview
 
