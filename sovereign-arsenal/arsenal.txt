@@ -1,0 +1,120 @@
+# Sovereign Arsenal - 100 Foundational Papers
+# Category: CS & AI Foundations (10 papers)
+https://arxiv.org/pdf/1706.03762.pdf  # Attention Is All You Need (Transformers)
+https://arxiv.org/pdf/2005.14165.pdf  # GPT-3: Language Models are Few-Shot Learners
+https://arxiv.org/pdf/1301.3781.pdf   # Word2Vec: Efficient Estimation of Word Representations
+https://arxiv.org/pdf/1810.04805.pdf  # BERT: Pre-training of Deep Bidirectional Transformers
+https://arxiv.org/pdf/1409.0473.pdf   # Neural Machine Translation by Jointly Learning to Align and Translate
+https://arxiv.org/pdf/1512.03385.pdf  # Deep Residual Learning for Image Recognition (ResNet)
+https://arxiv.org/pdf/1406.2661.pdf   # Generative Adversarial Networks (GANs)
+https://arxiv.org/pdf/1411.1784.pdf   # Generative Adversarial Nets (Original GAN paper)
+https://arxiv.org/pdf/1312.6114.pdf   # Auto-Encoding Variational Bayes (VAE)
+https://arxiv.org/pdf/1701.07875.pdf  # Wasserstein GAN
+
+# Category: Cryptography & Zero Trust (10 papers)
+https://eprint.iacr.org/2016/260.pdf  # The Signal Protocol: Double Ratchet Algorithm
+https://eprint.iacr.org/2019/953.pdf  # Sonic: Zero-Knowledge SNARKs from Linear-Size Universal
+https://eprint.iacr.org/2016/260.pdf  # Signal Protocol Specification
+https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf  # AES Standard
+https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf # Digital Signature Standard
+https://eprint.iacr.org/2013/879.pdf  # Zerocash: Decentralized Anonymous Payments
+https://eprint.iacr.org/2019/458.pdf  # PLONK: Permutations over Lagrange-bases
+https://eprint.iacr.org/2017/1066.pdf # Bulletproofs: Short Proofs for Confidential Transactions
+https://ed25519.cr.yp.to/ed25519-20110926.pdf # Ed25519: High-speed high-security signatures
+https://cr.yp.to/snuffle/xsalsa-20110204.pdf  # Salsa20 and ChaCha20
+
+# Category: Distributed Systems (10 papers)
+https://lamport.azurewebsites.net/pubs/time-clocks.pdf # Time, Clocks, and the Ordering of Events
+https://raft.github.io/raft.pdf       # Raft Consensus Algorithm
+https://pmg.csail.mit.edu/papers/osdi99.pdf # Practical Byzantine Fault Tolerance (PBFT)
+https://www.microsoft.com/en-us/research/uploads/prod/2016/12/paxos-simple-Copy.pdf # Paxos Made Simple
+https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf # Bigtable
+https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf # Google File System
+https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf # MapReduce
+https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf # Dynamo: Amazon's Highly Available Key-value Store
+https://www.cs.cornell.edu/projects/Quicksilver/public_pdfs/SWIM.pdf # SWIM: Scalable Weakly-consistent Infection-style Process Group Membership
+https://static.googleusercontent.com/media/research.google.com/en//archive/chubby-osdi06.pdf # Chubby Lock Service
+
+# Category: Law & Governance (10 papers)
+https://www.europarl.europa.eu/doceo/document/TA-9-2021-0141_EN.pdf # EU AI Act
+https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679 # GDPR Full Text
+https://www.congress.gov/117/bills/hr6216/BILLS-117hr6216ih.pdf # AI Bill of Rights
+https://www.whitehouse.gov/wp-content/uploads/2022/10/Blueprint-for-an-AI-Bill-of-Rights.pdf # Blueprint for AI Bill of Rights
+https://digital-strategy.ec.europa.eu/en/library/proposal-regulation-european-approach-artificial-intelligence # EU AI Regulation
+https://www.parliament.uk/globalassets/documents/commons-committees/science-technology/Algorithms-in-decision-making-Government-Response.pdf # UK Algorithms Report
+https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1027519/Data_Ethics_Framework_2021.pdf # UK Data Ethics Framework
+https://www.un.org/en/udhrbook/pdf/udhr_booklet_en_web.pdf # Universal Declaration of Human Rights
+https://www.oecd.org/digital/artificial-intelligence/ai-principles.pdf # OECD AI Principles
+https://www.unesco.org/en/artificial-intelligence/recommendation-ethics # UNESCO Recommendation on Ethics of AI
+
+# Category: Neuroscience & Collective Intelligence (10 papers)
+https://www.nature.com/articles/nn.2303.pdf # The Brain's Default Network
+https://www.nature.com/articles/nrn3475.pdf # Neural Basis of Consciousness
+https://www.pnas.org/doi/pdf/10.1073/pnas.0705965105 # Collective Intelligence Factor
+https://www.science.org/doi/pdf/10.1126/science.1136800 # Mirror Neurons and Imitation Learning
+https://www.nature.com/articles/nature10530.pdf # Human Connectome Project
+https://www.nature.com/articles/nrn2787.pdf # Predictive Coding in the Brain
+https://www.sciencedirect.com/science/article/pii/S0166223610001177 # Free Energy Principle
+https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1002327&type=printable # Bayesian Brain
+https://www.nature.com/articles/ncomms1227.pdf # Scale-Free Brain Networks
+https://www.pnas.org/doi/pdf/10.1073/pnas.0800005105 # Wisdom of Crowds
+
+# Category: Mathematics & Formal Methods (10 papers)
+https://arxiv.org/pdf/1706.00611.pdf  # Category Theory for Programmers
+https://arxiv.org/pdf/1904.12356.pdf  # Homotopy Type Theory
+https://arxiv.org/pdf/math/0409520.pdf # Higher Category Theory
+https://arxiv.org/pdf/1510.07021.pdf  # Dependent Types and Program Equivalence
+https://arxiv.org/pdf/1803.08823.pdf  # Formal Verification of Smart Contracts
+https://arxiv.org/pdf/1711.09599.pdf  # Formal Methods in Blockchain
+https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-560.pdf # Simply Typed Lambda Calculus
+https://arxiv.org/pdf/1908.05839.pdf  # Proof Assistants: History and Applications
+https://arxiv.org/pdf/1909.05204.pdf  # Computational Logic and Verification
+https://arxiv.org/pdf/2001.04417.pdf  # Foundations of Probabilistic Programming
+
+# Category: Open Source Licenses & Ethics (10 papers)
+https://www.gnu.org/licenses/gpl-3.0.pdf # GNU General Public License v3
+https://opensource.org/licenses/MIT      # MIT License Text
+https://www.apache.org/licenses/LICENSE-2.0.txt # Apache License 2.0
+https://www.mozilla.org/media/MPL/2.0/index.txt # Mozilla Public License 2.0
+https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt # Creative Commons BY-SA 4.0
+https://www.gnu.org/licenses/agpl-3.0.pdf # GNU Affero General Public License
+https://firstdonoharm.dev/version/2/1/license.html # Hippocratic License
+https://ethicalsource.dev/licenses/     # Ethical Source Licenses
+https://www.fsf.org/about/what-is-free-software # Free Software Definition
+https://opensource.org/osd             # Open Source Definition
+
+# Category: Energy & Hardware Sovereignty (10 papers)
+https://arxiv.org/pdf/1906.05433.pdf  # Energy Efficiency in Neural Networks
+https://arxiv.org/pdf/2104.10350.pdf  # Carbon Emissions of ML Training
+https://arxiv.org/pdf/2011.03761.pdf  # Green AI
+https://arxiv.org/pdf/1906.02243.pdf  # RISC-V: Free and Open RISC Instruction Set
+https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf # RISC-V Specification
+https://arxiv.org/pdf/2012.07436.pdf  # Neuromorphic Computing
+https://arxiv.org/pdf/2103.03386.pdf  # Edge AI Hardware
+https://arxiv.org/pdf/2005.04305.pdf  # Efficient Deep Learning Systems
+https://arxiv.org/pdf/2106.04560.pdf  # Sustainable Computing
+https://arxiv.org/pdf/2110.11334.pdf  # Hardware Security Modules
+
+# Category: Biology & Genome Ethics (10 papers)
+https://www.nature.com/articles/nature15393.pdf # CRISPR-Cas9 Genome Editing
+https://www.nature.com/articles/nature24286.pdf # Human Genome Project Completion
+https://www.science.org/doi/pdf/10.1126/science.1243518 # Ethics of Germline Editing
+https://www.genome.gov/about-genomics/policy-issues/Genetic-Discrimination # Genetic Discrimination
+https://osp.od.nih.gov/wp-content/uploads/2016/06/Human-Subjects-Protection-and-Institutional-Review-Boards.pdf # NIH IRB Guidelines
+https://www.nature.com/articles/nbt.3923.pdf # Genome Privacy
+https://www.science.org/doi/pdf/10.1126/science.aad5224 # Synthetic Biology Ethics
+https://www.nature.com/articles/s41576-018-0021-1.pdf # CRISPR Ethics
+https://www.cell.com/cell/pdf/S0092-8674(15)01705-5.pdf # Gene Drive Systems
+https://www.nature.com/articles/nature24647.pdf # Human Cell Atlas
+
+# Category: Miscellaneous Eternal Classics (10 papers)
+https://www.marxists.org/reference/subject/economics/proudhon/property/index.htm # What is Property? (Proudhon)
+https://theanarchistlibrary.org/library/petr-kropotkin-mutual-aid-a-factor-of-evolution # Mutual Aid
+https://cdn.mises.org/The%20Use%20of%20Knowledge%20in%20Society_3.pdf # Use of Knowledge in Society (Hayek)
+https://nakamotoinstitute.org/bitcoin.pdf # Bitcoin: A Peer-to-Peer Electronic Cash System
+https://ethereum.org/en/whitepaper/   # Ethereum Whitepaper
+https://ipfs.io/ipfs/QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs.draft3.pdf # IPFS Paper
+https://filecoin.io/filecoin.pdf      # Filecoin: A Decentralized Storage Network
+https://arxiv.org/pdf/1905.09274.pdf  # Decentralized Identity
+https://www.w3.org/TR/did-core/        # W3C Decentralized Identifiers
+https://arxiv.org/pdf/2104.12419.pdf  # Web3: A Vision for a Decentralized Internet
