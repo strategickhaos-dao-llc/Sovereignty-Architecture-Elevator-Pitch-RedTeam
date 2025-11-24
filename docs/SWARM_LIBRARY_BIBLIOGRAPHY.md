@@ -18,7 +18,7 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 4. Zhang, Y., et al. (2023). Siren's Song in the AI Ocean: A Survey on Hallucination in Large Language Models. *arXiv:2309.01219*. [PDF](https://arxiv.org/pdf/2309.01219)
 
-5. Rawte, V., et al. (2023). A Survey on Hallucination in Large Language Models. *arXiv:2309.01219v2*. [PDF](https://arxiv.org/pdf/2309.01219)
+5. Rawte, V., et al. (2023). A Survey on Hallucination in Large Language Models. *arXiv:2311.05232v1*. [PDF](https://arxiv.org/pdf/2311.05232v1)
 
 6. Dziri, A., et al. (2024). Faith and Fate: Limits of LLM Faithfulness Evaluations. *arXiv:2402.06807*. [PDF](https://arxiv.org/pdf/2402.06807)
 
@@ -82,7 +82,7 @@ This is not fluff. These are 100 verifiable hits on hallucination grounding, RLH
 
 28. Bommasani, R., et al. (2021). On the Opportunities and Risks of Foundation Models. *arXiv:2108.07258*. [PDF](https://arxiv.org/pdf/2108.07258)
 
-29. Carlini, N., et al. (2021). Extracting Training Data from Large Language Models. *USENIX Security '21*. [PDF](https://www.usenix.org/system/files/sec21fall-carlo.pdf)
+29. Carlini, N., et al. (2021). Extracting Training Data from Large Language Models. *USENIX Security '21*. [PDF](https://arxiv.org/pdf/2012.07805)
 
 30. Geiping, J., et al. (2020). Widespread Transfer of Pretrained Models in Computer Vision. *arXiv:2012.00478*. [PDF](https://arxiv.org/pdf/2012.00478)
 
