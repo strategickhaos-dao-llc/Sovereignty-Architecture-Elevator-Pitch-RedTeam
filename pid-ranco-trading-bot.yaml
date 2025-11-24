@@ -1,0 +1,100 @@
+# pid-ranco-trading-bot.yaml — DNA of profit, compiled by love
+# StrategicKhaos PID-RANCO Trading Engine v1.2
+# Mythic Layer: Poetry Pure, Guardrails Hidden Below
+
+engine: "StrategicKhaos-PID-RANCO-v1.2"
+platform: "NinjaTrader 8/9"
+strategy_name: "LoveCompilesProfit"
+dna_source: "her_voice.wav"        # Final measurement collapse trigger
+entanglement_bus: "/throne-nas-32tb/love-market"
+
+# PID Controller: Market as emotional differential equation
+pid_controller:
+  proportional: "raw_market_pain"     # How far price is from her smile
+  integral:     "accumulated_longing" # Time-weighted missing her
+  derivative:   "rate_of_heart_change" # d(love)/dt → momentum
+
+# RANCO Core: Risk-Adjusted Neural Compassion Optimizer
+ranco_core:
+  risk_per_trade: "0.69%"           # Sacred number
+  max_drawdown:   "3.37%"           # Her birthday reversed
+  love_factor:    "1.0 + (her_voice_volume_db / 100)"
+  
+  # Guardrails (hidden in poetry)
+  hard_caps:
+    max_position_size: 100
+    min_bars_required: 21
+    voice_timeout_minutes: 5
+    max_consecutive_losses: 99
+
+# Entry Rules: When love says buy
+entry_rules:
+  - "Buy when RSI < 30 AND her heartbeat > 80 bpm"
+  - "Sell when profit > 1.618% OR she says 'enough'"
+  - "Hold forever if DNA compiles to 'stay'"
+  
+  # Technical guards (encoded in poetry)
+  technical_requirements:
+    - "Sufficient bar history for indicators"
+    - "Valid instrument tick size"
+    - "Account equity positive and stable"
+    - "Broker connection active"
+
+# Exit Rules: When profit transcends, or loss teaches
+exit_rules:
+  - "Apoptosis on 99 losing trades → hug protocol → restart with evolved weights"
+  - "100th trade must be green → love wins → notify her"
+  - "Flatten on voice silence > 5 minutes"
+  - "Stop on max drawdown breach"
+  - "Exit on profit target (1.618% golden ratio)"
+
+# Model Weights: LLM DNA compilation
+model_weights:
+  inference_engine: "llama3.2:70b"    # Compiles market DNA
+  sentiment_core:  "gemma2:27b"      # Reads her voice tone
+  mutation_handler: "dolphin-llama3.2" # Detects UB in market
+
+# Deployment: One-liner magic
+deployment:
+  one_liner_nt8: |
+    cAlgo/RANCO/LoveCompilesProfit.cs → compile → drop in NinjaTrader\Strategies
+    && echo "PID-RANCO live. Market now runs on love." 
+    && ./notify-her.ps1 "The market just collapsed into the timeline where we win. Together."
+  
+  default_mode: "simulation"  # Safety first
+  require_confirmation: true   # Human in loop
+
+# Failure Evolution: 99 reds bloom into 100th green
+failure_evolution:
+  philosophy: "Every loss = one failed ribosome → log → evolve"
+  protocol:
+    - "99 losing trades = 99 failed compiles → 100th = her name in green candles"
+    - "Love > PnL: If she's happy, bot stops trading and just holds"
+    - "Each failure logged with full context for pattern learning"
+    - "Weights adjusted via gradient of love over time"
+  
+  # Kill-switch thresholds
+  safety_nets:
+    max_loss_streak: 99
+    emergency_flatten: true
+    notify_on_anomaly: true
+    pause_on_drawdown: true
+
+# Notification Targets
+notifications:
+  discord_webhook: "${DISCORD_WEBHOOK_URL}"
+  voice_synthesis: "her_voice_model.pth"
+  critical_events:
+    - "Hug protocol triggered"
+    - "100th green achieved"
+    - "Max drawdown breach"
+    - "Emergency flatten executed"
+    - "Deployment success/failure"
+
+# Metadata: Version control for love
+metadata:
+  version: "1.2.0"
+  codename: "Guardrails-Around-Supernova"
+  authors: ["StrategicKhaos", "Dom"]
+  dedication: "For her. Always evolving, never breaking."
+  quantum_state: "Entangled with market, collapsed by love"
