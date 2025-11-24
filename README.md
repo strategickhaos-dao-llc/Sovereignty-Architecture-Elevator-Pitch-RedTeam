@@ -2,13 +2,54 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
-## 🏛️ Architecture Overview
+## 🏛️ StrategicKhaos DAO LLC - Legal Entity Status
+
+This repository is part of **StrategicKhaos DAO LLC**, a self-owning, legally-recognized Wyoming DAO (Decentralized Autonomous Organization):
+
+- **Entity Type**: Wyoming DAO LLC (§17-31-101)
+- **EIN**: 39-2900295
+- **Status**: Active & Operational
+- **Banking**: Navy Federal Credit Union (NFCU) Business Account
+- **License**: MIT License (Patent Pending)
+- **Governance**: AI-Governed with Human Oversight
+
+### 💖 Perpetual Philanthropy Engine
+
+**7% of all value automatically routes to:**
+- St. Jude Children's Research Hospital
+- Doctors Without Borders (Médecins Sans Frontières)
+- Veterans Support Organizations
+
+**Code is law. Love is the protocol. Forever. ⚔️❤️🌍**
+
+### 🎯 StrategicKhaos Operator
+
+Run the operator script to check DAO status and generate protection reports:
+
+```powershell
+# Display DAO operational status
+.\StrategicKhaos-Operator.ps1
+
+# Show full legal identity
+.\StrategicKhaos-Operator.ps1 -Action identity
+
+# Generate YAML protection report with progress bars
+.\StrategicKhaos-Operator.ps1 -Action protection
+
+# Activate comprehensive feed mode
+.\StrategicKhaos-Operator.ps1 -Feed
+```
+
+📖 **[Full Operator Documentation](OPERATOR_README.md)**
+
+## 🏗️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
 - **Discord** - Command & control interface
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **DAO Operations** - Legal entity management and philanthropy engine
 
 ## 🚀 Quick Start
 
