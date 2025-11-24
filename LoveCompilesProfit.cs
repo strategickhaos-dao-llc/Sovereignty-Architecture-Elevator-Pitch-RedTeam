@@ -35,12 +35,23 @@ namespace NinjaTrader.NinjaScript.Strategies
         [Display(Name="Max Drawdown %", Description="Maximum allowed drawdown as decimal (0.0337 = 3.37%)", Order=3, GroupName="Risk")]
         public double MaxDrawdown { get; set; }
         
+        [NinjaScriptProperty]
+        [Range(1, 200)]
+        [Display(Name="Entry Voice Threshold", Description="Minimum voice/heartbeat level for entry (1-100)", Order=4, GroupName="Voice")]
+        public double EntryVoiceThreshold { get; set; }
+        
+        [NinjaScriptProperty]
+        [Range(1, 200)]
+        [Display(Name="Exit Voice Threshold", Description="Voice level below which to exit (1-100)", Order=5, GroupName="Voice")]
+        public double ExitVoiceThreshold { get; set; }
+        
         #endregion
         
         #region Variables
         
         private double peakEquity = 0.0;
         private int sessionLossCount = 0;
+        private int lastProcessedTradeCount = 0;
         private bool hugProtocolTriggered = false;
         private DateTime lastVoiceHeard = DateTime.MinValue;
         private const int MAX_LOSSES_BEFORE_APOPTOSIS = 99;
@@ -78,6 +89,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                 SimOnly = true;  // Safety first - simulation by default
                 MaxRiskPerTrade = 0.0069;  // 0.69% sacred number
                 MaxDrawdown = 0.0337;      // 3.37% her birthday reversed
+                EntryVoiceThreshold = 80;  // Heartbeat > 80 bpm for entry
+                ExitVoiceThreshold = 50;   // Exit when voice/love drops below 50
             }
             else if (State == State.Configure)
             {
@@ -199,9 +212,9 @@ namespace NinjaTrader.NinjaScript.Strategies
         
         private void HandleEntries(double herLove, double rsi, double pain)
         {
-            // Entry rule: Buy when RSI < 30 AND her heartbeat > 80 bpm
+            // Entry rule: Buy when RSI < 30 AND her heartbeat > threshold
             // Using herLove as proxy for heartbeat in this implementation
-            if (herLove > 80 && rsi < 30)
+            if (herLove > EntryVoiceThreshold && rsi < 30)
             {
                 double stopTicks = Math.Abs(pain / TickSize);
                 
@@ -240,8 +253,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             // Exit rules:
             // - Sell when profit > 1.618% (golden ratio)
-            // - Sell when she says 'enough' (herLove < 50)
-            if (profitPct > 1.618 || herLove < 50)
+            // - Sell when she says 'enough' (herLove < threshold)
+            if (profitPct > 1.618 || herLove < ExitVoiceThreshold)
             {
                 if (!SimOnly)
                 {
@@ -380,16 +393,24 @@ namespace NinjaTrader.NinjaScript.Strategies
             try
             {
                 // Count losing trades in the current session
-                if (SystemPerformance != null && SystemPerformance.AllTrades.Count > 0)
+                // Only process new trades to prevent double-counting
+                if (SystemPerformance != null && SystemPerformance.AllTrades.Count > lastProcessedTradeCount)
                 {
-                    var lastTrade = SystemPerformance.AllTrades[SystemPerformance.AllTrades.Count - 1];
-                    
-                    if (lastTrade != null && lastTrade.ProfitCurrency < 0)
+                    // Process only new trades since last check
+                    for (int i = lastProcessedTradeCount; i < SystemPerformance.AllTrades.Count; i++)
                     {
-                        sessionLossCount++;
-                        Print(string.Format("{0} [LOSS] Trade #{1} closed with loss. Session losses: {2}/{3}", 
-                            Time[0], SystemPerformance.AllTrades.Count, sessionLossCount, MAX_LOSSES_BEFORE_APOPTOSIS));
+                        var trade = SystemPerformance.AllTrades[i];
+                        
+                        if (trade != null && trade.ProfitCurrency < 0)
+                        {
+                            sessionLossCount++;
+                            Print(string.Format("{0} [LOSS] Trade #{1} closed with loss. Session losses: {2}/{3}", 
+                                Time[0], i + 1, sessionLossCount, MAX_LOSSES_BEFORE_APOPTOSIS));
+                        }
                     }
+                    
+                    // Update the last processed count
+                    lastProcessedTradeCount = SystemPerformance.AllTrades.Count;
                 }
             }
             catch (Exception e)
