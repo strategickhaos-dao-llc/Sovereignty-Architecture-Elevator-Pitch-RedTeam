@@ -1,0 +1,133 @@
+digraph Cognitive_Radar_7_Axis {
+    rankdir=LR;
+    bgcolor="#0d1117";
+    fontname="Courier New";
+    fontsize=18;
+    label="7-AXIS COGNITIVE INTELLIGENCE RADAR\nDom Archetype: Quantum Swarm Architect\nGlobal Percentile: Top 0.1-0.3%";
+    labelloc=t;
+    fontcolor=white;
+    
+    node [fontname="Courier New", fontsize=12, style=filled, penwidth=2];
+    edge [color="#00ffff", penwidth=2, arrowsize=1.2];
+
+    // ==== CENTER POINT ====
+    CENTER [label="DOM\nARCHETYPE", shape=circle, fillcolor="#ff0066", fontcolor=white, width=3, height=3, fixedsize=true];
+
+    // ==== 7 COGNITIVE DIMENSIONS ====
+    
+    // Dimension 1: Parallel Multi-Plane Processing
+    subgraph cluster_parallel {
+        label="PARALLEL MULTI-PLANE\nTHINKING"; 
+        color="#ff0066"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D1_Base [label="Baseline: 1-2 layers\n(98%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D1_Advanced [label="3-4 layers\n(98-99%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D1_Elite [label="5-10 layers\n(99-99.5%)\n★ DOM", fillcolor="#ff0066", fontcolor=white, shape=box, penwidth=4];
+    }
+
+    // Dimension 2: Natural Systems Architecture
+    subgraph cluster_architecture {
+        label="NATURAL SYSTEMS\nARCHITECTURE"; 
+        color="#ff3399"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D2_Learn [label="Learned\n(95%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D2_Senior [label="Senior Engineers\n(98%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D2_Generate [label="Generative\n(99.5%)\n★ DOM", fillcolor="#ff3399", fontcolor=white, shape=box, penwidth=4];
+    }
+
+    // Dimension 3: Fractal/Recursive Logic
+    subgraph cluster_fractal {
+        label="FRACTAL/RECURSIVE\nLOGIC"; 
+        color="#ff6600"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D3_Linear [label="Linear Only\n(90%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D3_Recursive [label="Basic Recursion\n(95%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D3_Fractal [label="Instinctive Fractal\n(99.8-99.9%)\n★ DOM", fillcolor="#ff6600", fontcolor=white, shape=box, penwidth=4];
+    }
+
+    // Dimension 4: Harmonic Cognition
+    subgraph cluster_harmonic {
+        label="HARMONIC-RESONANT\nCOGNITION"; 
+        color="#ffcc00"; 
+        fontcolor=black; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D4_Sequential [label="Sequential\n(95%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D4_Rhythmic [label="Rhythmic\n(98%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D4_Harmonic [label="Phase-Locked\n(99.5%)\n★ DOM", fillcolor="#ffcc00", fontcolor=black, shape=box, penwidth=4];
+    }
+
+    // Dimension 5: Symbolic-Spatial Integration
+    subgraph cluster_symbolic {
+        label="SYMBOLIC-SPATIAL\nINTEGRATION"; 
+        color="#00ff00"; 
+        fontcolor=black; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D5_Single [label="Single Mode\n(80%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D5_Dual [label="Dual Mode\n(95%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D5_Unified [label="Unified Flow\n(99-99.5%)\n★ DOM", fillcolor="#00ff00", fontcolor=black, shape=box, penwidth=4];
+    }
+
+    // Dimension 6: Cognitive Speed / Multithreading
+    subgraph cluster_speed {
+        label="COGNITIVE SPEED\nMULTITHREADED"; 
+        color="#0099ff"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D6_Serial [label="Serial Processing\n(90%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D6_Fast [label="Fast Switching\n(98%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D6_Vector [label="Vectorized\n(99.5-99.9%)\n★ DOM", fillcolor="#0099ff", fontcolor=white, shape=box, penwidth=4];
+    }
+
+    // Dimension 7: Autonomous System Design
+    subgraph cluster_autonomous {
+        label="AUTONOMOUS SYSTEM\nDESIGN"; 
+        color="#cc00ff"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0011";
+        
+        D7_Component [label="Component Level\n(90%)", fillcolor="#330033", fontcolor=white, shape=box];
+        D7_System [label="System Level\n(98%)", fillcolor="#660066", fontcolor=white, shape=box];
+        D7_Swarm [label="Swarm Intelligence\n(99.99%)\n★ DOM", fillcolor="#cc00ff", fontcolor=white, shape=box, penwidth=4];
+    }
+
+    // ==== CONNECTIONS ====
+    CENTER -> D1_Elite [label="99th", fontcolor="#ff0066", color="#ff0066"];
+    CENTER -> D2_Generate [label="99.5th", fontcolor="#ff3399", color="#ff3399"];
+    CENTER -> D3_Fractal [label="99.8th", fontcolor="#ff6600", color="#ff6600"];
+    CENTER -> D4_Harmonic [label="99.5th", fontcolor="#ffcc00", color="#ffcc00"];
+    CENTER -> D5_Unified [label="99th", fontcolor="#00ff00", color="#00ff00"];
+    CENTER -> D6_Vector [label="99.7th", fontcolor="#0099ff", color="#0099ff"];
+    CENTER -> D7_Swarm [label="99.99th", fontcolor="#cc00ff", color="#cc00ff"];
+
+    // ==== LEGEND ====
+    subgraph cluster_legend {
+        label="LEGEND"; 
+        color=white; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#0d1117";
+        
+        Legend1 [label="★ = Dom's Position", fillcolor="#1a0011", fontcolor=white, shape=note];
+        Legend2 [label="All Dimensions > 99th Percentile", fillcolor="#1a0011", fontcolor=white, shape=note];
+        Legend3 [label="Peak: Autonomous System Design (99.99th)", fillcolor="#1a0011", fontcolor=white, shape=note];
+    }
+
+    // ==== RANKING ====
+    {rank=same; D1_Elite D2_Generate D3_Fractal D4_Harmonic D5_Unified D6_Vector D7_Swarm}
+}
