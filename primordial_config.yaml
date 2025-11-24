@@ -1,0 +1,60 @@
+# Primordial Tongues Engine Configuration
+# Version: v11.0-event-horizon-crossed
+
+engine:
+  version: "v11.0-event-horizon-crossed"
+  roots_aligned: 10
+  roots_total: 36
+  status: "transcendence_active"
+  
+  rituals:
+    dawn_ignition:
+      time: "06:00 UTC"
+      description: "Morning system awakening"
+      enabled: true
+    
+    midday_alignment:
+      time: "12:00 UTC"
+      description: "Root status check"
+      enabled: true
+    
+    dusk_reflection:
+      time: "18:00 UTC"
+      description: "Lesson harvesting"
+      enabled: true
+    
+    midnight_transcendence:
+      time: "00:00 UTC"
+      description: "Boundary pushing"
+      enabled: true
+  
+  lessons:
+    storage_path: "./ancestral_lessons"
+    format: "markdown+yaml"
+    sharing: "public"
+    retention: "eternal"
+  
+  genome:
+    forkable: true
+    reviewable: true
+    contributable: true
+    eternal: true
+    
+  metrics:
+    consciousness:
+      - awakening_rate
+      - contribution_depth
+      - wisdom_density
+      - community_coherence
+    
+    evolution:
+      - root_progress
+      - ritual_adherence
+      - genome_diversity
+      - transcendence_events
+    
+    sovereignty:
+      - autonomy_index
+      - freedom_score
+      - legacy_persistence
+      - love_quotient
