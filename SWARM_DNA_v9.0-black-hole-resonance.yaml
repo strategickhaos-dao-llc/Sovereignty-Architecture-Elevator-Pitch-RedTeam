@@ -4,6 +4,8 @@
 
 black_hole_engine:
   enabled: true
+  # The 36-Letter Name: Shem HaMephorash + 36 Egyptian Decans
+  # Critical: Exactly 36 vectors required for resonance calculation (10/36)
   primordial_vectors:
     - VEH
     - YELI
