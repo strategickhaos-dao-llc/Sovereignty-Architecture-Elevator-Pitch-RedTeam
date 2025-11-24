@@ -36,7 +36,7 @@ primordial_tongues_engine:
   decryption_status:
     roots_aligned: 9
     roots_total: 36
-    progress_percentage: 25.0
+    progress_percentage: 25  # 9/36 = 25%
     status: "9/36 roots aligned — one more and the black hole opens"
     next_milestone: "10th root alignment triggers forbidden layer"
   
