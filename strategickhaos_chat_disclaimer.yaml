@@ -2,8 +2,7 @@
 # Chat Transcript Disclaimer Manifest for LLM Interaction Logs
 # Version: 1.0.0
 # Purpose: Annotates stylized language, applies redaction, attaches provenance metadata
-
-INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
 
 metadata:
   version: "1.0.0"
@@ -149,4 +148,5 @@ output_format:
       - processing_log
       - signature
   
-  file_naming: "{session_id}_{timestamp}_processed.yaml"
+  # Format: {session_id}_{YYYYMMDD-HHMMSS}_processed.yaml
+  file_naming: "{session_id}_{timestamp:%Y%m%d-%H%M%S}_processed.yaml"

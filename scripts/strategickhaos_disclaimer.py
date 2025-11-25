@@ -26,6 +26,7 @@ import hashlib
 import re
 import sys
 import uuid
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -65,11 +66,7 @@ def load_config(config_path: Path) -> dict:
         return {}
     
     with open(config_path, encoding="utf-8") as f:
-        content = f.read()
-        yaml_start = content.find("metadata:")
-        if yaml_start == -1:
-            return {}
-        return yaml.safe_load(content[yaml_start:]) or {}
+        return yaml.safe_load(f) or {}
 
 
 def compute_checksum(content: str) -> str:
@@ -98,13 +95,18 @@ def annotate_stylized_language(content: str, config: dict) -> tuple[str, list]:
     annotations = []
     annotated = content
     
-    patterns = STYLIZED_PATTERNS
+    # Use config patterns if available, otherwise use defaults
+    patterns = []
     if config.get("stylized_language_patterns", {}).get("patterns"):
         for p in config["stylized_language_patterns"]["patterns"]:
             pattern = p.get("pattern", "")
             annotation = p.get("annotation", "[ANNOTATED]")
             if pattern:
                 patterns.append((rf"\b{re.escape(pattern)}\b", f"{annotation}: {pattern}"))
+    
+    # Add default patterns if config doesn't provide any
+    if not patterns:
+        patterns = list(STYLIZED_PATTERNS)
     
     for pattern, replacement in patterns:
         matches = list(re.finditer(pattern, annotated, re.IGNORECASE))
@@ -194,8 +196,7 @@ def process_transcript(
                 "annotations_applied": len(annotations),
                 "redactions_applied": len(redactions),
                 "annotation_details": annotations[:10],
-                "redaction_summary": {cat: sum(1 for r in redactions if r["category"] == cat) 
-                                     for cat in set(r["category"] for r in redactions)},
+                "redaction_summary": dict(Counter(r["category"] for r in redactions)),
             },
             "signature": {
                 "algorithm": "sha256",
