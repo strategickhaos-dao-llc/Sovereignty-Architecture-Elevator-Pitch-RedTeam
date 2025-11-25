@@ -5,21 +5,29 @@ Strategickhaos DAO LLC - Performance Evaluation Framework
 
 This script measures key performance metrics for the Git-native
 multi-agent consensus protocol as defined in EVALUATION_METRICS.md.
+
+Usage:
+    Run from repository root: python benchmarks/dao_consensus_benchmark.py
+    Or install package and import: from src.dao.kernel import DAOKernel
 """
 
 import argparse
 import json
+import os
 import random
 import statistics
 import sys
 import time
 from dataclasses import dataclass, asdict
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Determine project root and add to path for imports when running as script
+_SCRIPT_DIR = Path(__file__).parent.resolve()
+_PROJECT_ROOT = _SCRIPT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 
 from src.dao.kernel import DAOKernel, VoteDecision, ProposalStatus
 
@@ -62,7 +70,7 @@ class DAOConsensusBenchmark:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.results: list[BenchmarkResult] = []
         self.start_time = None
-        self.run_id = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        self.run_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         
     def _record_result(self, name: str, value: float, unit: str, metadata: dict = None):
         """Record a benchmark result"""
@@ -70,7 +78,7 @@ class DAOConsensusBenchmark:
             metric_name=name,
             value=value,
             unit=unit,
-            timestamp=datetime.utcnow().isoformat() + 'Z',
+            timestamp=datetime.now(timezone.utc).isoformat(),
             metadata=metadata or {}
         )
         self.results.append(result)
@@ -421,13 +429,13 @@ class DAOConsensusBenchmark:
         environment = {
             'python_version': platform.python_version(),
             'platform': platform.platform(),
-            'timestamp': datetime.utcnow().isoformat() + 'Z'
+            'timestamp': datetime.now(timezone.utc).isoformat()
         }
         
         suite = BenchmarkSuite(
             suite_name="DAO Consensus Benchmark",
             run_id=self.run_id,
-            timestamp=datetime.utcnow().isoformat() + 'Z',
+            timestamp=datetime.now(timezone.utc).isoformat(),
             duration_seconds=duration,
             results=[asdict(r) for r in self.results],
             summary=summary,

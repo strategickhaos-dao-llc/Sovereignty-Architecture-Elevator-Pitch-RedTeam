@@ -12,7 +12,7 @@ import json
 import time
 import subprocess
 from dataclasses import dataclass, field, asdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Optional
@@ -219,7 +219,6 @@ class DAOKernel:
             The created Proposal object
         """
         proposal_id = f"PROP-{uuid.uuid4().hex[:8].upper()}"
-        from datetime import timedelta
         deadline = datetime.utcnow() + timedelta(hours=voting_hours)
         
         proposal = Proposal(
@@ -231,16 +230,17 @@ class DAOKernel:
             voting_deadline=deadline.isoformat() + 'Z'
         )
         
-        # Create Git branch for proposal
+        # Create Git branch for proposal (non-critical, continue on failure)
         branch_name = f"proposal/{proposal_id.lower()}"
         success, output = self._git_command('checkout', '-b', branch_name)
         if success:
             proposal.git_branch = branch_name
+        # Note: Git branch creation failure is non-critical; proposal can still function
             
         self.proposals[proposal_id] = proposal
         self._save_proposal(proposal)
         
-        # Commit proposal creation
+        # Commit proposal creation (best-effort, non-critical for core functionality)
         self._git_command('add', str(self.data_dir / f"{proposal_id}.json"))
         self._git_command('commit', '-m', f"[DAO] Create proposal: {title}")
         
@@ -273,10 +273,10 @@ class DAOKernel:
         if proposal.status not in [ProposalStatus.DRAFT, ProposalStatus.VOTING]:
             raise ValueError(f"Proposal {proposal_id} is not accepting votes")
             
-        # Check if agent already voted
-        for vote in proposal.votes:
-            if vote.agent_id == agent_id:
-                raise ValueError(f"Agent {agent_id} has already voted")
+        # Check if agent already voted using set for O(1) lookup
+        voted_agents = {vote.agent_id for vote in proposal.votes}
+        if agent_id in voted_agents:
+            raise ValueError(f"Agent {agent_id} has already voted")
                 
         # Transition to voting state if first vote
         if proposal.status == ProposalStatus.DRAFT:
@@ -293,7 +293,7 @@ class DAOKernel:
         proposal.votes.append(vote)
         self._save_proposal(proposal)
         
-        # Commit vote
+        # Commit vote (best-effort, non-critical for core functionality)
         self._git_command('add', str(self.data_dir / f"{proposal_id}.json"))
         self._git_command('commit', '-m', 
                          f"[DAO] Vote: {agent_id} votes {decision.value} on {proposal_id}")
