@@ -92,6 +92,6 @@ jobs:
       - name: Enforce SLOs
         run: |
           LOOP=$(./scripts/metrics/agent_loop_rate.sh || echo "0.1")
-          MTC=$(./scripts/metrics/mtc_break_minutes.sh || echo "5")
+          MTC_ACTUAL=$(./scripts/metrics/mtc_break_minutes.sh || echo "5")
           awk "BEGIN { exit !($LOOP <= ${LOOP_SLO:-0.005}) }" || (echo "Agent loop rate SLO violated" && exit 1)
-          awk "BEGIN { exit !($MTC <= ${MTC:-2}) }" || (echo "MTC circuit-break SLO violated" && exit 1)
+          awk "BEGIN { exit !($MTC_ACTUAL <= ${MTC:-2}) }" || (echo "MTC circuit-break SLO violated" && exit 1)

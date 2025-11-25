@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Spark smoke tests placeholder
 # Replace with actual preview test commands
 echo "Running Spark smoke tests..."

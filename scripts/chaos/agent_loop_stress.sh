@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Agent loop stress test placeholder
 # Simulates agent loop scenarios
 echo "Running agent loop stress test..."

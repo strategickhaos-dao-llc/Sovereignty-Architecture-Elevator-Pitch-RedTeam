@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Tool auth revocation test placeholder
 # Simulates tool authentication revocation scenarios
 echo "Running tool auth revocation test..."
