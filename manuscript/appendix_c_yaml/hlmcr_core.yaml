@@ -139,6 +139,6 @@ spec:
   # Audit and compliance
   audit_requirements:
     log_all_decisions: true
-    retention_period_days: 2555  # 7 years for compliance
+    retention_period_days: 2557  # 7 years for compliance (7 × 365.25)
     sensitive_field_encryption: true
     immutable_audit_trail: true
