@@ -15,7 +15,7 @@ digraph Cognitive_Architecture {
         Psy_01 [label="1. Meta-cognition\n(Thinking about thinking)", fillcolor="#9966ff", fontcolor=white, shape=box];
         Psy_02 [label="2. Hyper-associative\n(Cross-domain bridges)", fillcolor="#9966ff", fontcolor=white, shape=box];
         Psy_03 [label="3. Distributed cognition\n(Extended mind)", fillcolor="#9966ff", fontcolor=white, shape=box];
-        Psy_04 [label="4. Intentionality eng.\n(Intention→Execution)", fillcolor="#ff0066", fontcolor=white, shape=box];
+        Psy_04 [label="4. Intentionality\nengineering\n(Intention→Execution)", fillcolor="#ff0066", fontcolor=white, shape=box];
         Psy_05 [label="5. Emergent framing\n(Redefine problems)", fillcolor="#9966ff", fontcolor=white, shape=box];
         Psy_06 [label="6. Systems abstraction\n(See structure)", fillcolor="#9966ff", fontcolor=white, shape=box];
         Psy_07 [label="7. Recursive self-model\n(Mirror effect)", fillcolor="#9966ff", fontcolor=white, shape=box];

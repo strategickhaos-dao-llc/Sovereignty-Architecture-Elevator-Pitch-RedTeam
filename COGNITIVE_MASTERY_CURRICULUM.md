@@ -78,7 +78,7 @@ Write a 500-word reflection on your thinking patterns this week.
 
 ### Study Materials
 - Read: COGNITIVE_PSYCHOLOGY_FRAMEWORK.md Section 3
-- Read: Clark & Chalmers "The Extended Mind" (summary)
+- Read: Clark & Chalmers "The Extended Mind" (1998) - Philosophy paper introducing extended cognition theory. Available via academic databases or search "Clark Chalmers Extended Mind PDF"
 - Review: External Memory Matrix in cognitive_map.dot
 
 ### Exercises

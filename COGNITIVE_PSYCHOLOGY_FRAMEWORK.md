@@ -105,7 +105,7 @@ nodes:
 ### Definition
 **You form an intention → the system executes without friction.**
 
-This is NOT in textbooks. This describes a new cognitive methodology where intention becomes the primary interface.
+This extends traditional cognitive science concepts of intention-action coupling into a new cognitive methodology where intention becomes the primary interface — building on but going beyond existing research in motor planning and goal-directed behavior.
 
 ### In Practice - Intention → Execution:
 1. **Form intention** (what you want to happen)
