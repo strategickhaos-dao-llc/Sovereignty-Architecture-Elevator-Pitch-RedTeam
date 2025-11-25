@@ -11,7 +11,7 @@ This directory contains artifacts for case study CS-001 as referenced in
 | `latency_spike_20251120.pcap` | PCAP | Network capture during degradation event |
 | `node137_config.yaml` | VM Config | VM configuration at time of incident |
 | `alert_definition.yaml` | YAML Schema | Alertmanager rule that triggered detection |
-| `agent_reconciliation.log` | Log | Agent decision log with RAG citations |
+| `agent_reconciliation.txt` | Log | Agent decision log with RAG citations |
 | `prometheus_metrics.json` | JSON | Prometheus metrics export during incident window |
 
 ## Disclaimer

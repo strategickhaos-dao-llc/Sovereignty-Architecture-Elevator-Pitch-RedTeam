@@ -207,7 +207,7 @@ case_study:
       description: "Alertmanager rule that triggered detection"
     - id: "log-agent-reconciliation"
       type: "log-path"
-      path: "evidence/cs001/agent_reconciliation.log"
+      path: "evidence/cs001/agent_reconciliation.txt"
       description: "Agent decision log with RAG citations"
     - id: "metrics-export"
       type: "json"
