@@ -69,8 +69,8 @@ This bibliography presents a curated collection of 72 sources from credible scie
 19. **Hobson, R. P., & Meyer, J. A.** (2002). *The origins of social understanding: the role of simulation and mirroring*. *Philosophical Transactions of the Royal Society B: Biological Sciences, 357*(1422), 561–569. DOI: 10.1098/rstb.2002.1220. PMID: 12079664.  
     Simulation theory via mirroring as the biological basis for social pattern understanding.
 
-20. **Rizzolatti, G., Fogassi, L., & Gallese, V.** (2001). *Neurophysiological mechanisms underlying the understanding and imitation of action*. *Nature Reviews Neuroscience, 2*(9), 661–670. DOI: 10.1038/35090060. PMID: 11533610.  
-    MNS as the neural substrate for action pattern recognition and imitation.
+20. **Molenberghs, P., Cunnington, R., & Mattingley, J. B.** (2012). *Brain regions with mirror properties: A meta-analysis of 125 human fMRI studies*. *Neuroscience & Biobehavioral Reviews, 36*(1), 341–349. DOI: 10.1016/j.neubiorev.2011.07.004. PMID: 21782846.  
+    Comprehensive meta-analysis mapping brain regions involved in mirroring and action observation patterns.
 
 ### Hebbian Learning and Social Cognition
 
@@ -86,8 +86,8 @@ This bibliography presents a curated collection of 72 sources from credible scie
 24. **Friston, K.** (2009). *The free-energy principle: a rough guide to the brain?* *Trends in Cognitive Sciences, 13*(7), 293–301. DOI: 10.1016/j.tics.2009.04.005. PMID: 19559644.  
     Brain as a biological free-energy minimizer for pattern prediction.
 
-25. **Clark, A.** (2013). *Whatever next? Predictive brains, situated agents, and the future of cognitive science*. *Behavioral and Brain Sciences, 36*(3), 181–204. DOI: 10.1017/S0140525X12000477. PMID: 23663405.  
-    Predictive processing as the brain's core biological pattern engine.
+25. **Decety, J., & Sommerville, J. A.** (2003). *Shared representations between self and other: a social cognitive neuroscience view*. *Trends in Cognitive Sciences, 7*(12), 527–533. DOI: 10.1016/j.tics.2003.10.004. PMID: 14643668.  
+    Shared representations framework for understanding self-other pattern matching in the brain.
 
 26. **Keysers, C., Kohler, E., Umiltà, M. A., Nanetti, L., Fogassi, L., & Gallese, V.** (2003). *Audiovisual mirror neurons and action recognition*. *Experimental Brain Research, 150*(4), 564–567. DOI: 10.1007/s00221-003-1437-4. PMID: 12783189.  
     Audiovisual MNS for multimodal biological pattern recognition.
@@ -109,11 +109,11 @@ This bibliography presents a curated collection of 72 sources from credible scie
 31. **Keysers, C., & Gazzola, V.** (2014). *Hebbian learning and predictive mirror neurons for actions, sensations and emotions*. *Philosophical Transactions of the Royal Society B: Biological Sciences, 369*(1644), 20130175. DOI: 10.1098/rstb.2013.0175. PMID: 24778372.  
     Hebbian learning in MNS for predictive biological pattern matching.
 
-32. **Iacoboni, M.** (2009). *Imitation, empathy, and mirror neurons*. *Annual Review of Psychology, 60*, 653–670. DOI: 10.1146/annurev.psych.60.110707.163604. PMID: 19035842.  
-    MNS as the biological engine for empathetic pattern simulation.
+32. **Catmur, C., Walsh, V., & Heyes, C.** (2007). *Sensorimotor learning configures the human mirror system*. *Current Biology, 17*(17), 1527–1531. DOI: 10.1016/j.cub.2007.08.006. PMID: 17716898.  
+    Evidence that mirror neurons are shaped by sensorimotor learning, highlighting developmental pattern acquisition.
 
-33. **Friston, K.** (2010). *The free-energy principle: a unified brain theory?* *Nature Reviews Neuroscience, 11*(2), 127–138. DOI: 10.1038/nrn2787. PMID: 20068583.  
-    Unified theory of brain as biological pattern predictor via free-energy minimization.
+33. **Bastos, A. M., Usrey, W. M., Adams, R. A., Mangun, G. R., Fries, P., & Friston, K. J.** (2012). *Canonical microcircuits for predictive coding*. *Neuron, 76*(4), 695–711. DOI: 10.1016/j.neuron.2012.10.038. PMID: 23177956.  
+    Neural microcircuit architecture underlying predictive coding and hierarchical pattern processing.
 
 34. **Clark, A.** (2016). *Surfing uncertainty: prediction, action, and the embodied mind*. *Oxford University Press*. ISBN: 9780190217013.  
     Embodied predictive processing as the mind's biological pattern engine.
