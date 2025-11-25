@@ -1,0 +1,78 @@
+# node137_config.yaml
+# VM/Node Configuration at time of incident
+# Referenced in: engineering_methodology_domain.yaml → case_study → artifacts
+# Date: 2025-11-20T14:30:00Z
+
+node:
+  id: "node-137"
+  hostname: "node137.field.strategickhaos.internal"
+  role: "edge-compute"
+  location:
+    site: "Wyoming Remote Site Alpha"
+    coordinates:
+      latitude: 42.8501
+      longitude: -106.3252
+    environment: "field"
+
+hardware:
+  cpu:
+    model: "AMD EPYC 7302P"
+    cores: 8
+    threads: 16
+  memory:
+    total_gb: 32
+    available_gb: 28
+  storage:
+    root_device: "/dev/nvme0n1"
+    total_gb: 512
+    type: "NVMe SSD"
+
+network:
+  primary:
+    interface: "eth0"
+    type: "StarLink"
+    ip: "192.168.137.10"
+    gateway: "192.168.137.1"
+    mtu: 1500
+    status: "degraded"  # At time of incident
+  backup:
+    interface: "wwan0"
+    type: "LTE"
+    ip: "10.0.137.10"
+    gateway: "10.0.137.1"
+    mtu: 1400
+    status: "standby"
+  failover:
+    enabled: true
+    policy: "latency-threshold"
+    threshold_ms: 2000
+    probe_interval_s: 10
+
+services:
+  - name: "node_exporter"
+    port: 9100
+    status: "running"
+  - name: "promtail"
+    port: 9080
+    status: "running"
+  - name: "otel-collector"
+    ports: [4317, 4318]
+    status: "running"
+
+telemetry:
+  prometheus_scrape_interval: "15s"
+  log_level: "info"
+  trace_sampling_rate: 0.1
+
+security:
+  firewall: "enabled"
+  ssh_port: 22
+  allowed_ssh_sources:
+    - "192.168.137.0/24"
+    - "10.0.0.0/8"
+
+metadata:
+  created: "2025-10-01T00:00:00Z"
+  last_modified: "2025-11-20T14:30:00Z"
+  managed_by: "terraform"
+  version: "1.2.3"

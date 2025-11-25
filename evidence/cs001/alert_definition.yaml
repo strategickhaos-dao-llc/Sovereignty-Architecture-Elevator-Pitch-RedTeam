@@ -1,0 +1,39 @@
+# alert_definition.yaml
+# Alertmanager rule for latency spike detection
+# Referenced in: engineering_methodology_domain.yaml → case_study → artifacts
+
+groups:
+  - name: sovereignty_network_alerts
+    rules:
+      - alert: LatencySpike
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{job="node-exporter"}[5m])) > 2.0
+        for: 1m
+        labels:
+          severity: critical
+          team: ops
+          environment: field
+        annotations:
+          summary: "High latency detected on {{ $labels.instance }}"
+          description: "P99 latency exceeded 2000ms threshold for {{ $labels.instance }}"
+          runbook_url: "https://wiki.strategickhaos.internal/runbooks/latency-spike"
+          dashboard_url: "https://grafana.strategickhaos.internal/d/network-latency"
+
+      - alert: NetworkPartition
+        expr: up{job="node-exporter"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          team: ops
+        annotations:
+          summary: "Node unreachable: {{ $labels.instance }}"
+          description: "Node {{ $labels.instance }} has been unreachable for 30 seconds"
+
+      - alert: UplinkDegraded
+        expr: rate(node_network_receive_errs_total[5m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          team: ops
+        annotations:
+          summary: "Network errors on {{ $labels.instance }}"
+          description: "High rate of receive errors detected on {{ $labels.device }}"
