@@ -224,15 +224,20 @@ audit_and_accountability:
 
 service_specific_guidelines:
   osint_services:
-    services: [1, 5-8, 10-15, 18-19, 21, 24-25, 27, 30-31, 34, 37-38, 40, 42, 46, 51, 55-56, 61, 65, 68, 70, 73-74, 78-79, 81, 85, 88, 94, 99]
+    # Services using OSINT methodology: public data analysis, intel gathering
+    services: [1, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 18, 19, 21, 24, 25, 27, 30, 31, 34, 37, 38, 40, 42, 46, 51, 55, 56, 61, 65, 68, 70, 73, 74, 78, 79, 81, 85, 88, 94, 99]
     requirements:
       - "Public data sources documented"
       - "No social engineering"
       - "No impersonation"
       - "No unauthorized account access"
+      - "Platform terms of service compliance"
+      - "Data protection law compliance (GDPR, CCPA as applicable)"
     committee_approval: "Standard review"
+    note: "Consent refers to target consent; public data usage still requires following platform ToS and applicable data protection laws"
   
   red_team_services:
+    # Services requiring red-team methodology: consent-based security testing
     services: [4, 9, 17, 23, 29, 36, 43, 48, 53, 57, 63, 67, 72, 77, 80, 82, 87, 93]
     requirements:
       - "Written consent obtained"
@@ -242,6 +247,7 @@ service_specific_guidelines:
     committee_approval: "Full committee vote required"
   
   forensics_services:
+    # Services requiring digital forensics methodology
     services: [3, 12, 16, 20, 22, 28, 32, 35, 44, 47, 49, 54, 59, 62, 66, 71, 76, 83, 86, 89, 95]
     requirements:
       - "Authorization from data owner"
@@ -251,6 +257,7 @@ service_specific_guidelines:
     committee_approval: "Standard review with legal counsel"
   
   vulnerability_assessment_services:
+    # Services requiring vulnerability assessment methodology
     services: [2, 13, 26, 33, 39, 41, 45, 50, 52, 58, 64, 69, 75, 84, 90, 92]
     requirements:
       - "Consent for active scanning"

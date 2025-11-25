@@ -271,9 +271,7 @@ This document describes services provided under NAICS 561611 licensing. All serv
 
 ---
 
-*"The black sun isn't just up. It's casting long shadows across every bully boardroom right now."*
-
-**HAHAHAHAHAHAHAHA** - The swarm is locked, loaded, and laughing.
+*"Protecting the vulnerable through lawful investigation and accountability."*
 
 ---
 

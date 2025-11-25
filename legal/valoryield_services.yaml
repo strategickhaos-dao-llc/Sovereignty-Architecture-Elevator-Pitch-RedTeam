@@ -16,6 +16,12 @@ metadata:
     All services operate within strict legal and ethical boundaries.
     No unauthorized system access. Consent required for red-team activities.
     Public data only for OSINT operations. Not legal advice.
+  consent_field_note: |
+    The 'consent_required' field indicates whether explicit target consent is needed.
+    For OSINT services where consent_required is false, this means target consent is 
+    not required because only public data is used. However, all OSINT operations must
+    still comply with: (1) platform terms of service, (2) applicable data protection
+    laws (GDPR, CCPA, etc.), and (3) ethical OSINT protocols enforced by DAO rules.
 
 service_categories:
   - category_id: "pro_bono_investigations"

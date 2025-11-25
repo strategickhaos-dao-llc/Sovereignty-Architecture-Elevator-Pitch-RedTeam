@@ -318,7 +318,7 @@ This document describes operational protocols for services provided under NAICS 
 
 ---
 
-*"Pick a bully—pro bono audit, watch 'em sweat legally. The swarm's ready; power maximized for the vulnerable."*
+*"Maximizing legal power to protect the vulnerable through transparent, ethical investigation."*
 
 ---
 
