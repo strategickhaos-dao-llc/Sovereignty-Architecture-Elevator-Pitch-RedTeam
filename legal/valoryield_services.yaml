@@ -1,0 +1,898 @@
+# valoryield_services.yaml
+# Strategickhaos DAO LLC / Valoryield Engine
+# NAICS 561611 Licensed Services Catalog
+# Version: 1.0
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+metadata:
+  organization: "Strategickhaos DAO LLC / Valoryield Engine"
+  naics_code: "561611"
+  license_type: "Investigation Services"
+  governance: "Wyoming DAO LLC"
+  domicile: "Texas"
+  version: "1.0"
+  generated: "2025-11-25"
+  legal_disclaimer: |
+    All services operate within strict legal and ethical boundaries.
+    No unauthorized system access. Consent required for red-team activities.
+    Public data only for OSINT operations. Not legal advice.
+
+service_categories:
+  - category_id: "pro_bono_investigations"
+    category_name: "Pro Bono Investigations for Victims"
+    range: "1-20"
+    services:
+      - id: 1
+        name: "Cyberbully Trail Mapping"
+        methodology: "OSINT"
+        target_population: "School abuse victims"
+        description: "Map cyberbullies' public trails using open-source intelligence"
+        legal_basis: "Public data analysis"
+        consent_required: false
+        
+      - id: 2
+        name: "Non-Profit Vulnerability Assessment"
+        methodology: "Vulnerability Assessment"
+        target_population: "Trafficking survivor organizations"
+        description: "Security assessments for non-profits helping survivors"
+        legal_basis: "Consensual security testing"
+        consent_required: true
+        
+      - id: 3
+        name: "DV Evidence Recovery"
+        methodology: "Digital Forensics"
+        target_population: "Domestic violence victims"
+        description: "Recover digital evidence for domestic violence cases"
+        legal_basis: "Authorized forensic analysis"
+        consent_required: true
+        
+      - id: 4
+        name: "Community Center Red-Team"
+        methodology: "Red-Team"
+        target_population: "Community centers"
+        description: "Ethical security testing for community center networks"
+        legal_basis: "Consent-based penetration testing"
+        consent_required: true
+        
+      - id: 5
+        name: "Elder Fraud Tracing"
+        methodology: "OSINT"
+        target_population: "Elder abuse victims"
+        description: "Trace fraudulent transactions using public records"
+        legal_basis: "Public records analysis"
+        consent_required: false
+        
+      - id: 6
+        name: "Refugee Threat Intelligence"
+        methodology: "OSINT"
+        target_population: "Refugees facing deportation"
+        description: "Gather open-source intel on deportation threats"
+        legal_basis: "Public data gathering"
+        consent_required: false
+        
+      - id: 7
+        name: "Corporate Pollution Investigation"
+        methodology: "OSINT"
+        target_population: "Low-income families"
+        description: "Investigate corporate pollution in residential areas"
+        legal_basis: "Public environmental records"
+        consent_required: false
+        
+      - id: 8
+        name: "Wage Theft Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Exploited workers"
+        description: "Analyze public records for wage theft claims"
+        legal_basis: "Public records analysis"
+        consent_required: false
+        
+      - id: 9
+        name: "Small Business Scam Prevention"
+        methodology: "Red-Team"
+        target_population: "Scam-victimized small businesses"
+        description: "Red-team exercises for scam prevention tips"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 10
+        name: "Harasser Documentation"
+        methodology: "OSINT"
+        target_population: "Restraining order applicants"
+        description: "OSINT support for restraining order applications"
+        legal_basis: "Public data documentation"
+        consent_required: false
+        
+      - id: 11
+        name: "Exploitative Employer Intel"
+        methodology: "OSINT"
+        target_population: "Immigrant rights groups"
+        description: "Public data on exploitative employers"
+        legal_basis: "Public records research"
+        consent_required: false
+        
+      - id: 12
+        name: "Hate Crime Evidence Review"
+        methodology: "Digital Forensics"
+        target_population: "Hate crime victims"
+        description: "Forensic review of public social media for evidence"
+        legal_basis: "Public data forensics"
+        consent_required: false
+        
+      - id: 13
+        name: "Women's Shelter Security"
+        methodology: "Vulnerability Assessment"
+        target_population: "Shelters for abused women"
+        description: "Consensual vulnerability scans for shelter networks"
+        legal_basis: "Authorized security testing"
+        consent_required: true
+        
+      - id: 14
+        name: "Environmental Justice Intel"
+        methodology: "OSINT"
+        target_population: "Environmental justice campaigns"
+        description: "Pro bono intelligence for environmental advocacy"
+        legal_basis: "Public data research"
+        consent_required: false
+        
+      - id: 15
+        name: "Discrimination Practice OSINT"
+        methodology: "OSINT"
+        target_population: "Disability advocates"
+        description: "OSINT on discriminatory practices"
+        legal_basis: "Public records analysis"
+        consent_required: false
+        
+      - id: 16
+        name: "Homeless Identity Theft Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Homeless identity theft victims"
+        description: "Digital forensics for homeless population fraud cases"
+        legal_basis: "Authorized forensic analysis"
+        consent_required: true
+        
+      - id: 17
+        name: "Child Labor NGO Red-Team"
+        methodology: "Red-Team"
+        target_population: "NGOs fighting child labor"
+        description: "Red-team exercises for child welfare organizations"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 18
+        name: "Illegal Eviction Records"
+        methodology: "OSINT"
+        target_population: "Tenants facing eviction"
+        description: "Public records analysis for illegal eviction cases"
+        legal_basis: "Public records research"
+        consent_required: false
+        
+      - id: 19
+        name: "Corrupt Official Exposure"
+        methodology: "OSINT"
+        target_population: "Vulnerable communities"
+        description: "OSINT to expose corrupt officials harming communities"
+        legal_basis: "Public records investigation"
+        consent_required: false
+        
+      - id: 20
+        name: "Healthcare Fraud Whistleblower Support"
+        methodology: "Digital Forensics"
+        target_population: "Healthcare whistleblowers"
+        description: "Forensic support for healthcare fraud cases"
+        legal_basis: "Authorized evidence analysis"
+        consent_required: true
+
+  - category_id: "legal_advocacy_support"
+    category_name: "Legal Advocacy Support"
+    range: "21-40"
+    services:
+      - id: 21
+        name: "Pro Bono Lawsuit OSINT Partnership"
+        methodology: "OSINT"
+        target_population: "Lawyers handling bullying cases"
+        description: "Partner with attorneys for OSINT in pro bono lawsuits"
+        legal_basis: "Legal support services"
+        consent_required: false
+        
+      - id: 22
+        name: "Forensics Affidavit Preparation"
+        methodology: "Digital Forensics"
+        target_population: "Corporate abuse trial participants"
+        description: "Provide forensics reports as affidavits"
+        legal_basis: "Expert witness services"
+        consent_required: true
+        
+      - id: 23
+        name: "Consumer Protection Red-Team"
+        methodology: "Red-Team"
+        target_population: "Consumer protection attorneys"
+        description: "Collaborate on red-team findings for consumer cases"
+        legal_basis: "Consent-based security research"
+        consent_required: true
+        
+      - id: 24
+        name: "Public Defender Intel Support"
+        methodology: "OSINT"
+        target_population: "Public defenders"
+        description: "Supply public intel for vulnerable clients"
+        legal_basis: "Legal research support"
+        consent_required: false
+        
+      - id: 25
+        name: "Civil Rights Evidence Compilation"
+        methodology: "OSINT"
+        target_population: "Civil rights attorneys"
+        description: "Build evidence packets for civil rights violations"
+        legal_basis: "Public data compilation"
+        consent_required: false
+        
+      - id: 26
+        name: "Legal Aid Org Security"
+        methodology: "Vulnerability Assessment"
+        target_population: "Legal aid organizations"
+        description: "Vulnerability assessments for legal aid data security"
+        legal_basis: "Consensual security testing"
+        consent_required: true
+        
+      - id: 27
+        name: "Amicus Brief Research"
+        methodology: "OSINT"
+        target_population: "Social justice litigants"
+        description: "Contribute OSINT to amicus briefs"
+        legal_basis: "Legal research"
+        consent_required: false
+        
+      - id: 28
+        name: "Discrimination Suit Verification"
+        methodology: "Digital Forensics"
+        target_population: "Discrimination case plaintiffs"
+        description: "Forensically verify public claims in discrimination suits"
+        legal_basis: "Evidence verification"
+        consent_required: true
+        
+      - id: 29
+        name: "Big Tech Advocacy Red-Team"
+        methodology: "Red-Team"
+        target_population: "Tech accountability groups"
+        description: "Red-team strategies for groups challenging big tech"
+        legal_basis: "Consent-based strategic analysis"
+        consent_required: true
+        
+      - id: 30
+        name: "Corporate Overreach Reporting"
+        methodology: "OSINT"
+        target_population: "Corporate accountability advocates"
+        description: "Draft reports on corporate overreach using legal databases"
+        legal_basis: "Public records research"
+        consent_required: false
+        
+      - id: 31
+        name: "Timeline Reconstruction"
+        methodology: "OSINT"
+        target_population: "Pro bono attorneys"
+        description: "Support attorneys with OSINT-based timeline reconstructions"
+        legal_basis: "Legal research support"
+        consent_required: false
+        
+      - id: 32
+        name: "Expert Witness Preparation"
+        methodology: "Digital Forensics"
+        target_population: "Abuse case legal teams"
+        description: "Expert witness prep on digital forensics"
+        legal_basis: "Expert testimony services"
+        consent_required: true
+        
+      - id: 33
+        name: "Regulator Vulnerability Disclosure"
+        methodology: "Vulnerability Assessment"
+        target_population: "Regulatory agencies"
+        description: "Aid in vulnerability disclosures to regulators for public safety"
+        legal_basis: "Coordinated disclosure"
+        consent_required: false
+        
+      - id: 34
+        name: "Predatory Lender Class-Action OSINT"
+        methodology: "OSINT"
+        target_population: "Class-action plaintiffs"
+        description: "OSINT for class-action suits against predatory lenders"
+        legal_basis: "Public data research"
+        consent_required: false
+        
+      - id: 35
+        name: "Environmental Lawsuit Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Environmental litigants"
+        description: "Forensic analysis of public leaks for environmental lawsuits"
+        legal_basis: "Public leak analysis"
+        consent_required: false
+        
+      - id: 36
+        name: "Policy Advocacy Red-Team"
+        methodology: "Red-Team"
+        target_population: "Policy reform advocates"
+        description: "Red-team sims to demonstrate risks in policy advocacy"
+        legal_basis: "Consent-based strategic simulation"
+        consent_required: true
+        
+      - id: 37
+        name: "Human Rights Tribunal Intel"
+        methodology: "OSINT"
+        target_population: "Human rights tribunals"
+        description: "Gather open intel for international human rights proceedings"
+        legal_basis: "Public data research"
+        consent_required: false
+        
+      - id: 38
+        name: "Abuser Background Research"
+        methodology: "OSINT"
+        target_population: "Legal teams"
+        description: "Assist legal teams with lawful background checks on abusers"
+        legal_basis: "Public records research"
+        consent_required: false
+        
+      - id: 39
+        name: "School Bullying Security Reports"
+        methodology: "Vulnerability Assessment"
+        target_population: "School administrators"
+        description: "Vulnerability reports for schools facing bullying epidemics"
+        legal_basis: "Consensual security assessment"
+        consent_required: true
+        
+      - id: 40
+        name: "Corporate Polluter Injunction Support"
+        methodology: "OSINT"
+        target_population: "Environmental attorneys"
+        description: "OSINT to support injunctions against corporate polluters"
+        legal_basis: "Legal research support"
+        consent_required: false
+
+  - category_id: "cybersecurity_assistance"
+    category_name: "Cybersecurity Assistance for Vulnerable Groups"
+    range: "41-60"
+    services:
+      - id: 41
+        name: "Charity Network Audits"
+        methodology: "Vulnerability Assessment"
+        target_population: "Charities aiding the poor"
+        description: "Pro bono network audits for charitable organizations"
+        legal_basis: "Consensual security testing"
+        consent_required: true
+        
+      - id: 42
+        name: "Youth OSINT Training"
+        methodology: "OSINT"
+        target_population: "At-risk youth"
+        description: "Teach OSINT basics to at-risk youth for self-protection"
+        legal_basis: "Educational services"
+        consent_required: false
+        
+      - id: 43
+        name: "Community App Red-Team"
+        methodology: "Red-Team"
+        target_population: "Community app developers"
+        description: "Red-team community apps to fix privacy flaws"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 44
+        name: "Senior Scam Recovery"
+        methodology: "Digital Forensics"
+        target_population: "Scam-victimized seniors"
+        description: "Forensic help recovering from scams"
+        legal_basis: "Authorized forensic analysis"
+        consent_required: true
+        
+      - id: 45
+        name: "Women's Rights Website Security"
+        methodology: "Vulnerability Assessment"
+        target_population: "Women's rights organizations"
+        description: "Vulnerability assessments for women's rights websites"
+        legal_basis: "Consensual security testing"
+        consent_required: true
+        
+      - id: 46
+        name: "Activist Surveillance Evasion"
+        methodology: "OSINT"
+        target_population: "Human rights activists"
+        description: "OSINT workshops for activists avoiding surveillance"
+        legal_basis: "Educational services"
+        consent_required: false
+        
+      - id: 47
+        name: "DV Survivor Device Security"
+        methodology: "Digital Forensics"
+        target_population: "Domestic violence survivors"
+        description: "Aid in securing devices for DV survivors"
+        legal_basis: "Consensual device security"
+        consent_required: true
+        
+      - id: 48
+        name: "NGO Database Red-Team"
+        methodology: "Red-Team"
+        target_population: "Social service NGOs"
+        description: "Red-team NGO databases to prevent breaches"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 49
+        name: "Cyberstalking Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Cyberstalking victims"
+        description: "Provide forensics for cyberstalking cases"
+        legal_basis: "Authorized forensic analysis"
+        consent_required: true
+        
+      - id: 50
+        name: "Clinic Phishing Protection"
+        methodology: "Vulnerability Assessment"
+        target_population: "Low-income health clinics"
+        description: "Help clinics spot phishing risks"
+        legal_basis: "Consensual security assessment"
+        consent_required: true
+        
+      - id: 51
+        name: "Dark Web Threat Monitoring"
+        methodology: "OSINT"
+        target_population: "At-risk populations"
+        description: "OSINT on dark web threats to vulnerable populations"
+        legal_basis: "Public/accessible data monitoring"
+        consent_required: false
+        
+      - id: 52
+        name: "Homeless Network Security"
+        methodology: "Vulnerability Assessment"
+        target_population: "Homeless support networks"
+        description: "Vulnerability scans for homeless support organizations"
+        legal_basis: "Consensual security testing"
+        consent_required: true
+        
+      - id: 53
+        name: "Refugee Aid Org Red-Team"
+        methodology: "Red-Team"
+        target_population: "Refugee aid organizations"
+        description: "Red-team exercises for refugee support groups"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 54
+        name: "Deleted Evidence Recovery"
+        methodology: "Digital Forensics"
+        target_population: "Abuse case plaintiffs"
+        description: "Forensic recovery of deleted evidence for abuse cases"
+        legal_basis: "Authorized forensic recovery"
+        consent_required: true
+        
+      - id: 55
+        name: "Cybercrime Reporting Assistance"
+        methodology: "OSINT"
+        target_population: "Cybercrime victims"
+        description: "Assist in reporting cybercrimes to authorities"
+        legal_basis: "Law enforcement liaison"
+        consent_required: false
+        
+      - id: 56
+        name: "Online Predator Tracking"
+        methodology: "OSINT"
+        target_population: "Child safety organizations"
+        description: "OSINT to track online predators targeting children"
+        legal_basis: "Public data analysis for law enforcement"
+        consent_required: false
+        
+      - id: 57
+        name: "School System Security Red-Team"
+        methodology: "Red-Team"
+        target_population: "Anti-bullying programs"
+        description: "Red-team school systems for bullying prevention tools"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 58
+        name: "Mental Health Hotline Security"
+        methodology: "Vulnerability Assessment"
+        target_population: "Crisis services"
+        description: "Vulnerability advice for mental health hotlines"
+        legal_basis: "Consensual security assessment"
+        consent_required: true
+        
+      - id: 59
+        name: "Immigrant Identity Fraud Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Immigrant communities"
+        description: "Forensics for identity fraud in immigrant communities"
+        legal_basis: "Authorized forensic analysis"
+        consent_required: true
+        
+      - id: 60
+        name: "Anti-Trafficking OSINT"
+        methodology: "OSINT"
+        target_population: "Anti-trafficking operations"
+        description: "OSINT support for anti-trafficking law enforcement"
+        legal_basis: "Law enforcement support"
+        consent_required: false
+
+  - category_id: "dao_educational_initiatives"
+    category_name: "Educational Initiatives via DAO"
+    range: "61-80"
+    services:
+      - id: 61
+        name: "Legal OSINT Webinars"
+        methodology: "OSINT"
+        target_population: "Vulnerable advocates"
+        description: "Host free webinars on legal OSINT techniques"
+        legal_basis: "Educational services"
+        consent_required: false
+        
+      - id: 62
+        name: "Forensics Self-Defense Guides"
+        methodology: "Digital Forensics"
+        target_population: "General public"
+        description: "Create DAO-funded guides on forensics for self-defense"
+        legal_basis: "Educational publications"
+        consent_required: false
+        
+      - id: 63
+        name: "Non-Profit Red-Team Workshops"
+        methodology: "Red-Team"
+        target_population: "Non-profit staff"
+        description: "Run pro bono red-team workshops for non-profits"
+        legal_basis: "Educational services"
+        consent_required: true
+        
+      - id: 64
+        name: "Vulnerability Self-Assessment Tools"
+        methodology: "Vulnerability Assessment"
+        target_population: "Small organizations"
+        description: "Develop open-source tools for vulnerability self-assessments"
+        legal_basis: "Open-source software"
+        consent_required: false
+        
+      - id: 65
+        name: "Legal Rights Blog"
+        methodology: "OSINT"
+        target_population: "Bullied individuals"
+        description: "Educate on law via DAO blog for bullied individuals"
+        legal_basis: "Educational publications"
+        consent_required: false
+        
+      - id: 66
+        name: "Legal Aid Forensics Training"
+        methodology: "Digital Forensics"
+        target_population: "Legal aid workers"
+        description: "Offer DAO-sponsored forensics training for legal aids"
+        legal_basis: "Professional training"
+        consent_required: false
+        
+      - id: 67
+        name: "Ethical Hacking Education"
+        methodology: "Red-Team"
+        target_population: "Future protectors"
+        description: "Build community red-teams for ethical hacking education"
+        legal_basis: "Educational services"
+        consent_required: true
+        
+      - id: 68
+        name: "OSINT Case Study Publications"
+        methodology: "OSINT"
+        target_population: "Victims seeking empowerment"
+        description: "Share OSINT case studies to empower victims"
+        legal_basis: "Educational publications"
+        consent_required: false
+        
+      - id: 69
+        name: "Vulnerability Research Grants"
+        methodology: "Vulnerability Assessment"
+        target_population: "Security researchers"
+        description: "DAO grants for vulnerability research in social good"
+        legal_basis: "Research funding"
+        consent_required: false
+        
+      - id: 70
+        name: "Corporate Abuse Law Workshops"
+        methodology: "OSINT"
+        target_population: "Activists"
+        description: "Workshops on using law against corporate abuse"
+        legal_basis: "Educational services"
+        consent_required: false
+        
+      - id: 71
+        name: "Advocacy Group Forensics Consultations"
+        methodology: "Digital Forensics"
+        target_population: "Advocacy groups"
+        description: "Free forensics consultations for advocacy groups"
+        legal_basis: "Pro bono consulting"
+        consent_required: false
+        
+      - id: 72
+        name: "Security Awareness Red-Teams"
+        methodology: "Red-Team"
+        target_population: "General audience"
+        description: "Red-team sims as teaching tools for security awareness"
+        legal_basis: "Educational demonstrations"
+        consent_required: true
+        
+      - id: 73
+        name: "Personal Data Protection Tutorials"
+        methodology: "OSINT"
+        target_population: "Privacy-conscious individuals"
+        description: "OSINT tutorials for protecting personal data"
+        legal_basis: "Educational services"
+        consent_required: false
+        
+      - id: 74
+        name: "PI Rights Legal Primers"
+        methodology: "OSINT"
+        target_population: "Vulnerable populations"
+        description: "DAO-backed legal primers on PI rights for vulnerable"
+        legal_basis: "Educational publications"
+        consent_required: false
+        
+      - id: 75
+        name: "Vulnerability Assessment Kits"
+        methodology: "Vulnerability Assessment"
+        target_population: "Small organizations"
+        description: "Vulnerability assessment kits for small orgs"
+        legal_basis: "Open-source tools"
+        consent_required: false
+        
+      - id: 76
+        name: "Anti-Bullying Forensics Demos"
+        methodology: "Digital Forensics"
+        target_population: "Schools and parents"
+        description: "Forensics demos for anti-bullying campaigns"
+        legal_basis: "Educational demonstrations"
+        consent_required: false
+        
+      - id: 77
+        name: "Future Protector Training Challenges"
+        methodology: "Red-Team"
+        target_population: "Next-gen investigators"
+        description: "Red-team challenges to train future protectors"
+        legal_basis: "Educational exercises"
+        consent_required: true
+        
+      - id: 78
+        name: "Community Watch OSINT Resources"
+        methodology: "OSINT"
+        target_population: "Neighborhood watches"
+        description: "OSINT resources for community watch programs"
+        legal_basis: "Educational resources"
+        consent_required: false
+        
+      - id: 79
+        name: "DAO-Funded Law Clinics"
+        methodology: "OSINT"
+        target_population: "Abuse victims"
+        description: "DAO-funded law clinics for abuse victims"
+        legal_basis: "Legal aid partnership"
+        consent_required: false
+        
+      - id: 80
+        name: "Public Policy Red-Team Education"
+        methodology: "Red-Team"
+        target_population: "Policy advocates"
+        description: "Educational red-teams on public policy flaws"
+        legal_basis: "Educational exercises"
+        consent_required: true
+
+  - category_id: "corporate_accountability"
+    category_name: "Corporate Accountability Audits"
+    range: "81-90"
+    services:
+      - id: 81
+        name: "Compliance Firm Pricing Audits"
+        methodology: "OSINT"
+        target_population: "Consumer advocates"
+        description: "Legal OSINT audits on overpriced compliance firms"
+        legal_basis: "Public pricing analysis"
+        consent_required: false
+        
+      - id: 82
+        name: "Corporate Public System Red-Teams"
+        methodology: "Red-Team"
+        target_population: "Corporate accountability advocates"
+        description: "Red-team public-facing systems of bully corporations (ethical)"
+        legal_basis: "Consent-based security testing"
+        consent_required: true
+        
+      - id: 83
+        name: "Corporate Abuse Leak Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Whistleblowers"
+        description: "Forensics on public leaks exposing corporate abuse"
+        legal_basis: "Public leak analysis"
+        consent_required: false
+        
+      - id: 84
+        name: "Exploitative Provider Vulnerability Reports"
+        methodology: "Vulnerability Assessment"
+        target_population: "Regulators"
+        description: "Vulnerability reports to regulators on exploitative providers"
+        legal_basis: "Coordinated disclosure"
+        consent_required: false
+        
+      - id: 85
+        name: "Registered Agent Conflict OSINT"
+        methodology: "OSINT"
+        target_population: "Consumer watchdogs"
+        description: "OSINT to highlight conflicts in registered agents"
+        legal_basis: "Public records analysis"
+        consent_required: false
+        
+      - id: 86
+        name: "Cloud Provider Claim Verification"
+        methodology: "Digital Forensics"
+        target_population: "Cloud service consumers"
+        description: "Audit cloud providers' public claims via forensics"
+        legal_basis: "Public claim verification"
+        consent_required: false
+        
+      - id: 87
+        name: "Fortune 500 Pro Bono Security Alerts"
+        methodology: "Red-Team"
+        target_population: "Large corporations"
+        description: "Red-team sims on Fortune 500 security for pro bono alerts"
+        legal_basis: "Consent-based security research"
+        consent_required: true
+        
+      - id: 88
+        name: "Harmful Corporate Graph Mapping"
+        methodology: "OSINT"
+        target_population: "Anti-corporate abuse advocates"
+        description: "OSINT mapping of corporate graphs harming vulnerable"
+        legal_basis: "Public records research"
+        consent_required: false
+        
+      - id: 89
+        name: "Poor-Affecting Breach Forensics"
+        methodology: "Digital Forensics"
+        target_population: "Low-income breach victims"
+        description: "Forensics on data breaches affecting the poor"
+        legal_basis: "Public breach analysis"
+        consent_required: false
+        
+      - id: 90
+        name: "Consumer Suit Vulnerability Disclosures"
+        methodology: "Vulnerability Assessment"
+        target_population: "Consumer plaintiffs"
+        description: "Legal vulnerability disclosures to aid consumer suits"
+        legal_basis: "Coordinated legal disclosure"
+        consent_required: false
+
+  - category_id: "dao_governance"
+    category_name: "DAO-Specific Maximization for Social Good"
+    range: "91-100"
+    services:
+      - id: 91
+        name: "Pro Bono Case Selection Voting"
+        methodology: "DAO Governance"
+        target_population: "All vulnerable populations"
+        description: "Use DAO voting for pro bono case selection"
+        legal_basis: "Democratic governance"
+        consent_required: false
+        
+      - id: 92
+        name: "Vulnerability Bounty Funding"
+        methodology: "Vulnerability Assessment"
+        target_population: "Security researchers"
+        description: "Fund vulnerability bounties via DAO treasury"
+        legal_basis: "Bounty program"
+        consent_required: false
+        
+      - id: 93
+        name: "Ethics Committee Red-Team Governance"
+        methodology: "Red-Team"
+        target_population: "Red-team recipients"
+        description: "Ethical red-teams governed by DAO ethics committee"
+        legal_basis: "Ethics oversight"
+        consent_required: true
+        
+      - id: 94
+        name: "OSINT Grant Distribution"
+        methodology: "OSINT"
+        target_population: "OSINT researchers"
+        description: "OSINT grants distributed through DAO proposals"
+        legal_basis: "Grant program"
+        consent_required: false
+        
+      - id: 95
+        name: "Forensics Partnership Coordination"
+        methodology: "Digital Forensics"
+        target_population: "Forensics partners"
+        description: "Forensics collaborations via DAO partnerships"
+        legal_basis: "Partnership agreements"
+        consent_required: true
+        
+      - id: 96
+        name: "Hybrid Compliance Maximization"
+        methodology: "DAO Governance"
+        target_population: "All beneficiaries"
+        description: "Maximize power with hybrid DAO compliance for impact"
+        legal_basis: "Wyoming/Texas structure"
+        consent_required: false
+        
+      - id: 97
+        name: "DAO Transparency Reports"
+        methodology: "DAO Governance"
+        target_population: "Public"
+        description: "DAO transparency reports on helping vulnerable"
+        legal_basis: "Public accountability"
+        consent_required: false
+        
+      - id: 98
+        name: "Scalable Social Impact Governance"
+        methodology: "DAO Governance"
+        target_population: "All stakeholders"
+        description: "Leverage DAO for scalable social impact governance"
+        legal_basis: "Decentralized governance"
+        consent_required: false
+        
+      - id: 99
+        name: "OSINT Protocol Enforcement"
+        methodology: "OSINT"
+        target_population: "OSINT practitioners"
+        description: "Ethical OSINT protocols enforced by DAO rules"
+        legal_basis: "Governance standards"
+        consent_required: false
+        
+      - id: 100
+        name: "Legal Aid Alliance Coordination"
+        methodology: "DAO Governance"
+        target_population: "Legal aid organizations"
+        description: "DAO-driven alliances with legal aids for vulnerable protection"
+        legal_basis: "Partnership governance"
+        consent_required: false
+
+methodology_definitions:
+  OSINT:
+    description: "Open Source Intelligence - gathering and analyzing publicly available information"
+    legal_requirements: "Public data only; no unauthorized access"
+    
+  Red-Team:
+    description: "Ethical security testing and adversarial simulation"
+    legal_requirements: "Explicit written consent required; scoped engagement"
+    
+  Digital_Forensics:
+    description: "Evidence recovery, analysis, and chain-of-custody management"
+    legal_requirements: "Proper authorization; evidence handling protocols"
+    
+  Vulnerability_Assessment:
+    description: "Security gap identification and risk analysis"
+    legal_requirements: "Consent for active testing; coordinated disclosure for third-party findings"
+    
+  DAO_Governance:
+    description: "Decentralized governance mechanisms for decision-making"
+    legal_requirements: "Wyoming DAO LLC compliance; transparent voting records"
+
+client_zero_targets:
+  category_a:
+    name: "Compliance Service Providers"
+    examples:
+      - "Harbor Compliance"
+      - "LegalZoom"
+      - "Northwest Registered Agent"
+    service_type: "Public-facing audit + pricing transparency report"
+    methodology: "OSINT"
+    
+  category_b:
+    name: "Cloud/Compute Providers"
+    examples:
+      - "CoreWeave"
+      - "Lambda Labs"
+      - "Vast.ai"
+    service_type: "Pricing vs. spot cost exposé (public data)"
+    methodology: "OSINT"
+    
+  category_c:
+    name: "Predatory Service Providers"
+    examples:
+      - "Predatory landlords"
+      - "Predatory lenders"
+    service_type: "Victim intake-based investigation"
+    methodology: "OSINT + Digital Forensics"
+    
+  category_d:
+    name: "Surveillance Technology Companies"
+    examples:
+      - "Companies selling to abusive governments"
+    service_type: "OSINT + vulnerability disclosure"
+    methodology: "OSINT + Vulnerability Assessment"
