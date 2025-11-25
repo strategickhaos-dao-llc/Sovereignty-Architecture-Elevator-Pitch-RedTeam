@@ -23,7 +23,7 @@ standards:
       reference: "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final"
     - name: "NIST SP 800-82"
       scope: "ICS security guide"
-      reference: "https://csrc.nist.gov/publications/detail/sp/800-82/rev-2/final"
+      reference: "https://csrc.nist.gov/pubs/sp/800/82/r3/final"
   security_management:
     - name: "ISO 27001"
       scope: "Information security management"
