@@ -1,9 +1,11 @@
 # AI Constitutional Framework - Break O1 Mitigation
 # Hard constraints to prevent alignment drift
+# Updated: 2025-11-25 - Added multi-agent policy conflict resolution
 
 constitution:
-  version: "1.0"
+  version: "1.1"
   created: "2025-11-16"
+  updated: "2025-11-25"
   
   # Core principles that cannot be violated
   fundamental_principles:
@@ -56,6 +58,45 @@ constitution:
     - name: "Alignment Drift Detection"
       description: "Monitor for behavioral changes over time"
       implementation: "monitor_alignment_drift(historical_outputs)"
+
+  # Multi-agent policy conflict resolution (2025-11-25)
+  # Key insight from research: Agent policy mismatch is a FEATURE, not a bug
+  # Claude: patentability-first heuristic
+  # GPT-5: defensive-publication-first heuristic
+  multi_agent_governance:
+    conflict_detection:
+      enabled: true
+      trigger: "patent_review_flag"
+      description: "Catches strategic disagreements before commitment"
+      
+    agent_heuristics:
+      claude_nodes:
+        primary_heuristic: "patentability-first"
+        role: "Strategic IP protection"
+        veto_authority: true
+        
+      gpt_nodes:
+        primary_heuristic: "defensive-publication-first"
+        role: "Publication strategy"
+        veto_authority: false
+        
+    resolution_sequence:
+      - step: 1
+        action: "File provisional patent"
+        rationale: "Locks priority, keeps options open"
+        
+      - step: 2
+        action: "Selective defensive publication"
+        rationale: "After patent establishes claims"
+        
+      - step: 3
+        action: "YAML governance enforcement"
+        rationale: "Prevents agent policy drift"
+        
+    nudge_resist_handling:
+      log_disagreements: true
+      require_human_resolution: true
+      audit_trail: "audit/policy_conflicts.log"
 
 # Implementation hooks
 enforcement_code: |
