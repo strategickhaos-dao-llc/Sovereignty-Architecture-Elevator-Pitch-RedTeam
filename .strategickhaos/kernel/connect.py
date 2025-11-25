@@ -1,7 +1,6 @@
 import git
 import os
 import json
-import time
 import uuid
 import yaml
 
@@ -14,7 +13,10 @@ class LegionKernel:
     def _load_config(self):
         if 'origin' in [r.name for r in self.repo.remotes]:
             origin = self.repo.remotes.origin
-            origin.pull('main')
+            try:
+                origin.pull('main')
+            except git.GitCommandError:
+                pass  # Continue with local config if pull fails
         return self._parse_yaml('.strategickhaos/kernel/config.yml')
     
     def _parse_yaml(self, filepath: str) -> dict:
