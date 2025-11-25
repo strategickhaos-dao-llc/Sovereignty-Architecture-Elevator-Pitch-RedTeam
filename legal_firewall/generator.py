@@ -636,9 +636,9 @@ Return only valid JSON array:"""
             "",
         ])
         
-        low_priority = [g for g in sorted_gaps if gap.priority_score < 4]
-        for gap in low_priority:
-            lines.append(f"- [ ] {gap.requirement.id} - {gap.requirement.description[:50]}...")
+        low_priority = [g for g in sorted_gaps if g.priority_score < 4]
+        for g in low_priority:
+            lines.append(f"- [ ] {g.requirement.id} - {g.requirement.description[:50]}...")
         
         content = "\n".join(lines)
         
