@@ -1,0 +1,166 @@
+# defensive_publication.yaml
+# Strategickhaos DAO LLC / Valoryield Engine — Defensive Publication Governance v1
+# Purpose: YAML-based governance for defensive publication validation and patent strategy
+# Based on: 100+ source analysis identifying 15% YAML merge incompleteness, 25% patent forfeiture risks
+# References: Duck.ai research, USPTO provisional patent filing strategy
+
+version: "1.0"
+created: "2025-11-25"
+operator: "Domenic Garza (Node 137)"
+
+# Core validation step - prevents 15% YAML merge incompleteness in prior art challenges
+validation_step:
+  checklist:
+    - merge_complete
+    - artifact_hash
+    - prior_art_search
+    - claim_scope_review
+  auto_scan:
+    agent: copilot_agent
+    description: "GitHub Copilot agent performs automated validation scans"
+    capabilities:
+      - yaml_syntax_check
+      - merge_completeness_verification
+      - hash_validation
+  manual_review_required: true
+  review_timeout_hours: 48
+
+# Disclosure level controls - prevents 25% patent forfeiture from over-publication
+disclosure_level:
+  public:
+    mode: redacted
+    allowed_fields:
+      - abstract
+      - high_level_architecture
+      - non_novel_components
+    forbidden_fields:
+      - implementation_details
+      - proprietary_algorithms
+      - trade_secrets
+      - pending_claims
+  internal:
+    mode: full
+    access_control:
+      - role: attorney
+        permissions: [read, write, approve]
+      - role: inventor
+        permissions: [read, write]
+      - role: auditor
+        permissions: [read, log_trail]
+  patent_office:
+    mode: selective
+    disclosure_strategy: provisional_first
+
+# Timestamp redundancy - 9/10 resonance score for cryptographic verification
+timestamp_redundancy:
+  primary:
+    method: bitcoin
+    description: "OP_RETURN anchor for immutable timestamping"
+    resonance_score: 0.9
+    verification: blockchain_explorer
+  secondary:
+    method: research_disclosure
+    description: "Academic publication timestamp"
+    platforms:
+      - arxiv
+      - research_disclosure_journal
+  tertiary:
+    method: git_commit
+    description: "Repository commit history"
+    gpg_sign_required: true
+    sha256_required: true
+
+# Ghost proof risk mitigation - addresses 15% rejection rate
+ghost_proof_prevention:
+  artifact_preservation:
+    - development_logs
+    - design_documents
+    - meeting_notes
+    - email_threads
+    - slack_discord_exports
+  hash_chain:
+    algorithm: sha256
+    include:
+      - source_code
+      - documentation
+      - test_results
+    sign_with: gpg_key_ref
+  witness_requirements:
+    minimum_witnesses: 2
+    attestation_format: signed_declaration
+
+# Over-publication risk controls - when to redact vs publish
+over_publication_controls:
+  pre_filing_review:
+    required: true
+    reviewer_role: patent_attorney
+    checklist:
+      - no_enabling_disclosure
+      - no_best_mode_revelation
+      - no_claim_scope_limitation
+  publication_timing:
+    provisional_first: true
+    grace_period_days: 365
+    international_considerations:
+      - europe: no_grace_period
+      - japan: limited_grace_period
+      - china: limited_grace_period
+  redaction_rules:
+    auto_redact_patterns:
+      - "(?i)proprietary.*algorithm"
+      - "(?i)trade.*secret"
+      - "(?i)confidential.*implementation"
+
+# Failure modes from 100+ source analysis
+known_failure_modes:
+  - id: merge_incomplete
+    probability: 0.15
+    description: "YAML merge incompleteness in prior art challenges"
+    mitigation: validation_step.checklist
+    
+  - id: patent_forfeiture
+    probability: 0.25
+    description: "Patent forfeiture from over-publication"
+    mitigation: disclosure_level.public.mode
+    
+  - id: ghost_proof_rejection
+    probability: 0.15
+    description: "Rejection due to insufficient proof of invention date"
+    mitigation: ghost_proof_prevention
+
+# Integration with patent filing workflow
+patent_workflow:
+  sequence:
+    - step: provisional_filing
+      priority: 1
+      locks_priority_date: true
+      
+    - step: selective_defensive_publication
+      priority: 2
+      after_provisional: true
+      delay_days: 30
+      
+    - step: utility_conversion
+      priority: 3
+      deadline_months: 12
+      
+  yaml_enforcement:
+    patent_review_flag: true
+    prevents_agent_policy_drift: true
+
+# Audit trail requirements
+audit_trail:
+  log_file: "audit/defensive_publication.log"
+  gpg_required: true
+  sha256: true
+  retention_years: 20
+
+# CI integration hooks
+ci_integration:
+  pre_publish_check:
+    enabled: true
+    workflow: ".github/workflows/defensive-pub-check.yml"
+  post_publish_verify:
+    enabled: true
+    verify_timestamps: true
+    verify_redactions: true

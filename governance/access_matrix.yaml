@@ -50,3 +50,29 @@ enforcement:
     - checklist_complete
     - proof_logged
     - gpg_signed
+
+# Governance module references
+governance_modules:
+  - name: defensive_publication
+    file: governance/defensive_publication.yaml
+    description: "YAML governance for defensive publication validation and patent strategy"
+    enforcement:
+      - validation_step_checklist
+      - disclosure_level_controls
+      - timestamp_redundancy
+      
+  - name: spark_safety
+    file: governance/spark_safety.yaml
+    description: "YAML governance for GitHub Spark development safety"
+    enforcement:
+      - dependency_lock
+      - test_preview
+      - failure_library
+      
+  - name: ai_governance
+    file: governance/ai_governance.yaml
+    description: "YAML governance for multi-agent AI systems with ethics veto"
+    enforcement:
+      - ethics_check
+      - decay_detect
+      - agent_policy_resolution
