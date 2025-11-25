@@ -280,6 +280,18 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 📚 Trading Engine Dossier
+
+Comprehensive documentation for the **PID-RANCO + XAI Trading Engine** sovereign trading architecture:
+
+- **[Full Dossier Index](docs/trading-engine-dossier/README.md)** - Complete documentation overview
+- **[Executive Summary](docs/trading-engine-dossier/01_EXECUTIVE_SUMMARY.md)** - High-level overview and novelty proof
+- **[System Architecture](docs/trading-engine-dossier/02_SYSTEM_ARCHITECTURE.md)** - Full technical analysis
+- **[Patent Mapping](docs/trading-engine-dossier/03_PATENT_MAPPING.md)** - Invention mapping and IP strategy
+- **[Academic Paper](docs/trading-engine-dossier/04_ACADEMIC_PAPER.md)** - Google Scholar-ready format
+- **[Compliance Framework](docs/trading-engine-dossier/05_COMPLIANCE_FRAMEWORK.md)** - Audit and regulatory compliance
+- **[Prior Art Matrix](docs/trading-engine-dossier/06_PRIOR_ART_MATRIX.md)** - Citations and novelty analysis
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
