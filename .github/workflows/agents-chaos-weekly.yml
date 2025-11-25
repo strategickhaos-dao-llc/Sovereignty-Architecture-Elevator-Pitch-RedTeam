@@ -92,8 +92,8 @@ jobs:
           echo "  Resonance: $RESONANCE_SCORE"
           echo "  Threshold: $CIRCUIT_BREAK_THRESHOLD"
           
-          # Use bc for floating point comparison
-          SHOULD_BREAK=$(echo "$RESONANCE_SCORE < $CIRCUIT_BREAK_THRESHOLD" | bc -l)
+          # Use awk for floating point comparison (bc not available on ubuntu-latest)
+          SHOULD_BREAK=$(awk "BEGIN {print ($RESONANCE_SCORE < $CIRCUIT_BREAK_THRESHOLD)}")
           
           if [ "$SHOULD_BREAK" -eq 1 ]; then
             echo "⚠️ CIRCUIT BREAKER TRIGGERED!"

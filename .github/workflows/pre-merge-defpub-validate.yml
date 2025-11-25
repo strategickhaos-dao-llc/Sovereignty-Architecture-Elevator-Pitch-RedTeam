@@ -91,8 +91,8 @@ jobs:
         run: |
           TIMESTAMP_FAILURE_MAX=$(yq '.slo.timestamp_failure_rate_max' $CONFIG_PATH)
           
-          # Convert to percentage for display
-          PERCENTAGE=$(echo "$TIMESTAMP_FAILURE_MAX * 100" | bc)
+          # Convert to percentage for display using awk (bc not available on ubuntu-latest)
+          PERCENTAGE=$(awk "BEGIN {print $TIMESTAMP_FAILURE_MAX * 100}")
           
           echo "✅ SLO: Timestamp failure rate max = ${PERCENTAGE}%"
 
