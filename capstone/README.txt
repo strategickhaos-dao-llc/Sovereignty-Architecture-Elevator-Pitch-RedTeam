@@ -29,7 +29,7 @@ SUPPORTING REPOSITORY ARTIFACTS:
 PROJECT HIGHLIGHTS:
 - Wyoming DAO LLC formed (Filing 2025-001708194)
 - Provisional patent filed (63/667,318 — pending)
-- 37+ technical manuscripts in <6 months
+- 37+ technical manuscripts in under 6 months
 - Zero-hallucination RAG achieved
 - 100% cryptographically verifiable commits
 - MIT-licensed and publicly archived
