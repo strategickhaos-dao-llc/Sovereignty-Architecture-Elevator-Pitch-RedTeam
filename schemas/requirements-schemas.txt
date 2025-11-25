@@ -7,6 +7,3 @@ jsonschema>=4.20.0
 
 # Optional: GPG signing support
 python-gnupg>=0.5.2
-
-# Optional: Enhanced validation
-referencing>=0.32.0

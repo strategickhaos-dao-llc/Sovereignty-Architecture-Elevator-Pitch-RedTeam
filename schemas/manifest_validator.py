@@ -22,6 +22,7 @@ Version: 1.0.0
 """
 
 import argparse
+import copy
 import hashlib
 import json
 import os
@@ -268,8 +269,6 @@ class ManifestSanitizer:
         Returns:
             Sanitized manifest dictionary
         """
-        import copy
-
         sanitized = copy.deepcopy(manifest)
 
         # Remove sensitive fields
