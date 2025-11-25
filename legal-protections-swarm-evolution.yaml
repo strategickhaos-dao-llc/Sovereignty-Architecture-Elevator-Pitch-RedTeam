@@ -330,7 +330,7 @@ legal_protection_resources:
   - name: Seed Club Legal Structure Template
     url: https://seedclub.xyz/legal
     category: template
-  - name: a]cube DAO Risk Framework
+  - name: a16z DAO Risk Framework
     url: https://a16z.com/portfolio-resources/dao-legal-framework/
     category: risk_framework
   - name: Paradigm Crypto Regulatory Overview
@@ -383,12 +383,21 @@ ingestion_pipeline:
     retries: 3
     rate_limit_sec: 2
     output_dir: "legal/armor_sources"
+  prerequisites:
+    - "mkdir -p legal/armor_sources"
+    - "mkdir -p legal/audit"
+    - "mkdir -p clause_db"
   steps:
-    - fetch: "curl -L -s -H 'User-Agent: $user_agent' $url -o $output_dir/$file"
-    - parse: "python /app/legal_parser.py --extract-clauses --output clause_db/"
-    - diff: "python /app/legal_diff.py --baseline dao_operating_agreement.md --sources clause_db/"
-    - build: "python /app/legal_firewall_generator.py --gaps missing_enforcements.yaml"
-    - audit: "python /app/proof_engine.py --query 'Legal gap analysis for $name'"
+    # Variables ${source.url}, ${source.name}, ${source.category} are injected per-resource by the swarm executor
+    - fetch: "curl -L -s -H 'User-Agent: ${globals.user_agent}' ${source.url} -o ${globals.output_dir}/${source.name | slugify}.pdf"
+    - parse: "python scripts/legal_parser.py --extract-clauses --input ${globals.output_dir}/${source.name | slugify}.pdf --output clause_db/"
+    - diff: "python scripts/legal_diff.py --baseline governance/dao_operating_agreement.md --sources clause_db/"
+    - build: "python scripts/legal_firewall_generator.py --gaps missing_enforcements.yaml"
+    - audit: "python scripts/proof_engine.py --query 'Legal gap analysis for ${source.name}'"
+  notes: |
+    Pipeline scripts (legal_parser.py, legal_diff.py, legal_firewall_generator.py, proof_engine.py) 
+    are expected to be created in the scripts/ directory as part of phase_3_build_and_deploy.
+    The swarm executor injects source context variables for each resource during iteration.
 
 enforcement_triggers:
   - trigger: "Ingest full legal armor now"
