@@ -2,6 +2,32 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 📚 DAO Development & Academic Publication
+
+This repository implements a **Git-native multi-agent consensus protocol** for the Strategickhaos DAO LLC. We are working towards academic publication of our novel approach.
+
+### Key Documentation
+
+| Document | Description |
+|----------|-------------|
+| [DAO Development Timeline](docs/DAO_DEVELOPMENT_TIMELINE.md) | Complete roadmap for case study publication |
+| [Paper Structure](docs/PAPER_STRUCTURE.md) | Academic paper outline for "Distributed Cognitive Governance" |
+| [Publication Timeline](docs/PUBLICATION_TIMELINE.md) | 3-week sprint plan for arXiv submission |
+| [Evaluation Metrics](docs/EVALUATION_METRICS.md) | Quantitative metrics framework |
+
+### Novel Contributions
+- **Git as Consensus Substrate**: Using VCS as a governance layer, avoiding custom blockchains
+- **Multi-Agent Voting**: 105+ concurrent AI agents participating in governance
+- **Legal Integration**: Wyoming DAO LLC with algorithmic charitable distribution
+- **Production Scale**: 130+ services, 4 Kubernetes clusters
+
+### Quick Links
+- **DAO Kernel**: `src/dao/kernel.py` - Core voting and consensus implementation
+- **Benchmarks**: `benchmarks/dao_consensus_benchmark.py` - Performance evaluation
+- **Governance**: `governance/access_matrix.yaml` - Role-based access control
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
