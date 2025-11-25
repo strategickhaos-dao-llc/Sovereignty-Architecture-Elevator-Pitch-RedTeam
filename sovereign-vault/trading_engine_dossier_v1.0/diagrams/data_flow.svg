@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Strategickhaos Trading Engine - Data Flow Diagram
+  Version 1.0 - Patent Pending
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600">
+  <defs>
+    <linearGradient id="processGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498DB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2980B9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2ECC71;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#27AE60;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="storeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F39C12;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D68910;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34495E"/>
+    </marker>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#FAFBFC"/>
+  
+  <!-- Title -->
+  <text x="500" y="35" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#2C3E50">
+    Strategickhaos Trading Engine - Data Flow
+  </text>
+  <text x="500" y="55" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#7F8C8D">
+    End-to-End Decision Pipeline | Version 1.0 | Patent Pending
+  </text>
+  
+  <!-- Row 1: Market Data Input -->
+  <g filter="url(#dropShadow)">
+    <rect x="50" y="80" width="120" height="50" rx="5" fill="url(#dataGrad)"/>
+    <text x="110" y="110" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Market Data</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="220" y="80" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="280" y="110" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Preprocess</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="390" y="80" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="450" y="110" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">HMM Regime</text>
+  </g>
+  
+  <!-- Row 2: Regime and Allocation -->
+  <g filter="url(#dropShadow)">
+    <rect x="390" y="170" width="120" height="50" rx="5" fill="url(#dataGrad)"/>
+    <text x="450" y="195" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Regime ρ</text>
+    <text x="450" y="210" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">(1-5)</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="390" y="260" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="450" y="290" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Allocation</text>
+  </g>
+  
+  <!-- Row 3: Target and Control -->
+  <g filter="url(#dropShadow)">
+    <rect x="220" y="350" width="120" height="50" rx="5" fill="url(#dataGrad)"/>
+    <text x="280" y="380" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Target p*</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="50" y="350" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="110" y="380" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">PID Control</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="50" y="260" width="100" height="50" rx="5" fill="url(#dataGrad)"/>
+    <text x="100" y="290" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Error e</text>
+  </g>
+  
+  <!-- Row 4: Optimization and Execution -->
+  <g filter="url(#dropShadow)">
+    <rect x="50" y="440" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="110" y="470" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">RANCO</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="220" y="440" width="120" height="50" rx="5" fill="url(#dataGrad)"/>
+    <text x="280" y="470" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Orders</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="390" y="440" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="450" y="470" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Execute</text>
+  </g>
+  
+  <!-- Audit Store -->
+  <g filter="url(#dropShadow)">
+    <rect x="560" y="440" width="120" height="50" rx="5" fill="url(#storeGrad)"/>
+    <text x="620" y="470" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Audit DB</text>
+  </g>
+  
+  <!-- XAI Explanation Branch -->
+  <g filter="url(#dropShadow)">
+    <rect x="560" y="80" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="620" y="110" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">SHAP Values</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="730" y="80" width="120" height="50" rx="5" fill="url(#processGrad)"/>
+    <text x="790" y="105" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Explanation</text>
+    <text x="790" y="120" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Generator</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="730" y="170" width="120" height="50" rx="5" fill="url(#dataGrad)"/>
+    <text x="790" y="195" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">XAI Output</text>
+    <text x="790" y="210" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">(Human-readable)</text>
+  </g>
+  
+  <!-- Philanthropy Branch -->
+  <g filter="url(#dropShadow)">
+    <rect x="560" y="350" width="120" height="50" rx="5" fill="#F1C40F"/>
+    <text x="620" y="375" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#2C3E50">7% Split</text>
+    <text x="620" y="390" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#2C3E50">(Irrevocable)</text>
+  </g>
+  
+  <g filter="url(#dropShadow)">
+    <rect x="730" y="350" width="120" height="50" rx="5" fill="url(#storeGrad)"/>
+    <text x="790" y="375" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">Philanthropy</text>
+    <text x="790" y="390" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Vault</text>
+  </g>
+  
+  <!-- Arrows -->
+  <!-- Market -> Preprocess -->
+  <line x1="170" y1="105" x2="215" y2="105" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Preprocess -> HMM -->
+  <line x1="340" y1="105" x2="385" y2="105" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- HMM -> Regime -->
+  <line x1="450" y1="130" x2="450" y2="165" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Regime -> Allocation -->
+  <line x1="450" y1="220" x2="450" y2="255" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Allocation -> Target -->
+  <path d="M 390 285 Q 280 285 280 345" stroke="#34495E" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- Target -> PID -->
+  <line x1="220" y1="375" x2="175" y2="375" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- PID -> Error feedback -->
+  <path d="M 50 375 Q 20 375 20 285 Q 20 285 45 285" stroke="#34495E" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- Error -> PID -->
+  <line x1="100" y1="310" x2="100" y2="345" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- PID -> RANCO -->
+  <line x1="110" y1="400" x2="110" y2="435" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- RANCO -> Orders -->
+  <line x1="170" y1="465" x2="215" y2="465" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Orders -> Execute -->
+  <line x1="340" y1="465" x2="385" y2="465" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Execute -> Audit -->
+  <line x1="510" y1="465" x2="555" y2="465" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- HMM -> SHAP -->
+  <line x1="510" y1="105" x2="555" y2="105" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- SHAP -> Explanation -->
+  <line x1="680" y1="105" x2="725" y2="105" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Explanation -> XAI Output -->
+  <line x1="790" y1="130" x2="790" y2="165" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- XAI Output -> Audit -->
+  <path d="M 790 220 Q 790 330 680 380 Q 620 400 620 435" stroke="#34495E" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- Execute -> 7% Split -->
+  <path d="M 450 440 Q 450 375 555 375" stroke="#34495E" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- 7% Split -> Philanthropy Vault -->
+  <line x1="680" y1="375" x2="725" y2="375" stroke="#34495E" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Legend -->
+  <rect x="50" y="520" width="300" height="60" rx="5" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1"/>
+  <text x="60" y="538" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2C3E50">Legend:</text>
+  
+  <rect x="60" y="548" width="15" height="15" rx="2" fill="url(#processGrad)"/>
+  <text x="80" y="560" font-family="Arial, sans-serif" font-size="10" fill="#2C3E50">Process</text>
+  
+  <rect x="130" y="548" width="15" height="15" rx="2" fill="url(#dataGrad)"/>
+  <text x="150" y="560" font-family="Arial, sans-serif" font-size="10" fill="#2C3E50">Data</text>
+  
+  <rect x="190" y="548" width="15" height="15" rx="2" fill="url(#storeGrad)"/>
+  <text x="210" y="560" font-family="Arial, sans-serif" font-size="10" fill="#2C3E50">Data Store</text>
+  
+  <rect x="280" y="548" width="15" height="15" rx="2" fill="#F1C40F"/>
+  <text x="300" y="560" font-family="Arial, sans-serif" font-size="10" fill="#2C3E50">7% Enforcer</text>
+  
+  <!-- Copyright -->
+  <text x="500" y="560" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#7F8C8D">
+    © 2025 Strategickhaos DAO LLC — Patent Pending — CONFIDENTIAL
+  </text>
+</svg>
