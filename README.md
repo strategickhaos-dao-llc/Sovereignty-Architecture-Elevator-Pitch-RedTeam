@@ -86,6 +86,26 @@ kubectl apply -f bootstrap/k8s/
 - RBAC with least-privilege access
 - Network policies for secure communication
 - Ingress with TLS and rate limiting
+- **Satellite Gateway** - Starlink connectivity layer
+
+### 🛰️ Satellite Connectivity (Starlink Infrastructure)
+
+The sovereignty architecture includes an **uninterruptible satellite backbone** via Starlink Business:
+
+- **Primary Connection** - Starlink dish (220/20 Mbps, static IP)
+- **Direct-to-Cell** - SMS relay via SpaceX/T-Mobile partnership
+- **Hybrid Failover** - LTE/5G backup via Peplink router
+- **Satellite Relay** - Agent coordination during outages
+
+```bash
+# Deploy satellite gateway
+kubectl apply -f bootstrap/k8s/satellite-gateway.yaml
+
+# Check satellite status
+curl https://sat-relay.strategickhaos.com/satellite/health
+```
+
+📖 See **[STARLINK_INFRASTRUCTURE.md](STARLINK_INFRASTRUCTURE.md)** for complete documentation.
 
 ### Observability Stack
 - **Prometheus** - Metrics collection from all components
