@@ -1,0 +1,112 @@
+# .strategickhaos/kernel/config.yml
+# Strategickhaos Legions of Minds OS - Core Configuration
+# A distributed cognitive governance operating system
+
+legion_os:
+  version: "1.0.0"
+  name: "Strategickhaos Legions of Minds OS"
+  description: "Distributed cognitive governance system where codespaces connect to a shared intelligence layer"
+  
+  memory_backend: "git"
+  consensus_protocol: "weighted_voting"
+  
+  departments:
+    - name: "legal"
+      agent: "claude-opus-4"
+      weight: 3
+      veto_power: true
+      description: "Legal compliance and risk assessment"
+      
+    - name: "technical"
+      agents: ["qwen2.5:72b", "deepseek-coder"]
+      weight: 2
+      veto_power: false
+      description: "Technical feasibility and code review"
+      
+    - name: "finance"
+      agent: "gpt-4"
+      weight: 2
+      veto_power: true
+      description: "Financial analysis and budget approval"
+      
+    - name: "ethics"
+      agent: "claude-sonnet-4"
+      weight: 3
+      veto_power: true
+      description: "Ethical review and alignment verification"
+      
+    - name: "operations"
+      agent: "llama3.1:70b"
+      weight: 1
+      veto_power: false
+      description: "Operational logistics and execution planning"
+
+  voting_rules:
+    quorum: 3                  # Minimum departments that must participate
+    threshold: 0.6             # 60% approval required
+    veto_blocks: true          # Any department with veto can block
+    timeout: 300               # 5 minutes to gather votes
+    abstain_counts_for_quorum: true
+    tie_breaker: "ethics"      # Department that breaks ties
+
+  proposal_types:
+    - type: "code_change"
+      required_departments: ["technical", "ethics"]
+      auto_approve_threshold: 0.8
+      
+    - type: "financial"
+      required_departments: ["finance", "legal"]
+      auto_approve_threshold: null  # Always requires manual review
+      
+    - type: "governance"
+      required_departments: ["legal", "ethics", "operations"]
+      auto_approve_threshold: null
+      
+    - type: "emergency"
+      required_departments: ["technical"]
+      timeout_override: 60      # 1 minute for emergencies
+      quorum_override: 1
+
+  integrations:
+    discord:
+      webhook_env: "DISCORD_WEBHOOK_URL"
+      channel_env: "GOVERNANCE_CHANNEL"
+      bot_token_env: "DISCORD_BOT_TOKEN"
+      notifications:
+        - event: "proposal_created"
+          channel: "governance"
+        - event: "vote_cast"
+          channel: "governance"
+        - event: "proposal_approved"
+          channel: "deployments"
+        - event: "proposal_rejected"
+          channel: "governance"
+        - event: "veto_used"
+          channel: "alerts"
+          
+    github:
+      repo_env: "LEGION_REPO"
+      branch: "main"
+      proposal_branch_prefix: "proposal/"
+      auto_merge: true
+      require_gpg: true
+      
+    gitlens:
+      visualize_proposals: true
+      show_vote_annotations: true
+      highlight_consensus: true
+
+  execution:
+    sandbox_enabled: true
+    rollback_on_failure: true
+    audit_all_actions: true
+    max_concurrent_executions: 3
+
+  logging:
+    level: "INFO"
+    format: "json"
+    destinations:
+      - type: "file"
+        path: ".strategickhaos/logs/legion.log"
+      - type: "discord"
+        channel: "audit-log"
