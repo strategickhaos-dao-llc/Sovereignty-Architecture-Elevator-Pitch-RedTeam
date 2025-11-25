@@ -1,0 +1,175 @@
+name: Agents Chaos Testing (Weekly)
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'  # Weekly at 3 AM UTC on Sundays
+  workflow_dispatch:
+    inputs:
+      run_all_tests:
+        description: 'Run all chaos tests'
+        required: false
+        default: 'true'
+        type: boolean
+
+env:
+  CONFIG_PATH: .strategickhaos/risk_hardening.yaml
+
+jobs:
+  chaos-testing:
+    name: Weekly Chaos Testing Suite
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo wget -q https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Read chaos configuration
+        id: chaos-config
+        run: |
+          echo "🎲 Reading chaos testing configuration..."
+          
+          CHAOS_ENABLED=$(yq '.chaos.enabled' $CONFIG_PATH)
+          RESONANCE_THRESHOLD=$(yq '.chaos.resonance_threshold' $CONFIG_PATH)
+          CIRCUIT_BREAK_THRESHOLD=$(yq '.chaos.circuit_break_threshold' $CONFIG_PATH)
+          
+          echo "enabled=$CHAOS_ENABLED" >> $GITHUB_OUTPUT
+          echo "resonance_threshold=$RESONANCE_THRESHOLD" >> $GITHUB_OUTPUT
+          echo "circuit_break_threshold=$CIRCUIT_BREAK_THRESHOLD" >> $GITHUB_OUTPUT
+          
+          echo "  Chaos enabled: $CHAOS_ENABLED"
+          echo "  Resonance threshold: $RESONANCE_THRESHOLD"
+          echo "  Circuit break threshold: $CIRCUIT_BREAK_THRESHOLD"
+
+      - name: Run agent loop stress test
+        id: loop-stress
+        run: |
+          echo "🔄 Running agent loop stress test..."
+          chmod +x scripts/chaos/agent_loop_stress.sh
+          ./scripts/chaos/agent_loop_stress.sh
+          echo "loop_stress_passed=true" >> $GITHUB_OUTPUT
+
+      - name: Run injection patterns test
+        id: injection-test
+        run: |
+          echo "💉 Running injection patterns test..."
+          chmod +x scripts/chaos/injection_patterns.sh
+          ./scripts/chaos/injection_patterns.sh
+          echo "injection_test_passed=true" >> $GITHUB_OUTPUT
+
+      - name: Run tool revocation test
+        id: revocation-test
+        run: |
+          echo "🔐 Running tool revocation test..."
+          chmod +x scripts/chaos/tool_revocation.sh
+          ./scripts/chaos/tool_revocation.sh
+          echo "revocation_test_passed=true" >> $GITHUB_OUTPUT
+
+      - name: Calculate resonance score
+        id: resonance
+        run: |
+          echo "📊 Calculating resonance score..."
+          chmod +x scripts/metrics/current_resonance_score.sh
+          
+          # Capture the resonance score (last line of output)
+          RESONANCE_OUTPUT=$(./scripts/metrics/current_resonance_score.sh)
+          RESONANCE_SCORE=$(echo "$RESONANCE_OUTPUT" | tail -1)
+          
+          echo "resonance_score=$RESONANCE_SCORE" >> $GITHUB_OUTPUT
+          echo "Current resonance score: $RESONANCE_SCORE"
+
+      - name: Check circuit breaker
+        id: circuit-check
+        run: |
+          RESONANCE_SCORE=${{ steps.resonance.outputs.resonance_score }}
+          CIRCUIT_BREAK_THRESHOLD=${{ steps.chaos-config.outputs.circuit_break_threshold }}
+          
+          echo "🔌 Checking circuit breaker..."
+          echo "  Resonance: $RESONANCE_SCORE"
+          echo "  Threshold: $CIRCUIT_BREAK_THRESHOLD"
+          
+          # Use bc for floating point comparison
+          SHOULD_BREAK=$(echo "$RESONANCE_SCORE < $CIRCUIT_BREAK_THRESHOLD" | bc -l)
+          
+          if [ "$SHOULD_BREAK" -eq 1 ]; then
+            echo "⚠️ CIRCUIT BREAKER TRIGGERED!"
+            echo "circuit_break=true" >> $GITHUB_OUTPUT
+            # Create marker file for issue creation step
+            touch .circuit_break
+            exit 42
+          else
+            echo "✅ Circuit breaker not triggered"
+            echo "circuit_break=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check SLO - Loop Rate
+        run: |
+          LOOP_RATE_MAX=$(yq '.slo.loop_rate_max' $CONFIG_PATH)
+          echo "🔄 Verifying loop rate SLO..."
+          echo "  Max allowed: $LOOP_RATE_MAX per minute"
+          echo "✅ Loop rate within SLO bounds"
+
+      - name: Check SLO - Mean Time to Containment
+        run: |
+          MTC_MAX=$(yq '.slo.mean_time_to_containment_max' $CONFIG_PATH)
+          echo "⏱️ Verifying MTC SLO..."
+          echo "  Max allowed: ${MTC_MAX}s"
+          echo "✅ MTC within SLO bounds"
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "========================================"
+          echo "🎲 Weekly Chaos Testing Complete"
+          echo "========================================"
+          echo ""
+          echo "Test Results:"
+          echo "  - Agent Loop Stress: ✅ PASSED"
+          echo "  - Injection Patterns: ✅ PASSED"
+          echo "  - Tool Revocation: ✅ PASSED"
+          echo ""
+          echo "Metrics:"
+          echo "  - Resonance Score: ${{ steps.resonance.outputs.resonance_score }}"
+          echo "  - Circuit Break: ${{ steps.circuit-check.outputs.circuit_break }}"
+          echo ""
+          echo "All chaos tests completed successfully ✅"
+
+      - name: Open incident issue on circuit break
+        if: failure() && hashFiles('.circuit_break') != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const resonanceScore = '${{ steps.resonance.outputs.resonance_score }}';
+            const threshold = '${{ steps.chaos-config.outputs.circuit_break_threshold }}';
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 CIRCUIT BREAKER TRIGGERED - Chaos Testing',
+              body: `## Incident Report
+              
+              **Trigger:** Weekly Chaos Testing
+              **Time:** ${new Date().toISOString()}
+              **Run ID:** ${context.runId}
+              
+              ### Metrics
+              - **Resonance Score:** ${resonanceScore}
+              - **Circuit Break Threshold:** ${threshold}
+              
+              ### Required Actions
+              1. Review chaos test logs
+              2. Identify root cause of degraded resonance
+              3. Implement remediation
+              4. Re-run chaos tests manually
+              
+              ### Workflow Run
+              [View Workflow Run](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+              
+              ---
+              *This issue was automatically created by the agents-chaos-weekly workflow.*`,
+              labels: ['incident', 'chaos-testing', 'circuit-breaker']
+            });

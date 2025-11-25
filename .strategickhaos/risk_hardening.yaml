@@ -1,0 +1,55 @@
+# Strategickhaos Risk Hardening Configuration
+# This file defines governance rules enforced via CI/CD pipelines
+
+version: "1.0"
+last_updated: "2025-11-25"
+
+# Defensive Publication Configuration
+defensive_publication:
+  required_fields:
+    - title
+    - description
+    - timestamp
+    - author
+    - disclosure_type
+  timestamp_redundancy: true
+  encryption_required: true
+  secret_scanning_enabled: true
+  patent_review_flag: false
+
+# SLO Definitions - Quantitative Failure Thresholds
+slo:
+  ghost_proofs_allowed: 0
+  timestamp_failure_rate_max: 0.01  # 1%
+  loop_rate_max: 100  # max loops per minute
+  mean_time_to_containment_max: 300  # seconds
+
+# Spark Agent Configuration
+spark:
+  built_in_only: true
+  max_cost_usd: 10.0
+  max_concurrent_agents: 3
+  allowed_models:
+    - gpt-4
+    - claude-3
+  timeout_seconds: 120
+  
+# Chaos Testing Configuration  
+chaos:
+  enabled: true
+  schedule: "0 3 * * 0"  # Weekly at 3 AM UTC on Sundays
+  tests:
+    - agent_loop_stress
+    - injection_patterns
+    - tool_revocation
+  resonance_threshold: 0.7
+  circuit_break_threshold: 0.5
+
+# Access Control
+access:
+  require_approval: true
+  min_reviewers: 1
+  protected_paths:
+    - ".strategickhaos/"
+    - ".github/workflows/"
+    - "governance/"

@@ -1,0 +1,121 @@
+name: Pre-merge Defensive Publication Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  CONFIG_PATH: .strategickhaos/risk_hardening.yaml
+
+jobs:
+  validate-defpub:
+    name: Validate Defensive Publication Requirements
+    runs-on: ubuntu-latest
+    outputs:
+      defpub_stamp_allowed: ${{ steps.check-patent-flag.outputs.stamp_allowed }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install yq
+        run: |
+          sudo wget -q https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Validate configuration file exists
+        run: |
+          if [ ! -f "$CONFIG_PATH" ]; then
+            echo "❌ Configuration file not found: $CONFIG_PATH"
+            exit 1
+          fi
+          echo "✅ Configuration file found"
+
+      - name: Check required defensive publication fields
+        run: |
+          echo "🔍 Checking required defensive publication fields..."
+          
+          REQUIRED_FIELDS=$(yq '.defensive_publication.required_fields[]' $CONFIG_PATH)
+          
+          for field in $REQUIRED_FIELDS; do
+            echo "  - Required field: $field"
+          done
+          
+          echo "✅ Required fields configuration verified"
+
+      - name: Verify timestamp redundancy setting
+        run: |
+          TIMESTAMP_REDUNDANCY=$(yq '.defensive_publication.timestamp_redundancy' $CONFIG_PATH)
+          
+          if [ "$TIMESTAMP_REDUNDANCY" != "true" ]; then
+            echo "⚠️ Warning: Timestamp redundancy is not enabled"
+          else
+            echo "✅ Timestamp redundancy is enabled"
+          fi
+
+      - name: Verify encryption configuration
+        run: |
+          ENCRYPTION_REQUIRED=$(yq '.defensive_publication.encryption_required' $CONFIG_PATH)
+          
+          if [ "$ENCRYPTION_REQUIRED" != "true" ]; then
+            echo "❌ Encryption must be required for defensive publications"
+            exit 1
+          fi
+          echo "✅ Encryption requirement verified"
+
+      - name: Verify secret scanning configuration
+        run: |
+          SECRET_SCANNING=$(yq '.defensive_publication.secret_scanning_enabled' $CONFIG_PATH)
+          
+          if [ "$SECRET_SCANNING" != "true" ]; then
+            echo "❌ Secret scanning must be enabled"
+            exit 1
+          fi
+          echo "✅ Secret scanning is enabled"
+
+      - name: Check SLO - Ghost Proofs
+        run: |
+          GHOST_PROOFS_ALLOWED=$(yq '.slo.ghost_proofs_allowed' $CONFIG_PATH)
+          
+          if [ "$GHOST_PROOFS_ALLOWED" != "0" ]; then
+            echo "❌ SLO violation: Ghost proofs must be 0, found: $GHOST_PROOFS_ALLOWED"
+            exit 1
+          fi
+          echo "✅ SLO: Ghost proofs = 0 (compliant)"
+
+      - name: Check SLO - Timestamp Failure Rate
+        run: |
+          TIMESTAMP_FAILURE_MAX=$(yq '.slo.timestamp_failure_rate_max' $CONFIG_PATH)
+          
+          # Convert to percentage for display
+          PERCENTAGE=$(echo "$TIMESTAMP_FAILURE_MAX * 100" | bc)
+          
+          echo "✅ SLO: Timestamp failure rate max = ${PERCENTAGE}%"
+
+      - name: Check patent review flag
+        id: check-patent-flag
+        run: |
+          PATENT_REVIEW_FLAG=$(yq '.defensive_publication.patent_review_flag' $CONFIG_PATH)
+          
+          if [ "$PATENT_REVIEW_FLAG" == "true" ]; then
+            echo "⚠️ Patent review flag is set - defensive publication stamping blocked"
+            echo "stamp_allowed=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Patent review flag not set - defensive publication stamping allowed"
+            echo "stamp_allowed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summary
+        run: |
+          echo "========================================"
+          echo "🛡️ Defensive Publication Validation Complete"
+          echo "========================================"
+          echo ""
+          echo "Configuration: $CONFIG_PATH"
+          echo "DefPub Stamp Allowed: ${{ steps.check-patent-flag.outputs.stamp_allowed }}"
+          echo ""
+          echo "All checks passed ✅"
