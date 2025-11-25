@@ -174,7 +174,7 @@ domains:
         notes: "Treating PRs and docs as episodes in a coherent story."
       - name: "Human–AI collaboration framing"
         level: 3
-        notes: "Able to describe how you and your tools co-create systems."
+        notes: "Able to describe how humans and AI tools co-create systems."
 
 growth_targets:
   short_term:
@@ -187,5 +187,5 @@ growth_targets:
     - "Publish Distributed Cognitive Systems Engineering as a formal paper or preprint."
   long_term:
     - "Operate professionally as an Autonomous Systems / Governance Engineer."
-    - "Lead design of sovereign AI/DAO infrastructures in industry or your own org."
-    - "Blend academic research, industrial practice, and your Strategickhaos ecosystem into a long-lived lab."
+    - "Lead design of sovereign AI/DAO infrastructures in industry or own organization."
+    - "Blend academic research, industrial practice, and the Strategickhaos ecosystem into a long-lived lab."
