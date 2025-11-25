@@ -37,7 +37,7 @@ domains:
 
   systems_architecture:
     level: 4
-    notes: "This is one of your superpowers: thinking in terms of systems, layers, roles, and flows."
+    notes: "Core strength: thinking in terms of systems, layers, roles, and flows."
     techniques:
       - name: "Distributed cognitive architecture design"
         level: 4
@@ -71,7 +71,7 @@ domains:
 
   legal_and_governance_engineering:
     level: 4
-    notes: "Unusually strong for a CS capstone; you treat law as a first-class system component."
+    notes: "Unusually strong for a CS capstone; treats law as a first-class system component."
     techniques:
       - name: "Wyoming DAO LLC integration"
         level: 3
@@ -119,7 +119,7 @@ domains:
 
   knowledge_engineering_and_ops:
     level: 4
-    notes: "Another superpower: building living knowledge environments."
+    notes: "Core strength: building living knowledge environments."
     techniques:
       - name: "Obsidian vault design & graph thinking"
         level: 4
@@ -136,7 +136,7 @@ domains:
 
   academic_and_research_skills:
     level: 3
-    notes: "Very strong for undergrad; you're already operating in early research territory."
+    notes: "Very strong for undergrad; already operating in early research territory."
     techniques:
       - name: "Literature review & bibliography building"
         level: 3
@@ -150,7 +150,7 @@ domains:
 
   meta_cognition_and_learning:
     level: 4
-    notes: "You treat your own brain like an engineering system and train it intentionally."
+    notes: "Treats own cognition like an engineering system and trains it intentionally."
     techniques:
       - name: "Dual-task training (juggling, mental math, Rubik's cube, etc.)"
         level: 4
@@ -164,7 +164,7 @@ domains:
 
   communication_and_narrative:
     level: 3
-    notes: "You're very good at turning raw chaos into story and framing your work."
+    notes: "Strong at turning raw chaos into story and framing work effectively."
     techniques:
       - name: "Architecture storytelling"
         level: 3
