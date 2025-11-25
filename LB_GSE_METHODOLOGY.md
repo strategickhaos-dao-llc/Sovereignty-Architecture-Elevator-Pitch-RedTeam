@@ -40,7 +40,7 @@ Parse the DAO operating agreement, charitable purpose statements, and related le
 In this project, primitives originate from:
 - Wyoming DAO LLC statute (SF0068)
 - Filed organizational documents
-- Repository artifacts (e.g., `LEGAL_CONTRACT.md`, "Iron‑Clad Contract")
+- Repository artifacts (e.g., `LEGAL_CONTRACT.md`, "Iron-Clad Contract")
 - Explicit charitable and governance commitments
 
 **Related Repository Artifacts:**
