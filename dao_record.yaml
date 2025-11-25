@@ -68,4 +68,5 @@ generated:
   script_version: "1.1"
   update_notes: "Reflected administrative dissolution and entity separation"
   checksums:
-    sha256: "PENDING_RECALCULATION"
+    sha256: "VERIFY_AT_RUNTIME"  # Regenerate with: sha256sum dao_record.yaml
+    verification_note: "Run sha256sum after excluding this line for accurate verification"
