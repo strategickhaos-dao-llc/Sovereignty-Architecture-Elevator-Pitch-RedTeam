@@ -41,6 +41,72 @@ compliance:
   regulatory_status: "Good standing"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
 
+# DiviDen Refinery Ecosystem Integration
+dividen_refinery:
+  # Nonprofit Foundation (Planned)
+  foundation:
+    name: "Valoryield Refuge Foundation"
+    type: "501(c)(3) Public Charity"
+    status: "Formation Pending"
+    jurisdiction: "Wyoming"
+    relationship: "Receives donations from DAO LLC; distributes to beneficiaries"
+  
+  # Hybrid Structure
+  ecosystem_structure:
+    for_profit_arm: "Strategickhaos DAO LLC"
+    nonprofit_arm: "Valoryield Refuge Foundation"
+    integration_model: "Flow-through profit donation with tax optimization"
+  
+  # Revenue Streams
+  revenue_sources:
+    - type: "Dividend Capture"
+      description: "Automated HLMCR-governed trading bots"
+      status: "Development"
+    - type: "Royalty Streams"
+      description: "Legal settlement and reparation royalties"
+      status: "Framework Ready"
+    - type: "Service Fees"
+      description: "Investigation and cybersecurity consulting"
+      status: "Active"
+  
+  # Distribution Model
+  distribution:
+    charity_allocation: 0.07          # 7% minimum to verified charities
+    victim_fund: 0.10                 # 10% to victim compensation
+    operational: 0.10                 # 10% operational reserve
+    dao_members: 0.63                 # 63% to $VALOR token holders
+    emergency_reserve: 0.10           # 10% emergency fund
+  
+  # Verified Charity Partners (7% Auto-Donate Recipients)
+  verified_charities:
+    - name: "National Center for Missing & Exploited Children"
+      ein: "52-1328557"
+      allocation: 0.20
+    - name: "RAINN"
+      ein: "52-1876465"
+      allocation: 0.20
+    - name: "National Domestic Violence Hotline"
+      ein: "75-2557071"
+      allocation: 0.20
+    - name: "Cyber Civil Rights Initiative"
+      ein: "46-2892788"
+      allocation: 0.20
+    - name: "Electronic Frontier Foundation"
+      ein: "04-3091431"
+      allocation: 0.20
+  
+  # Token Economics
+  token:
+    symbol: "$VALOR"
+    purpose: "Governance and distribution mechanism"
+    total_supply: 100000000
+    documentation: "VALOR_TOKEN_ECONOMICS.md"
+  
+  # Governance
+  governance:
+    framework: "HLMCR (High-Leverage Multi-Currency Refinery)"
+    documentation: "governance/nonprofit_access_matrix.yaml"
+
 generated:
   by: "generate_dao_record.sh (hardened)"
   timestamp: "2025-11-16T11:34:26Z"
