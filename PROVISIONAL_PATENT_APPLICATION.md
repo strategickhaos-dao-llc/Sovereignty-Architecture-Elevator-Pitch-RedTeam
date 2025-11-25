@@ -11,9 +11,21 @@
 
 ---
 
-## INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+## ⚠️ IMPORTANT LEGAL NOTICE ⚠️
 
-*This document is an internal draft prepared for planning purposes only. Patent applications require review by a registered patent attorney before filing with the USPTO.*
+### INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+> **WARNING**: This document is an INTERNAL DRAFT prepared for academic and planning purposes only. 
+>
+> **DO NOT FILE** this document with the USPTO without first:
+> 1. Engaging a registered patent attorney or agent
+> 2. Conducting a comprehensive prior art search
+> 3. Having claims professionally drafted and reviewed
+> 4. Completing all required USPTO forms and declarations
+>
+> Patent applications require review by a registered patent attorney before filing. Filing without professional assistance may result in loss of patent rights, inadequate claim scope, or other adverse consequences.
+>
+> **This document does not constitute legal advice.** No attorney-client relationship is created by reading or using this document. For patent filing assistance, consult a USPTO-registered patent attorney or agent.
 
 ---
 

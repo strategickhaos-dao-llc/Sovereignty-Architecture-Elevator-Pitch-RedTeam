@@ -491,7 +491,7 @@ The system adheres to four ethical principles:
 
 1. **Legal-Technical Integration**: "Legal + technical integration is harder than pure code, but more powerful"
 
-2. **Multi-Validation**: Using multiple AI systems (Claude, GPT, Grok) for consensus validation increased confidence in design decisions
+2. **Multi-Validation**: Using multiple AI systems (Claude, GPT, Grok) as research assistance tools for design validation increased confidence in design decisions. *Note: AI tools are used as research aids and idea validators, not as authoritative sources. All conclusions are verified against authoritative legal and technical references.*
 
 3. **Offline Resilience**: Network timeouts for OpenTimestamps required creating offline proof mechanisms
 

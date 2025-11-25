@@ -234,10 +234,10 @@ Validation Chain:
 │   ├── Wyoming statute analysis
 │   ├── Tax code compliance check
 │   └── Entity formation verification
-└── AI Consensus
-    ├── Multiple LLM consultation
-    ├── Cross-validation of conclusions
-    └── Identification of blind spots
+└── AI Research Assistance (Note: Used as tools, not authoritative sources)
+    ├── Multiple LLM consultation for idea exploration
+    ├── Cross-validation of reasoning against authoritative sources
+    └── Identification of potential blind spots for human review
 ```
 
 **Evidence Locations**:
