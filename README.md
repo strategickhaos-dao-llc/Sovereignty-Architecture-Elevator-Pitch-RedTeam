@@ -71,6 +71,15 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 💹 Trading Engine Dossier
+Complete documentation package for the Trading Engine component:
+- **[Overview](trading_engine_dossier/README.md)** - Dossier introduction and contents
+- **[Architecture](trading_engine_dossier/architecture.md)** - System design and components
+- **[Deployment](trading_engine_dossier/deployment.md)** - Deployment procedures
+- **[Governance](trading_engine_dossier/governance.md)** - Compliance and governance
+- **[API Reference](trading_engine_dossier/api_reference.md)** - API documentation
+- **[Security](trading_engine_dossier/security.md)** - Security controls and policies
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
