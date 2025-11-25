@@ -18,8 +18,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from legal_firewall_generator import LegalFirewallGenerator, RequiredComponent
-from component_templates import ComponentTemplateEngine, ComponentSpec
+# Support both package imports and direct script execution
+try:
+    from .legal_firewall_generator import LegalFirewallGenerator, RequiredComponent
+    from .component_templates import ComponentTemplateEngine, ComponentSpec
+except ImportError:
+    from legal_firewall_generator import LegalFirewallGenerator, RequiredComponent
+    from component_templates import ComponentTemplateEngine, ComponentSpec
 
 
 class AutoPRCreator:

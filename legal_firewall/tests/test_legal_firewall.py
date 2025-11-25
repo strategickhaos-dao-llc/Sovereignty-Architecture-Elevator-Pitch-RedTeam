@@ -2,6 +2,9 @@
 """
 Tests for Legal-Firewall Generator Module
 Strategickhaos DAO LLC - LB-GSE Methodology
+
+Run with: python -m legal_firewall.tests.test_legal_firewall
+Or from the repo root: python legal_firewall/tests/test_legal_firewall.py
 """
 
 import os
@@ -10,22 +13,36 @@ import tempfile
 import json
 from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from legal_firewall_generator import (
-    LegalFirewallGenerator,
-    RequiredComponent,
-    LegalRequirement,
-    AnalysisResult,
-    generate_required_components,
-)
-from component_templates import (
-    ComponentTemplateEngine,
-    ComponentSpec,
-    COMPONENT_TEMPLATES,
-)
-from auto_pr_creator import AutoPRCreator
+# Support running both as script and as module
+try:
+    # When running as module (python -m legal_firewall.tests.test_legal_firewall)
+    from legal_firewall import (
+        LegalFirewallGenerator,
+        RequiredComponent,
+        LegalRequirement,
+        AnalysisResult,
+        generate_required_components,
+        ComponentTemplateEngine,
+        ComponentSpec,
+        COMPONENT_TEMPLATES,
+        AutoPRCreator,
+    )
+except ImportError:
+    # When running as script (python legal_firewall/tests/test_legal_firewall.py)
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from legal_firewall_generator import (
+        LegalFirewallGenerator,
+        RequiredComponent,
+        LegalRequirement,
+        AnalysisResult,
+        generate_required_components,
+    )
+    from component_templates import (
+        ComponentTemplateEngine,
+        ComponentSpec,
+        COMPONENT_TEMPLATES,
+    )
+    from auto_pr_creator import AutoPRCreator
 
 
 class TestLegalFirewallGenerator:
