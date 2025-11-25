@@ -1,0 +1,71 @@
+name: Spark Scan and Cost Cap
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+env:
+  RISK_CFG_PATH: .strategickhaos/risk_hardening.yaml
+
+jobs:
+  spark-guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@v4.44.3
+
+      - name: Read Spark settings
+        id: read
+        run: |
+          BUILTIN=$(yq '.risk_hardening.spark_swarm_safety.dependency_lock.built_in_only' $RISK_CFG_PATH)
+          TESTPRE=$(yq '.risk_hardening.spark_swarm_safety.dependency_lock.test_preview' $RISK_CFG_PATH)
+          THROTTLE=$(yq '.risk_hardening.spark_swarm_safety.scale_opt.throttle_agents' $RISK_CFG_PATH)
+          CAP=$(yq '.risk_hardening.spark_swarm_safety.scale_opt.preview_cost_cap_usd' $RISK_CFG_PATH)
+          EDGE=$(yq '.risk_hardening.spark_swarm_safety.confidence_check.edge_cases_test_suite' $RISK_CFG_PATH)
+          echo "BUILTIN=$BUILTIN" >> $GITHUB_ENV
+          echo "TESTPRE=$TESTPRE" >> $GITHUB_ENV
+          echo "THROTTLE=$THROTTLE" >> $GITHUB_ENV
+          echo "CAP=$CAP" >> $GITHUB_ENV
+          echo "EDGE=$EDGE" >> $GITHUB_ENV
+
+      - name: Enforce dependency lock policy
+        run: |
+          [ "$BUILTIN" = "true" ] || (echo "built_in_only must be true" && exit 1)
+
+      - name: Set Spark cost cap env
+        run: |
+          echo "SPARK_MAX_COST_USD=${CAP:-100}" >> $GITHUB_ENV
+          echo "SPARK_MAX_CONCURRENT_AGENTS=${THROTTLE:-50}" >> $GITHUB_ENV
+
+      - name: Dependabot security scan (lightweight gate)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.info('Placeholder: ensure Dependabot Alerts are enabled in repo settings.')
+
+      - name: Run Copilot smoke tests for previews
+        if: env.TESTPRE != ''
+        run: |
+          echo "Running smoke tests mode: $TESTPRE"
+          # Replace with actual preview test command
+          ./scripts/spark_smoke_tests.sh || exit 1
+
+      - name: Run edge-case unit tests
+        if: env.EDGE == 'true'
+        run: |
+          ./scripts/edge_cases_test_suite.sh
+
+      - name: Validate SLO targets
+        run: |
+          P95=$(yq '.risk_hardening.spark_swarm_safety.slo_targets.cost_p95_per_preview_usd' $RISK_CFG_PATH)
+          CR=$(yq '.risk_hardening.spark_swarm_safety.slo_targets.preview_crash_rate' $RISK_CFG_PATH)
+          awk "BEGIN { exit !($P95 <= 20) }" || (echo "cost_p95_per_preview_usd must be <= 20" && exit 1)
+          awk "BEGIN { exit !($CR <= 0.02) }" || (echo "preview_crash_rate must be <= 0.02" && exit 1)

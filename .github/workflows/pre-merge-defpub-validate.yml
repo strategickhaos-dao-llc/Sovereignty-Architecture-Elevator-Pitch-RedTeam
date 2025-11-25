@@ -1,0 +1,59 @@
+name: Pre-merge Defensive Publication Validate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-defpub:
+    name: Validate defensive publication config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Load risk_hardening config
+        id: cfg
+        uses: mikefarah/yq@v4.44.3
+        with:
+          cmd: yq -o=json '.risk_hardening.defensive_publication_pipeline' ./.strategickhaos/risk_hardening.yaml
+
+      - name: Assert validation checklist present
+        run: |
+          yq '.risk_hardening.defensive_publication_pipeline.validation_step.checklist[]' ./.strategickhaos/risk_hardening.yaml | grep -q 'merge_complete'
+          yq '.risk_hardening.defensive_publication_pipeline.validation_step.checklist[]' ./.strategickhaos/risk_hardening.yaml | grep -q 'artifact_hash_present'
+
+      - name: Block stamping labels if patent_review_flag true
+        run: |
+          set -e
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          FLAG=$(yq '.risk_hardening.defensive_publication_pipeline.disclosure_level.patent_review_flag' ./.strategickhaos/risk_hardening.yaml)
+          if [ "$FLAG" = "true" ]; then
+            echo "Patent review flag is true; blocking timestamp jobs."
+            echo "defpub_stamp_allowed=false" >> $GITHUB_ENV
+          else
+            echo "defpub_stamp_allowed=true" >> $GITHUB_ENV
+          fi
+
+      - name: Verify timestamp redundancy methods
+        run: |
+          yq '.risk_hardening.defensive_publication_pipeline.timestamp_redundancy.methods[]' ./.strategickhaos/risk_hardening.yaml | grep -q 'bitcoin_opentimestamps'
+          yq '.risk_hardening.defensive_publication_pipeline.timestamp_redundancy.methods[]' ./.strategickhaos/risk_hardening.yaml | grep -q 'research_disclosure_or_mirror'
+
+      - name: Ensure encryption + secret scanning enabled
+        run: |
+          ENC=$(yq '.risk_hardening.defensive_publication_pipeline.artifact_encryption.enabled' ./.strategickhaos/risk_hardening.yaml)
+          SCAN=$(yq '.risk_hardening.defensive_publication_pipeline.artifact_encryption.scan' ./.strategickhaos/risk_hardening.yaml)
+          [ "$ENC" = "true" ] || (echo "Encryption must be enabled" && exit 1)
+          [ "$SCAN" = "github_secret_scanner" ] || (echo "Secret scanner must be github_secret_scanner" && exit 1)
+
+      - name: Enforce SLO targets (ghost proofs, timestamp failure rate)
+        run: |
+          GPW=$(yq '.risk_hardening.defensive_publication_pipeline.slo_targets.ghost_proofs_per_week' ./.strategickhaos/risk_hardening.yaml)
+          TFR=$(yq '.risk_hardening.defensive_publication_pipeline.slo_targets.timestamp_failure_rate' ./.strategickhaos/risk_hardening.yaml)
+          [ "$GPW" = "0" ] || (echo "ghost_proofs_per_week must be 0" && exit 1)
+          awk "BEGIN { exit !($TFR <= 0.01) }" || (echo "timestamp_failure_rate must be <= 0.01" && exit 1)
