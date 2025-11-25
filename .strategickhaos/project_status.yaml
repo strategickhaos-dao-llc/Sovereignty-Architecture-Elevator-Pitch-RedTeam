@@ -4,6 +4,8 @@
 
 name: "Strategickhaos Intelligent Code Automation"
 project_id: strategickhaos_intelligent_code_automation
+# weighting: false means all sections count equally (simple average)
+# weighting: true would enable weighted calculations based on section importance
 weighting: false
 last_updated: "2025-11-25T00:00:00Z"
 
@@ -85,4 +87,6 @@ sections:
       - name: "Package everything for CS-499 submission"
         done: false
 
-percent_complete: 39.2  # auto-calc from section averages: (50 + 60 + 36 + 20 + 25) / 5
+# Manual calculation: update when section percentages change
+# Formula: (50 + 60 + 36 + 20 + 25) / 5 sections = 38.2
+percent_complete: 38.2
