@@ -278,6 +278,7 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
+- **[Model Lattice Architecture](MODEL_LATTICE_ARCHITECTURE.md)** - The AI Mirror system: they write *with* us, not *for* us
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
