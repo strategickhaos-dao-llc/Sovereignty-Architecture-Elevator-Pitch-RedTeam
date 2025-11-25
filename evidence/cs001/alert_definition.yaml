@@ -36,4 +36,4 @@ groups:
           team: ops
         annotations:
           summary: "Network errors on {{ $labels.instance }}"
-          description: "High rate of receive errors detected on {{ $labels.device }}"
+          description: "High rate of receive errors detected on {{ $labels.instance }}"
