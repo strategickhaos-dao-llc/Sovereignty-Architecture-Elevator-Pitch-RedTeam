@@ -26,6 +26,7 @@ import hashlib
 import json
 import os
 import platform
+import random
 import subprocess
 import sys
 import time
@@ -364,11 +365,20 @@ class SovereigntyBenchmark:
         model_name = model["name"]
         ref = cloud_reference.get(model_name, {"latency": 40.0, "tps": 2000})
 
-        # Add realistic variance
-        import random
+        # Add realistic variance to simulated values
         latency = ref["latency"] * (1 + random.uniform(-0.05, 0.05))
         tps = ref["tps"] * (1 + random.uniform(-0.03, 0.03))
 
+        # TODO: Replace this simulation with actual cloud API calls.
+        # Implementation steps:
+        # 1. Add API key configuration (via environment variables or config file)
+        # 2. Use httpx/aiohttp for async API calls with proper timeout handling
+        # 3. Parse streaming responses to measure time-to-first-token
+        # 4. Handle rate limiting and retry logic
+        # Example for OpenAI:
+        #   from openai import OpenAI
+        #   client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        #   response = client.chat.completions.create(...)
         return BenchmarkResult(
             model_name=model_name,
             model_type=model["type"],
@@ -381,7 +391,7 @@ class SovereigntyBenchmark:
             time_to_first_token=round(latency * 0.1, 3),
             timestamp=datetime.now(timezone.utc).isoformat(),
             success=True,
-            error_message="SIMULATED - Replace with actual API call"
+            error_message="SIMULATED - Replace with actual API call (see TODO above)"
         )
 
     def run_benchmark(self, model: dict, trial: int, prompt: str) -> BenchmarkResult:
