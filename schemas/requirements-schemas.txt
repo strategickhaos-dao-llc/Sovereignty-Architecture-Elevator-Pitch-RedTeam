@@ -1,0 +1,12 @@
+# Requirements for LyraNode Manifest Tools
+# Install: pip install -r requirements-schemas.txt
+
+# Core dependencies
+pyyaml>=6.0.1
+jsonschema>=4.20.0
+
+# Optional: GPG signing support
+python-gnupg>=0.5.2
+
+# Optional: Enhanced validation
+referencing>=0.32.0

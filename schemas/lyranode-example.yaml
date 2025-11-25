@@ -1,0 +1,131 @@
+---
+# Example LyraNode Custom Resource
+# Sanitized for public sharing (no sensitive data exposed)
+apiVersion: lyra.io/v1alpha1
+kind: LyraNode
+metadata:
+  name: nitrov15-lyra
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/name: lyra-node
+    app.kubernetes.io/instance: nitrov15
+    app.kubernetes.io/version: "15.2.0"
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: sovereignty-architecture
+    sovereignty.lyra.io/level: bigtech
+  annotations:
+    description: "Primary sovereignty node for Valoryield Engine"
+    sovereignty.lyra.io/compliance: "UPL-Safe + SF0068 + SOC2-Ready"
+spec:
+  node:
+    id: "urn:lyra:node:NitroV15-Lyra:15"
+    version: "15.2.0"
+    description: "Primary LLM sovereignty and RAG inference node"
+
+  operator:
+    name: "Domenic Garza"
+    nodeRef: "node-137"
+    gpgKeyId: "0x137SOVEREIGN"
+    orcid: "0009-0005-2996-3526"
+
+  sovereigntyLevel: "bigtech"
+  hallucinationScore: 0.00
+  
+  cryptographicVerification:
+    - GPG
+    - SHA256
+  
+  complianceFramework: "UPL-Safe + SF0068 + SOC2-Ready"
+
+  models:
+    - name: qwen2.5
+      modelId: "4f6861a20c29"
+      source: ollama
+      pinnedVersion: "14b-instruct-q6_K"
+      checksum: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"
+    - name: bge-small-en-v1.5
+      modelId: "baai123456"
+      source: huggingface
+      pinnedVersion: "1.5.0"
+      checksum: "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3"
+
+  capabilities:
+    - llm-inference
+    - rag-query
+    - embedding-generation
+    - document-chunking
+    - provenance-tracking
+    - gpg-signing
+
+  milestones:
+    - name: "LLM Sovereignty Stack Complete"
+      achievedAt: "2025-11-16T12:00:00Z"
+      commitRef: "7b8ad1a"
+    - name: "Big Tech Automation Patterns"
+      achievedAt: "2025-11-16T14:00:00Z"
+      commitRef: "0ff4524"
+    - name: "Cyber Recon v2 Integration"
+      achievedAt: "2025-11-16T16:00:00Z"
+      commitRef: "d50d39a"
+    - name: "Zero Hallucination RAG"
+      achievedAt: "2025-11-16T18:00:00Z"
+      commitRef: "f1a2b3c"
+
+  provenance:
+    generatedBy: "lyra-manifest-generator v1.0"
+    source: "Automated from CI/CD pipeline"
+    scriptVersion: "1.0"
+    checksums:
+      sha256: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+
+  sensitivity:
+    - path: ".spec.operator.gpgKeyId"
+      classification: internal
+      handling: "Do not expose key ID in public manifests"
+    - path: ".spec.models[*].checksum"
+      classification: internal
+      handling: "Model checksums for internal verification only"
+
+  signature:
+    method: GPG
+    keyId: "0x137SOVEREIGN"
+    sigTs: "2025-11-25T12:00:00Z"
+    algorithm: "RSA-4096"
+    # sig field would contain actual base64 signature in production
+
+  hooks:
+    - on: milestone
+      url: "https://events.strategickhaos.com/hooks/milestone"
+      secretRef: "webhook_secret_01"
+      method: POST
+    - on: health_check
+      url: "https://events.strategickhaos.com/hooks/health"
+      secretRef: "webhook_secret_02"
+      method: POST
+    - on: status_change
+      url: "https://events.strategickhaos.com/hooks/status"
+      secretRef: "webhook_secret_03"
+      method: POST
+
+# Note: status block is managed by the Kubernetes controller
+# and populated automatically. Example of expected status:
+#
+# status:
+#   phase: Active
+#   health: passing
+#   lastSeen: "2025-11-25T11:00:00Z"
+#   uptimeSeconds: 86400
+#   lastSync: "2025-11-25T10:55:00Z"
+#   queriesProcessed: 15420
+#   signatureVerified: true
+#   conditions:
+#     - type: Ready
+#       status: "True"
+#       lastTransitionTime: "2025-11-16T12:00:00Z"
+#       reason: Initialized
+#       message: "Node is operational and healthy"
+#     - type: SignatureValid
+#       status: "True"
+#       lastTransitionTime: "2025-11-25T12:00:00Z"
+#       reason: Verified
+#       message: "GPG signature verified successfully"

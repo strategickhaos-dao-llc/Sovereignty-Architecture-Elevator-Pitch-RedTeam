@@ -1,0 +1,161 @@
+# lyra_node_manifest_public.yaml
+# Sanitized Public Manifest - Safe for External Distribution
+# 
+# NOTICE: This is a SANITIZED version of the LyraNode manifest.
+# All sensitive paths, vault references, credentials, and internal
+# identifiers have been redacted or replaced with opaque tokens.
+# 
+# Classification: PUBLIC
+# Last Sanitized: 2025-11-25T12:00:00Z
+# Sanitization Script: sanitize_manifest.py v1.0
+
+node:
+  id: "urn:lyra:node:NitroV15-Lyra:15"
+  version: "15.2.0"
+  status: active
+  name: "Sovereignty Architecture Node"
+  description: "Primary LLM sovereignty and RAG inference node for Valoryield Engine"
+
+operator:
+  # Redacted: Personal identifiable information
+  name: "[REDACTED]"
+  node_ref: "node-xxx"
+  # Redacted: GPG key identifiers
+  gpg_key_id: "[KEY_REF:operator_primary]"
+  # ORCID preserved as it's public academic identifier
+  orcid: "0009-0005-2996-3526"
+
+status:
+  sovereignty_level: "Big Tech"
+  hallucination_score: 0.00
+  cryptographic_verification:
+    - GPG
+    - SHA256
+  compliance_framework: "UPL-Safe + SF0068 + SOC2-Ready"
+  health: passing
+  # Timestamps generalized
+  last_seen: "[TIMESTAMP:recent]"
+
+models:
+  # Model identifiers replaced with verification tokens
+  - name: qwen2.5
+    model_id: "[MODEL_TOKEN:qwen25_prod]"
+    source: ollama
+    pinned_version: "14b-instruct-q6_K"
+    # Checksum replaced with verification reference
+    checksum_ref: "verify://models/qwen25/integrity"
+  - name: bge-small-en-v1.5
+    model_id: "[MODEL_TOKEN:bge_embed]"
+    source: huggingface
+    pinned_version: "1.5.0"
+    checksum_ref: "verify://models/bge/integrity"
+
+capabilities:
+  - llm-inference
+  - rag-query
+  - embedding-generation
+  - document-chunking
+  - provenance-tracking
+  - cryptographic-signing
+
+milestones:
+  - name: "LLM Sovereignty Stack Complete"
+    achieved_at: "2025-11-16T12:00:00Z"
+    # Commit refs anonymized
+    commit_ref: "[COMMIT:milestone_1]"
+  - name: "Big Tech Automation Patterns"
+    achieved_at: "2025-11-16T14:00:00Z"
+    commit_ref: "[COMMIT:milestone_2]"
+  - name: "Cyber Recon v2 Integration"
+    achieved_at: "2025-11-16T16:00:00Z"
+    commit_ref: "[COMMIT:milestone_3]"
+  - name: "Zero Hallucination RAG"
+    achieved_at: "2025-11-16T18:00:00Z"
+    commit_ref: "[COMMIT:milestone_4]"
+
+provenance:
+  generated_by: "lyra-manifest-generator (sanitized output)"
+  timestamp: "2025-11-25T12:00:00Z"
+  source: "Automated CI/CD Pipeline"
+  script_version: "1.0"
+  checksums:
+    # Original checksums replaced with verification tokens
+    verification_token: "[INTEGRITY:manifest_v1]"
+
+# Vault paths and sensitive resource references REMOVED
+# Original fields contained:
+# - research_vaults: [REDACTED - internal paths]
+# - library_names: [REDACTED - classification restricted]
+# - internal_endpoints: [REDACTED - infrastructure]
+
+sensitivity:
+  # Classification metadata preserved for transparency
+  - path: "operator"
+    classification: internal
+    handling: "PII redacted for public release"
+  - path: "models[*].checksum"
+    classification: internal
+    handling: "Replaced with verification token references"
+  - path: "research_vaults"
+    classification: restricted
+    handling: "REMOVED - DO NOT PUBLISH"
+  - path: "library_names"
+    classification: restricted
+    handling: "REMOVED - DO NOT PUBLISH"
+
+signature:
+  # Signature preserved for integrity verification
+  # Public can verify but cannot forge
+  method: GPG
+  key_id: "[KEY_REF:signing_public]"
+  # Signature blob preserved
+  sig: "[BASE64_SIGNATURE]"
+  sig_ts: "2025-11-25T12:00:00Z"
+  algorithm: "RSA-4096"
+  # Verification instructions
+  verify_url: "https://verify.strategickhaos.com/manifest"
+
+# Hooks sanitized - only event types exposed
+hooks:
+  - on: milestone
+    url: "[WEBHOOK_REF:milestone]"
+  - on: health_check
+    url: "[WEBHOOK_REF:health]"
+  - on: status_change
+    url: "[WEBHOOK_REF:status]"
+
+metrics:
+  # Operational metrics - non-sensitive
+  health: passing
+  # Specific timestamps generalized
+  last_seen: "[TIMESTAMP:recent]"
+  uptime_seconds: "[METRIC:uptime]"
+
+competitive_context:
+  # Benchmarks can be public
+  benchmark_score: 95.2
+  ranking: "leader"
+  differentiators:
+    - "Zero-hallucination RAG architecture"
+    - "Cryptographically verified provenance"
+    - "UPL-safe compliance framework"
+    - "Multi-model orchestration"
+
+# === SANITIZATION LOG ===
+# Fields removed or redacted:
+# 1. operator.name -> [REDACTED]
+# 2. operator.gpg_key_id -> [KEY_REF:*]
+# 3. models[*].model_id -> [MODEL_TOKEN:*]
+# 4. models[*].checksum -> checksum_ref
+# 5. milestones[*].commit_ref -> [COMMIT:*]
+# 6. provenance.checksums -> verification_token
+# 7. research_vaults -> REMOVED
+# 8. library_names -> REMOVED
+# 9. hooks[*].url -> [WEBHOOK_REF:*]
+# 10. hooks[*].secret_ref -> REMOVED
+# 11. All internal IP addresses -> REMOVED
+# 12. All database connection strings -> REMOVED
+#
+# Sanitization performed by: sanitize_manifest.py
+# Verification: sha256 of sanitized content logged
+# === END SANITIZATION LOG ===

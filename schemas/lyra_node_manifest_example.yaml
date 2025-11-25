@@ -1,0 +1,109 @@
+# lyra_node_manifest_example.yaml
+# Example LyraNode manifest conforming to JSON Schema
+# This is NOT a Kubernetes resource - use lyranode-example.yaml for K8s
+
+node:
+  id: "urn:lyra:node:NitroV15-Lyra:15"
+  version: "15.2.0"
+  status: active
+  name: "Sovereignty Architecture Node"
+  description: "Primary LLM sovereignty and RAG inference node for Valoryield Engine"
+
+operator:
+  name: "Domenic Garza"
+  node_ref: "node-137"
+  gpg_key_id: "0x137A5B6C7D8E9F0A"
+  orcid: "0009-0005-2996-3526"
+
+status:
+  sovereignty_level: "Big Tech"
+  hallucination_score: 0.00
+  cryptographic_verification:
+    - GPG
+    - SHA256
+  compliance_framework: "UPL-Safe + SF0068 + SOC2-Ready"
+  health: passing
+  last_seen: "2025-11-25T11:00:00Z"
+
+models:
+  - name: qwen2.5
+    model_id: "4f6861a20c29"
+    source: ollama
+    pinned_version: "14b-instruct-q6_K"
+    checksum: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"
+  - name: bge-small-en-v1.5
+    model_id: "baab123456ab"
+    source: huggingface
+    pinned_version: "1.5.0"
+    checksum: "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3"
+
+capabilities:
+  - llm-inference
+  - rag-query
+  - embedding-generation
+  - document-chunking
+  - provenance-tracking
+  - cryptographic-signing
+
+milestones:
+  - name: "LLM Sovereignty Stack Complete"
+    achieved_at: "2025-11-16T12:00:00Z"
+    commit_ref: "7b8ad1a"
+  - name: "Big Tech Automation Patterns"
+    achieved_at: "2025-11-16T14:00:00Z"
+    commit_ref: "0ff4524"
+  - name: "Cyber Recon v2 Integration"
+    achieved_at: "2025-11-16T16:00:00Z"
+    commit_ref: "d50d39a"
+  - name: "Zero Hallucination RAG"
+    achieved_at: "2025-11-16T18:00:00Z"
+    commit_ref: "f1a2b3c"
+
+provenance:
+  generated_by: "lyra-manifest-generator v1.0"
+  timestamp: "2025-11-25T12:00:00Z"
+  source: "Automated from CI/CD pipeline"
+  script_version: "1.0"
+  checksums:
+    sha256: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+
+sensitivity:
+  - path: "operator.gpg_key_id"
+    classification: internal
+    handling: "Do not expose key ID in public manifests"
+  - path: "models[*].checksum"
+    classification: internal
+    handling: "Model checksums for internal verification only"
+
+signature:
+  method: GPG
+  key_id: "0x137A5B6C7D8E9F0A"
+  sig_ts: "2025-11-25T12:00:00Z"
+  algorithm: "RSA-4096"
+
+hooks:
+  - "on": milestone
+    url: "https://events.strategickhaos.com/hooks/milestone"
+    secret_ref: "webhook_secret_01"
+    method: POST
+  - "on": health_check
+    url: "https://events.strategickhaos.com/hooks/health"
+    secret_ref: "webhook_secret_02"
+  - "on": status_change
+    url: "https://events.strategickhaos.com/hooks/status"
+    secret_ref: "webhook_secret_03"
+
+metrics:
+  last_seen: "2025-11-25T11:00:00Z"
+  health: passing
+  uptime_seconds: 86400
+  last_sync: "2025-11-25T10:55:00Z"
+  queries_processed: 15420
+
+competitive_context:
+  benchmark_score: 95.2
+  ranking: leader
+  differentiators:
+    - "Zero-hallucination RAG architecture"
+    - "Cryptographically verified provenance"
+    - "UPL-safe compliance framework"

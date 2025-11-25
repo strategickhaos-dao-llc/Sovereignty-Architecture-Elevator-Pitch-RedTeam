@@ -1,0 +1,382 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lyra.io/schemas/lyra-node-manifest.schema.json",
+  "title": "LyraNode Manifest Schema",
+  "description": "JSON Schema for LyraNode manifest validation with typed fields, provenance, and security metadata",
+  "type": "object",
+  "required": ["node", "status", "provenance"],
+  "properties": {
+    "node": {
+      "type": "object",
+      "description": "Node identity and configuration",
+      "required": ["id", "version", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique node identifier in URN format",
+          "pattern": "^urn:lyra:node:[a-zA-Z0-9_-]+:[0-9]+$",
+          "examples": ["urn:lyra:node:NitroV15-Lyra:15"]
+        },
+        "version": {
+          "type": "string",
+          "description": "Semantic version of the node",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$",
+          "examples": ["15.2.0", "1.0.0-alpha"]
+        },
+        "status": {
+          "type": "string",
+          "description": "Current operational status of the node",
+          "enum": ["active", "inactive", "retired", "maintenance", "degraded"]
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable node name",
+          "maxLength": 128
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the node purpose",
+          "maxLength": 512
+        }
+      },
+      "additionalProperties": false
+    },
+    "operator": {
+      "type": "object",
+      "description": "Operator identity and credentials",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Operator name",
+          "maxLength": 256
+        },
+        "node_ref": {
+          "type": "string",
+          "description": "Reference to operator node ID",
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "gpg_key_id": {
+          "type": "string",
+          "description": "GPG key identifier (hex format)",
+          "pattern": "^0x[A-Fa-f0-9]+$",
+          "examples": ["0x137SOVEREIGN"]
+        },
+        "orcid": {
+          "type": "string",
+          "description": "ORCID identifier for academic provenance",
+          "pattern": "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$",
+          "examples": ["0009-0005-2996-3526"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "object",
+      "description": "Current operational status and health metrics",
+      "required": ["sovereignty_level"],
+      "properties": {
+        "sovereignty_level": {
+          "type": "string",
+          "description": "Level of sovereignty achieved",
+          "enum": ["none", "partial", "enterprise", "Big Tech", "sovereign"]
+        },
+        "hallucination_score": {
+          "type": "number",
+          "description": "AI hallucination rate (0.0 = no hallucination)",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "cryptographic_verification": {
+          "type": "array",
+          "description": "List of cryptographic verification methods used",
+          "items": {
+            "type": "string",
+            "enum": ["GPG", "SHA256", "SHA512", "ED25519", "RSA", "ECDSA"]
+          },
+          "uniqueItems": true
+        },
+        "compliance_framework": {
+          "type": "string",
+          "description": "Compliance frameworks being followed",
+          "examples": ["UPL-Safe + SF0068 + SOC2-Ready"]
+        },
+        "health": {
+          "type": "string",
+          "description": "Current health status",
+          "enum": ["passing", "warning", "critical", "unknown"]
+        },
+        "last_seen": {
+          "type": "string",
+          "description": "Last heartbeat timestamp in ISO 8601 format",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "models": {
+      "type": "array",
+      "description": "AI/ML models deployed on this node",
+      "items": {
+        "type": "object",
+        "required": ["name", "model_id", "source"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Model name",
+            "maxLength": 128
+          },
+          "model_id": {
+            "type": "string",
+            "description": "Unique model identifier (hash or UUID)",
+            "pattern": "^[a-fA-F0-9]+$"
+          },
+          "source": {
+            "type": "string",
+            "description": "Model source/registry",
+            "enum": ["ollama", "huggingface", "openai", "anthropic", "local", "custom"]
+          },
+          "pinned_version": {
+            "type": "string",
+            "description": "Pinned version identifier",
+            "maxLength": 128
+          },
+          "checksum": {
+            "type": "string",
+            "description": "SHA256 checksum of model weights",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "List of node capabilities",
+      "items": {
+        "type": "string",
+        "maxLength": 128
+      },
+      "uniqueItems": true
+    },
+    "milestones": {
+      "type": "array",
+      "description": "Achieved milestones with timestamps",
+      "items": {
+        "type": "object",
+        "required": ["name", "achieved_at"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Milestone name",
+            "maxLength": 256
+          },
+          "achieved_at": {
+            "type": "string",
+            "description": "Achievement timestamp in ISO 8601 format",
+            "format": "date-time"
+          },
+          "commit_ref": {
+            "type": "string",
+            "description": "Git commit reference",
+            "pattern": "^[a-fA-F0-9]{7,40}$"
+          },
+          "artifact_uri": {
+            "type": "string",
+            "description": "URI to milestone artifact",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Provenance and audit information",
+      "required": ["generated_by", "timestamp"],
+      "properties": {
+        "generated_by": {
+          "type": "string",
+          "description": "Tool or process that generated this manifest",
+          "maxLength": 256
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Generation timestamp in ISO 8601 format",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string",
+          "description": "Data source for manifest generation",
+          "maxLength": 512
+        },
+        "script_version": {
+          "type": "string",
+          "description": "Version of generation script",
+          "pattern": "^[0-9]+\\.[0-9]+(\\.?[0-9]+)?$"
+        },
+        "checksums": {
+          "type": "object",
+          "description": "Integrity checksums",
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{64}$"
+            },
+            "sha512": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{128}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "sensitivity": {
+      "type": "array",
+      "description": "Sensitivity classifications for manifest fields",
+      "items": {
+        "type": "object",
+        "required": ["path", "classification"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "JSON path to sensitive field"
+          },
+          "classification": {
+            "type": "string",
+            "description": "Classification level",
+            "enum": ["public", "internal", "confidential", "restricted", "top_secret"]
+          },
+          "handling": {
+            "type": "string",
+            "description": "Handling instructions",
+            "maxLength": 256
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "signature": {
+      "type": "object",
+      "description": "Cryptographic signature for manifest integrity",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "Signature method used",
+          "enum": ["GPG", "JWS", "ED25519", "RSA", "ECDSA"]
+        },
+        "key_id": {
+          "type": "string",
+          "description": "Key identifier used for signing",
+          "maxLength": 128
+        },
+        "sig": {
+          "type": "string",
+          "description": "Base64-encoded signature",
+          "contentEncoding": "base64"
+        },
+        "sig_ts": {
+          "type": "string",
+          "description": "Signature timestamp in ISO 8601 format",
+          "format": "date-time"
+        },
+        "algorithm": {
+          "type": "string",
+          "description": "Signature algorithm details",
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false
+    },
+    "hooks": {
+      "type": "array",
+      "description": "Automation and observability hooks",
+      "items": {
+        "type": "object",
+        "required": ["on", "url"],
+        "properties": {
+          "on": {
+            "type": "string",
+            "description": "Event trigger",
+            "enum": ["milestone", "status_change", "health_check", "sync", "deploy", "alert"]
+          },
+          "url": {
+            "type": "string",
+            "description": "Webhook URL",
+            "format": "uri"
+          },
+          "secret_ref": {
+            "type": "string",
+            "description": "Reference to webhook secret in vault",
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "method": {
+            "type": "string",
+            "description": "HTTP method",
+            "enum": ["POST", "PUT"],
+            "default": "POST"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Observability metrics",
+      "properties": {
+        "last_seen": {
+          "type": "string",
+          "description": "Last heartbeat timestamp",
+          "format": "date-time"
+        },
+        "health": {
+          "type": "string",
+          "enum": ["passing", "warning", "critical", "unknown"]
+        },
+        "uptime_seconds": {
+          "type": "integer",
+          "description": "Uptime in seconds",
+          "minimum": 0
+        },
+        "last_sync": {
+          "type": "string",
+          "description": "Last synchronization timestamp",
+          "format": "date-time"
+        },
+        "queries_processed": {
+          "type": "integer",
+          "description": "Total queries processed",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "competitive_context": {
+      "type": "object",
+      "description": "Competitive benchmarking context (sanitized)",
+      "properties": {
+        "benchmark_score": {
+          "type": "number",
+          "description": "Overall benchmark score",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "ranking": {
+          "type": "string",
+          "description": "Competitive ranking tier",
+          "enum": ["leader", "challenger", "niche", "emerging"]
+        },
+        "differentiators": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 256
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
