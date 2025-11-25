@@ -170,10 +170,11 @@ jobs:
       - name: Generate validation report
         if: always()
         run: |
-          cat > validation_report.md << 'EOF'
+          REPORT_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          cat > validation_report.md << EOF
           # Defensive Publication Validation Report
           
-          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Date:** ${REPORT_DATE}
           **Commit:** ${{ github.sha }}
           **PR:** #${{ github.event.pull_request.number }}
           

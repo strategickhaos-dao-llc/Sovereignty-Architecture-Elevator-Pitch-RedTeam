@@ -86,7 +86,7 @@ jobs:
           python << 'EOF'
           import os
           import json
-          import random  # Simulated for demo - replace with actual benchmark runner
+          from datetime import datetime, timezone
           
           try:
               from ruamel.yaml import YAML
@@ -102,7 +102,7 @@ jobs:
           benchmark_path = 'benchmarks/benchmark_config.yaml'
           
           results = {
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
               "benchmarks": {},
               "drift_detected": False,
               "alerts": []
@@ -158,6 +158,7 @@ jobs:
           python << 'EOF'
           import os
           import json
+          from datetime import datetime, timezone
           
           try:
               from ruamel.yaml import YAML
@@ -182,7 +183,7 @@ jobs:
                   threshold = cb.get('threshold', 0.6)
           
           results = {
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
               "decay_score": 0.85,  # Simulated - replace with actual calculation
               "threshold": threshold,
               "circuit_breaker_triggered": False,
@@ -226,9 +227,10 @@ jobs:
           python << 'EOF'
           import os
           import json
+          from datetime import datetime, timezone
           
           results = {
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
               "loops_detected": 0,
               "max_iterations_observed": 8,
               "iteration_threshold": 20,
@@ -269,12 +271,13 @@ jobs:
           python << 'EOF'
           import os
           import json
+          from datetime import datetime, timezone
           
           # Load all chaos results
           results_dir = "chaos_results"
           
           resonance = {
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
               "overall_health": "GOOD",
               "resonance_score": 0.0,
               "deltas": {},
@@ -347,10 +350,12 @@ jobs:
       - name: Generate chaos report
         if: always()
         run: |
-          cat > chaos_results/chaos_report.md << 'EOF'
+          mkdir -p chaos_results
+          REPORT_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          cat > chaos_results/chaos_report.md << EOF
           # Weekly Chaos Test Report
           
-          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Date:** ${REPORT_DATE}
           **Run ID:** ${{ github.run_id }}
           
           ## Executive Summary
@@ -365,16 +370,16 @@ jobs:
           ## Detailed Results
           
           See attached JSON files for detailed results:
-          - `benchmark_drift.json` - Benchmark SLA comparison
-          - `decay_detection.json` - System decay analysis
-          - `loop_detection.json` - Agent loop monitoring
-          - `resonance_report.json` - Overall health summary
+          - \`benchmark_drift.json\` - Benchmark SLA comparison
+          - \`decay_detection.json\` - System decay analysis
+          - \`loop_detection.json\` - Agent loop monitoring
+          - \`resonance_report.json\` - Overall health summary
           
           ## Playbooks
           
           If issues are detected:
-          1. **Loop Detected**: Follow `dao_veto_path` playbook
-          2. **Decay Below Threshold**: Run `simulate_failure` suite
+          1. **Loop Detected**: Follow \`dao_veto_path\` playbook
+          2. **Decay Below Threshold**: Run \`simulate_failure\` suite
           3. **Benchmark Drift**: Review benchmark #406 baseline
           
           ---

@@ -245,10 +245,11 @@ jobs:
       - name: Generate scan report
         if: always()
         run: |
+          REPORT_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           cat > scan_report.md << EOF
           # Spark Scan and Cap Report
           
-          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Date:** ${REPORT_DATE}
           **Commit:** ${{ github.sha }}
           **Run ID:** ${{ github.run_id }}
           
