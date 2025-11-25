@@ -177,6 +177,14 @@ ai_agents:
 - **Audit Logging**: Comprehensive activity tracking
 - **Content Redaction**: Automatic PII and credential filtering
 
+### Security Documentation
+| Document | Description |
+|----------|-------------|
+| [THREAT_MODEL.md](./THREAT_MODEL.md) | Adversarial threat model covering key compromise, model poisoning, supply chain attacks |
+| [SECURITY.md](./SECURITY.md) | Security policy and vulnerability reporting procedures |
+| [VAULT_SECURITY_PLAYBOOK.md](./VAULT_SECURITY_PLAYBOOK.md) | Secret management and rotation procedures |
+| [reproducibility/](./reproducibility/) | Artifact verification manifest and scripts |
+
 ### Production Safeguards
 ```yaml
 governance:
@@ -186,7 +194,24 @@ governance:
     link: "https://wiki.strategickhaos.internal/change-management"
 ```
 
+### Artifact Verification
+```bash
+# Verify all artifacts cryptographically
+./reproducibility/verify.sh --full
+
+# Quick hash-only verification
+./reproducibility/verify.sh --quick
+```
+
 ## 📊 Monitoring & Alerts
+
+### Service Level Objectives (SLOs)
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| System Uptime | 99.9% | Monthly |
+| MTTR | < 30 minutes | Rolling 30-day |
+| RAG Accuracy | > 85% | Weekly benchmark |
+| Hallucination Rate | < 2% | Weekly benchmark |
 
 ### Key Metrics
 - Discord API response times and rate limits

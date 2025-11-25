@@ -243,6 +243,87 @@ governance:
     link: "https://wiki.strategickhaos.internal/change-management"
   data_handling:
     post_pii_to_discord: false
+  threat_model:
+    document: "THREAT_MODEL.md"
+    review_cadence: "quarterly"
+    last_review: "2025-11-25"
+
+# Metrics & Service Level Agreements
+metrics_sla:
+  # Artifact tracking
+  artifacts:
+    corpus_count_target: 500           # Target number of indexed artifacts
+    current_count: 0                    # Updated by automation
+    growth_rate: "10% monthly"
+    
+  # System availability
+  availability:
+    uptime_target: 99.9                 # 99.9% uptime SLO
+    uptime_measurement: "monthly"
+    mttr_target_minutes: 30             # Mean Time To Recovery target
+    mttr_measurement: "rolling_30_day"
+    
+  # Detection and security metrics
+  detection:
+    threat_detection_rate: 0.95         # 95% detection rate target
+    false_positive_rate_max: 0.05       # Maximum 5% false positive rate
+    alert_response_time_minutes: 15     # Target time to acknowledge alerts
+    
+  # Telemetry retention
+  telemetry:
+    metrics_retention_days: 90          # Prometheus metrics retention
+    logs_retention_days: 30             # Loki logs retention
+    traces_retention_days: 14           # OpenTelemetry traces retention
+    audit_logs_retention_days: 365      # Security audit log retention
+    
+  # Capacity planning
+  capacity:
+    storage_threshold_percent: 80       # Alert when storage exceeds 80%
+    memory_threshold_percent: 85        # Alert when memory exceeds 85%
+    cpu_threshold_percent: 90           # Alert when CPU exceeds 90%
+    
+  # LLM/RAG specific metrics
+  llm_metrics:
+    rag_accuracy_target: 0.85           # Target RAG accuracy
+    hallucination_rate_max: 0.02        # Maximum 2% hallucination rate
+    response_time_p95_ms: 5000          # 95th percentile response time
+    safety_pass_rate: 0.98              # Constitutional AI safety rate
+
+# Model governance protocol
+model_governance:
+  # Prompt version control
+  prompt_versioning:
+    enabled: true
+    storage: "prompts/"
+    format: "yaml"
+    require_review: true
+    
+  # Evaluation cadence
+  evaluation:
+    benchmark_frequency: "weekly"
+    full_eval_frequency: "monthly"
+    benchmark_suite: "benchmarks/"
+    baseline_file: "benchmarks/reports/baseline_results.json"
+    
+  # Human-in-the-loop checkpoints
+  hitl:
+    enabled: true
+    high_risk_categories:
+      - "legal_advice"
+      - "financial_decisions"
+      - "security_recommendations"
+      - "production_deployments"
+    review_required_for:
+      - confidence_below: 0.7
+      - flagged_content: true
+      - new_domain: true
+      
+  # Model updates
+  updates:
+    auto_update: false
+    require_testing: true
+    require_security_review: true
+    rollback_enabled: true
 
 testing:
   sandbox_guild_id: null
