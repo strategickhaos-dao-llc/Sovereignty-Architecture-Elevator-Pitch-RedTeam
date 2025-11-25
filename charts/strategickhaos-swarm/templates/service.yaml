@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "strategickhaos-swarm.fullname" . }}-bot
+  labels:
+    {{- include "strategickhaos-swarm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: bot
+spec:
+  type: {{ .Values.bot.service.type }}
+  ports:
+    - port: {{ .Values.bot.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "strategickhaos-swarm.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: bot
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "strategickhaos-swarm.fullname" . }}-gateway
+  labels:
+    {{- include "strategickhaos-swarm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gateway
+spec:
+  type: {{ .Values.gateway.service.type }}
+  ports:
+    - port: {{ .Values.gateway.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "strategickhaos-swarm.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: gateway

@@ -1,0 +1,236 @@
+name: Auto-Timestamp Release with Bitcoin Anchor
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published, created]
+  workflow_dispatch:
+    inputs:
+      force_timestamp:
+        description: 'Force timestamp even if no changes'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  OTS_VERSION: "0.7.1"
+
+jobs:
+  timestamp-commit:
+    name: Bitcoin Timestamp - Commit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install OpenTimestamps
+        run: |
+          pip install opentimestamps-client
+          echo "✅ OpenTimestamps client installed"
+
+      - name: Create commit timestamp
+        run: |
+          # Generate timestamp file for the commit
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_DATE=$(git show -s --format=%ci $COMMIT_SHA)
+          TIMESTAMP_FILE="timestamps/${COMMIT_SHA}.ots"
+          
+          mkdir -p timestamps
+          
+          # Create proof document
+          cat > "timestamps/${COMMIT_SHA}.txt" << EOF
+          Strategickhaos Swarm Intelligence - Commit Proof
+          ================================================
+          Repository: ${{ github.repository }}
+          Commit SHA: ${COMMIT_SHA}
+          Branch: ${{ github.ref_name }}
+          Author: ${{ github.actor }}
+          Date: ${COMMIT_DATE}
+          Message: $(git show -s --format=%s $COMMIT_SHA)
+          
+          This commit is part of the Strategickhaos sovereign infrastructure.
+          Prior art anchored via OpenTimestamps to Bitcoin blockchain.
+          
+          Verification: ots verify timestamps/${COMMIT_SHA}.ots
+          EOF
+          
+          # Generate OpenTimestamp proof
+          ots stamp "timestamps/${COMMIT_SHA}.txt"
+          
+          echo "📜 Timestamp created for commit ${COMMIT_SHA:0:8}"
+          ls -la timestamps/
+
+      - name: Upload timestamp artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: commit-timestamp-${{ github.sha }}
+          path: timestamps/
+          retention-days: 365
+
+      - name: Summary
+        run: |
+          echo "## 🔏 Bitcoin Timestamp Anchored" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Actor | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Timestamp | $(date -u +"%Y-%m-%d %H:%M:%S UTC") |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The OpenTimestamps proof will be anchored to Bitcoin within ~24 hours." >> $GITHUB_STEP_SUMMARY
+
+  timestamp-release:
+    name: Bitcoin Timestamp - Release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install OpenTimestamps
+        run: |
+          pip install opentimestamps-client
+          echo "✅ OpenTimestamps client installed"
+
+      - name: Package Helm chart
+        run: |
+          # Install Helm
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          
+          # Package the chart
+          helm package charts/strategickhaos-swarm -d release/
+          
+          echo "📦 Helm chart packaged"
+          ls -la release/
+
+      - name: Create release timestamp
+        run: |
+          RELEASE_TAG="${{ github.event.release.tag_name }}"
+          RELEASE_NAME="${{ github.event.release.name }}"
+          TIMESTAMP_DIR="timestamps/releases/${RELEASE_TAG}"
+          
+          mkdir -p "${TIMESTAMP_DIR}"
+          
+          # Create comprehensive release proof
+          cat > "${TIMESTAMP_DIR}/release-proof.txt" << EOF
+          Strategickhaos Swarm Intelligence - Release Proof
+          ==================================================
+          
+          RELEASE INFORMATION
+          -------------------
+          Repository: ${{ github.repository }}
+          Release Tag: ${RELEASE_TAG}
+          Release Name: ${RELEASE_NAME}
+          Release URL: ${{ github.event.release.html_url }}
+          Created By: ${{ github.actor }}
+          Created At: ${{ github.event.release.created_at }}
+          
+          COMMIT INFORMATION
+          ------------------
+          Target Commit: ${{ github.sha }}
+          
+          HELM CHART
+          ----------
+          Chart Version: $(grep '^version:' charts/strategickhaos-swarm/Chart.yaml | awk '{print $2}')
+          App Version: $(grep '^appVersion:' charts/strategickhaos-swarm/Chart.yaml | awk '{print $2}' | tr -d '"')
+          
+          INTEGRITY
+          ---------
+          Helm Chart SHA256: $(sha256sum release/*.tgz | awk '{print $1}')
+          
+          LEGAL NOTICE
+          ------------
+          This release constitutes prior art for the Strategickhaos swarm intelligence
+          architecture. All innovations, patterns, and implementations contained herein
+          are timestamped to the Bitcoin blockchain via OpenTimestamps protocol.
+          
+          Verification: ots verify timestamps/releases/${RELEASE_TAG}/release-proof.ots
+          
+          © $(date +%Y) Strategickhaos DAO LLC - MIT License
+          EOF
+          
+          # Copy Helm chart to timestamp directory
+          cp release/*.tgz "${TIMESTAMP_DIR}/"
+          
+          # Generate OpenTimestamp proofs
+          ots stamp "${TIMESTAMP_DIR}/release-proof.txt"
+          ots stamp "${TIMESTAMP_DIR}/"*.tgz
+          
+          echo "📜 Release timestamp created for ${RELEASE_TAG}"
+          ls -la "${TIMESTAMP_DIR}/"
+
+      - name: Upload release timestamp artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-timestamp-${{ github.event.release.tag_name }}
+          path: timestamps/releases/
+          retention-days: 365
+
+      - name: Upload Helm chart to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/*.tgz
+            timestamps/releases/${{ github.event.release.tag_name }}/*.ots
+            timestamps/releases/${{ github.event.release.tag_name }}/release-proof.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "## 🚀 Release Timestamped & Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Release | \`${{ github.event.release.tag_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Chart Version | \`$(grep '^version:' charts/strategickhaos-swarm/Chart.yaml | awk '{print $2}')\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Timestamp | $(date -u +"%Y-%m-%d %H:%M:%S UTC") |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Helm chart packaged and attached to release" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ OpenTimestamps proof generated" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏳ Bitcoin anchor pending (~24 hours)" >> $GITHUB_STEP_SUMMARY
+
+  helm-publish:
+    name: Publish Helm Chart to OCI Registry
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    needs: timestamp-release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Login to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Package and Push Helm Chart
+        run: |
+          # Package the chart
+          helm package charts/strategickhaos-swarm
+          
+          # Push to OCI registry
+          helm push strategickhaos-swarm-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+          
+          echo "✅ Helm chart published to ghcr.io/${{ github.repository_owner }}/helm-charts"
+
+      - name: Summary
+        run: |
+          echo "## 📦 Helm Chart Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Install with:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "helm install swarm oci://ghcr.io/${{ github.repository_owner }}/helm-charts/strategickhaos-swarm" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

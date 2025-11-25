@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "strategickhaos-swarm.fullname" . }}-bot
+  labels:
+    {{- include "strategickhaos-swarm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: bot
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "strategickhaos-swarm.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: bot
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "strategickhaos-swarm.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: bot
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "strategickhaos-swarm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: discord-bot
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.bot.service.port }}
+              protocol: TCP
+          env:
+            - name: GITHUB_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "strategickhaos-swarm.fullname" . }}-github-app
+                  key: app-id
+                  optional: true
+            - name: GITHUB_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "strategickhaos-swarm.fullname" . }}-github-app
+                  key: webhook-secret
+                  optional: true
+            {{- if .Values.discord.enabled }}
+            - name: DISCORD_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "strategickhaos-swarm.fullname" . }}-discord
+                  key: bot-token
+                  optional: true
+            - name: DISCORD_GUILD_ID
+              value: {{ .Values.discord.guildId | quote }}
+            {{- end }}
+            {{- if .Values.aiAgents.enabled }}
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "strategickhaos-swarm.fullname" . }}-ai
+                  key: openai-api-key
+                  optional: true
+            - name: AI_MODEL
+              value: {{ .Values.aiAgents.model | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/strategickhaos
+              readOnly: true
+            - name: github-private-key
+              mountPath: /secrets/github
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.bot.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "strategickhaos-swarm.fullname" . }}-config
+        - name: github-private-key
+          secret:
+            secretName: {{ include "strategickhaos-swarm.fullname" . }}-github-app
+            items:
+              - key: private-key
+                path: private-key.pem
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
