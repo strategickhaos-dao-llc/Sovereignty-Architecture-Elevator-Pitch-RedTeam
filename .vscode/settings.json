@@ -1,7 +1,4 @@
 {
-  "// Strategickhaos Legions OS - VS Code Settings": "",
-  "// GitLens Integration for Visual Cognitive Governance": "",
-  
   "gitlens.hovers.enabled": true,
   "gitlens.blame.highlight.enabled": true,
   "gitlens.codeLens.enabled": true,
@@ -18,7 +15,6 @@
     "suppressShowKeyBindingsNotice": true
   },
   
-  "// Legion OS Custom Settings (read by extension if available)": "",
   "strategickhaos.legion.enabled": true,
   "strategickhaos.legion.visualize": {
     "proposals": "show as branches",
@@ -33,26 +29,22 @@
   },
   "strategickhaos.legion.kernelPath": ".strategickhaos/kernel",
   
-  "// Python settings for kernel development": "",
   "python.defaultInterpreterPath": "python3",
   "[python]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
   
-  "// TypeScript settings for Discord bot": "",
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   
-  "// YAML settings for configuration files": "",
   "[yaml]": {
     "editor.formatOnSave": true,
     "editor.tabSize": 2
   },
   
-  "// File associations": "",
   "files.associations": {
     "*.yml": "yaml",
     "*.yaml": "yaml"

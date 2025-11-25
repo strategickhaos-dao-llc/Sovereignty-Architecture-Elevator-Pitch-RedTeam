@@ -10,12 +10,14 @@ Git serves as the distributed brain - every commit is a thought, every branch is
 
 import json
 import os
+import re
 import socket
 import time
 import uuid
 import hashlib
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import yaml
 
@@ -119,6 +121,31 @@ class LegionKernel:
         timestamp = int(time.time() * 1000)
         random_suffix = uuid.uuid4().hex[:8]
         return f"prop-{timestamp}-{random_suffix}"
+    
+    def _validate_proposal_id(self, proposal_id: str) -> bool:
+        """
+        Validate that a proposal ID is safe and well-formed.
+        
+        Prevents path traversal attacks by ensuring the ID matches expected format.
+        
+        Args:
+            proposal_id: The proposal ID to validate
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        # Proposal IDs must match format: prop-{timestamp}-{hex}
+        pattern = r'^prop-\d+-[a-f0-9]+$'
+        if not re.match(pattern, proposal_id):
+            self._log("warning", f"Invalid proposal ID format: {proposal_id}")
+            return False
+        
+        # Additional check: ensure no path traversal characters
+        if '..' in proposal_id or '/' in proposal_id or '\\' in proposal_id:
+            self._log("warning", f"Path traversal attempt detected in proposal ID: {proposal_id}")
+            return False
+        
+        return True
     
     def _log(self, level: str, message: str) -> None:
         """Log a message to file and console."""
@@ -258,6 +285,10 @@ Veto power: {dept.get('veto_power', False)}
         Returns:
             True if vote was recorded successfully
         """
+        # Validate proposal ID to prevent path traversal
+        if not self._validate_proposal_id(proposal_id):
+            return False
+        
         proposal_file = self.proposals_path / f"{proposal_id}.json"
         
         if not proposal_file.exists():
@@ -308,6 +339,10 @@ Veto power: {dept.get('veto_power', False)}
         Returns:
             Dictionary with status, reason, and approval_rate
         """
+        # Validate proposal ID to prevent path traversal
+        if not self._validate_proposal_id(proposal_id):
+            return {"status": "invalid", "reason": f"Invalid proposal ID format: {proposal_id}"}
+        
         proposal_file = self.proposals_path / f"{proposal_id}.json"
         
         if not proposal_file.exists():
@@ -498,9 +533,23 @@ Veto power: {dept.get('veto_power', False)}
             self._log("warning", "Discord webhook not configured, skipping notification")
             return
         
+        # Validate webhook URL is a Discord webhook
+        parsed = urlparse(webhook_url)
+        if not (parsed.scheme == "https" and 
+                parsed.netloc in ("discord.com", "discordapp.com", "canary.discord.com", "ptb.discord.com") and
+                "/api/webhooks/" in parsed.path):
+            self._log("warning", "Invalid Discord webhook URL format, skipping notification")
+            return
+        
         if requests is None:
             self._log("warning", "requests not installed, skipping Discord notification")
             return
+        
+        # Truncate message to Discord's limit (2000 characters)
+        max_length = 2000
+        if len(message) > max_length:
+            message = message[:max_length - 3] + "..."
+            self._log("warning", "Message truncated to Discord's 2000 character limit")
         
         try:
             payload = {"content": message}
@@ -535,6 +584,10 @@ Veto power: {dept.get('veto_power', False)}
     
     def get_proposal(self, proposal_id: str) -> dict[str, Any] | None:
         """Get a specific proposal by ID."""
+        # Validate proposal ID to prevent path traversal
+        if not self._validate_proposal_id(proposal_id):
+            return None
+        
         proposal_file = self.proposals_path / f"{proposal_id}.json"
         
         if not proposal_file.exists():

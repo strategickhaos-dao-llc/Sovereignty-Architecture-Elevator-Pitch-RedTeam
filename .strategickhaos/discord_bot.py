@@ -21,6 +21,7 @@ Commands:
 import json
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -36,15 +37,23 @@ except ImportError:
     DISCORD_AVAILABLE = False
     print("Warning: discord.py not installed. Install with: pip install discord.py")
 
+_LEGION_KERNEL_IMPORT_ERROR: str | None = None
+
 try:
     from kernel.connect import LegionKernel
 except ImportError:
     # Try relative import if running from different directory
     try:
         from connect import LegionKernel
-    except ImportError:
-        print("Error: Cannot import LegionKernel. Ensure connect.py is in the kernel directory.")
-        LegionKernel = None  # type: ignore[misc, assignment]
+    except ImportError as e:
+        _LEGION_KERNEL_IMPORT_ERROR = str(e)
+        # Define a placeholder that will fail clearly if used
+        class LegionKernel:  # type: ignore[no-redef]
+            def __init__(self, *args: Any, **kwargs: Any) -> None:
+                raise RuntimeError(
+                    f"LegionKernel not available: {_LEGION_KERNEL_IMPORT_ERROR}. "
+                    "Ensure connect.py is in the kernel directory."
+                )
 
 
 class LegionDiscordBot:
@@ -265,7 +274,7 @@ class LegionDiscordBot:
             proposal["override"] = {
                 "by": str(ctx.author),
                 "action": action.lower(),
-                "timestamp": __import__("time").time()
+                "timestamp": time.time()
             }
             
             with open(proposal_file, "w") as f:
