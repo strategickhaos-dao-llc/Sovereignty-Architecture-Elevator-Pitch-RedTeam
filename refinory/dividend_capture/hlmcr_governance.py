@@ -77,7 +77,7 @@ class GovernanceConfig:
     
     # Audit settings
     log_all_decisions: bool = True
-    decision_retention_days: int = 2555
+    decision_retention_days: int = 2555  # ~7 years (IRS record retention requirement)
     
     # Emergency controls
     kill_switch_enabled: bool = True
