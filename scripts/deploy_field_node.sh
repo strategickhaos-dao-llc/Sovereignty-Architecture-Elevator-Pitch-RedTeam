@@ -166,8 +166,8 @@ if [[ "$SKIP_HARDWARE_CHECK" != "true" ]]; then
     section "PHASE 2: Hardware Validation"
     
     # Check for Raspberry Pi
-    if [[ -f /proc/device-tree/model ]]; then
-        MODEL=$(cat /proc/device-tree/model 2>/dev/null || echo "Unknown")
+    MODEL=$(cat /proc/device-tree/model 2>/dev/null || echo "")
+    if [[ -n "$MODEL" ]]; then
         log_success "Device: $MODEL"
     else
         log_warn "Device model not detected"

@@ -3,45 +3,57 @@
 # Classification: SOVEREIGN-ENCRYPTED
 # Requires: Yubikey 5C NFC + passphrase + TPM2 attestation
 
-# Read access to GHOST-7 configuration secrets
-path "secret/data/ghost7/*" {
-  capabilities = ["read", "update"]
+# Read-only access to GHOST-7 configuration secrets (default)
+path "secret/data/ghost7/config/*" {
+  capabilities = ["read"]
 }
 
-# Read access to cryptographic keys
+# Read access to cryptographic keys (most sensitive, read-only)
 path "secret/data/ghost7/keys/*" {
   capabilities = ["read"]
 }
 
-# Emergency access (requires MFA + dual approval)
+# Emergency access path - read-only
+# MFA Enforcement: This path requires additional MFA validation
+# Configure via: vault write sys/mfa/method/totp/ghost7-emergency ...
+# Bind via: vault write identity/mfa/login-enforcement/ghost7-emergency ...
 path "secret/data/ghost7/emergency/*" {
   capabilities = ["read"]
-  # Requires identity/mfa/method_id/totp
 }
 
-# Satellite uplink credentials
+# Satellite uplink credentials - read-only
 path "secret/data/ghost7/uplinks/*" {
   capabilities = ["read"]
 }
 
-# DAO identity and signing keys
-path "secret/data/ghost7/dao/*" {
+# DAO identity signing - requires update for key rotation
+path "secret/data/ghost7/dao/identity" {
+  capabilities = ["read"]
+}
+
+# DAO signing state - update allowed for state management
+path "secret/data/ghost7/dao/state" {
   capabilities = ["read", "update"]
 }
 
-# Temporal workflow secrets
+# Temporal workflow secrets - read-only
 path "secret/data/ghost7/temporal/*" {
   capabilities = ["read"]
 }
 
-# Legal entity credentials
+# Legal entity credentials - read-only
 path "secret/data/ghost7/legal/*" {
   capabilities = ["read"]
 }
 
-# Boot chain verification keys
+# Boot chain verification keys - read-only
 path "secret/data/ghost7/boot/*" {
   capabilities = ["read"]
+}
+
+# Resurrection state - update allowed for self-healing
+path "secret/data/ghost7/resurrection/state" {
+  capabilities = ["read", "update"]
 }
 
 # Auth token self-renewal

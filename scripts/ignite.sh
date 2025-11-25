@@ -180,7 +180,7 @@ validate_hardware() {
     fi
     
     # Check network interfaces
-    if ip link show wlan0 &>/dev/null 2>&1 || ip link show eth0 &>/dev/null 2>&1; then
+    if ip link show wlan0 &>/dev/null || ip link show eth0 &>/dev/null; then
         log_success "Network interfaces available"
     else
         log_warn "No network interfaces detected"
@@ -237,7 +237,7 @@ init_network() {
         starlink)
             log "Initializing Starlink Mini uplink..."
             # Check for Starlink interface
-            if ip link show eth1 &>/dev/null 2>&1; then
+            if ip link show eth1 &>/dev/null; then
                 log_success "Starlink interface detected"
             else
                 log_warn "Starlink interface not detected — waiting for dish alignment"
@@ -245,7 +245,7 @@ init_network() {
             ;;
         5g)
             log "Initializing Quectel 5G modem..."
-            if ip link show wwan0 &>/dev/null 2>&1; then
+            if ip link show wwan0 &>/dev/null; then
                 log_success "5G modem interface detected"
             else
                 log_warn "5G modem not detected"
@@ -264,7 +264,7 @@ init_network() {
     # Initialize mesh overlay
     if command -v tailscale &> /dev/null; then
         log "Connecting to Tailscale mesh..."
-        if tailscale status &>/dev/null 2>&1; then
+        if tailscale status &>/dev/null; then
             log_success "Tailscale connected"
         else
             log_warn "Tailscale not connected"
@@ -273,7 +273,7 @@ init_network() {
     
     if command -v nebula &> /dev/null; then
         log "Connecting to Nebula mesh..."
-        if systemctl is-active --quiet nebula 2>/dev/null; then
+        if systemctl is-active --quiet nebula; then
             log_success "Nebula connected"
         else
             log_warn "Nebula not running"
