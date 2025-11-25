@@ -278,7 +278,7 @@ Strategickhaos implements comprehensive intellectual property protection through
 
 - **[USPTO Filing Guide](legal/USPTO_FILING_GUIDE.md)** - Provisional patent filing procedures for micro-entities
 - **[GPG Signing Workflow](docs/GPG_SIGNING_WORKFLOW.md)** - Cryptographic document signing and verification
-- **[Wyoming SF0068 Research](legal/wyoming_sf0068/)** - DAO LLC formation legal framework
+- **[Wyoming SF0068 Research](legal/wyoming_sf0068/WYOMING_SF0068_RESEARCH_INDEX.md)** - DAO LLC formation legal framework
 
 ### Defensive Publication Pipeline
 

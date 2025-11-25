@@ -45,7 +45,7 @@ For prior art protection and proof of conception, ensure these are GPG-signed be
 ### Step 1: Prepare Account
 
 1. Navigate to [USPTO.gov](https://www.uspto.gov)
-2. Log in with your registered email (e.g., domenic.garza@snhu.edu)
+2. Log in with your registered USPTO account email
 3. Access **Patent Center** or **EFS-Web**
 
 ### Step 2: Create New Application
@@ -106,8 +106,7 @@ This guide is for informational purposes only and does not constitute legal advi
 
 ---
 
-**Contact**: domenic.garza@snhu.edu  
 **Entity**: Strategickhaos DAO LLC  
-**ORCID**: 0009-0005-2996-3526
+**Contact**: See [dao_record.yaml](../dao_record.yaml) for entity contact information
 
 *Document generated for USPTO provisional patent filing preparation.*

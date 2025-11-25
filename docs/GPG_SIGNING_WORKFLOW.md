@@ -63,7 +63,7 @@ The repository includes `hooks/require_gpg.sh` for automated verification:
 ./hooks/require_gpg.sh document.pdf.asc
 
 # Output on success:
-# ✅ Valid GPG signature from: Domenic Garza <domenic.garza@snhu.edu>
+# ✅ Valid GPG signature from: Signer Name <signer@example.com>
 #    File: document.pdf
 #    Signature: document.pdf.asc
 ```
@@ -194,4 +194,4 @@ This pattern enables parallel execution across:
 
 **Primary Key**: Contact repository owner for public key fingerprint  
 **Entity**: Strategickhaos DAO LLC  
-**Contact**: domenic.garza@snhu.edu
+**Contact**: See [dao_record.yaml](../dao_record.yaml) for entity contact information
