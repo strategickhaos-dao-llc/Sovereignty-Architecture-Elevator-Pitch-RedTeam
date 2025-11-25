@@ -21,6 +21,9 @@ jobs:
     name: Bitcoin Timestamp - Commit
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    permissions:
+      contents: read
+      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -88,6 +91,9 @@ jobs:
     name: Bitcoin Timestamp - Release
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
+    permissions:
+      contents: write
+      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -204,6 +210,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     needs: timestamp-release
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
