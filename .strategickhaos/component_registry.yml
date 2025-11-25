@@ -1,0 +1,76 @@
+# Strategickhaos Component Registry
+# This registry provides curated knowledge of system components for the Legal Firewall Engine
+# The engine uses this to determine capability coverage during gap analysis
+
+version: "1.0"
+
+components:
+  - id: manifests_charity
+    path: manifests/charity.yml
+    description: Rules for charitable allocation percentages and constraints.
+    capability_type: validator
+    tags: ["charity", "allocation", "policy"]
+    status: planned
+
+  - id: agents_risk_assessor
+    path: agents/risk_assessor.py
+    description: Agent performing pre-execution risk assessments for proposals.
+    capability_type: agent
+    tags: ["risk", "fiduciary"]
+    status: planned
+
+  - id: governance_kernel
+    path: .strategickhaos/kernel/connect.py
+    description: Strategickhaos Legions OS governance kernel (voting, veto, merging).
+    capability_type: governance_engine
+    tags: ["governance", "voting", "kernel"]
+    status: implemented
+
+  - id: audit_logger
+    path: logs/audit_pipeline.md
+    description: Design notes and implementation spec for append-only audit logging.
+    capability_type: logger
+    tags: ["audit", "transparency"]
+    status: planned
+
+  - id: access_matrix
+    path: governance/access_matrix.yaml
+    description: UPL-safe access control matrix for role-based permissions.
+    capability_type: validator
+    tags: ["access", "rbac", "permissions"]
+    status: implemented
+
+  - id: dao_record
+    path: dao_record.yaml
+    description: DAO company record with compliance and operational metadata.
+    capability_type: registry
+    tags: ["dao", "compliance", "registry"]
+    status: implemented
+
+  - id: discord_bot
+    path: src/bot.ts
+    description: Discord operations bot for command and control.
+    capability_type: integration
+    tags: ["discord", "communication", "bot"]
+    status: implemented
+
+  - id: event_gateway
+    path: src/event-gateway.ts
+    description: Webhook router for GitHub/GitLab to Discord channel routing.
+    capability_type: integration
+    tags: ["webhook", "events", "gateway"]
+    status: implemented
+
+  - id: refinory_orchestrator
+    path: refinory/refinory/orchestrator.py
+    description: AI agent orchestration for autonomous software architecture.
+    capability_type: agent
+    tags: ["ai", "orchestration", "architecture"]
+    status: implemented
+
+  - id: uidp_voting
+    path: uidp_vote.py
+    description: On-chain cognitive leap recording and UIDP.sol integration.
+    capability_type: governance_engine
+    tags: ["blockchain", "voting", "cognitive"]
+    status: implemented
