@@ -1,0 +1,61 @@
+# Fiduciary Duty Audit Agent
+# Source: IRS Notice 2023-14 + Utah DAO Act
+# Deployed by: Sovereign Compiler v1.0
+
+version: "1.0"
+name: "fiduciary_duty_audit_agent"
+description: "Swarm agent running weekly compliance scans for duty of care"
+
+configuration:
+  scan_interval_ms: 333
+  mode: "continuous"
+  ollama_node: true
+
+audit_rules:
+  duty_of_care:
+    description: "Members must act with reasonable care in managing DAO affairs"
+    source: "Utah DAO Act Section 48-5-105"
+    checks:
+      - "Reasonable diligence in decision-making"
+      - "Informed basis for major decisions"
+      - "Good faith belief in best interests of DAO"
+    
+  duty_of_loyalty:
+    description: "Members must not self-deal or usurp opportunities"
+    source: "Delaware LLC Act 6 Del. C. § 18-1104"
+    checks:
+      - "No undisclosed conflicts of interest"
+      - "No personal benefit at DAO expense"
+      - "Fair dealing in related-party transactions"
+    
+  duty_of_disclosure:
+    description: "Material information must be disclosed to members"
+    source: "IRS Notice 2023-14"
+    checks:
+      - "Financial statements available"
+      - "Major decisions communicated"
+      - "Conflict disclosures on record"
+
+compliance_scanning:
+  triggers:
+    - "New proposal submitted"
+    - "Treasury transaction > $10,000"
+    - "Member addition/removal"
+    - "Operating agreement amendment"
+  
+  actions_on_breach:
+    - "Flag transaction for review"
+    - "Notify governance council"
+    - "Generate compliance report"
+    - "Optionally pause execution"
+
+reporting:
+  format: "JSON"
+  storage: "IPFS + local"
+  retention_days: 365
+  weekly_summary: true
+
+integration:
+  governance_contracts: true
+  treasury_monitoring: true
+  proposal_system: true

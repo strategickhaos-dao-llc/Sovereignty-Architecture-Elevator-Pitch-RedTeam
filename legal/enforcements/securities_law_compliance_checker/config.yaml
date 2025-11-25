@@ -1,0 +1,103 @@
+# Securities Law Compliance Checker
+# Source: SEC v. LBRY + Marshall Islands DAO Law
+# Deployed by: Sovereign Compiler v1.0
+
+version: "1.0"
+name: "securities_law_compliance_checker"
+description: "Flags any token-like proposal with LBRY precedent quotes"
+
+configuration:
+  auto_check: true
+  block_on_violation: false
+  warn_on_risk: true
+
+howey_test_analysis:
+  components:
+    - name: "Investment of Money"
+      description: "Whether purchasers invested money or other consideration"
+      risk_indicators:
+        - "Token sale"
+        - "ICO/ITO"
+        - "Purchase required for access"
+        
+    - name: "Common Enterprise"
+      description: "Whether investors' fortunes are tied together"
+      risk_indicators:
+        - "Pooled funds"
+        - "Shared profits"
+        - "Token price dependency"
+        
+    - name: "Expectation of Profits"
+      description: "Whether purchasers expect profits"
+      risk_indicators:
+        - "Investment returns promised"
+        - "Token appreciation discussed"
+        - "Staking rewards"
+        
+    - name: "Efforts of Others"
+      description: "Whether profits depend on third party efforts"
+      risk_indicators:
+        - "Core team development"
+        - "Roadmap promises"
+        - "Centralized decision-making"
+
+safe_harbor_factors:
+  utility_token:
+    - "Functional at launch"
+    - "Used for governance only"
+    - "No profit expectation marketed"
+    - "Decentralized from inception"
+    
+  governance_token:
+    - "Voting rights only"
+    - "No economic rights"
+    - "No profit sharing"
+    - "Non-transferable or limited transfer"
+
+precedent_library:
+  sec_v_lbry:
+    citation: "SEC v. LBRY, Inc., Case No. 21-cv-260"
+    court: "D.N.H."
+    holding: "LBC tokens were securities under Howey test"
+    key_factors:
+      - "Sold to raise capital"
+      - "Buyers expected profits from LBRY's efforts"
+      - "LBRY controlled development"
+    lesson: "Utility alone doesn't defeat securities classification"
+    
+  sec_v_ripple:
+    citation: "SEC v. Ripple Labs Inc."
+    court: "S.D.N.Y."
+    holding: "Institutional sales were securities; programmatic sales were not"
+    key_factors:
+      - "Manner of sale matters"
+      - "Buyer sophistication relevant"
+      - "Secondary market sales differ"
+      
+  hinman_speech:
+    reference: "Director Hinman Speech (2018)"
+    key_point: "Sufficiently decentralized networks may not be securities"
+    caveat: "Not binding precedent, SEC has distanced"
+
+compliance_checks:
+  on_proposal:
+    - check: "Token issuance"
+      action: "Full Howey analysis"
+    - check: "Profit language"
+      action: "Flag for review"
+    - check: "Investment terminology"
+      action: "Require disclaimer"
+      
+  required_disclaimers:
+    - "This token does not represent an investment contract"
+    - "No expectation of profit from the efforts of others"
+    - "Token is for governance/utility purposes only"
+
+reporting:
+  format: "Compliance Report"
+  includes:
+    - "Howey test analysis"
+    - "Risk factors identified"
+    - "Precedent citations"
+    - "Recommendations"
+  storage: "IPFS + legal archive"

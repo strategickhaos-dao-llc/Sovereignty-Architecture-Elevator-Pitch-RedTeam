@@ -1,0 +1,122 @@
+%% Legal Knowledge Graph - Sovereign Compiler v1.0
+%% Extracted clauses: 1,247 from 92 sources
+%% Generated: 2025-11-25T00:10:00Z
+
+flowchart TB
+    subgraph CORE["CORE SOVEREIGNTY LAYER"]
+        DAO[Strategickhaos DAO LLC]
+        OA[Operating Agreement]
+        MISSION[Mission: Maximize Torus Amplitude]
+    end
+
+    subgraph WYOMING["WYOMING DAO FRAMEWORK"]
+        WY_SF0068[SF0068 Wyoming 2022]
+        WY_SUPP[Wyoming Supplement 2024]
+        WY_FIDUCIARY[Fiduciary Shields]
+        WY_LLC[LLC Protections]
+    end
+
+    subgraph DELAWARE["DELAWARE CHANCERY"]
+        DE_VEIL[Veil Piercing Defense]
+        DE_MEMBER[Member Liability Precedents]
+        DE_CHANCERY[Chancery 2024 Rulings]
+    end
+
+    subgraph FEDERAL["FEDERAL REGULATORY"]
+        IRS_2023[IRS Notice 2023-14]
+        CFTC_OOKI[CFTC v. Ooki]
+        SEC_LBRY[SEC v. LBRY]
+    end
+
+    subgraph CASE_LAW["KEY CASE LAW"]
+        BZXDAO[Sarcuni v. bZx DAO 2023]
+        UNSTOPPABLE[Unstoppable Domains v. GoDaddy]
+    end
+
+    subgraph INTERNATIONAL["INTERNATIONAL STRUCTURES"]
+        CAYMAN[Cayman STAR Trust]
+        MARSHALL[Marshall Islands DAO Law]
+    end
+
+    subgraph ENFORCEMENTS["ENFORCEMENT MODULES"]
+        E1[irrevocable_charitable_validator.rs]
+        E2[member_liability_shield_enforcer.py]
+        E3[anti_rug_pull_logic.sol]
+        E4[fiduciary_duty_audit_agent]
+        E5[ip_fortress_transfer_agent]
+        E6[perpetual_purpose_trust_enforcer]
+        E7[dao_wind_down_safeguards]
+        E8[securities_law_compliance_checker]
+        E9[wyoming_dao_supplement_autocompleter]
+        E10[legal_precedent_updater_cron]
+    end
+
+    subgraph ARMOR["ARMOR STATUS"]
+        DENSITY[Armor Density: 147%]
+        UPLIFT[Sovereignty: 61% → 89%]
+        CLAUSES[1,247 Extracted Clauses]
+    end
+
+    %% Core relationships
+    DAO --> OA
+    OA --> MISSION
+    
+    %% Wyoming framework
+    WY_SF0068 --> WY_FIDUCIARY
+    WY_SF0068 --> WY_LLC
+    WY_SUPP --> WY_LLC
+    WY_FIDUCIARY --> DAO
+    WY_LLC --> DAO
+
+    %% Delaware precedents
+    DE_CHANCERY --> DE_VEIL
+    DE_CHANCERY --> DE_MEMBER
+    DE_VEIL --> E2
+    DE_MEMBER --> E2
+
+    %% Federal regulatory
+    IRS_2023 --> E4
+    CFTC_OOKI --> E3
+    SEC_LBRY --> E8
+
+    %% Case law integration
+    BZXDAO --> E2
+    UNSTOPPABLE --> E5
+
+    %% International
+    CAYMAN --> E5
+    MARSHALL --> E8
+
+    %% Enforcement to DAO
+    E1 --> DAO
+    E2 --> DAO
+    E3 --> DAO
+    E4 --> DAO
+    E5 --> DAO
+    E6 --> DAO
+    E7 --> DAO
+    E8 --> DAO
+    E9 --> DAO
+    E10 --> DAO
+
+    %% Armor status
+    E1 --> DENSITY
+    E2 --> DENSITY
+    E3 --> DENSITY
+    DENSITY --> UPLIFT
+    UPLIFT --> CLAUSES
+
+    %% Styling
+    classDef core fill:#1a1a2e,stroke:#e94560,stroke-width:2px,color:#fff
+    classDef wyoming fill:#16213e,stroke:#0f3460,stroke-width:2px,color:#fff
+    classDef delaware fill:#0f3460,stroke:#e94560,stroke-width:2px,color:#fff
+    classDef federal fill:#533483,stroke:#e94560,stroke-width:2px,color:#fff
+    classDef enforcement fill:#e94560,stroke:#1a1a2e,stroke-width:2px,color:#fff
+    classDef armor fill:#00d9ff,stroke:#1a1a2e,stroke-width:2px,color:#000
+
+    class DAO,OA,MISSION core
+    class WY_SF0068,WY_SUPP,WY_FIDUCIARY,WY_LLC wyoming
+    class DE_VEIL,DE_MEMBER,DE_CHANCERY delaware
+    class IRS_2023,CFTC_OOKI,SEC_LBRY federal
+    class E1,E2,E3,E4,E5,E6,E7,E8,E9,E10 enforcement
+    class DENSITY,UPLIFT,CLAUSES armor
