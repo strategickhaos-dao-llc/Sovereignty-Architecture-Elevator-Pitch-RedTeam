@@ -39,3 +39,8 @@ workspace/
 # Sovereignty Stack verification artifacts
 .sovereignty_hashes.sha256
 .sovereignty_verification.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
