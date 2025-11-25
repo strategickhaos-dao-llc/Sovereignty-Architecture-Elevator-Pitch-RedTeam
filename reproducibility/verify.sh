@@ -145,8 +145,8 @@ verify_signatures() {
         ((SKIP_COUNT++))
     fi
     
-    # Count signed commits on main branch
-    local signed_commits=$(git log --oneline --show-signature main 2>/dev/null | grep -c "Good signature" || echo "0")
+    # Count signed commits on main branch (use --format='%G?' for reliable detection)
+    local signed_commits=$(git log --format='%G?' main 2>/dev/null | grep -c '^G$' || echo "0")
     local total_commits=$(git rev-list --count main 2>/dev/null || echo "0")
     
     log "DEBUG" "Signed commits: $signed_commits / $total_commits"
@@ -187,7 +187,7 @@ verify_dependencies() {
         log "DEBUG" "Python requirements files found"
         
         if command -v pip-audit &> /dev/null; then
-            if pip-audit -r requirements.txt &> /dev/null 2>&1; then
+            if pip-audit -r requirements.txt &> /dev/null; then
                 log "INFO" "pip audit passed"
                 ((PASS_COUNT++))
             else
@@ -255,7 +255,8 @@ generate_hashes() {
         
         for file in "${files[@]}"; do
             if [[ -f "$REPO_ROOT/$file" ]]; then
-                sha256sum "$REPO_ROOT/$file" | sed "s|$REPO_ROOT/||"
+                # Use awk for safer path replacement instead of sed with variable
+                sha256sum "$REPO_ROOT/$file" | awk -v root="$REPO_ROOT/" '{gsub(root, "", $2); print $1 "  " $2}'
             fi
         done
     } > "$HASH_FILE"
@@ -331,15 +332,11 @@ main() {
             ;;
     esac
     
-    # Print summary and exit
-    print_summary
-    
-    if [[ $FAIL_COUNT -gt 0 ]]; then
-        exit 1
-    elif [[ $PASS_COUNT -eq 0 ]] && [[ $SKIP_COUNT -gt 0 ]]; then
-        exit 0  # All skipped is OK for initial setup
-    else
+    # Print summary and exit based on its result
+    if print_summary; then
         exit 0
+    else
+        exit 1
     fi
 }
 
