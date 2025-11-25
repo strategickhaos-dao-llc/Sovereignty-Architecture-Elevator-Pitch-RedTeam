@@ -14,7 +14,7 @@ import json
 import hashlib
 from datetime import datetime
 from typing import Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass

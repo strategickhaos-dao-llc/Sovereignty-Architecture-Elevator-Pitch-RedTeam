@@ -40,7 +40,8 @@ contract AntiRugPullLogic is AccessControl, ReentrancyGuard {
     uint256 public dissolutionVotesFor;
     uint256 public dissolutionVotesAgainst;
     uint256 public dissolutionVoteDeadline;
-    mapping(address => bool) public hasVotedDissolution;
+    uint256 private _proposalNonce;  // Nonce to track proposal rounds
+    mapping(address => uint256) public voterNonce;  // Track which proposal round voter participated in
     
     // Asset registry
     address[] public registeredAssets;
@@ -128,6 +129,7 @@ contract AntiRugPullLogic is AccessControl, ReentrancyGuard {
 
     /**
      * @notice Propose dissolution with voting period
+     * @dev Resets voting state including previous voter records
      * @param votingPeriod Duration in seconds for voting
      */
     function proposeDissolution(uint256 votingPeriod) 
@@ -136,9 +138,11 @@ contract AntiRugPullLogic is AccessControl, ReentrancyGuard {
     {
         if (dissolved) revert AlreadyDissolved();
         
+        // Reset voting state including voter tracking
         dissolutionVotesFor = 0;
         dissolutionVotesAgainst = 0;
         dissolutionVoteDeadline = block.timestamp + votingPeriod;
+        _proposalNonce++;  // Increment nonce to invalidate previous votes
         
         emit DissolutionProposed(dissolutionVoteDeadline);
     }
@@ -151,9 +155,11 @@ contract AntiRugPullLogic is AccessControl, ReentrancyGuard {
         if (dissolutionVoteDeadline == 0 || block.timestamp > dissolutionVoteDeadline) {
             revert VotingNotActive();
         }
-        if (hasVotedDissolution[msg.sender]) revert AlreadyVoted();
+        // Check if voter already voted in current proposal round
+        if (voterNonce[msg.sender] == _proposalNonce) revert AlreadyVoted();
         
-        hasVotedDissolution[msg.sender] = true;
+        // Record vote for current proposal round
+        voterNonce[msg.sender] = _proposalNonce;
         
         if (inFavor) {
             dissolutionVotesFor++;
@@ -166,12 +172,15 @@ contract AntiRugPullLogic is AccessControl, ReentrancyGuard {
 
     /**
      * @notice Execute dissolution if approved
-     * @dev Transfers all registered assets to safe harbor
+     * @dev Transfers all registered assets to safe harbor. 
+     *      Dissolution requires strict majority (votesFor > votesAgainst).
+     *      Tie votes are treated as rejection to maintain status quo.
      */
     function executeDissolution() external nonReentrant onlyRole(GUARDIAN_ROLE) {
         if (dissolved) revert AlreadyDissolved();
         if (block.timestamp <= dissolutionVoteDeadline) revert VotingStillActive();
         
+        // Require strict majority: votesFor must exceed votesAgainst (tie = rejection)
         uint256 totalVotes = dissolutionVotesFor + dissolutionVotesAgainst;
         if (totalVotes == 0 || dissolutionVotesFor <= dissolutionVotesAgainst) {
             revert DissolutionRejected();
@@ -234,12 +243,15 @@ contract AntiRugPullLogic is AccessControl, ReentrancyGuard {
 
     /**
      * @notice Internal function to transfer all assets to safe harbor
+     * @dev Uses low-level call for ETH transfer to support both EOAs and contracts.
+     *      SafeHarbor address should be verified to accept ETH before deployment.
      */
     function _transferAllAssets() internal {
-        // Transfer ETH
+        // Transfer ETH using low-level call with sufficient gas
+        // This supports both EOAs and contracts with receive/fallback functions
         uint256 ethBalance = address(this).balance;
         if (ethBalance > 0) {
-            (bool success, ) = safeHarbor.call{value: ethBalance}("");
+            (bool success, ) = safeHarbor.call{value: ethBalance, gas: 100000}("");
             if (!success) revert TransferFailed();
             emit AssetTransferred(address(0), safeHarbor, ethBalance);
         }
