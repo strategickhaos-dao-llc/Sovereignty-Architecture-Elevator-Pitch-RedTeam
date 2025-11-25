@@ -182,6 +182,7 @@ PLAYLIST
 # ═══════════════════════════════════════════════════════════════════════════════
 generate_concat_file() {
     local concat_file="$LOG_DIR/concat_list.txt"
+    local queue_input="$1"
     
     log "Generating concatenation file..."
     
@@ -191,7 +192,13 @@ generate_concat_file() {
         if [[ -n "$video" && -f "$video" ]]; then
             echo "file '$video'" >> "$concat_file"
         fi
-    done
+    done <<< "$queue_input"
+    
+    # Verify the concat file has content
+    if [[ ! -s "$concat_file" ]]; then
+        log_error "No valid video files found in queue"
+        return 1
+    fi
     
     log_success "Concatenation file generated: $concat_file"
     echo "$concat_file"
@@ -365,7 +372,10 @@ main() {
             }
             
             local concat_file
-            concat_file=$(echo "$queue_output" | generate_concat_file)
+            concat_file=$(generate_concat_file "$queue_output") || {
+                log_error "Failed to generate concat file"
+                exit 1
+            }
             
             start_stream "$concat_file"
             ;;
