@@ -409,11 +409,16 @@ operations:
 # METADATA
 # =============================================================================
 metadata:
-  created: "2025-11-25"
-  last_updated: "2025-11-25"
+  # Note: Update these dates when modifying this configuration
+  created: "REPLACE_WITH_CREATION_DATE"
+  last_updated: "REPLACE_WITH_UPDATE_DATE"
   version: "2.0.0"
   author: "Strategickhaos DAO Series LLC"
   classification: "sovereign_operations"
+  
+  # Dates should be updated during deployment via:
+  # sed -i "s/REPLACE_WITH_CREATION_DATE/$(date +%Y-%m-%d)/" quantum_defense_config.yaml
+  # sed -i "s/REPLACE_WITH_UPDATE_DATE/$(date +%Y-%m-%d)/" quantum_defense_config.yaml
   
   review_schedule:
     quarterly: "algorithm_assessment"

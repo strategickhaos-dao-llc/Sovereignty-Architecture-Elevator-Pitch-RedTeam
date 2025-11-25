@@ -221,7 +221,8 @@ check_prerequisites() {
     
     # Check for YubiKey (optional but recommended)
     if command -v ykman &> /dev/null; then
-        if ykman list 2>/dev/null | grep -q "YubiKey"; then
+        # Use ykman info for more reliable detection
+        if ykman info &>/dev/null; then
             log_success "YubiKey detected"
         else
             log_warn "YubiKey not connected (recommended for mode: $MODE)"
@@ -298,10 +299,14 @@ initialize_security() {
         return
     fi
     
-    # Generate session entropy
+    # Generate session entropy using secure temporary file
     log_info "Generating session entropy..."
-    local entropy_file="/tmp/.field_node_entropy_$$"
+    local entropy_file
+    entropy_file=$(mktemp -t field_node_entropy.XXXXXX)
+    chmod 600 "$entropy_file"
     dd if=/dev/urandom bs=256 count=1 2>/dev/null | base64 > "$entropy_file"
+    # Set up trap to clean up entropy file on exit
+    trap 'rm -f "$entropy_file"' EXIT
     
     # Initialize PQC if enabled
     if [[ "$PQC_ENABLED" == "true" ]]; then
