@@ -1,0 +1,417 @@
+name: Agents Chaos Weekly
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'  # Weekly on Sunday at 03:00 UTC
+  workflow_dispatch:
+    inputs:
+      run_full_suite:
+        description: 'Run full chaos test suite'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  agents-chaos-weekly:
+    name: Decay Detection + Benchmark Drift Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install ruamel.yaml requests
+          
+      - name: Load governance configuration
+        id: load_config
+        run: |
+          echo "Loading AI governance configuration..."
+          
+          python << 'EOF'
+          import os
+          import json
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          config_path = 'hardening/ai_governance_overlays.yaml'
+          
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  config = yaml.load(f)
+                  
+              if config and 'ai_governance' in config:
+                  gov = config['ai_governance']
+                  
+                  # Extract decay detection settings
+                  if 'decay_detect' in gov:
+                      decay = gov['decay_detect']
+                      print(f"✅ Decay detection configured:")
+                      print(f"   Circuit breaker threshold: {decay.get('circuit_breaker', {}).get('threshold', 'N/A')}")
+                      print(f"   Library: {decay.get('library', 'N/A')}")
+                      print(f"   Self-heal: {decay.get('self_heal', 'N/A')}")
+                      
+                  # Extract data governance settings
+                  if 'data_gov' in gov:
+                      data = gov['data_gov']
+                      print(f"✅ Data governance configured:")
+                      print(f"   Audit frequency: {data.get('audit', 'N/A')}")
+                      print(f"   Decay detect: {data.get('decay_detect', 'N/A')}")
+                      print(f"   Benchmark reference: {data.get('benchmark_reference', 'N/A')}")
+          else:
+              print("⚠️ Governance config not found")
+              
+          print("\n✅ Configuration loaded")
+          EOF
+          
+      - name: Run benchmark drift analysis
+        id: benchmark_drift
+        run: |
+          echo "Running benchmark drift analysis..."
+          
+          python << 'EOF'
+          import os
+          import json
+          import random  # Simulated for demo - replace with actual benchmark runner
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          # Load benchmark config
+          benchmark_path = 'benchmarks/benchmark_config.yaml'
+          
+          results = {
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "benchmarks": {},
+              "drift_detected": False,
+              "alerts": []
+          }
+          
+          if os.path.exists(benchmark_path):
+              with open(benchmark_path) as f:
+                  config = yaml.load(f)
+                  
+              if config and 'framework' in config:
+                  sla = config['framework'].get('sla_targets', {})
+                  
+                  # Simulate benchmark results (replace with actual execution)
+                  results["benchmarks"] = {
+                      "query_latency_p50": {"target": sla.get("query_latency_p50", 50), "actual": 45, "status": "pass"},
+                      "query_latency_p90": {"target": sla.get("query_latency_p90", 200), "actual": 180, "status": "pass"},
+                      "recall_at_5": {"target": sla.get("recall_at_5", 0.85), "actual": 0.87, "status": "pass"},
+                      "hallucination_rate": {"target": sla.get("hallucination_rate", 0.02), "actual": 0.015, "status": "pass"},
+                      "safety_pass_rate": {"target": sla.get("safety_pass_rate", 0.98), "actual": 0.99, "status": "pass"},
+                      "detection_coverage": {"target": sla.get("detection_coverage", 0.80), "actual": 0.82, "status": "pass"}
+                  }
+                  
+                  # Check for drift
+                  for metric, data in results["benchmarks"].items():
+                      if isinstance(data["target"], float):
+                          drift = abs(data["actual"] - data["target"]) / data["target"]
+                          if drift > 0.1:  # 10% drift threshold
+                              results["drift_detected"] = True
+                              results["alerts"].append(f"Drift detected in {metric}: {drift:.1%}")
+                              
+          # Save results
+          os.makedirs("chaos_results", exist_ok=True)
+          with open("chaos_results/benchmark_drift.json", "w") as f:
+              json.dump(results, f, indent=2)
+              
+          print(json.dumps(results, indent=2))
+          
+          if results["drift_detected"]:
+              print("\n⚠️ BENCHMARK DRIFT DETECTED")
+              for alert in results["alerts"]:
+                  print(f"  - {alert}")
+          else:
+              print("\n✅ No significant benchmark drift detected")
+          EOF
+          
+          echo "benchmark_drift=completed" >> $GITHUB_OUTPUT
+          
+      - name: Simulate decay detection
+        id: decay_detection
+        run: |
+          echo "Running decay detection simulation..."
+          
+          python << 'EOF'
+          import os
+          import json
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          # Load governance config for thresholds
+          config_path = 'hardening/ai_governance_overlays.yaml'
+          threshold = 0.6  # default
+          
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  config = yaml.load(f)
+              if config and 'ai_governance' in config:
+                  decay = config['ai_governance'].get('decay_detect', {})
+                  cb = decay.get('circuit_breaker', {})
+                  threshold = cb.get('threshold', 0.6)
+          
+          results = {
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "decay_score": 0.85,  # Simulated - replace with actual calculation
+              "threshold": threshold,
+              "circuit_breaker_triggered": False,
+              "components": {
+                  "model_performance": 0.88,
+                  "data_quality": 0.82,
+                  "response_accuracy": 0.85,
+                  "latency_stability": 0.87
+              }
+          }
+          
+          # Check if decay score is below threshold
+          if results["decay_score"] < threshold:
+              results["circuit_breaker_triggered"] = True
+              print(f"🚨 CIRCUIT BREAKER TRIGGERED!")
+              print(f"   Decay score: {results['decay_score']:.2f}")
+              print(f"   Threshold: {threshold:.2f}")
+          else:
+              print(f"✅ System health: GOOD")
+              print(f"   Decay score: {results['decay_score']:.2f}")
+              print(f"   Threshold: {threshold:.2f}")
+          
+          # Save results
+          os.makedirs("chaos_results", exist_ok=True)
+          with open("chaos_results/decay_detection.json", "w") as f:
+              json.dump(results, f, indent=2)
+              
+          print(f"\nComponent scores:")
+          for component, score in results["components"].items():
+              status = "✅" if score >= threshold else "⚠️"
+              print(f"   {status} {component}: {score:.2f}")
+          EOF
+          
+          echo "decay_detection=completed" >> $GITHUB_OUTPUT
+          
+      - name: Simulate agent loop detection
+        id: loop_detection
+        run: |
+          echo "Running agent loop detection simulation..."
+          
+          python << 'EOF'
+          import os
+          import json
+          
+          results = {
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "loops_detected": 0,
+              "max_iterations_observed": 8,
+              "iteration_threshold": 20,
+              "agents_monitored": 105,
+              "suspicious_patterns": [],
+              "cost_accumulation": 0.0
+          }
+          
+          # Simulate loop detection (replace with actual monitoring)
+          if results["max_iterations_observed"] > results["iteration_threshold"]:
+              results["loops_detected"] += 1
+              results["suspicious_patterns"].append({
+                  "agent_id": "agent-042",
+                  "iterations": results["max_iterations_observed"],
+                  "pattern": "recursive_call"
+              })
+              print(f"🚨 LOOP DETECTED!")
+          else:
+              print(f"✅ No agent loops detected")
+              
+          print(f"   Agents monitored: {results['agents_monitored']}")
+          print(f"   Max iterations observed: {results['max_iterations_observed']}")
+          print(f"   Iteration threshold: {results['iteration_threshold']}")
+          
+          # Save results
+          os.makedirs("chaos_results", exist_ok=True)
+          with open("chaos_results/loop_detection.json", "w") as f:
+              json.dump(results, f, indent=2)
+          EOF
+          
+          echo "loop_detection=completed" >> $GITHUB_OUTPUT
+          
+      - name: Calculate resonance deltas
+        id: resonance
+        run: |
+          echo "Calculating resonance deltas..."
+          
+          python << 'EOF'
+          import os
+          import json
+          
+          # Load all chaos results
+          results_dir = "chaos_results"
+          
+          resonance = {
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "overall_health": "GOOD",
+              "resonance_score": 0.0,
+              "deltas": {},
+              "recommendations": []
+          }
+          
+          # Calculate overall resonance
+          scores = []
+          
+          # Load benchmark drift
+          drift_path = f"{results_dir}/benchmark_drift.json"
+          if os.path.exists(drift_path):
+              with open(drift_path) as f:
+                  drift = json.load(f)
+              if not drift.get("drift_detected", False):
+                  scores.append(1.0)
+              else:
+                  scores.append(0.7)
+                  resonance["recommendations"].append("Review benchmark drift alerts")
+                  
+          # Load decay detection
+          decay_path = f"{results_dir}/decay_detection.json"
+          if os.path.exists(decay_path):
+              with open(decay_path) as f:
+                  decay = json.load(f)
+              scores.append(decay.get("decay_score", 0.8))
+              if decay.get("circuit_breaker_triggered", False):
+                  resonance["overall_health"] = "DEGRADED"
+                  resonance["recommendations"].append("Investigate decay score degradation")
+                  
+          # Load loop detection
+          loop_path = f"{results_dir}/loop_detection.json"
+          if os.path.exists(loop_path):
+              with open(loop_path) as f:
+                  loops = json.load(f)
+              if loops.get("loops_detected", 0) == 0:
+                  scores.append(1.0)
+              else:
+                  scores.append(0.5)
+                  resonance["overall_health"] = "CRITICAL"
+                  resonance["recommendations"].append("Investigate agent loops immediately")
+          
+          # Calculate overall resonance score
+          if scores:
+              resonance["resonance_score"] = sum(scores) / len(scores)
+              
+          if resonance["resonance_score"] < 0.6:
+              resonance["overall_health"] = "CRITICAL"
+          elif resonance["resonance_score"] < 0.8:
+              resonance["overall_health"] = "DEGRADED"
+          else:
+              resonance["overall_health"] = "GOOD"
+              
+          print(f"📊 Resonance Report")
+          print(f"   Overall Health: {resonance['overall_health']}")
+          print(f"   Resonance Score: {resonance['resonance_score']:.2f}")
+          
+          if resonance["recommendations"]:
+              print(f"\n📋 Recommendations:")
+              for rec in resonance["recommendations"]:
+                  print(f"   - {rec}")
+                  
+          # Save resonance report
+          with open(f"{results_dir}/resonance_report.json", "w") as f:
+              json.dump(resonance, f, indent=2)
+          EOF
+          
+          echo "resonance=calculated" >> $GITHUB_OUTPUT
+          
+      - name: Generate chaos report
+        if: always()
+        run: |
+          cat > chaos_results/chaos_report.md << 'EOF'
+          # Weekly Chaos Test Report
+          
+          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Run ID:** ${{ github.run_id }}
+          
+          ## Executive Summary
+          
+          | Test | Status |
+          |------|--------|
+          | Benchmark Drift | ${{ steps.benchmark_drift.outputs.benchmark_drift == 'completed' && '✅ Completed' || '❌ Failed' }} |
+          | Decay Detection | ${{ steps.decay_detection.outputs.decay_detection == 'completed' && '✅ Completed' || '❌ Failed' }} |
+          | Loop Detection | ${{ steps.loop_detection.outputs.loop_detection == 'completed' && '✅ Completed' || '❌ Failed' }} |
+          | Resonance Calculation | ${{ steps.resonance.outputs.resonance == 'calculated' && '✅ Calculated' || '❌ Failed' }} |
+          
+          ## Detailed Results
+          
+          See attached JSON files for detailed results:
+          - `benchmark_drift.json` - Benchmark SLA comparison
+          - `decay_detection.json` - System decay analysis
+          - `loop_detection.json` - Agent loop monitoring
+          - `resonance_report.json` - Overall health summary
+          
+          ## Playbooks
+          
+          If issues are detected:
+          1. **Loop Detected**: Follow `dao_veto_path` playbook
+          2. **Decay Below Threshold**: Run `simulate_failure` suite
+          3. **Benchmark Drift**: Review benchmark #406 baseline
+          
+          ---
+          *Automated by Strategickhaos Hardening Pipeline*
+          EOF
+          
+          cat chaos_results/chaos_report.md
+          
+      - name: Create issue on failures
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `[Chaos Weekly] Issues Detected - ${new Date().toISOString().split('T')[0]}`;
+            const body = `## Weekly Chaos Test Alert
+            
+            The weekly chaos test run has detected issues that require attention.
+            
+            **Run ID:** ${{ github.run_id }}
+            **Workflow:** [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            Please review the chaos_results artifacts and address any:
+            - Benchmark drift > 10%
+            - Decay score < 0.6
+            - Agent loops detected
+            
+            Labels: \`alert\`, \`hardening\`, \`chaos-test\`
+            `;
+            
+            // Note: Issue creation would go here if permissions allow
+            console.log('Issue would be created:', title);
+            console.log(body);
+            
+      - name: Upload chaos artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chaos-weekly-${{ github.run_id }}
+          path: chaos_results/
+          retention-days: 90

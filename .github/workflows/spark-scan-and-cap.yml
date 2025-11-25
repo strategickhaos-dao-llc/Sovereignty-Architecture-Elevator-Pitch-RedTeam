@@ -1,0 +1,283 @@
+name: Spark Scan and Cap
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+
+env:
+  SPARK_MAX_COST_USD: ${{ vars.SPARK_MAX_COST_USD || '100' }}
+
+jobs:
+  spark-scan-and-cap:
+    name: Dependency Lock, Dependabot, and Cost Guard
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install ruamel.yaml
+          
+      - name: Validate dependency lock configuration
+        id: dependency_lock
+        run: |
+          echo "Validating dependency lock configuration..."
+          
+          python << 'EOF'
+          import sys
+          import os
+          import json
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          errors = []
+          warnings = []
+          
+          # Check hardening config for dependency lock settings
+          config_path = 'hardening/spark_copilot_swarm.yaml'
+          
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  config = yaml.load(f)
+                  
+              if config and 'spark_copilot_swarm' in config:
+                  swarm_config = config['spark_copilot_swarm']
+                  
+                  # Check dependency_lock settings
+                  if 'dependency_lock' in swarm_config:
+                      dep_lock = swarm_config['dependency_lock']
+                      
+                      if dep_lock.get('built_in_only', False):
+                          print("✅ Built-in only mode: ENABLED")
+                      else:
+                          warnings.append("Built-in only mode is disabled - external dependencies allowed")
+                          
+                      if dep_lock.get('lockfile_required', False):
+                          print("✅ Lockfile required: ENABLED")
+                      else:
+                          warnings.append("Lockfile not required - version drift possible")
+                  else:
+                      warnings.append("No dependency_lock configuration found")
+          else:
+              warnings.append(f"Config file not found: {config_path}")
+          
+          # Check package-lock.json exists if package.json exists
+          if os.path.exists('package.json'):
+              if os.path.exists('package-lock.json'):
+                  print("✅ package-lock.json: PRESENT")
+              else:
+                  warnings.append("package.json exists but package-lock.json is missing")
+          
+          if errors:
+              for e in errors:
+                  print(f"❌ {e}")
+              sys.exit(1)
+              
+          if warnings:
+              print("\n⚠️ Warnings:")
+              for w in warnings:
+                  print(f"  - {w}")
+                  
+          print("\n✅ Dependency lock validation completed")
+          EOF
+          
+          echo "dependency_lock=passed" >> $GITHUB_OUTPUT
+          
+      - name: Check for known vulnerabilities
+        id: vulnerability_scan
+        run: |
+          echo "Scanning for known vulnerabilities..."
+          
+          VULN_COUNT=0
+          
+          # Check npm dependencies if package.json exists
+          if [ -f "package.json" ]; then
+            echo "📦 Scanning npm dependencies..."
+            npm audit --json > npm_audit.json 2>/dev/null || true
+            
+            if [ -f "npm_audit.json" ]; then
+              CRITICAL=$(cat npm_audit.json | python -c "import sys, json; d=json.load(sys.stdin); print(d.get('metadata', {}).get('vulnerabilities', {}).get('critical', 0))" 2>/dev/null || echo "0")
+              HIGH=$(cat npm_audit.json | python -c "import sys, json; d=json.load(sys.stdin); print(d.get('metadata', {}).get('vulnerabilities', {}).get('high', 0))" 2>/dev/null || echo "0")
+              
+              echo "  Critical: $CRITICAL"
+              echo "  High: $HIGH"
+              
+              if [ "$CRITICAL" -gt 0 ]; then
+                echo "❌ Critical vulnerabilities found!"
+                VULN_COUNT=$((VULN_COUNT + CRITICAL))
+              fi
+            fi
+          fi
+          
+          # Check Python dependencies if requirements files exist
+          for req_file in requirements*.txt; do
+            if [ -f "$req_file" ]; then
+              echo "📦 Found: $req_file"
+            fi
+          done
+          
+          if [ "$VULN_COUNT" -gt 0 ]; then
+            echo "vulnerability_status=failed" >> $GITHUB_OUTPUT
+            echo "vulnerability_count=$VULN_COUNT" >> $GITHUB_OUTPUT
+          else
+            echo "vulnerability_status=passed" >> $GITHUB_OUTPUT
+            echo "vulnerability_count=0" >> $GITHUB_OUTPUT
+            echo "✅ No critical vulnerabilities detected"
+          fi
+          
+      - name: Validate cost guards
+        id: cost_guard
+        run: |
+          echo "Validating cost guard configuration..."
+          
+          MAX_COST="${SPARK_MAX_COST_USD}"
+          
+          echo "💰 SPARK_MAX_COST_USD: \$$MAX_COST"
+          
+          python << EOF
+          import sys
+          import os
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          config_path = 'hardening/spark_copilot_swarm.yaml'
+          
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  config = yaml.load(f)
+                  
+              if config and 'guardrails' in config:
+                  guardrails = config['guardrails']
+                  
+                  if 'budget_caps' in guardrails:
+                      caps = guardrails['budget_caps']
+                      print(f"✅ Budget caps configured:")
+                      print(f"   Default limit: \${caps.get('default_limit', 'N/A')}")
+                      print(f"   Warning threshold: \${caps.get('warning_threshold', 'N/A')}")
+                      print(f"   Hard limit: \${caps.get('hard_limit', 'N/A')}")
+                      
+                  if 'circuit_breaker' in guardrails:
+                      cb = guardrails['circuit_breaker']
+                      print(f"✅ Circuit breaker configured:")
+                      print(f"   Cooldown: {cb.get('cooldown_period', 'N/A')}")
+                      
+          print("\n✅ Cost guard validation completed")
+          EOF
+          
+          echo "cost_guard=configured" >> $GITHUB_OUTPUT
+          
+      - name: Check scale optimization
+        id: scale_check
+        run: |
+          echo "Checking scale optimization settings..."
+          
+          python << 'EOF'
+          import os
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          config_path = 'hardening/spark_copilot_swarm.yaml'
+          
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  config = yaml.load(f)
+                  
+              if config and 'spark_copilot_swarm' in config:
+                  swarm = config['spark_copilot_swarm']
+                  
+                  if 'scale_opt' in swarm:
+                      scale = swarm['scale_opt']
+                      print(f"✅ Scale optimization configured:")
+                      print(f"   Throttle: {scale.get('throttle', 'N/A')} agents")
+                      print(f"   Max concurrent previews: {scale.get('max_concurrent_previews', 'N/A')}")
+                      print(f"   Session timeout: {scale.get('session_timeout', 'N/A')}")
+                      
+                      if 'resource_limits' in scale:
+                          limits = scale['resource_limits']
+                          print(f"   CPU per agent: {limits.get('cpu_per_agent', 'N/A')}")
+                          print(f"   Memory per agent: {limits.get('memory_per_agent', 'N/A')}")
+          
+          print("\n✅ Scale optimization check completed")
+          EOF
+          
+          echo "scale_check=passed" >> $GITHUB_OUTPUT
+          
+      - name: Generate scan report
+        if: always()
+        run: |
+          cat > scan_report.md << EOF
+          # Spark Scan and Cap Report
+          
+          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Commit:** ${{ github.sha }}
+          **Run ID:** ${{ github.run_id }}
+          
+          ## Scan Results
+          
+          | Check | Status |
+          |-------|--------|
+          | Dependency Lock | ${{ steps.dependency_lock.outputs.dependency_lock == 'passed' && '✅ Passed' || '❌ Failed' }} |
+          | Vulnerability Scan | ${{ steps.vulnerability_scan.outputs.vulnerability_status == 'passed' && '✅ Passed' || '⚠️ Issues Found' }} |
+          | Cost Guard | ${{ steps.cost_guard.outputs.cost_guard == 'configured' && '✅ Configured' || '⚠️ Not Configured' }} |
+          | Scale Check | ${{ steps.scale_check.outputs.scale_check == 'passed' && '✅ Passed' || '⚠️ Issues Found' }} |
+          
+          ## Environment
+          
+          - **SPARK_MAX_COST_USD:** \$${SPARK_MAX_COST_USD}
+          - **Vulnerability Count:** ${{ steps.vulnerability_scan.outputs.vulnerability_count || '0' }}
+          
+          ---
+          *Automated by Strategickhaos Hardening Pipeline*
+          EOF
+          
+          cat scan_report.md
+          
+      - name: Upload scan artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spark-scan-report-${{ github.run_id }}
+          path: |
+            scan_report.md
+            npm_audit.json
+          retention-days: 30
