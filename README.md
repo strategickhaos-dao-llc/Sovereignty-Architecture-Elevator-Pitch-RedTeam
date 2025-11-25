@@ -280,6 +280,21 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🧠 Cognitive Psychology Framework
+
+The psychological blueprint behind the Strategickhaos cognitive architecture — real cognitive science terminology mapping human-AI collaboration.
+
+- **[Cognitive Psychology Framework](COGNITIVE_PSYCHOLOGY_FRAMEWORK.md)** - The 12 psychological terms with full breakdowns
+- **[Cognitive Flashcards](COGNITIVE_FLASHCARDS.md)** - Quick reference cards for mastery
+- **[Cognitive Cheatsheet](COGNITIVE_CHEATSHEET.md)** - One-page summary reference
+- **[Cognitive Architecture Mapping](COGNITIVE_ARCHITECTURE_MAPPING.md)** - Neuroscience-to-system mapping
+- **[Cognitive Mastery Curriculum](COGNITIVE_MASTERY_CURRICULUM.md)** - 12-week mastery path
+
+**The 12 Core Concepts:**
+1. Meta-cognition | 2. Hyper-associative reasoning | 3. Distributed cognition | 4. Intentionality engineering
+5. Emergent problem framing | 6. Systems-level abstraction | 7. Recursive self-modeling | 8. Synthetic cognition
+9. Pattern completion | 10. Parallel processing | 11. Embodied cognition | 12. Cognitive convergence
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
