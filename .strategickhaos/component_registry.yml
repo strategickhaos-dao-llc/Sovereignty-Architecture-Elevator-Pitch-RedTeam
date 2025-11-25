@@ -1,0 +1,50 @@
+# Strategickhaos Component Registry
+# Central registry for all components in the Strategickhaos ecosystem
+
+version: "1.0"
+last_updated: "2025-11-25T00:00:00Z"
+
+components:
+  - id: legal-firewall
+    name: "Legal Firewall Generator"
+    description: "LB-GSE engine for generating legal compliance firewalls"
+    status: in_progress
+    module_path: legal_firewall/
+    entry_point: legal_firewall/generator.py
+    cli_command: firewall
+    dependencies:
+      - llm_provider
+      - regex_engine
+    outputs:
+      - gap_analysis_report
+      - capability_mapping
+    
+  - id: governance-kernel
+    name: "Strategickhaos Legions OS"
+    description: "Governance kernel for DAO operations and proposal management"
+    status: in_progress
+    module_path: governance/
+    features:
+      - proposal_branches
+      - voting_logic
+      - quorum_rules
+    integrations:
+      - discord_bot
+      - auto_execution_daemon
+
+  - id: lb-gse-docs
+    name: "LB-GSE Methodology Documentation"
+    description: "Documentation for the Learn-Build-Govern-Scale-Evolve methodology"
+    status: in_progress
+    artifacts:
+      - conceptual_overview
+      - implementation_guide
+      - rubric_alignment
+
+hooks:
+  - name: gap_to_governance
+    description: "Auto-feed identified gaps into governance kernel proposals"
+    source: legal-firewall
+    target: governance-kernel
+    trigger: on_gap_detected
+    status: planned
