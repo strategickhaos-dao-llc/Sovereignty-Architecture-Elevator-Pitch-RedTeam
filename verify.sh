@@ -11,11 +11,22 @@ if ! command -v sha256sum >/dev/null; then
     exit 1
 fi
 
+if ! command -v yq >/dev/null; then
+    echo "❌ yq not available (install via: brew install yq or snap install yq)"
+    exit 1
+fi
+
 missing=0
-while IFS=: read -r key value; do
-    [[ $key =~ ^[[:space:]]*path ]] && path="${value//\"/}" && continue
-    [[ $key =~ ^[[:space:]]*sha256 ]] || continue
-    expected="${value//\"/}"
+count=$(yq e '.artifacts | length' reproducibility_manifest.yml)
+
+for ((i=0; i<count; i++)); do
+    path=$(yq e ".artifacts[$i].path" reproducibility_manifest.yml -r)
+    expected=$(yq e ".artifacts[$i].sha256" reproducibility_manifest.yml -r)
+    
+    if [[ -z "$path" || "$path" == "null" ]]; then
+        continue
+    fi
+    
     actual=$(sha256sum "$path" 2>/dev/null | awk '{print $1}')
     
     if [[ "$actual" == "$expected" ]]; then
@@ -24,7 +35,7 @@ while IFS=: read -r key value; do
         echo "✗ $path (expected $expected, got $actual)"
         ((missing++))
     fi
-done < <(yq e '.artifacts[] | .path, .sha256' reproducibility_manifest.yml -r)
+done
 
 echo "------------------------------------------------"
 if [[ $missing -eq 0 ]]; then

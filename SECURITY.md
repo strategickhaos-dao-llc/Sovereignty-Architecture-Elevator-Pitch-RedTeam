@@ -25,7 +25,7 @@ declined, etc.
 SACSE operates under a formally defined threat model assuming a capable adversary able to attempt:  
 (a) private key compromise, (b) supply-chain or model-poisoning attacks against LLM inference endpoints, (c) repository compromise via stolen credentials or CI/CD subversion, and (d) network-level interception or replay.
 
-Mitigations currently deployed or scheduled for v1.1 (December 2025):  
+Mitigations currently deployed or scheduled for v1.1 (planned December 2025):  
 - All primary GPG keys stored offline on YubiKey 5 FIPS hardware security modules; daily subkeys only touch internet-connected devices.  
 - LLM inference executed exclusively via local Ollama instances (qwen2.5:72b, llama3.3:405b) with reproducible model hashes; cloud endpoints used only under explicit, signed HITL override.  
 - All CI/CD pipelines disabled; every commit manually GPG-signed; merge-to-main requires detached signature verification.  
