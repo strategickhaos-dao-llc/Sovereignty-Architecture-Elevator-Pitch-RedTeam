@@ -31,6 +31,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
+# Set up logging
+import logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
+
 # -----------------------------------------------------------------------------
 # Configuration
 # -----------------------------------------------------------------------------
@@ -98,6 +103,9 @@ def load_config(config_path: str = DEFAULT_CONFIG_PATH) -> Dict[str, Any]:
         with open(config_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     except FileNotFoundError:
+        logger.warning(
+            f"Configuration file '{config_path}' not found. Using default configuration."
+        )
         return get_default_config()
 
 
@@ -242,7 +250,8 @@ def annotate_content(
     annotated = content
     for annotation in sorted(annotations, key=lambda x: x.start_pos, reverse=True):
         original_text = annotated[annotation.start_pos:annotation.end_pos]
-        marked_text = f"[{annotation.tag}: {original_text}]"
+        # Use unique delimiter format to avoid conflicts with existing content
+        marked_text = f"«{annotation.tag}: {original_text}»"
         annotated = (
             annotated[:annotation.start_pos] +
             marked_text +
@@ -259,18 +268,23 @@ def annotate_content(
 # Patterns for sensitive content detection (non-operational, sanitizing only)
 SENSITIVE_PATTERNS = {
     "credentials": [
-        r"(?i)api[_\-]?key\s*[:=]\s*['\"]?[\w\-]+",
-        r"(?i)password\s*[:=]\s*['\"]?[\w\-]+",
-        r"(?i)secret\s*[:=]\s*['\"]?[\w\-]+",
-        r"(?i)token\s*[:=]\s*['\"]?[\w\-]+",
+        # Require at least 8 characters for credential values to reduce false positives
+        r"(?i)api[_\-]?key\s*[:=]\s*['\"]?[\w\-]{8,}",
+        r"(?i)password\s*[:=]\s*['\"]?[\w\-]{8,}",
+        r"(?i)secret\s*[:=]\s*['\"]?[\w\-]{8,}",
+        r"(?i)token\s*[:=]\s*['\"]?[\w\-]{8,}",
     ],
     "infrastructure": [
-        r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b",  # IPv4 addresses
-        r"(?i)https?://(?!example\.com|localhost)[^\s]+",  # Real URLs
+        # IPv4 addresses excluding localhost and private ranges used in documentation
+        r"\b(?!127\.0\.0\.1\b)(?!10\.0\.0\.\d{1,3}\b)(?!192\.168\.0\.\d{1,3}\b)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b",
+        # Real URLs excluding common test/documentation domains
+        r"(?i)https?://(?!example\.com|example\.org|example\.net|test\.com|localhost)[^\s]+",
     ],
     "pii": [
         r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",  # Email
-        r"\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b",  # SSN-like
+        # SSN pattern with validation: must have proper format ###-##-#### or ###.##.#### or ### ## ####
+        # Excludes common date-like patterns by requiring valid SSN area number ranges
+        r"\b(?!000)(?!666)(?!9\d{2})\d{3}[-.\s](?!00)\d{2}[-.\s](?!0000)\d{4}\b",
     ],
 }
 
@@ -367,18 +381,24 @@ def compute_checksum(content: str, algorithm: str = "sha256") -> str:
 
     Args:
         content: Content to hash
-        algorithm: Hash algorithm (default: sha256)
+        algorithm: Hash algorithm (default: sha256). Only secure algorithms
+                   (sha256, sha512, sha3_256, sha3_512) are supported.
 
     Returns:
         Hexadecimal digest string
     """
-    if algorithm == "sha256":
-        hasher = hashlib.sha256()
-    elif algorithm == "sha512":
-        hasher = hashlib.sha512()
-    elif algorithm == "md5":
-        hasher = hashlib.md5()
+    # Only allow secure hash algorithms for integrity verification
+    secure_algorithms = {
+        "sha256": hashlib.sha256,
+        "sha512": hashlib.sha512,
+        "sha3_256": hashlib.sha3_256,
+        "sha3_512": hashlib.sha3_512,
+    }
+
+    if algorithm.lower() in secure_algorithms:
+        hasher = secure_algorithms[algorithm.lower()]()
     else:
+        # Default to SHA-256 for unsupported or insecure algorithms
         hasher = hashlib.sha256()
 
     hasher.update(content.encode('utf-8'))
