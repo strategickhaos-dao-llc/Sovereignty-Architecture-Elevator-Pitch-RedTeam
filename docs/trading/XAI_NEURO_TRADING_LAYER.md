@@ -74,7 +74,7 @@ This layer integrates with the PID-RANCO Trading Engine to provide regulatory-co
     "ema_distance": 15.3,
     "volatility": 0.023,
     "volume_ratio": 1.45,
-    "her_love": 85,
+    "sentiment_score": 85,
     "loss_count": 3,
     "drawdown_pct": 1.2
   },
@@ -161,19 +161,30 @@ Input Features (x) ────────────────────�
 
 ```python
 import shap
+from collections import OrderedDict
 
 class XaiExplainer:
-    def __init__(self, model):
+    def __init__(self, model, feature_names):
         self.model = model
+        self.feature_names = feature_names  # Ordered list of feature names
         self.explainer = shap.TreeExplainer(model)
     
     def explain(self, features):
-        """Generate SHAP values for feature attribution."""
-        shap_values = self.explainer.shap_values(features)
+        """Generate SHAP values for feature attribution.
         
-        # Get top contributing features
+        Args:
+            features: dict of feature_name -> value (order-independent)
+        
+        Returns:
+            List of top 5 contributing features with their contributions
+        """
+        # Use explicit feature ordering to match model expectations
+        feature_values = [features[name] for name in self.feature_names]
+        shap_values = self.explainer.shap_values(feature_values)
+        
+        # Build feature importance list with explicit index mapping
         feature_importance = []
-        for i, (name, value) in enumerate(features.items()):
+        for i, name in enumerate(self.feature_names):
             feature_importance.append({
                 "name": name,
                 "contribution": abs(shap_values[i]),

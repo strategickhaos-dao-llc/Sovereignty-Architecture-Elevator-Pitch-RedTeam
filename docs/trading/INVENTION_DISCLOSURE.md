@@ -97,9 +97,9 @@ Alternative titles:
 
 | Element | Why Trade Secret? |
 |---------|------------------|
-| Specific PID gain values (Kp, Ki, Kd) | Tuned to specific markets, easily copied if disclosed |
-| XAI model architecture details | Training data and hyperparameters are competitive advantage |
-| Risk thresholds (0.69%, 3.37%) | Calibrated through proprietary testing |
+| Specific PID gain values (Kp, Ki, Kd) | Tuned to specific markets; competitive advantage would be lost if disclosed |
+| XAI model architecture details | Training data and hyperparameters provide competitive advantage |
+| Risk thresholds (0.69%, 3.37%) | Calibrated through proprietary testing; disclosure eliminates edge |
 
 ---
 
@@ -284,8 +284,23 @@ PID + Renko + Hard Risk + XAI Veto + Crypto Audit + DAO Allocation
 
 ## 11. Action Items
 
+### CRITICAL: Signal Objectification (Required Across All Docs)
+
+The poetic signal names ("herLove", "heartbeat", "voice volume") appear in multiple documents and MUST be converted to objective, measurable features before any patent filing or academic publication:
+
+| Poetic Name | Proposed Objective Definition |
+|-------------|------------------------------|
+| `herLove` | `sentiment_score`: Social media sentiment aggregation (0-100 scale, computed from Twitter/Reddit NLP) |
+| `heartbeat` | `market_pulse`: Trade volume rate (trades/second normalized to 20-period average) |
+| `voice volume` | `audio_rms`: If audio input used, RMS of audio channel scaled to [0, 100]; otherwise remove |
+
+**Files requiring update:**
+- PID_RANCO_TRADING_ENGINE.md (Section 2.1 terminology)
+- XAI_NEURO_TRADING_LAYER.md (API contract features)
+- Any future code implementations
+
 ### Immediate (This Week)
-1. [ ] Convert "herLove/heartbeat/voice" to measurable features
+1. [ ] **PRIORITY** Convert all poetic signal names to measurable features (see table above)
 2. [ ] Set up backtest data pipeline
 3. [ ] Implement basic PID-RANCO in Python for rapid iteration
 

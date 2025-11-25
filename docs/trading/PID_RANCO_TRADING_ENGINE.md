@@ -140,12 +140,22 @@ public class PidRancoStrategy : Strategy
     private int lossCounter = 0;
     private bool strategyEnabled = true;
     
+    // === Integral Wind-Up Protection ===
+    // Bounds derived from typical price deviation range
+    // Should be calibrated per asset class volatility profile
+    private const double IntegralClampMin = -100;
+    private const double IntegralClampMax = 100;
+    
     // === Safety Guards ===
+    // MinBars ensures indicators (EMA, RSI) have sufficient data
+    // 50 bars allows EMA(20) to stabilize and provides buffer for volatility calculation
+    // During initialization period, strategy observes market but does not trade
     private const int MinBars = 50;  // Minimum bars before trading
     
     protected override void OnBarUpdate()
     {
         // Bar guard - prevent premature execution
+        // Strategy remains in observation mode until MinBars data points collected
         if (CurrentBar < MinBars) return;
         
         // Strategy kill switch
@@ -173,8 +183,8 @@ public class PidRancoStrategy : Strategy
         // Proportional term
         double p_term = Kp * error;
         
-        // Integral term (with anti-windup)
-        integralAccum = Math.Clamp(integralAccum + error, -100, 100);
+        // Integral term (with configurable anti-windup bounds)
+        integralAccum = Math.Clamp(integralAccum + error, IntegralClampMin, IntegralClampMax);
         double i_term = Ki * integralAccum;
         
         // Derivative term
