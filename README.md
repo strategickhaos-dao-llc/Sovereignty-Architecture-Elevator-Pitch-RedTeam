@@ -280,6 +280,23 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🔒 Black Ops Field Node
+
+For advanced operators requiring portable, autonomous, satellite-backhauled sovereign infrastructure:
+
+- **[BLACK_OPS_FIELD_NODE.md](BLACK_OPS_FIELD_NODE.md)** - Complete Portable Sovereign Field Node documentation
+- **Hardware Fortress** - Raspberry Pi 5 + encrypted NVMe in tamper-evident Pelican case
+- **Satellite Backhaul** - Starlink Mini + 5G + Iridium triple-redundant connectivity
+- **Quantum Defense** - Post-quantum cryptography with ML-KEM and ML-DSA algorithms
+- **Legal Armor** - Wyoming DAO Series LLC structured operations with immutable audit trails
+
+```bash
+# One-command deployment
+./deploy_field_node.sh --mode=ghost --uplink=starlink --legal-entity=strategickhaos-dao-series-7
+```
+
+See [quantum_defense_config.yaml](quantum_defense_config.yaml) for complete PQC and quantum chip security configuration.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
