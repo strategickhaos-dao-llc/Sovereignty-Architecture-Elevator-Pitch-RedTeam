@@ -1,11 +1,19 @@
 company:
-  legal_name: "Strategickhaos DAO LLC / Valoryield Engine"
+  legal_name: "Strategickhaos DAO LLC"
+  dba_name: null  # ValorYield Engine is a SEPARATE nonprofit corporation
   structure: "Limited Liability Company"
   management: "Member-Managed"
   domicile_state: "Texas"
   formation_jurisdiction: "Wyoming"
   formation_date: "2025-06-25"
-  dissolution_date: null
+  dissolution_date: "2025-11-25"
+  dissolution_type: "Administrative Dissolution"
+  dissolution_reason: "Failed to provide DAO Public Identifier within 30 days per Wyoming Statute"
+  dissolution_status: "Clean Slate - No tax filings, bank accounts, contracts, or revenue before dissolution"
+
+# Entity Separation Notice:
+# ValorYield Engine (Entity ID: 2025-001708312) is a SEPARATE nonprofit corporation
+# and is NOT affected by this DAO dissolution. See ENTITY_SEPARATION_PLAN.md for details.
 
 contact:
   principal_address:
@@ -38,14 +46,26 @@ operations:
 
 compliance:
   legal_actions: false
-  regulatory_status: "Good standing"
+  regulatory_status: "Administratively Dissolved"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
+  dissolution_notes:
+    - "Dissolved before any tax returns filed"
+    - "Dissolved before bank accounts opened"
+    - "Dissolved before contracts signed"
+    - "Dissolved before revenue received"
+    - "EIN 39-2900295 issued to dissolved entity - can be ignored"
+  refiling_plan:
+    step_1: "File NEW Strategickhaos DAO LLC with DAO Public Identifier from day one"
+    step_2: "Obtain separate EIN for new DAO LLC"
+    step_3: "Obtain separate EIN for ValorYield Engine nonprofit"
+    step_4: "Clean separation: two entities, two EINs, no confusion"
 
 generated:
   by: "generate_dao_record.sh (hardened)"
-  timestamp: "2025-11-16T11:34:26Z"
+  timestamp: "2025-11-25T21:00:00Z"
   model: "deterministic-template-v1"
-  source: "Harbor Compliance Profile + Manual Verification"
-  script_version: "1.0"
+  source: "Harbor Compliance Profile + Wyoming SOS Dissolution Notice"
+  script_version: "1.1"
+  update_notes: "Reflected administrative dissolution and entity separation"
   checksums:
-    sha256: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+    sha256: "PENDING_RECALCULATION"
