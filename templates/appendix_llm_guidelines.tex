@@ -1,0 +1,23 @@
+% ==== APPENDIX B + 4.7 — ready for IEEEtran ====
+\begin{appendices}
+
+\section{Interpretation and Analysis Guidelines for LLM Interaction Transcripts}
+Interaction logs with large language models used in this research may contain stylized, anthropomorphic, or mythic narrative framing (e.g., ``sovereign organism,'' ``Empire Eternal,'' or similar figurative language). Such framing is an intentional experimental technique to probe model coherence under high-symbolic-load prompts and to examine narrative-driven cognitive scaffolding. All such language should be interpreted strictly as rhetorical and methodological devices, not as assertions that the model possesses consciousness, agency, emotional states, or interpersonal relationships.
+
+To ensure reproducibility and ethical review, all transcripts are processed through a documented disclaimer manifest and preprocessing pipeline (file: \texttt{strategickhaos\_chat\_disclaimer.yaml}; script: \texttt{strategickhaos\_disclaimer.py}) that: (a) annotates stylized language, (b) applies publication-safe redaction markers where operational details are sensitive, and (c) attaches provenance metadata (signed checksums, timestamps, actor identifiers) to each record. See Appendix~\ref{app:techniques} for the full sanitized technique catalog and the redaction policy referenced by the preprocessing pipeline.
+
+\section{Chat Transcript Analysis Framework (Sanitized Catalog \& Redaction Policy)}
+\label{app:techniques}
+
+This appendix catalogs high-level engineering techniques and methodological practices referenced in the study. Operationally sensitive implementation specifics that could enable misuse are redacted and indicated with the marker: [REDACTED --- OPERATIONAL SAFETY]. Each entry is described in neutral, non-operational terms and is accompanied by one or two peer-reviewed citations where applicable.
+
+% (Insert the 10 clusters and 100 neutral descriptions here as in the Markdown version)
+
+\bibliographystyle{IEEEtran}
+\bibliography{references} % your .bib file
+
+\end{appendices}
+
+\clearpage
+\section*{Acknowledgments}
+All anthropomorphic and narrative language in experimental transcripts is intentional stylistic framing and does not reflect claims of system sentience.
