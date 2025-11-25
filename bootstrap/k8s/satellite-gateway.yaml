@@ -141,6 +141,22 @@ data:
   failover-threshold-ms: "5000"
   heartbeat-interval-sec: "60"
 ---
+# IMPORTANT: Secret Management
+# 
+# Option 1: Vault Integration (Recommended)
+# The vault.hashicorp.com annotations below enable automatic secret injection
+# when using HashiCorp Vault with the Kubernetes auth method.
+#
+# Option 2: External Secrets Operator
+# Use external-secrets.io to sync secrets from AWS Secrets Manager, GCP Secret Manager, etc.
+# Example: kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
+#
+# Option 3: Sealed Secrets
+# Use Bitnami's sealed-secrets for GitOps-friendly encrypted secrets.
+# kubeseal --format=yaml < secret.yaml > sealed-secret.yaml
+#
+# DO NOT commit plaintext secrets to version control.
+# Generate relay-secret with: openssl rand -hex 32
 apiVersion: v1
 kind: Secret
 metadata:
@@ -151,10 +167,14 @@ metadata:
   annotations:
     vault.hashicorp.com/agent-inject: "true"
     vault.hashicorp.com/role: "satellite-gateway"
+    vault.hashicorp.com/agent-inject-secret-discord-token: "kv/discord/bot_token"
+    vault.hashicorp.com/agent-inject-secret-relay-secret: "kv/satellite/relay_key"
 type: Opaque
 stringData:
-  discord-token: ""     # vault://kv/discord/bot_token
-  relay-secret: ""      # vault://kv/satellite/relay_key - Generate with: openssl rand -hex 32
+  # These placeholders are for local development only.
+  # In production, use Vault, External Secrets, or Sealed Secrets.
+  discord-token: "REPLACE_WITH_VAULT_OR_SEALED_SECRET"
+  relay-secret: "REPLACE_WITH_VAULT_OR_SEALED_SECRET"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

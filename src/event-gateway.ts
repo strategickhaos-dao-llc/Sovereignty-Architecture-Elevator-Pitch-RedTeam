@@ -27,7 +27,12 @@ const channelIds = {
 app.post("/webhooks/github", githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
 
 // Satellite connectivity routes (Starlink/Direct-to-Cell)
+// SECURITY: Use a dedicated SATELLITE_RELAY_SECRET in production.
+// Fallback to GITHUB_WEBHOOK_SECRET is provided for development only.
 const satSecret = env("SATELLITE_RELAY_SECRET", false) || env("GITHUB_WEBHOOK_SECRET");
+if (!process.env.SATELLITE_RELAY_SECRET) {
+  console.warn("⚠️  SATELLITE_RELAY_SECRET not set, using GITHUB_WEBHOOK_SECRET as fallback");
+}
 const satRoutes = satelliteRoutes(rest, channelIds, satSecret);
 
 app.get("/satellite/status", satRoutes.status);

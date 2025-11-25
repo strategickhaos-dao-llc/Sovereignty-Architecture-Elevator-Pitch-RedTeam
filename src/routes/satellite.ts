@@ -9,6 +9,11 @@ import { REST } from "discord.js";
  * and swarm agent coordination via the Elon Text-Sat Pipeline.
  */
 
+/** Request with raw body for signature verification */
+interface RawBodyRequest extends Request {
+  rawBody: string;
+}
+
 interface SatelliteStatus {
   provider: string;
   connection: "online" | "degraded" | "offline";
@@ -40,9 +45,19 @@ const satelliteState: SatelliteStatus = {
 
 const relayQueue: RelayMessage[] = [];
 
+/**
+ * Verify HMAC signature in format 'sha256=<hex>' (consistent with GitHub webhook format)
+ */
 function verifySignature(secret: string, payload: string, signature: string): boolean {
   const expected = crypto.createHmac("sha256", secret).update(payload).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  const expectedSig = `sha256=${expected}`;
+  // Support both raw hex and prefixed format for compatibility
+  const sigToCompare = signature.startsWith("sha256=") ? signature : `sha256=${signature}`;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expectedSig), Buffer.from(sigToCompare));
+  } catch {
+    return false; // Buffers of different lengths
+  }
 }
 
 function generateAuditHash(data: Record<string, unknown>): string {
@@ -100,7 +115,7 @@ export function satelliteRoutes(
      */
     relay: async (req: Request, res: Response) => {
       const sig = req.get("X-Satellite-Signature") || "";
-      const raw = (req as unknown as { rawBody: string }).rawBody;
+      const raw = (req as RawBodyRequest).rawBody;
 
       if (!verifySignature(secret, raw, sig)) {
         return res.status(401).json({ error: "Invalid signature" });
@@ -151,7 +166,7 @@ export function satelliteRoutes(
      */
     failover: async (req: Request, res: Response) => {
       const sig = req.get("X-Router-Signature") || "";
-      const raw = (req as unknown as { rawBody: string }).rawBody;
+      const raw = (req as RawBodyRequest).rawBody;
 
       if (!verifySignature(secret, raw, sig)) {
         return res.status(401).json({ error: "Invalid signature" });
@@ -237,7 +252,7 @@ export function satelliteRoutes(
      */
     directToCell: async (req: Request, res: Response) => {
       const sig = req.get("X-SMS-Signature") || "";
-      const raw = (req as unknown as { rawBody: string }).rawBody;
+      const raw = (req as RawBodyRequest).rawBody;
 
       if (!verifySignature(secret, raw, sig)) {
         return res.status(401).json({ error: "Invalid signature" });
