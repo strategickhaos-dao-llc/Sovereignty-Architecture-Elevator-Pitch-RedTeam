@@ -16,7 +16,7 @@ specVersion: "1.5"
 version: 1
 serialNumber: urn:uuid:sovereignty-stack-sbom-v1
 metadata:
-  timestamp: "2025-01-01T00:00:00Z"
+  timestamp: "2025-11-25T00:00:00Z"  # Update this timestamp when regenerating SBOM
   tools:
     - vendor: Strategickhaos DAO LLC
       name: Sovereignty Stack Generator

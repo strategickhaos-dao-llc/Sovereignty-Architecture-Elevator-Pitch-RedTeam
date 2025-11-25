@@ -211,7 +211,15 @@ verify_environment() {
     
     # Check Docker (with timeout to avoid hanging)
     if command -v docker &> /dev/null; then
-        if timeout 5 docker info &> /dev/null 2>&1; then
+        local docker_check_result
+        if command -v timeout &> /dev/null; then
+            docker_check_result=$(timeout 5 docker info 2>&1) && docker_running=true || docker_running=false
+        else
+            # Fallback for systems without timeout (e.g., macOS without GNU coreutils)
+            docker_check_result=$(docker info 2>&1) && docker_running=true || docker_running=false
+        fi
+        
+        if [[ "$docker_running" == "true" ]]; then
             local docker_version
             docker_version=$(docker --version 2>/dev/null)
             log_pass "Docker running: $docker_version"
@@ -258,16 +266,19 @@ verify_network() {
     echo "Checking network connectivity..."
     echo ""
     
-    # Check basic internet connectivity
-    if ping -c 1 -W 3 8.8.8.8 &> /dev/null || ping -c 1 -W 3 1.1.1.1 &> /dev/null; then
+    # Use curl as primary check for cross-platform compatibility
+    # ping -W behavior differs between Linux (seconds) and macOS (milliseconds)
+    local internet_available=false
+    
+    if curl -s --max-time 3 --connect-timeout 3 "https://dns.google" &> /dev/null 2>&1 || \
+       curl -s --max-time 3 --connect-timeout 3 "https://1.1.1.1" &> /dev/null 2>&1; then
+        internet_available=true
         log_pass "Internet connectivity detected"
         
-        # Check specific endpoints
+        # Check specific endpoints using curl for reliability
         for endpoint in "${endpoints[@]}"; do
-            if ping -c 1 -W 3 "$endpoint" &> /dev/null; then
+            if curl -s --max-time 5 --connect-timeout 3 "https://$endpoint" &> /dev/null 2>&1; then
                 log_pass "Can reach $endpoint"
-            elif curl -s --max-time 5 "https://$endpoint" &> /dev/null; then
-                log_pass "Can reach $endpoint (via HTTPS)"
             else
                 log_warn "Cannot reach $endpoint"
             fi
@@ -317,7 +328,10 @@ generate_hashes() {
             if [[ -n "$hash" ]]; then
                 echo "$hash  $file" >> "$HASH_FILE"
                 log_pass "Hash generated: $file"
-                echo "      SHA256: ${hash:0:16}...${hash: -16}"
+                # Use substring expansion with parentheses for better compatibility
+                local hash_prefix="${hash:0:16}"
+                local hash_suffix="${hash:$((${#hash}-16))}"
+                echo "      SHA256: ${hash_prefix}...${hash_suffix}"
             fi
         fi
     done

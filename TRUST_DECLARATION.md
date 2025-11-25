@@ -214,7 +214,7 @@ This Trust Declaration is maintained by:
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 1.0.0 | 2025-01-01 | Initial Trust Declaration |
+| 1.0.0 | 2025-11-25 | Initial Trust Declaration |
 
 ---
 
