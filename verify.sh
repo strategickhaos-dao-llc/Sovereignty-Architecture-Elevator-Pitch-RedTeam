@@ -94,7 +94,7 @@ log_error() {
 calculate_sha256() {
     local file="$1"
     if [[ -f "$file" ]]; then
-        sha256sum "$file" | cut -d' ' -f1
+        sha256sum "$file" | awk '{print $1}'
     else
         echo "FILE_NOT_FOUND"
     fi
@@ -105,8 +105,8 @@ get_manifest_files() {
     if command -v yq &> /dev/null; then
         yq -r '.files[].path, .scripts[].path' "$MANIFEST_FILE" 2>/dev/null || echo ""
     else
-        # Fallback: simple grep-based extraction
-        grep -E "^\s*-?\s*path:\s*\"" "$MANIFEST_FILE" | sed 's/.*path:\s*"\([^"]*\)".*/\1/' || echo ""
+        # Fallback: simple grep-based extraction (handles simple YAML paths)
+        grep -E "^\s*-?\s*path:\s*\"" "$MANIFEST_FILE" 2>/dev/null | sed 's/.*path:\s*"\([^"]*\)".*/\1/' || echo ""
     fi
 }
 
@@ -127,14 +127,14 @@ generate_report() {
         echo ""
         echo "Files Verified:"
         echo "---------------"
-        for file in $VERIFIED_FILES; do
+        for file in "${VERIFIED_FILES[@]}"; do
             echo "  [OK] $file"
         done
         echo ""
-        if [[ -n "${FAILED_FILES:-}" ]]; then
+        if [[ ${#FAILED_FILES[@]} -gt 0 ]]; then
             echo "Files Failed:"
             echo "-------------"
-            for file in $FAILED_FILES; do
+            for file in "${FAILED_FILES[@]}"; do
                 echo "  [FAIL] $file"
             done
             echo ""
@@ -154,8 +154,8 @@ verify_corpus() {
     local total=0
     local passed=0
     local failed=0
-    VERIFIED_FILES=""
-    FAILED_FILES=""
+    VERIFIED_FILES=()
+    FAILED_FILES=()
     
     # Get list of critical files to verify
     local files_to_check=(
@@ -183,7 +183,7 @@ verify_corpus() {
                 log_success "$file"
             fi
             ((passed++))
-            VERIFIED_FILES="$VERIFIED_FILES $file"
+            VERIFIED_FILES+=("$file")
         else
             log_warning "$file: Not found (optional)"
             # Don't count missing optional files as failures

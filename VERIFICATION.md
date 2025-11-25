@@ -28,7 +28,7 @@ cd Sovereignty-Architecture-Elevator-Pitch-
 
 ```bash
 # Clone with full history
-git clone --depth=full https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
+git clone https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
 cd Sovereignty-Architecture-Elevator-Pitch-
 ```
 

@@ -22,4 +22,11 @@ declined, etc.
 
 ## Operational Risk Appendix
 
-This repository contains sovereignty architecture components that may be subject to legal and jurisdictional considerations. Users and contributors should be aware that: (1) certain cryptographic implementations may be subject to export control regulations (e.g., EAR, ITAR) depending on jurisdiction; (2) intellectual property rights, including patents and trade secrets, may apply to specific algorithms or methods referenced herein; (3) deployment of this architecture in regulated industries (finance, healthcare, government) may require additional compliance review; and (4) contributors should ensure they have appropriate authorization before contributing code that may be encumbered by third-party IP or employment agreements. This notice is provided for informational purposes and does not constitute legal advice—consult qualified legal counsel for jurisdiction-specific guidance.
+This repository contains sovereignty architecture components that may be subject to legal and jurisdictional considerations. Users and contributors should be aware of the following:
+
+- **Export Controls:** Certain cryptographic implementations may be subject to export control regulations (e.g., EAR, ITAR) depending on jurisdiction.
+- **Intellectual Property:** Patents and trade secrets may apply to specific algorithms or methods referenced herein.
+- **Regulated Industries:** Deployment in regulated industries (finance, healthcare, government) may require additional compliance review.
+- **Contributor Authorization:** Contributors should ensure they have appropriate authorization before contributing code that may be encumbered by third-party IP or employment agreements.
+
+This notice is provided for informational purposes and does not constitute legal advice—consult qualified legal counsel for jurisdiction-specific guidance.
