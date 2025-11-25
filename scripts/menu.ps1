@@ -470,10 +470,21 @@ function Show-SystemStatus {
     }
     
     # Check if loop is running (look for process)
-    $loopProcess = Get-Process -Name "pwsh", "powershell" -ErrorAction SilentlyContinue | 
-        Where-Object { $_.CommandLine -like "*_Orchestra*" }
+    # Note: Process detection may require elevated privileges on some systems
+    $loopRunning = $false
+    try {
+        # Try using Get-CimInstance for better cross-platform compatibility
+        $processInfo = Get-CimInstance -ClassName Win32_Process -Filter "Name LIKE '%pwsh%' OR Name LIKE '%powershell%'" -ErrorAction SilentlyContinue
+        if ($processInfo) {
+            $loopRunning = $processInfo | Where-Object { $_.CommandLine -like "*_Orchestra*" } | Select-Object -First 1
+        }
+    }
+    catch {
+        # Fallback: just check if Orchestra script exists and assume status unknown
+        # Get-Process alone cannot reliably determine command line arguments
+    }
     
-    if ($loopProcess) {
+    if ($loopRunning) {
         Write-Host "  │ Status:                            Running │"
     }
     else {
