@@ -291,19 +291,61 @@ Veto power: {dept.get('veto_power', False)}
 
     def _execute_actions(self, actions: List[str]):
         """
-        Execute approved proposal actions.
-        WARNING: This executes shell commands - sanitize carefully!
+        Execute approved proposal actions with strict validation.
+        Uses subprocess.run with shell=False for security.
+        Only whitelisted commands with validated arguments are allowed.
         """
-        allowed_prefixes = ['echo ', 'git ', 'python3 ', 'npm ']
+        import subprocess
+        import shlex
+
+        # Whitelist of allowed commands (base command only)
+        ALLOWED_COMMANDS = {'echo', 'git', 'python3', 'npm'}
+
+        # Dangerous patterns to block in arguments
+        DANGEROUS_PATTERNS = [';', '|', '&', '`', '$', '>', '<', '\n', '\r']
 
         for action in actions:
-            # Basic sanitization - only allow safe commands
-            is_safe = any(action.startswith(prefix) for prefix in allowed_prefixes)
-            if is_safe:
+            try:
+                # Parse the action into command and arguments
+                parts = shlex.split(action)
+                if not parts:
+                    logger.warning(f"Empty action, skipping")
+                    continue
+
+                base_command = parts[0]
+
+                # Check if base command is allowed
+                if base_command not in ALLOWED_COMMANDS:
+                    logger.warning(f"Blocked disallowed command: {base_command}")
+                    continue
+
+                # Check for dangerous patterns in all arguments
+                full_command = ' '.join(parts)
+                if any(pattern in full_command for pattern in DANGEROUS_PATTERNS):
+                    logger.warning(f"Blocked action with dangerous pattern: {action}")
+                    continue
+
+                # Execute safely with subprocess
                 logger.info(f"Executing action: {action}")
-                os.system(action)
-            else:
-                logger.warning(f"Blocked unsafe action: {action}")
+                result = subprocess.run(
+                    parts,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                    check=False
+                )
+
+                if result.returncode != 0:
+                    logger.warning(f"Action returned non-zero: {result.stderr}")
+                else:
+                    logger.info(f"Action output: {result.stdout[:200]}")
+
+            except ValueError as e:
+                logger.error(f"Failed to parse action '{action}': {e}")
+            except subprocess.TimeoutExpired:
+                logger.error(f"Action timed out: {action}")
+            except Exception as e:
+                logger.error(f"Action execution failed: {e}")
 
     def _notify_discord(self, message: str):
         """Send notification to Discord webhook"""

@@ -171,6 +171,9 @@ def create_bot():
         Dom's manual override (requires admin role).
         WARNING: This bypasses the voting process.
         """
+        import json
+        import os
+
         if not ctx.author.guild_permissions.administrator:
             await ctx.send("❌ Only Dom can override")
             return
@@ -182,16 +185,38 @@ def create_bot():
         # Log the override for audit trail
         logger.warning(f"MANUAL OVERRIDE by {ctx.author}: {action} on {proposal_id}")
 
-        await ctx.send(
-            f"⚠️ **Manual override initiated**\n"
-            f"Proposal: `{proposal_id}`\n"
-            f"Action: `{action.upper()}`\n"
-            f"Override by: {ctx.author.mention}\n"
-            f"⚠️ This bypasses normal voting procedures"
-        )
+        # Create override vote file
+        override_vote = {
+            'decision': 'APPROVE' if action.lower() == 'approve' else 'REJECT',
+            'weight': 100,  # Override weight supersedes all votes
+            'has_veto': True,
+            'explanation': f'Manual override by {ctx.author}',
+            'override': True,
+            'override_by': str(ctx.author),
+            'override_by_id': str(ctx.author.id)
+        }
 
-        # TODO: Implement actual override logic
-        # This would update the proposal status directly
+        try:
+            os.makedirs('.strategickhaos/proposals', exist_ok=True)
+            override_path = f'.strategickhaos/proposals/{proposal_id}_OVERRIDE_vote.json'
+            with open(override_path, 'w') as f:
+                json.dump(override_vote, f, indent=2)
+
+            await ctx.send(
+                f"⚠️ **Manual override applied**\n"
+                f"Proposal: `{proposal_id}`\n"
+                f"Action: `{action.upper()}`\n"
+                f"Override by: {ctx.author.mention}\n"
+                f"⚠️ This bypasses normal voting procedures"
+            )
+
+            # If approved, ask if they want to execute
+            if action.lower() == 'approve':
+                await ctx.send(f"Use `!execute {proposal_id}` to execute the approved proposal")
+
+        except Exception as e:
+            logger.error(f"Override failed: {e}")
+            await ctx.send(f"❌ Override failed: {e}")
 
     @bot.command()
     async def departments(ctx):
