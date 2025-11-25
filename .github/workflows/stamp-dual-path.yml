@@ -15,6 +15,9 @@ on:
         default: 'false'
         type: boolean
 
+permissions:
+  contents: read
+
 jobs:
   stamp-dual-path:
     name: OpenTimestamps + Mirror Dual-Path Stamping

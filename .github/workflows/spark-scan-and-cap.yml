@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: '0 */6 * * *'  # Every 6 hours
 
+permissions:
+  contents: read
+
 env:
   SPARK_MAX_COST_USD: ${{ vars.SPARK_MAX_COST_USD || '100' }}
 

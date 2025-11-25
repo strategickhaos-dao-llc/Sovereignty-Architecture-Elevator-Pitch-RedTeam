@@ -11,6 +11,10 @@ on:
         default: 'false'
         type: boolean
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   agents-chaos-weekly:
     name: Decay Detection + Benchmark Drift Analysis

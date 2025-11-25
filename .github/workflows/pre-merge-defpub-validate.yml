@@ -9,6 +9,10 @@ on:
       - 'legal/**'
       - 'templates/**'
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   pre-merge-defpub-validate:
     name: Validate Defensive Publication Artifacts
