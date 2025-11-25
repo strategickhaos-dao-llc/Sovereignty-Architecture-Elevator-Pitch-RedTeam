@@ -42,8 +42,8 @@ We're building **the silence between the sparks**…
 …and letting the bullies pay to hear it.
 
 This means:
-- **Dividend arbitrage** over venture capital extraction
-- **Defamation royalties** over advertising revenue  
+- **Dividend arbitrage** over venture capital extraction — *generating returns from market inefficiencies rather than user exploitation*
+- **Defamation royalties** over advertising revenue — *legal accountability from those who spread false narratives*
 - **Sovereign infrastructure** over platform dependency
 - **Open architecture** over proprietary lock-in
 
