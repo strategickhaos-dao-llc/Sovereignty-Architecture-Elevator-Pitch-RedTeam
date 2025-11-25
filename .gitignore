@@ -35,3 +35,17 @@ target/
 
 # Workspace data
 workspace/
+
+# Generated benchmark figures (can be regenerated)
+papers/figs/*.pdf
+papers/figs/*.png
+papers/figs/*.svg
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Benchmark output
+benchmarks_out/
+*.ndjson
