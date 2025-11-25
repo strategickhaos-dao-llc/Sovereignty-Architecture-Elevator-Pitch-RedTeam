@@ -105,17 +105,21 @@ Kill Switches: HardPanic(), SafeFlatten()
 
 ## References (New Entries)
 
+> **Note**: Some references below require author verification before final publication.
+> Entries marked with [VERIFY] in the BibTeX file should be updated with confirmed
+> author names from the original sources.
+
 [10] V. Azhmyakov et al., "On a Data-Driven Optimization Approach to the PID-Based Algorithmic Trading," Preprints.org, May 2023. [Online]. Available: https://www.preprints.org/manuscript/202305.0977/v1
 
 [11] V. Azhmyakov et al., "Application of a Switched PIDD Type Control Strategy to the Model-Free Algorithmic Trading," IFAC-PapersOnLine, vol. 55, no. 1, pp. 145–150, 2022.
 
 [12] "The 2 Percent Rule," Incredible Charts, 2023. [Online]. Available: https://www.incrediblecharts.com/trading/2_percent_rule.php
 
-[15] A. Author et al., "A Survey of Explainable Artificial Intelligence (XAI) in Financial Time Series Forecasting," arXiv:2407.15909, 2024.
+[15] [VERIFY Authors], "A Survey of Explainable Artificial Intelligence (XAI) in Financial Time Series Forecasting," arXiv:2407.15909, 2024.
 
-[16] "Explainable AI in Finance: Addressing the Needs of Diverse Stakeholders," CFA Institute Research and Policy Center, Aug. 2025.
+[16] CFA Institute Research and Policy Center, "Explainable AI in Finance: Addressing the Needs of Diverse Stakeholders," Aug. 2025.
 
-[17] "Model-agnostic explainable artificial intelligence methods in finance: a systematic review," Artif. Intell. Rev., 2025.
+[17] [VERIFY Authors], "Model-agnostic explainable artificial intelligence methods in finance: a systematic review," Artif. Intell. Rev., 2025.
 
 ---
 
