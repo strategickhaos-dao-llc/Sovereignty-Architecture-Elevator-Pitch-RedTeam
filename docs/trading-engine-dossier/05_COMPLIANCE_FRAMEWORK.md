@@ -619,10 +619,12 @@ INCIDENT RESPONSE WORKFLOW
 
 | Role | Contact | Responsibility |
 |------|---------|---------------|
-| Compliance Officer | compliance@strategickhaos.internal | Overall compliance |
-| Legal Counsel | legal@strategickhaos.internal | Regulatory matters |
-| Technical Lead | tech@strategickhaos.internal | System controls |
-| DAO Governance | dao@strategickhaos.internal | DAO operations |
+| Compliance Officer | compliance@strategickhaos.example | Overall compliance |
+| Legal Counsel | legal@strategickhaos.example | Regulatory matters |
+| Technical Lead | tech@strategickhaos.example | System controls |
+| DAO Governance | dao@strategickhaos.example | DAO operations |
+
+*Note: Contact addresses are placeholders. Replace with actual contact information for production use.*
 
 ---
 
