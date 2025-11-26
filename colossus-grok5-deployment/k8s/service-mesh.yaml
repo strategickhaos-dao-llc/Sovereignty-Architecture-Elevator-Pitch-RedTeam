@@ -1,0 +1,75 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grok5-trainer-vs
+  namespace: colossus-grok5
+spec:
+  hosts:
+    - grok5-trainer
+  http:
+    - match:
+        - uri:
+            prefix: /api/v1/
+      route:
+        - destination:
+            host: grok5-trainer
+            port:
+              number: 8080
+      timeout: 30s
+      retries:
+        attempts: 3
+        perTryTimeout: 10s
+        retryOn: gateway-error,connect-failure,refused-stream
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: grok5-trainer-dr
+  namespace: colossus-grok5
+spec:
+  host: grok5-trainer
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1000
+      http:
+        h2UpgradePolicy: UPGRADE
+        http1MaxPendingRequests: 1000
+        http2MaxRequests: 1000
+    loadBalancer:
+      simple: LEAST_REQUEST
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 10
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: grok5-mtls
+  namespace: colossus-grok5
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: grok5-authz
+  namespace: colossus-grok5
+spec:
+  selector:
+    matchLabels:
+      app: grok5-trainer
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/colossus-grok5/sa/grok5-trainer
+              - cluster.local/ns/colossus-grok5/sa/grok5-data-pipeline
+              - cluster.local/ns/colossus-grok5/sa/grok5-verifier
+      to:
+        - operation:
+            methods: ["GET", "POST"]
+            paths: ["/api/*", "/health", "/ready", "/metrics"]

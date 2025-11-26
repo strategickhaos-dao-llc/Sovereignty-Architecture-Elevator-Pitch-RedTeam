@@ -1,0 +1,155 @@
+# Prometheus Rules for Colossus Grok-5 Deployment
+# Artifact #3558
+
+groups:
+  - name: colossus_power
+    interval: 15s
+    rules:
+      - alert: PowerConsumptionCritical
+        expr: colossus_power_mw > 250
+        for: 2m
+        labels:
+          severity: critical
+          service: colossus-grok5
+        annotations:
+          summary: "Power consumption exceeds 250MW limit"
+          description: "Current power consumption is {{ $value }}MW, exceeding the 250MW limit."
+
+      - alert: PowerConsumptionHigh
+        expr: colossus_power_mw > 225
+        for: 5m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "Power consumption approaching limit"
+          description: "Power consumption at {{ $value }}MW, approaching 250MW limit."
+
+      - alert: MegapackSoCLow
+        expr: megapack_soc < 0.4
+        for: 5m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "Megapack state of charge is low"
+          description: "Megapack SoC at {{ $value }}, below 0.4 threshold."
+
+      - alert: MegapackSoCCritical
+        expr: megapack_soc < 0.2
+        for: 2m
+        labels:
+          severity: critical
+          service: colossus-grok5
+        annotations:
+          summary: "Megapack state of charge critical"
+          description: "Megapack SoC at {{ $value }}, immediate action required."
+
+  - name: colossus_training
+    interval: 30s
+    rules:
+      - alert: CheckpointConsensusDrop
+        expr: checkpoint_consensus_fraction < 0.99
+        for: 5m
+        labels:
+          severity: critical
+          service: colossus-grok5
+        annotations:
+          summary: "Checkpoint consensus below threshold"
+          description: "Consensus at {{ $value }}, below 0.99 threshold."
+
+      - alert: HallucinationRateHigh
+        expr: grok5_hallucination_rate > 0.15
+        for: 10m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "Model hallucination rate exceeds threshold"
+          description: "Hallucination rate at {{ $value }}, exceeds 0.15 threshold."
+
+      - alert: BiasScoreHigh
+        expr: grok5_bias_score > 0.25
+        for: 10m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "Model bias score exceeds threshold"
+          description: "Bias score at {{ $value }}, exceeds 0.25 threshold."
+
+      - alert: TrainingStalled
+        expr: rate(grok5_training_step[30m]) == 0
+        for: 15m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "Training progress stalled"
+          description: "No training progress in the last 30 minutes."
+
+      - alert: GPUUtilizationLow
+        expr: grok5_gpu_utilization < 0.5
+        for: 15m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "GPU utilization is low"
+          description: "GPU utilization at {{ $value }}, below 50% threshold."
+
+  - name: colossus_provenance
+    interval: 60s
+    rules:
+      - alert: ProvenanceBatchStalled
+        expr: rate(provenance_batches_total[1h]) == 0
+        for: 30m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "Provenance batch processing stalled"
+          description: "No provenance batches processed in the last hour."
+
+      - alert: MerkleRootInvalid
+        expr: provenance_merkle_root_valid == 0
+        for: 5m
+        labels:
+          severity: critical
+          service: colossus-grok5
+        annotations:
+          summary: "Merkle root verification failed"
+          description: "Latest Merkle root failed verification."
+
+      - alert: OTSAnchoringFailed
+        expr: rate(provenance_ots_anchored_total{status="failed"}[1h]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: colossus-grok5
+        annotations:
+          summary: "OTS anchoring failures detected"
+          description: "OpenTimestamps anchoring has failed {{ $value }} times in the last hour."
+
+  - name: colossus_safety_gate
+    interval: 30s
+    rules:
+      - alert: SafetyGateFailed
+        expr: grok5_safety_gate_passed == 0
+        for: 0m
+        labels:
+          severity: critical
+          service: colossus-grok5
+        annotations:
+          summary: "Safety gate check failed"
+          description: "Deployment blocked by safety gate failure."
+
+      - alert: EnergyWindowClosed
+        expr: energy_window_allowed == 0
+        for: 30m
+        labels:
+          severity: info
+          service: colossus-grok5
+        annotations:
+          summary: "Energy window is closed"
+          description: "Training is paused due to energy constraints."
