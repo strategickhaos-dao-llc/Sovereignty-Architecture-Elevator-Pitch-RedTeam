@@ -1,0 +1,38 @@
+name: "CI – Test Genesis Delivery Payload"
+on:
+  push:
+    paths:
+      - "payloads/artifact_3546_genesis_delivery.*"
+  workflow_dispatch:
+
+jobs:
+  test-webhook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install aiohttp
+
+      - name: Generate signature & test webhook
+        env:
+          SHARED_SECRET: ${{ secrets.WEBHOOK_TEST_SECRET }}
+          STAGING_WEBHOOK: ${{ secrets.STAGING_WEBHOOK_URL }}
+        run: |
+          # Generate the signed curl command
+          python tooling/generate_signature.py payloads/artifact_3546_genesis_delivery.json "$SHARED_SECRET" > /tmp/curl_cmd.sh
+          chmod +x /tmp/curl_cmd.sh
+          
+          # Only run webhook test if staging URL is configured
+          if [ -n "$STAGING_WEBHOOK" ]; then
+            bash /tmp/curl_cmd.sh "$STAGING_WEBHOOK" || exit 1
+          else
+            echo "STAGING_WEBHOOK_URL not configured, skipping webhook test"
+            echo "Generated curl command:"
+            cat /tmp/curl_cmd.sh
+          fi
