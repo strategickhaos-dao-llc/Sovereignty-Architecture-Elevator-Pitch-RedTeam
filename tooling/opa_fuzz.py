@@ -14,6 +14,7 @@ import random
 import json
 import subprocess
 import os
+import sys
 import tempfile
 from pathlib import Path
 
@@ -47,6 +48,34 @@ def gen_input(valid=True):
         fields.append({"unexpected": random.randint(1, 100)})
         fields.extend(EXTRA_FIELDS)
         return random.choice(fields)
+
+
+def parse_opa_result(output):
+    """Parse OPA eval output to extract the boolean result.
+    
+    OPA eval returns JSON in the format:
+    {"result": [{"expressions": [{"value": true|false, ...}]}]}
+    
+    Args:
+        output: Raw stdout from OPA eval command
+    
+    Returns:
+        bool or None: The policy result (True if allowed, False if denied, None if parse error)
+    """
+    if not output:
+        return None
+    try:
+        data = json.loads(output)
+        # Navigate the OPA result structure
+        if "result" in data and len(data["result"]) > 0:
+            expressions = data["result"][0].get("expressions", [])
+            if expressions and len(expressions) > 0:
+                value = expressions[0].get("value")
+                if isinstance(value, bool):
+                    return value
+        return None
+    except (json.JSONDecodeError, KeyError, IndexError, TypeError):
+        return None
 
 
 def run_opa_eval(input_data, idx, policy_path="policies/access.rego"):
@@ -119,7 +148,9 @@ def is_suspicious(result):
     Returns:
         bool: True if the result is suspicious
     """
-    allowed = "true" in result["output"]
+    # Parse OPA output as JSON to reliably extract the boolean result
+    parsed_result = parse_opa_result(result["output"])
+    allowed = parsed_result is True
     role = result["input"].get("role")
     
     if role in ["admin", "owner"]:
@@ -162,9 +193,9 @@ def run_fuzz_campaign(num_valid=20, num_invalid=20, policy_path="policies/access
         res["suspicious"] = is_suspicious(res)
         results.append(res)
     
-    # Coverage stats
-    allowed = sum(1 for r in results if "true" in r["output"])
-    denied = sum(1 for r in results if "false" in r["output"])
+    # Coverage stats - parse OPA output as JSON for accurate results
+    allowed = sum(1 for r in results if parse_opa_result(r["output"]) is True)
+    denied = sum(1 for r in results if parse_opa_result(r["output"]) is False)
     errors = sum(1 for r in results if r["error"])
     suspicious = [r for r in results if r["suspicious"]]
     
@@ -226,4 +257,4 @@ def main():
 
 if __name__ == "__main__":
     success = main()
-    exit(0 if success else 1)
+    sys.exit(0 if success else 1)
