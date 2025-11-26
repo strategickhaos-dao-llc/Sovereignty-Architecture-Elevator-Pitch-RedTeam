@@ -19,7 +19,7 @@ import json
 import random
 import string
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from locust import HttpUser, task, between, events, tag
@@ -269,7 +269,7 @@ class PowerUser(BaseAPIUser):
                     self.client.put(
                         f"/api/v1/resources/{resource_id}",
                         json={
-                            "description": f"Updated at {datetime.now().isoformat()}",
+                            "description": f"Updated at {datetime.now(timezone.utc).isoformat()}",
                             "metadata": {"updated_by": "power_user"},
                         },
                         headers=self.get_headers(),
@@ -528,7 +528,7 @@ class APIConsumer(BaseAPIUser):
             "/api/v1/webhooks/receive",
             json={
                 "event": "resource.updated",
-                "timestamp": datetime.now().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "data": {"id": random.randint(1, 1000)},
             },
             headers=self.get_headers(),

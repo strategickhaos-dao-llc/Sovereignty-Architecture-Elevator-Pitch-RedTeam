@@ -353,7 +353,7 @@ class FastAPISecurityTester:
         if not original_token:
             # Generate test token
             original_token = jwt.encode(
-                {"sub": "test-user", "role": "user", "exp": datetime.utcnow() + timedelta(hours=1)},
+                {"sub": "test-user", "role": "user", "exp": datetime.now(timezone.utc) + timedelta(hours=1)},
                 "test-secret",
                 algorithm="HS256"
             )
@@ -433,7 +433,7 @@ class FastAPISecurityTester:
         # Test 3: Expired token acceptance
         try:
             payload = jwt.decode(original_token, options={"verify_signature": False})
-            payload["exp"] = datetime.utcnow() - timedelta(days=1)
+            payload["exp"] = datetime.now(timezone.utc) - timedelta(days=1)
             expired_token = jwt.encode(payload, "test-secret", algorithm="HS256")
             
             for endpoint in test_endpoints:
