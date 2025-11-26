@@ -1,6 +1,6 @@
 # audit.py
-import asyncio
 from datetime import datetime
+from typing import Optional
 from sqlmodel import SQLModel, Field
 from db import async_session
 
@@ -8,7 +8,7 @@ from db import async_session
 class AuditLog(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     user_id: str
-    artifact_id: str | None
+    artifact_id: Optional[str]
     action: str
     reason: str
     timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
