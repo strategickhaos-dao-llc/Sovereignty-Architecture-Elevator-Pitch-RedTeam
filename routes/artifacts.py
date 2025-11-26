@@ -1,5 +1,5 @@
 # routes/artifacts.py
-from fastapi import APIRouter, Request, HTTPException, Depends
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 from sqlmodel import select
 from db import async_session
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/artifacts", tags=["artifacts"])
     response_model=Artifact,
     responses={
         200: {"description": "Full access granted by policy"},
-        206: {"model": RedactionResponse, "description": "Partial Content – love redacted"},
+        206: {"model": RedactionResponse, "description": "Partial Content – content redacted"},
         403: {"description": "Forbidden by policy"},
         404: {"description": "Artifact not found"},
     },

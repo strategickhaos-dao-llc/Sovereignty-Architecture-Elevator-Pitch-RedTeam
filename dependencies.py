@@ -1,7 +1,5 @@
 # dependencies.py
 """Dependencies for policy enforcement."""
-import hashlib
-import json
 import os
 from typing import Optional
 import httpx
