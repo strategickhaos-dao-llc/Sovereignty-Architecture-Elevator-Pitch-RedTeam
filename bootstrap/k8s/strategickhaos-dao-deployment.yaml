@@ -1,0 +1,173 @@
+# strategickhaos-dao-deployment.yaml
+# Kubernetes deployment for proof-of-origin DAO validator
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: strategickhaos
+  labels:
+    app.kubernetes.io/name: strategickhaos
+    app.kubernetes.io/component: dao
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proof-of-origin
+  namespace: strategickhaos
+  labels:
+    app: dao-validator
+    component: proof-generator
+spec:
+  replicas: 4  # One per cluster
+  selector:
+    matchLabels:
+      app: dao-validator
+  template:
+    metadata:
+      labels:
+        app: dao-validator
+        node: lyra-nova-consensus
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: dao-validator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+      - name: proof-generator
+        image: strategickhaos/proof:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        - name: CHARITABLE_RATE
+          value: "0.07"
+        - name: EIN
+          value: "39-2923503"
+        - name: NODE_TYPE
+          value: "consensus"
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: proof-config
+          mountPath: /etc/proof
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: proof-config
+        configMap:
+          name: dao-proof-config
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proof-of-origin
+  namespace: strategickhaos
+  labels:
+    app: dao-validator
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: dao-validator
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dao-proof-config
+  namespace: strategickhaos
+data:
+  config.yaml: |
+    # DAO Proof of Origin Configuration
+    charitable_rate: 0.07
+    ein: "39-2923503"
+    consensus:
+      nodes:
+        - name: nova
+          weight: 1
+        - name: lyra
+          weight: 1
+      quorum: 2
+    proof_generation:
+      algorithm: "sha256"
+      interval_seconds: 300
+      retention_days: 365
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dao-validator
+  namespace: strategickhaos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dao-validator-role
+  namespace: strategickhaos
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dao-validator-rolebinding
+  namespace: strategickhaos
+subjects:
+- kind: ServiceAccount
+  name: dao-validator
+  namespace: strategickhaos
+roleRef:
+  kind: Role
+  name: dao-validator-role
+  apiGroup: rbac.authorization.k8s.io
