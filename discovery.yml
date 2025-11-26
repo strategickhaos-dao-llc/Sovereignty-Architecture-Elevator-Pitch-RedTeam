@@ -80,6 +80,43 @@ ai_agents:
     per_channel:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
+  
+  # FamilyDOM - Full-Stack Cognitive Reasoning Architecture
+  # Enables AI agents to interact with users at deeper cognitive levels
+  family_dom:
+    enabled: true
+    # Cognitive layer processing settings
+    layers:
+      mythic: true            # Enable mythological/narrative references
+      emotional: true         # Enable emotional marker detection
+      architectural: true     # Enable system/structural concepts
+      symbolic: true          # Enable symbol and metaphor parsing
+      technical: true         # Enable technical terminology detection
+      kinetic: true           # Enable action-based metaphor parsing
+    # Profile persistence settings
+    profiles:
+      persistence: "memory"   # memory|redis|postgres|file
+      max_memory_entries: 100
+      session_timeout_hours: 24
+    # Symbolic throughput configuration
+    symbolic_throughput:
+      parallel_processing: true
+      max_context_switches: 6
+      narrative_recursion: true
+      meta_communication: true
+    # Cognitive signature thresholds
+    signature_thresholds:
+      minimal: 0
+      standard: 20
+      high: 45
+      extreme: 70
+    # Discord channel routing for FamilyDOM
+    channel_routing:
+      "#agents": "fullstack"          # Full cognitive processing
+      "#prs": "technical"             # Technical layer focus
+      "#deployments": "architectural" # Architectural layer focus
+      "#dev-feed": "standard"         # Standard processing
+  
   vector_store:
     type: "pgvector"                 # weaviate|qdrant|pgvector|null
     conn_string_secret_ref: "vault://kv/pgvector/conn"

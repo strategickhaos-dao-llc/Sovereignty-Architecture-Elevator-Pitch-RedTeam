@@ -1,0 +1,115 @@
+# FamilyDOM Cognitive Profile Schema
+# Template for user cognitive profiles with full-stack reasoning support
+
+version: "1.0"
+schema: "cognitive_profile"
+
+# User identification
+user:
+  id: "${USER_ID}"
+  display_name: "${DISPLAY_NAME}"
+  created_at: "${CREATED_AT}"
+  updated_at: "${UPDATED_AT}"
+
+# Communication style preferences
+cognitive_style:
+  # Whether user communicates in parallel streams
+  parallel_processing: false
+  
+  # Symbolic throughput level: minimal|standard|high|extreme
+  symbolic_throughput: "medium"
+  
+  # Preferred cognitive layers (ordered by preference)
+  # Options: mythic, emotional, architectural, symbolic, technical, kinetic
+  preferred_layers:
+    - technical
+    - architectural
+  
+  # Whether user uses narrative recursion (self-referential structures)
+  narrative_recursion: false
+  
+  # Whether user engages in meta-communication (talking about communication)
+  meta_communication: false
+
+# Cognitive layer vocabulary (learned from interactions)
+layers:
+  mythic: []
+    # Examples: sovereign, empire, realm, quest, forge, legion
+  
+  emotional: []
+    # Examples: trust, hope, excited, overwhelm
+  
+  architectural: []
+    # Examples: system, framework, pipeline, integration
+  
+  symbolic: []
+    # Examples: encode, mirror, reflect, essence
+  
+  technical: []
+    # Examples: api, docker, typescript, kubernetes
+  
+  kinetic: []
+    # Examples: build, forge, launch, deploy
+
+# Long-term context memory (high-significance interactions)
+context_memory: []
+  # Each entry:
+  # - timestamp: ISO date
+  # - content: message content (truncated)
+  # - layers: detected layers
+  # - significance: 0-1 score
+
+# Active projects being tracked
+active_projects: []
+  # Each project:
+  # - id: unique identifier
+  # - name: project name
+  # - description: project description
+  # - artifacts: list of artifact names
+  # - last_interaction: ISO date
+  # - status: active|paused|completed
+
+# Narrative threads (persistent story elements)
+narrative_threads: []
+  # Each thread:
+  # - id: unique identifier
+  # - theme: narrative theme
+  # - symbols: associated symbols
+  # - references: referenced artifacts
+  # - continuity: number of sessions
+
+# Intent pattern recognition (learned patterns)
+intent_patterns: []
+  # Each pattern:
+  # - pattern: input pattern (first 50 chars)
+  # - frequency: times seen
+  # - last_seen: ISO date
+  # - resolved_to: intent classification
+
+# Cognitive signature metrics
+signature:
+  # Overall cognitive complexity score (0-100)
+  score: 0
+  
+  # Detected characteristics
+  characteristics: []
+    # Examples:
+    # - rich symbolic vocabulary
+    # - parallel processing
+    # - extreme symbolic throughput
+    # - narrative recursion
+    # - deep context memory
+
+# Profile metadata
+metadata:
+  # Total interactions processed
+  total_interactions: 0
+  
+  # Average throughput score
+  avg_throughput: 0
+  
+  # Throughput trend: increasing|stable|decreasing
+  throughput_trend: "stable"
+  
+  # Profile completeness (0-1)
+  completeness: 0
