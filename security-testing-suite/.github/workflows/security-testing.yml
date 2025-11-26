@@ -1,0 +1,557 @@
+# security-testing.yml - GitHub Actions Security Testing Workflow
+# Strategickhaos Sovereign Infrastructure
+#
+# Comprehensive security testing CI/CD pipeline:
+# - SAST (Static Analysis) with Semgrep and Bandit
+# - SCA (Dependency Scanning) with Safety and npm audit
+# - Secrets Detection with TruffleHog
+# - OPA Policy Testing and Fuzzing
+# - API Security Testing
+# - Audit Chain Verification
+# - Comprehensive Reporting
+#
+# Triggers:
+# - Push to main/develop branches
+# - Pull requests
+# - Nightly scheduled scans
+# - Manual dispatch
+
+name: Security Testing Suite
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+  schedule:
+    # Nightly scan at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      full_scan:
+        description: 'Run full security scan'
+        required: false
+        default: 'true'
+        type: boolean
+      target_url:
+        description: 'Target URL for API testing'
+        required: false
+        default: 'http://localhost:8000'
+        type: string
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '20'
+  OPA_VERSION: '0.60.0'
+
+jobs:
+  # ============================================================================
+  # SAST - Static Application Security Testing
+  # ============================================================================
+  sast:
+    name: SAST Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install SAST tools
+        run: |
+          pip install semgrep bandit
+      
+      - name: Run Semgrep
+        id: semgrep
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+          semgrep \
+            --config "p/security-audit" \
+            --config "p/python" \
+            --config "p/javascript" \
+            --json \
+            --output reports/semgrep.json \
+            --sarif \
+            --sarif-output reports/semgrep.sarif \
+            . || true
+          
+          # Count findings
+          FINDINGS=$(jq '.results | length' reports/semgrep.json 2>/dev/null || echo "0")
+          echo "semgrep_findings=$FINDINGS" >> $GITHUB_OUTPUT
+      
+      - name: Run Bandit
+        id: bandit
+        continue-on-error: true
+        run: |
+          bandit \
+            -r . \
+            -f json \
+            -o reports/bandit.json \
+            --exit-zero \
+            --exclude "*/.venv/*,*/node_modules/*,*/__pycache__/*,*/.git/*" || true
+          
+          # Count high severity
+          HIGH=$(jq '.results | map(select(.issue_severity == "HIGH")) | length' reports/bandit.json 2>/dev/null || echo "0")
+          echo "bandit_high=$HIGH" >> $GITHUB_OUTPUT
+      
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: reports/semgrep.sarif
+        continue-on-error: true
+      
+      - name: Upload SAST reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-reports
+          path: reports/
+          retention-days: 30
+
+  # ============================================================================
+  # SCA - Software Composition Analysis
+  # ============================================================================
+  sca:
+    name: Dependency Scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install SCA tools
+        run: |
+          pip install safety pip-audit
+          npm install -g npm-audit-reporter
+      
+      - name: Create reports directory
+        run: mkdir -p reports
+      
+      - name: Scan Python dependencies
+        id: python_scan
+        continue-on-error: true
+        run: |
+          # Find all requirements files
+          find . -name "requirements*.txt" -type f | while read req; do
+            echo "Scanning $req..."
+            pip-audit -r "$req" -f json >> reports/pip_audit.json 2>/dev/null || true
+          done
+          
+          # Safety check (if available)
+          find . -name "requirements*.txt" -type f | while read req; do
+            safety check -r "$req" --json >> reports/safety.json 2>/dev/null || true
+          done
+      
+      - name: Scan JavaScript dependencies
+        id: js_scan
+        continue-on-error: true
+        run: |
+          # Find package.json files
+          find . -name "package.json" -not -path "*/node_modules/*" -type f | while read pkg; do
+            dir=$(dirname "$pkg")
+            if [ -f "$dir/package-lock.json" ]; then
+              echo "Auditing $dir..."
+              (cd "$dir" && npm audit --json >> ../reports/npm_audit.json 2>/dev/null) || true
+            fi
+          done
+      
+      - name: Upload SCA reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: sca-reports
+          path: reports/
+          retention-days: 30
+
+  # ============================================================================
+  # Secrets Detection
+  # ============================================================================
+  secrets:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: TruffleHog Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --json --only-verified
+        continue-on-error: true
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Run detect-secrets
+        continue-on-error: true
+        run: |
+          pip install detect-secrets
+          mkdir -p reports
+          detect-secrets scan . \
+            --exclude-files '\.git/.*' \
+            --exclude-files 'node_modules/.*' \
+            --exclude-files '\.venv/.*' \
+            > reports/detect_secrets.json || true
+      
+      - name: Upload secrets reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: secrets-reports
+          path: reports/
+          retention-days: 7
+
+  # ============================================================================
+  # OPA Policy Testing
+  # ============================================================================
+  opa-testing:
+    name: OPA Policy Testing
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install OPA
+        run: |
+          curl -L -o opa https://openpolicyagent.org/downloads/v${{ env.OPA_VERSION }}/opa_linux_amd64_static
+          chmod +x opa
+          sudo mv opa /usr/local/bin/
+          opa version
+      
+      - name: Create reports directory
+        run: mkdir -p reports
+      
+      - name: Run OPA tests
+        id: opa_test
+        run: |
+          if [ -d "security-testing-suite/policies" ]; then
+            opa test security-testing-suite/policies/ -v --format=json > reports/opa_test.json || true
+            
+            TOTAL=$(jq 'length' reports/opa_test.json 2>/dev/null || echo "0")
+            PASSED=$(jq '[.[] | select(.pass == true)] | length' reports/opa_test.json 2>/dev/null || echo "0")
+            FAILED=$((TOTAL - PASSED))
+            
+            echo "total_tests=$TOTAL" >> $GITHUB_OUTPUT
+            echo "passed_tests=$PASSED" >> $GITHUB_OUTPUT
+            echo "failed_tests=$FAILED" >> $GITHUB_OUTPUT
+            
+            if [ "$FAILED" -gt 0 ]; then
+              echo "::warning::$FAILED OPA policy tests failed"
+            fi
+          else
+            echo "No policies directory found"
+            echo '[]' > reports/opa_test.json
+          fi
+      
+      - name: Run OPA coverage
+        run: |
+          if [ -d "security-testing-suite/policies" ]; then
+            opa test security-testing-suite/policies/ --coverage --format=json > reports/opa_coverage.json || true
+          fi
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install fuzzing dependencies
+        run: |
+          pip install hypothesis
+      
+      - name: Run OPA fuzzing
+        if: github.event_name == 'schedule' || github.event.inputs.full_scan == 'true'
+        run: |
+          if [ -f "security-testing-suite/tooling/opa_fuzz.py" ]; then
+            python security-testing-suite/tooling/opa_fuzz.py \
+              --policy security-testing-suite/policies/ \
+              --iterations 500 \
+              --output reports/opa_fuzz.ndjson \
+              --report reports/opa_fuzz_report.json || true
+          fi
+      
+      - name: Upload OPA reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: opa-reports
+          path: reports/
+          retention-days: 30
+
+  # ============================================================================
+  # API Security Testing
+  # ============================================================================
+  api-security:
+    name: API Security Testing
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    permissions:
+      contents: read
+    
+    services:
+      # Add your API service here if needed for testing
+      api:
+        image: python:3.11-slim
+        ports:
+          - 8000:8000
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install dependencies
+        run: |
+          pip install requests pyjwt
+      
+      - name: Create reports directory
+        run: mkdir -p reports
+      
+      - name: Run API security tests
+        env:
+          TARGET_URL: ${{ github.event.inputs.target_url || 'http://localhost:8000' }}
+        run: |
+          if [ -f "security-testing-suite/tooling/fastapi_security_test.py" ]; then
+            python security-testing-suite/tooling/fastapi_security_test.py \
+              --target "$TARGET_URL" \
+              --output reports/api_security.json \
+              --timeout 30 || true
+          fi
+        continue-on-error: true
+      
+      - name: Upload API security reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-security-reports
+          path: reports/
+          retention-days: 30
+
+  # ============================================================================
+  # Audit Chain Verification
+  # ============================================================================
+  audit-verification:
+    name: Audit Chain Verification
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Create test audit chain
+        run: |
+          mkdir -p reports
+          if [ -f "security-testing-suite/tooling/verify_audit_chain.py" ]; then
+            python security-testing-suite/tooling/verify_audit_chain.py \
+              --generate-sample 100 \
+              --output reports/sample_chain.ndjson
+          fi
+      
+      - name: Verify audit chain
+        run: |
+          if [ -f "security-testing-suite/tooling/verify_audit_chain.py" ] && [ -f "reports/sample_chain.ndjson" ]; then
+            python security-testing-suite/tooling/verify_audit_chain.py \
+              --file reports/sample_chain.ndjson \
+              --output reports/chain_verification.json \
+              --algorithm sha256 || true
+          fi
+      
+      - name: Upload verification reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-reports
+          path: reports/
+          retention-days: 30
+
+  # ============================================================================
+  # Security Report Generation
+  # ============================================================================
+  report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [sast, sca, secrets, opa-testing]
+    if: always()
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-reports
+      
+      - name: Create consolidated report
+        run: |
+          mkdir -p final-reports
+          
+          # Consolidate all reports
+          cat > final-reports/security_summary.json << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit": "${{ github.sha }}",
+            "ref": "${{ github.ref }}",
+            "event": "${{ github.event_name }}",
+            "workflow_run_id": "${{ github.run_id }}",
+            "sast": {
+              "semgrep": $(cat all-reports/sast-reports/semgrep.json 2>/dev/null | jq '.results | length' || echo "null"),
+              "bandit_high": $(cat all-reports/sast-reports/bandit.json 2>/dev/null | jq '.results | map(select(.issue_severity == "HIGH")) | length' || echo "null")
+            },
+            "opa": {
+              "tests_passed": $(cat all-reports/opa-reports/opa_test.json 2>/dev/null | jq '[.[] | select(.pass == true)] | length' || echo "null"),
+              "tests_failed": $(cat all-reports/opa-reports/opa_test.json 2>/dev/null | jq '[.[] | select(.pass == false)] | length' || echo "null")
+            },
+            "secrets_detected": $(cat all-reports/secrets-reports/detect_secrets.json 2>/dev/null | jq '.results | to_entries | map(.value | length) | add // 0' || echo "null")
+          }
+          EOF
+          
+          cat final-reports/security_summary.json
+      
+      - name: Post summary to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let summary;
+            try {
+              summary = JSON.parse(fs.readFileSync('final-reports/security_summary.json', 'utf8'));
+            } catch (e) {
+              summary = { error: 'Failed to parse summary' };
+            }
+            
+            const body = `## 🔐 Security Scan Results
+            
+            | Check | Result |
+            |-------|--------|
+            | SAST (Semgrep) | ${summary.sast?.semgrep ?? 'N/A'} findings |
+            | SAST (Bandit High) | ${summary.sast?.bandit_high ?? 'N/A'} findings |
+            | OPA Tests Passed | ${summary.opa?.tests_passed ?? 'N/A'} |
+            | OPA Tests Failed | ${summary.opa?.tests_failed ?? 'N/A'} |
+            | Secrets Detected | ${summary.secrets_detected ?? 'N/A'} |
+            
+            _Scan completed at ${summary.timestamp}_
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+      
+      - name: Upload final report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-summary
+          path: final-reports/
+          retention-days: 90
+
+  # ============================================================================
+  # Security Gate
+  # ============================================================================
+  security-gate:
+    name: Security Gate
+    runs-on: ubuntu-latest
+    needs: [sast, sca, secrets, opa-testing]
+    if: always()
+    
+    steps:
+      - name: Download reports
+        uses: actions/download-artifact@v4
+        with:
+          path: reports
+        continue-on-error: true
+      
+      - name: Evaluate security gate
+        id: gate
+        run: |
+          CRITICAL=0
+          HIGH=0
+          
+          # Check Semgrep
+          if [ -f "reports/sast-reports/semgrep.json" ]; then
+            SEMGREP_CRITICAL=$(jq '[.results[] | select(.extra.severity == "ERROR")] | length' reports/sast-reports/semgrep.json 2>/dev/null || echo "0")
+            CRITICAL=$((CRITICAL + SEMGREP_CRITICAL))
+          fi
+          
+          # Check Bandit
+          if [ -f "reports/sast-reports/bandit.json" ]; then
+            BANDIT_HIGH=$(jq '.results | map(select(.issue_severity == "HIGH")) | length' reports/sast-reports/bandit.json 2>/dev/null || echo "0")
+            HIGH=$((HIGH + BANDIT_HIGH))
+          fi
+          
+          # Check secrets
+          if [ -f "reports/secrets-reports/detect_secrets.json" ]; then
+            SECRETS=$(jq '.results | to_entries | map(.value | length) | add // 0' reports/secrets-reports/detect_secrets.json 2>/dev/null || echo "0")
+            CRITICAL=$((CRITICAL + SECRETS))
+          fi
+          
+          echo "critical=$CRITICAL" >> $GITHUB_OUTPUT
+          echo "high=$HIGH" >> $GITHUB_OUTPUT
+          
+          echo "Critical findings: $CRITICAL"
+          echo "High findings: $HIGH"
+          
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "::error::Security gate failed: $CRITICAL critical vulnerabilities found"
+            exit 1
+          fi
+      
+      - name: Gate passed
+        if: steps.gate.outcome == 'success'
+        run: |
+          echo "✅ Security gate passed"
+          echo "No critical vulnerabilities found"
