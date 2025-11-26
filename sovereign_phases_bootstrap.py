@@ -9,6 +9,7 @@ ensuring each phase is validated before progressing to the next.
 
 import json
 import hashlib
+import sys
 import time
 import subprocess
 import os
@@ -109,8 +110,8 @@ class SovereignPhasesBootstrap:
     
     def __init__(self, config_path: str = "./bootstrap_config.json"):
         self.state = BootstrapState(
-            started_at=utc_now().isoformat() + 'Z',
-            last_updated=utc_now().isoformat() + 'Z'
+            started_at=utc_now().isoformat(),
+            last_updated=utc_now().isoformat()
         )
         self.config = self._load_config(config_path)
         self.state_file = Path("sovereign_bootstrap_state.json")
@@ -211,7 +212,7 @@ class SovereignPhasesBootstrap:
     
     def _save_state(self):
         """Save current bootstrap state to file"""
-        self.state.last_updated = utc_now().isoformat() + 'Z'
+        self.state.last_updated = utc_now().isoformat()
         
         with open(self.state_file, 'w') as f:
             json.dump(self.state.to_dict(), f, indent=2)
@@ -223,7 +224,7 @@ class SovereignPhasesBootstrap:
         """Create a new phase checkpoint"""
         checkpoint = PhaseCheckpoint(
             phase=phase,
-            timestamp=utc_now().isoformat() + 'Z',
+            timestamp=utc_now().isoformat(),
             status=status,
             validations_passed=passed,
             validations_failed=failed,
@@ -255,12 +256,12 @@ class SovereignPhasesBootstrap:
         """Validate network connectivity"""
         try:
             import socket
-            # Test basic network connectivity
+            # Test basic network connectivity by attempting DNS resolution
             socket.setdefaulttimeout(5)
-            socket.socket(socket.AF_INET, socket.SOCK_STREAM).close()
+            socket.gethostbyname('dns.google')
             print("✅ Network connectivity check passed")
             return True
-        except Exception as e:
+        except (socket.gaierror, socket.timeout, OSError) as e:
             print(f"⚠️ Network check warning: {e}")
             return True  # Non-blocking for offline mode
     
@@ -406,8 +407,8 @@ class SovereignPhasesBootstrap:
         # Scan environment
         env_info = {
             'cwd': os.getcwd(),
-            'python_version': f"{os.sys.version_info.major}.{os.sys.version_info.minor}",
-            'platform': os.sys.platform,
+            'python_version': f"{sys.version_info.major}.{sys.version_info.minor}",
+            'platform': sys.platform,
             'files_count': len(list(Path('.').glob('*')))
         }
         
@@ -449,7 +450,7 @@ class SovereignPhasesBootstrap:
         
         # Initialize cognitive state
         cognitive_state = {
-            'timestamp': utc_now().isoformat() + 'Z',
+            'timestamp': utc_now().isoformat(),
             'threads_active': 0,
             'active_processes': [],
             'synthesis_level': 1,
@@ -471,11 +472,23 @@ class SovereignPhasesBootstrap:
         """Phase 4: Integration - connect services"""
         print("🔗 Phase 4: Integrating services...")
         
+        # Check Docker availability by running docker version
+        docker_available = False
+        try:
+            result = subprocess.run(
+                ['docker', 'version'],
+                capture_output=True,
+                timeout=10
+            )
+            docker_available = result.returncode == 0
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            docker_available = False
+        
         # Check for integration points
         integrations = {
             'discord': os.environ.get('DISCORD_BOT_TOKEN') is not None,
             'github': os.environ.get('GITHUB_APP_ID') is not None,
-            'docker': Path('/var/run/docker.sock').exists() or os.name == 'nt'
+            'docker': docker_available
         }
         
         for service, status in integrations.items():
@@ -490,7 +503,7 @@ class SovereignPhasesBootstrap:
         
         # Create sovereignty manifest
         manifest = {
-            'timestamp': utc_now().isoformat() + 'Z',
+            'timestamp': utc_now().isoformat(),
             'node_id': self.state.node_id,
             'operator': self.state.operator,
             'status': 'SOVEREIGN',
@@ -628,8 +641,8 @@ class SovereignPhasesBootstrap:
         print("🔄 Resetting bootstrap state...")
         
         self.state = BootstrapState(
-            started_at=utc_now().isoformat() + 'Z',
-            last_updated=utc_now().isoformat() + 'Z'
+            started_at=utc_now().isoformat(),
+            last_updated=utc_now().isoformat()
         )
         
         self._save_state()
