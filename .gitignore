@@ -36,6 +36,11 @@ target/
 # Workspace data
 workspace/
 
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
 # Sovereign bootstrap generated files
 sovereign_bootstrap_state.json
 sovereignty_manifest.json
