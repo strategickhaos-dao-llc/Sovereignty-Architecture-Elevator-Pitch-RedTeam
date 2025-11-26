@@ -83,9 +83,11 @@ export function uplinkRoutes(rest: REST, config: UplinkRouteConfig) {
         });
       }
 
+      // Type assertion needed for Discord.js REST API compatibility
+      // This pattern is used consistently throughout the codebase (see routes/github.ts)
       await rest.post(`/channels/${config.channelId}/messages`, {
         body: { embeds: [embed] },
-      } as any);
+      } as Parameters<typeof rest.post>[1]);
 
       return res.json({
         success: true,
@@ -183,7 +185,7 @@ export function uplinkBatchRoutes(rest: REST, config: UplinkRouteConfig) {
             },
           ],
         },
-      } as any);
+      } as Parameters<typeof rest.post>[1]);
 
       return res.json({
         success: true,

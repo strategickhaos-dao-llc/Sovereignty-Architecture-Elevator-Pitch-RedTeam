@@ -136,6 +136,17 @@ export function validateReceipt(receipt: UplinkReceipt): ValidationResult {
 }
 
 /**
+ * Parse timestamp from filename format (YYYY-MM-DD_HH-MM-SS) to readable format
+ */
+function formatFilenameTimestamp(raw: string): string {
+  // Input: "2025-06-09_17-56-42"
+  // Output: "2025-06-09 17:56:42"
+  const datePart = raw.slice(0, 10); // "2025-06-09"
+  const timePart = raw.slice(11).replace(/-/g, ":"); // "17:56:42"
+  return `${datePart} ${timePart}`;
+}
+
+/**
  * Parse filename to extract receipt metadata
  */
 export function parseReceiptFilename(
@@ -147,9 +158,7 @@ export function parseReceiptFilename(
 
   return {
     type: match[1],
-    timestamp: match[2].replace(/_/g, " ").replace(/-/g, ":").slice(0, 10) +
-      " " +
-      match[2].slice(11).replace(/-/g, ":"),
+    timestamp: formatFilenameTimestamp(match[2]),
   };
 }
 
