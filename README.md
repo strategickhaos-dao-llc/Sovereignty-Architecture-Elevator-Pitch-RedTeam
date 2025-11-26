@@ -10,6 +10,43 @@ This system creates a **sovereignty control plane** that bridges:
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
+### Cognitive Architecture Diagram
+
+![Cognitive Architecture](cognitive_architecture.svg)
+
+The **Cognitive Architecture** diagram illustrates the hierarchical flow of the Strategickhaos sovereign system, organized into five distinct layers:
+
+1. **Sovereign Mind** (Top Layer) - The central command node (`@strategickhaos Node 137`) that orchestrates all parallel processing threads.
+
+2. **Parallel Thread Mode** (Second Layer) - Six concurrent processing threads:
+   - **Environment Load**: Manages Athena, Docker, and RAG integrations
+   - **Repo Scanning**: Handles GitHub and Obsidian repositories
+   - **Dependency Mapping**: Processes YAML and Dockerfiles
+   - **Synthesis Cues**: Runs the Contradiction Engine for insight generation
+   - **Visual Layout**: Coordinates monitors and window management
+   - **Cognitive Compression**: Transforms patterns into actionable insights
+
+3. **Synthesis Layer** (Third Layer) - Integration tools that process thread outputs:
+   - **IDEs**: VSCode, Rider, and PyCharm development environments
+   - **Terminals**: PowerShell, WSL, and Kali command interfaces
+   - **Docker Swarm**: Qdrant and Ollama containerized services
+   - **AI Agents**: Grok, Qwen, and custom Recon.py agents
+
+4. **External Memory Matrix** (Fourth Layer) - Display and interface systems:
+   - **Strategic Overview**: DOT graphs and RAG visualizations
+   - **Active Code**: VSCode and JetBrains views
+   - **Terminals + Docker**: PowerShell and Kali interfaces
+   - **Logs + Recon**: Bug bounty and IPFS monitoring
+   - **Mobile Command**: iPad with Shortcuts and Voice control
+
+5. **Execution Mesh** (Bottom Layer) - Physical infrastructure:
+   - **Athena 128GB**: Primary control plane server
+   - **Kali Offensive VM**: Security testing environment
+   - **Nova TUF GPU**: GPU-accelerated compute node
+   - **WD Black Array**: High-performance storage system
+
+The diagram uses color coding to distinguish layers (magenta for core mind, orange-yellow gradient for threads, magenta for synthesis, blue gradient for memory matrix, and green for execution mesh) with flow edges showing data and control pathways.
+
 ## 🚀 Quick Start
 
 ```bash
