@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# OPA fuzz harness output
+opa_fuzz_results.json
+tmp_input_*.json
