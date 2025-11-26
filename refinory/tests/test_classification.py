@@ -428,10 +428,11 @@ class TestRedactionEngine:
         
         preview = create_redacted_preview(artifact, "confidential", max_length=50)
         
+        max_length = 50
         assert preview["id"] == "artifact-123"
         assert preview["title"] == "Test Document"
         assert preview["classification"] == "confidential"
-        assert len(preview["description"]) <= 53  # 50 + "..."
+        assert len(preview["description"]) <= max_length + len("...")
         assert "content" not in preview
         assert preview["_redacted_preview"] is True
 

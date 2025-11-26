@@ -485,15 +485,21 @@ class Database:
         request_id: str,
         user_clearance_rank: int = 0,
         user_groups: List[str] = None,
+        user_id: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
-        """Get all artifacts for a request, filtered by user clearance"""
-        # Classification rank mapping
+        """Get all artifacts for a request, filtered by user clearance.
+        
+        Also logs access attempts for auditing purposes.
+        """
+        # Classification rank mapping (matches ClassificationRank enum)
+        from .classification.models import ClassificationRank, ClassificationLevel
+        
         classification_ranks = {
-            'unclassified': 0,
-            'internal': 1,
-            'confidential': 2,
-            'secret': 3,
-            'top_secret': 4,
+            ClassificationLevel.UNCLASSIFIED.value: int(ClassificationRank.UNCLASSIFIED),
+            ClassificationLevel.INTERNAL.value: int(ClassificationRank.INTERNAL),
+            ClassificationLevel.CONFIDENTIAL.value: int(ClassificationRank.CONFIDENTIAL),
+            ClassificationLevel.SECRET.value: int(ClassificationRank.SECRET),
+            ClassificationLevel.TOP_SECRET.value: int(ClassificationRank.TOP_SECRET),
         }
         
         sql = """
@@ -513,19 +519,44 @@ class Database:
             for row in rows:
                 classification = row['classification']
                 artifact_rank = classification_ranks.get(classification, 0)
+                artifact_id = str(row['artifact_id'])
                 
-                # Filter by clearance level
+                # Filter by clearance level and log denied access
                 if artifact_rank > user_clearance_rank:
+                    # Log denied access attempt for auditing
+                    if user_id:
+                        await self.store_audit_event(
+                            event_type="access_denied",
+                            user_id=user_id,
+                            action="list_artifacts",
+                            outcome="denied",
+                            resource_id=artifact_id,
+                            resource_type="architecture_artifact",
+                            details={"reason": "clearance_insufficient"},
+                            classification_level=classification,
+                        )
                     continue
                 
                 # Check group access if groups are specified on artifact
                 artifact_groups = json.loads(row['allow_groups']) if row['allow_groups'] else []
                 if artifact_groups and user_groups:
                     if not set(artifact_groups) & set(user_groups):
+                        # Log denied access due to missing group
+                        if user_id:
+                            await self.store_audit_event(
+                                event_type="access_denied",
+                                user_id=user_id,
+                                action="list_artifacts",
+                                outcome="denied",
+                                resource_id=artifact_id,
+                                resource_type="architecture_artifact",
+                                details={"reason": "group_access_denied"},
+                                classification_level=classification,
+                            )
                         continue
                 
                 result.append({
-                    "artifact_id": str(row['artifact_id']),
+                    "artifact_id": artifact_id,
                     "artifact_type": row['artifact_type'],
                     "filename": row['filename'],
                     "content": row['content'],

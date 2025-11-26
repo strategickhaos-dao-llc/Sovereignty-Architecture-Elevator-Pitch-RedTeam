@@ -336,6 +336,40 @@ class PolicyEngine:
                 policy_ids=[],
             )
 
+    def _check_need_to_know_access(
+        self,
+        user: UserClearance,
+        artifact: ArtifactClassification,
+    ) -> bool:
+        """
+        Check if user has need-to-know access to the artifact.
+        
+        Returns True if:
+        - User has at least one matching need-to-know grant, OR
+        - Artifact has no need-to-know restrictions
+        """
+        if not artifact.need_to_know_tags:
+            # No restrictions means access granted
+            return True
+        return bool(artifact.need_to_know_tags & user.need_to_know_grants)
+
+    def _check_group_access(
+        self,
+        user: UserClearance,
+        artifact: ArtifactClassification,
+    ) -> bool:
+        """
+        Check if user has group-based access to the artifact.
+        
+        Returns True if:
+        - User is a member of at least one allowed group, OR
+        - Artifact has no group restrictions
+        """
+        if not artifact.allow_groups:
+            # No restrictions means access granted
+            return True
+        return bool(artifact.allow_groups & user.groups)
+
     def _build_context(
         self,
         user: UserClearance,
@@ -346,15 +380,9 @@ class PolicyEngine:
         has_clearance = user.clearance_rank >= artifact.rank
         clearance_insufficient = not has_clearance
 
-        # Check need-to-know
-        has_need_to_know = bool(
-            artifact.need_to_know_tags & user.need_to_know_grants
-        ) or len(artifact.need_to_know_tags) == 0
-
-        # Check group access
-        has_group_access = bool(
-            artifact.allow_groups & user.groups
-        ) or len(artifact.allow_groups) == 0
+        # Check need-to-know and group access using helper methods
+        has_need_to_know = self._check_need_to_know_access(user, artifact)
+        has_group_access = self._check_group_access(user, artifact)
 
         return {
             "user": {

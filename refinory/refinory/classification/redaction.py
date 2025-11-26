@@ -126,7 +126,7 @@ class RedactionEngine:
         current = data
 
         # Navigate to parent of target field
-        for part in parts[:-1]:
+        for i, part in enumerate(parts[:-1]):
             if isinstance(current, dict) and part in current:
                 current = current[part]
             elif isinstance(current, list):
@@ -141,7 +141,7 @@ class RedactionEngine:
                     # Redact field in all list items
                     for item in current:
                         if isinstance(item, dict):
-                            remaining_path = ".".join(parts[parts.index(part) :])
+                            remaining_path = ".".join(parts[i:])
                             self._redact_field(item, remaining_path, reason, policy_id)
                     return True
             else:

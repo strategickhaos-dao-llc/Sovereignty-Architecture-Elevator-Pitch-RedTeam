@@ -46,11 +46,13 @@ class ClassificationMiddleware:
     def decode_token(self, token: str) -> dict:
         """Decode and validate JWT token."""
         try:
-            options = {}
-            if self.jwt_audience:
-                options["audience"] = self.jwt_audience
-            if self.jwt_issuer:
-                options["issuer"] = self.jwt_issuer
+            # Build options dict with non-None values only
+            options = {
+                k: v for k, v in [
+                    ("audience", self.jwt_audience),
+                    ("issuer", self.jwt_issuer)
+                ] if v is not None
+            }
 
             payload = jwt.decode(
                 token,
