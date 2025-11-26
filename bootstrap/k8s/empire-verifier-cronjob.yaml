@@ -150,8 +150,8 @@ data:
     
     log_ndjson() {
         timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        printf '{"timestamp":"%s","level":"%s","artifact":"%s","status":"%s"}\n' \
-            "$timestamp" "$1" "$2" "$3" >> "$LOG_FILE"
+        printf '{"timestamp":"%s","level":"%s","artifact":"%s","status":"%s","message":"%s"}\n' \
+            "$timestamp" "$1" "$2" "$3" "$4" >> "$LOG_FILE"
     }
     
     write_prometheus() {
@@ -159,6 +159,8 @@ data:
     # HELP empire_archive_verified Whether archive verification passed
     # TYPE empire_archive_verified gauge
     empire_archive_verified{artifact="3544"} $1
+    # HELP empire_archive_last_check_timestamp Unix timestamp of last verification
+    # TYPE empire_archive_last_check_timestamp gauge
     empire_archive_last_check_timestamp $(date +%s)
     EOF
     }
@@ -173,7 +175,7 @@ data:
     
     # Main
     if [ ! -d "$ARCHIVE_DIR" ]; then
-        log_ndjson "ERROR" "archive" "MISSING"
+        log_ndjson "ERROR" "archive" "MISSING" "Archive directory not found"
         alert "Archive directory missing!"
         write_prometheus 0
         exit 1
@@ -181,7 +183,7 @@ data:
     
     artifact="$ARCHIVE_DIR/artifact_3544_impulse_slip_saga.yaml"
     if [ ! -f "$artifact" ]; then
-        log_ndjson "ERROR" "3544" "MISSING"
+        log_ndjson "ERROR" "3544" "MISSING" "Artifact file not found"
         alert "Artifact #3544 missing!"
         write_prometheus 0
         exit 1
@@ -190,13 +192,13 @@ data:
     current_hash=$(sha256sum "$artifact" | cut -d' ' -f1)
     
     if [ -n "$ARTIFACT_3544_HASH" ] && [ "$current_hash" != "$ARTIFACT_3544_HASH" ]; then
-        log_ndjson "ERROR" "3544" "HASH_TOUCHED"
+        log_ndjson "ERROR" "3544" "HASH_TOUCHED" "Hash mismatch detected"
         alert "Artifact #3544 hash mismatch!"
         write_prometheus 0
         exit 1
     fi
     
-    log_ndjson "INFO" "3544" "ETERNAL"
+    log_ndjson "INFO" "3544" "ETERNAL" "Archive integrity verified"
     write_prometheus 1
     echo "Empire Eternal - Archive Verified"
     exit 0
