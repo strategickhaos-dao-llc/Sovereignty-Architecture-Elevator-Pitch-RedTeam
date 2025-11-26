@@ -12,7 +12,7 @@ This system creates a **sovereignty control plane** that bridges:
 
 ### Cognitive Architecture Diagram
 
-![Cognitive Architecture](cognitive_architecture.svg)
+![Cognitive Architecture - Five-layer hierarchical diagram showing sovereign mind, parallel threads, synthesis layer, memory matrix, and execution mesh](cognitive_architecture.svg)
 
 The **Cognitive Architecture** diagram illustrates the hierarchical flow of the Strategickhaos sovereign system, organized into five distinct layers:
 
@@ -45,7 +45,7 @@ The **Cognitive Architecture** diagram illustrates the hierarchical flow of the 
    - **Nova TUF GPU**: GPU-accelerated compute node
    - **WD Black Array**: High-performance storage system
 
-The diagram uses color coding to distinguish layers (magenta for core mind, orange-yellow gradient for threads, magenta for synthesis, blue gradient for memory matrix, and green for execution mesh) with flow edges showing data and control pathways.
+The diagram uses color coding to distinguish layers: magenta for core mind, orange-yellow gradient for threads, magenta for synthesis, blue gradient for memory matrix, and green for execution mesh. Flow edges show data and control pathways throughout the system.
 
 ## 🚀 Quick Start
 
