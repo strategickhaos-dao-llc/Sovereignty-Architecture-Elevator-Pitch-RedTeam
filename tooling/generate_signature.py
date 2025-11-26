@@ -3,9 +3,10 @@
 Generate HMAC-SHA256 signature for webhook payloads.
 
 Usage:
-    python generate_signature.py <payload_file> <secret>
+    python3 generate_signature.py <payload_file> <secret>
 
-Outputs a curl command to /tmp/curl_cmd.sh that includes the signature.
+Outputs a curl command to stdout that includes the signature.
+Redirect to a file if needed: python3 generate_signature.py <payload_file> <secret> > /tmp/curl_cmd.sh
 """
 
 import hashlib
@@ -26,7 +27,7 @@ def generate_signature(payload: bytes, secret: str) -> str:
 
 def main():
     if len(sys.argv) < 3:
-        print("Usage: python generate_signature.py <payload_file> <secret>", file=sys.stderr)
+        print("Usage: python3 generate_signature.py <payload_file> <secret>", file=sys.stderr)
         sys.exit(1)
 
     payload_file = sys.argv[1]
