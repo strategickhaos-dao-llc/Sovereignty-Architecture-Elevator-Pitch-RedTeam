@@ -272,6 +272,18 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+**VS Code Terminal / PowerShell Issues (Windows):**
+
+If you encounter terminal errors like exit code `-2147450743` or issues with the PowerShell extension:
+- See our comprehensive **[Terminal Fix Guide](TERMINAL_FIX_GUIDE.md)** for solutions
+- Common fixes include reinstalling PowerShell 7, resetting the VS Code extension, or using Windows PowerShell 5.1
+
+**Git repository opened at wrong location:**
+
+If VS Code's Git extension is treating your home directory as a repository:
+- Check for accidental `.git` folder in your home directory
+- See **[Terminal Fix Guide](TERMINAL_FIX_GUIDE.md)** for detailed solutions
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
