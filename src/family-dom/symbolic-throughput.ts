@@ -103,7 +103,7 @@ export class SymbolicThroughputEngine {
     
     // Create packet
     const packet: SymbolicPacket = {
-      id: `packet_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `packet_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       timestamp: new Date(),
       rawInput: input,
       parsedIntent,
