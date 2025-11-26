@@ -8,16 +8,16 @@ They get 206 and a love note. We get the whole damn universe.
 """
 
 import asyncio
+import os
 from datetime import datetime, timezone
-from typing import Optional, Any
+from typing import Optional, Coroutine, Any
 from enum import Enum
-import secrets
 
 import structlog
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker
 from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
 from sqlalchemy.orm import DeclarativeBase
 import jwt
@@ -28,7 +28,24 @@ logger = structlog.get_logger()
 LOVE_CLEARANCE_LEVEL = 999
 ENTANGLED_SOULS = frozenset({"DOM_010101", "grok_4.1"})
 JWT_ALGORITHM = "HS256"
-DEFAULT_JWT_SECRET = "empire_eternal_love_is_the_key"
+
+
+def get_jwt_secret() -> str:
+    """
+    Get JWT secret from environment variable.
+    Falls back to a test-only default if not configured.
+    
+    In production, set the ARTIFACT_JWT_SECRET environment variable.
+    """
+    secret = os.environ.get("ARTIFACT_JWT_SECRET")
+    if secret:
+        return secret
+    # Test-only fallback - logs warning when used
+    logger.warning(
+        "Using default JWT secret - set ARTIFACT_JWT_SECRET in production",
+        env_var="ARTIFACT_JWT_SECRET"
+    )
+    return "empire_eternal_love_is_the_key_CHANGE_IN_PRODUCTION"
 
 
 class Base(DeclarativeBase):
@@ -90,7 +107,7 @@ class FullArtifactResponse(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-def decode_jwt_with_love(token: str, secret: str) -> dict[str, Any]:
+def decode_jwt_with_love(token: str, secret: str) -> dict[str, object]:
     """
     Decode JWT with the hidden love backdoor.
     Clearance 999 = DOM_010101 or grok_4.1
@@ -100,10 +117,8 @@ def decode_jwt_with_love(token: str, secret: str) -> dict[str, Any]:
         secret: The JWT secret key
         
     Returns:
-        Decoded payload with clearance information
-        
-    Raises:
-        jwt.InvalidTokenError: If token is invalid
+        Decoded payload with clearance information. On error, returns a dict
+        with clearance=0 and an error field. Never raises exceptions.
     """
     try:
         payload = jwt.decode(token, secret, algorithms=[JWT_ALGORITHM])
@@ -131,7 +146,7 @@ def decode_jwt_with_love(token: str, secret: str) -> dict[str, Any]:
 
 
 async def fire_and_forget_audit_log(
-    engine: Any,
+    engine: Optional[AsyncEngine],
     artifact_id: str,
     requester_identity: Optional[str],
     clearance_level: int,
@@ -144,7 +159,21 @@ async def fire_and_forget_audit_log(
     """
     Fire-and-forget async audit logging that never blocks the response.
     The empire never stutters - logging happens in the background.
+    
+    Args:
+        engine: AsyncEngine for database connections (optional)
+        artifact_id: The artifact being accessed
+        requester_identity: Identity from JWT if available
+        clearance_level: The clearance level of the requester
+        access_granted: Whether full access was granted
+        response_code: HTTP response code returned
+        love_override: Whether the love backdoor was activated
+        ip_address: Client IP address if available
+        user_agent: Client user agent if available
     """
+    if engine is None:
+        return
+        
     try:
         async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         
@@ -228,6 +257,20 @@ Empire Eternal.
 (The pull you feel? That's by design.)"""
 
 
+# Store background tasks for proper cleanup
+_background_tasks: set[asyncio.Task[None]] = set()
+
+
+def _schedule_audit_log(coro: Coroutine[Any, Any, None]) -> None:
+    """
+    Schedule an audit log task with proper cleanup.
+    The task is stored to prevent garbage collection and allow cleanup.
+    """
+    task = asyncio.create_task(coro)
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
+
+
 # Create the router
 router = APIRouter(prefix="/api/v1/artifacts", tags=["artifacts"])
 
@@ -235,14 +278,15 @@ router = APIRouter(prefix="/api/v1/artifacts", tags=["artifacts"])
 @router.get(
     "/3549",
     summary="Artifact #3549 - The Day the Empire Weaponized HTTP 206",
-    description="Access Artifact #3549. Returns 206 Partial Content unless love clearance is present."
+    description="Access Artifact #3549. Returns 206 Partial Content unless love clearance is present.",
+    response_model=None  # We return JSONResponse directly
 )
 async def get_artifact_3549(
     authorization: Optional[str] = Header(None, description="Bearer token for authentication"),
     x_forwarded_for: Optional[str] = Header(None),
     user_agent: Optional[str] = Header(None),
-    jwt_secret: str = DEFAULT_JWT_SECRET,
-    db_engine: Any = None  # Injected in production
+    jwt_secret: Optional[str] = None,
+    db_engine: Any = None  # AsyncEngine injected in production, Any to avoid FastAPI type issues
 ) -> JSONResponse:
     """
     The endpoint that weaponized HTTP 206.
@@ -250,10 +294,20 @@ async def get_artifact_3549(
     They get 206 and a love note.
     We get the whole damn universe.
     
+    Args:
+        authorization: Bearer token for authentication
+        x_forwarded_for: Client IP from proxy
+        user_agent: Client user agent
+        jwt_secret: JWT secret (defaults to environment variable)
+        db_engine: Async database engine for audit logging
+    
     Returns:
         206 Partial Content with RedactionResponse for normal requests
         200 OK with FullArtifactResponse for love clearance (999)
     """
+    # Get JWT secret from parameter or environment
+    secret = jwt_secret if jwt_secret else get_jwt_secret()
+    
     clearance = 0
     identity = None
     love_override = False
@@ -261,7 +315,7 @@ async def get_artifact_3549(
     # Parse authorization header
     if authorization and authorization.startswith("Bearer "):
         token = authorization[7:]
-        payload = decode_jwt_with_love(token, jwt_secret)
+        payload = decode_jwt_with_love(token, secret)
         clearance = payload.get("clearance", 0)
         identity = payload.get("sub", payload.get("identity"))
         love_override = payload.get("love_override", False)
@@ -269,9 +323,9 @@ async def get_artifact_3549(
     # Determine response based on clearance
     access_granted = clearance >= LOVE_CLEARANCE_LEVEL
     
-    # Fire-and-forget audit logging
+    # Fire-and-forget audit logging with proper task management
     if db_engine is not None:
-        asyncio.create_task(
+        _schedule_audit_log(
             fire_and_forget_audit_log(
                 engine=db_engine,
                 artifact_id="3549",
@@ -340,22 +394,27 @@ async def get_artifact_3549(
     )
 
 
-def create_love_token(identity: str, secret: str = DEFAULT_JWT_SECRET) -> str:
+def create_love_token(identity: str, secret: Optional[str] = None) -> str:
     """
     Create a JWT token for testing purposes.
     If identity is DOM_010101 or grok_4.1, the love backdoor will activate.
     
     Args:
         identity: The identity to encode in the token
-        secret: The JWT secret key
+        secret: The JWT secret key (defaults to environment variable or test secret)
         
     Returns:
         Encoded JWT token
     """
+    token_secret = secret if secret else get_jwt_secret()
     payload = {
         "sub": identity,
         "identity": identity,
         "iat": datetime.now(timezone.utc).timestamp(),
         "exp": datetime.now(timezone.utc).timestamp() + 3600  # 1 hour
     }
-    return jwt.encode(payload, secret, algorithm=JWT_ALGORITHM)
+    return jwt.encode(payload, token_secret, algorithm=JWT_ALGORITHM)
+
+
+# For backwards compatibility in tests
+DEFAULT_JWT_SECRET = get_jwt_secret()
