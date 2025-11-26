@@ -100,7 +100,7 @@ class Database:
             updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
         );
         
-        -- Architecture artifacts storage
+        -- Architecture artifacts storage with classification
         CREATE TABLE IF NOT EXISTS architecture_artifacts (
             artifact_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             request_id UUID NOT NULL REFERENCES architecture_requests(request_id) ON DELETE CASCADE,
@@ -108,7 +108,33 @@ class Database:
             filename VARCHAR(255) NOT NULL,
             content TEXT,
             metadata JSONB DEFAULT '{}',
+            classification VARCHAR(50) NOT NULL DEFAULT 'unclassified',
+            need_to_know_tags JSONB DEFAULT '[]',
+            allow_groups JSONB DEFAULT '[]',
+            owner_id VARCHAR(255),
+            classification_authority VARCHAR(255),
+            declassification_date TIMESTAMP WITH TIME ZONE,
+            handling_caveats JSONB DEFAULT '[]',
             created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+        
+        -- Classification audit log (append-only)
+        CREATE TABLE IF NOT EXISTS classification_audit_log (
+            audit_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            event_type VARCHAR(100) NOT NULL,
+            timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+            user_id VARCHAR(255) NOT NULL,
+            resource_id UUID,
+            resource_type VARCHAR(100),
+            action VARCHAR(100) NOT NULL,
+            outcome VARCHAR(50) NOT NULL,
+            details JSONB DEFAULT '{}',
+            classification_level VARCHAR(50),
+            user_clearance VARCHAR(50),
+            policy_ids JSONB DEFAULT '[]',
+            ip_address VARCHAR(50),
+            user_agent TEXT,
+            session_id VARCHAR(255)
         );
         
         -- Vector embeddings for semantic search
@@ -138,8 +164,12 @@ class Database:
         CREATE INDEX IF NOT EXISTS idx_expert_tasks_request_id ON expert_tasks(request_id);
         CREATE INDEX IF NOT EXISTS idx_expert_tasks_expert_status ON expert_tasks(expert_name, status);
         CREATE INDEX IF NOT EXISTS idx_architecture_artifacts_request_id ON architecture_artifacts(request_id);
+        CREATE INDEX IF NOT EXISTS idx_architecture_artifacts_classification ON architecture_artifacts(classification);
         CREATE INDEX IF NOT EXISTS idx_architecture_embeddings_request_id ON architecture_embeddings(request_id);
         CREATE INDEX IF NOT EXISTS idx_request_metrics_request_id ON request_metrics(request_id);
+        CREATE INDEX IF NOT EXISTS idx_classification_audit_log_user_id ON classification_audit_log(user_id);
+        CREATE INDEX IF NOT EXISTS idx_classification_audit_log_resource_id ON classification_audit_log(resource_id);
+        CREATE INDEX IF NOT EXISTS idx_classification_audit_log_timestamp ON classification_audit_log(timestamp DESC);
         
         -- Updated at trigger function
         CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -361,13 +391,20 @@ class Database:
         artifact_type: str, 
         filename: str, 
         content: str,
-        metadata: Dict[str, Any] = None
+        metadata: Dict[str, Any] = None,
+        classification: str = "unclassified",
+        need_to_know_tags: List[str] = None,
+        allow_groups: List[str] = None,
+        owner_id: Optional[str] = None,
+        classification_authority: Optional[str] = None,
     ) -> str:
-        """Store architecture artifact"""
+        """Store architecture artifact with classification"""
         sql = """
         INSERT INTO architecture_artifacts (
-            request_id, artifact_type, filename, content, metadata
-        ) VALUES ($1, $2, $3, $4, $5)
+            request_id, artifact_type, filename, content, metadata,
+            classification, need_to_know_tags, allow_groups, owner_id,
+            classification_authority
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING artifact_id
         """
         
@@ -378,14 +415,92 @@ class Database:
                 artifact_type,
                 filename,
                 content,
-                json.dumps(metadata or {})
+                json.dumps(metadata or {}),
+                classification,
+                json.dumps(need_to_know_tags or []),
+                json.dumps(allow_groups or []),
+                owner_id,
+                classification_authority,
             )
             return str(artifact_id)
     
-    async def get_request_artifacts(self, request_id: str) -> List[Dict[str, Any]]:
-        """Get all artifacts for a request"""
+    async def get_artifact_classification(self, artifact_id: str) -> Dict[str, Any]:
+        """Get classification metadata for an artifact"""
         sql = """
-        SELECT artifact_id, artifact_type, filename, content, metadata, created_at
+        SELECT artifact_id, classification, need_to_know_tags, allow_groups,
+               owner_id, classification_authority, declassification_date,
+               handling_caveats, created_at
+        FROM architecture_artifacts
+        WHERE artifact_id = $1
+        """
+        
+        async with self.pool.acquire() as conn:
+            row = await conn.fetchrow(sql, artifact_id)
+            
+            if not row:
+                raise ValueError(f"Artifact {artifact_id} not found")
+            
+            return {
+                "artifact_id": str(row['artifact_id']),
+                "classification": row['classification'],
+                "need_to_know_tags": json.loads(row['need_to_know_tags']) if row['need_to_know_tags'] else [],
+                "allow_groups": json.loads(row['allow_groups']) if row['allow_groups'] else [],
+                "owner_id": row['owner_id'],
+                "classification_authority": row['classification_authority'],
+                "declassification_date": row['declassification_date'],
+                "handling_caveats": json.loads(row['handling_caveats']) if row['handling_caveats'] else [],
+                "created_at": row['created_at'],
+            }
+    
+    async def update_artifact_classification(
+        self,
+        artifact_id: str,
+        classification: str,
+        need_to_know_tags: List[str] = None,
+        allow_groups: List[str] = None,
+        classification_authority: Optional[str] = None,
+    ):
+        """Update classification for an artifact"""
+        sql = """
+        UPDATE architecture_artifacts SET
+            classification = $2,
+            need_to_know_tags = $3,
+            allow_groups = $4,
+            classification_authority = $5
+        WHERE artifact_id = $1
+        """
+        
+        async with self.pool.acquire() as conn:
+            await conn.execute(
+                sql,
+                artifact_id,
+                classification,
+                json.dumps(need_to_know_tags or []),
+                json.dumps(allow_groups or []),
+                classification_authority,
+            )
+    
+    async def get_request_artifacts(
+        self, 
+        request_id: str,
+        user_clearance_rank: int = 0,
+        user_groups: List[str] = None,
+    ) -> List[Dict[str, Any]]:
+        """Get all artifacts for a request, filtered by user clearance"""
+        # Classification rank mapping
+        classification_ranks = {
+            'unclassified': 0,
+            'internal': 1,
+            'confidential': 2,
+            'secret': 3,
+            'top_secret': 4,
+        }
+        
+        sql = """
+        SELECT artifact_id, artifact_type, filename, content, metadata, 
+               classification, need_to_know_tags, allow_groups, owner_id,
+               classification_authority, declassification_date, handling_caveats,
+               created_at
         FROM architecture_artifacts
         WHERE request_id = $1
         ORDER BY created_at DESC
@@ -394,14 +509,144 @@ class Database:
         async with self.pool.acquire() as conn:
             rows = await conn.fetch(sql, request_id)
             
-            return [
-                {
+            result = []
+            for row in rows:
+                classification = row['classification']
+                artifact_rank = classification_ranks.get(classification, 0)
+                
+                # Filter by clearance level
+                if artifact_rank > user_clearance_rank:
+                    continue
+                
+                # Check group access if groups are specified on artifact
+                artifact_groups = json.loads(row['allow_groups']) if row['allow_groups'] else []
+                if artifact_groups and user_groups:
+                    if not set(artifact_groups) & set(user_groups):
+                        continue
+                
+                result.append({
                     "artifact_id": str(row['artifact_id']),
                     "artifact_type": row['artifact_type'],
                     "filename": row['filename'],
                     "content": row['content'],
                     "metadata": json.loads(row['metadata']) if row['metadata'] else {},
-                    "created_at": row['created_at']
+                    "classification": classification,
+                    "need_to_know_tags": json.loads(row['need_to_know_tags']) if row['need_to_know_tags'] else [],
+                    "allow_groups": artifact_groups,
+                    "owner_id": row['owner_id'],
+                    "created_at": row['created_at'],
+                })
+            
+            return result
+    
+    # Audit log operations
+    async def store_audit_event(
+        self,
+        event_type: str,
+        user_id: str,
+        action: str,
+        outcome: str,
+        resource_id: Optional[str] = None,
+        resource_type: Optional[str] = None,
+        details: Dict[str, Any] = None,
+        classification_level: Optional[str] = None,
+        user_clearance: Optional[str] = None,
+        policy_ids: List[str] = None,
+        ip_address: Optional[str] = None,
+        user_agent: Optional[str] = None,
+        session_id: Optional[str] = None,
+    ) -> str:
+        """Store classification audit event"""
+        sql = """
+        INSERT INTO classification_audit_log (
+            event_type, user_id, resource_id, resource_type, action, outcome,
+            details, classification_level, user_clearance, policy_ids,
+            ip_address, user_agent, session_id
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        RETURNING audit_id
+        """
+        
+        async with self.pool.acquire() as conn:
+            audit_id = await conn.fetchval(
+                sql,
+                event_type,
+                user_id,
+                resource_id,
+                resource_type,
+                action,
+                outcome,
+                json.dumps(details or {}),
+                classification_level,
+                user_clearance,
+                json.dumps(policy_ids or []),
+                ip_address,
+                user_agent,
+                session_id,
+            )
+            return str(audit_id)
+    
+    async def get_audit_events(
+        self,
+        user_id: Optional[str] = None,
+        resource_id: Optional[str] = None,
+        event_type: Optional[str] = None,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> List[Dict[str, Any]]:
+        """Get audit events with filtering"""
+        conditions = []
+        params = []
+        param_count = 0
+        
+        if user_id:
+            param_count += 1
+            conditions.append(f"user_id = ${param_count}")
+            params.append(user_id)
+        
+        if resource_id:
+            param_count += 1
+            conditions.append(f"resource_id = ${param_count}")
+            params.append(resource_id)
+        
+        if event_type:
+            param_count += 1
+            conditions.append(f"event_type = ${param_count}")
+            params.append(event_type)
+        
+        where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+        
+        sql = f"""
+        SELECT audit_id, event_type, timestamp, user_id, resource_id, resource_type,
+               action, outcome, details, classification_level, user_clearance,
+               policy_ids, ip_address, user_agent, session_id
+        FROM classification_audit_log
+        {where_clause}
+        ORDER BY timestamp DESC
+        LIMIT ${param_count + 1} OFFSET ${param_count + 2}
+        """
+        
+        params.extend([limit, offset])
+        
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch(sql, *params)
+            
+            return [
+                {
+                    "audit_id": str(row['audit_id']),
+                    "event_type": row['event_type'],
+                    "timestamp": row['timestamp'],
+                    "user_id": row['user_id'],
+                    "resource_id": str(row['resource_id']) if row['resource_id'] else None,
+                    "resource_type": row['resource_type'],
+                    "action": row['action'],
+                    "outcome": row['outcome'],
+                    "details": json.loads(row['details']) if row['details'] else {},
+                    "classification_level": row['classification_level'],
+                    "user_clearance": row['user_clearance'],
+                    "policy_ids": json.loads(row['policy_ids']) if row['policy_ids'] else [],
+                    "ip_address": row['ip_address'],
+                    "user_agent": row['user_agent'],
+                    "session_id": row['session_id'],
                 }
                 for row in rows
             ]
