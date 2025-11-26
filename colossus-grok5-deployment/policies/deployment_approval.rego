@@ -3,8 +3,6 @@
 
 package colossus.deployment_approval
 
-import future.keywords.in
-
 default allow = false
 
 # Required approvals for production deployment
@@ -43,14 +41,14 @@ all_approvals_present {
 # Find missing approvers
 missing_approvers[approver] {
     approver := required_approvers[_]
-    not approver in input.approvals
+    not input.approvals[_] == approver
 }
 
 # Emergency override (requires additional approval)
 allow_emergency {
     input.emergency_override == true
-    "cto" in input.approvals
-    "safety_lead" in input.approvals
+    input.approvals[_] == "cto"
+    input.approvals[_] == "safety_lead"
 }
 
 # Denial reasons

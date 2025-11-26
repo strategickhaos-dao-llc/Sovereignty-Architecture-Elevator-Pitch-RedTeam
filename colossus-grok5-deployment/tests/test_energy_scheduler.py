@@ -95,14 +95,14 @@ class TestEnergyScheduler:
         scheduler = EnergyScheduler(
             power_client=power_client,
             megapack_client=megapack_client,
-            # Use hours that are definitely not off-peak
-            offpeak_start=time(2, 0),
-            offpeak_end=time(3, 0),  # Very narrow window
+            # Use hours that ensure we test off-peak logic (midnight to 1 AM)
+            offpeak_start=time(0, 0),
+            offpeak_end=time(1, 0),
         )
 
         decision = scheduler.evaluate_window()
-        # Should be blocked if not in off-peak and low SoC
-        # Note: depends on current time, so we just check the structure
+        # The result depends on current time vs off-peak window
+        # We just validate the decision structure is correct
         assert isinstance(decision, PowerWindowDecision)
         assert decision.suggested_scale <= 1.0
 

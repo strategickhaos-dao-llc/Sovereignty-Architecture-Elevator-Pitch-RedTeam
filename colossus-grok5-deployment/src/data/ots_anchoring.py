@@ -173,11 +173,14 @@ class OpenTimestampsAnchor:
             if not proof_str.startswith("STUB:"):
                 return False
             # Format is STUB:{timestamp}:{digest_hex}
-            # Find the last colon which separates timestamp from digest
-            last_colon = proof_str.rfind(":")
-            if last_colon == -1:
+            # The digest is always 64 hex chars (32 bytes), so extract from end
+            expected_digest = digest.hex()
+            if len(proof_str) < len("STUB:") + 64:
                 return False
-            proof_digest = proof_str[last_colon + 1:]
-            return proof_digest == digest.hex()
-        except Exception:
+            proof_digest = proof_str[-64:]
+            return proof_digest == expected_digest
+        except (UnicodeDecodeError, ValueError):
+            return False
+        except Exception as e:
+            self.log.debug(f"Stub proof verification failed: {e}")
             return False

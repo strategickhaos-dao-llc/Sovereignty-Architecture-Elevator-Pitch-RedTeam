@@ -218,10 +218,13 @@ class AuditLogger:
         Args:
             path: Export file path
         """
-        entries = [asdict(e) for e in self._chain]
-        for entry in entries:
-            if isinstance(entry.get("timestamp"), datetime):
-                entry["timestamp"] = entry["timestamp"].isoformat()
+        entries = []
+        for e in self._chain:
+            entry = asdict(e)
+            # Ensure timestamp is ISO format string for JSON serialization
+            if hasattr(e.timestamp, 'isoformat'):
+                entry["timestamp"] = e.timestamp.isoformat()
+            entries.append(entry)
 
         with open(path, "w") as f:
             json.dump(entries, f, indent=2)
