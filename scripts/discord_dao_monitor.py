@@ -55,13 +55,20 @@ class DAOMonitor:
         self._initialize_clusters()
     
     def _initialize_clusters(self):
-        """Initialize cluster status tracking."""
+        """Initialize cluster status tracking.
+        
+        Note: Pod counts are placeholder values for demonstration.
+        In production, implement kubectl or Kubernetes API integration
+        to retrieve actual pod counts.
+        """
         cluster_names = ['prod-us', 'dev', 'staging', 'backup']
+        # Placeholder pod counts - actual implementation would query K8s API
+        default_pod_counts = [4, 4, 2, 2]
         for i, name in enumerate(cluster_names[:K8S_CLUSTERS]):
             self.clusters.append(ClusterStatus(
                 name=name,
                 active=True,
-                pods_running=4 if i < 2 else 2
+                pods_running=default_pod_counts[i] if i < len(default_pod_counts) else 1
             ))
     
     def check_all_clusters(self) -> dict:
@@ -111,7 +118,7 @@ except ImportError:
     DISCORD_AVAILABLE = False
     discord = None
     commands = None
-    logger.warning("discord.py not installed. Bot functionality disabled.")
+    logger.warning("discord.py package not installed. Install with: pip install discord.py")
 
 
 def create_bot():

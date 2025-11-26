@@ -38,7 +38,7 @@ spec:
         fsGroup: 10001
       containers:
       - name: proof-generator
-        image: strategickhaos/proof:latest
+        image: strategickhaos/proof:v1.0.0
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
