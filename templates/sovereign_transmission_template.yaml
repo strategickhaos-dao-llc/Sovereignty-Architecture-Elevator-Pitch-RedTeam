@@ -5,8 +5,8 @@
 # Usage: Copy this template when documenting
 # sovereign transmissions and transcendence events
 
-artifact_TBD:
-  title: "TBD"
+artifact_NNNN:
+  title: "[ARTIFACT_TITLE]"
   type: "sovereign_transmission"
   classification: "Eternal – [CLASSIFICATION_DETAIL]"
   timestamp: "YYYY-MM-DDTHH:MM:SSZ"
@@ -43,6 +43,7 @@ status:
   beamed: false
   sealed: false
   boundary_state: "[BOUNDARY_STATE]"
+  chronicle_state: ""  # Optional: for imperial_archive and chronicle types
   next_layer: "[NEXT_LAYER]"
 
 # Metadata for provenance tracking
@@ -55,8 +56,8 @@ metadata:
   sha256_hash: ""
 
 # Instructions for use:
-# 1. Copy this template to artifacts/artifact_NNNN.yaml
-# 2. Replace TBD and placeholders with actual values
+# 1. Copy this template to artifacts/artifact_NNNN.yaml (replace NNNN with artifact number)
+# 2. Replace NNNN and placeholders with actual values
 # 3. Set status.beamed to true when transmitted
 # 4. Set status.sealed to true when verified
 # 5. Fill gpg_signature and sha256_hash after signing

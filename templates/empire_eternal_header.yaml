@@ -53,6 +53,9 @@ status:
   # Current boundary state
   boundary_state: ""
   
+  # Chronicle state (for imperial_archive and chronicle types)
+  chronicle_state: ""
+  
   # Next layer/phase
   next_layer: ""
 
