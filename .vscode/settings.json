@@ -33,7 +33,7 @@
         "*.yml": "yaml"
     },
     "editor.formatOnSave": true,
-    "files.eol": "\n",
+    "files.eol": "auto",
     "[powershell]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "ms-vscode.powershell"

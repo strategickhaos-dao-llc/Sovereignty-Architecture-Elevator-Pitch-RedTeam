@@ -74,7 +74,7 @@ if ($currentPath -notlike "*$pwshPath*") {
 }
 ```
 
-**Note:** The error shows PowerShell installed in `C:\Program Files (x86)\PowerShell\7` which is unusual (typically 64-bit apps go to `C:\Program Files`). Consider reinstalling to the correct location.
+**Note:** The error shows PowerShell installed in `C:\Program Files (x86)\PowerShell\7` which is unusual for 64-bit systems (typically 64-bit apps install to `C:\Program Files`). If you're on a 64-bit system, consider reinstalling to the correct location. On 32-bit systems, `Program Files (x86)` is expected.
 
 ---
 
@@ -114,7 +114,7 @@ Add to VS Code `settings.json`:
 ```json
 {
     "git.ignoredRepositories": [
-        "C:\\Users\\Me10101Main",
+        "C:\\Users\\YourUsername",
         "${env:USERPROFILE}"
     ],
     "git.scanRepositories": []
