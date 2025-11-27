@@ -1,7 +1,7 @@
 # Cloud Terminal Federation – Complete ✅
 
 > **Status**: OPERATIONAL  
-> **Deploy Date**: 2025-11-27  
+> **Deploy Date**: $(date '+%Y-%m-%d %H:%M:%S UTC')  
 > **Architecture**: Multi-Cloud Distributed PID-RANCO Sharding via Ansible
 
 ---
@@ -73,7 +73,7 @@ azure-node-2
 ### **Performance Metrics**
 | Metric | Local Execution | Distributed (7-way) | Improvement |
 |--------|----------------|---------------------|-------------|
-| ⏱️ Backtest Time | ~78 minutes | ~11 minutes | **7.1x faster** |
+| ⏱️ Backtest Time | ~78 minutes | ~11 minutes | **~7x faster** |
 | 📊 Parallel Shards | 1 | 7 | 7x parallelism |
 | 🔄 Convergence | Sequential | Simultaneous | Distributed |
 
