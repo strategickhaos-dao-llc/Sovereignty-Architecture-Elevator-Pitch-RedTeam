@@ -16,7 +16,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      baseSepolia: "PLACEHOLDER_KEY" // Base Blockscout usually doesn't need key, or use Etherscan
+      baseSepolia: process.env.ETHERSCAN_API_KEY || "PLACEHOLDER_KEY"
     },
     customChains: [
       {

@@ -78,9 +78,9 @@ contract ImmutableCharitySplitter {
         uint256 sharePerCharity = balance / charities.length;
         if (sharePerCharity == 0) revert NoFundsToDistribute();
 
-        for (uint i = 0; i < charities.length; i++) {
+        for (uint256 i = 0; i < charities.length; i++) {
             (bool success, ) = charities[i].call{value: sharePerCharity}("");
-            require(success, "Charity transfer failed"); // Verify strict success
+            if (!success) revert TransferFailed();
         }
 
         lastDistributionTime = block.timestamp;
