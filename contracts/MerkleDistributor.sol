@@ -11,7 +11,6 @@ contract MerkleDistributor {
     mapping(uint256 => uint256) private claimedBitMap;
 
     event Claimed(uint256 indexed index, address indexed account, uint256 amount);
-    event MerkleRootUpdated(bytes32 indexed oldRoot, bytes32 indexed newRoot);
 
     constructor(bytes32 _merkleRoot) {
         merkleRoot = _merkleRoot;
