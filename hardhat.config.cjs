@@ -21,16 +21,14 @@ module.exports = {
       accounts: process.env.DEPLOYER_PRIVATE_KEY 
         ? [process.env.DEPLOYER_PRIVATE_KEY] 
         : [],
-      chainId: 84532,
-      gasPrice: "auto"
+      chainId: 84532
     },
     baseMainnet: {
       url: process.env.BASE_MAINNET_RPC_URL || "https://mainnet.base.org",
       accounts: process.env.DEPLOYER_PRIVATE_KEY 
         ? [process.env.DEPLOYER_PRIVATE_KEY] 
         : [],
-      chainId: 8453,
-      gasPrice: "auto"
+      chainId: 8453
     }
   },
   etherscan: {

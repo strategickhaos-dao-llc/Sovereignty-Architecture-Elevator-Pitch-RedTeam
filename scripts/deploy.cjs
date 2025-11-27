@@ -1,7 +1,7 @@
 /**
  * @title Strategickhaos Charity Splitter - Deployment Script
  * @notice Deploys CharitySplitter and MerkleDistributor to Base Sepolia
- * @dev Run with: npx hardhat run scripts/deploy.js --network baseSepolia
+ * @dev Run with: npx hardhat run scripts/deploy.cjs --network baseSepolia
  */
 
 const hre = require("hardhat");

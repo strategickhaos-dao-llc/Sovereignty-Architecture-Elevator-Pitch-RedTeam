@@ -83,7 +83,7 @@ Strategickhaos 7% Charity Engine
 
 ### Generate Merkle Root
 
-Edit `scripts/generate-merkle-root.js` with your charity addresses and amounts, then:
+Edit `scripts/generate-merkle-root.cjs` with your charity addresses and amounts, then:
 
 ```bash
 npm run generate-root

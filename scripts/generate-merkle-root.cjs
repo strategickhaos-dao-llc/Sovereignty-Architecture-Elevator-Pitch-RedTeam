@@ -16,44 +16,57 @@ const path = require("path");
 // --- CHARITY CONFIGURATION ---
 // Replace these with REAL charity addresses and their allocations
 // Total amount should equal the expected 7% charity pool
+// WARNING: Update these placeholder addresses before deployment!
 const charities = [
   {
     name: "St. Jude Children's Research Hospital",
-    address: "0x5555555555555555555555555555555555555555", // Replace with real address
+    address: "0x0000000000000000000000000000000000000001", // PLACEHOLDER - Replace with real address
     amount: ethers.parseEther("1.5"), // 1.5 ETH allocation
   },
   {
     name: "Médecins Sans Frontières (Doctors Without Borders)",
-    address: "0x6666666666666666666666666666666666666666", // Replace with real address
+    address: "0x0000000000000000000000000000000000000002", // PLACEHOLDER - Replace with real address
     amount: ethers.parseEther("1.5"), // 1.5 ETH allocation
   },
   {
     name: "Veterans Support Foundation",
-    address: "0x7777777777777777777777777777777777777777", // Replace with real address
+    address: "0x0000000000000000000000000000000000000003", // PLACEHOLDER - Replace with real address
     amount: ethers.parseEther("0.5"), // 0.5 ETH allocation
   },
 ];
 
+// Validate that placeholder addresses are not used in production
+function validateAddresses() {
+  const placeholderPattern = /^0x0{39}[1-9]$/;
+  const hasPlaceholders = charities.some(c => placeholderPattern.test(c.address));
+  if (hasPlaceholders) {
+    console.warn("⚠️  WARNING: Placeholder addresses detected!");
+    console.warn("   Update charity addresses before mainnet deployment.\n");
+  }
+}
+
 /**
  * Generate leaf node for Merkle tree
+ * Uses keccak256(abi.encode()) to match the contract
  * @param index Unique index for the claim
  * @param address Recipient address
  * @param amount Amount in wei
- * @returns Keccak256 hash of packed data
+ * @returns Keccak256 hash of encoded data
  */
 function generateLeaf(index, address, amount) {
-  return Buffer.from(
-    ethers.solidityPackedKeccak256(
-      ["uint256", "address", "uint256"],
-      [index, address, amount]
-    ).slice(2),
-    "hex"
+  const abiCoder = ethers.AbiCoder.defaultAbiCoder();
+  const encoded = abiCoder.encode(
+    ["uint256", "address", "uint256"],
+    [index, address, amount]
   );
+  return Buffer.from(ethers.keccak256(encoded).slice(2), "hex");
 }
 
 async function main() {
   console.log("🌳 Strategickhaos Charity Merkle Tree Generator");
   console.log("================================================\n");
+
+  validateAddresses();
 
   console.log("📋 Charity Recipients:");
   let totalAllocation = BigInt(0);

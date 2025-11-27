@@ -89,7 +89,7 @@ contract MerkleDistributor is ReentrancyGuard, Ownable {
         if (isClaimed(index)) revert AlreadyClaimed();
 
         // Verify the merkle proof
-        bytes32 node = keccak256(abi.encodePacked(index, account, amount));
+        bytes32 node = keccak256(abi.encode(index, account, amount));
         if (!MerkleProof.verify(merkleProof, merkleRoot, node)) {
             revert InvalidProof();
         }

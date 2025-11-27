@@ -30,9 +30,6 @@ contract CharitySplitter is ReentrancyGuard {
         uint256 charityAmount
     );
 
-    /// @notice Emitted when charity funds are forwarded
-    event CharityForwarded(uint256 amount);
-
     /// @notice Error when transfer fails
     error TransferFailed();
     

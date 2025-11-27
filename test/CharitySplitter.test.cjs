@@ -19,15 +19,15 @@ describe("Strategickhaos 7% Charity Engine", function () {
 
   /**
    * Generate a leaf node for the Merkle tree
+   * Uses keccak256(abi.encode()) to match the contract
    */
   function generateLeaf(index, address, amount) {
-    return Buffer.from(
-      ethers.solidityPackedKeccak256(
-        ["uint256", "address", "uint256"],
-        [index, address, amount]
-      ).slice(2),
-      "hex"
+    const abiCoder = ethers.AbiCoder.defaultAbiCoder();
+    const encoded = abiCoder.encode(
+      ["uint256", "address", "uint256"],
+      [index, address, amount]
     );
+    return Buffer.from(ethers.keccak256(encoded).slice(2), "hex");
   }
 
   beforeEach(async function () {
