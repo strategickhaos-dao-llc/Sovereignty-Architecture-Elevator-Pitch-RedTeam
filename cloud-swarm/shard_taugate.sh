@@ -70,7 +70,10 @@ show_estimates() {
     echo ""
     echo -e "${CYAN}=== Cost Estimate ===${NC}"
     echo ""
-    echo "  ${host_count} x t3.micro spots @ \$0.005/hr x 18hr = \$$(echo "scale=2; $host_count * 0.005 * 18" | bc)"
+    # Use awk instead of bc for portability
+    local cost
+    cost=$(awk "BEGIN {printf \"%.2f\", $host_count * 0.005 * 18}")
+    echo "  ${host_count} x t3.micro spots @ \$0.005/hr x 18hr = \$${cost}"
     echo "  Free tier coverage:     ~20% (first 100hrs)"
     echo "  Estimated Total:        <\$50"
     echo ""

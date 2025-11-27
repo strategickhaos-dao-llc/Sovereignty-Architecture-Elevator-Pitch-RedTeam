@@ -48,6 +48,7 @@ output_file = "${OUTPUT_FILE}"
 print(f"[PID-RANCO] Executing shard {shard_id}/{total_shards}")
 
 try:
+    import socket
     # Simulated PID-RANCO backtest execution
     # In production, this would load actual trading data and run the algorithm
     result = {
@@ -55,7 +56,7 @@ try:
             'shard_id': shard_id,
             'total_shards': total_shards,
             'timestamp': datetime.now().isoformat(),
-            'node': '$(hostname)',
+            'node': socket.gethostname(),
             'data_path': data_path
         },
         'status': 'completed',

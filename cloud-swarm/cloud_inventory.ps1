@@ -121,12 +121,26 @@ function Provision-BurstNodes {
     $perProvider = [math]::Ceiling($toAdd / 3)
     
     # AWS burst (t3.micro spot instances)
+    # NOTE: AMI ID should be updated for your region. Get latest Ubuntu AMI:
+    # aws ec2 describe-images --owners 099720109477 --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-*-22.04-amd64-server-*" --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId'
     $awsCount = [math]::Min($perProvider, $toAdd - $newNodes.Count)
     for ($i = 1; $i -le $awsCount; $i++) {
         try {
             Write-Log "Provisioning AWS burst node $i/$awsCount..."
+            # Get latest Ubuntu 22.04 AMI dynamically
+            $ami = aws ec2 describe-images `
+                --owners 099720109477 `
+                --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-*-22.04-amd64-server-*" `
+                --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' `
+                --output text 2>$null
+            
+            if (-not $ami) {
+                $ami = "ami-0c55b159cbfafe1f0"  # Fallback AMI
+                Write-Log "Using fallback AMI: $ami" "WARN"
+            }
+            
             $result = aws ec2 run-instances `
-                --image-id ami-0c55b159cbfafe1f0 `
+                --image-id $ami `
                 --instance-type t3.micro `
                 --instance-market-options "MarketType=spot" `
                 --count 1 `

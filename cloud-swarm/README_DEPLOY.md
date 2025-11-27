@@ -288,6 +288,25 @@ ansible -i cloud_hosts.ini all -m shell -a "crontab -l | grep cost_guard"
 ansible -i cloud_hosts.ini all -m shell -a "cat /var/log/cost-guard.log"
 ```
 
+## 🔐 Security Notes
+
+### SSH Host Key Verification
+The scripts use `StrictHostKeyChecking=no` for automated deployments. This is acceptable for ephemeral cloud instances but has security implications:
+
+- **Trade-off**: Bypasses host key verification for automation convenience
+- **Risk**: Potential man-in-the-middle attacks on first connection
+- **Mitigation**: Use within trusted VPCs/networks only
+
+For production use, consider:
+1. Pre-distributing host keys via cloud-init
+2. Using AWS SSM, GCP OS Login, or Azure Bastion instead of direct SSH
+3. Implementing known_hosts management via Ansible
+
+### Secrets Management
+- Never commit cloud credentials to the repository
+- Use environment variables or secret managers (Vault, AWS Secrets Manager)
+- Rotate SSH keys regularly
+
 ## 📚 References
 
 - [Ansible Documentation](https://docs.ansible.com/)

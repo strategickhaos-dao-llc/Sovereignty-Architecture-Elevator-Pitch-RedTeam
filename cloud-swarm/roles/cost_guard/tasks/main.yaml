@@ -40,9 +40,22 @@
         return 0
       }
 
-      # Get CPU idle percentage
+      # Get CPU idle percentage using /proc/stat for reliability
       get_cpu_idle() {
-        top -bn1 | grep "Cpu(s)" | awk '{print $8}' | cut -d'.' -f1
+        # Read /proc/stat for more reliable CPU stats across distributions
+        if [ -f /proc/stat ]; then
+          local cpu_line
+          cpu_line=$(head -1 /proc/stat)
+          local user nice system idle iowait irq softirq steal
+          read -r _ user nice system idle iowait irq softirq steal _ <<< "$cpu_line"
+          local total=$((user + nice + system + idle + iowait + irq + softirq + steal))
+          if [ "$total" -gt 0 ]; then
+            echo $((idle * 100 / total))
+            return
+          fi
+        fi
+        # Fallback to top if /proc/stat is not available
+        top -bn1 | grep -E "^(%?Cpu|CPU)" | awk '{for(i=1;i<=NF;i++) if($i~/id/) {gsub(/[^0-9.]/,"",$i-1); print int($i-1); exit}}'
       }
 
       # Main check

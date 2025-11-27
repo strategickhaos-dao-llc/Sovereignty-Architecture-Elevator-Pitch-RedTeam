@@ -207,11 +207,11 @@
     - name: Run sharded screen
       command: >
         python3 {{ strategickhaos_base }}/taugate/virtual_screen.py
-        --shard {{ ansible_loop.index0 }}
+        --shard {{ groups['all_cloud_terminals'].index(inventory_hostname) }}
         --of {{ groups['all_cloud_terminals'] | length }}
-        --library_shard /data/compounds_{{ ansible_loop.index0 }}.parquet
+        --library_shard /data/compounds_{{ groups['all_cloud_terminals'].index(inventory_hostname) }}.parquet
         --target tau_4R.mrc
-        --out {{ strategickhaos_base }}/logs/taugate_shard_{{ ansible_loop.index0 }}.json
+        --out {{ strategickhaos_base }}/logs/taugate_shard_{{ groups['all_cloud_terminals'].index(inventory_hostname) }}.json
       register: screen_out
       ignore_errors: true
       when: run_taugate_screen | default(false)
@@ -219,10 +219,11 @@
 
     - name: Hash and log TauGate provenance
       shell: |
-        OUTPUT_FILE="{{ strategickhaos_base }}/logs/taugate_shard_{{ ansible_loop.index0 | default(0) }}.json"
+        SHARD_ID={{ groups['all_cloud_terminals'].index(inventory_hostname) | default(0) }}
+        OUTPUT_FILE="{{ strategickhaos_base }}/logs/taugate_shard_${SHARD_ID}.json"
         if [ -f "$OUTPUT_FILE" ]; then
           HASH=$(b3sum "$OUTPUT_FILE" 2>/dev/null | cut -d' ' -f1 || sha256sum "$OUTPUT_FILE" | cut -d' ' -f1)
-          echo "$(date -Iseconds)|blake3|$HASH|$OUTPUT_FILE|{{ ansible_loop.index0 | default(0) }}|completed" >> {{ provenance_log }}
+          echo "$(date -Iseconds)|blake3|$HASH|$OUTPUT_FILE|${SHARD_ID}|completed" >> {{ provenance_log }}
         fi
       when: run_taugate_screen | default(false)
       tags: [taugate_shard]
