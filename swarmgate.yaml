@@ -1,0 +1,47 @@
+# SwarmGate v1.0 Configuration
+# Strategickhaos DAO LLC / Valoryield Engine — SwarmGate Sovereignty Module
+# Version: 1.0
+# Date: 2025-11-27
+# Operator: Domenic Garza (Node 137)
+
+version: "1.0"
+date: "2025-11-27"
+project: "SwarmGate — Sovereign Infrastructure Gateway"
+operator:
+  name: "Domenic Garza"
+  node: "137"
+  alias: "Dom (garza)"
+
+status:
+  release: "v1.0"
+  sealed: true
+  immutable: true
+  legal_shield: "active"
+
+provenance:
+  blake3_hash: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+  artifact: "swarmgate_v1.0.tar.gz"
+  verification_url: "https://raw.githubusercontent.com/strategickhaos/swarmgate/swarmgate/v1.0/swarmgate_v1.0.tar.gz"
+  verification_command: "curl -s https://raw.githubusercontent.com/strategickhaos/swarmgate/swarmgate/v1.0/swarmgate_v1.0.tar.gz | b3sum"
+
+legal:
+  shield_file: "/legal/LEGAL_SHIELD.yaml"
+  compliance_framework: "UPL-Safe + SF0068 + SOC2-Ready"
+  disclaimers: "INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED"
+
+cryptography:
+  hash_algorithm: "BLAKE3"
+  gpg_required: true
+  signed_commits: true
+  signed_tags: true
+
+governance:
+  upl_safe:
+    attorney_review_gates: true
+    access_control_matrix:
+      roles: ["Drafter", "Reviewer", "Approver", "Signer", "Auditor"]
+      authorized_signers: ["Domenic Garza", "Node 137"]
+
+# === GPG SIGNATURE BLOCK (DETACHED) ===
+# Save as swarmgate.yaml.asc
+# Command: gpg --armor --detach-sign swarmgate.yaml
