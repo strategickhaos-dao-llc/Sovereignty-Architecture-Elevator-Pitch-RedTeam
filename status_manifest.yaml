@@ -26,8 +26,8 @@ components:
     percent_complete: 100
     description: 7-way PID-RANCO + 134-way TauGate-10B live right now
     verify_commands:
-      - "Get-Content cloud_hosts.ini | Measure-Object -Line"
-      - "Get-Content /opt/strategickhaos/uam/cluster_pulse.txt | Select-Object -Last 5"
+      - "PowerShell> Get-Content cloud_hosts.ini | Measure-Object -Line"
+      - "PowerShell> Get-Content /opt/strategickhaos/uam/cluster_pulse.txt | Select-Object -Last 5"
 
   provenance_and_aggregation:
     state: "verified"
@@ -40,8 +40,8 @@ components:
     state: "verified"
     percent_complete: 90
     verify_commands:
-      - "gpg --verify aggregated_2025-11-27_v2.json.asc aggregated_2025-11-27_v2.json"
-      - "ots verify aggregated_2025-11-27_v2.json.ots || echo 'pending'"
+      - "gpg --verify aggregated_2025-11-27.json.asc aggregated_2025-11-27.json"
+      - "ots verify aggregated_2025-11-27.json.ots || echo 'pending'"
 
   ci_and_quality:
     state: "verified"
