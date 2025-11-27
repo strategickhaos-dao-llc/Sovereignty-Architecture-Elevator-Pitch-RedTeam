@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat artifacts
+cache/
+artifacts/
+typechain-types/
+
+# Deployment data (may contain sensitive info)
+deployment.json
+merkle-data.json
