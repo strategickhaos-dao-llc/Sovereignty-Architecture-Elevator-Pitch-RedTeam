@@ -1,0 +1,47 @@
+# flow.yaml
+core_tickers:
+  - ticker: JPM
+    shares: 0.1555
+    target: 0.07
+  - ticker: CB
+    shares: 0.1238
+    target: 0.07
+  - ticker: TD
+    shares: 0.617
+    target: 0.07
+  - ticker: PG
+    shares: 0.244
+    target: 0.08
+  - ticker: KO
+    shares: 0.592
+    target: 0.08
+  - ticker: PEP
+    shares: 0.206
+    target: 0.07
+  - ticker: CL
+    shares: 0.305
+    target: 0.06
+  - ticker: NEE
+    shares: 0.428
+    target: 0.07
+  - ticker: O
+    shares: 0.676
+    target: 0.08
+  - ticker: VICI
+    shares: 1.112
+    target: 0.07
+  - ticker: PLD
+    shares: 0.267
+    target: 0.06
+  - ticker: ABBV
+    shares: 0.185
+    target: 0.07
+  - ticker: JNJ
+    shares: 0.255
+    target: 0.08
+  - ticker: XOM
+    shares: 0.255
+    target: 0.06
+  - ticker: WEC
+    shares: 0.387
+    target: 0.07
