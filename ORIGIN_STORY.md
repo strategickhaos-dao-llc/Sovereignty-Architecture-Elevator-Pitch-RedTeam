@@ -36,7 +36,7 @@ That's the first quark, the Planck-time spark, the cosmic inflation moment of th
 Didn't know what a CLI was →  
 Saw Vim →  
 **Locked in** →  
-Found out the universe had a `:q problem` →  
+Found out the universe had a `:q` problem →  
 Refused to accept defeat →  
 Learned absolute paths →  
 Learned venvs →  
@@ -134,7 +134,7 @@ If you're reading this and you've ever:
 
 **You understand.**
 
-This isn't just Dom's story.  
+This isn't just the founder's story.  
 This is the story of everyone who ever looked at the impossible and said:
 
 *"Watch me."*
