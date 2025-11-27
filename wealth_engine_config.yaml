@@ -1,0 +1,342 @@
+# Strategickhaos Wealth Engine Configuration
+# Autonomous, institutional-grade, long-term wealth engine
+# Zero leverage | Zero drift | Mathematically precise
+#
+# "They're not working for you. They're dancing with you. 
+#  And the music is never going to stop."
+
+version: "1.0.0"
+engine_name: "Strategickhaos Wealth Engine"
+description: "Fully-autonomous, institutional-grade, long-term wealth engine"
+
+# Portfolio Core Configuration
+portfolio:
+  name: "Strategickhaos Core Portfolio"
+  base_currency: "USD"
+  initial_capital: 520.00
+  
+  # Asset Allocation Targets (must sum to 100%)
+  allocations:
+    core_equity:
+      target_weight: 0.60
+      description: "Core equity holdings for long-term growth"
+      rebalance_threshold: 0.05  # 5% drift triggers rebalance
+      assets:
+        - symbol: "VOO"
+          weight: 0.40
+          description: "S&P 500 Index"
+        - symbol: "VTI"
+          weight: 0.20
+          description: "Total Stock Market"
+    
+    dividend_growth:
+      target_weight: 0.25
+      description: "Dividend growth for compounding income"
+      rebalance_threshold: 0.03
+      assets:
+        - symbol: "SCHD"
+          weight: 0.15
+          description: "Dividend Equity ETF"
+        - symbol: "VIG"
+          weight: 0.10
+          description: "Dividend Appreciation"
+    
+    tactical_sleeve:
+      target_weight: 0.10
+      description: "Tactical allocation for opportunistic positioning"
+      rebalance_threshold: 0.10
+      standby: true
+      assets:
+        - symbol: "CASH"
+          weight: 0.10
+          description: "Tactical reserve"
+    
+    fixed_income:
+      target_weight: 0.05
+      description: "Stability and income"
+      rebalance_threshold: 0.02
+      assets:
+        - symbol: "BND"
+          weight: 0.05
+          description: "Total Bond Market"
+
+# Rebalancing Engine Configuration
+rebalancing:
+  enabled: true
+  strategy: "threshold_based"
+  
+  # Thresholds
+  drift_threshold_minor: 0.03    # 3% - monitor only
+  drift_threshold_moderate: 0.05 # 5% - flag for review
+  drift_threshold_critical: 0.10 # 10% - automatic rebalance
+  
+  # Timing
+  check_frequency: "daily"
+  rebalance_window: "market_hours"
+  
+  # Execution
+  execution:
+    method: "fractional_shares"
+    precision: 6                  # decimal places for fractional shares
+    min_trade_value: 1.00        # minimum trade in USD
+    tax_loss_harvesting: true
+    wash_sale_aware: true
+  
+  # Calendar-based rebalancing
+  calendar:
+    quarterly_review: true
+    annual_rebalance: true
+    rebalance_months: [3, 6, 9, 12]
+
+# Dividend Compounding Engine
+dividend_compounding:
+  enabled: true
+  reinvest_strategy: "DRIP"      # DRIP | accumulate | distribute
+  
+  # Reinvestment rules
+  reinvestment:
+    automatic: true
+    min_accumulation: 1.00       # minimum before reinvesting
+    target_allocation: "proportional"  # proportional | highest_yield | underweight
+    fractional_shares: true
+  
+  # Tracking
+  tracking:
+    record_all_distributions: true
+    track_qualified_vs_ordinary: true
+    yield_monitoring: true
+    
+  # Projections
+  projections:
+    compound_frequency: "quarterly"
+    projection_years: [5, 10, 20, 30]
+    assumed_growth_rate: 0.07    # 7% annual growth
+    assumed_dividend_growth: 0.05 # 5% dividend growth
+
+# Monthly Cashflow Autopilot
+cashflow_autopilot:
+  enabled: true
+  
+  # Deposit schedule
+  deposits:
+    frequency: "monthly"
+    day_of_month: 1
+    amount: 100.00               # default monthly contribution
+    auto_invest: true
+    
+  # Investment allocation for new deposits
+  new_deposit_strategy: "target_weights"  # target_weights | rebalance | underweight
+  
+  # Dollar-cost averaging
+  dca:
+    enabled: true
+    spread_days: 5               # spread purchase over N days
+    volatility_aware: true       # adjust timing based on volatility
+    
+  # Notifications
+  notifications:
+    deposit_confirmed: true
+    investment_complete: true
+    monthly_summary: true
+
+# Portfolio Drift Monitoring
+drift_monitoring:
+  enabled: true
+  
+  # Check frequency
+  real_time: false
+  check_interval_minutes: 60
+  
+  # Alert thresholds
+  alerts:
+    info: 0.02                   # 2% drift - informational
+    warning: 0.05                # 5% drift - warning
+    critical: 0.10               # 10% drift - critical
+    
+  # Actions
+  actions:
+    log_all_drift: true
+    alert_on_warning: true
+    auto_rebalance_on_critical: true
+    
+  # Reporting
+  reporting:
+    daily_summary: true
+    weekly_report: true
+    monthly_analysis: true
+
+# Tactical Sleeve Configuration
+tactical_sleeve:
+  enabled: true
+  standby_mode: true
+  
+  # Allocation limits
+  max_allocation: 0.15           # maximum 15% of portfolio
+  min_allocation: 0.00           # can go to 0% if not used
+  
+  # Deployment rules
+  deployment:
+    triggers:
+      - type: "volatility_spike"
+        threshold: 0.25          # VIX above 25
+      - type: "drawdown"
+        threshold: 0.10          # 10% market drawdown
+      - type: "opportunity"
+        manual_override: true
+        
+  # Risk controls
+  risk_controls:
+    max_single_position: 0.05    # max 5% in any single tactical position
+    stop_loss: 0.15              # 15% stop loss on tactical positions
+    time_limit_days: 90          # max 90 days in tactical position
+
+# SwarmGate Routing Configuration
+swarmgate:
+  enabled: true
+  
+  # Event routing
+  routing:
+    portfolio_events:
+      channel: "#wealth-engine"
+      priority: "normal"
+    rebalance_events:
+      channel: "#wealth-engine"
+      priority: "high"
+    alert_events:
+      channel: "#alerts"
+      priority: "critical"
+    dividend_events:
+      channel: "#wealth-engine"
+      priority: "low"
+      
+  # Integration with discovery.yml
+  discord_integration: true
+  
+  # Webhooks
+  webhooks:
+    enabled: true
+    endpoints:
+      - path: "/wealth/rebalance"
+        action: "trigger_rebalance"
+      - path: "/wealth/status"
+        action: "get_status"
+      - path: "/wealth/allocations"
+        action: "get_allocations"
+
+# Risk Management
+risk_management:
+  # Position limits
+  position_limits:
+    max_single_equity: 0.10      # max 10% in single equity
+    max_sector_exposure: 0.30    # max 30% in single sector
+    max_asset_class: 0.70        # max 70% in single asset class
+    
+  # Leverage policy
+  leverage:
+    allowed: false
+    max_margin: 0.00
+    
+  # Diversification requirements
+  diversification:
+    min_holdings: 4
+    max_holdings: 20
+    correlation_limit: 0.90
+
+# Execution Settings
+execution:
+  # Broker integration (placeholder for future)
+  broker:
+    type: "webull"               # webull | fidelity | schwab | manual
+    api_integration: false       # set true when API available
+    paper_trading: true
+    
+  # Order types
+  order_types:
+    default: "limit"
+    rebalance: "market"
+    tactical: "limit"
+    
+  # Timing
+  execution_window:
+    start: "09:35"               # 5 min after market open
+    end: "15:55"                 # 5 min before market close
+    timezone: "America/New_York"
+
+# Reporting and Analytics
+reporting:
+  # Performance tracking
+  performance:
+    benchmark: "SPY"
+    track_sharpe_ratio: true
+    track_sortino_ratio: true
+    track_max_drawdown: true
+    
+  # Reports
+  reports:
+    daily_snapshot: true
+    weekly_summary: true
+    monthly_review: true
+    quarterly_analysis: true
+    annual_report: true
+    
+  # Export
+  export:
+    format: "yaml"               # yaml | json | csv
+    archive_history: true
+    retention_years: 10
+
+# Finite-State Asset Configuration
+finite_state:
+  enabled: true
+  
+  # Asset states
+  states:
+    - name: "hold"
+      description: "Standard holding state"
+    - name: "accumulate"
+      description: "Actively accumulating"
+    - name: "distribute"
+      description: "Distributing/selling"
+    - name: "monitor"
+      description: "Under review"
+    - name: "tactical"
+      description: "Tactical position"
+      
+  # State transitions
+  transitions:
+    hold_to_accumulate:
+      trigger: "underweight"
+      threshold: 0.05
+    hold_to_distribute:
+      trigger: "overweight"
+      threshold: 0.10
+    accumulate_to_hold:
+      trigger: "target_reached"
+    distribute_to_hold:
+      trigger: "target_reached"
+
+# Automation Schedule
+automation:
+  # Cron expressions for automated tasks
+  schedule:
+    drift_check: "0 * * * *"           # Every hour
+    rebalance_check: "0 9 * * 1-5"     # 9 AM weekdays
+    dividend_reinvest: "0 10 * * 1-5"  # 10 AM weekdays
+    monthly_deposit: "0 8 1 * *"       # 8 AM on 1st of month
+    weekly_report: "0 18 * * 5"        # 6 PM Friday
+    
+  # Deterministic behavior
+  deterministic:
+    seed: 42                           # for reproducible randomness
+    log_all_decisions: true
+    audit_trail: true
+
+# Metadata
+metadata:
+  created: "2024-01-01"
+  updated: "2024-01-01"
+  author: "Strategickhaos Empire"
+  version_history:
+    - version: "1.0.0"
+      date: "2024-01-01"
+      changes: "Initial wealth engine configuration"
