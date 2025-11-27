@@ -152,6 +152,13 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 
 ## 🤖 AI Agent Integration
 
+### GitHub Copilot Agents
+- **Development Assistant**: Context-aware AI coding help integrated with VS Code
+- **Multi-Agent Workflow**: @workspace, @terminal, @test, @docs, and custom agents
+- **Discord Integration**: Copilot agent notifications and CI/CD reviews
+- **Custom Sovereignty Agent**: Specialized agent for architecture-specific tasks
+- **📖 Full Documentation**: [GITHUB_COPILOT_AGENTS.md](GITHUB_COPILOT_AGENTS.md)
+
 ### Vector Knowledge Base
 - **Runbooks**: Operational procedures and troubleshooting guides
 - **Log Schemas**: Structured logging patterns and analysis

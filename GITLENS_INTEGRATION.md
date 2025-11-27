@@ -167,6 +167,10 @@ export DEBUG=1
 
 ## 📚 Resources
 
+### Related Documentation
+- [GitHub Copilot Agents Integration](GITHUB_COPILOT_AGENTS.md) - AI-powered development assistance
+
+### External Resources
 - [GitLens Documentation](https://gitlens.amod.io/)
 - [Discord Bot Guide](https://discord.com/developers/docs/intro)
 - [GitHub Webhooks](https://docs.github.com/en/developers/webhooks-and-events/webhooks)
