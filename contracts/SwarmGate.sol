@@ -6,22 +6,32 @@ pragma solidity ^0.8.20;
  * @notice Eternal 7% Revenue Split Engine for Sovereignty Architecture
  * @dev Implements immutable revenue allocation with configurable recipients
  * 
- * The 7% split is distributed as follows:
- * - 40% (2.8% total) → Operations
- * - 30% (2.1% total) → Development  
- * - 20% (1.4% total) → Governance
- * - 10% (0.7% total) → Reserves
+ * Architecture:
+ * - Revenue streams send 7% of their earnings to this contract
+ * - The contract holds the 7% portion and distributes it among recipients
+ * - distribute() splits the contract's entire balance (which represents the 7% allocation)
+ * 
+ * The distribution ratios are:
+ * - 40% → Operations (2.8% of original revenue)
+ * - 30% → Development (2.1% of original revenue)
+ * - 20% → Governance (1.4% of original revenue)
+ * - 10% → Reserves (0.7% of original revenue)
  */
 contract SwarmGate {
     // Constants
+    // TOTAL_SPLIT_BPS: Used by calculateSplit() to compute 7% of revenue for external callers
     uint256 public constant TOTAL_SPLIT_BPS = 700;      // 7% in basis points
     uint256 public constant BPS_DENOMINATOR = 10000;
     
-    uint256 public constant OPS_SHARE = 40;             // 40% of split
-    uint256 public constant DEV_SHARE = 30;             // 30% of split
-    uint256 public constant GOV_SHARE = 20;             // 20% of split
-    uint256 public constant RESERVE_SHARE = 10;         // 10% of split
+    // Distribution shares: How the contract's balance (the 7% allocation) is split
+    uint256 public constant OPS_SHARE = 40;             // 40% of balance
+    uint256 public constant DEV_SHARE = 30;             // 30% of balance
+    uint256 public constant GOV_SHARE = 20;             // 20% of balance
+    uint256 public constant RESERVE_SHARE = 10;         // 10% of balance
     uint256 public constant SHARE_DENOMINATOR = 100;
+    
+    // Gas limit for ETH transfers to prevent gas griefing
+    uint256 public constant TRANSFER_GAS_LIMIT = 10000;
 
     // Recipients
     address public immutable operationsRecipient;
@@ -157,8 +167,15 @@ contract SwarmGate {
     }
 
     /**
-     * @notice Calculate split amounts for a given revenue
-     * @param revenue The revenue amount to calculate split for
+     * @notice Calculate the 7% split amounts for a given gross revenue
+     * @dev This is a utility function for external callers to preview the split
+     *      before sending funds. The returned amounts represent what would be
+     *      distributed if 7% of the revenue were sent to this contract.
+     * @param revenue The gross revenue amount to calculate the 7% split for
+     * @return opsAmount Amount that would go to operations (40% of 7%)
+     * @return devAmount Amount that would go to development (30% of 7%)
+     * @return govAmount Amount that would go to governance (20% of 7%)
+     * @return reserveAmount Amount that would go to reserves (10% of 7%)
      */
     function calculateSplit(uint256 revenue) external pure returns (
         uint256 opsAmount,
@@ -166,7 +183,9 @@ contract SwarmGate {
         uint256 govAmount,
         uint256 reserveAmount
     ) {
+        // First calculate 7% of the gross revenue
         uint256 splitAmount = (revenue * TOTAL_SPLIT_BPS) / BPS_DENOMINATOR;
+        // Then distribute that 7% among recipients
         opsAmount = (splitAmount * OPS_SHARE) / SHARE_DENOMINATOR;
         devAmount = (splitAmount * DEV_SHARE) / SHARE_DENOMINATOR;
         govAmount = (splitAmount * GOV_SHARE) / SHARE_DENOMINATOR;
@@ -174,10 +193,10 @@ contract SwarmGate {
     }
 
     /**
-     * @dev Safe ETH transfer
+     * @dev Safe ETH transfer with gas limit to prevent griefing
      */
     function _safeTransfer(address to, uint256 amount) internal {
-        (bool success, ) = to.call{value: amount}("");
+        (bool success, ) = to.call{value: amount, gas: TRANSFER_GAS_LIMIT}("");
         if (!success) revert TransferFailed();
     }
 }
