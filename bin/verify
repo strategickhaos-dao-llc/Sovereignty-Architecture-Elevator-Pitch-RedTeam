@@ -173,11 +173,11 @@ cat > "$RECEIPT_FILE" << EOF
   "type": "verification",
   "bundle": "$BUNDLE_FILE",
   "blake3_hash": "$ACTUAL_HASH",
-  "ipfs_cid": "$COMPUTED_CID",
+  "ipfs_cid": "${COMPUTED_CID:-null}",
   "signature_file": "$SIGNATURE_FILE",
   "signature_valid": $([ -f "$SIGNATURE_FILE" ] && gpg --verify "$SIGNATURE_FILE" "$BUNDLE_FILE" 2>&1 | grep -q "Good signature" && echo "true" || echo "false"),
   "verification_passed": $VERIFICATION_PASSED,
-  "results": [$(IFS=,; echo "\"${RESULTS[*]}\"" | sed 's/,/", "/g')],
+  "results": $(printf '%s\n' "${RESULTS[@]}" | jq -R . 2>/dev/null | jq -s . 2>/dev/null || echo '[]'),
   "timestamp": "$TIMESTAMP"
 }
 EOF

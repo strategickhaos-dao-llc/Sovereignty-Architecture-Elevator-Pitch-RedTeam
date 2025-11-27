@@ -190,7 +190,10 @@ EOF
                 echo "[" > "$EXPORT_FILE"
                 first=true
                 for receipt in "$RECEIPTS_DIR"/*.json; do
-                    if [ -f "$receipt" ] && [ "$(basename "$receipt")" != "export_*.json" ]; then
+                    BASENAME=$(basename "$receipt")
+                    # Skip export files using case pattern matching
+                    case "$BASENAME" in export_*) continue ;; esac
+                    if [ -f "$receipt" ]; then
                         if [ "$first" = true ]; then
                             first=false
                         else

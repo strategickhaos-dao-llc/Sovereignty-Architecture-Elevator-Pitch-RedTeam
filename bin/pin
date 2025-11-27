@@ -81,8 +81,12 @@ else
     
     if [ -z "$CID" ]; then
         echo "⚠️ Local IPFS not available. Computing CID only..."
-        CID=$(ipfs add --only-hash -q "$BUNDLE_FILE" 2>/dev/null || \
-              echo "Qm$(sha256sum "$BUNDLE_FILE" | cut -c1-46)")
+        CID=$(ipfs add --only-hash -q "$BUNDLE_FILE" 2>/dev/null || echo "")
+        
+        if [ -z "$CID" ]; then
+            echo "⚠️ Unable to compute IPFS CID. Please install IPFS or use --web3 option."
+            CID="unavailable"
+        fi
     fi
 fi
 
