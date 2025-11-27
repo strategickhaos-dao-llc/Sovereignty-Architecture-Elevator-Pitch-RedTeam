@@ -159,7 +159,8 @@ if [[ ! -f "$ARCHIVE" ]]; then
     FAILED=$((FAILED + 1))
 else
     echo -e "${GREEN}  ✓ Archive found: $ARCHIVE${NC}"
-    ARCHIVE_SIZE=$(stat -f%z "$ARCHIVE" 2>/dev/null || stat -c%s "$ARCHIVE" 2>/dev/null)
+    # Use portable method to get file size
+    ARCHIVE_SIZE=$(wc -c < "$ARCHIVE" | tr -d ' ')
     echo -e "    Size: ${ARCHIVE_SIZE} bytes"
     PASSED=$((PASSED + 1))
 fi
@@ -239,21 +240,35 @@ else
     
     # Extract include patterns from manifest (simplified)
     # In production, this would parse swarmgate.yaml properly
-    if command -v yq &> /dev/null; then
-        INCLUDE_PATTERNS=$(yq -r '.archive.include[]' "$MANIFEST" 2>/dev/null || echo "")
-    else
-        # Fallback: use predefined list
-        INCLUDE_PATTERNS="swarmgate.yaml discovery.yml dao_record_v1.0.yaml ai_constitution.yaml LICENSE README.md SECURITY.md COMMUNITY.md CONTRIBUTORS.md"
-    fi
+    # Use predefined list of files (yq is optional, fallback is used)
+    INCLUDE_FILES=(
+        "swarmgate.yaml"
+        "discovery.yml"
+        "dao_record_v1.0.yaml"
+        "ai_constitution.yaml"
+        "LICENSE"
+        "README.md"
+        "SECURITY.md"
+        "COMMUNITY.md"
+        "CONTRIBUTORS.md"
+    )
     
-    if [[ -n "$INCLUDE_PATTERNS" ]]; then
+    # Filter to only existing files
+    EXISTING_FILES=()
+    for f in "${INCLUDE_FILES[@]}"; do
+        if [[ -e "$f" ]]; then
+            EXISTING_FILES+=("$f")
+        fi
+    done
+    
+    if [[ ${#EXISTING_FILES[@]} -gt 0 ]]; then
         # Create deterministic archive
         REBUILD_ARCHIVE="$REBUILD_DIR/rebuilt.tar.gz"
         
         # Note: Full deterministic rebuild requires tar with --mtime and proper sorting
         # This is a simplified version for demonstration
         tar --sort=name --mtime="2025-11-27 00:00:00" --owner=root --group=root \
-            -czf "$REBUILD_ARCHIVE" $INCLUDE_PATTERNS 2>/dev/null || true
+            -czf "$REBUILD_ARCHIVE" "${EXISTING_FILES[@]}" 2>/dev/null || true
         
         if [[ -f "$REBUILD_ARCHIVE" ]]; then
             REBUILD_HASH=$(compute_blake3 "$REBUILD_ARCHIVE")
@@ -271,7 +286,7 @@ else
             WARNINGS=$((WARNINGS + 1))
         fi
     else
-        echo -e "${YELLOW}  ⚠ Could not extract include patterns from manifest${NC}"
+        echo -e "${YELLOW}  ⚠ No files found to rebuild archive${NC}"
         WARNINGS=$((WARNINGS + 1))
     fi
 fi

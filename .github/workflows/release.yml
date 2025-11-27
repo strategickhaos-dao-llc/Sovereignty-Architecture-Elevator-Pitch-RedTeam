@@ -26,7 +26,7 @@ env:
   B3SUM_VERSION: '1.5.0'
   IPFS_VERSION: '0.24.0'
   # Timestamp for deterministic builds
-  SOURCE_DATE_EPOCH: '1732665600'  # 2025-11-27T00:00:00Z
+  SOURCE_DATE_EPOCH: '1764201600'  # 2025-11-27T00:00:00Z
 
 jobs:
   # Job 1: Build deterministic archive
@@ -222,20 +222,15 @@ jobs:
           if [[ -n "${BUNDLR_PRIVATE_KEY}" ]]; then
             echo "📦 Uploading to Arweave via Bundlr..."
             
-            # Write key to temp file
-            echo "${BUNDLR_PRIVATE_KEY}" > /tmp/bundlr-key.json
-            
-            # Upload using Bundlr
+            # Upload using Bundlr with process substitution (avoid writing key to disk)
             RESULT=$(bundlr upload "${ARCHIVE}" \
               -h "https://node1.bundlr.network" \
-              -w /tmp/bundlr-key.json \
+              -w <(echo "${BUNDLR_PRIVATE_KEY}") \
               -c ethereum \
               --no-confirmation 2>&1) || true
             
             # Extract TXID from result
             TXID=$(echo "${RESULT}" | grep -oP '(?<=id:\s)[a-zA-Z0-9_-]+' || echo "PENDING")
-            
-            rm -f /tmp/bundlr-key.json
           else
             echo "⚠️ BUNDLR_PRIVATE_KEY not configured, skipping Arweave upload"
             TXID="NOT_CONFIGURED"
@@ -411,7 +406,7 @@ jobs:
           echo "✅ Provenance files generated"
       
       - name: Import GPG key and sign
-        if: ${{ env.GPG_PRIVATE_KEY != '' }}
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
@@ -518,7 +513,8 @@ jobs:
               --arg ipfs "${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}" \
               --arg arweave "${{ needs.upload-arweave.outputs.txid || 'PENDING' }}" \
               --arg url "${{ github.server_url }}/${{ github.repository }}/releases/tag/${VERSION}" \
-              '{service:"release", version:$version, status:$status, blake3:$blake3, ipfs:$ipfs, arweave:$arweave, url:$url, timestamp:now}')
+              --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '{service:"release", version:$version, status:$status, blake3:$blake3, ipfs:$ipfs, arweave:$arweave, url:$url, timestamp:$timestamp}')
             
             sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "${EVENTS_HMAC_KEY}" -binary | xxd -p -c 256)
             

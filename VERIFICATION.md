@@ -137,7 +137,7 @@ cd Sovereignty-Architecture-Elevator-Pitch-
 git checkout v1.0.0
 
 # Create deterministic archive
-export SOURCE_DATE_EPOCH=1732665600  # 2025-11-27T00:00:00Z
+export SOURCE_DATE_EPOCH=1764201600  # 2025-11-27T00:00:00Z
 tar --sort=name \
     --mtime="@${SOURCE_DATE_EPOCH}" \
     --owner=root:0 \
