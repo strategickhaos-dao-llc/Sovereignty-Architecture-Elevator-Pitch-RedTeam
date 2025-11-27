@@ -14,8 +14,8 @@ echo "Collecting logs from hosts in $INVENTORY -> $OUTDIR"
 # Pull logs from each host (ansible must be configured)
 ansible -i "$INVENTORY" all_cloud_terminals -m fetch -a "src=/opt/strategickhaos/logs/ dest=$OUTDIR/ flat=yes" --become
 
-# Consolidate all per-host json files
-JSON_FILES=( $(find "$OUTDIR" -type f -name 'pid_ranco_*_shard_*.json') )
+# Consolidate all per-host json files (using readarray for safe handling of filenames with spaces)
+readarray -t JSON_FILES < <(find "$OUTDIR" -type f -name 'pid_ranco_*_shard_*.json')
 if [ ${#JSON_FILES[@]} -eq 0 ]; then
   echo "No shard output JSON files found in $OUTDIR"
   exit 2
@@ -48,11 +48,18 @@ if jq -s 'add' "${JSON_FILES[@]}" > "$AGG" 2>/dev/null; then
   echo "Aggregated JSON written to $AGG"
 else
   echo "jq merge failed; concatenating JSON objects to ${AGG}. Use jq manually to shape as needed."
-  jq -n '{"items": []}' > "$AGG"
+  echo "[" > "$AGG"
+  first=true
   for f in "${JSON_FILES[@]}"; do
-    # append raw content as string if parsing fails
-    echo "{}" >> "$AGG"
+    # Preserve original content by concatenating as JSON array elements
+    if [ "$first" = true ]; then
+      first=false
+    else
+      echo "," >> "$AGG"
+    fi
+    cat "$f" >> "$AGG"
   done
+  echo "]" >> "$AGG"
 fi
 
 # GPG sign aggregated result (detached clearsig)

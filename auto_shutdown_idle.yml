@@ -20,17 +20,17 @@
 
     - name: Compute idle duration
       set_fact:
-        last_epoch: "{{ (last_ts.stdout | default('0')) | float }}"
+        last_epoch: "{{ (last_ts.stdout | default('0')) | int }}"
         now_epoch: "{{ ansible_date_time.epoch | int }}"
-        idle_seconds: "{{ now_epoch - last_epoch | int }}"
-        idle_minutes_actual: "{{ (idle_seconds / 60) | int }}"
+        idle_seconds: "{{ (now_epoch | int) - (last_epoch | int) }}"
+        idle_minutes_actual: "{{ ((idle_seconds | int) / 60) | int }}"
 
     - name: Debug idle
       debug:
         msg: "Host {{ inventory_hostname }} idle {{ idle_minutes_actual }} minutes (threshold {{ idle_minutes }})."
 
     - name: Shutdown node if idle > threshold
-      when: last_epoch != 0 and idle_minutes_actual >= idle_minutes
+      when: (last_epoch | int) != 0 and (idle_minutes_actual | int) >= (idle_minutes | int)
       block:
         - name: Schedule shutdown in 2 minutes
           shell: "nohup sudo shutdown -h +2 'Idle auto-shutdown by cloud-swarm cost-guard' >/dev/null 2>&1 &"
