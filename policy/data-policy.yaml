@@ -1,0 +1,143 @@
+# data-policy.yaml
+# Sovereignty Architecture Data Handling Policy
+# Research tool only - no medical claims
+
+version: "1.0"
+created_at: "2025-11-27T00:00:00Z"
+description: "Data handling policy for Strategickhaos DAO LLC"
+
+# Data classification
+classification:
+  levels:
+    - name: "public"
+      description: "Publicly available information"
+      handling: "No restrictions"
+      
+    - name: "internal"
+      description: "Internal business information"
+      handling: "Do not share externally"
+      
+    - name: "confidential"
+      description: "Sensitive business information"
+      handling: "Need-to-know basis"
+      
+    - name: "restricted"
+      description: "Highly sensitive information"
+      handling: "Explicit authorization required"
+
+# Research tool disclaimers
+disclaimers:
+  required: true
+  
+  statements:
+    - "RESEARCH TOOL ONLY"
+    - "NOT MEDICAL ADVICE"
+    - "NOT LEGAL ADVICE"
+    - "NOT FINANCIAL ADVICE"
+    - "INTERNAL DRAFT — ATTORNEY REVIEW REQUIRED"
+  
+  placement:
+    - document_header
+    - export_banner
+    - api_response_header
+
+# Prohibited claims
+prohibited_claims:
+  categories:
+    - medical_diagnosis
+    - medical_treatment
+    - legal_advice
+    - financial_investment_advice
+    - wet_lab_operations
+  
+  enforcement:
+    mode: "strict"
+    scan_outputs: true
+    block_on_detection: true
+
+# Data retention
+retention:
+  default_days: 365
+  
+  by_classification:
+    public: null  # No limit
+    internal: 1825  # 5 years
+    confidential: 2555  # 7 years
+    restricted: 3650  # 10 years
+  
+  deletion:
+    method: "secure_delete"
+    verification: true
+    audit_log: true
+
+# Data access
+access:
+  authentication_required: true
+  
+  logging:
+    enabled: true
+    include:
+      - accessor_identity
+      - timestamp
+      - data_accessed
+      - access_purpose
+  
+  principle: "least_privilege"
+
+# PII handling
+pii:
+  detection:
+    enabled: true
+    scan_on_commit: true
+  
+  handling:
+    encryption_required: true
+    anonymization: "preferred"
+  
+  prohibited_in:
+    - logs
+    - error_messages
+    - commit_messages
+    - public_outputs
+
+# Export controls
+exports:
+  watermark: true
+  watermark_text: "RESEARCH TOOL ONLY - NOT FOR CLINICAL USE"
+  
+  allowed_formats:
+    - json
+    - yaml
+    - markdown
+    - pdf
+  
+  approval_required:
+    - external_sharing
+    - public_release
+
+# Data provenance
+provenance:
+  tracking: true
+  
+  required_metadata:
+    - source
+    - timestamp
+    - transformation_history
+    - access_log
+  
+  cryptographic_verification:
+    enabled: true
+    algorithms:
+      - BLAKE3
+      - SHA256
+
+# Compliance alignment
+compliance:
+  frameworks:
+    - GDPR
+    - CCPA
+    - HIPAA_aware  # Awareness, not full compliance claim
+  
+  assessments:
+    frequency: "quarterly"
+    reviewer: "compliance-officer"

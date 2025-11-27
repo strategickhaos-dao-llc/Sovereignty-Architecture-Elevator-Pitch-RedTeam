@@ -1,0 +1,198 @@
+#!/bin/bash
+# verify - Verify bundle integrity end-to-end
+# Part of the Sovereignty Architecture CLI toolkit
+
+set -e
+
+BUNDLE_FILE="${1:-swarmgate_v1.0.tar.gz}"
+RECEIPTS_DIR="${RECEIPTS_DIR:-provenance}"
+
+usage() {
+    echo "Usage: verify [OPTIONS] [BUNDLE_FILE]"
+    echo ""
+    echo "Verify bundle integrity: hash, signature, IPFS"
+    echo ""
+    echo "Arguments:"
+    echo "  BUNDLE_FILE    File to verify (default: swarmgate_v1.0.tar.gz)"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help     Show this help message"
+    echo "  -e, --expected HASH  Expected BLAKE3 hash"
+    echo "  -c, --cid CID        Expected IPFS CID"
+    echo "  -a, --all            Run all verification steps"
+    echo ""
+    echo "Environment Variables:"
+    echo "  RECEIPTS_DIR   Directory for receipts (default: provenance)"
+}
+
+# Parse arguments
+EXPECTED_HASH=""
+EXPECTED_CID=""
+RUN_ALL=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -e|--expected)
+            EXPECTED_HASH="$2"
+            shift 2
+            ;;
+        -c|--cid)
+            EXPECTED_CID="$2"
+            shift 2
+            ;;
+        -a|--all)
+            RUN_ALL=true
+            shift
+            ;;
+        *)
+            BUNDLE_FILE="$1"
+            shift
+            ;;
+    esac
+done
+
+echo "🔍 Verifying bundle: $BUNDLE_FILE"
+echo ""
+
+VERIFICATION_PASSED=true
+RESULTS=()
+
+# Check if bundle exists
+if [ ! -f "$BUNDLE_FILE" ]; then
+    echo "❌ Error: Bundle file '$BUNDLE_FILE' not found"
+    exit 1
+fi
+
+# 1. Compute BLAKE3 hash
+echo "1️⃣ Computing BLAKE3 hash..."
+if command -v b3sum &> /dev/null; then
+    ACTUAL_HASH=$(b3sum "$BUNDLE_FILE" | awk '{print $1}')
+    echo "   Hash: $ACTUAL_HASH"
+    
+    if [ -n "$EXPECTED_HASH" ]; then
+        if [ "$ACTUAL_HASH" = "$EXPECTED_HASH" ]; then
+            echo "   ✅ Hash matches expected value"
+            RESULTS+=("hash:pass")
+        else
+            echo "   ❌ Hash mismatch!"
+            echo "      Expected: $EXPECTED_HASH"
+            echo "      Actual:   $ACTUAL_HASH"
+            VERIFICATION_PASSED=false
+            RESULTS+=("hash:fail")
+        fi
+    else
+        RESULTS+=("hash:computed")
+    fi
+else
+    echo "   ⚠️ b3sum not installed, computing SHA256 instead"
+    ACTUAL_HASH=$(sha256sum "$BUNDLE_FILE" | awk '{print $1}')
+    echo "   SHA256: $ACTUAL_HASH"
+    RESULTS+=("hash:sha256")
+fi
+echo ""
+
+# 2. Verify GPG signature
+echo "2️⃣ Verifying GPG signature..."
+SIGNATURE_FILE="${BUNDLE_FILE}.asc"
+if [ -f "$SIGNATURE_FILE" ]; then
+    if gpg --verify "$SIGNATURE_FILE" "$BUNDLE_FILE" 2>&1 | grep -q "Good signature"; then
+        SIGNER=$(gpg --verify "$SIGNATURE_FILE" 2>&1 | grep "Good signature" | sed 's/.*"\(.*\)".*/\1/')
+        echo "   ✅ Valid signature from: $SIGNER"
+        RESULTS+=("signature:pass")
+    else
+        echo "   ❌ Invalid or untrusted signature"
+        VERIFICATION_PASSED=false
+        RESULTS+=("signature:fail")
+    fi
+else
+    echo "   ⚠️ No signature file found: $SIGNATURE_FILE"
+    RESULTS+=("signature:missing")
+fi
+echo ""
+
+# 3. Verify IPFS CID
+echo "3️⃣ Verifying IPFS CID..."
+if command -v ipfs &> /dev/null; then
+    COMPUTED_CID=$(ipfs add --only-hash -q "$BUNDLE_FILE" 2>/dev/null || echo "")
+    
+    if [ -n "$COMPUTED_CID" ]; then
+        echo "   CID: $COMPUTED_CID"
+        
+        if [ -n "$EXPECTED_CID" ]; then
+            if [ "$COMPUTED_CID" = "$EXPECTED_CID" ]; then
+                echo "   ✅ CID matches expected value"
+                RESULTS+=("ipfs:pass")
+            else
+                echo "   ❌ CID mismatch!"
+                echo "      Expected: $EXPECTED_CID"
+                echo "      Actual:   $COMPUTED_CID"
+                VERIFICATION_PASSED=false
+                RESULTS+=("ipfs:fail")
+            fi
+        else
+            RESULTS+=("ipfs:computed")
+        fi
+    else
+        echo "   ⚠️ Could not compute CID"
+        RESULTS+=("ipfs:error")
+    fi
+else
+    echo "   ⚠️ IPFS not installed"
+    RESULTS+=("ipfs:unavailable")
+fi
+echo ""
+
+# 4. Check file integrity
+echo "4️⃣ Checking file integrity..."
+if file "$BUNDLE_FILE" | grep -q "gzip"; then
+    if gzip -t "$BUNDLE_FILE" 2>/dev/null; then
+        echo "   ✅ Archive integrity verified"
+        RESULTS+=("integrity:pass")
+    else
+        echo "   ❌ Archive corrupted"
+        VERIFICATION_PASSED=false
+        RESULTS+=("integrity:fail")
+    fi
+else
+    echo "   ℹ️ Not a gzip archive, skipping integrity check"
+    RESULTS+=("integrity:skipped")
+fi
+echo ""
+
+# Create verification receipt
+mkdir -p "$RECEIPTS_DIR"
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+RECEIPT_FILE="$RECEIPTS_DIR/verify_$(date +%Y%m%d_%H%M%S).json"
+
+cat > "$RECEIPT_FILE" << EOF
+{
+  "type": "verification",
+  "bundle": "$BUNDLE_FILE",
+  "blake3_hash": "$ACTUAL_HASH",
+  "ipfs_cid": "${COMPUTED_CID:-null}",
+  "signature_file": "$SIGNATURE_FILE",
+  "signature_valid": $([ -f "$SIGNATURE_FILE" ] && gpg --verify "$SIGNATURE_FILE" "$BUNDLE_FILE" 2>&1 | grep -q "Good signature" && echo "true" || echo "false"),
+  "verification_passed": $VERIFICATION_PASSED,
+  "results": $(printf '%s\n' "${RESULTS[@]}" | jq -R . 2>/dev/null | jq -s . 2>/dev/null || echo '[]'),
+  "timestamp": "$TIMESTAMP"
+}
+EOF
+
+# Summary
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [ "$VERIFICATION_PASSED" = true ]; then
+    echo "✅ VERIFICATION PASSED"
+else
+    echo "❌ VERIFICATION FAILED"
+fi
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "📋 Receipt saved to: $RECEIPT_FILE"
+
+if [ "$VERIFICATION_PASSED" = false ]; then
+    exit 1
+fi

@@ -1,0 +1,53 @@
+{
+  "name": "Sovereignty Architecture Dev Container",
+  "dockerFile": "Dockerfile",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "eamodio.gitlens",
+        "hashicorp.terraform",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "yaml.schemas": {
+          "./swarmgate.yaml": "swarmgate.yaml"
+        }
+      }
+    },
+    "codespaces": {
+      "openFiles": [
+        "swarmgate.yaml",
+        "README.md"
+      ]
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "echo 'Sovereignty Architecture Dev Container Ready'",
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "SWARMGATE_VERSION": "v1.0",
+    "IPFS_GATEWAY": "https://w3s.link/ipfs/",
+    "ARWEAVE_GATEWAY": "https://arweave.net/"
+  },
+  "forwardPorts": [
+    5001,
+    8080
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolder}/.gnupg,target=/home/vscode/.gnupg,type=bind,consistency=cached"
+  ]
+}

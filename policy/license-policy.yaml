@@ -1,0 +1,106 @@
+# license-policy.yaml
+# Sovereignty Architecture License Policy
+# Enforces MIT/Apache-2.0-only dependencies
+
+version: "1.0"
+created_at: "2025-11-27T00:00:00Z"
+description: "License compliance policy for Strategickhaos DAO LLC"
+
+# Allowed licenses for dependencies
+allowed_licenses:
+  permissive:
+    - MIT
+    - Apache-2.0
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - ISC
+    - Unlicense
+    - CC0-1.0
+    - 0BSD
+  
+  # Allowed with attribution
+  with_attribution:
+    - MPL-2.0
+    - LGPL-2.1
+    - LGPL-3.0
+
+# Denied licenses - will fail CI
+denied_licenses:
+  copyleft_strong:
+    - GPL-2.0
+    - GPL-3.0
+    - AGPL-3.0
+  
+  commercial:
+    - Commercial
+    - Proprietary
+  
+  unclear:
+    - UNLICENSED
+    - UNKNOWN
+
+# Enforcement configuration
+enforcement:
+  mode: strict  # strict, warn, or ignore
+  
+  ci_integration:
+    fail_on_denied: true
+    warn_on_unknown: true
+    generate_sbom: true
+  
+  exceptions:
+    # Allow specific packages with non-standard licenses
+    packages: []
+    # Example:
+    # - name: "some-package"
+    #   license: "Custom"
+    #   reason: "Approved by legal review on 2025-01-01"
+    #   approved_by: "counsel-01"
+
+# SBOM generation
+sbom:
+  format: "spdx"
+  version: "2.3"
+  output: "provenance/sbom.json"
+  
+  required_fields:
+    - name
+    - version
+    - license
+    - supplier
+    - purl
+
+# License header requirements
+headers:
+  required_in:
+    - "*.ts"
+    - "*.js"
+    - "*.py"
+    - "*.sh"
+    - "*.yaml"
+    - "*.yml"
+  
+  template: |
+    # SPDX-License-Identifier: MIT
+    # Copyright (c) 2025 Strategickhaos DAO LLC / Valoryield Engine
+    # See LICENSE file for details
+
+# Audit configuration
+audit:
+  frequency: "weekly"
+  report_path: "audit/license-audit.json"
+  notify_on_violation: true
+  
+  reviewers:
+    - role: "approver"
+      id: "counsel-01"
+
+# Integration with CI/CD
+ci:
+  prebuild:
+    - "npm audit --production"
+    - "pip-audit"
+  
+  postbuild:
+    - "syft . -o spdx-json > provenance/sbom.json"
+    - "grype provenance/sbom.json --fail-on critical"
