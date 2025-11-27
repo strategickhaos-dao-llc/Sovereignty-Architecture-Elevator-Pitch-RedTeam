@@ -15,6 +15,18 @@ from .database import Database
 from .discord_integration import DiscordNotifier, RefinoryDiscordBot
 from .github_integration import GitHubIntegration
 
+# Hybrid Refinery - Dividend Portfolio Architecture
+from .portfolio_config import (
+    DIVIDEND_CORE,
+    TOTAL_CAPITAL,
+    SWARMGATE,
+    get_portfolio_summary,
+    get_position_details,
+    rescale_portfolio,
+)
+from .swarmgate import SwarmGateRouter, create_default_swarmgate
+from .nightly_refinery import NightlyRefinery
+
 __all__ = [
     "app",
     "ExpertOrchestrator", 
@@ -27,5 +39,15 @@ __all__ = [
     "Database",
     "DiscordNotifier",
     "RefinoryDiscordBot",
-    "GitHubIntegration"
+    "GitHubIntegration",
+    # Hybrid Refinery exports
+    "DIVIDEND_CORE",
+    "TOTAL_CAPITAL",
+    "SWARMGATE",
+    "get_portfolio_summary",
+    "get_position_details",
+    "rescale_portfolio",
+    "SwarmGateRouter",
+    "create_default_swarmgate",
+    "NightlyRefinery",
 ]
