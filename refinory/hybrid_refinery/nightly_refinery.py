@@ -5,9 +5,9 @@ Nightly portfolio equity and drift check for the Live Hybrid Refinery
 """
 
 import datetime
+import sys
 from pathlib import Path
 
-import pandas as pd
 import yaml
 import yfinance as yf
 
@@ -24,14 +24,32 @@ def main() -> None:
     config = load_config()
 
     tickers = [x["ticker"] for x in config]
-    data = yf.download(tickers, period="2d", progress=False)["Adj Close"]
-    prices = data.iloc[-1]
+    data = yf.download(tickers, period="2d", progress=False)
+
+    if data.empty:
+        print("ERROR: Failed to download price data")
+        sys.exit(1)
+
+    if "Adj Close" not in data.columns:
+        print("ERROR: Adjusted close prices not available")
+        sys.exit(1)
+
+    prices = data["Adj Close"].iloc[-1]
 
     total = 0.0
     for pos in config:
-        value = pos["shares"] * prices[pos["ticker"]]
+        ticker = pos["ticker"]
+        if ticker not in prices or prices[ticker] is None:
+            print(f"WARNING: No price data for {ticker}, skipping")
+            pos["value"] = 0.0
+            continue
+        value = pos["shares"] * float(prices[ticker])
         pos["value"] = round(value, 2)
         total += value
+
+    if total == 0:
+        print("ERROR: Total equity is zero, check price data")
+        sys.exit(1)
 
     for pos in config:
         pos["weight"] = pos["value"] / total
