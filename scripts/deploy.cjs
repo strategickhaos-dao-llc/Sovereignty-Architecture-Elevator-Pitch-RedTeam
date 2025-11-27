@@ -1,19 +1,36 @@
 const hre = require("hardhat");
 
 async function main() {
-  // SETUP: Replace these with REAL addresses before mainnet!
-  const OPS_WALLET = "0xYourOpsMultisigAddressHere"; 
+  // ==========================================================================
+  // CRITICAL: Replace these placeholder addresses before ANY deployment!
+  // Using placeholder addresses will cause deployment failure or fund loss.
+  // ==========================================================================
   
-  // Example: St. Jude's, MSF, Wounded Warrior (Use real ETH addresses)
-  const CHARITIES = [
-    "0x0000000000000000000000000000000000000001", 
-    "0x0000000000000000000000000000000000000002",
-    "0x0000000000000000000000000000000000000003"
-  ];
+  // Ops Multisig: Replace with your Gnosis Safe or multisig address
+  const OPS_WALLET = process.env.OPS_WALLET || "0xYourOpsMultisigAddressHere";
+  
+  // Charity Addresses: Replace with real charity wallet addresses
+  // Example organizations: St. Jude's, MSF, Wounded Warrior Project
+  const CHARITIES = process.env.CHARITIES 
+    ? process.env.CHARITIES.split(",") 
+    : [
+        "0x0000000000000000000000000000000000000001", // Placeholder - REPLACE
+        "0x0000000000000000000000000000000000000002", // Placeholder - REPLACE
+        "0x0000000000000000000000000000000000000003"  // Placeholder - REPLACE
+      ];
+
+  // Validate addresses before deployment
+  if (OPS_WALLET === "0xYourOpsMultisigAddressHere") {
+    throw new Error("ERROR: OPS_WALLET must be set to a valid address before deployment!");
+  }
+  
+  if (CHARITIES.some(addr => addr.startsWith("0x000000000000000000000000000000000000000"))) {
+    throw new Error("ERROR: CHARITIES must be set to valid charity addresses before deployment!");
+  }
 
   console.log("Deploying SwarmGateSplitter...");
   console.log("Ops Wallet:", OPS_WALLET);
-  console.log("Charities:", CHARITIES.length);
+  console.log("Charities:", CHARITIES.length, CHARITIES);
 
   const Splitter = await hre.ethers.getContractFactory("SwarmGateSplitter");
   const splitter = await Splitter.deploy(OPS_WALLET, CHARITIES);

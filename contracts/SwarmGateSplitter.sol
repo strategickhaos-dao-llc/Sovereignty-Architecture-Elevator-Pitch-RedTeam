@@ -31,6 +31,7 @@ contract SwarmGateSplitter {
     error DistributionTooEarly();
     error NoFundsToDistribute();
     error TransferFailed();
+    error CharityTransferFailed(uint256 charityIndex);
 
     constructor(address payable _opsMultisig, address payable[] memory _charities) {
         require(_opsMultisig != address(0), "Invalid Ops Address");
@@ -75,9 +76,16 @@ contract SwarmGateSplitter {
         if (sharePerCharity == 0) revert NoFundsToDistribute();
 
         // 2. Distribute pro-rata to charities
-        for (uint i = 0; i < charities.length; i++) {
-            (bool success, ) = charities[i].call{value: sharePerCharity}("");
-            require(success, "Charity transfer failed"); 
+        uint256 distributed = 0;
+        for (uint256 i = 0; i < charities.length; i++) {
+            uint256 amount = sharePerCharity;
+            // Give remainder to the last charity to avoid dust lockup
+            if (i == charities.length - 1) {
+                amount = balance - distributed;
+            }
+            (bool success, ) = charities[i].call{value: amount}("");
+            if (!success) revert CharityTransferFailed(i);
+            distributed += amount;
         }
 
         lastDistributionTime = block.timestamp;
