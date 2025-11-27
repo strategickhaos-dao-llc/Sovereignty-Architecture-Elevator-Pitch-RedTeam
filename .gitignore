@@ -35,3 +35,11 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat artifacts
+swarmgate/artifacts/
+swarmgate/cache/
+swarmgate/typechain-types/
+
+# Generated Merkle data (committed separately)
+swarmgate/merkle-data.json

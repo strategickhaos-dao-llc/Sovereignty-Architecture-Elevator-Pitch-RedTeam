@@ -1,0 +1,21 @@
+{
+  "name": "strategickhaos-swarmgate",
+  "version": "1.0.0",
+  "description": "SwarmGate v1.0 — Irrevocable 7% Charity Engine",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia",
+    "generate-root": "hardhat run scripts/generate-merkle-root.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.1",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.3.10"
+  }
+}
