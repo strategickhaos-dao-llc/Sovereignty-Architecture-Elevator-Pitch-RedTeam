@@ -1,0 +1,41 @@
+# GitHub Pages Configuration for Strategickhaos Sovereignty Architecture
+theme: jekyll-theme-minimal
+title: Strategickhaos Sovereignty Architecture
+description: A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.
+
+# Social links (compatible with jekyll-theme-minimal)
+twitter_username: strategickhaos
+
+# Repository information
+repository: Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+
+# Exclude files from the Jekyll build
+exclude:
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - package-scaffold.json
+  - tsconfig.json
+  - Dockerfile.*
+  - docker-compose*.yml
+  - "*.sh"
+  - "*.ps1"
+  - .github/agents/
+  - .env
+  - .env.example
+  - benchmarks/
+  - recon/
+  - refinory/
+  - src/
+  - scripts/
+  - examples/
+  - templates/
+  - hooks/
+  - bootstrap/
+  - monitoring/
+  - governance/
+  - legal/
+  - upl_compliance/
+  - mastery_results/
+  - moc_trial_results/
+  - contradictions/

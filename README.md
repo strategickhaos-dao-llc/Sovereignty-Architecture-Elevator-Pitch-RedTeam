@@ -284,6 +284,7 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
+- **X (Twitter)**: [@strategickhaos](https://x.com/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
 
