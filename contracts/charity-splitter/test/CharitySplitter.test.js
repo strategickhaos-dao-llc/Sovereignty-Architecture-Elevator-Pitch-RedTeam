@@ -341,6 +341,46 @@ describe("MerkleDistributor", function () {
         distributor.claim(0, charity1.address, proof)
       ).to.be.revertedWith("Already claimed in epoch");
     });
+
+    it("Should give remainder dust to last claimer", async function () {
+      const { distributor, tree, charity1, charity2, charity3, user } = await loadFixture(deployMerkleDistributorFixture);
+      
+      // Send amount that doesn't divide evenly by 3
+      // 10 wei = 3 wei * 3 + 1 wei remainder
+      const amount = 10n;
+      await user.sendTransaction({
+        to: await distributor.getAddress(),
+        value: amount
+      });
+      
+      const proof1 = tree.getProof([0, charity1.address]);
+      const proof2 = tree.getProof([1, charity2.address]);
+      const proof3 = tree.getProof([2, charity3.address]);
+      
+      // Get balances before
+      const charity1Before = await ethers.provider.getBalance(charity1.address);
+      const charity2Before = await ethers.provider.getBalance(charity2.address);
+      const charity3Before = await ethers.provider.getBalance(charity3.address);
+      
+      // All three claim
+      await distributor.claim(0, charity1.address, proof1);
+      await distributor.claim(1, charity2.address, proof2);
+      await distributor.claim(2, charity3.address, proof3);
+      
+      // Get balances after
+      const charity1After = await ethers.provider.getBalance(charity1.address);
+      const charity2After = await ethers.provider.getBalance(charity2.address);
+      const charity3After = await ethers.provider.getBalance(charity3.address);
+      
+      // First two get base share (3 wei), last one gets base + remainder (3 + 1 = 4 wei)
+      expect(charity1After - charity1Before).to.equal(3n);
+      expect(charity2After - charity2Before).to.equal(3n);
+      expect(charity3After - charity3Before).to.equal(4n); // Gets the 1 wei remainder
+      
+      // Verify total distributed equals total received (no dust locked)
+      const distributorBalance = await ethers.provider.getBalance(await distributor.getAddress());
+      expect(distributorBalance).to.equal(0n);
+    });
   });
 
   describe("Statistics", function () {

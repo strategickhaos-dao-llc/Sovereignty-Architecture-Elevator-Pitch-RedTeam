@@ -2,7 +2,6 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /**
  * @title CharitySplitter
@@ -15,13 +14,11 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
  * - IMMUTABLE: Operations and charity addresses cannot be changed
  * - APPEND-ONLY: All distributions are logged and verifiable on-chain
  * - TRUSTLESS: No admin keys, no governance capture possible
+ * - UNSTOPPABLE: No pause functionality - distributions cannot be halted
  */
-contract CharitySplitter is ReentrancyGuard, Pausable {
+contract CharitySplitter is ReentrancyGuard {
     /// @notice Charity allocation in basis points (700 = 7%)
     uint256 public constant CHARITY_BPS = 700;
-    
-    /// @notice Operations allocation in basis points (9300 = 93%)
-    uint256 public constant OPS_BPS = 9300;
     
     /// @notice Total basis points (10000 = 100%)
     uint256 public constant TOTAL_BPS = 10000;
@@ -92,7 +89,7 @@ contract CharitySplitter is ReentrancyGuard, Pausable {
      * @notice Manual distribution trigger (for gas optimization in some cases)
      * @dev Anyone can call this to force distribution of accumulated balance
      */
-    function distribute() external nonReentrant whenNotPaused {
+    function distribute() external nonReentrant {
         _distribute();
     }
     

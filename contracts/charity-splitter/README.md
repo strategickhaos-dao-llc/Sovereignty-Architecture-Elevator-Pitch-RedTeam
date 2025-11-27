@@ -126,7 +126,7 @@ npm run deploy:local -- --parameters '{"opsMultisig":"0x...", "merkleRoot":"0x..
 ```solidity
 // Constants
 uint256 public constant CHARITY_BPS = 700;  // 7%
-uint256 public constant OPS_BPS = 9300;     // 93%
+uint256 public constant TOTAL_BPS = 10000;  // 100%
 
 // Immutable addresses
 address payable public immutable opsMultisig;
@@ -167,10 +167,12 @@ function getStats() external view returns (uint256, uint256, uint256, uint256);
 ### Why This Design is Trustless
 
 1. **No Proxy Pattern**: Contracts are not upgradeable
-2. **No Owner**: No admin functions, no pause (except for emergency)
-3. **Immutable State**: Critical values set at deployment cannot change
-4. **ReentrancyGuard**: Protected against reentrancy attacks
-5. **Merkle Proofs**: Cryptographic verification of charity addresses
+2. **No Owner**: No admin functions, no pause capability
+3. **Unstoppable**: Distributions cannot be halted by anyone
+4. **Immutable State**: Critical values set at deployment cannot change
+5. **ReentrancyGuard**: Protected against reentrancy attacks
+6. **Merkle Proofs**: Cryptographic verification of charity addresses
+7. **No Dust Lockup**: Remainder from integer division goes to last claimer
 
 ### Audit Recommendations
 

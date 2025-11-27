@@ -20,6 +20,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  * - Feeding America
  * 
  * Each charity has an equal share of the 7% allocation.
+ * Remainder dust from integer division is added to the last charity's claim.
  */
 contract MerkleDistributor is ReentrancyGuard {
     /// @notice Immutable Merkle root for charity verification
@@ -56,6 +57,9 @@ contract MerkleDistributor is ReentrancyGuard {
     
     /// @notice Claimed in epoch by charity
     mapping(uint256 => mapping(uint256 => bool)) public claimedInEpoch;
+    
+    /// @notice Number of claims in current epoch (to track when to add remainder)
+    mapping(uint256 => uint256) public epochClaimCount;
 
     /// @notice Number of charities in the Merkle tree
     uint256 public immutable charityCount;
@@ -103,7 +107,16 @@ contract MerkleDistributor is ReentrancyGuard {
         
         // Calculate share (equal distribution among all charities)
         uint256 epochAmount = epochAllocations[currentEpoch];
-        uint256 share = epochAmount / charityCount;
+        uint256 baseShare = epochAmount / charityCount;
+        uint256 remainder = epochAmount % charityCount;
+        
+        // Give remainder dust to the last claimer to avoid permanently locked funds
+        epochClaimCount[currentEpoch]++;
+        uint256 share = baseShare;
+        if (epochClaimCount[currentEpoch] == charityCount) {
+            // Last claimer gets the remainder
+            share += remainder;
+        }
         
         require(share > 0, "No funds available");
         
