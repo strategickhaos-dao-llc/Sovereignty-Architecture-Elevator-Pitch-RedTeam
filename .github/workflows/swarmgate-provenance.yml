@@ -66,9 +66,10 @@ jobs:
         
     - name: Generate provenance report
       run: |
-        cat > provenance_report.md << 'EOF'
+        BUILD_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        cat > provenance_report.md << EOF
         # SwarmGate Provenance Report
-        **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        **Date:** ${BUILD_DATE}
         **Commit:** ${{ github.sha }}
         **Bundle:** swarmgate_v1.0
         
@@ -77,11 +78,11 @@ jobs:
         - **TAR BLAKE3:** ${{ steps.hashes.outputs.tar_hash }}
         
         ## Artifacts
-        - `swarmgate.yaml` - SwarmGate ecosystem descriptor
-        - `swarmgate_v1.0.tar` - Deterministic tar archive
+        - \`swarmgate.yaml\` - SwarmGate ecosystem descriptor
+        - \`swarmgate_v1.0.tar\` - Deterministic tar archive
         
         ## Next Steps (Manual)
-        1. Pin to IPFS: `ipfs add -Q swarmgate_v1.0.tar`
+        1. Pin to IPFS: \`ipfs add -Q swarmgate_v1.0.tar\`
         2. Upload to Arweave
         3. Record on-chain via CommitRegistry
         

@@ -136,7 +136,7 @@ policies:
     bundle_name: "legal_shield_v1.0"
     created_at: "2025-11-27T00:00:00Z"
     hash_algorithm: "blake3"
-    b3_hash: "f0e4c2f76c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b"  # SHA fallback; recompute BLAKE3
+    b3_hash: "f0e4c2f76c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b"  # Placeholder; replace with actual BLAKE3 hash after bundling
     ipfs_cid: "bafybeihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtenxquvyku"
     arweave_tx: "L7vR9v9q2m9vJ7kB8d5X3c9q1fG2hN4jL8pR6tW9xU1yZ3aS5dF7gH9jK2mN4"
     chain_commit:
