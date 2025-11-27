@@ -10,6 +10,9 @@ on:
       - 'swarmgate.yaml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   provenance:
     runs-on: ubuntu-latest
