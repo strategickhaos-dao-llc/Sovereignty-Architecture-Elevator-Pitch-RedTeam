@@ -9,6 +9,9 @@ Calculates which positions to buy based on target allocation drift.
 import yaml
 import yfinance as yf
 
+# Minimum underweight threshold to trigger a buy order (in dollars)
+MIN_BUY_THRESHOLD = 3.0
+
 
 def main():
     """Execute monthly rebalance calculation."""
@@ -18,14 +21,24 @@ def main():
         positions = yaml.safe_load(f)['core_tickers']
 
     # Get current prices for all tickers
-    tickers_str = ' '.join(p['ticker'] for p in positions)
-    prices = yf.Tickers(tickers_str).tickers
+    tickers_list = [p['ticker'] for p in positions]
+    tickers_str = ' '.join(tickers_list)
+    tickers_obj = yf.Tickers(tickers_str)
+
+    # Fetch current prices
+    current_prices = {}
+    for ticker in tickers_list:
+        try:
+            ticker_info = tickers_obj.tickers[ticker].info
+            current_prices[ticker] = ticker_info.get('regularMarketPrice') or ticker_info.get('currentPrice', 0)
+        except (KeyError, AttributeError):
+            print(f"Warning: Could not fetch price for {ticker}")
+            current_prices[ticker] = 0
 
     # Calculate total equity including new cash
     total_equity = cash
     for p in positions:
-        current_price = prices[p['ticker']].info['regularMarketPrice']
-        total_equity += p['shares'] * current_price
+        total_equity += p['shares'] * current_prices[p['ticker']]
 
     print(f"Total Equity (with cash): ${total_equity:.2f}")
     print(f"New Cash: ${cash:.2f}")
@@ -34,23 +47,26 @@ def main():
     # Calculate buys needed
     buy_orders = []
     for p in positions:
-        current_price = prices[p['ticker']].info['regularMarketPrice']
+        price = current_prices[p['ticker']]
+        if price <= 0:
+            continue
+
         target_value = total_equity * p['target']
-        current_value = p['shares'] * current_price
+        current_value = p['shares'] * price
         underweight = target_value - current_value
 
-        if underweight > 3:  # only buy if >$3 underweight
-            buy_shares = underweight / current_price
+        if underweight > MIN_BUY_THRESHOLD:
+            buy_shares = underweight / price
             buy_orders.append({
                 'ticker': p['ticker'],
                 'shares': buy_shares,
-                'price': current_price,
+                'price': price,
                 'amount': underweight
             })
-            print(f"BUY {buy_shares:.4f} {p['ticker']} @ ${current_price:.2f}")
+            print(f"BUY {buy_shares:.4f} {p['ticker']} @ ${price:.2f}")
 
     if not buy_orders:
-        print("No positions underweight by >$3 - portfolio balanced")
+        print(f"No positions underweight by >${MIN_BUY_THRESHOLD:.0f} - portfolio balanced")
 
     print("-" * 50)
     print("SwarmGate 7% routed: $20.80 SGOV | $10.40 AI-Fuel | $5.20 BTC/ETH")

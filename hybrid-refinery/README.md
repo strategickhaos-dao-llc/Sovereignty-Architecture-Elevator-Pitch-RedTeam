@@ -53,7 +53,7 @@ Output: `2025-11-27 | Equity: $520.10 | Drift max: 0.1%`
 ```bash
 python ranco_executor.py
 ```
-Outputs buy recommendations for positions >$3 underweight.
+Outputs buy recommendations for positions underweight by more than `MIN_BUY_THRESHOLD` (default: $3, configurable in script).
 
 ## Buy / Add-on Zones
 

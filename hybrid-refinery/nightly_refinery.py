@@ -7,6 +7,7 @@ Add email alert integration as needed.
 """
 
 import datetime
+import sys
 import yaml
 import yfinance as yf
 
@@ -17,14 +18,35 @@ def main():
         config = yaml.safe_load(f)['core_tickers']
 
     tickers = [x['ticker'] for x in config]
-    data = yf.download(tickers, period='2d')['Adj Close']
-    prices = data.iloc[-1]
+    data = yf.download(tickers, period='2d', progress=False)
+
+    # Handle case where download returns no data
+    if data.empty:
+        print(f"{datetime.date.today()} | ERROR: Could not fetch market data")
+        sys.exit(1)
+
+    # Handle multi-ticker format (Adj Close is a DataFrame) vs single ticker
+    if 'Adj Close' in data.columns or len(tickers) == 1:
+        adj_close = data['Adj Close'] if 'Adj Close' in data.columns else data
+    else:
+        adj_close = data['Adj Close']
+
+    prices = adj_close.iloc[-1]
 
     total = 0
     for pos in config:
-        value = pos['shares'] * prices[pos['ticker']]
-        pos['value'] = round(value, 2)
-        total += value
+        try:
+            price = prices[pos['ticker']] if len(tickers) > 1 else prices
+            value = pos['shares'] * float(price)
+            pos['value'] = round(value, 2)
+            total += value
+        except (KeyError, TypeError) as e:
+            print(f"Warning: Could not get price for {pos['ticker']}: {e}")
+            pos['value'] = 0
+
+    if total == 0:
+        print(f"{datetime.date.today()} | ERROR: Total equity is zero")
+        sys.exit(1)
 
     # Calculate weights and drift
     for pos in config:
