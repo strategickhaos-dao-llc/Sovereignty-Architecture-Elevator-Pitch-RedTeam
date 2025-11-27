@@ -1,6 +1,12 @@
 # access_matrix.yaml
 # Strategickhaos DAO LLC — UPL-Safe Access Control
-version: "1.0"
+version: "1.1"
+provenance:
+  swarmgate_v1:
+    canonical_hash: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+    algorithm: "BLAKE3"
+    status: "ETERNAL"
+    storage: ["IPFS", "Arweave", "Base"]
 roles:
   drafter:
     - name: "Domenic Garza"
