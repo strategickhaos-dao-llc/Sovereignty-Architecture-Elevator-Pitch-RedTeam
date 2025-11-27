@@ -24,12 +24,14 @@ import yaml
 try:
     from .config_loader import (
         get_portfolio, get_monthly_contribution, 
-        get_annual_return_expectation, get_dividend_growth_rate
+        get_annual_return_expectation, get_dividend_growth_rate,
+        get_initial_investment
     )
 except ImportError:
     from config_loader import (
         get_portfolio, get_monthly_contribution,
-        get_annual_return_expectation, get_dividend_growth_rate
+        get_annual_return_expectation, get_dividend_growth_rate,
+        get_initial_investment
     )
 
 # Configure logging
@@ -44,6 +46,7 @@ PORTFOLIO = get_portfolio()
 MONTHLY_CONTRIBUTION = get_monthly_contribution()
 EXPECTED_ANNUAL_RETURN = get_annual_return_expectation()
 DIVIDEND_GROWTH_RATE = get_dividend_growth_rate()
+INITIAL_INVESTMENT = get_initial_investment()
 
 # Base directory
 BASE_DIR = Path(__file__).parent
@@ -195,7 +198,7 @@ def generate_heatmap_data() -> list:
 
 def calculate_growth_projections() -> dict:
     """Calculate portfolio growth projections."""
-    initial_investment = 520.00
+    initial_investment = INITIAL_INVESTMENT
     monthly_contribution = MONTHLY_CONTRIBUTION
     annual_return = EXPECTED_ANNUAL_RETURN / 100  # Convert from percentage
     

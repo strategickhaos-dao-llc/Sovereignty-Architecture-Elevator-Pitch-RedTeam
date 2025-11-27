@@ -25,11 +25,11 @@ import yaml
 # Import centralized configuration
 try:
     from .config_loader import (
-        get_portfolio, get_drift_threshold, get_alert_thresholds
+        get_portfolio, get_drift_threshold, get_alert_thresholds, get_monthly_contribution
     )
 except ImportError:
     from config_loader import (
-        get_portfolio, get_drift_threshold, get_alert_thresholds
+        get_portfolio, get_drift_threshold, get_alert_thresholds, get_monthly_contribution
     )
 
 # Configure logging
@@ -45,6 +45,7 @@ PORTFOLIO = get_portfolio()
 # Load thresholds from configuration
 DRIFT_THRESHOLD = get_drift_threshold()
 ALERT_THRESHOLDS = get_alert_thresholds()
+MONTHLY_CONTRIBUTION = get_monthly_contribution()
 
 # Base directory for the hybrid refinery
 BASE_DIR = Path(__file__).parent
@@ -228,6 +229,9 @@ def send_email_summary(total_value: float, daily_change: float,
     max_drift_ticker, max_drift_pct = max_drift
     today = datetime.date.today().strftime('%B %d, %Y')
     
+    # Get configured thresholds
+    critical_threshold = ALERT_THRESHOLDS.get('position_drift_critical', DRIFT_THRESHOLD)
+    
     subject = f"🏭 Hybrid Refinery Daily: ${total_value:.2f} ({daily_change_pct:+.2f}%)"
     
     body = f"""
@@ -242,9 +246,9 @@ Strategickhaos Hybrid Refinery - Daily Summary
 {"⚠️ ALERT: Position drift exceeds 10%!" if abs(max_drift_pct) > 10 else "✅ All positions within tolerance."}
 
 Next Actions:
-• Monthly contribution ($36.40) scheduled for the 1st
+• Monthly contribution (${MONTHLY_CONTRIBUTION:.2f}) scheduled for the 1st
 • DRIP enabled for all positions
-• Rebalancing triggers at 12% drift
+• Rebalancing triggers at {critical_threshold}% drift
 
 --- 
 Automated by Strategickhaos Hybrid Refinery v1.0

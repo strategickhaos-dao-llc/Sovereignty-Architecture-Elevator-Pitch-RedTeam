@@ -22,6 +22,7 @@ DEFAULT_MONTHLY_CONTRIBUTION = 36.40
 DEFAULT_DRIFT_THRESHOLD = 12.0
 DEFAULT_ANNUAL_RETURN = 8.0
 DEFAULT_DIVIDEND_GROWTH_RATE = 6.0
+DEFAULT_INITIAL_INVESTMENT = 520.00
 
 
 def load_yaml_config(path: Path) -> dict:
@@ -70,6 +71,18 @@ def get_dividend_growth_rate() -> float:
     """Get dividend growth rate from config."""
     flow = get_flow_config()
     return flow.get('portfolio_metrics', {}).get('projections', {}).get('dividend_growth_rate', DEFAULT_DIVIDEND_GROWTH_RATE)
+
+
+def get_initial_investment() -> float:
+    """Get initial investment amount.
+    
+    Calculates from portfolio holdings if not explicitly configured.
+    """
+    # Calculate from portfolio holdings (sum of cost basis)
+    holdings = get_portfolio_holdings()
+    if holdings:
+        return sum(h.get('cost_basis', 0) for h in holdings.values())
+    return DEFAULT_INITIAL_INVESTMENT
 
 
 def get_portfolio_holdings() -> dict:
