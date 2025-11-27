@@ -303,6 +303,10 @@ refinory:
       - name: "testing"
       - name: "architecture"
       - name: "data_science"
+      - name: "dividend_engine"       # Passive income through dividends
+      - name: "ranco_tactical"        # RANCO/PID structured trading
+      - name: "risk_management"       # Guardrails and safety
+      - name: "portfolio_optimization" # Allocation and rebalancing
     orchestration:
       strategy: "parallel_then_reduce"   # or cascade
       max_rounds: 3
@@ -322,3 +326,207 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# =============================================================================
+# Hybrid Refinery Financial System Configuration
+# Sovereign Income Architecture - This is ARCHITECTURE, not gambling
+# =============================================================================
+financial_refinery:
+  enabled: true
+  mode: "hybrid"  # pure_dividend | hybrid | full_ranco | no_trading
+  
+  # Non-negotiable guardrails
+  guardrails:
+    # FORBIDDEN - No exceptions ever
+    allow_leverage: false
+    allow_options: false
+    allow_margin: false
+    
+    # Position limits
+    max_single_position_pct: 0.05    # 5% max per position
+    max_sector_allocation_pct: 0.20  # 20% max per sector
+    
+    # Risk controls
+    hard_stop_loss_pct: 0.12         # 12% stop loss
+    soft_stop_loss_pct: 0.08         # 8% trailing stop
+    
+    # Cash management
+    min_cash_buffer_pct: 0.10        # 10% minimum cash
+    max_cash_buffer_pct: 0.20        # 20% maximum cash
+    
+    # Drawdown limits
+    max_portfolio_drawdown_pct: 0.12  # 12% max drawdown
+    tactical_risk_cut_threshold: 0.50 # Cut tactical by 50% at drawdown limit
+  
+  # Dividend Engine Configuration (Base Income Layer)
+  dividend_engine:
+    enabled: true
+    description: "Safe, boring, passive income - like owning a vending machine"
+    
+    # Portfolio construction
+    target_positions: 25
+    min_positions: 20
+    max_positions: 30
+    weighting_method: "risk_weight"  # equal_weight | risk_weight
+    
+    # Screening criteria
+    screening:
+      max_payout_ratio: 0.70          # < 70% (REITs: 80%)
+      max_payout_ratio_reit: 0.80
+      min_dividend_growth_5yr_cagr: 0.03  # > 3% CAGR
+      min_interest_coverage: 4.0       # > 4x
+      max_net_debt_ebitda: 3.0         # < 3x (REITs: 6x)
+      max_net_debt_ebitda_reit: 6.0
+      min_roic_premium_over_wacc: 0.02  # ROIC > WACC + 2%
+      min_avg_daily_volume_usd: 1000000
+    
+    # Universe
+    universe:
+      - "Dividend Achievers (10+ years)"
+      - "Dividend Aristocrats (25+ years)"
+      - "High-quality REITs"
+      - "Regulated Utilities"
+    
+    # Cash flow allocation
+    dividend_allocation:
+      reinvest_pct: 0.70              # 70% reinvest
+      treasury_pct: 0.23              # 23% to cash buffer
+      swarmgate_pct: 0.07             # 7% to SwarmGate
+    
+    # Rebalancing
+    rebalance_frequency: "quarterly"
+    rebalance_threshold_pct: 0.05
+  
+  # Refinery Overlay Configuration (Signals, not gambling)
+  refinery_overlay:
+    enabled: true
+    description: "Algorithms, filters, data processing - machine intelligence"
+    
+    # Data sources
+    data_sources:
+      - "price_volume"
+      - "atr_14"
+      - "moving_averages_20_50_200"
+      - "rsi_14"
+      - "fundamentals"
+    
+    # Exclusion rules
+    exclusions:
+      earnings_window_days: 5         # ±5 days from earnings
+      min_adv_for_signals: 1000000    # $1M ADV minimum
+    
+    # Signal criteria
+    safe_add_criteria:
+      near_ma200_pct: 0.05            # Within 5% of 200MA
+      require_atr_downtrend: true
+      require_fundamentals_intact: true
+    
+    avoid_criteria:
+      payout_stretch_threshold: 0.80
+      earnings_revision_down: true
+    
+    # Output
+    watchlists:
+      generate_nightly: true
+      format: "csv"
+      outputs:
+        - "dividends_core.csv"
+        - "safe_add.csv"
+        - "ranco_candidates.csv"
+        - "avoid_list.csv"
+  
+  # RANCO/PID Tactical Sleeve Configuration (Structured Trading)
+  ranco_tactical:
+    enabled: true
+    description: "PID loops, zero-emotion, strict rules - ENGINEERING not speculation"
+    
+    # Allocation
+    max_allocation_pct: 0.20          # 10-20% of capital
+    min_allocation_pct: 0.10
+    max_open_positions: 5
+    
+    # Entry rules
+    entry_rules:
+      require_volatility_compression: true  # ATR% < 6-mo median
+      require_ma_alignment: true            # 20 > 50 > 200
+      rsi_min: 45
+      rsi_max: 65
+      require_higher_low: true
+      trading_frequency: "weekly"           # NO intraday
+    
+    # Exit rules
+    exit_rules:
+      initial_stop_atr_multiplier: 1.5     # 1.5x ATR below entry
+      trailing_stop_atr_multiplier: 2.0    # 2x ATR trail
+      rsi_overbought_threshold: 75
+      exit_on_lower_high_after_overbought: true
+    
+    # Position sizing
+    sizing:
+      method: "kelly_fraction"             # kelly_fraction | fixed_risk
+      kelly_divisor: 5                     # Kelly / 5
+      max_risk_per_trade_pct: 0.01         # 1% max risk
+      min_risk_per_trade_pct: 0.005        # 0.5% min risk
+    
+    # Execution
+    execution:
+      auto_place_orders: false             # Require human confirmation
+      staged_entry_tranches: 3             # Enter in 3 tranches
+  
+  # Account Structure
+  accounts:
+    core:
+      name: "Core Dividend Account"
+      purpose: "Long-term dividend holdings"
+      allocation_target: 0.70              # 70% of portfolio
+    tactical:
+      name: "Tactical RANCO Account"
+      purpose: "Structured mechanical trades"
+      allocation_target: 0.20              # 20% of portfolio
+    treasury:
+      name: "Treasury Buffer"
+      purpose: "Cash safety buffer"
+      allocation_target: 0.10              # 10% of portfolio
+  
+  # Automation and Rules Engine
+  automation:
+    enabled: true
+    rules:
+      - name: "safe_add_staged_buy"
+        trigger: "core_name_dips_to_buy_zone"
+        action: "place_staged_buys"
+        tranches: 3
+        requires_confirmation: true
+      - name: "ranco_entry_trigger"
+        trigger: "ranco_entry_signal"
+        action: "place_with_stop"
+        requires_confirmation: true
+      - name: "drawdown_risk_cut"
+        trigger: "portfolio_drawdown_exceeds_12pct"
+        action: "cut_tactical_risk_50pct"
+        requires_confirmation: false
+  
+  # Reporting
+  reporting:
+    weekly_report: true
+    metrics:
+      - "portfolio_pnl"
+      - "dividend_run_rate"
+      - "risk_heatmap"
+      - "swarmgate_flow_log"
+    alerts:
+      - "position_concentration"
+      - "sector_concentration"
+      - "drawdown_warning"
+      - "cash_buffer_low"
+  
+  # Validation and Backtesting
+  validation:
+    backtest_years: 10
+    monte_carlo_simulations: 1000
+    scenarios:
+      - "dividend_cuts"
+      - "recession"
+      - "rate_spike"
+    alerts:
+      drawdown_threshold: 0.12
