@@ -58,8 +58,8 @@ Follow the prompts:
 ### Working with the Repository
 
 ```bash
-# Clone the repository
-gh repo clone Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+# Clone the repository (replace OWNER/REPO with the actual repository)
+gh repo clone OWNER/REPO
 
 # Sync your local repo (optional, ensures everything is up to date)
 gh repo sync
@@ -74,11 +74,11 @@ git push --follow-tags origin main
 
 ```bash
 # Fork the repository (creates a copy under your account)
-gh repo fork Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+gh repo fork OWNER/REPO
 
 # Clone your fork
-gh repo clone YOUR_USERNAME/Sovereignty-Architecture-Elevator-Pitch-
-cd Sovereignty-Architecture-Elevator-Pitch-
+gh repo clone YOUR_USERNAME/REPO
+cd REPO
 ```
 
 ### 2. Create a Branch
@@ -110,7 +110,7 @@ gh pr create --title "Your PR title" --body "Description of changes"
 ## 📂 Project Structure
 
 ```
-Sovereignty-Architecture-Elevator-Pitch-/
+REPO/
 ├── discovery.yml              # Strategickhaos configuration
 ├── gl2discord.sh              # GitLens → Discord CLI tool
 ├── README.md                  # Main documentation
