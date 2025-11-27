@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Sovereignty verification reports
+sovereignty_verification_report.json
+sovereignty_verification_report.md
