@@ -12,22 +12,25 @@ const path = require("path");
  */
 
 // ============================================
-// EDIT THESE ADDRESSES BEFORE DEPLOYMENT
+// ⚠️  WARNING: EDIT THESE ADDRESSES BEFORE MAINNET DEPLOYMENT
+// ⚠️  These placeholder addresses are for testing only.
+// ⚠️  Using placeholder addresses in production will result in
+// ⚠️  funds being sent to uncontrolled addresses!
 // ============================================
 const beneficiaries = [
   {
     name: "St. Jude's Children's Research Hospital",
-    address: "0x0000000000000000000000000000000000000001", // REPLACE WITH REAL ADDRESS
+    address: "0x0000000000000000000000000000000000000001", // ⚠️ REPLACE WITH REAL ADDRESS BEFORE MAINNET
     allocation: ethers.parseEther("0.033"), // ~33% of 7% = ~2.33% of total
   },
   {
     name: "Médecins Sans Frontières",
-    address: "0x0000000000000000000000000000000000000002", // REPLACE WITH REAL ADDRESS
+    address: "0x0000000000000000000000000000000000000002", // ⚠️ REPLACE WITH REAL ADDRESS BEFORE MAINNET
     allocation: ethers.parseEther("0.033"), // ~33% of 7% = ~2.33% of total
   },
   {
     name: "Veteran Support Programs",
-    address: "0x0000000000000000000000000000000000000003", // REPLACE WITH REAL ADDRESS
+    address: "0x0000000000000000000000000000000000000003", // ⚠️ REPLACE WITH REAL ADDRESS BEFORE MAINNET
     allocation: ethers.parseEther("0.034"), // ~34% of 7% = ~2.34% of total
   },
 ];

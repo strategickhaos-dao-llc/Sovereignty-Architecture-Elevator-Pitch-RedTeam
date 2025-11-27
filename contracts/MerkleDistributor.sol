@@ -2,13 +2,14 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title MerkleDistributor
  * @notice Distributes ETH to charity beneficiaries using Merkle proofs
  * @dev Charity addresses and allocations are encoded in the Merkle tree
  */
-contract MerkleDistributor {
+contract MerkleDistributor is ReentrancyGuard {
     bytes32 public immutable merkleRoot;
 
     mapping(address => bool) public hasClaimed;
@@ -33,8 +34,9 @@ contract MerkleDistributor {
      * @param amount The amount to claim
      * @param merkleProof The Merkle proof for the claim
      */
-    function claim(uint256 amount, bytes32[] calldata merkleProof) external {
+    function claim(uint256 amount, bytes32[] calldata merkleProof) external nonReentrant {
         require(!hasClaimed[msg.sender], "Already claimed");
+        require(address(this).balance >= amount, "Insufficient balance");
 
         bytes32 leaf = keccak256(abi.encodePacked(msg.sender, amount));
         require(MerkleProof.verify(merkleProof, merkleRoot, leaf), "Invalid proof");
