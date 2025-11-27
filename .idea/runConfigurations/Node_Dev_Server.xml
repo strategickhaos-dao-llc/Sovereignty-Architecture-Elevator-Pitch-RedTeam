@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Node.js Dev Server" type="NodeJSConfigurationType" factoryName="Node.js">
+    <node-options>--experimental-specifier-resolution=node</node-options>
+    <working-dir>$PROJECT_DIR$</working-dir>
+    <node-interpreter value="project" />
+    <application-parameters />
+    <method v="2">
+      <option name="NpmBeforeRunTask" enabled="true">
+        <package-json value="$PROJECT_DIR$/package.json" />
+        <command value="install" />
+      </option>
+    </method>
+  </configuration>
+</component>

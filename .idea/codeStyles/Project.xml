@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectCodeStyleConfiguration">
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+    <code_scheme name="Strategickhaos" version="173">
+      <!-- General Settings -->
+      <option name="LINE_SEPARATOR" value="&#10;" />
+      <option name="RIGHT_MARGIN" value="120" />
+      <option name="WRAP_ON_TYPING" value="1" />
+      
+      <!-- HTML/XML Settings -->
+      <HTMLCodeStyleSettings>
+        <option name="HTML_KEEP_BLANK_LINES" value="1" />
+        <option name="HTML_ATTRIBUTE_WRAP" value="0" />
+        <option name="HTML_SPACE_INSIDE_EMPTY_TAG" value="true" />
+      </HTMLCodeStyleSettings>
+      
+      <!-- JavaScript Settings -->
+      <JSCodeStyleSettings version="0">
+        <option name="FORCE_SEMICOLON_STYLE" value="true" />
+        <option name="USE_SEMICOLON_AFTER_STATEMENT" value="true" />
+        <option name="FORCE_QUOTE_STYlE" value="true" />
+        <option name="USE_DOUBLE_QUOTES" value="false" />
+        <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
+        <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
+        <option name="SPACES_WITHIN_IMPORTS" value="true" />
+        <option name="INDENT_CHAINED_CALLS" value="true" />
+      </JSCodeStyleSettings>
+      
+      <!-- TypeScript Settings -->
+      <TypeScriptCodeStyleSettings version="0">
+        <option name="FORCE_SEMICOLON_STYLE" value="true" />
+        <option name="USE_SEMICOLON_AFTER_STATEMENT" value="true" />
+        <option name="FORCE_QUOTE_STYlE" value="true" />
+        <option name="USE_DOUBLE_QUOTES" value="false" />
+        <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
+        <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
+        <option name="SPACES_WITHIN_IMPORTS" value="true" />
+        <option name="USE_PUBLIC_MODIFIER" value="true" />
+        <option name="PREFER_AS_TYPE_CAST" value="true" />
+        <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+      </TypeScriptCodeStyleSettings>
+      
+      <!-- C# Settings (Rider) -->
+      <csharpCodeStyleSettings>
+        <option name="BRACES_FOR_IFELSE" value="REQUIRED" />
+        <option name="BRACES_FOR_FOR" value="REQUIRED" />
+        <option name="BRACES_FOR_FOREACH" value="REQUIRED" />
+        <option name="BRACES_FOR_WHILE" value="REQUIRED" />
+        <option name="BRACES_FOR_DOWHILE" value="REQUIRED" />
+        <option name="BRACES_FOR_USING" value="REQUIRED" />
+        <option name="BRACES_FOR_LOCK" value="REQUIRED" />
+        <option name="BRACES_FOR_FIXED" value="REQUIRED" />
+        <option name="INDENT_SIZE" value="4" />
+        <option name="CONTINUOUS_INDENT_MULTIPLIER" value="1" />
+        <option name="BLANK_LINES_AROUND_NAMESPACE" value="1" />
+        <option name="BLANK_LINES_INSIDE_NAMESPACE" value="0" />
+        <option name="BLANK_LINES_AROUND_TYPE" value="1" />
+        <option name="BLANK_LINES_AROUND_FIELD" value="0" />
+        <option name="BLANK_LINES_AROUND_SINGLE_LINE_FIELD" value="0" />
+        <option name="BLANK_LINES_AROUND_PROPERTY" value="0" />
+        <option name="BLANK_LINES_AROUND_AUTO_PROPERTY" value="0" />
+        <option name="BLANK_LINES_AROUND_SINGLE_LINE_AUTO_PROPERTY" value="0" />
+        <option name="BLANK_LINES_AROUND_INVOCABLE" value="1" />
+        <option name="BLANK_LINES_AROUND_REGION" value="1" />
+        <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+        <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
+        <option name="PLACE_FIELD_ATTRIBUTE_ON_SAME_LINE" value="false" />
+        <option name="PLACE_SIMPLE_ACCESSOR_ON_SINGLE_LINE" value="false" />
+        <option name="WRAP_ARGUMENTS_STYLE" value="CHOP_IF_LONG" />
+        <option name="WRAP_PARAMETERS_STYLE" value="CHOP_IF_LONG" />
+      </csharpCodeStyleSettings>
+      
+      <!-- YAML Settings -->
+      <YAML>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="false" />
+        <option name="SEQUENCE_ON_NEW_LINE" value="true" />
+        <option name="BLOCK_MAPPING_ON_NEW_LINE" value="true" />
+      </YAML>
+      
+      <!-- JSON Settings -->
+      <JSON>
+        <option name="ARRAY_WRAPPING" value="1" />
+        <option name="OBJECT_WRAPPING" value="2" />
+        <option name="KEEP_TRAILING_COMMA" value="false" />
+      </JSON>
+      
+      <!-- Shell Script Settings -->
+      <ShellScript>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
+      </ShellScript>
+      
+      <!-- Markdown Settings -->
+      <MarkdownNavigatorCodeStyleSettings>
+        <option name="RIGHT_MARGIN" value="80" />
+      </MarkdownNavigatorCodeStyleSettings>
+    </code_scheme>
+  </component>
+</project>

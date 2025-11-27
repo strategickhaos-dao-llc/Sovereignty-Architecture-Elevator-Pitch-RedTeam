@@ -272,6 +272,14 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🛠️ JetBrains IDE Setup
+
+For developers using JetBrains IDEs (WebStorm, Rider, or any IntelliJ-based IDE), we provide comprehensive configuration and security settings:
+
+- **[JetBrains Sovereignty Guide](JETBRAINS_SOVEREIGNTY.md)** - Complete setup for WebStorm, Rider, and AI Pro
+- **[AI Exclusions](.idea/ai_exclusions.txt)** - Patterns to protect secrets from AI services
+- **Pre-configured Settings**: Code styles, inspection profiles, and run configurations in `.idea/`
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
