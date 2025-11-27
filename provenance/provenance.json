@@ -1,0 +1,69 @@
+{
+  "name": "SwarmGate",
+  "version": "1.0.0",
+  "release_date": "2025-11-27T00:00:00Z",
+  "artifact": {
+    "name": "swarmgate_v1.0.tar.gz",
+    "blake3": "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698",
+    "size_bytes": 4096,
+    "format": "tar.gz"
+  },
+  "builder": {
+    "entity": "Strategickhaos DAO LLC",
+    "entity_id": "2025-001708194",
+    "jurisdiction": "Wyoming",
+    "signer": "Domenic Gabriel Garza",
+    "build_timestamp": "2025-11-27T00:00:00Z"
+  },
+  "source": {
+    "repository": "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch",
+    "commit": "main",
+    "tag": "swarmgate/v1.0"
+  },
+  "receipts": {
+    "ipfs": {
+      "cid": "<IPFS_CID_PLACEHOLDER>",
+      "gateways": [
+        "https://ipfs.io/ipfs/<CID>",
+        "https://dweb.link/ipfs/<CID>",
+        "https://cloudflare-ipfs.com/ipfs/<CID>"
+      ]
+    },
+    "arweave": {
+      "txid": "<ARWEAVE_TXID_PLACEHOLDER>",
+      "url": "https://arweave.net/<TXID>"
+    },
+    "blockchain": {
+      "chain": "Base Mainnet",
+      "tx_hash": "<BASE_TX_PLACEHOLDER>",
+      "explorer": "https://basescan.org/tx/<TX_HASH>"
+    }
+  },
+  "legal_entities": {
+    "nonprofit": {
+      "name": "ValorYield Engine",
+      "type": "501(c)(3) Nonprofit Corporation",
+      "ein": "39-2923503",
+      "state": "Wyoming",
+      "entity_id": "2025-001708312"
+    },
+    "dao": {
+      "name": "Strategickhaos DAO LLC",
+      "type": "Limited Liability Company",
+      "ein": "pending_separate_filing",
+      "state": "Wyoming",
+      "entity_id": "2025-001708194"
+    }
+  },
+  "verification": {
+    "signature": {
+      "algorithm": "GPG",
+      "keyid": "<GPG_KEY_ID>",
+      "signature_file": "provenance.json.asc"
+    },
+    "timestamp": {
+      "method": "OpenTimestamps",
+      "ots_file": "provenance.json.ots"
+    }
+  }
+}
