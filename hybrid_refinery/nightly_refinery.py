@@ -22,6 +22,16 @@ from typing import Optional
 
 import yaml
 
+# Import centralized configuration
+try:
+    from .config_loader import (
+        get_portfolio, get_drift_threshold, get_alert_thresholds
+    )
+except ImportError:
+    from config_loader import (
+        get_portfolio, get_drift_threshold, get_alert_thresholds
+    )
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -29,24 +39,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Portfolio holdings as of November 27, 2025
-PORTFOLIO = {
-    'JPM': {'shares': 0.1555, 'cost_basis': 36.40, 'target_weight': 7.00},
-    'CB': {'shares': 0.1238, 'cost_basis': 36.40, 'target_weight': 7.01},
-    'TD': {'shares': 0.617, 'cost_basis': 36.40, 'target_weight': 7.00},
-    'PG': {'shares': 0.244, 'cost_basis': 41.60, 'target_weight': 8.00},
-    'KO': {'shares': 0.592, 'cost_basis': 41.60, 'target_weight': 8.00},
-    'PEP': {'shares': 0.206, 'cost_basis': 36.40, 'target_weight': 7.00},
-    'CL': {'shares': 0.305, 'cost_basis': 31.20, 'target_weight': 6.00},
-    'NEE': {'shares': 0.428, 'cost_basis': 36.40, 'target_weight': 7.00},
-    'O': {'shares': 0.676, 'cost_basis': 41.60, 'target_weight': 8.01},
-    'VICI': {'shares': 1.112, 'cost_basis': 36.40, 'target_weight': 7.01},
-    'PLD': {'shares': 0.267, 'cost_basis': 31.20, 'target_weight': 5.99},
-    'ABBV': {'shares': 0.185, 'cost_basis': 36.40, 'target_weight': 7.00},
-    'JNJ': {'shares': 0.255, 'cost_basis': 41.60, 'target_weight': 8.00},
-    'XOM': {'shares': 0.255, 'cost_basis': 31.20, 'target_weight': 6.00},
-    'WEC': {'shares': 0.387, 'cost_basis': 36.40, 'target_weight': 7.00},
-}
+# Load portfolio from configuration
+PORTFOLIO = get_portfolio()
+
+# Load thresholds from configuration
+DRIFT_THRESHOLD = get_drift_threshold()
+ALERT_THRESHOLDS = get_alert_thresholds()
 
 # Base directory for the hybrid refinery
 BASE_DIR = Path(__file__).parent
@@ -305,9 +303,10 @@ def main():
     max_drift_ticker, max_drift_pct = max_drift
     logger.info(f"Maximum Drift: {max_drift_ticker} at {max_drift_pct:+.2f}%")
     
-    # Check for drift alerts
-    if abs(max_drift_pct) > 12:
-        logger.warning(f"ALERT: {max_drift_ticker} exceeds 12% drift threshold!")
+    # Check for drift alerts using configured threshold
+    critical_threshold = ALERT_THRESHOLDS.get('position_drift_critical', DRIFT_THRESHOLD)
+    if abs(max_drift_pct) > critical_threshold:
+        logger.warning(f"ALERT: {max_drift_ticker} exceeds {critical_threshold}% drift threshold!")
         
     # Send email summary
     send_email_summary(total_value, daily_change, daily_change_pct, max_drift)

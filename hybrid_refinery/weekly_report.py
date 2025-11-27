@@ -20,6 +20,18 @@ from typing import Optional
 
 import yaml
 
+# Import centralized configuration
+try:
+    from .config_loader import (
+        get_portfolio, get_monthly_contribution, 
+        get_annual_return_expectation, get_dividend_growth_rate
+    )
+except ImportError:
+    from config_loader import (
+        get_portfolio, get_monthly_contribution,
+        get_annual_return_expectation, get_dividend_growth_rate
+    )
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -27,27 +39,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Portfolio holdings as of November 27, 2025
-PORTFOLIO = {
-    'JPM': {'shares': 0.1555, 'cost_basis': 36.40, 'target_weight': 7.00, 'sector': 'Financials', 'div_yield': 2.2},
-    'CB': {'shares': 0.1238, 'cost_basis': 36.40, 'target_weight': 7.01, 'sector': 'Financials', 'div_yield': 1.4},
-    'TD': {'shares': 0.617, 'cost_basis': 36.40, 'target_weight': 7.00, 'sector': 'Financials', 'div_yield': 5.1},
-    'PG': {'shares': 0.244, 'cost_basis': 41.60, 'target_weight': 8.00, 'sector': 'Consumer Staples', 'div_yield': 2.4},
-    'KO': {'shares': 0.592, 'cost_basis': 41.60, 'target_weight': 8.00, 'sector': 'Consumer Staples', 'div_yield': 2.9},
-    'PEP': {'shares': 0.206, 'cost_basis': 36.40, 'target_weight': 7.00, 'sector': 'Consumer Staples', 'div_yield': 2.8},
-    'CL': {'shares': 0.305, 'cost_basis': 31.20, 'target_weight': 6.00, 'sector': 'Consumer Staples', 'div_yield': 2.2},
-    'NEE': {'shares': 0.428, 'cost_basis': 36.40, 'target_weight': 7.00, 'sector': 'Utilities', 'div_yield': 2.6},
-    'O': {'shares': 0.676, 'cost_basis': 41.60, 'target_weight': 8.01, 'sector': 'Real Estate', 'div_yield': 5.1},
-    'VICI': {'shares': 1.112, 'cost_basis': 36.40, 'target_weight': 7.01, 'sector': 'Real Estate', 'div_yield': 5.4},
-    'PLD': {'shares': 0.267, 'cost_basis': 31.20, 'target_weight': 5.99, 'sector': 'Real Estate', 'div_yield': 3.0},
-    'ABBV': {'shares': 0.185, 'cost_basis': 36.40, 'target_weight': 7.00, 'sector': 'Healthcare', 'div_yield': 3.7},
-    'JNJ': {'shares': 0.255, 'cost_basis': 41.60, 'target_weight': 8.00, 'sector': 'Healthcare', 'div_yield': 3.0},
-    'XOM': {'shares': 0.255, 'cost_basis': 31.20, 'target_weight': 6.00, 'sector': 'Energy', 'div_yield': 3.3},
-    'WEC': {'shares': 0.387, 'cost_basis': 36.40, 'target_weight': 7.00, 'sector': 'Utilities', 'div_yield': 3.7},
-}
-
-# Monthly contribution
-MONTHLY_CONTRIBUTION = 36.40
+# Load portfolio and configuration from centralized config
+PORTFOLIO = get_portfolio()
+MONTHLY_CONTRIBUTION = get_monthly_contribution()
+EXPECTED_ANNUAL_RETURN = get_annual_return_expectation()
+DIVIDEND_GROWTH_RATE = get_dividend_growth_rate()
 
 # Base directory
 BASE_DIR = Path(__file__).parent
@@ -143,7 +139,8 @@ def calculate_dividend_forecast() -> dict:
     monthly_dividends = annual_dividends / 12
     quarterly_dividends = annual_dividends / 4
     
-    # Project future dividends with 6% annual growth
+    # Project future dividends using configured growth rate
+    dividend_growth = 1 + (DIVIDEND_GROWTH_RATE / 100)
     projections = []
     current_annual = annual_dividends
     for year in range(1, 16):
@@ -152,7 +149,7 @@ def calculate_dividend_forecast() -> dict:
             'annual_dividends': current_annual,
             'monthly_dividends': current_annual / 12
         })
-        current_annual *= 1.06  # 6% dividend growth
+        current_annual *= dividend_growth
         
     return {
         'portfolio_yield': weighted_yield,
@@ -200,7 +197,7 @@ def calculate_growth_projections() -> dict:
     """Calculate portfolio growth projections."""
     initial_investment = 520.00
     monthly_contribution = MONTHLY_CONTRIBUTION
-    annual_return = 0.08  # 8% expected return
+    annual_return = EXPECTED_ANNUAL_RETURN / 100  # Convert from percentage
     
     projections = []
     balance = initial_investment
@@ -222,7 +219,7 @@ def calculate_growth_projections() -> dict:
     return {
         'initial': initial_investment,
         'monthly_contribution': monthly_contribution,
-        'annual_return': annual_return * 100,
+        'annual_return': EXPECTED_ANNUAL_RETURN,
         'projections': projections
     }
 

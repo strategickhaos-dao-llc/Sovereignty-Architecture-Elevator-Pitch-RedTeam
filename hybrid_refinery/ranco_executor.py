@@ -5,7 +5,7 @@ Rebalancing and New Capital Orchestrator.
 
 Features:
 - Detects position drift from target weights
-- Executes rebalancing when drift exceeds 12%
+- Executes rebalancing when drift exceeds configured threshold
 - Allocates monthly contributions to most underweight positions
 - Logs all transactions for audit trail
 """
@@ -20,6 +20,16 @@ from typing import Optional
 
 import yaml
 
+# Import centralized configuration
+try:
+    from .config_loader import (
+        get_portfolio, get_monthly_contribution, get_drift_threshold
+    )
+except ImportError:
+    from config_loader import (
+        get_portfolio, get_monthly_contribution, get_drift_threshold
+    )
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -27,28 +37,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Portfolio holdings as of November 27, 2025
-PORTFOLIO = {
-    'JPM': {'shares': 0.1555, 'cost_basis': 36.40, 'target_weight': 7.00, 'name': 'JPMorgan Chase'},
-    'CB': {'shares': 0.1238, 'cost_basis': 36.40, 'target_weight': 7.01, 'name': 'Chubb Limited'},
-    'TD': {'shares': 0.617, 'cost_basis': 36.40, 'target_weight': 7.00, 'name': 'Toronto-Dominion Bank'},
-    'PG': {'shares': 0.244, 'cost_basis': 41.60, 'target_weight': 8.00, 'name': 'Procter & Gamble'},
-    'KO': {'shares': 0.592, 'cost_basis': 41.60, 'target_weight': 8.00, 'name': 'Coca-Cola'},
-    'PEP': {'shares': 0.206, 'cost_basis': 36.40, 'target_weight': 7.00, 'name': 'PepsiCo'},
-    'CL': {'shares': 0.305, 'cost_basis': 31.20, 'target_weight': 6.00, 'name': 'Colgate-Palmolive'},
-    'NEE': {'shares': 0.428, 'cost_basis': 36.40, 'target_weight': 7.00, 'name': 'NextEra Energy'},
-    'O': {'shares': 0.676, 'cost_basis': 41.60, 'target_weight': 8.01, 'name': 'Realty Income'},
-    'VICI': {'shares': 1.112, 'cost_basis': 36.40, 'target_weight': 7.01, 'name': 'VICI Properties'},
-    'PLD': {'shares': 0.267, 'cost_basis': 31.20, 'target_weight': 5.99, 'name': 'Prologis'},
-    'ABBV': {'shares': 0.185, 'cost_basis': 36.40, 'target_weight': 7.00, 'name': 'AbbVie'},
-    'JNJ': {'shares': 0.255, 'cost_basis': 41.60, 'target_weight': 8.00, 'name': 'Johnson & Johnson'},
-    'XOM': {'shares': 0.255, 'cost_basis': 31.20, 'target_weight': 6.00, 'name': 'Exxon Mobil'},
-    'WEC': {'shares': 0.387, 'cost_basis': 36.40, 'target_weight': 7.00, 'name': 'WEC Energy Group'},
-}
-
-# Configuration
-MONTHLY_CONTRIBUTION = 36.40
-DRIFT_THRESHOLD = 12.0  # Percentage drift that triggers rebalancing
+# Load portfolio and configuration from centralized config
+PORTFOLIO = get_portfolio()
+MONTHLY_CONTRIBUTION = get_monthly_contribution()
+DRIFT_THRESHOLD = get_drift_threshold()
 
 # Base directory
 BASE_DIR = Path(__file__).parent
