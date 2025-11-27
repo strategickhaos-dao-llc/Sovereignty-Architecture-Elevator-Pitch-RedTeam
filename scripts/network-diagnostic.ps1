@@ -26,7 +26,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [int]$WebhookPort = 3000,
+    [int]$WebhookPort = 3001,
     
     [Parameter(Mandatory=$false)]
     [string]$SmeeUrl = "",

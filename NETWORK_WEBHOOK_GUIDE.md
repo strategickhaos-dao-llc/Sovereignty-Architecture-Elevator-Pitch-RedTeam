@@ -74,12 +74,12 @@ npm install -g smee-client
 
 ```bash
 # Forward webhooks from smee.io to your local event gateway
-smee --url https://smee.io/YOUR_CHANNEL_ID --target http://localhost:3000/webhooks/github
+smee --url https://smee.io/YOUR_CHANNEL_ID --target http://localhost:3001/webhooks/github
 ```
 
 **Windows PowerShell (background):**
 ```powershell
-Start-Process -NoNewWindow npx -ArgumentList "smee-client", "--url", "https://smee.io/YOUR_CHANNEL_ID", "--target", "http://localhost:3000/webhooks/github"
+Start-Process -NoNewWindow npx -ArgumentList "smee-client", "--url", "https://smee.io/YOUR_CHANNEL_ID", "--target", "http://localhost:3001/webhooks/github"
 ```
 
 ### Configure GitHub Webhook
@@ -222,6 +222,8 @@ Download failed: The request was aborted: The connection was closed unexpectedly
 | `ALERTS_CHANNEL_ID` | Discord channel for alerts | `1234567890123456789` |
 | `PORT` | Event gateway port | `3000` (default: 3001) |
 | `EVENTS_HMAC_KEY` | HMAC key for event signing | `dev_events_hmac_key...` |
+
+> **Note:** The default port is 3001 per the event gateway configuration. Use `PORT=3000` if you need port 3000.
 
 ## 7. Full Diagnostic Script
 
