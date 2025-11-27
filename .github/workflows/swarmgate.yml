@@ -31,9 +31,11 @@ jobs:
       
       - name: 📦 Install BLAKE3
         run: |
-          # Install b3sum for BLAKE3 hashing
-          curl -sSL https://github.com/BLAKE3-team/BLAKE3/releases/download/1.5.0/b3sum_linux_x64_bin -o /usr/local/bin/b3sum
-          chmod +x /usr/local/bin/b3sum
+          # Install b3sum for BLAKE3 hashing via cargo (more secure than downloading binary)
+          # Pinned to specific version for reproducibility
+          cargo install b3sum@1.5.0 --locked
+          # Verify installation
+          b3sum --version
       
       - name: 🔐 Verify SwarmGate Provenance
         id: verify
