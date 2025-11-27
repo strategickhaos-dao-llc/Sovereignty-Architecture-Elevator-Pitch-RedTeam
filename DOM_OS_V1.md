@@ -60,7 +60,7 @@ Output: Thousands of engineered subsystems
 - Random input → Engineered solution
 
 ### Analogous System
-CERN Large Hadron Collider — proton collisions generating fundamental particle discovery
+CERN Large Hadron Collider — proton collisions generating the fundamental particle discoveries
 
 ---
 
