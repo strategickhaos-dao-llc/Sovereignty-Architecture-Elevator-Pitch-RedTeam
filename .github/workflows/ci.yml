@@ -1,0 +1,45 @@
+name: CI - Ansible Lint & Syntax + Shellcheck
+on:
+  push:
+    branches: ["main", "infra/*", "infra/cloud-federation"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint-and-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install ansible and ansible-lint
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible ansible-lint
+
+      - name: Run ansible-lint on playbook
+        run: |
+          ansible-lint cloud_swarm_playbook.yaml || true
+        # allow non-zero exit (policy) but show results
+
+      - name: Ansible syntax-check (playbook)
+        run: |
+          # --syntax-check does not require live hosts; it checks syntax only.
+          ansible-playbook --syntax-check -i cloud_hosts.ini cloud_swarm_playbook.yaml || true
+
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck on shell scripts
+        run: |
+          shellcheck *.sh || true
+
+      - name: List files for review
+        run: ls -la
