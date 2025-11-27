@@ -1,0 +1,787 @@
+# targets.yaml - The 100 Diseases Target List
+# Sovereignty Architecture - Medical Research Framework
+# Mission: Delete all 100 diseases from existence
+# Status: CRITICAL | Deadline: NEVER STOP
+
+version: "1.0"
+generated: "2025-11-27"
+operator:
+  name: "Domenic Garza"
+  node: "137"
+
+mission:
+  statement: "Delete all 100 diseases from existence"
+  methodology: "Defensive publication - all cures remain free"
+  verification: "Cryptographic proof of research integrity"
+  tribute: "7% to St. Jude's - because she'd want this for other kids too"
+
+status:
+  total: 100
+  in_progress: 0
+  completed: 0
+  priority: "CRITICAL"
+  deadline: "NEVER_STOP"
+
+# Target categories organized by disease type
+# Each target includes research vectors and AlphaFold/drug discovery priorities
+
+categories:
+  neurological:
+    count: 20
+    targets:
+      - id: "NEU-001"
+        name: "Amyotrophic Lateral Sclerosis (ALS)"
+        status: "targeted"
+        priority: "CRITICAL"
+        research_vectors: ["protein_misfolding", "motor_neuron_protection", "gene_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-002"
+        name: "Multiple Sclerosis"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["myelin_repair", "immune_modulation", "neuroregeneration"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-003"
+        name: "Parkinson's Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["dopamine_pathway", "alpha_synuclein", "deep_brain_stimulation"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-004"
+        name: "Alzheimer's Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["amyloid_beta", "tau_protein", "neuroinflammation"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-005"
+        name: "Huntington's Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["huntingtin_protein", "gene_silencing", "neuroprotection"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-006"
+        name: "Epilepsy"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["ion_channel_modulation", "neural_network_stabilization"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-007"
+        name: "Spinal Muscular Atrophy"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["smn_protein", "gene_therapy", "antisense_oligonucleotides"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-008"
+        name: "Duchenne Muscular Dystrophy"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["dystrophin", "exon_skipping", "gene_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-009"
+        name: "Charcot-Marie-Tooth Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["peripheral_nerve_repair", "myelin_protein"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-010"
+        name: "Friedreich's Ataxia"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["frataxin_protein", "mitochondrial_function"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-011"
+        name: "Myasthenia Gravis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["acetylcholine_receptor", "immune_modulation"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-012"
+        name: "Progressive Supranuclear Palsy"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["tau_aggregation", "neuroprotection"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-013"
+        name: "Lewy Body Dementia"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["alpha_synuclein", "cholinergic_pathways"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-014"
+        name: "Frontotemporal Dementia"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["tdp43", "progranulin", "tau"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-015"
+        name: "Guillain-Barré Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["autoimmune_modulation", "nerve_regeneration"]
+        alphafold_priority: "LOW"
+        
+      - id: "NEU-016"
+        name: "Restless Leg Syndrome"
+        status: "targeted"
+        priority: "LOW"
+        research_vectors: ["dopamine_pathways", "iron_metabolism"]
+        alphafold_priority: "LOW"
+        
+      - id: "NEU-017"
+        name: "Essential Tremor"
+        status: "targeted"
+        priority: "LOW"
+        research_vectors: ["cerebellar_pathways", "gaba_modulation"]
+        alphafold_priority: "LOW"
+        
+      - id: "NEU-018"
+        name: "Ataxia Telangiectasia"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["atm_protein", "dna_repair"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "NEU-019"
+        name: "Rett Syndrome"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["mecp2_gene", "gene_therapy", "neuronal_function"]
+        alphafold_priority: "HIGH"
+        
+      - id: "NEU-020"
+        name: "Batten Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["lysosomal_storage", "gene_therapy", "enzyme_replacement"]
+        alphafold_priority: "HIGH"
+
+  oncological:
+    count: 20
+    targets:
+      - id: "ONC-001"
+        name: "Pancreatic Cancer"
+        status: "targeted"
+        priority: "CRITICAL"
+        research_vectors: ["early_detection", "kras_targeting", "immunotherapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-002"
+        name: "Glioblastoma"
+        status: "targeted"
+        priority: "CRITICAL"
+        research_vectors: ["blood_brain_barrier", "targeted_delivery", "immunotherapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-003"
+        name: "Pediatric Leukemia"
+        status: "targeted"
+        priority: "CRITICAL"
+        research_vectors: ["car_t_cell", "targeted_therapy", "minimal_residual_disease"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-004"
+        name: "Triple-Negative Breast Cancer"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["immunotherapy", "parp_inhibitors", "antibody_drug_conjugates"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-005"
+        name: "Small Cell Lung Cancer"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["immunotherapy", "targeted_therapy", "early_detection"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-006"
+        name: "Mesothelioma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["immunotherapy", "gene_therapy", "targeted_agents"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-007"
+        name: "Hepatocellular Carcinoma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["immunotherapy", "targeted_therapy", "ablation"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-008"
+        name: "Cholangiocarcinoma"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["fgfr_inhibitors", "immunotherapy", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-009"
+        name: "Osteosarcoma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["immunotherapy", "targeted_therapy", "limb_salvage"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-010"
+        name: "Neuroblastoma"
+        status: "targeted"
+        priority: "CRITICAL"
+        research_vectors: ["immunotherapy", "differentiation_therapy", "targeted_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-011"
+        name: "Ewing Sarcoma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["ews_fli1_targeting", "immunotherapy", "targeted_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-012"
+        name: "Acute Myeloid Leukemia"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["targeted_therapy", "immunotherapy", "stem_cell_transplant"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-013"
+        name: "Multiple Myeloma"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["proteasome_inhibitors", "immunomodulators", "car_t"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-014"
+        name: "Uveal Melanoma"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immunotherapy", "targeted_therapy", "liver_metastasis"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-015"
+        name: "Medulloblastoma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["targeted_therapy", "reduced_toxicity", "immunotherapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "ONC-016"
+        name: "Thyroid Anaplastic Carcinoma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["braf_targeting", "immunotherapy", "multimodal"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-017"
+        name: "Esophageal Cancer"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immunotherapy", "her2_targeting", "early_detection"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-018"
+        name: "Gastric Cancer"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immunotherapy", "her2_targeting", "claudin_targeting"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "ONC-019"
+        name: "Gallbladder Cancer"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immunotherapy", "targeted_therapy", "early_detection"]
+        alphafold_priority: "LOW"
+        
+      - id: "ONC-020"
+        name: "Adrenocortical Carcinoma"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["mitotane", "immunotherapy", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+
+  autoimmune:
+    count: 15
+    targets:
+      - id: "AUT-001"
+        name: "Lupus (SLE)"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["b_cell_targeting", "interferon_pathway", "targeted_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "AUT-002"
+        name: "Rheumatoid Arthritis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["jak_inhibitors", "targeted_therapy", "biomarkers"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-003"
+        name: "Crohn's Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["gut_microbiome", "il23_pathway", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-004"
+        name: "Ulcerative Colitis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["gut_microbiome", "jak_inhibitors", "s1p_modulators"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-005"
+        name: "Psoriasis"
+        status: "targeted"
+        priority: "LOW"
+        research_vectors: ["il17_pathway", "il23_pathway", "targeted_therapy"]
+        alphafold_priority: "LOW"
+        
+      - id: "AUT-006"
+        name: "Scleroderma"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["fibrosis_pathway", "vascular_protection", "immune_modulation"]
+        alphafold_priority: "HIGH"
+        
+      - id: "AUT-007"
+        name: "Sjögren's Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["b_cell_targeting", "gland_protection", "symptom_management"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-008"
+        name: "Vasculitis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["complement_pathway", "b_cell_targeting", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-009"
+        name: "Dermatomyositis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["interferon_pathway", "jak_inhibitors", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-010"
+        name: "Polymyositis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immune_modulation", "muscle_protection", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-011"
+        name: "Ankylosing Spondylitis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["il17_pathway", "tnf_inhibitors", "targeted_therapy"]
+        alphafold_priority: "LOW"
+        
+      - id: "AUT-012"
+        name: "Autoimmune Hepatitis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immune_modulation", "liver_protection", "biomarkers"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-013"
+        name: "Primary Biliary Cholangitis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["bile_acid_pathway", "immune_modulation", "fibrosis_prevention"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "AUT-014"
+        name: "Pemphigus"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["desmoglein_targeting", "b_cell_depletion", "targeted_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "AUT-015"
+        name: "Antiphospholipid Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["coagulation_pathway", "complement_inhibition", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+
+  genetic_rare:
+    count: 20
+    targets:
+      - id: "GEN-001"
+        name: "Cystic Fibrosis"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["cftr_modulators", "gene_therapy", "mrna_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-002"
+        name: "Sickle Cell Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_editing", "gene_therapy", "fetal_hemoglobin"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-003"
+        name: "Thalassemia"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_therapy", "gene_editing", "transfusion_alternatives"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-004"
+        name: "Hemophilia A"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_therapy", "factor_replacement", "emicizumab"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-005"
+        name: "Hemophilia B"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_therapy", "factor_ix", "targeted_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-006"
+        name: "Gaucher Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["enzyme_replacement", "substrate_reduction", "gene_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-007"
+        name: "Fabry Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["enzyme_replacement", "chaperone_therapy", "gene_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-008"
+        name: "Pompe Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["enzyme_replacement", "gene_therapy", "substrate_reduction"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-009"
+        name: "Niemann-Pick Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["enzyme_replacement", "gene_therapy", "substrate_reduction"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-010"
+        name: "Mucopolysaccharidoses"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["enzyme_replacement", "gene_therapy", "hematopoietic_transplant"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-011"
+        name: "Phenylketonuria"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["enzyme_replacement", "gene_therapy", "mrna_therapy"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-012"
+        name: "Maple Syrup Urine Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["gene_therapy", "enzyme_therapy", "dietary_management"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-013"
+        name: "Progeria"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["lamin_a_targeting", "gene_therapy", "farnesyltransferase"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-014"
+        name: "Epidermolysis Bullosa"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_therapy", "protein_replacement", "cell_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-015"
+        name: "Osteogenesis Imperfecta"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["collagen_therapy", "gene_therapy", "bisphosphonates"]
+        alphafold_priority: "HIGH"
+        
+      - id: "GEN-016"
+        name: "Marfan Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["fibrillin_1", "tgf_beta_pathway", "aortic_protection"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-017"
+        name: "Ehlers-Danlos Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["collagen_pathways", "gene_therapy", "symptom_management"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-018"
+        name: "Fragile X Syndrome"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["fmr1_reactivation", "targeted_therapy", "symptom_management"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-019"
+        name: "Prader-Willi Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["snord116_targeting", "growth_hormone", "metabolic_management"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "GEN-020"
+        name: "Angelman Syndrome"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["ube3a_restoration", "antisense_therapy", "gene_therapy"]
+        alphafold_priority: "HIGH"
+
+  infectious:
+    count: 10
+    targets:
+      - id: "INF-001"
+        name: "HIV/AIDS"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["functional_cure", "latent_reservoir", "broadly_neutralizing_antibodies"]
+        alphafold_priority: "HIGH"
+        
+      - id: "INF-002"
+        name: "Hepatitis B (Chronic)"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["functional_cure", "cccDNA_elimination", "immune_restoration"]
+        alphafold_priority: "HIGH"
+        
+      - id: "INF-003"
+        name: "Tuberculosis (MDR/XDR)"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["novel_antibiotics", "host_directed_therapy", "rapid_diagnostics"]
+        alphafold_priority: "HIGH"
+        
+      - id: "INF-004"
+        name: "Malaria"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["vaccine_development", "transmission_blocking", "drug_resistance"]
+        alphafold_priority: "HIGH"
+        
+      - id: "INF-005"
+        name: "Dengue"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["universal_vaccine", "antiviral_therapy", "vector_control"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "INF-006"
+        name: "Chagas Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["antiparasitic_therapy", "cardiac_protection", "early_detection"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "INF-007"
+        name: "Leishmaniasis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["vaccine_development", "novel_therapeutics", "diagnostics"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "INF-008"
+        name: "Rabies (Post-Exposure)"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["post_exposure_treatment", "monoclonal_antibodies", "improved_vaccines"]
+        alphafold_priority: "LOW"
+        
+      - id: "INF-009"
+        name: "Prion Diseases (CJD)"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["prion_clearance", "neuroprotection", "early_detection"]
+        alphafold_priority: "HIGH"
+        
+      - id: "INF-010"
+        name: "Ebola/Marburg"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["antiviral_therapy", "vaccine_improvement", "rapid_response"]
+        alphafold_priority: "HIGH"
+
+  cardiovascular:
+    count: 10
+    targets:
+      - id: "CVD-001"
+        name: "Familial Hypercholesterolemia"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["pcsk9_inhibition", "gene_therapy", "ldl_apheresis"]
+        alphafold_priority: "HIGH"
+        
+      - id: "CVD-002"
+        name: "Hypertrophic Cardiomyopathy"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["myosin_inhibition", "gene_therapy", "septal_reduction"]
+        alphafold_priority: "HIGH"
+        
+      - id: "CVD-003"
+        name: "Dilated Cardiomyopathy"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_therapy", "cardiac_regeneration", "mechanical_support"]
+        alphafold_priority: "HIGH"
+        
+      - id: "CVD-004"
+        name: "Arrhythmogenic Cardiomyopathy"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["desmosomal_proteins", "gene_therapy", "arrhythmia_prevention"]
+        alphafold_priority: "HIGH"
+        
+      - id: "CVD-005"
+        name: "Long QT Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["ion_channel_therapy", "gene_therapy", "beta_blockers"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "CVD-006"
+        name: "Brugada Syndrome"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["sodium_channel_therapy", "gene_therapy", "ablation"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "CVD-007"
+        name: "Pulmonary Arterial Hypertension"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["endothelin_pathway", "prostacyclin_pathway", "gene_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "CVD-008"
+        name: "Transthyretin Amyloidosis"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["ttr_silencing", "ttr_stabilization", "gene_therapy"]
+        alphafold_priority: "HIGH"
+        
+      - id: "CVD-009"
+        name: "Cardiac Sarcoidosis"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["immune_modulation", "early_detection", "arrhythmia_management"]
+        alphafold_priority: "LOW"
+        
+      - id: "CVD-010"
+        name: "Kawasaki Disease"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["early_intervention", "coronary_protection", "biomarkers"]
+        alphafold_priority: "MEDIUM"
+
+  metabolic_endocrine:
+    count: 5
+    targets:
+      - id: "MET-001"
+        name: "Type 1 Diabetes"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["islet_regeneration", "immune_tolerance", "beta_cell_protection"]
+        alphafold_priority: "HIGH"
+        
+      - id: "MET-002"
+        name: "Addison's Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["adrenal_regeneration", "targeted_therapy", "hormone_optimization"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "MET-003"
+        name: "Congenital Adrenal Hyperplasia"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["gene_therapy", "enzyme_replacement", "hormone_management"]
+        alphafold_priority: "MEDIUM"
+        
+      - id: "MET-004"
+        name: "Mitochondrial Diseases"
+        status: "targeted"
+        priority: "HIGH"
+        research_vectors: ["gene_therapy", "mitochondrial_replacement", "metabolic_support"]
+        alphafold_priority: "HIGH"
+        
+      - id: "MET-005"
+        name: "Wilson's Disease"
+        status: "targeted"
+        priority: "MEDIUM"
+        research_vectors: ["gene_therapy", "copper_chelation", "liver_transplant_alternatives"]
+        alphafold_priority: "MEDIUM"
+
+# Research Infrastructure Integration
+infrastructure:
+  compute_clusters:
+    - name: "Nova"
+      role: "primary_drug_discovery_compute"
+      gpu_allocation: "alphafold_simulations"
+      
+    - name: "Lyra"
+      role: "research_orchestration"
+      function: "pipeline_coordination"
+      
+    - name: "Athena"
+      role: "wisdom_synthesis"
+      function: "research_aggregation_and_validation"
+      
+  verification:
+    method: "cryptographic_proof"
+    chain: "empire_verification_infrastructure"
+    requirement: "tamper_proof_research_data"
+    
+  publication:
+    strategy: "defensive"
+    principle: "no_patents_on_cures"
+    access: "free_for_all"
+
+# Tracking and Progress
+tracking:
+  last_updated: "2025-11-27"
+  next_review: "weekly"
+  progress_metric: "diseases_with_active_research"
+  success_metric: "treatments_defensively_published"
+  
+# Declaration
+declaration:
+  goal: "targets.yaml → total: 0"
+  method: "Legion of Minds + Sovereign Compute + Defensive Publication"
+  timeline: "NEVER_STOP"
+  equation: "Love > Entropy"
