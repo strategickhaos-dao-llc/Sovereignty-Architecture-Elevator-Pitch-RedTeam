@@ -1,0 +1,107 @@
+# SwarmGate v1.0 Immutable Provenance Manifest
+# This file documents the canonical sealing of SwarmGate v1.0
+
+swarmgate_v1.0:
+  sealed: true
+  seal_date: "2025-11-27T04:25:00Z"
+  sealed_by: "Domenic Gabriel Garza"
+  hardware: "Windows + Starlink Business + Proton Drive"
+  location: "C:\\Users\\garza\\strategic-khaos-private"
+
+artifacts:
+  - name: swarmgate_v1.0.tar.gz
+    path: "C:\\Users\\garza\\strategic-khaos-private\\swarmgate_v1.0.tar.gz"
+    blake3: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+    sha256: "31205635D7851E496D4764EAF06557E90753DE60FC09BFAFBF2E2561F174D6B2"
+
+  - name: PROVENANCE.md
+    path: "C:\\Users\\garza\\strategic-khaos-private\\PROVENANCE.md"
+    created_by: "Domenic Gabriel Garza"
+    created_on: "2025-11-27"
+
+  - name: b3sum.exe
+    path: "C:\\Users\\garza\\strategic-khaos-private\\b3sum.exe"
+
+git:
+  local_commit:
+    repo_path: "C:\\Users\\garza\\strategic-khaos-private"
+    commit_message: "chore: add v1.0 provenance receipt + SHA256"
+    commit_hash: "d9498ea"
+  local_tag:
+    tag: "v1.0"
+    message: "SwarmGate v1.0 sealed"
+  push_status: not_pushed
+  push_errors:
+    - "fatal: repository 'https://github.com/strategickhaos/swarmgate.git/' not found"
+  correct_repo_location: "C:\\Users\\garza\\Downloads\\Sovereignty-Architecture-Elevator-Pitch--main"
+  recommended_push_steps:
+    - "Copy PROVENANCE.md and swarmgate_v1.0.tar.gz into the real repo directory"
+    - "git rm 'discord:' --force 2>$null"
+    - "git add PROVENANCE.md swarmgate_v1.0.tar.gz"
+    - "git commit -S -m 'feat: seal SwarmGate v1.0 with canonical BLAKE3 hash'"
+    - "git tag -s swarmgate/v1.0 -m 'SwarmGate v1.0 - Immutable Release'"
+    - "git push origin main"
+    - "git push origin swarmgate/v1.0"
+
+legal_entities:
+  - name: "Strategickhaos DAO LLC"
+    jurisdiction: "Wyoming"
+    registration: "2025-001708194"
+    status: active
+
+  - name: "ValorYield Engine"
+    type: "501(c)(3)"
+    ein: "39-2923503"
+    status: in_development_or_established
+
+purpose:
+  description: "Sovereignty infrastructure for AI-governed perpetual philanthropy"
+  irrevocable_allocation:
+    percent: 7
+    beneficiaries:
+      - "St. Jude Children's Research Hospital"
+      - "Médecins Sans Frontières"
+      - "Veteran support programs"
+
+status_summary:
+  completed:
+    - "Archive created: swarmgate_v1.0.tar.gz"
+    - "Canonical BLAKE3 hash computed"
+    - "SHA256 computed"
+    - "PROVENANCE.md created"
+    - "Local git commit made"
+    - "Local git tag created"
+    - "All files present in local folder"
+  pending:
+    - "Smart contract deployment: NOT DEPLOYED"
+    - "On-chain irrevocable 7% sink: NOT DEPLOYED"
+    - "GitHub push: NOT PUSHED"
+    - "OpenTimestamps integration: IN PROGRESS"
+    - "Patent provisional filings: IN DEVELOPMENT"
+
+backups:
+  recommended_immediate:
+    - powershell: |
+        Copy-Item "C:\Users\garza\strategic-khaos-private\swarmgate_v1.0.tar.gz" "$env:USERPROFILE\Proton Drive\SwarmGate\" -Force
+        Copy-Item "C:\Users\garza\strategic-khaos-private\PROVENANCE.md" "$env:USERPROFILE\Proton Drive\SwarmGate\" -Force
+  backup_status: manual_recommended
+
+next_steps_tomorrow:
+  - "Run the backup commands above and sleep 8 hours"
+  - "Copy artifacts into the real repo directory"
+  - "Fix invalid filename ('discord:') if present"
+  - "Add, sign, tag, and push commits to GitHub"
+  - "Optionally deploy Hardhat irrevocable 7% splitter to testnet/mainnet"
+  - "Integrate OpenTimestamps for additional proof anchoring"
+
+notes:
+  - "You sealed the canonical artifacts locally; GitHub is a mirror."
+  - "No further YAML verification required tonight."
+  - "Timestamp and hashes are the cryptographic proof of sealing."
+
+provenance_manifest_hashes:
+  canonical_blake3: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+  sha256: "31205635D7851E496D4764EAF06557E90753DE60FC09BFAFBF2E2561F174D6B2"
+
+emotional:
+  message: "You kept the promise. Sleep."
