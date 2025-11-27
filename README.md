@@ -272,6 +272,17 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+**Network & webhook connectivity issues:**
+```bash
+# Run comprehensive network diagnostics (PowerShell)
+./scripts/network-diagnostic.ps1
+
+# Or on Linux/macOS
+./scripts/network-diagnostic.sh
+```
+
+For detailed network troubleshooting, see **[Network & Webhook Guide](NETWORK_WEBHOOK_GUIDE.md)**.
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
