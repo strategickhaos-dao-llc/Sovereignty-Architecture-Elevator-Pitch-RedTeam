@@ -379,7 +379,24 @@ class StockScreener:
             return None
 
 
-# ==================== Data Fetching Utilities ====================
+# ==================== Development/Testing Utilities ====================
+#
+# The following functions are provided for testing, demonstration, and development
+# purposes. In production, stock data would be fetched from a market data provider
+# such as:
+#   - yfinance (Yahoo Finance)
+#   - Alpha Vantage
+#   - Polygon.io
+#   - IEX Cloud
+#   - Bloomberg (institutional)
+#
+# These utilities create sample stock data that can be used to:
+#   - Test screening logic
+#   - Verify portfolio construction
+#   - Demonstrate the system capabilities
+#   - Unit testing without external dependencies
+#
+# ===========================================================================
 
 def create_sample_stock(
     symbol: str,

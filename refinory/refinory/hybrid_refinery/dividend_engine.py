@@ -404,8 +404,28 @@ class DividendEngine:
                 })
         
         elif weighting == "volatility":
-            # Inverse volatility weighting (placeholder - would need ATR data)
-            # For now, use equal weight as fallback
+            # Inverse volatility weighting
+            #
+            # Implementation Note: This is a placeholder that falls back to equal weight.
+            # 
+            # To implement proper inverse volatility weighting:
+            # 1. Requires ATR (Average True Range) data for each stock
+            # 2. Calculate inverse ATR weight: weight_i = (1/ATR_i) / sum(1/ATR_j)
+            # 3. This gives higher allocation to lower-volatility stocks
+            # 4. Cap individual weights at max_position_weight
+            #
+            # Required data structure extension:
+            #   - Add 'atr_14' field to DividendStock.financial_metrics
+            #   - Or pass technical_data dict with ATR values
+            #
+            # Example implementation:
+            #   total_inv_atr = sum(1/stock.atr for stock in selected if stock.atr > 0)
+            #   for stock in selected:
+            #       weight = (1/stock.atr) / total_inv_atr
+            #       weight = min(weight, max_weight)  # Cap at guardrail
+            #
+            # For now, use equal weight as fallback until ATR data is available
+            logger.warning("Volatility weighting requested but not fully implemented - using equal weight")
             return self.construct_portfolio(screened_stocks, weighting="equal")
         
         logger.info("Portfolio constructed",

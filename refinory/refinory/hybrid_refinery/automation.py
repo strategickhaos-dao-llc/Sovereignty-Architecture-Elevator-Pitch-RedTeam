@@ -464,8 +464,25 @@ class AutomationEngine:
         return alerts
     
     def _send_nightly_brief(self, job: NightlyCronJob) -> bool:
-        """Send nightly email brief"""
-        # Placeholder - would integrate with email service
+        """
+        Send nightly email brief.
+        
+        NOTE: This is currently a placeholder implementation that saves the brief
+        to a local JSON file. For production use, integrate with an email service
+        such as:
+            - SendGrid (recommended for transactional emails)
+            - Amazon SES
+            - SMTP server (smtplib)
+            - Mailgun
+        
+        The brief is saved to the output directory for verification even when
+        email sending is not configured.
+        
+        Returns:
+            bool: True if brief was generated successfully
+        """
+        # Placeholder implementation - saves to file instead of sending email
+        # TODO: Integrate with email service for production use
         logger.info("Sending nightly brief",
                    job_id=job.job_id,
                    recipients=self.auto_config.email_recipients)

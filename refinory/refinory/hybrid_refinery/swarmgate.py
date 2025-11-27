@@ -31,6 +31,15 @@ class RoutingStrategy(Enum):
     DYNAMIC = "dynamic"  # AI-driven dynamic allocation
 
 
+# Default allocation percentages for AUTO_OPTIMAL strategy
+# These can be overridden via configuration
+DEFAULT_AUTO_OPTIMAL_ALLOCATIONS = {
+    "treasuries": 0.40,  # 40% to short-term treasuries for safety
+    "crypto": 0.25,      # 25% to crypto for asymmetric upside
+    "ai_fuel": 0.35,     # 35% to AI-fuel for operations
+}
+
+
 @dataclass
 class FlowDestination:
     """A single flow destination"""
@@ -283,20 +292,24 @@ class SwarmGateRouter:
         allocations = {}
         reasoning_parts = []
         
-        # Simple rule-based allocation (placeholder for AI)
+        # Use configurable default allocations from constants
         # - High uncertainty -> More treasuries
         # - Crypto momentum -> More crypto
         # - Need for operations -> More AI fuel
         
-        # Default balanced allocation
-        allocations["Short-Term Treasuries"] = amount * 0.40
-        allocations["Crypto Reserve"] = amount * 0.25
-        allocations["AI-Fuel Account"] = amount * 0.35
+        # Apply default balanced allocation from configuration constants
+        treasuries_pct = DEFAULT_AUTO_OPTIMAL_ALLOCATIONS["treasuries"]
+        crypto_pct = DEFAULT_AUTO_OPTIMAL_ALLOCATIONS["crypto"]
+        ai_fuel_pct = DEFAULT_AUTO_OPTIMAL_ALLOCATIONS["ai_fuel"]
+        
+        allocations["Short-Term Treasuries"] = amount * treasuries_pct
+        allocations["Crypto Reserve"] = amount * crypto_pct
+        allocations["AI-Fuel Account"] = amount * ai_fuel_pct
         
         reasoning_parts.append("Balanced allocation across destinations")
-        reasoning_parts.append("40% treasuries for safety")
-        reasoning_parts.append("25% crypto for asymmetric upside")
-        reasoning_parts.append("35% AI-fuel for operations")
+        reasoning_parts.append(f"{treasuries_pct:.0%} treasuries for safety")
+        reasoning_parts.append(f"{crypto_pct:.0%} crypto for asymmetric upside")
+        reasoning_parts.append(f"{ai_fuel_pct:.0%} AI-fuel for operations")
         
         return RoutingDecision(
             timestamp=datetime.now(),
