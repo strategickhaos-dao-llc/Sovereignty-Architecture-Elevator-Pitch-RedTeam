@@ -25,6 +25,7 @@ echo ""
 INVENTORY="${1:-}"
 OUTPUT_DIR="${2:-collected_results_$(date -u +%Y%m%d_%H%M%S)}"
 TIMESTAMP=$(date -u +%Y%m%d_%H%M%S)
+OPERATOR="${SWARM_OPERATOR:-${USER:-Unknown}}"
 
 # Validate inputs
 if [[ -z "$INVENTORY" ]]; then
@@ -137,7 +138,7 @@ AGGREGATED_FILE="$OUTPUT_DIR/aggregated_results.json"
     echo "  \"inventory\": \"$INVENTORY\","
     echo "  \"total_hosts\": $HOST_COUNT,"
     echo "  \"verified_hosts\": $VERIFIED_COUNT,"
-    echo "  \"operator\": \"Node 137\","
+    echo "  \"operator\": \"$OPERATOR\","
     echo "  \"results\": ["
     
     first=true

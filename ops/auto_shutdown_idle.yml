@@ -15,6 +15,7 @@
 
   vars:
     idle_threshold_minutes: 15
+    idle_load_threshold: 0.1
     dry_run: false
     swarm_results_dir: /var/lib/swarm/results
     idle_marker_file: /var/lib/swarm/.idle_since
@@ -46,7 +47,7 @@
     - name: Determine if host is idle
       ansible.builtin.set_fact:
         host_is_idle: >-
-          {{ (load_average.stdout | float < 0.1) and (running_jobs.stdout | int == 0) }}
+          {{ (load_average.stdout | float < idle_load_threshold | float) and (running_jobs.stdout | int == 0) }}
 
     - name: Debug - Host idle status
       ansible.builtin.debug:

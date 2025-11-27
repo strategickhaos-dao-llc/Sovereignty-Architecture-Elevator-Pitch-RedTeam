@@ -150,7 +150,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     fi
     
     # Check if host is idle
-    if check_host_idle "$host" "$IDLE_THRESHOLD_MINUTES"; then
+    if check_host_idle "$host"; then
         ((IDLE_HOSTS++)) || true
         
         # Get idle duration
