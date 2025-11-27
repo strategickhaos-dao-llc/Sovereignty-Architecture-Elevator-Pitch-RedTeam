@@ -1,0 +1,37 @@
+{
+  "ts_iso": "2025-11-27T13:05:00Z",
+  "overall_completion_percent": 95,
+  "claims": {
+    "prs_merged": ["#4", "#5", "#6", "#7", "#8", "#9"],
+    "terminals": {
+      "aws": 3,
+      "gcp": 2,
+      "azure": 2,
+      "total": 7
+    },
+    "burst_nodes": 134,
+    "provenance_schema": "JSONL@/opt/strategickhaos/uam/provenance.log.jsonl",
+    "anchors": {
+      "aggregate_file": "aggregated_2025-11-27_v2.json",
+      "blake3": "4d503da8164cbca550c3ee07b0b86709cbe615ec26eb18a0949536f3397ddcb3",
+      "gpg_sig": "present",
+      "ots": "present"
+    },
+    "ci_status": "green",
+    "cost_guard": "active"
+  },
+  "sources": {
+    "github_actions_runs": [
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/actions/runs"
+    ],
+    "github_prs": [
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/pulls/4",
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/pulls/5",
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/pulls/6",
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/pulls/7",
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/pulls/8",
+      "https://api.github.com/repos/StrategicKhaos/cloud-swarm/pulls/9"
+    ],
+    "ots_doc": "https://opentimestamps.org"
+  }
+}

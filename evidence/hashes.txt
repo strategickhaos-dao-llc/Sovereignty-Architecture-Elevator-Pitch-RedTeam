@@ -1,0 +1,10 @@
+# Blake3 hashes for evidence dossier
+# Generated: 2025-11-27
+# Verify with: blake3 --check hashes.txt
+#
+a2af4c6aa372e5a9112dcf938a5fd08121fde7e440d5ff46621f59708b52a7be  README.md
+35c5457a1d86cd4d9b80b839a731a1613aee0c8d9f0d4b6844f4dd18cf2c9458  status_snapshot.json
+655b5166bffd9d72be0325ecb0ce39825eb4cecf09e8bf972c165dda40083607  how_to_verify.md
+afbf0604da43a2b6a33b57299250aa3ba8b78a0fd52b4f118e1fe6b4f42dae25  verify_evidence.py
+4d503da8164cbca550c3ee07b0b86709cbe615ec26eb18a0949536f3397ddcb3  anchors/aggregated_2025-11-27.json
+2c2d82746a5c66b2b6da9c2df673f405b1a88b0a5059032ad6764a071573564c  anchors/aggregated_2025-11-27.json.prov.json
