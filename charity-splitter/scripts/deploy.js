@@ -6,7 +6,12 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
 
   // 1. Deploy MerkleDistributor
-  // Example Root: 0x... (Replace with generated root of your charities)
+  // ⚠️ IMPORTANT: PLACEHOLDER MERKLE ROOT - DO NOT USE IN PRODUCTION!
+  // Before mainnet deployment, generate the actual Merkle root from your charity list:
+  // - St. Jude's Children's Research Hospital
+  // - Médecins Sans Frontières  
+  // - Veteran support programs
+  // Use a Merkle tree library to compute the root from (index, address, amount) tuples
   const MOCK_ROOT = "0x0000000000000000000000000000000000000000000000000000000000000000"; 
   const MerkleDistributor = await hre.ethers.getContractFactory("MerkleDistributor");
   const distributor = await MerkleDistributor.deploy(MOCK_ROOT);
@@ -16,8 +21,10 @@ async function main() {
   console.log("MerkleDistributor deployed to:", distributorAddress);
 
   // 2. Deploy CharitySplitter
-  // 93% receiver (Ops)
-  const OPS_WALLET = deployer.address; // Replace with actual Ops Multisig
+  // ⚠️ IMPORTANT: PLACEHOLDER OPS WALLET - DO NOT USE IN PRODUCTION!
+  // Before mainnet deployment, replace with your actual Ops Multisig address
+  // (e.g., a Gnosis Safe multisig for operational fund management)
+  const OPS_WALLET = deployer.address;
   
   const CharitySplitter = await hre.ethers.getContractFactory("CharitySplitter");
   const splitter = await CharitySplitter.deploy(OPS_WALLET, distributorAddress);
