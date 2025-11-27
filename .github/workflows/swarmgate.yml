@@ -7,6 +7,11 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
+# Explicitly set minimal permissions for security
+permissions:
+  contents: read
+  actions: read
+
 env:
   SWARMGATE_TAG: "swarmgate/v1.0"
   SWARMGATE_BLAKE3: "d8f3a9c7e1b4f592c8a7d6e5f4c3b2a1f9876543210fedcba9876543210fedcb"
