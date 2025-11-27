@@ -133,7 +133,7 @@ Create or import these settings for consistent code formatting:
   <code_scheme name="Strategickhaos" version="173">
     <TypeScriptCodeStyleSettings version="0">
       <option name="FORCE_SEMICOLON_STYLE" value="true" />
-      <option name="FORCE_QUOTE_STYlE" value="true" />
+      <option name="FORCE_QUOTE_STYLE" value="true" />
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
       <option name="USE_PUBLIC_MODIFIER" value="true" />
