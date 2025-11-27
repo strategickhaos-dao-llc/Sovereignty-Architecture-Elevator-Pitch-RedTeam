@@ -35,3 +35,10 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat / Solidity
+swarmgate-contracts/node_modules/
+swarmgate-contracts/cache/
+swarmgate-contracts/artifacts/
+swarmgate-contracts/typechain-types/
+swarmgate-contracts/.env
