@@ -29,8 +29,16 @@ def get_realtime_prices(tickers: list) -> dict:
             )
         except (KeyError, AttributeError):
             # Fallback to historical data if real-time fails
-            data = yf.download(ticker, period="1d", progress=False)
-            prices[ticker] = float(data["Close"].iloc[-1])
+            try:
+                data = yf.download(ticker, period="1d", progress=False)
+                if not data.empty:
+                    prices[ticker] = float(data["Close"].iloc[-1])
+                else:
+                    print(f"Warning: No data available for {ticker}, using 0")
+                    prices[ticker] = 0.0
+            except Exception as e:
+                print(f"Warning: Failed to fetch price for {ticker}: {e}")
+                prices[ticker] = 0.0
     return prices
 
 
