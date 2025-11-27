@@ -1,0 +1,8 @@
+773faa801ba2c7f1c418e53f36ed3ba19082b4b53b089cd1af4e077bcd693301  ./README.md
+48215cbeff837b9598d75f5ddf2aa2a5cfe867a2c54cedd7e1d834486c1c8434  ./anchors/aggregated_2025-11-27_v2.json
+39eb94eded9c0b97e9e7b98829808d9eb0ed10927b019d34e79259df1acf68c5  ./anchors/aggregated_2025-11-27_v2.json.asc
+cf1a64e8ded78d9f03ed19be1b101dc9ef316bed00663efd3506d911274ca53d  ./anchors/aggregated_2025-11-27_v2.json.ots
+b5a7ad7270c5bcb84c4ecd56710d8d750f2e9bd287c35a0e56ec135e316bed0a  ./anchors/aggregated_2025-11-27_v2.json.prov.json
+46c7ddeba1b05c49a3820166d29e9157b643c140fb59c2344deb221dcc37572a  ./how_to_verify.md
+a8992c6fe70670e5ac9d0aea06c4d4f6b107d5920d37523684edb32d2c90b879  ./status_snapshot.json
+a9dbd25b666a1a0f80a6c220d75f6203136e4d6887213a582467817a95e71fb5  ./verify_evidence.py

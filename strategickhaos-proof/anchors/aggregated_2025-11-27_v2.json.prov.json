@@ -1,0 +1,35 @@
+{
+  "provenance": {
+    "version": "1.0",
+    "builder": {
+      "id": "strategickhaos-uam-builder"
+    },
+    "buildType": "https://strategickhaos.io/provenance/v1",
+    "invocation": {
+      "configSource": {
+        "uri": "git+https://github.com/StrategicKhaos/cloud-swarm@main"
+      }
+    },
+    "metadata": {
+      "buildStartedOn": "2025-11-27T13:00:00Z",
+      "buildFinishedOn": "2025-11-27T13:05:00Z",
+      "reproducible": true
+    },
+    "materials": [
+      {
+        "uri": "git+https://github.com/StrategicKhaos/cloud-swarm@refs/heads/main",
+        "digest": {
+          "sha256": "REPLACE_WITH_ACTUAL_COMMIT_SHA"
+        }
+      }
+    ]
+  },
+  "subject": [
+    {
+      "name": "aggregated_2025-11-27_v2.json",
+      "digest": {
+        "blake3": "REPLACE_WITH_BLAKE3_HASH"
+      }
+    }
+  ]
+}
