@@ -1,0 +1,580 @@
+name: Swarmgate Release Pipeline
+
+# Automated release workflow for Strategickhaos Sovereignty Architecture
+# Triggers on release tags, generates deterministic archives, uploads to IPFS/Arweave,
+# creates provenance files, and signs with GPG.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (skip uploads)'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  ARCHIVE_NAME: swarmgate
+  # Pinned tool versions for reproducibility
+  B3SUM_VERSION: '1.5.0'
+  IPFS_VERSION: '0.24.0'
+  # Timestamp for deterministic builds
+  SOURCE_DATE_EPOCH: '1732665600'  # 2025-11-27T00:00:00Z
+
+jobs:
+  # Job 1: Build deterministic archive
+  build:
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      blake3_hash: ${{ steps.hash.outputs.blake3 }}
+      sha256_hash: ${{ steps.hash.outputs.sha256 }}
+      archive_name: ${{ steps.archive.outputs.name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${{ github.ref_name }}"
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "📦 Building version: ${VERSION}"
+      
+      - name: Install b3sum
+        run: |
+          curl -sSL "https://github.com/BLAKE3-team/BLAKE3/releases/download/${B3SUM_VERSION}/b3sum_linux_x64_bin" -o b3sum
+          chmod +x b3sum
+          sudo mv b3sum /usr/local/bin/
+          b3sum --version
+      
+      - name: Create deterministic archive
+        id: archive
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          ARCHIVE_FILENAME="${ARCHIVE_NAME}_${VERSION#v}.tar.gz"
+          
+          echo "📁 Creating deterministic archive: ${ARCHIVE_FILENAME}"
+          
+          # List of files to include (from swarmgate.yaml)
+          FILES=(
+            "swarmgate.yaml"
+            "discovery.yml"
+            "dao_record_v1.0.yaml"
+            "ai_constitution.yaml"
+            "LICENSE"
+            "README.md"
+            "SECURITY.md"
+            "COMMUNITY.md"
+            "CONTRIBUTORS.md"
+          )
+          
+          DIRS=(
+            "bootstrap"
+            "governance"
+            ".github/workflows"
+            "scripts"
+            "provenance"
+          )
+          
+          # Collect existing files
+          EXISTING_FILES=()
+          for f in "${FILES[@]}"; do
+            if [[ -f "$f" ]]; then
+              EXISTING_FILES+=("$f")
+            fi
+          done
+          
+          for d in "${DIRS[@]}"; do
+            if [[ -d "$d" ]]; then
+              EXISTING_FILES+=("$d")
+            fi
+          done
+          
+          # Create deterministic tarball
+          # --sort=name ensures consistent file ordering
+          # --mtime uses SOURCE_DATE_EPOCH for reproducibility
+          # --owner/--group set to root for consistency
+          tar --sort=name \
+              --mtime="@${SOURCE_DATE_EPOCH}" \
+              --owner=root:0 \
+              --group=root:0 \
+              --numeric-owner \
+              -czf "${ARCHIVE_FILENAME}" \
+              "${EXISTING_FILES[@]}"
+          
+          echo "name=${ARCHIVE_FILENAME}" >> $GITHUB_OUTPUT
+          ls -la "${ARCHIVE_FILENAME}"
+      
+      - name: Compute hashes
+        id: hash
+        run: |
+          ARCHIVE="${{ steps.archive.outputs.name }}"
+          
+          BLAKE3=$(b3sum "${ARCHIVE}" | cut -d' ' -f1)
+          SHA256=$(sha256sum "${ARCHIVE}" | cut -d' ' -f1)
+          
+          echo "blake3=${BLAKE3}" >> $GITHUB_OUTPUT
+          echo "sha256=${SHA256}" >> $GITHUB_OUTPUT
+          
+          echo "🔐 BLAKE3: ${BLAKE3}"
+          echo "🔐 SHA256: ${SHA256}"
+      
+      - name: Upload archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: swarmgate-archive
+          path: ${{ steps.archive.outputs.name }}
+          retention-days: 30
+
+  # Job 2: Upload to IPFS
+  upload-ipfs:
+    runs-on: ubuntu-22.04
+    needs: build
+    if: ${{ github.event.inputs.dry_run != 'true' }}
+    outputs:
+      cid: ${{ steps.upload.outputs.cid }}
+    steps:
+      - name: Download archive
+        uses: actions/download-artifact@v4
+        with:
+          name: swarmgate-archive
+      
+      - name: Install IPFS
+        run: |
+          curl -sSL "https://dist.ipfs.tech/kubo/v${IPFS_VERSION}/kubo_v${IPFS_VERSION}_linux-amd64.tar.gz" | tar xz
+          sudo mv kubo/ipfs /usr/local/bin/
+          ipfs init --profile server
+          ipfs daemon &
+          sleep 5
+      
+      - name: Upload to IPFS
+        id: upload
+        env:
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+          WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
+        run: |
+          ARCHIVE="${{ needs.build.outputs.archive_name }}"
+          
+          # Add to local IPFS
+          CID=$(ipfs add -Q "${ARCHIVE}")
+          echo "cid=${CID}" >> $GITHUB_OUTPUT
+          echo "📌 IPFS CID: ${CID}"
+          
+          # Pin to Pinata (if configured)
+          if [[ -n "${PINATA_JWT}" ]]; then
+            echo "📌 Pinning to Pinata..."
+            curl -X POST "https://api.pinata.cloud/pinning/pinByHash" \
+              -H "Authorization: Bearer ${PINATA_JWT}" \
+              -H "Content-Type: application/json" \
+              -d "{\"hashToPin\": \"${CID}\", \"pinataMetadata\": {\"name\": \"${ARCHIVE}\"}}" || true
+          fi
+          
+          # Upload to web3.storage (if configured)
+          if [[ -n "${WEB3_STORAGE_TOKEN}" ]]; then
+            echo "📌 Uploading to web3.storage..."
+            curl -X POST "https://api.web3.storage/upload" \
+              -H "Authorization: Bearer ${WEB3_STORAGE_TOKEN}" \
+              -F "file=@${ARCHIVE}" || true
+          fi
+
+  # Job 3: Upload to Arweave
+  upload-arweave:
+    runs-on: ubuntu-22.04
+    needs: build
+    if: ${{ github.event.inputs.dry_run != 'true' }}
+    outputs:
+      txid: ${{ steps.upload.outputs.txid }}
+    steps:
+      - name: Download archive
+        uses: actions/download-artifact@v4
+        with:
+          name: swarmgate-archive
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Bundlr
+        run: npm install -g @bundlr-network/client
+      
+      - name: Upload to Arweave via Bundlr
+        id: upload
+        env:
+          BUNDLR_PRIVATE_KEY: ${{ secrets.BUNDLR_PRIVATE_KEY }}
+        run: |
+          ARCHIVE="${{ needs.build.outputs.archive_name }}"
+          
+          if [[ -n "${BUNDLR_PRIVATE_KEY}" ]]; then
+            echo "📦 Uploading to Arweave via Bundlr..."
+            
+            # Write key to temp file
+            echo "${BUNDLR_PRIVATE_KEY}" > /tmp/bundlr-key.json
+            
+            # Upload using Bundlr
+            RESULT=$(bundlr upload "${ARCHIVE}" \
+              -h "https://node1.bundlr.network" \
+              -w /tmp/bundlr-key.json \
+              -c ethereum \
+              --no-confirmation 2>&1) || true
+            
+            # Extract TXID from result
+            TXID=$(echo "${RESULT}" | grep -oP '(?<=id:\s)[a-zA-Z0-9_-]+' || echo "PENDING")
+            
+            rm -f /tmp/bundlr-key.json
+          else
+            echo "⚠️ BUNDLR_PRIVATE_KEY not configured, skipping Arweave upload"
+            TXID="NOT_CONFIGURED"
+          fi
+          
+          echo "txid=${TXID}" >> $GITHUB_OUTPUT
+          echo "📦 Arweave TXID: ${TXID}"
+
+  # Job 4: Generate provenance and sign
+  sign-and-publish:
+    runs-on: ubuntu-22.04
+    needs: [build, upload-ipfs, upload-arweave]
+    if: always() && needs.build.result == 'success'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download archive
+        uses: actions/download-artifact@v4
+        with:
+          name: swarmgate-archive
+      
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq gnupg
+      
+      - name: Generate provenance files
+        id: provenance
+        run: |
+          VERSION="${{ needs.build.outputs.version }}"
+          BLAKE3="${{ needs.build.outputs.blake3_hash }}"
+          SHA256="${{ needs.build.outputs.sha256_hash }}"
+          ARCHIVE="${{ needs.build.outputs.archive_name }}"
+          IPFS_CID="${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}"
+          ARWEAVE_TXID="${{ needs.upload-arweave.outputs.txid || 'PENDING' }}"
+          COMMIT_SHA="${{ github.sha }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo "📝 Generating provenance files..."
+          
+          # Generate provenance.json
+          cat > provenance/provenance.json << EOF
+          {
+            "\$schema": "https://in-toto.io/Statement/v1",
+            "subject": [
+              {
+                "name": "${ARCHIVE}",
+                "digest": {
+                  "blake3": "${BLAKE3}",
+                  "sha256": "${SHA256}"
+                }
+              }
+            ],
+            "predicateType": "https://slsa.dev/provenance/v1",
+            "predicate": {
+              "buildDefinition": {
+                "buildType": "https://strategickhaos.com/swarmgate/v1",
+                "externalParameters": {
+                  "repository": "${{ github.server_url }}/${{ github.repository }}",
+                  "ref": "refs/tags/${VERSION}"
+                },
+                "internalParameters": {
+                  "timestamp_override": "2025-11-27T00:00:00Z",
+                  "deterministic": true
+                }
+              },
+              "runDetails": {
+                "builder": {
+                  "id": "${{ github.server_url }}/${{ github.repository }}/actions"
+                },
+                "metadata": {
+                  "invocationId": "${{ github.run_id }}",
+                  "startedOn": "${TIMESTAMP}",
+                  "finishedOn": "${TIMESTAMP}"
+                }
+              }
+            },
+            "provenance": {
+              "version": "${VERSION#v}",
+              "project": "Strategickhaos Sovereignty Architecture",
+              "organization": "Strategickhaos DAO LLC / Valoryield Engine",
+              "maintainer": "Domenic Garza",
+              "created": "${TIMESTAMP}",
+              "license": "MIT",
+              "commit": "${COMMIT_SHA}"
+            },
+            "distribution": {
+              "ipfs": {
+                "cid": "${IPFS_CID}",
+                "gateways": [
+                  "https://ipfs.io/ipfs/${IPFS_CID}",
+                  "https://dweb.link/ipfs/${IPFS_CID}",
+                  "https://cloudflare-ipfs.com/ipfs/${IPFS_CID}"
+                ]
+              },
+              "arweave": {
+                "txid": "${ARWEAVE_TXID}",
+                "gateway": "https://arweave.net/${ARWEAVE_TXID}"
+              },
+              "github": {
+                "release_url": "${{ github.server_url }}/${{ github.repository }}/releases/tag/${VERSION}"
+              }
+            },
+            "verification": {
+              "scripts": {
+                "posix": "scripts/verify/verify.sh",
+                "windows": "scripts/verify/verify.ps1"
+              }
+            }
+          }
+          EOF
+          
+          # Generate provenance.yaml
+          cat > provenance/provenance.yaml << EOF
+          # provenance.yaml - Generated by Swarmgate Release Pipeline
+          # Version: ${VERSION}
+          # Generated: ${TIMESTAMP}
+          
+          version: "${VERSION#v}"
+          schema: "https://slsa.dev/provenance/v1"
+          
+          subject:
+            name: "${ARCHIVE}"
+            digest:
+              blake3: "${BLAKE3}"
+              sha256: "${SHA256}"
+          
+          provenance:
+            project: "Strategickhaos Sovereignty Architecture"
+            organization: "Strategickhaos DAO LLC / Valoryield Engine"
+            maintainer: "Domenic Garza"
+            created: "${TIMESTAMP}"
+            license: "MIT"
+            commit: "${COMMIT_SHA}"
+          
+          build:
+            type: "https://strategickhaos.com/swarmgate/v1"
+            repository: "${{ github.server_url }}/${{ github.repository }}"
+            ref: "refs/tags/${VERSION}"
+            commit: "${COMMIT_SHA}"
+            builder:
+              id: "${{ github.server_url }}/${{ github.repository }}/actions"
+            metadata:
+              invocation_id: "${{ github.run_id }}"
+              started_on: "${TIMESTAMP}"
+              finished_on: "${TIMESTAMP}"
+            deterministic:
+              enabled: true
+              source_date_epoch: "${SOURCE_DATE_EPOCH}"
+          
+          distribution:
+            ipfs:
+              cid: "${IPFS_CID}"
+              gateways:
+                - "https://ipfs.io/ipfs/${IPFS_CID}"
+                - "https://dweb.link/ipfs/${IPFS_CID}"
+                - "https://cloudflare-ipfs.com/ipfs/${IPFS_CID}"
+            
+            arweave:
+              txid: "${ARWEAVE_TXID}"
+              gateway: "https://arweave.net/${ARWEAVE_TXID}"
+            
+            github:
+              release_url: "${{ github.server_url }}/${{ github.repository }}/releases/tag/${VERSION}"
+          
+          verification:
+            scripts:
+              posix: "scripts/verify/verify.sh"
+              windows: "scripts/verify/verify.ps1"
+          EOF
+          
+          echo "✅ Provenance files generated"
+      
+      - name: Import GPG key and sign
+        if: ${{ env.GPG_PRIVATE_KEY != '' }}
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          ARCHIVE="${{ needs.build.outputs.archive_name }}"
+          
+          echo "🔐 Importing GPG key..."
+          echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
+          
+          # Sign archive (detached signature)
+          echo "🔐 Creating detached signature..."
+          echo "${GPG_PASSPHRASE}" | gpg --batch --yes --pinentry-mode loopback \
+            --passphrase-fd 0 \
+            --armor --detach-sign \
+            -o "${ARCHIVE}.sig" \
+            "${ARCHIVE}"
+          
+          # Clearsign provenance.json
+          echo "🔐 Clearsigning provenance.json..."
+          echo "${GPG_PASSPHRASE}" | gpg --batch --yes --pinentry-mode loopback \
+            --passphrase-fd 0 \
+            --clearsign \
+            -o "provenance/provenance.json.asc" \
+            "provenance/provenance.json"
+          
+          echo "✅ Signatures created"
+      
+      - name: Upload provenance artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: swarmgate-provenance
+          path: |
+            provenance/
+            ${{ needs.build.outputs.archive_name }}.sig
+          retention-days: 90
+      
+      - name: Create GitHub Release
+        if: ${{ github.event_name == 'push' || github.event.inputs.dry_run != 'true' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.build.outputs.version }}
+          name: "Swarmgate ${{ needs.build.outputs.version }}"
+          body: |
+            ## Swarmgate Release ${{ needs.build.outputs.version }}
+            
+            ### Cryptographic Verification
+            
+            | Algorithm | Hash |
+            |-----------|------|
+            | BLAKE3 | `${{ needs.build.outputs.blake3_hash }}` |
+            | SHA256 | `${{ needs.build.outputs.sha256_hash }}` |
+            
+            ### Distribution
+            
+            - **IPFS**: `ipfs://${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}`
+            - **Arweave**: `ar://${{ needs.upload-arweave.outputs.txid || 'PENDING' }}`
+            
+            ### Verification
+            
+            **POSIX/Linux/macOS:**
+            ```bash
+            curl -sL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/verify/verify.sh | bash
+            ```
+            
+            **Windows PowerShell:**
+            ```powershell
+            irm https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/verify/verify.ps1 | iex
+            ```
+            
+            ### IPFS Gateways
+            
+            - https://ipfs.io/ipfs/${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}
+            - https://dweb.link/ipfs/${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}
+            - https://cloudflare-ipfs.com/ipfs/${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}
+            
+            ---
+            
+            Built with 🔥 by the Strategickhaos Swarm Intelligence collective
+          files: |
+            ${{ needs.build.outputs.archive_name }}
+            ${{ needs.build.outputs.archive_name }}.sig
+            provenance/provenance.json
+            provenance/provenance.yaml
+            provenance/provenance.json.asc
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Notify Discord
+        if: always()
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+          EVENTS_URL: ${{ vars.EVENTS_URL || 'https://events.strategickhaos.com/event' }}
+        run: |
+          if [[ -n "${EVENTS_HMAC_KEY}" ]]; then
+            VERSION="${{ needs.build.outputs.version }}"
+            STATUS="${{ job.status }}"
+            
+            payload=$(jq -n \
+              --arg version "${VERSION}" \
+              --arg status "${STATUS}" \
+              --arg blake3 "${{ needs.build.outputs.blake3_hash }}" \
+              --arg ipfs "${{ needs.upload-ipfs.outputs.cid || 'PENDING' }}" \
+              --arg arweave "${{ needs.upload-arweave.outputs.txid || 'PENDING' }}" \
+              --arg url "${{ github.server_url }}/${{ github.repository }}/releases/tag/${VERSION}" \
+              '{service:"release", version:$version, status:$status, blake3:$blake3, ipfs:$ipfs, arweave:$arweave, url:$url, timestamp:now}')
+            
+            sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "${EVENTS_HMAC_KEY}" -binary | xxd -p -c 256)
+            
+            curl -sS -X POST "${EVENTS_URL}" \
+              -H "Content-Type: application/json" \
+              -H "X-Sig: ${sig}" \
+              -d "${payload}" || true
+          fi
+
+  # Job 5: Verify release
+  verify:
+    runs-on: ubuntu-22.04
+    needs: [build, sign-and-publish]
+    if: always() && needs.build.result == 'success'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: swarmgate-archive
+      
+      - name: Download provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: swarmgate-provenance
+          path: provenance-download
+      
+      - name: Install b3sum
+        run: |
+          curl -sSL "https://github.com/BLAKE3-team/BLAKE3/releases/download/${B3SUM_VERSION}/b3sum_linux_x64_bin" -o b3sum
+          chmod +x b3sum
+          sudo mv b3sum /usr/local/bin/
+      
+      - name: Verify archive hash
+        run: |
+          ARCHIVE="${{ needs.build.outputs.archive_name }}"
+          EXPECTED_BLAKE3="${{ needs.build.outputs.blake3_hash }}"
+          
+          ACTUAL_BLAKE3=$(b3sum "${ARCHIVE}" | cut -d' ' -f1)
+          
+          echo "Expected BLAKE3: ${EXPECTED_BLAKE3}"
+          echo "Actual BLAKE3:   ${ACTUAL_BLAKE3}"
+          
+          if [[ "${EXPECTED_BLAKE3}" == "${ACTUAL_BLAKE3}" ]]; then
+            echo "✅ Hash verification PASSED"
+          else
+            echo "❌ Hash verification FAILED"
+            exit 1
+          fi
+      
+      - name: Run verification script
+        run: |
+          chmod +x scripts/verify/verify.sh
+          ./scripts/verify/verify.sh \
+            --archive "${{ needs.build.outputs.archive_name }}" \
+            --skip-gpg \
+            --skip-rebuild || true

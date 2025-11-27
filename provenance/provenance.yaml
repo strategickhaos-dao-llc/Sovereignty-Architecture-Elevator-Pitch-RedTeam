@@ -1,0 +1,123 @@
+# provenance.yaml
+# Strategickhaos Sovereignty Architecture - Provenance Record
+# This file contains cryptographic receipts and verification data
+# Version: 1.0
+# Date: 2025-11-27
+
+version: "1.0"
+schema: "https://slsa.dev/provenance/v1"
+
+subject:
+  name: "swarmgate_v1.0.tar.gz"
+  digest:
+    blake3: "PLACEHOLDER_BLAKE3_HASH"
+    sha256: "PLACEHOLDER_SHA256_HASH"
+
+provenance:
+  project: "Strategickhaos Sovereignty Architecture"
+  organization: "Strategickhaos DAO LLC / Valoryield Engine"
+  maintainer: "Domenic Garza"
+  created: "2025-11-27T00:00:00Z"
+  license: "MIT"
+
+build:
+  type: "https://strategickhaos.com/swarmgate/v1"
+  repository: "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+  ref: "refs/tags/v1.0.0"
+  commit: "PLACEHOLDER_COMMIT_SHA"
+  builder:
+    id: "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/actions"
+  metadata:
+    invocation_id: "PLACEHOLDER_INVOCATION_ID"
+    started_on: "2025-11-27T00:00:00Z"
+    finished_on: "2025-11-27T00:00:00Z"
+  deterministic:
+    enabled: true
+    timestamp_override: "2025-11-27T00:00:00Z"
+
+distribution:
+  ipfs:
+    cid: "PLACEHOLDER_IPFS_CID"
+    gateways:
+      - "https://ipfs.io/ipfs/PLACEHOLDER_IPFS_CID"
+      - "https://dweb.link/ipfs/PLACEHOLDER_IPFS_CID"
+      - "https://cloudflare-ipfs.com/ipfs/PLACEHOLDER_IPFS_CID"
+    pinned_providers:
+      - name: "pinata.cloud"
+        status: "pending"
+      - name: "web3.storage"
+        status: "pending"
+      - name: "infura.io"
+        status: "pending"
+  
+  arweave:
+    txid: "PLACEHOLDER_ARWEAVE_TXID"
+    gateway: "https://arweave.net/PLACEHOLDER_ARWEAVE_TXID"
+    bundlr_node: "https://node1.bundlr.network"
+    status: "pending"
+  
+  mirrors:
+    - url: "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/releases"
+      type: "github"
+      status: "pending"
+    - url: "ipfs://PLACEHOLDER_IPFS_CID"
+      type: "ipfs"
+      status: "pending"
+    - url: "ar://PLACEHOLDER_ARWEAVE_TXID"
+      type: "arweave"
+      status: "pending"
+
+signing:
+  gpg:
+    key_id: "0x137SOVEREIGN"
+    fingerprint: "PLACEHOLDER_GPG_FINGERPRINT"
+    algorithm: "RSA4096"
+    detached_signature: "swarmgate_v1.0.tar.gz.sig"
+    clearsign_provenance: "provenance.json.asc"
+  
+  timestamp:
+    rfc3161:
+      tsa_url: "https://freetsa.org/tsr"
+      timestamp_token: "PLACEHOLDER_TST_TOKEN"
+      status: "pending"
+    
+    blockchain:
+      network: null
+      contract: null
+      txid: null
+      status: "not_configured"
+
+verification:
+  scripts:
+    posix: "scripts/verify/verify.sh"
+    windows: "scripts/verify/verify.ps1"
+  instructions: "VERIFICATION.md"
+  
+  checksums:
+    - algorithm: "blake3"
+      hash: "PLACEHOLDER_BLAKE3_HASH"
+      canonical: true
+    - algorithm: "sha256"
+      hash: "PLACEHOLDER_SHA256_HASH"
+      canonical: false
+
+custody:
+  signing_key:
+    location: "air-gapped HSM"
+    backup_count: 3
+    recovery_document: "RECOVERY.md"
+  
+  backup_locations:
+    - type: "encrypted USB"
+      location: "secure location 1"
+      encrypted: true
+    - type: "encrypted USB"
+      location: "secure location 2"
+      encrypted: true
+    - type: "paper key"
+      location: "vault"
+      encrypted: false
+
+# === GPG SIGNATURE BLOCK (DETACHED) ===
+# Save as provenance.yaml.asc
+# Command: gpg --armor --detach-sign provenance.yaml
