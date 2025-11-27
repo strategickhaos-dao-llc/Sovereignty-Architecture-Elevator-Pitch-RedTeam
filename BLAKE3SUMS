@@ -1,0 +1,10 @@
+# BLAKE3 checksums for release artifacts
+# Verify with: b3sum -c BLAKE3SUMS
+# 
+# Format: <hash>  <filename>
+# 
+# To add new entries:
+#   b3sum <file> >> BLAKE3SUMS
+
+# swarmgate v1.0 release archive
+caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698  swarmgate_v1.0.tar.gz
