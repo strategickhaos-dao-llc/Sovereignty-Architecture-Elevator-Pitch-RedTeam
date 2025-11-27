@@ -69,8 +69,11 @@ contract MerkleCharityDistributor is ReentrancyGuard {
     /// @notice Mapping of epoch number => Epoch data
     mapping(uint256 => Epoch) public epochs;
     
-    /// @notice Mapping of epoch => charity address => claimed
+    /// @notice Mapping of epoch => charity address => claimed (for ETH)
     mapping(uint256 => mapping(address => bool)) public claimed;
+    
+    /// @notice Mapping of epoch => token => charity address => claimed (for ERC20)
+    mapping(uint256 => mapping(address => mapping(address => bool))) public tokenClaimed;
     
     /// @notice Total ETH ever distributed to charities
     uint256 public totalEthDistributed;
@@ -268,13 +271,10 @@ contract MerkleCharityDistributor is ReentrancyGuard {
     ) external nonReentrant {
         if (token == address(0)) revert ZeroAddress();
         if (epochNumber == 0 || epochNumber > currentEpoch) revert EpochNotActive();
-        
-        // Use separate claimed mapping for tokens
-        bytes32 claimKey = keccak256(abi.encodePacked(epochNumber, token, charityAddress));
-        // Note: For simplicity, we reuse the same claimed mapping
-        // In production, use a separate mapping for token claims
+        if (tokenClaimed[epochNumber][token][charityAddress]) revert AlreadyClaimed();
         
         Epoch storage epoch = epochs[epochNumber];
+        if (epoch.finalized) revert EpochNotActive();
         
         // Verify Merkle proof (includes token address)
         bytes32 leaf = keccak256(abi.encodePacked(token, charityAddress, amount));
@@ -282,6 +282,8 @@ contract MerkleCharityDistributor is ReentrancyGuard {
             revert InvalidProof();
         }
         
+        // Mark as claimed
+        tokenClaimed[epochNumber][token][charityAddress] = true;
         totalTokenDistributed[token] += amount;
         
         // Transfer tokens to charity
@@ -324,6 +326,17 @@ contract MerkleCharityDistributor is ReentrancyGuard {
      */
     function hasClaimed(uint256 epochNumber, address charityAddress) external view returns (bool) {
         return claimed[epochNumber][charityAddress];
+    }
+    
+    /**
+     * @notice Check if a charity has claimed tokens for an epoch
+     * @param epochNumber Epoch number
+     * @param token Token address
+     * @param charityAddress Charity address
+     * @return True if claimed
+     */
+    function hasClaimedToken(uint256 epochNumber, address token, address charityAddress) external view returns (bool) {
+        return tokenClaimed[epochNumber][token][charityAddress];
     }
     
     /**
