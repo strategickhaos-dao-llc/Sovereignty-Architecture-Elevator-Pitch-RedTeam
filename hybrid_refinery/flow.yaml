@@ -1,0 +1,173 @@
+# Strategickhaos Hybrid Refinery - Automation Flow Configuration
+# Defines the automation workflow and scheduling
+# Last Updated: November 27, 2025
+
+automation:
+  # System identification
+  system_name: "Strategickhaos Hybrid Refinery"
+  version: "1.0.0"
+  created_date: "2025-11-27"
+  owner: "Strategickhaos"
+  
+  # Environment configuration
+  environment:
+    timezone: "America/New_York"
+    broker: "Webull"
+    drip_enabled: true
+    paper_trading: false
+    
+scheduled_tasks:
+  # Nightly equity tracking
+  nightly_refinery:
+    enabled: true
+    schedule: "0 3 * * *"  # 3:00 AM EST daily
+    script: "nightly_refinery.py"
+    description: "Pull prices, calculate drift, log to CSV, email summary"
+    timeout_seconds: 300
+    retry_count: 3
+    notifications:
+      on_success: false
+      on_failure: true
+      email_summary: true
+      
+  # Weekly comprehensive report
+  weekly_report:
+    enabled: true
+    schedule: "0 8 * * 0"  # Sunday 8:00 AM EST
+    script: "weekly_report.py"
+    description: "Full heatmap, dividend forecast, SwarmGate log"
+    timeout_seconds: 600
+    retry_count: 2
+    notifications:
+      on_success: true
+      on_failure: true
+      discord_notification: true
+      
+  # Monthly contribution processing
+  monthly_contribution:
+    enabled: true
+    schedule: "0 10 1 * *"  # 1st of month, 10:00 AM EST
+    script: "ranco_executor.py"
+    description: "Process $36.40 monthly contribution to most underweight position"
+    timeout_seconds: 120
+    requires_approval: false
+    
+  # Rebalancing executor (drift-triggered)
+  ranco_executor:
+    enabled: true
+    trigger: "drift_threshold"
+    threshold: 12.0
+    script: "ranco_executor.py"
+    description: "Rebalance when any position drifts >12% from target"
+    dry_run_first: true
+    notifications:
+      pre_trade: true
+      post_trade: true
+      
+data_sources:
+  # Price data providers
+  price_feeds:
+    primary: "yahoo_finance"
+    fallback: "alpha_vantage"
+    refresh_interval: 86400  # 24 hours in seconds
+    
+  # Dividend tracking
+  dividend_data:
+    source: "yahoo_finance"
+    track_ex_dates: true
+    track_pay_dates: true
+    
+  # Market data
+  market_indicators:
+    - "SPY"  # S&P 500 benchmark
+    - "VIX"  # Volatility index
+    - "AGG"  # Bond benchmark
+    
+output_files:
+  # CSV logging
+  equity_log:
+    path: "logs/equity_curve.csv"
+    columns:
+      - "date"
+      - "total_equity"
+      - "daily_change"
+      - "daily_change_pct"
+      - "total_dividends_ytd"
+      
+  # Position tracking
+  positions_log:
+    path: "logs/positions.csv"
+    columns:
+      - "date"
+      - "ticker"
+      - "shares"
+      - "market_value"
+      - "weight"
+      - "drift_from_target"
+      
+  # Dividend tracking
+  dividend_log:
+    path: "logs/dividends.csv"
+    columns:
+      - "date"
+      - "ticker"
+      - "amount"
+      - "reinvested_shares"
+      
+notifications:
+  # Email configuration
+  email:
+    enabled: true
+    smtp_server: "${SMTP_SERVER}"
+    smtp_port: 587
+    from_address: "${EMAIL_FROM}"
+    to_addresses:
+      - "${EMAIL_TO}"
+    use_tls: true
+    
+  # Discord integration
+  discord:
+    enabled: true
+    webhook_url: "${DISCORD_WEBHOOK_URL}"
+    channel: "#refinery-alerts"
+    
+  # Summary format
+  daily_summary_format: |
+    📊 Hybrid Refinery Daily Summary
+    Date: {date}
+    Total Equity: ${total_equity}
+    Daily Change: {daily_change} ({daily_change_pct}%)
+    Top Drift: {top_drift_ticker} at {top_drift_pct}%
+    
+portfolio_metrics:
+  # Tracking metrics
+  track:
+    - total_equity
+    - total_cost_basis
+    - unrealized_gain_loss
+    - dividend_yield_portfolio
+    - annual_dividend_income
+    - years_to_double  # Rule of 72
+    
+  # Growth projections
+  projections:
+    monthly_contribution: 36.40
+    expected_annual_return: 8.0
+    expected_dividend_yield: 3.5
+    dividend_growth_rate: 6.0
+    years_to_project: 15
+    
+  # Milestones
+  milestones:
+    - amount: 1000
+      name: "First $1K"
+    - amount: 5200
+      name: "10x Initial Investment"
+    - amount: 10000
+      name: "Five Figures"
+    - amount: 52000
+      name: "100x Initial Investment"
+    - amount: 100000
+      name: "Six Figures"
+    - amount: 520000
+      name: "1000x Initial Investment"

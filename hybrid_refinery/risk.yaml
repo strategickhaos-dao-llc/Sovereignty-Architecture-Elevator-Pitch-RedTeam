@@ -1,0 +1,75 @@
+# Strategickhaos Hybrid Refinery - Risk Configuration
+# Risk parameters for portfolio management automation
+# Last Updated: November 27, 2025
+
+risk_parameters:
+  # Maximum drift threshold before rebalancing triggers
+  max_drift_percentage: 12.0
+  
+  # Minimum position size (dollars)
+  min_position_size: 31.20
+  
+  # Maximum single position weight
+  max_position_weight: 10.0
+  
+  # Stop-loss thresholds (percentage decline from cost basis)
+  stop_loss:
+    enabled: false  # Disabled for long-term dividend strategy
+    threshold: 30.0
+    
+  # Volatility constraints
+  volatility:
+    max_portfolio_beta: 1.2
+    prefer_low_volatility: true
+    
+  # Concentration limits
+  concentration:
+    max_sector_weight: 35.0
+    max_single_stock: 10.0
+    
+sector_allocations:
+  # Target sector weights
+  financials: 14.0      # JPM, CB
+  consumer_staples: 21.0  # PG, KO, PEP, CL
+  utilities: 14.0       # NEE, WEC
+  real_estate: 20.0     # O, VICI, PLD
+  healthcare: 15.0      # ABBV, JNJ
+  energy: 6.0           # XOM
+  
+dividend_requirements:
+  # Minimum dividend yield threshold
+  min_yield: 2.0
+  
+  # Consecutive years of dividend growth
+  min_dividend_history: 10
+  
+  # Payout ratio ceiling
+  max_payout_ratio: 80.0
+  
+  # Prefer dividend aristocrats
+  prefer_aristocrats: true
+  
+rebalancing_rules:
+  # Frequency checks
+  daily_drift_check: true
+  weekly_report: true
+  
+  # Rebalancing triggers
+  trigger_on_drift: true
+  drift_threshold: 12.0
+  
+  # Monthly contribution handling
+  monthly_contribution: 36.40
+  contribution_day: 1
+  
+  # Tax-loss harvesting
+  tax_loss_harvesting:
+    enabled: false
+    threshold: -10.0
+    
+alert_thresholds:
+  # Email/notification triggers
+  position_drift_warning: 10.0
+  position_drift_critical: 12.0
+  dividend_cut_alert: true
+  market_volatility_spike: 2.5  # VIX multiplier
