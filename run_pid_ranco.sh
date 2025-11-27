@@ -20,12 +20,14 @@ python3 /opt/strategickhaos/trading_engine_dossier_v1.0/pid_ranco_backtest.py \
 if command -v b3sum >/dev/null 2>&1; then
   b3sum "${OUT}" >> "${UAM_DIR}/provenance.log"
 else
-  python3 - <<PY
+  python3 -c "
 from blake3 import blake3
-p = "${OUT}"
-with open(p,"rb") as fh:
+import sys
+p = sys.argv[1]
+uam = sys.argv[2]
+with open(p, 'rb') as fh:
     h = blake3(fh.read()).hexdigest()
-with open("${UAM_DIR}/provenance.log","a") as f:
-    f.write(h + "  " + p + "\n")
-PY
+with open(uam + '/provenance.log', 'a') as f:
+    f.write(h + '  ' + p + '\n')
+" "${OUT}" "${UAM_DIR}"
 fi

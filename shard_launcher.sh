@@ -24,7 +24,7 @@ for h in "${HOSTS[@]}"; do
   total="$N"
   echo "Launching shard $shard on host $h"
   # Use ansible ad-hoc to run the wrapper. ansible will use ansible_user from inventory if provided.
-  ansible -i "$INVENTORY" "$h" -m shell -a "/opt/strategickhaos/run_pid_ranco.sh $shard $total" --forks "$N" &
+  ansible -i "$INVENTORY" "$h" -m shell -a "/opt/strategickhaos/run_pid_ranco.sh $shard $total" &
   i=$((i+1))
 done
 

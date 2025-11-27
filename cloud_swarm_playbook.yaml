@@ -88,13 +88,14 @@
           if command -v b3sum >/dev/null 2>&1; then
             b3sum "${OUT}" >> "{{ uam_dir }}/provenance.log"
           else
-            python3 - <<'PY'
+            python3 -c "
           from blake3 import blake3
           import sys
           p = sys.argv[1]
-          with open(p, "rb") as fh:
+          uam = sys.argv[2]
+          with open(p, 'rb') as fh:
               h = blake3(fh.read()).hexdigest()
-          with open("{{ uam_dir }}/provenance.log", "a") as f:
-              f.write(h + "  " + p + "\n")
-          PY
+          with open(uam + '/provenance.log', 'a') as f:
+              f.write(h + '  ' + p + '\n')
+          " "${OUT}" "{{ uam_dir }}"
           fi
