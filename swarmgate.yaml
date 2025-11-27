@@ -10,10 +10,13 @@ description: "Sovereignty Architecture provenance and verification manifest"
 created: "2025-11-27T00:00:00Z"
 created_by: "garza"
 
+# Define BLAKE3 hash once using YAML anchor for consistency
+blake3_hash: &blake3 "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+
 provenance:
   version: "v1.0"
   archive: "swarmgate_v1.0.tar.gz"
-  blake3: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+  blake3: *blake3
   created: "2025-11-27T00:00:00Z"
   created_by: "garza"
   receipts:
@@ -22,7 +25,7 @@ provenance:
 
 verification:
   algorithm: "BLAKE3"
-  expected_hash: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+  expected_hash: *blake3
   instructions: "See SWARMGATE_VERIFICATION.md for cross-platform verification recipes"
 
 # === GPG SIGNATURE BLOCK (DETACHED) ===
