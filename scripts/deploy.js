@@ -9,7 +9,8 @@ async function main() {
   // Operations wallet (deployer address by default)
   const OPS = deployer.address;
 
-  // Charity addresses - replace with actual charity wallet addresses
+  // Charity addresses - IMPORTANT: Replace with actual distinct charity wallet addresses before mainnet deployment
+  // The addresses below are placeholders for testnet deployment
   const CHARITIES = [
     "0x710F0568aA1b6f14a95d24486a1a1643b4E4E1Dc",
     "0x710F0568aA1b6f14a95d24486a1a1643b4E4E1Dc",

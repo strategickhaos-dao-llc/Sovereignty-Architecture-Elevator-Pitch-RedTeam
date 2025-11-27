@@ -6,6 +6,9 @@ pragma solidity ^0.8.20;
  * @dev A contract that splits incoming ETH payments with 7% going to charity
  * and 93% going to operations. Charity funds are accumulated and can be
  * distributed evenly among registered charity addresses.
+ * 
+ * Note: The distribute() function is intentionally public to allow anyone
+ * to trigger charity distributions, promoting transparency and community involvement.
  */
 contract SwarmGateSplitter {
     /// @notice Charity allocation in basis points (700 = 7%)
@@ -21,14 +24,16 @@ contract SwarmGateSplitter {
     event FundsReceived(address indexed sender, uint256 amount, uint256 toOps, uint256 toCharity);
 
     /// @notice Emitted when charity funds are distributed
-    event CharityDistributed(uint256 totalAmount, uint256 perCharity);
+    event CharityDistributed(uint256 totalAmount, uint256 perCharity, uint256 remainder);
 
     /**
      * @dev Constructor sets the operations wallet and charity addresses
-     * @param o Operations wallet address
-     * @param c Array of charity wallet addresses
+     * @param o Operations wallet address (must not be zero address)
+     * @param c Array of charity wallet addresses (must not be empty)
      */
     constructor(address payable o, address payable[] memory c) {
+        require(o != address(0), "OPS address cannot be zero");
+        require(c.length > 0, "Must have at least one charity");
         OPS = o;
         charities = c;
     }
@@ -49,20 +54,21 @@ contract SwarmGateSplitter {
 
     /**
      * @dev Distributes accumulated charity funds evenly among all charity addresses
+     * Any remainder from integer division stays in the contract for the next distribution
      */
     function distribute() external {
         uint256 bal = address(this).balance;
         require(bal > 0, "No balance to distribute");
-        require(charities.length > 0, "No charities configured");
 
         uint256 each = bal / charities.length;
+        uint256 remainder = bal % charities.length;
 
         for (uint256 i = 0; i < charities.length; i++) {
             (bool success, ) = charities[i].call{value: each}("");
             require(success, "Charity transfer failed");
         }
 
-        emit CharityDistributed(bal, each);
+        emit CharityDistributed(bal, each, remainder);
     }
 
     /**
