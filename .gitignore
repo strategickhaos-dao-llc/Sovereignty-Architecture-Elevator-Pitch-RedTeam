@@ -35,3 +35,14 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat/Solidity artifacts
+artifacts/
+cache/
+typechain-types/
+coverage/
+coverage.json
+
+# Environment files with secrets
+.env
+!.env.example
