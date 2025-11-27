@@ -61,7 +61,7 @@ roadmap:
     name: "Deploy the Eternal Engine"
     deadline: "2025-11-28T12:00:00Z"
     tasks:
-      - "Install Node.js (winget install OpenJS.NodeJS.LTS)"
+      - "Install Node.js LTS (Windows: winget install OpenJS.NodeJS.LTS | macOS: brew install node | Linux: apt install nodejs)"
       - "Run the full Artifact A repo (drop incoming)"
       - "Deploy CharitySplitter + MerkleDistributor to Base Sepolia"
       - "Verify both contracts on Basescan"
