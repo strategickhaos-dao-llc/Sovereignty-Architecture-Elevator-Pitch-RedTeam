@@ -28,10 +28,16 @@ env:
   # Timestamp for deterministic builds
   SOURCE_DATE_EPOCH: '1764201600'  # 2025-11-27T00:00:00Z
 
+# Restrict permissions by default
+permissions:
+  contents: read
+
 jobs:
   # Job 1: Build deterministic archive
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
     outputs:
       version: ${{ steps.version.outputs.version }}
       blake3_hash: ${{ steps.hash.outputs.blake3 }}
@@ -143,6 +149,8 @@ jobs:
   # Job 2: Upload to IPFS
   upload-ipfs:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
     needs: build
     if: ${{ github.event.inputs.dry_run != 'true' }}
     outputs:
@@ -194,6 +202,8 @@ jobs:
   # Job 3: Upload to Arweave
   upload-arweave:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
     needs: build
     if: ${{ github.event.inputs.dry_run != 'true' }}
     outputs:
@@ -242,6 +252,8 @@ jobs:
   # Job 4: Generate provenance and sign
   sign-and-publish:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     needs: [build, upload-ipfs, upload-arweave]
     if: always() && needs.build.result == 'success'
     steps:
@@ -527,6 +539,8 @@ jobs:
   # Job 5: Verify release
   verify:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
     needs: [build, sign-and-publish]
     if: always() && needs.build.result == 'success'
     steps:
