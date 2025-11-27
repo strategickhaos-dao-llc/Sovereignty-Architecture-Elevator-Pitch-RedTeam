@@ -44,7 +44,7 @@ fi
 # Verify GPG signature if available
 if [ -f "provenance.json.asc" ] && [ -f "provenance.json" ]; then
     echo "[3/3] Verifying GPG signature..."
-    if gpg --verify provenance.json.asc provenance.json 2>&1 | grep -q "Good signature"; then
+    if gpg --verify provenance.json.asc provenance.json 2>/dev/null; then
         echo "✓ GPG signature verified"
     else
         echo "⚠ GPG signature verification failed or key not trusted"

@@ -44,8 +44,8 @@ if ($COMPUTED_HASH -eq $CANONICAL_BLAKE3) {
 if ((Test-Path "provenance.json.asc") -and (Test-Path "provenance.json")) {
     Write-Host "[3/3] Verifying GPG signature..."
     if (Get-Command gpg -ErrorAction SilentlyContinue) {
-        $gpgResult = gpg --verify provenance.json.asc provenance.json 2>&1
-        if ($gpgResult -match "Good signature") {
+        gpg --verify provenance.json.asc provenance.json 2>&1 | Out-Null
+        if ($LASTEXITCODE -eq 0) {
             Write-Host "✓ GPG signature verified" -ForegroundColor Green
         } else {
             Write-Host "⚠ GPG signature verification failed or key not trusted" -ForegroundColor Yellow

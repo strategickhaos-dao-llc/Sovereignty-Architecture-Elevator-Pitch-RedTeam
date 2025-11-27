@@ -25,6 +25,7 @@ jobs:
           cargo install b3sum
           sudo apt-get update
           sudo apt-get install -y gnupg tar
+          pip install PyYAML
       
       - name: Extract version from tag
         id: version
@@ -39,7 +40,7 @@ jobs:
               --numeric-owner \
               --mtime='2025-11-27 00:00:00' \
               -czf swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz \
-              swarmgate.yaml
+              provenance/provenance.yaml
       
       - name: Compute BLAKE3 hash
         id: hash
@@ -98,7 +99,6 @@ jobs:
             swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz
             provenance.json
             provenance.yaml
-            provenance.json.asc
           body: |
             # SwarmGate v${{ steps.version.outputs.VERSION }}
             
