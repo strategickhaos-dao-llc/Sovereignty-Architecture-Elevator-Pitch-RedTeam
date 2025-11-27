@@ -1,0 +1,41 @@
+dao_governance_appendix:
+  version: 1.0
+  entity: Strategickhaos DAO LLC
+  jurisdiction: Wyoming
+  governance_model:
+    type: member-managed
+    voting: quadratic
+    quorum: 50%
+    proposal_threshold: 1% of members
+  smart_contracts:
+    - name: CommitRegistry
+      # REPLACE: Deploy CommitRegistry contract and update this address
+      address: "0x_REPLACE_WITH_DEPLOYED_CONTRACT_ADDRESS"
+      functions:
+        - commit(bytes32 b3Hash, string ipfsCid, string tag)
+      audit_status: pending_external
+  member_rights:
+    - propose_changes
+    - vote_on_proposals
+    - access_audit_logs
+    - inspect_provenance
+  member_obligations:
+    - comply_with_terms
+    - maintain_security
+    - no_illegal_use
+  dispute_resolution:
+    - arbitration_under_us_faa
+    - dao_vote_for_minor_issues
+    - multi_sig_for_emergencies
+  amendment_process:
+    - proposal_submission
+    - discussion_period: 7_days
+    - vote_period: 3_days
+    - implementation: auto_via_smart_contract
+  transparency_measures:
+    - public_audit_logs
+    - on_chain_provenance
+    - annual_report
+  bundle_integration:
+    hash_link: blake3_of_legal_bundle
+    commit_tag: LegalShield-v1.0-appendix
