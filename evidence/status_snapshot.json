@@ -12,7 +12,7 @@
     "burst_nodes": 134,
     "provenance_schema": "JSONL@/opt/strategickhaos/uam/provenance.log.jsonl",
     "anchors": {
-      "aggregate_file": "aggregated_2025-11-27_v2.json",
+      "aggregate_file": "aggregated_2025-11-27.json",
       "blake3": "abc123def4567890exampleblake3hash",
       "gpg_sig": "present",
       "ots": "present"

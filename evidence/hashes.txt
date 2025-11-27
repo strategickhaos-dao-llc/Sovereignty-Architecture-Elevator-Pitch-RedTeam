@@ -3,12 +3,12 @@
 # Generated: 2025-11-27
 #
 # To verify: sha256sum --check hashes.txt
-# For blake3: install b3sum and regenerate with: b3sum <files> > hashes.txt
+# Note: For blake3 verification, install b3sum and regenerate with: b3sum <files> > hashes_blake3.txt
 
 README.md daa1aeb20c7cf1a72b3bd96ae4b0983555ce143583815a95d789e28a8f8723df
-status_snapshot.json 0f413433b728bec9d7763ed053e8b3d7a0f99cd50c4a2b7109c2b066b0fc9e44
+status_snapshot.json 3da88f6a3f5912693e0d7d2cf1b9b9a68d39700f1baa1f86d6344a821dee881d
 how_to_verify.md 1b19f12f7c98aeb68ffbfee0c450fe1b0e90ec6b94720cbd1f5f06f059b59d4f
-verify_evidence.py 074ed3cc3169b53bbb17996ccc178353a3e1cd3333dd8c0b4a7464e5eeb86ebd
+verify_evidence.py 5f8c9a6e502a6f77b341ce75d64005728b50ed8d0baf257510068027cc36dce0
 anchors/aggregated_2025-11-27.json 09f83bb213886626e42756dd3b38d74ad4d4180abdb0eda5820f3b68ebc7597c
 anchors/aggregated_2025-11-27.json.asc cf66bff5f93b2554a0b7db20bafe22a2b0e591cc187f30bbc0e2beabc335f9d5
 anchors/aggregated_2025-11-27.json.ots 4d93a3378c7b95fd056192bdf91326e0ae08572b4004ce5218625aa5dbc2c960

@@ -46,7 +46,7 @@ def check_tool_available(tool):
 
 
 def verify_hashes(evidence_dir):
-    """Verify blake3 hashes from hashes.txt."""
+    """Verify SHA256 hashes from hashes.txt."""
     print("\n[1/4] Verifying file hashes...")
     hashes_file = evidence_dir / "hashes.txt"
 
@@ -54,12 +54,8 @@ def verify_hashes(evidence_dir):
         print("  ⚠️  hashes.txt not found - skipping hash verification")
         return True
 
-    if not check_tool_available("b3sum"):
-        # Try alternative command
-        if not check_tool_available("blake3"):
-            print("  ⚠️  blake3/b3sum not installed - skipping hash verification")
-            print("  Install with: pip install b3sum")
-            return True
+    # Use Python's hashlib for SHA256 verification (no external dependency)
+    import hashlib
 
     # Read expected hashes
     with open(hashes_file) as f:
@@ -78,10 +74,9 @@ def verify_hashes(evidence_dir):
             filepath = evidence_dir / filename
 
             if filepath.exists():
-                success, actual_hash, _ = run_cmd(f"b3sum {filepath} | cut -d' ' -f1")
-                if not success:
-                    success, actual_hash, _ = run_cmd(f"blake3 {filepath}")
-                    actual_hash = actual_hash.split()[0] if actual_hash else ""
+                # Compute SHA256 hash using Python hashlib
+                with open(filepath, 'rb') as f:
+                    actual_hash = hashlib.sha256(f.read()).hexdigest()
 
                 if actual_hash == expected_hash:
                     print(f"  ✅ {filename}")
@@ -180,22 +175,35 @@ def verify_github(evidence_dir, offline=False):
         print("  ⚠️  No PR URLs in snapshot - skipping")
         return True
 
-    if not check_tool_available("curl"):
-        print("  ⚠️  curl not installed - skipping GitHub verification")
-        return True
-
-    # Check first PR as sample
+    # Check first PR as sample using Python's urllib (no shell injection risk)
     pr_url = pr_urls[0] if pr_urls else None
     if pr_url:
-        success, stdout, stderr = run_cmd(
-            f"curl -s {pr_url} | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('merged_at','not_merged'))\""
-        )
-        if success and stdout and stdout != "not_merged":
-            print(f"  ✅ Sample PR merged at: {stdout}")
-        elif "rate limit" in (stderr + stdout).lower():
-            print("  ⚠️  GitHub API rate limited - use GITHUB_TOKEN")
-        else:
-            print("  ⚠️  Could not verify PR merge status")
+        # Validate URL format to prevent injection
+        import re
+        if not re.match(r'^https://api\.github\.com/repos/[\w\-]+/[\w\-]+/pulls/\d+$', pr_url):
+            print(f"  ⚠️  Invalid PR URL format: {pr_url}")
+            return True
+
+        try:
+            import urllib.request
+            import urllib.error
+            req = urllib.request.Request(pr_url, headers={'User-Agent': 'verify-evidence/1.0'})
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.loads(response.read().decode())
+                merged_at = data.get('merged_at')
+                if merged_at:
+                    print(f"  ✅ Sample PR merged at: {merged_at}")
+                else:
+                    print("  ⚠️  PR not yet merged")
+        except urllib.error.HTTPError as e:
+            if e.code == 403:
+                print("  ⚠️  GitHub API rate limited - use GITHUB_TOKEN")
+            elif e.code == 404:
+                print("  ⚠️  PR not found (may be private repo)")
+            else:
+                print(f"  ⚠️  HTTP error: {e.code}")
+        except Exception as e:
+            print(f"  ⚠️  Could not verify PR: {str(e)[:50]}")
 
     return True
 
