@@ -27,11 +27,18 @@ b3sum --version
 ### Linux (Alternative: Pre-built Binary)
 
 ```bash
-# Download latest release
-curl -LO https://github.com/BLAKE3-team/BLAKE3/releases/latest/download/b3sum_linux_x64_bin
+# Download a specific release (verify the version on GitHub releases page)
+# Example for version 1.8.2:
+curl -LO https://github.com/BLAKE3-team/BLAKE3/releases/download/1.8.2/b3sum_linux_x64_bin
 chmod +x b3sum_linux_x64_bin
+
+# Verify the binary (compare with hash from BLAKE3 releases page)
+sha256sum b3sum_linux_x64_bin
+
 sudo mv b3sum_linux_x64_bin /usr/local/bin/b3sum
 ```
+
+> **Note**: Always verify downloaded binaries against published checksums from the official BLAKE3 releases page.
 
 ### Windows (via Scoop)
 
@@ -43,10 +50,17 @@ blake3.exe <filename>
 ### Windows (Portable)
 
 ```powershell
-Invoke-WebRequest -Uri https://github.com/BLAKE3-team/BLAKE3/releases/latest/download/blake3-win64.zip -OutFile blake3-win64.zip
-Expand-Archive blake3-win64.zip -DestinationPath .\blake3
-.\blake3\blake3.exe <filename>
+# Download a specific version (verify the version on GitHub releases page)
+# Example for version 1.8.2:
+Invoke-WebRequest -Uri https://github.com/BLAKE3-team/BLAKE3/releases/download/1.8.2/b3sum_windows_x64_bin.exe -OutFile b3sum.exe
+
+# Verify the binary hash before use (compare with published checksum)
+Get-FileHash b3sum.exe -Algorithm SHA256
+
+.\b3sum.exe <filename>
 ```
+
+> **Note**: Always verify downloaded binaries against published checksums from the official BLAKE3 releases page.
 
 ### macOS (via Homebrew)
 

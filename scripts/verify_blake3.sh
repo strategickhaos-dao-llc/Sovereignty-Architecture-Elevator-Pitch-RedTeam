@@ -47,17 +47,14 @@ fi
 
 # Check for b3sum
 if ! command -v b3sum &> /dev/null; then
-    echo -e "${YELLOW}Warning: b3sum not found. Installing via cargo...${NC}"
-    if command -v cargo &> /dev/null; then
-        cargo install b3sum
-    else
-        echo -e "${RED}Error: Neither b3sum nor cargo found.${NC}"
-        echo "Please install b3sum manually:"
-        echo "  - Linux: cargo install b3sum"
-        echo "  - macOS: brew install b3sum"
-        echo "  - Windows: scoop install blake3"
-        exit 1
-    fi
+    echo -e "${RED}Error: b3sum not found.${NC}"
+    echo "Please install b3sum manually:"
+    echo "  - Linux: cargo install b3sum"
+    echo "  - macOS: brew install b3sum"
+    echo "  - Windows: scoop install blake3"
+    echo ""
+    echo "See PROVENANCE.md for detailed installation instructions."
+    exit 1
 fi
 
 # Compute hash
