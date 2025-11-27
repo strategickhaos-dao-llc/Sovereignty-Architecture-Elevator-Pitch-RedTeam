@@ -1,0 +1,12 @@
+# risk.yaml - Hybrid Refinery Risk Management Configuration
+# Live Snapshot: 27 Nov 2025
+
+max_single_position: 9%
+max_sector: 30%
+rebalance_threshold: 12%      # only touch if drift >12%
+tactical_sleeve_active: false # turns on automatically at $1,000 equity
+swarmgate_monthly: 36.40
+swarmgate_split:
+  tbill: 20.80   # SGOV or Webull cash sweep
+  aifuel: 10.40
+  crypto: 5.20   # 2.60 BTC / 2.60 ETH cold
