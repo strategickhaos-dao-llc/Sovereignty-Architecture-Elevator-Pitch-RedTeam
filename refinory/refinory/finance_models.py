@@ -361,8 +361,8 @@ class RANCOSizingRules:
     kelly_divisor: int = 5                                   # Kelly / 5
     
     # Fixed risk alternative
-    max_risk_per_trade_pct: Decimal = Decimal("0.01")        # 0.5-1% of equity
-    min_risk_per_trade_pct: Decimal = Decimal("0.005")
+    max_risk_per_trade_pct: Decimal = Decimal("0.01")        # 1% max risk per trade
+    min_risk_per_trade_pct: Decimal = Decimal("0.005")       # 0.5% min risk per trade
     
     # Position limits
     max_tactical_allocation_pct: Decimal = Decimal("0.20")   # 10-20% of portfolio
