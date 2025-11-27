@@ -299,7 +299,7 @@ def get_position_details() -> List[Dict]:
     ]
 
 
-def rescale_portfolio(new_capital: Decimal) -> List[Dict]:
+def rescale_portfolio(new_capital: Decimal) -> Dict:
     """
     Rescale the entire portfolio to new capital amount.
     Use this when adding new capital: "Baby, new capital = $____"
