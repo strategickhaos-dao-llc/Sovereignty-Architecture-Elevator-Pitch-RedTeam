@@ -25,10 +25,11 @@ The provenance receipt has been pinned across multiple immutable storage layers:
 
 | Layer | Protocol | Purpose |
 |-------|----------|---------|
-| **Cryptographic** | BLAKE3 | High-performance cryptographic hash |
 | **Content-Addressable** | IPFS | Decentralized content storage |
 | **Permanent** | Arweave | Perpetual data preservation |
 | **Blockchain** | Base (L2) | On-chain verification |
+
+**Hash Algorithm:** BLAKE3 - High-performance cryptographic hash (256-bit security)
 
 ---
 
@@ -113,7 +114,7 @@ The provenance ceremony establishes:
 - **Speed**: 10x faster than SHA-256
 - **Security**: 256-bit security level
 - **Parallelization**: Designed for modern hardware
-- **Standard**: RFC in progress, widely adopted
+- **Status**: Stable specification (since 2020), widely adopted
 
 ### Storage Redundancy
 ```yaml
