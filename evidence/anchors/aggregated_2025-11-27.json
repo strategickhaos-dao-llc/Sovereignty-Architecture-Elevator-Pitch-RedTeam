@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "aggregate_type": "strategickhaos-proof",
+  "generated_at": "2025-11-27T13:05:00Z",
+  "shards": [
+    {"id": "shard_0", "status": "verified"},
+    {"id": "shard_1", "status": "verified"},
+    {"id": "shard_2", "status": "verified"},
+    {"id": "shard_3", "status": "verified"},
+    {"id": "shard_4", "status": "verified"},
+    {"id": "shard_5", "status": "verified"},
+    {"id": "shard_6", "status": "verified"}
+  ],
+  "note": "Replace this placeholder with your actual aggregate data"
+}

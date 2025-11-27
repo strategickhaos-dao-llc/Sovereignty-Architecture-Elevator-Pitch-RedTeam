@@ -1,0 +1,16 @@
+{
+  "aggregate_blake3": "abc123def4567890exampleblake3hash",
+  "verified_count": 7,
+  "failed_count": 0,
+  "file_list": [
+    "shard_0.json",
+    "shard_1.json",
+    "shard_2.json",
+    "shard_3.json",
+    "shard_4.json",
+    "shard_5.json",
+    "shard_6.json"
+  ],
+  "verification_timestamp": "2025-11-27T13:05:00Z",
+  "note": "Replace blake3 hash with actual computed value"
+}
