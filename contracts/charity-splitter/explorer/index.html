@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategickhaos Charity Splitter - 7% Forever Counter</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .counter {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--success);
+            font-family: 'Monaco', 'Menlo', monospace;
+            margin: 1rem 0;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        .counter-label {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0.5rem;
+        }
+        
+        .badge.immutable {
+            background: var(--primary);
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card h3 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+        
+        .card .subtext {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .charities {
+            margin-top: 3rem;
+        }
+        
+        .charities h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .charity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .charity-item {
+            background: var(--bg-card);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .charity-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .charity-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .charity-info p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        
+        .contract-info {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .contract-info h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .address {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 0.5rem 0;
+            display: inline-block;
+        }
+        
+        .network-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: black;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .loading {
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        #connect-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+        
+        #connect-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        #connect-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏛️ Strategickhaos Charity Splitter</h1>
+        <p>Irrevocable On-Chain 7% Charity Sink</p>
+    </header>
+    
+    <main>
+        <div class="hero">
+            <div class="badge immutable">🔒 IMMUTABLE</div>
+            <div class="badge">✓ VERIFIED</div>
+            <div class="badge">⛓️ ON-CHAIN</div>
+            
+            <div id="charity-counter" class="counter loading">0.000 ETH</div>
+            <div class="counter-label">Total Sent to Charity (7% Forever)</div>
+            
+            <button id="connect-btn" onclick="connectWallet()">Connect Wallet to View Live Data</button>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <h3>Total Received</h3>
+                <div id="total-received" class="value loading">---.--- ETH</div>
+                <div class="subtext">All ETH sent to splitter</div>
+            </div>
+            
+            <div class="card">
+                <h3>To Operations (93%)</h3>
+                <div id="total-ops" class="value loading">---.--- ETH</div>
+                <div class="subtext">For DAO operations</div>
+            </div>
+            
+            <div class="card">
+                <h3>To Charity (7%)</h3>
+                <div id="total-charity" class="value loading">---.--- ETH</div>
+                <div class="subtext">Distributed to charities</div>
+            </div>
+            
+            <div class="card">
+                <h3>Distributions</h3>
+                <div id="distribution-count" class="value loading">---</div>
+                <div class="subtext">Total distribution events</div>
+            </div>
+        </div>
+        
+        <div class="charities">
+            <h2>Named Charities (Equal Share of 7%)</h2>
+            <div class="charity-grid">
+                <div class="charity-item">
+                    <div class="charity-icon">🏥</div>
+                    <div class="charity-info">
+                        <h4>St. Jude Children's Research Hospital</h4>
+                        <p>Pediatric treatment and research</p>
+                    </div>
+                </div>
+                <div class="charity-item">
+                    <div class="charity-icon">🌍</div>
+                    <div class="charity-info">
+                        <h4>Doctors Without Borders</h4>
+                        <p>International medical humanitarian aid</p>
+                    </div>
+                </div>
+                <div class="charity-item">
+                    <div class="charity-icon">🔐</div>
+                    <div class="charity-info">
+                        <h4>Electronic Frontier Foundation</h4>
+                        <p>Digital rights and privacy</p>
+                    </div>
+                </div>
+                <div class="charity-item">
+                    <div class="charity-icon">💊</div>
+                    <div class="charity-info">
+                        <h4>Direct Relief</h4>
+                        <p>Healthcare for people in poverty</p>
+                    </div>
+                </div>
+                <div class="charity-item">
+                    <div class="charity-icon">💧</div>
+                    <div class="charity-info">
+                        <h4>charity: water</h4>
+                        <p>Clean water access</p>
+                    </div>
+                </div>
+                <div class="charity-item">
+                    <div class="charity-icon">🐼</div>
+                    <div class="charity-info">
+                        <h4>World Wildlife Fund</h4>
+                        <p>Environmental conservation</p>
+                    </div>
+                </div>
+                <div class="charity-item">
+                    <div class="charity-icon">🍽️</div>
+                    <div class="charity-info">
+                        <h4>Feeding America</h4>
+                        <p>Hunger relief network</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contract-info">
+            <h2>Contract Addresses</h2>
+            <div class="network-badge">⚠️ BASE SEPOLIA TESTNET</div>
+            <p><strong>CharitySplitter:</strong></p>
+            <div id="splitter-address" class="address">Not yet deployed</div>
+            <p><strong>MerkleDistributor:</strong></p>
+            <div id="distributor-address" class="address">Not yet deployed</div>
+            <p style="margin-top: 1rem; color: var(--text-muted);">
+                <a href="https://sepolia.basescan.org" target="_blank">View on Basescan ↗</a>
+            </p>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Built by <a href="https://github.com/Strategickhaos">Strategickhaos DAO LLC</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            "7% forever — mathematically guaranteed, cryptographically verified, legally defensible."
+        </p>
+    </footer>
+    
+    <script>
+        // Contract ABI (minimal for reading stats)
+        const SPLITTER_ABI = [
+            "function getStats() external view returns (uint256 received, uint256 toOps, uint256 toCharity, uint256 distributions)",
+            "function totalToCharity() external view returns (uint256)"
+        ];
+        
+        // Contract addresses (update after deployment)
+        const SPLITTER_ADDRESS = ""; // Set after deployment
+        const DISTRIBUTOR_ADDRESS = ""; // Set after deployment
+        const CHAIN_ID = 84532; // Base Sepolia
+        
+        let provider = null;
+        let splitterContract = null;
+        
+        async function connectWallet() {
+            const btn = document.getElementById('connect-btn');
+            
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask or another Web3 wallet');
+                return;
+            }
+            
+            try {
+                btn.textContent = 'Connecting...';
+                btn.disabled = true;
+                
+                // Request account access
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                
+                // Check network
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (parseInt(chainId, 16) !== CHAIN_ID) {
+                    alert('Please switch to Base Sepolia network');
+                    btn.textContent = 'Connect Wallet';
+                    btn.disabled = false;
+                    return;
+                }
+                
+                // Setup provider
+                provider = new ethers.BrowserProvider(window.ethereum);
+                
+                if (SPLITTER_ADDRESS) {
+                    splitterContract = new ethers.Contract(SPLITTER_ADDRESS, SPLITTER_ABI, provider);
+                    await updateStats();
+                    
+                    // Update every 15 seconds
+                    setInterval(updateStats, 15000);
+                    
+                    btn.textContent = '✓ Connected';
+                } else {
+                    btn.textContent = 'Contract Not Deployed Yet';
+                    alert('Contracts not yet deployed. Check back after testnet deployment.');
+                }
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                btn.textContent = 'Connect Wallet';
+                btn.disabled = false;
+            }
+        }
+        
+        async function updateStats() {
+            if (!splitterContract) return;
+            
+            try {
+                const [received, toOps, toCharity, distributions] = await splitterContract.getStats();
+                
+                document.getElementById('total-received').textContent = formatEth(received) + ' ETH';
+                document.getElementById('total-received').classList.remove('loading');
+                
+                document.getElementById('total-ops').textContent = formatEth(toOps) + ' ETH';
+                document.getElementById('total-ops').classList.remove('loading');
+                
+                document.getElementById('total-charity').textContent = formatEth(toCharity) + ' ETH';
+                document.getElementById('total-charity').classList.remove('loading');
+                
+                document.getElementById('charity-counter').textContent = formatEth(toCharity) + ' ETH';
+                document.getElementById('charity-counter').classList.remove('loading');
+                
+                document.getElementById('distribution-count').textContent = distributions.toString();
+                document.getElementById('distribution-count').classList.remove('loading');
+                
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+            }
+        }
+        
+        function formatEth(wei) {
+            const eth = Number(wei) / 1e18;
+            return eth.toFixed(6);
+        }
+        
+        // Update addresses display
+        if (SPLITTER_ADDRESS) {
+            document.getElementById('splitter-address').textContent = SPLITTER_ADDRESS;
+        }
+        if (DISTRIBUTOR_ADDRESS) {
+            document.getElementById('distributor-address').textContent = DISTRIBUTOR_ADDRESS;
+        }
+    </script>
+    
+    <!-- ethers.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+{
+  "root": "0xda8e2fb8f4d587387ff064ceb201243e4c589d3298a6daf0ceeaf4cf19c2a795",
+  "charityCount": 7,
+  "charities": [
+    {
+      "index": 0,
+      "name": "St. Jude Children's Research Hospital",
+      "address": "0x1111111111111111111111111111111111111111",
+      "proof": [
+        "0x7b4e4429a12d7c7f52f97ac3310a7f766c8a424a830a3b5423010430bc468c18",
+        "0xe888b6c8bb5f7b47e6e454c36e4a038d92587d30083afe2cb64d5ab49197945c",
+        "0xe7b105b9535dca721c13a58e1b787158b0230d86b0231be574f42e69fee7d650"
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Doctors Without Borders",
+      "address": "0x2222222222222222222222222222222222222222",
+      "proof": [
+        "0x53d1ea11c02bccf00efa13950923d7ec0991024794dcc0a5de4788c13baf062c",
+        "0xe888b6c8bb5f7b47e6e454c36e4a038d92587d30083afe2cb64d5ab49197945c",
+        "0xe7b105b9535dca721c13a58e1b787158b0230d86b0231be574f42e69fee7d650"
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Electronic Frontier Foundation",
+      "address": "0x3333333333333333333333333333333333333333",
+      "proof": [
+        "0x1bb0564438be2c73f44e5f2823a74318a2c932034be210669206a51ecbf203f2",
+        "0xf450839c8a16c609eeebc87c8f4f91a943de08a4a2f3688d8c1c89d3638ffe69",
+        "0xe1384edda4c4e17faf8382675db7f4d4749b236c7e41973612df68dc3f5bec76"
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Direct Relief",
+      "address": "0x4444444444444444444444444444444444444444",
+      "proof": [
+        "0xc34c1c3612ddbb45cb059833b8edcd39da77199e6ef01701becea982dfcf78b6",
+        "0x3240c86f751f8d996187613ec9d2dfe7a6d0155da0b13a82d05b94ea59838d94",
+        "0xe7b105b9535dca721c13a58e1b787158b0230d86b0231be574f42e69fee7d650"
+      ]
+    },
+    {
+      "index": 4,
+      "name": "charity: water",
+      "address": "0x5555555555555555555555555555555555555555",
+      "proof": [
+        "0x88c92b47e6d2fdd8c61bf26bc2813ff412757dc0bae060f38c9c0b2e6f714f57",
+        "0xe1384edda4c4e17faf8382675db7f4d4749b236c7e41973612df68dc3f5bec76"
+      ]
+    },
+    {
+      "index": 5,
+      "name": "World Wildlife Fund",
+      "address": "0x6666666666666666666666666666666666666666",
+      "proof": [
+        "0x0cbb6eb1853daf8519c4402c080f1eea521b2c7b948dd3fa19840f908c41be1c",
+        "0xf450839c8a16c609eeebc87c8f4f91a943de08a4a2f3688d8c1c89d3638ffe69",
+        "0xe1384edda4c4e17faf8382675db7f4d4749b236c7e41973612df68dc3f5bec76"
+      ]
+    },
+    {
+      "index": 6,
+      "name": "Feeding America",
+      "address": "0x7777777777777777777777777777777777777777",
+      "proof": [
+        "0x8d613f9f57d96ed74d7ff6ae6a942604d014f22da8c17ecc75f32a96e16dc35e",
+        "0x3240c86f751f8d996187613ec9d2dfe7a6d0155da0b13a82d05b94ea59838d94",
+        "0xe7b105b9535dca721c13a58e1b787158b0230d86b0231be574f42e69fee7d650"
+      ]
+    }
+  ],
+  "tree": {
+    "format": "standard-v1",
+    "leafEncoding": [
+      "uint256",
+      "address"
+    ],
+    "tree": [
+      "0xda8e2fb8f4d587387ff064ceb201243e4c589d3298a6daf0ceeaf4cf19c2a795",
+      "0xe1384edda4c4e17faf8382675db7f4d4749b236c7e41973612df68dc3f5bec76",
+      "0xe7b105b9535dca721c13a58e1b787158b0230d86b0231be574f42e69fee7d650",
+      "0xe888b6c8bb5f7b47e6e454c36e4a038d92587d30083afe2cb64d5ab49197945c",
+      "0x3240c86f751f8d996187613ec9d2dfe7a6d0155da0b13a82d05b94ea59838d94",
+      "0x88c92b47e6d2fdd8c61bf26bc2813ff412757dc0bae060f38c9c0b2e6f714f57",
+      "0xf450839c8a16c609eeebc87c8f4f91a943de08a4a2f3688d8c1c89d3638ffe69",
+      "0xc34c1c3612ddbb45cb059833b8edcd39da77199e6ef01701becea982dfcf78b6",
+      "0x8d613f9f57d96ed74d7ff6ae6a942604d014f22da8c17ecc75f32a96e16dc35e",
+      "0x7b4e4429a12d7c7f52f97ac3310a7f766c8a424a830a3b5423010430bc468c18",
+      "0x53d1ea11c02bccf00efa13950923d7ec0991024794dcc0a5de4788c13baf062c",
+      "0x1bb0564438be2c73f44e5f2823a74318a2c932034be210669206a51ecbf203f2",
+      "0x0cbb6eb1853daf8519c4402c080f1eea521b2c7b948dd3fa19840f908c41be1c"
+    ],
+    "values": [
+      {
+        "value": [
+          0,
+          "0x1111111111111111111111111111111111111111"
+        ],
+        "treeIndex": 10
+      },
+      {
+        "value": [
+          1,
+          "0x2222222222222222222222222222222222222222"
+        ],
+        "treeIndex": 9
+      },
+      {
+        "value": [
+          2,
+          "0x3333333333333333333333333333333333333333"
+        ],
+        "treeIndex": 12
+      },
+      {
+        "value": [
+          3,
+          "0x4444444444444444444444444444444444444444"
+        ],
+        "treeIndex": 8
+      },
+      {
+        "value": [
+          4,
+          "0x5555555555555555555555555555555555555555"
+        ],
+        "treeIndex": 6
+      },
+      {
+        "value": [
+          5,
+          "0x6666666666666666666666666666666666666666"
+        ],
+        "treeIndex": 11
+      },
+      {
+        "value": [
+          6,
+          "0x7777777777777777777777777777777777777777"
+        ],
+        "treeIndex": 7
+      }
+    ]
+  }
+}
