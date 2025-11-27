@@ -424,9 +424,14 @@ class TacticalManager:
         reports = []
 
         for position in state.positions:
-            current_price = Decimal(
-                str(current_prices.get(position.symbol, position.entry_price))
-            )
+            if position.symbol not in current_prices:
+                logger.warning(
+                    f"Skipping stop-loss check for {position.symbol}: "
+                    "no current price available"
+                )
+                continue
+
+            current_price = Decimal(str(current_prices.get(position.symbol)))
 
             if (
                 position.stop_loss_price
@@ -472,9 +477,14 @@ class TacticalManager:
             days_held = (datetime.now() - position.entry_date).days
 
             if days_held >= time_limit:
-                current_price = Decimal(
-                    str(current_prices.get(position.symbol, position.entry_price))
-                )
+                if position.symbol not in current_prices:
+                    logger.warning(
+                        f"Deferring time limit closure for {position.symbol}: "
+                        "no current price available"
+                    )
+                    continue
+
+                current_price = Decimal(str(current_prices.get(position.symbol)))
                 report = self.close_position(
                     state,
                     position.position_id,

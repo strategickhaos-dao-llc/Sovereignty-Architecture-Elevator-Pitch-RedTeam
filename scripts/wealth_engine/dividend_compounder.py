@@ -389,7 +389,9 @@ class DividendCompounder:
             )
 
             # Calculate CAGR
-            cagr = ((ending_value / starting_value) ** (1 / Decimal(years))) - 1
+            cagr = (
+                (ending_value / starting_value) ** (Decimal("1") / Decimal(str(years)))
+            ) - 1
 
             projections.append(
                 CompoundingProjection(

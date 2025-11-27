@@ -231,9 +231,11 @@ class PortfolioRebalancer:
                 continue
 
             action_type = "buy" if diff_value > 0 else "sell"
+            # Use configured precision for displaying value
+            display_precision = min(self.precision, 2)
             reason = (
                 f"{'Underweight' if diff_value > 0 else 'Overweight'} "
-                f"by {abs(diff_value):.2f} USD"
+                f"by {abs(diff_value).quantize(Decimal(10) ** -display_precision)} USD"
             )
 
             actions.append(

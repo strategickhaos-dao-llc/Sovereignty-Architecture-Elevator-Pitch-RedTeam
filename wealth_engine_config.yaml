@@ -333,10 +333,10 @@ automation:
 
 # Metadata
 metadata:
-  created: "2024-01-01"
-  updated: "2024-01-01"
+  created: "auto"  # Set dynamically on first run
+  updated: "auto"  # Set dynamically on each modification
   author: "Strategickhaos Empire"
   version_history:
     - version: "1.0.0"
-      date: "2024-01-01"
+      date: "auto"
       changes: "Initial wealth engine configuration"

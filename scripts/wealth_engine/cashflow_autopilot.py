@@ -16,7 +16,7 @@ import json
 import logging
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import Optional
@@ -345,9 +345,7 @@ class CashflowAutopilot:
 
             # Generate purchase schedule
             for day in range(spread_days):
-                purchase_date = start_date.replace(
-                    day=min(start_date.day + day, 28)  # Safe day handling
-                )
+                purchase_date = start_date + timedelta(days=day)
                 dca.purchases.append(
                     {
                         "date": purchase_date.isoformat(),
