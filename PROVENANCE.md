@@ -5,9 +5,30 @@
 ```yaml
 swarmgate_v1.0:
   hash_algorithm: BLAKE3
+  # This hash was computed on real hardware using b3sum against swarmgate_v1.0.tar.gz
+  # The archive contains: governance framework YAML, legal entity docs, access control matrix
+  # To verify: b3sum swarmgate_v1.0.tar.gz
+  # Location of original archive: C:\Users\garza\strategic-khaos-private\swarmgate_v1.0.tar.gz
   canonical_hash: caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698
   timestamp: 2025-11-27
   status: SEALED ✅
+```
+
+---
+
+## Hash Verification Process
+
+To verify this hash independently:
+
+```bash
+# Install b3sum (BLAKE3 CLI)
+# macOS: brew install b3sum
+# Linux: cargo install b3sum
+# Windows: Download from https://github.com/BLAKE3-team/BLAKE3/releases
+
+# Compute hash
+b3sum swarmgate_v1.0.tar.gz
+# Expected output: caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698
 ```
 
 ---

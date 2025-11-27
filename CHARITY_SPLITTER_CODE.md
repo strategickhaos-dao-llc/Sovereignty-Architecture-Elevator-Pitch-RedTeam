@@ -18,7 +18,9 @@ This contract implements an immutable 7% charitable split for the Strategickhaos
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+// For OpenZeppelin v5.x use: @openzeppelin/contracts/utils/ReentrancyGuard.sol
+// For OpenZeppelin v4.x use: @openzeppelin/contracts/security/ReentrancyGuard.sol
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
@@ -184,9 +186,17 @@ contract CharitySplitter is ReentrancyGuard, Ownable {
 const hre = require("hardhat");
 
 async function main() {
+  // ⚠️ CRITICAL: Replace these placeholders with real wallet addresses before deployment
+  // ⚠️ Double-check addresses - funds sent to invalid addresses are UNRECOVERABLE
   // Configuration - UPDATE THESE BEFORE DEPLOYMENT
-  const CHARITY_WALLET = "0x..."; // Your charity wallet address
-  const OPERATIONS_WALLET = "0x..."; // Your operations wallet address
+  const CHARITY_WALLET = "0x..."; // Your charity wallet address - REPLACE BEFORE DEPLOY
+  const OPERATIONS_WALLET = "0x..."; // Your operations wallet address - REPLACE BEFORE DEPLOY
+  
+  // Validate addresses are not placeholders
+  if (CHARITY_WALLET === "0x..." || OPERATIONS_WALLET === "0x...") {
+    console.error("❌ ERROR: Replace placeholder wallet addresses before deployment!");
+    process.exit(1);
+  }
 
   console.log("Deploying CharitySplitter...");
   console.log("Charity Wallet:", CHARITY_WALLET);

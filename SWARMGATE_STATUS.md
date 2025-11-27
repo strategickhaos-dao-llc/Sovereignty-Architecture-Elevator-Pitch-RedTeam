@@ -12,6 +12,8 @@
 completed:
   swarmgate_v1.0:
     status: SEALED LOCALLY ✅
+    # Hash computed using BLAKE3 on swarmgate_v1.0.tar.gz archive
+    # Verify with: b3sum swarmgate_v1.0.tar.gz
     hash: caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698
     provenance: PROVENANCE.md created ✅
     git: Committed locally ✅

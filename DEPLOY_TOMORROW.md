@@ -106,9 +106,9 @@ BASESCAN_API_KEY=your_basescan_api_key
 
 ## Step 5: Get Testnet ETH
 
-1. Go to [Base Sepolia Faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet)
+1. Go to [Base Sepolia Faucet](https://www.alchemy.com/faucets/base-sepolia) or [Coinbase Faucet](https://faucet.quicknode.com/base/sepolia)
 2. Enter your wallet address
-3. Request testnet ETH
+3. Request testnet ETH (Base Sepolia)
 
 ---
 
