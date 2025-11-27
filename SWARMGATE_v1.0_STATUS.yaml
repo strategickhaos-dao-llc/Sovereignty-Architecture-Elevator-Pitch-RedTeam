@@ -1,0 +1,108 @@
+# SwarmGate v1.0 Status
+# Charity Split Engine - 93% Operations / 7% Charity (Physics, not promises)
+
+version: "1.0.0"
+name: SwarmGate Engine
+description: |
+  Mathematically enforced 93/7 ETH split between operations and charity.
+  The 7% is no longer a promise, it's physics.
+
+artifact_status:
+  package_json: ✅
+  hardhat_config: ✅
+  CharitySplitter_sol: ✅
+  MerkleDistributor_sol: ✅
+  generate_merkle_root_js: ✅
+  deploy_js: ✅
+  test_CharitySplitter_test_js: ✅
+  SWARMGATE_v1_0_STATUS_yaml: ✅
+  ci_yml: ✅
+
+current_state:
+  environment: development
+  test_status: pending
+  on_chain:
+    base_sepolia:
+      CharitySplitter: null  # Update after deployment
+      MerkleDistributor: null  # Update after deployment
+    base_mainnet:
+      CharitySplitter: null
+      MerkleDistributor: null
+
+split_configuration:
+  operations_share: 93
+  charity_share: 7
+  total: 100
+  math_verification: |
+    For any amount X:
+    - toOps = (X * 93) / 100
+    - toCharity = X - toOps (ensures no dust lost)
+    - Result: Perfect 93/7 split
+
+contracts:
+  CharitySplitter:
+    description: Main entry point - receives ETH and splits 93/7
+    immutable_params:
+      - opsWallet
+      - charityDistributor
+    events:
+      - Split(sender, amount, toOps, toCharity)
+
+  MerkleDistributor:
+    description: Receives 7% charity portion, enables merkle-based claims
+    features:
+      - Merkle proof verification
+      - Claim tracking (bitmap)
+      - ETH distribution to verified recipients
+
+roadmap:
+  phase_0:
+    name: "Artifact Creation"
+    status: complete
+    items:
+      - Smart contracts (Solidity 0.8.20)
+      - Hardhat test suite
+      - Deployment scripts
+      - CI/CD pipeline
+
+  phase_1:
+    name: "Base Sepolia Deployment"
+    status: pending
+    steps:
+      - npm install
+      - "Edit charity addresses in scripts/generate-merkle-root.js"
+      - npm run generate-root
+      - npm run deploy:base-sepolia
+    outcome: null  # Update with deployed CharitySplitter address
+
+  phase_2:
+    name: "Base Mainnet Deployment"
+    status: pending
+    prerequisites:
+      - Sepolia testing complete
+      - Charity recipient addresses finalized
+      - Ops wallet secured
+
+  phase_3:
+    name: "Production Operations"
+    status: pending
+    features:
+      - Contract verification on Basescan
+      - Integration with payment flows
+      - Charity claim portal
+
+verification:
+  test_command: "npm run test"
+  expected_result: |
+    SwarmGate v1.0 Engine
+      ✓ 93/7 split is mathematically perfect — delta-based verification
+    1 passing
+
+  manual_verification: |
+    1. Deploy contracts
+    2. Send 100 ETH to CharitySplitter
+    3. Verify ops wallet received 93 ETH
+    4. Verify MerkleDistributor received 7 ETH
+
+timestamp: 2024-01-01T00:00:00Z
+maintainer: strategickhaos
