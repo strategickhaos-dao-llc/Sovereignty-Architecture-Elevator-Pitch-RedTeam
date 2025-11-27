@@ -20,8 +20,8 @@ Artifacts are verified using BLAKE3 hashes for integrity and authenticity.
 $b3Url = "https://github.com/BLAKE3-team/BLAKE3/releases/latest/download/b3sum_windows_x64_bin.exe"
 Invoke-WebRequest -Uri $b3Url -OutFile "b3sum.exe"
 
-# Verify artifact
-.\b3sum.exe <artifact-file>
+# Verify artifact (example with swarmgate_v1.0.tar.gz)
+.\b3sum.exe swarmgate_v1.0.tar.gz
 ```
 
 **Linux/macOS:**
@@ -32,8 +32,8 @@ cargo install b3sum
 # Or download pre-built binary from releases
 # https://github.com/BLAKE3-team/BLAKE3/releases
 
-# Verify artifact
-b3sum <artifact-file>
+# Verify artifact (example with swarmgate_v1.0.tar.gz)
+b3sum swarmgate_v1.0.tar.gz
 ```
 
 ## Recorded Hashes

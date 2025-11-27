@@ -134,9 +134,9 @@ function Update-ProvenanceFile {
     $entry = @"
 
 **Canonical BLAKE3 (Verified on $hostname at $timestamp):**
-``````
+```
 $hash  $FileName
-``````
+```
 "@
     
     Log "Updating provenance file: $ProvenancePath"
