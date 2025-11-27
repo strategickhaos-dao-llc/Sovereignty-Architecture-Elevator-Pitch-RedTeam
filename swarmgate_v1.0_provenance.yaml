@@ -1,0 +1,13 @@
+# swarmgate_v1.0_provenance.yaml
+# SwarmGate v1.0 — Provenance Record
+# Canonical BLAKE3 hash: caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698
+
+provenance:
+  version: "v1.0"
+  archive: "swarmgate_v1.0.tar.gz"
+  blake3: "caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698"
+  created: "2025-11-27T00:00:00Z"
+  created_by: "garza"
+  receipts:
+    ipfs: "<ipfs-cid-if-uploaded>"
+    arweave: "<arweave-txid-if-uploaded>"
