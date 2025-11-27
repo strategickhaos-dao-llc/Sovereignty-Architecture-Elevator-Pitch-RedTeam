@@ -1,0 +1,98 @@
+name: SwarmGate Provenance Build
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'swarmgate.yaml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'swarmgate.yaml'
+  workflow_dispatch:
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        
+    - name: Install dependencies
+      run: |
+        pip install blake3 pyyaml
+        
+    - name: Validate YAML syntax
+      run: |
+        python -c "import yaml; yaml.safe_load(open('swarmgate.yaml'))"
+        echo "✅ YAML syntax is valid"
+        
+    - name: Create deterministic tar archive
+      run: |
+        tar --sort=name --mtime='2025-11-27 00:00:00' --owner=0 --group=0 --numeric-owner -cf swarmgate_v1.0.tar swarmgate.yaml
+        echo "✅ Deterministic tar archive created"
+        
+    - name: Compute BLAKE3 hashes
+      id: hashes
+      run: |
+        python - <<'PY'
+        import blake3
+        import os
+        
+        # Hash the YAML file
+        with open('swarmgate.yaml', 'rb') as f:
+            yaml_hash = blake3.blake3(f.read()).hexdigest()
+        print(f"YAML BLAKE3 hash: {yaml_hash}")
+        
+        # Hash the tar archive
+        with open('swarmgate_v1.0.tar', 'rb') as f:
+            tar_hash = blake3.blake3(f.read()).hexdigest()
+        print(f"TAR BLAKE3 hash: {tar_hash}")
+        
+        # Write to GitHub output
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"yaml_hash={yaml_hash}\n")
+            f.write(f"tar_hash={tar_hash}\n")
+        PY
+        
+    - name: Compute SHA-256 fallback
+      run: |
+        echo "SHA-256 (YAML): $(sha256sum swarmgate.yaml | cut -d ' ' -f1)"
+        echo "SHA-256 (TAR): $(sha256sum swarmgate_v1.0.tar | cut -d ' ' -f1)"
+        
+    - name: Generate provenance report
+      run: |
+        cat > provenance_report.md << 'EOF'
+        # SwarmGate Provenance Report
+        **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        **Commit:** ${{ github.sha }}
+        **Bundle:** swarmgate_v1.0
+        
+        ## Hash Values
+        - **YAML BLAKE3:** ${{ steps.hashes.outputs.yaml_hash }}
+        - **TAR BLAKE3:** ${{ steps.hashes.outputs.tar_hash }}
+        
+        ## Artifacts
+        - `swarmgate.yaml` - SwarmGate ecosystem descriptor
+        - `swarmgate_v1.0.tar` - Deterministic tar archive
+        
+        ## Next Steps (Manual)
+        1. Pin to IPFS: `ipfs add -Q swarmgate_v1.0.tar`
+        2. Upload to Arweave
+        3. Record on-chain via CommitRegistry
+        
+        *This is an automated provenance build. See swarmgate.yaml for full process.*
+        EOF
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: swarmgate-provenance
+        path: |
+          swarmgate.yaml
+          swarmgate_v1.0.tar
+          provenance_report.md
