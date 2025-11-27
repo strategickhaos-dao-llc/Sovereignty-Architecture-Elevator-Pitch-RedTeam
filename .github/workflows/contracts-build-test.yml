@@ -1,0 +1,191 @@
+name: SwarmGate Contracts Build & Test
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'contracts/**'
+      - 'swarmgate/**'
+      - '.github/workflows/contracts-build-test.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'contracts/**'
+      - 'swarmgate/**'
+  workflow_dispatch:
+
+env:
+  SOLIDITY_VERSION: "0.8.20"
+
+jobs:
+  lint:
+    name: Lint Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Solhint
+        run: npm install -g solhint
+
+      - name: Lint Solidity contracts
+        run: |
+          cd contracts
+          if [ -f ".solhint.json" ]; then
+            solhint '**/*.sol'
+          else
+            echo "No .solhint.json found, using default rules"
+            solhint '**/*.sol' --config '{"extends": "solhint:recommended"}'
+          fi
+
+  build:
+    name: Build Contracts
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Hardhat
+        run: npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+
+      - name: Compile contracts
+        run: |
+          cd contracts
+          if [ -f "hardhat.config.js" ] || [ -f "hardhat.config.ts" ]; then
+            npx hardhat compile
+          else
+            echo "Hardhat config not found, creating minimal config for compilation check"
+            echo 'module.exports = { solidity: "${{ env.SOLIDITY_VERSION }}" };' > hardhat.config.js
+            npx hardhat compile
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-artifacts
+          path: contracts/artifacts/
+          retention-days: 7
+
+  test:
+    name: Test Contracts
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Hardhat
+        run: npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+
+      - name: Run tests
+        run: |
+          cd contracts
+          if [ -d "test" ] && [ "$(ls -A test 2>/dev/null)" ]; then
+            npx hardhat test
+          else
+            echo "No tests found, skipping test execution"
+            echo "⚠️ Add tests to contracts/test/ for production readiness"
+          fi
+
+      - name: Generate coverage report
+        run: |
+          cd contracts
+          if [ -d "test" ] && [ "$(ls -A test 2>/dev/null)" ]; then
+            npx hardhat coverage || echo "Coverage not configured"
+          fi
+        continue-on-error: true
+
+  checksum:
+    name: Generate Checksums
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate contract checksums
+        run: |
+          echo "# SwarmGate Contract Checksums" > checksums.txt
+          echo "# Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> checksums.txt
+          echo "# Commit: ${{ github.sha }}" >> checksums.txt
+          echo "" >> checksums.txt
+          
+          find contracts -name "*.sol" -type f | sort | while read file; do
+            sha256sum "$file" >> checksums.txt
+          done
+          
+          cat checksums.txt
+
+      - name: Upload checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: checksums
+          path: checksums.txt
+          retention-days: 90
+
+  notify:
+    name: Notify Build Status
+    runs-on: ubuntu-latest
+    needs: [lint, build, test, checksum]
+    if: always()
+    steps:
+      - name: Notify Discord - Build Status
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+          EVENTS_URL: ${{ secrets.EVENTS_URL || 'https://events.strategickhaos.com/event' }}
+        run: |
+          if [ -z "$EVENTS_HMAC_KEY" ]; then
+            echo "EVENTS_HMAC_KEY not configured, skipping notification"
+            exit 0
+          fi
+          
+          status="success"
+          if [ "${{ needs.lint.result }}" != "success" ] || \
+             [ "${{ needs.build.result }}" != "success" ] || \
+             [ "${{ needs.test.result }}" != "success" ]; then
+            status="failure"
+          fi
+          
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg ref "${{ github.ref_name }}" \
+            --arg actor "${{ github.actor }}" \
+            --arg status "$status" \
+            --arg workflow "SwarmGate Contracts Build" \
+            '{service:"ci-contracts", repo:$repo, sha:$sha, ref:$ref, actor:$actor, status:$status, workflow:$workflow, timestamp:now}')
+          
+          sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+          
+          curl -sS -X POST "$EVENTS_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-Sig: $sig" \
+            -d "$payload" || true

@@ -1,0 +1,82 @@
+# SwarmGate Status and Provenance
+# Eternal 7% Engine — Sovereignty Architecture
+version: "1.0.0"
+status: active
+release_tag: swarmgate/v1.0
+
+# Component metadata
+component:
+  name: SwarmGate
+  description: "Eternal 7% revenue split engine for autonomous funding"
+  type: smart-contract-engine
+  purpose: >
+    SwarmGate implements an immutable 7% revenue allocation mechanism
+    that funds autonomous operations, ecosystem development, and 
+    community governance activities.
+
+# Artifact provenance
+artifacts:
+  contracts:
+    path: contracts/
+    description: "Solidity smart contracts for revenue split mechanism"
+    checksums:
+      # Updated on release build
+      swarmgate_sol: "sha256:placeholder-update-on-build"
+    compiler:
+      solidity: "0.8.20"
+      optimizer: true
+      runs: 200
+
+# Split configuration
+split_params:
+  total_percentage: 7
+  distribution:
+    operations: 40      # 2.8% of total revenue
+    development: 30     # 2.1% of total revenue  
+    governance: 20      # 1.4% of total revenue
+    reserves: 10        # 0.7% of total revenue
+
+# Recipients (configurable via control plane)
+recipients:
+  operations:
+    address: "${SWARMGATE_OPS_ADDRESS}"
+    description: "Operational treasury for running costs"
+  development:
+    address: "${SWARMGATE_DEV_ADDRESS}"
+    description: "Development fund for ecosystem growth"
+  governance:
+    address: "${SWARMGATE_GOV_ADDRESS}"
+    description: "Governance and community initiatives"
+  reserves:
+    address: "${SWARMGATE_RESERVE_ADDRESS}"
+    description: "Strategic reserves for stability"
+
+# Deployment status
+deployments:
+  testnet:
+    network: goerli
+    status: pending
+    address: null
+    deployed_at: null
+    tx_hash: null
+  mainnet:
+    network: ethereum
+    status: pending
+    address: null
+    deployed_at: null
+    tx_hash: null
+
+# Signing and verification
+signing:
+  required_signers: 1
+  quorum: 1
+  authorized_keys:
+    - name: "managing-member"
+      key_id: "domenic-garza-gpg"
+      role: "primary"
+
+# Metadata
+generated:
+  timestamp: "2025-11-27T00:00:00Z"
+  schema_version: "1.0"
+  provenance_link: "governance/SWARMGATE_CHANGE_POLICY.md"

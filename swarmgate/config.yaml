@@ -1,0 +1,80 @@
+# SwarmGate Control Plane Configuration
+# Environment-specific toggles for the 7% Engine
+version: "1.0.0"
+
+# Feature toggles
+features:
+  enabled: true
+  auto_distribute: true
+  emergency_pause: false
+  require_multisig: false
+
+# Environment configuration
+environments:
+  development:
+    enabled: true
+    network: localhost
+    rpc_url: "${DEV_RPC_URL:-http://localhost:8545}"
+    split_params:
+      total_percentage: 7
+      min_distribution_amount: "0.01"
+      distribution_frequency: "daily"
+
+  testnet:
+    enabled: true
+    network: goerli
+    rpc_url: "${TESTNET_RPC_URL}"
+    chain_id: 5
+    split_params:
+      total_percentage: 7
+      min_distribution_amount: "0.1"
+      distribution_frequency: "weekly"
+    gas:
+      max_gas_price: "50000000000"  # 50 gwei
+      gas_limit: "500000"
+
+  mainnet:
+    enabled: false  # Requires explicit activation
+    network: ethereum
+    rpc_url: "${MAINNET_RPC_URL}"
+    chain_id: 1
+    split_params:
+      total_percentage: 7
+      min_distribution_amount: "1.0"
+      distribution_frequency: "weekly"
+    gas:
+      max_gas_price: "100000000000"  # 100 gwei max
+      gas_limit: "500000"
+    vault:
+      key_path: "${VAULT_KEY_PATH:-secret/swarmgate/mainnet}"
+      role: "swarmgate-deployer"
+
+# Recipient addresses (override per environment)
+recipients:
+  default:
+    operations: "${SWARMGATE_OPS_ADDRESS}"
+    development: "${SWARMGATE_DEV_ADDRESS}"
+    governance: "${SWARMGATE_GOV_ADDRESS}"
+    reserves: "${SWARMGATE_RESERVE_ADDRESS}"
+
+# Monitoring and alerting
+monitoring:
+  enabled: true
+  metrics_endpoint: "/metrics/swarmgate"
+  alert_channels:
+    - discord: "#swarmgate-alerts"
+    - email: "${ALERT_EMAIL}"
+  thresholds:
+    distribution_delay_minutes: 60
+    failed_tx_count: 3
+    low_balance_eth: "0.5"
+
+# Security controls
+security:
+  require_signed_commits: true
+  require_audit_log: true
+  max_single_distribution: "100"  # ETH
+  cooldown_period_hours: 24
+  emergency_contacts:
+    - "${EMERGENCY_CONTACT_1}"
+    - "${EMERGENCY_CONTACT_2}"

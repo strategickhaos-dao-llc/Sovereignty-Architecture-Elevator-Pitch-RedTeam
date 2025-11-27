@@ -1,0 +1,293 @@
+name: SwarmGate Contracts Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - testnet
+          - mainnet
+      confirm:
+        description: 'Type "confirm" to proceed with deployment'
+        required: true
+        type: string
+      skip_verification:
+        description: 'Skip Etherscan verification'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  SOLIDITY_VERSION: "0.8.20"
+
+jobs:
+  validate:
+    name: Validate Deployment Request
+    runs-on: ubuntu-latest
+    outputs:
+      can_deploy: ${{ steps.check.outputs.can_deploy }}
+    steps:
+      - name: Validate confirmation
+        id: check
+        run: |
+          if [ "${{ inputs.confirm }}" != "confirm" ]; then
+            echo "❌ Deployment not confirmed. Input 'confirm' to proceed."
+            echo "can_deploy=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "✅ Deployment confirmed"
+          echo "can_deploy=true" >> $GITHUB_OUTPUT
+
+      - name: Check mainnet restrictions
+        if: inputs.environment == 'mainnet'
+        run: |
+          echo "⚠️ MAINNET DEPLOYMENT REQUESTED"
+          echo "Ensure the following before proceeding:"
+          echo "  - Contract has been audited"
+          echo "  - All recipient addresses verified"
+          echo "  - Emergency procedures documented"
+          echo "  - Governance approval obtained"
+
+  build:
+    name: Build Contracts
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.can_deploy == 'true'
+    outputs:
+      checksum: ${{ steps.checksum.outputs.checksum }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Hardhat
+        run: npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+
+      - name: Compile contracts
+        run: |
+          cd contracts
+          if [ -f "hardhat.config.js" ] || [ -f "hardhat.config.ts" ]; then
+            npx hardhat compile
+          else
+            echo 'module.exports = { solidity: "${{ env.SOLIDITY_VERSION }}" };' > hardhat.config.js
+            npx hardhat compile
+          fi
+
+      - name: Generate checksum
+        id: checksum
+        run: |
+          checksum=$(sha256sum contracts/SwarmGate.sol | cut -d' ' -f1)
+          echo "checksum=$checksum" >> $GITHUB_OUTPUT
+          echo "Contract checksum: $checksum"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-artifacts
+          path: |
+            contracts/artifacts/
+            contracts/cache/
+          retention-days: 30
+
+  deploy-testnet:
+    name: Deploy to Testnet
+    runs-on: ubuntu-latest
+    needs: build
+    if: inputs.environment == 'testnet'
+    environment: testnet
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-artifacts
+          path: contracts/
+
+      - name: Deploy to Goerli
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+          TESTNET_RPC_URL: ${{ secrets.TESTNET_RPC_URL }}
+          SWARMGATE_OPS_ADDRESS: ${{ vars.SWARMGATE_OPS_ADDRESS }}
+          SWARMGATE_DEV_ADDRESS: ${{ vars.SWARMGATE_DEV_ADDRESS }}
+          SWARMGATE_GOV_ADDRESS: ${{ vars.SWARMGATE_GOV_ADDRESS }}
+          SWARMGATE_RESERVE_ADDRESS: ${{ vars.SWARMGATE_RESERVE_ADDRESS }}
+          SWARMGATE_ADMIN_ADDRESS: ${{ vars.SWARMGATE_ADMIN_ADDRESS }}
+        run: |
+          cd contracts
+          echo "🚀 Deploying SwarmGate to Goerli testnet..."
+          
+          # Check required variables
+          if [ -z "$DEPLOYER_PRIVATE_KEY" ] || [ -z "$TESTNET_RPC_URL" ]; then
+            echo "❌ Missing required secrets"
+            exit 1
+          fi
+          
+          # Create deployment script if not exists
+          if [ ! -f "scripts/deploy.js" ]; then
+            mkdir -p scripts
+            cat > scripts/deploy.js << 'EOF'
+          const hre = require("hardhat");
+          
+          async function main() {
+            const ops = process.env.SWARMGATE_OPS_ADDRESS;
+            const dev = process.env.SWARMGATE_DEV_ADDRESS;
+            const gov = process.env.SWARMGATE_GOV_ADDRESS;
+            const reserve = process.env.SWARMGATE_RESERVE_ADDRESS;
+            const admin = process.env.SWARMGATE_ADMIN_ADDRESS;
+            
+            console.log("Deploying SwarmGate with:");
+            console.log("  Operations:", ops);
+            console.log("  Development:", dev);
+            console.log("  Governance:", gov);
+            console.log("  Reserves:", reserve);
+            console.log("  Admin:", admin);
+            
+            const SwarmGate = await hre.ethers.getContractFactory("SwarmGate");
+            const swarmgate = await SwarmGate.deploy(ops, dev, gov, reserve, admin);
+            await swarmgate.waitForDeployment();
+            
+            console.log("SwarmGate deployed to:", await swarmgate.getAddress());
+          }
+          
+          main().catch(console.error);
+          EOF
+          fi
+          
+          # Note: Actual deployment requires proper hardhat.config.js with network configuration
+          echo "Deployment script prepared. Configure hardhat.config.js for network deployment."
+          
+      - name: Verify on Etherscan
+        if: inputs.skip_verification != true
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          echo "Contract verification would run here with Etherscan API"
+          # npx hardhat verify --network goerli $DEPLOYED_ADDRESS ...
+
+  deploy-mainnet:
+    name: Deploy to Mainnet
+    runs-on: ubuntu-latest
+    needs: build
+    if: inputs.environment == 'mainnet'
+    environment: mainnet
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-artifacts
+          path: contracts/
+
+      - name: Setup Vault
+        uses: hashicorp/vault-action@v2
+        if: vars.USE_VAULT == 'true'
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          role: swarmgate-deployer
+          secrets: |
+            secret/data/swarmgate/mainnet private_key | DEPLOYER_PRIVATE_KEY
+
+      - name: Deploy to Mainnet
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
+          SWARMGATE_OPS_ADDRESS: ${{ vars.SWARMGATE_OPS_ADDRESS }}
+          SWARMGATE_DEV_ADDRESS: ${{ vars.SWARMGATE_DEV_ADDRESS }}
+          SWARMGATE_GOV_ADDRESS: ${{ vars.SWARMGATE_GOV_ADDRESS }}
+          SWARMGATE_RESERVE_ADDRESS: ${{ vars.SWARMGATE_RESERVE_ADDRESS }}
+          SWARMGATE_ADMIN_ADDRESS: ${{ vars.SWARMGATE_ADMIN_ADDRESS }}
+        run: |
+          cd contracts
+          echo "🚀 MAINNET DEPLOYMENT"
+          echo "Contract checksum: ${{ needs.build.outputs.checksum }}"
+          
+          # Safety checks
+          if [ -z "$DEPLOYER_PRIVATE_KEY" ] || [ -z "$MAINNET_RPC_URL" ]; then
+            echo "❌ Missing required secrets for mainnet deployment"
+            exit 1
+          fi
+          
+          echo "⚠️ Mainnet deployment would proceed here"
+          echo "Configure hardhat.config.js with mainnet network settings"
+
+      - name: Record deployment
+        run: |
+          echo "Recording deployment metadata..."
+          echo "Checksum: ${{ needs.build.outputs.checksum }}"
+          echo "Environment: mainnet"
+          echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "Actor: ${{ github.actor }}"
+
+  notify:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [validate, build, deploy-testnet, deploy-mainnet]
+    if: always()
+    steps:
+      - name: Notify Discord
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+          EVENTS_URL: ${{ secrets.EVENTS_URL || 'https://events.strategickhaos.com/event' }}
+        run: |
+          if [ -z "$EVENTS_HMAC_KEY" ]; then
+            echo "EVENTS_HMAC_KEY not configured, skipping notification"
+            exit 0
+          fi
+          
+          status="success"
+          if [ "${{ needs.deploy-testnet.result }}" == "failure" ] || \
+             [ "${{ needs.deploy-mainnet.result }}" == "failure" ]; then
+            status="failure"
+          fi
+          
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg env "${{ inputs.environment }}" \
+            --arg actor "${{ github.actor }}" \
+            --arg status "$status" \
+            '{service:"deployment-swarmgate", repo:$repo, environment:$env, actor:$actor, status:$status, timestamp:now}')
+          
+          sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+          
+          curl -sS -X POST "$EVENTS_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-Sig: $sig" \
+            -d "$payload" || true

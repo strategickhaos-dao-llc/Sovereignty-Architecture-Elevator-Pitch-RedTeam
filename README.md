@@ -280,6 +280,38 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## ⚡ SwarmGate (7% Engine)
+
+SwarmGate is the **Eternal 7% Revenue Split Engine** — an immutable smart contract mechanism that automatically allocates 7% of incoming revenue to fund autonomous operations and ecosystem growth.
+
+### Why 7%?
+
+The 7% split represents a carefully balanced allocation that funds ongoing development, operations, governance, and strategic reserves without creating excessive overhead. This fixed percentage ensures predictable, sustainable funding while maintaining alignment between revenue generation and ecosystem investment. The immutable nature of the split prevents governance capture and guarantees long-term commitment to the ecosystem's growth.
+
+### Distribution
+
+| Recipient | Share | Effective Rate |
+|-----------|-------|----------------|
+| Operations | 40% | 2.8% of revenue |
+| Development | 30% | 2.1% of revenue |
+| Governance | 20% | 1.4% of revenue |
+| Reserves | 10% | 0.7% of revenue |
+
+### Quick Links
+
+- **[Contracts](contracts/)** - Smart contract source code
+- **[Deployment Guide](docs/DEPLOY_SWARMGATE.md)** - Testnet and mainnet deployment
+- **[Status & Provenance](swarmgate/status.yaml)** - Current deployment status and checksums
+- **[Configuration](swarmgate/config.yaml)** - Control plane settings
+- **[Change Policy](governance/SWARMGATE_CHANGE_POLICY.md)** - Version and parameter change procedures
+- **[AI Constitution](ai_constitution.yaml)** - Alignment and governance framework
+
+### Release
+
+**Current Version**: swarmgate/v1.0
+
+See [RELEASE_NOTES.md](RELEASE_NOTES.md) for full release history.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
