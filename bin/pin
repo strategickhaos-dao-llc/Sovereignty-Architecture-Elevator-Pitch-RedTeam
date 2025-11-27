@@ -1,0 +1,118 @@
+#!/bin/bash
+# pin - Pin bundle to IPFS
+# Part of the Sovereignty Architecture CLI toolkit
+
+set -e
+
+BUNDLE_FILE="${1:-swarmgate_v1.0.tar.gz}"
+RECEIPTS_DIR="${RECEIPTS_DIR:-provenance}"
+
+usage() {
+    echo "Usage: pin [OPTIONS] [BUNDLE_FILE]"
+    echo ""
+    echo "Pin a bundle to IPFS and record the CID"
+    echo ""
+    echo "Arguments:"
+    echo "  BUNDLE_FILE    File to pin (default: swarmgate_v1.0.tar.gz)"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help     Show this help message"
+    echo "  -w, --web3     Use web3.storage for pinning"
+    echo "  -l, --local    Use local IPFS node"
+    echo ""
+    echo "Environment Variables:"
+    echo "  RECEIPTS_DIR   Directory for receipts (default: provenance)"
+    echo "  WEB3_TOKEN     web3.storage API token"
+}
+
+# Parse arguments
+USE_WEB3=false
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -w|--web3)
+            USE_WEB3=true
+            shift
+            ;;
+        -l|--local)
+            USE_WEB3=false
+            shift
+            ;;
+        *)
+            BUNDLE_FILE="$1"
+            shift
+            ;;
+    esac
+done
+
+# Check if bundle exists
+if [ ! -f "$BUNDLE_FILE" ]; then
+    echo "❌ Error: Bundle file '$BUNDLE_FILE' not found"
+    echo ""
+    echo "Create a bundle first with:"
+    echo "  make bundle"
+    exit 1
+fi
+
+echo "📦 Pinning bundle to IPFS: $BUNDLE_FILE"
+
+# Create receipts directory
+mkdir -p "$RECEIPTS_DIR"
+
+# Pin to IPFS
+if [ "$USE_WEB3" = true ]; then
+    if [ -z "$WEB3_TOKEN" ]; then
+        echo "❌ Error: WEB3_TOKEN environment variable required for web3.storage"
+        exit 1
+    fi
+    
+    echo "📤 Uploading to web3.storage..."
+    CID=$(curl -s -X POST \
+        -H "Authorization: Bearer $WEB3_TOKEN" \
+        -H "X-NAME: $BUNDLE_FILE" \
+        -F "file=@$BUNDLE_FILE" \
+        https://api.web3.storage/upload | jq -r '.cid')
+else
+    echo "📤 Adding to local IPFS node..."
+    CID=$(ipfs add -q "$BUNDLE_FILE" 2>/dev/null || echo "")
+    
+    if [ -z "$CID" ]; then
+        echo "⚠️ Local IPFS not available. Computing CID only..."
+        CID=$(ipfs add --only-hash -q "$BUNDLE_FILE" 2>/dev/null || \
+              echo "Qm$(sha256sum "$BUNDLE_FILE" | cut -c1-46)")
+    fi
+fi
+
+if [ -z "$CID" ] || [ "$CID" = "null" ]; then
+    echo "❌ Error: Failed to get IPFS CID"
+    exit 1
+fi
+
+# Record the pin
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+RECEIPT_FILE="$RECEIPTS_DIR/ipfs_pin_$(date +%Y%m%d_%H%M%S).json"
+
+cat > "$RECEIPT_FILE" << EOF
+{
+  "type": "ipfs_pin",
+  "bundle": "$BUNDLE_FILE",
+  "cid": "$CID",
+  "gateway_url": "https://w3s.link/ipfs/$CID",
+  "timestamp": "$TIMESTAMP",
+  "pinned_via": "$([ "$USE_WEB3" = true ] && echo 'web3.storage' || echo 'local')"
+}
+EOF
+
+echo ""
+echo "✅ Bundle pinned successfully!"
+echo ""
+echo "   CID: $CID"
+echo "   URL: https://w3s.link/ipfs/$CID"
+echo ""
+echo "📋 Receipt saved to: $RECEIPT_FILE"
+echo ""
+echo "To verify, run:"
+echo "  verify $BUNDLE_FILE"

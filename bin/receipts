@@ -1,0 +1,233 @@
+#!/bin/bash
+# receipts - Generate and display provenance receipts
+# Part of the Sovereignty Architecture CLI toolkit
+
+set -e
+
+RECEIPTS_DIR="${RECEIPTS_DIR:-provenance}"
+ACTION="${1:-list}"
+
+usage() {
+    echo "Usage: receipts [ACTION] [OPTIONS]"
+    echo ""
+    echo "Generate and manage provenance receipts"
+    echo ""
+    echo "Actions:"
+    echo "  list           List all receipts (default)"
+    echo "  show [ID]      Show a specific receipt"
+    echo "  bundle [TAG]   Create a complete provenance bundle"
+    echo "  index          Update provenance INDEX.md"
+    echo "  export [FMT]   Export receipts (json, yaml, csv)"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help     Show this help message"
+    echo "  -d, --dir DIR  Receipts directory (default: provenance)"
+    echo ""
+    echo "Environment Variables:"
+    echo "  RECEIPTS_DIR   Directory for receipts (default: provenance)"
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -d|--dir)
+            RECEIPTS_DIR="$2"
+            shift 2
+            ;;
+        list|show|bundle|index|export)
+            ACTION="$1"
+            shift
+            ;;
+        *)
+            ARG="$1"
+            shift
+            ;;
+    esac
+done
+
+# Create receipts directory if needed
+mkdir -p "$RECEIPTS_DIR"
+
+case "$ACTION" in
+    list)
+        echo "📋 Provenance Receipts"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        
+        if [ -z "$(ls -A "$RECEIPTS_DIR"/*.json 2>/dev/null)" ]; then
+            echo "No receipts found in $RECEIPTS_DIR"
+            echo ""
+            echo "Create receipts using:"
+            echo "  pin swarmgate_v1.0.tar.gz"
+            echo "  sign swarmgate_v1.0.tar.gz"
+            echo "  verify swarmgate_v1.0.tar.gz"
+            exit 0
+        fi
+        
+        for receipt in "$RECEIPTS_DIR"/*.json; do
+            if [ -f "$receipt" ]; then
+                NAME=$(basename "$receipt" .json)
+                TYPE=$(jq -r '.type // "unknown"' "$receipt" 2>/dev/null || echo "unknown")
+                TIMESTAMP=$(jq -r '.timestamp // "unknown"' "$receipt" 2>/dev/null || echo "unknown")
+                echo "  $NAME"
+                echo "    Type: $TYPE"
+                echo "    Time: $TIMESTAMP"
+                echo ""
+            fi
+        done
+        ;;
+    
+    show)
+        RECEIPT_ID="${ARG:-}"
+        if [ -z "$RECEIPT_ID" ]; then
+            echo "❌ Error: Receipt ID required"
+            echo "Usage: receipts show <receipt_id>"
+            exit 1
+        fi
+        
+        RECEIPT_FILE="$RECEIPTS_DIR/${RECEIPT_ID}.json"
+        if [ ! -f "$RECEIPT_FILE" ]; then
+            # Try finding by partial match
+            RECEIPT_FILE=$(find "$RECEIPTS_DIR" -name "*${RECEIPT_ID}*.json" | head -1)
+        fi
+        
+        if [ -f "$RECEIPT_FILE" ]; then
+            echo "📄 Receipt: $(basename "$RECEIPT_FILE")"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            jq '.' "$RECEIPT_FILE"
+        else
+            echo "❌ Error: Receipt not found: $RECEIPT_ID"
+            exit 1
+        fi
+        ;;
+    
+    bundle)
+        TAG="${ARG:-$(date +%Y%m%d)}"
+        echo "📦 Creating provenance bundle: $TAG"
+        echo ""
+        
+        BUNDLE_DIR="$RECEIPTS_DIR/bundle_$TAG"
+        mkdir -p "$BUNDLE_DIR"
+        
+        # Copy all receipts
+        cp "$RECEIPTS_DIR"/*.json "$BUNDLE_DIR/" 2>/dev/null || true
+        
+        # Generate summary
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        cat > "$BUNDLE_DIR/MANIFEST.json" << EOF
+{
+  "bundle_tag": "$TAG",
+  "created_at": "$TIMESTAMP",
+  "receipts": [
+$(for f in "$BUNDLE_DIR"/*.json; do
+    [ "$f" = "$BUNDLE_DIR/MANIFEST.json" ] && continue
+    [ -f "$f" ] || continue
+    echo "    \"$(basename "$f")\","
+done | sed '$ s/,$//')
+  ],
+  "integrity": {
+    "sha256": "$(find "$BUNDLE_DIR" -name "*.json" ! -name "MANIFEST.json" -exec sha256sum {} \; | sha256sum | awk '{print $1}')"
+  }
+}
+EOF
+        
+        # Create tarball
+        tar -czf "$RECEIPTS_DIR/provenance_$TAG.tar.gz" -C "$RECEIPTS_DIR" "bundle_$TAG"
+        
+        echo "✅ Bundle created: $RECEIPTS_DIR/provenance_$TAG.tar.gz"
+        echo ""
+        echo "Contents:"
+        tar -tzf "$RECEIPTS_DIR/provenance_$TAG.tar.gz"
+        ;;
+    
+    index)
+        echo "📝 Updating provenance INDEX.md..."
+        
+        INDEX_FILE="$RECEIPTS_DIR/INDEX.md"
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        
+        cat > "$INDEX_FILE" << EOF
+# Provenance Index
+
+Last updated: $TIMESTAMP
+
+## Receipts
+
+| Type | Timestamp | Bundle | Details |
+|------|-----------|--------|---------|
+EOF
+        
+        for receipt in "$RECEIPTS_DIR"/*.json; do
+            if [ -f "$receipt" ]; then
+                TYPE=$(jq -r '.type // "-"' "$receipt" 2>/dev/null)
+                TIME=$(jq -r '.timestamp // "-"' "$receipt" 2>/dev/null)
+                BUNDLE=$(jq -r '.bundle // "-"' "$receipt" 2>/dev/null)
+                
+                echo "| $TYPE | $TIME | $BUNDLE | [$(basename "$receipt")]($(basename "$receipt")) |" >> "$INDEX_FILE"
+            fi
+        done
+        
+        echo "" >> "$INDEX_FILE"
+        echo "---" >> "$INDEX_FILE"
+        echo "" >> "$INDEX_FILE"
+        echo "*Generated by \`receipts index\` command*" >> "$INDEX_FILE"
+        
+        echo "✅ Index updated: $INDEX_FILE"
+        ;;
+    
+    export)
+        FORMAT="${ARG:-json}"
+        EXPORT_FILE="$RECEIPTS_DIR/export_$(date +%Y%m%d).$FORMAT"
+        
+        echo "📤 Exporting receipts as $FORMAT..."
+        
+        case "$FORMAT" in
+            json)
+                echo "[" > "$EXPORT_FILE"
+                first=true
+                for receipt in "$RECEIPTS_DIR"/*.json; do
+                    if [ -f "$receipt" ] && [ "$(basename "$receipt")" != "export_*.json" ]; then
+                        if [ "$first" = true ]; then
+                            first=false
+                        else
+                            echo "," >> "$EXPORT_FILE"
+                        fi
+                        cat "$receipt" >> "$EXPORT_FILE"
+                    fi
+                done
+                echo "]" >> "$EXPORT_FILE"
+                ;;
+            
+            csv)
+                echo "type,timestamp,bundle,details" > "$EXPORT_FILE"
+                for receipt in "$RECEIPTS_DIR"/*.json; do
+                    if [ -f "$receipt" ]; then
+                        TYPE=$(jq -r '.type // ""' "$receipt" 2>/dev/null)
+                        TIME=$(jq -r '.timestamp // ""' "$receipt" 2>/dev/null)
+                        BUNDLE=$(jq -r '.bundle // ""' "$receipt" 2>/dev/null)
+                        echo "$TYPE,$TIME,$BUNDLE,$(basename "$receipt")" >> "$EXPORT_FILE"
+                    fi
+                done
+                ;;
+            
+            *)
+                echo "❌ Unsupported format: $FORMAT"
+                echo "Supported: json, csv"
+                exit 1
+                ;;
+        esac
+        
+        echo "✅ Exported to: $EXPORT_FILE"
+        ;;
+    
+    *)
+        echo "❌ Unknown action: $ACTION"
+        echo ""
+        usage
+        exit 1
+        ;;
+esac

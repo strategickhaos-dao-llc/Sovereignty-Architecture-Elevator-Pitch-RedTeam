@@ -1,0 +1,108 @@
+#!/bin/bash
+# sign - GPG sign a bundle
+# Part of the Sovereignty Architecture CLI toolkit
+
+set -e
+
+BUNDLE_FILE="${1:-swarmgate_v1.0.tar.gz}"
+RECEIPTS_DIR="${RECEIPTS_DIR:-provenance}"
+GPG_KEY="${GPG_KEY:-}"
+
+usage() {
+    echo "Usage: sign [OPTIONS] [BUNDLE_FILE]"
+    echo ""
+    echo "Create a detached GPG signature for a bundle"
+    echo ""
+    echo "Arguments:"
+    echo "  BUNDLE_FILE    File to sign (default: swarmgate_v1.0.tar.gz)"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help     Show this help message"
+    echo "  -k, --key KEY  GPG key ID to use for signing"
+    echo ""
+    echo "Environment Variables:"
+    echo "  RECEIPTS_DIR   Directory for receipts (default: provenance)"
+    echo "  GPG_KEY        GPG key ID for signing"
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -k|--key)
+            GPG_KEY="$2"
+            shift 2
+            ;;
+        *)
+            BUNDLE_FILE="$1"
+            shift
+            ;;
+    esac
+done
+
+# Check if bundle exists
+if [ ! -f "$BUNDLE_FILE" ]; then
+    echo "❌ Error: Bundle file '$BUNDLE_FILE' not found"
+    exit 1
+fi
+
+echo "🔐 Signing bundle: $BUNDLE_FILE"
+
+# Create receipts directory
+mkdir -p "$RECEIPTS_DIR"
+
+# Build GPG command
+GPG_CMD="gpg --armor --detach-sign"
+if [ -n "$GPG_KEY" ]; then
+    GPG_CMD="$GPG_CMD --default-key $GPG_KEY"
+fi
+
+# Create signature
+SIGNATURE_FILE="${BUNDLE_FILE}.asc"
+echo "📝 Creating detached signature..."
+
+if $GPG_CMD "$BUNDLE_FILE" 2>/dev/null; then
+    echo "✅ Signature created: $SIGNATURE_FILE"
+else
+    echo "❌ Error: GPG signing failed"
+    echo ""
+    echo "Make sure you have a GPG key configured:"
+    echo "  gpg --gen-key"
+    echo ""
+    echo "Or specify a key with:"
+    echo "  sign -k YOUR_KEY_ID $BUNDLE_FILE"
+    exit 1
+fi
+
+# Get signature info
+SIGNER=$(gpg --verify "$SIGNATURE_FILE" 2>&1 | grep "Good signature" | sed 's/.*"\(.*\)".*/\1/' || echo "Unknown")
+KEY_ID=$(gpg --verify "$SIGNATURE_FILE" 2>&1 | grep "using" | awk '{print $NF}' || echo "Unknown")
+
+# Record the signature
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+RECEIPT_FILE="$RECEIPTS_DIR/gpg_sign_$(date +%Y%m%d_%H%M%S).json"
+
+cat > "$RECEIPT_FILE" << EOF
+{
+  "type": "gpg_signature",
+  "bundle": "$BUNDLE_FILE",
+  "signature_file": "$SIGNATURE_FILE",
+  "key_id": "$KEY_ID",
+  "signer": "$SIGNER",
+  "timestamp": "$TIMESTAMP"
+}
+EOF
+
+echo ""
+echo "✅ Bundle signed successfully!"
+echo ""
+echo "   Signature: $SIGNATURE_FILE"
+echo "   Key ID: $KEY_ID"
+echo ""
+echo "📋 Receipt saved to: $RECEIPT_FILE"
+echo ""
+echo "To verify signature:"
+echo "  gpg --verify $SIGNATURE_FILE $BUNDLE_FILE"

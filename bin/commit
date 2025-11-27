@@ -1,0 +1,140 @@
+#!/bin/bash
+# commit - Commit changes with provenance metadata
+# Part of the Sovereignty Architecture CLI toolkit
+
+set -e
+
+MESSAGE="${1:-}"
+RECEIPTS_DIR="${RECEIPTS_DIR:-provenance}"
+
+usage() {
+    echo "Usage: commit [OPTIONS] MESSAGE"
+    echo ""
+    echo "Commit changes with provenance metadata"
+    echo ""
+    echo "Arguments:"
+    echo "  MESSAGE        Commit message (required)"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help     Show this help message"
+    echo "  -s, --sign     GPG sign the commit"
+    echo "  -t, --tag TAG  Create a tag after commit"
+    echo "  -b, --bundle   Create bundle and update swarmgate.yaml"
+    echo ""
+    echo "Environment Variables:"
+    echo "  RECEIPTS_DIR   Directory for receipts (default: provenance)"
+}
+
+# Parse arguments
+SIGN_COMMIT=false
+CREATE_TAG=""
+CREATE_BUNDLE=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -s|--sign)
+            SIGN_COMMIT=true
+            shift
+            ;;
+        -t|--tag)
+            CREATE_TAG="$2"
+            shift 2
+            ;;
+        -b|--bundle)
+            CREATE_BUNDLE=true
+            shift
+            ;;
+        *)
+            if [ -z "$MESSAGE" ]; then
+                MESSAGE="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Validate message
+if [ -z "$MESSAGE" ]; then
+    echo "❌ Error: Commit message required"
+    echo ""
+    usage
+    exit 1
+fi
+
+echo "📝 Committing changes with provenance..."
+
+# Create receipts directory
+mkdir -p "$RECEIPTS_DIR"
+
+# Stage all changes
+echo "📂 Staging changes..."
+git add -A
+
+# Check for changes
+if git diff --cached --quiet; then
+    echo "⚠️ No changes to commit"
+    exit 0
+fi
+
+# Build commit command
+GIT_CMD="git commit"
+if [ "$SIGN_COMMIT" = true ]; then
+    GIT_CMD="$GIT_CMD -S"
+fi
+
+# Commit
+$GIT_CMD -m "$MESSAGE"
+COMMIT_SHA=$(git rev-parse HEAD)
+COMMIT_SHORT=$(git rev-parse --short HEAD)
+
+echo ""
+echo "✅ Committed: $COMMIT_SHORT"
+
+# Create tag if requested
+if [ -n "$CREATE_TAG" ]; then
+    echo "🏷️ Creating tag: $CREATE_TAG"
+    if [ "$SIGN_COMMIT" = true ]; then
+        git tag -s "$CREATE_TAG" -m "$MESSAGE"
+    else
+        git tag "$CREATE_TAG" -m "$MESSAGE"
+    fi
+fi
+
+# Create bundle if requested
+if [ "$CREATE_BUNDLE" = true ]; then
+    echo "📦 Creating bundle..."
+    make bundle 2>/dev/null || {
+        echo "⚠️ make bundle not available, skipping bundle creation"
+    }
+fi
+
+# Record the commit
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+RECEIPT_FILE="$RECEIPTS_DIR/commit_$(date +%Y%m%d_%H%M%S).json"
+
+cat > "$RECEIPT_FILE" << EOF
+{
+  "type": "git_commit",
+  "sha": "$COMMIT_SHA",
+  "short_sha": "$COMMIT_SHORT",
+  "message": "$MESSAGE",
+  "signed": $SIGN_COMMIT,
+  "tag": $([ -n "$CREATE_TAG" ] && echo "\"$CREATE_TAG\"" || echo "null"),
+  "timestamp": "$TIMESTAMP",
+  "author": "$(git config user.name)",
+  "email": "$(git config user.email)"
+}
+EOF
+
+echo ""
+echo "✅ Commit recorded!"
+echo ""
+echo "   SHA: $COMMIT_SHA"
+echo "   Short: $COMMIT_SHORT"
+[ -n "$CREATE_TAG" ] && echo "   Tag: $CREATE_TAG"
+echo ""
+echo "📋 Receipt saved to: $RECEIPT_FILE"

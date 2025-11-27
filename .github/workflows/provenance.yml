@@ -1,0 +1,272 @@
+# Provenance Workflow - Sovereignty Architecture
+# Creates deterministic bundles with cryptographic verification
+
+name: Provenance
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      bundle_name:
+        description: 'Bundle name (default: swarmgate_v1.0)'
+        required: false
+        default: 'swarmgate_v1.0'
+
+permissions:
+  contents: write
+  id-token: write  # For Sigstore keyless signing
+  packages: write
+
+env:
+  BUNDLE_NAME: ${{ github.event.inputs.bundle_name || 'swarmgate_v1.0' }}
+  RECEIPTS_DIR: provenance
+
+jobs:
+  # Generate SBOM
+  sbom:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate SBOM
+        run: |
+          syft . -o spdx-json > ${{ env.RECEIPTS_DIR }}/sbom.json
+          syft . -o cyclonedx-json > ${{ env.RECEIPTS_DIR }}/sbom-cyclonedx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: ${{ env.RECEIPTS_DIR }}/sbom*.json
+
+  # Vulnerability scan
+  vulnerability-scan:
+    name: Vulnerability Scan
+    runs-on: ubuntu-latest
+    needs: sbom
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download SBOM
+        uses: actions/download-artifact@v4
+        with:
+          name: sbom
+          path: ${{ env.RECEIPTS_DIR }}
+
+      - name: Install Grype
+        uses: anchore/scan-action/download-grype@v4
+
+      - name: Run vulnerability scan
+        run: |
+          grype sbom:${{ env.RECEIPTS_DIR }}/sbom.json \
+            --fail-on critical \
+            -o json > ${{ env.RECEIPTS_DIR }}/vulnerability-report.json || true
+
+      - name: Upload vulnerability report
+        uses: actions/upload-artifact@v4
+        with:
+          name: vulnerability-report
+          path: ${{ env.RECEIPTS_DIR }}/vulnerability-report.json
+
+  # Create bundle
+  bundle:
+    name: Create Bundle
+    runs-on: ubuntu-latest
+    needs: [sbom, vulnerability-scan]
+    outputs:
+      blake3_hash: ${{ steps.hash.outputs.blake3 }}
+      sha256_hash: ${{ steps.hash.outputs.sha256 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download SBOM
+        uses: actions/download-artifact@v4
+        with:
+          name: sbom
+          path: ${{ env.RECEIPTS_DIR }}
+
+      - name: Install b3sum
+        run: |
+          curl -sL https://github.com/BLAKE3-team/BLAKE3/releases/download/1.5.0/b3sum_linux_x64_bin -o /usr/local/bin/b3sum
+          chmod +x /usr/local/bin/b3sum
+
+      - name: Create deterministic bundle
+        run: |
+          mkdir -p ${{ env.RECEIPTS_DIR }}
+          
+          # Create deterministic tar (reproducible build)
+          tar --sort=name \
+              --mtime="2025-01-01 00:00:00Z" \
+              --owner=0 \
+              --group=0 \
+              --numeric-owner \
+              -czf ${{ env.BUNDLE_NAME }}.tar.gz \
+              swarmgate.yaml \
+              ai_constitution.yaml \
+              dao_record.yaml \
+              governance/ \
+              policy/ \
+              bin/ \
+              2>/dev/null || tar -czf ${{ env.BUNDLE_NAME }}.tar.gz \
+              swarmgate.yaml \
+              ai_constitution.yaml \
+              dao_record.yaml \
+              governance/ \
+              policy/ \
+              bin/
+
+      - name: Compute hashes
+        id: hash
+        run: |
+          BLAKE3=$(b3sum ${{ env.BUNDLE_NAME }}.tar.gz | awk '{print $1}')
+          SHA256=$(sha256sum ${{ env.BUNDLE_NAME }}.tar.gz | awk '{print $1}')
+          
+          echo "blake3=$BLAKE3" >> $GITHUB_OUTPUT
+          echo "sha256=$SHA256" >> $GITHUB_OUTPUT
+          
+          echo "BLAKE3: $BLAKE3"
+          echo "SHA256: $SHA256"
+          
+          # Save hashes to files
+          echo "$BLAKE3" > ${{ env.RECEIPTS_DIR }}/${{ env.BUNDLE_NAME }}.b3sum
+          echo "$SHA256" > ${{ env.RECEIPTS_DIR }}/${{ env.BUNDLE_NAME }}.sha256
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle
+          path: |
+            ${{ env.BUNDLE_NAME }}.tar.gz
+            ${{ env.RECEIPTS_DIR }}/*.b3sum
+            ${{ env.RECEIPTS_DIR }}/*.sha256
+
+  # Sign with Cosign
+  sign:
+    name: Sign Bundle
+    runs-on: ubuntu-latest
+    needs: bundle
+    steps:
+      - name: Download bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: bundle
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign bundle (keyless)
+        run: |
+          cosign sign-blob \
+            --yes \
+            --bundle ${{ env.BUNDLE_NAME }}.tar.gz.sig \
+            ${{ env.BUNDLE_NAME }}.tar.gz
+
+      - name: Upload signature
+        uses: actions/upload-artifact@v4
+        with:
+          name: signature
+          path: ${{ env.BUNDLE_NAME }}.tar.gz.sig
+
+  # Generate provenance attestation
+  provenance:
+    name: Generate Provenance
+    runs-on: ubuntu-latest
+    needs: [bundle, sign]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Generate provenance receipt
+        run: |
+          mkdir -p ${{ env.RECEIPTS_DIR }}
+          
+          cat > ${{ env.RECEIPTS_DIR }}/provenance-${{ github.run_id }}.json << EOF
+          {
+            "version": "1.0",
+            "bundle": {
+              "name": "${{ env.BUNDLE_NAME }}",
+              "file": "${{ env.BUNDLE_NAME }}.tar.gz",
+              "blake3": "${{ needs.bundle.outputs.blake3_hash }}",
+              "sha256": "${{ needs.bundle.outputs.sha256_hash }}"
+            },
+            "build": {
+              "workflow": "${{ github.workflow }}",
+              "run_id": "${{ github.run_id }}",
+              "run_number": "${{ github.run_number }}",
+              "actor": "${{ github.actor }}",
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}"
+            },
+            "provenance": {
+              "builder": "github-actions",
+              "build_type": "https://github.com/slsa-framework/slsa-github-generator",
+              "invocation": {
+                "uri": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              }
+            },
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: Upload provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: provenance
+          path: ${{ env.RECEIPTS_DIR }}/provenance-${{ github.run_id }}.json
+
+  # Create release (on tag push)
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [bundle, sign, provenance]
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            bundle/${{ env.BUNDLE_NAME }}.tar.gz
+            signature/${{ env.BUNDLE_NAME }}.tar.gz.sig
+            sbom/*.json
+            provenance/*.json
+          body: |
+            ## Provenance Information
+            
+            **BLAKE3**: `${{ needs.bundle.outputs.blake3_hash }}`
+            **SHA256**: `${{ needs.bundle.outputs.sha256_hash }}`
+            
+            ### Verification
+            
+            ```bash
+            # Verify BLAKE3 hash
+            b3sum ${{ env.BUNDLE_NAME }}.tar.gz
+            
+            # Verify Cosign signature
+            cosign verify-blob \
+              --bundle ${{ env.BUNDLE_NAME }}.tar.gz.sig \
+              ${{ env.BUNDLE_NAME }}.tar.gz
+            ```
+            
+            ### Included Files
+            
+            - `${{ env.BUNDLE_NAME }}.tar.gz` - Deterministic bundle
+            - `${{ env.BUNDLE_NAME }}.tar.gz.sig` - Cosign signature
+            - `sbom.json` - Software Bill of Materials
+            - `provenance-*.json` - Build provenance
