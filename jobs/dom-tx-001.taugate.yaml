@@ -1,0 +1,112 @@
+# Dom-τX-001 TauGate Job Specification
+# Computational Drug Discovery Job for Tau Protein Targeting
+# Version: 1.0
+# Generated: 2025-11-26T10:41:37Z
+
+job:
+  id: "dom-tx-001"
+  name: "Dom-τX-001 Tau PHF6 Virtual Screen"
+  specification: "jobs/dom-tx-001.taugate.yaml"
+  launch_timestamp: "2025-11-26T10:41:37Z"
+  status: "running"
+
+budget:
+  cap_usd: 500
+  locked: true
+  currency: "USD"
+  billing_model: "compute-time"
+
+target:
+  protein: "4R tau"
+  primary_interface: "PHF6"
+  secondary_interface: "R3-R4"
+  ptm_ensemble: "phospho-common"
+  description: "4R tau - PHF6 + R3-R4 interfaces, phospho-common PTM ensemble"
+  disease_focus: "Alzheimer's disease and tauopathies"
+
+library:
+  sources:
+    - name: "ZINC22"
+      enabled: true
+      description: "Free database of commercially-available compounds for virtual screening"
+    - name: "Enamine REAL"
+      enabled: true
+      description: "Largest purchasable chemical space with make-on-demand compounds"
+    - name: "Mcule"
+      enabled: true
+      description: "Integrated drug discovery platform with compound database"
+    - name: "WuXi"
+      enabled: true
+      description: "WuXi AppTec chemistry catalog"
+  
+  filters:
+    molecular_weight:
+      max_daltons: 500
+      description: "MW < 500 Da (Lipinski Rule of Five compliant)"
+    pains_filter:
+      enabled: true
+      strictness: "strict"
+      description: "Pan-assay interference compounds filter"
+    brenk_filter:
+      enabled: true
+      strictness: "strict"
+      description: "Structural alert filter for undesirable moieties"
+    drug_likeness:
+      oral_bioavailability: true
+      bbb_permeation: true
+      description: "oral + BBB-required for CNS drug targeting"
+  
+  estimated_compounds: 2800000000
+  estimated_compounds_readable: "~2.8 billion"
+
+compute:
+  pool: "H100-equivalent"
+  pool_size: 100000
+  runtime_estimate_hours: 38
+  runtime_variance_hours: 4
+  runtime_readable: "38 hours ± 4 h"
+
+monitoring:
+  live_dashboard: "https://taugate.domains/jobs/dom-tx-001"
+  refresh_interval_seconds: 30
+
+provenance:
+  enabled: true
+  hash_algorithm: "BLAKE3"
+  storage:
+    primary: "IPFS"
+    blockchain: "Base"
+  write_interval_minutes: 15
+  description: "auto-writing BLAKE3 → IPFS → Base every 15 min"
+
+publication:
+  defensive_publication:
+    enabled: true
+    trigger: "on_completion"
+    timing: "immediately"
+    description: "scheduled immediately on completion"
+  top_hits:
+    count: 200
+    notification: "discord"
+
+wallet:
+  seven_percent_allocation:
+    enabled: true
+    status: "armed"
+    monitoring: true
+    description: "7% wallet: armed and watching"
+
+mission:
+  statement: |
+    The swarm is running.
+    The promise is in motion.
+    No wet lab. No lies. Just pure, verifiable, leveraged impact.
+  dedication: "For your sister. For every family still waiting."
+  principle: "We're doing this the only way that lasts: honestly, relentlessly, and forever."
+
+# === PROVENANCE METADATA ===
+generated:
+  by: "taugate-job-manager"
+  timestamp: "2025-11-26T10:41:37Z"
+  operator: "Domenic Garza (Node 137)"
+  source: "Approved job specification"
