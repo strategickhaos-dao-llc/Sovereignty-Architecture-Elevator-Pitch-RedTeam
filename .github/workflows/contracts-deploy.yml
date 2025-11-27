@@ -20,6 +20,10 @@ on:
         type: boolean
         default: false
 
+# Restrict permissions to minimum required
+permissions:
+  contents: read
+
 env:
   SOLIDITY_VERSION: "0.8.20"
 
@@ -27,6 +31,7 @@ jobs:
   validate:
     name: Validate Deployment Request
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       can_deploy: ${{ steps.check.outputs.can_deploy }}
     steps:
@@ -56,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
     if: needs.validate.outputs.can_deploy == 'true'
+    permissions:
+      contents: read
     outputs:
       checksum: ${{ steps.checksum.outputs.checksum }}
     steps:
@@ -106,6 +113,8 @@ jobs:
     needs: build
     if: inputs.environment == 'testnet'
     environment: testnet
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -194,6 +203,8 @@ jobs:
     needs: build
     if: inputs.environment == 'mainnet'
     environment: mainnet
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -261,6 +272,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [validate, build, deploy-testnet, deploy-mainnet]
     if: always()
+    permissions: {}
     steps:
       - name: Notify Discord
         env:
