@@ -1,0 +1,143 @@
+---
+# auto_shutdown_idle.yml
+# Cloud Swarm Operations - Ansible Playbook for Auto-Shutdown Idle Nodes
+# Strategickhaos DAO LLC — Automated Cost Control via Ansible
+#
+# Usage: ansible-playbook -i cloud_hosts.ini auto_shutdown_idle.yml
+# Variables:
+#   idle_threshold_minutes: Minutes of idle time before shutdown (default: 15)
+#   dry_run: Set to true to test without shutting down (default: false)
+
+- name: Auto-Shutdown Idle Cloud Swarm Nodes
+  hosts: all
+  gather_facts: true
+  become: true
+
+  vars:
+    idle_threshold_minutes: 15
+    dry_run: false
+    swarm_results_dir: /var/lib/swarm/results
+    idle_marker_file: /var/lib/swarm/.idle_since
+    cost_guard_log: /var/log/cost-guard-ansible.log
+
+  tasks:
+    - name: Ensure swarm directory exists
+      ansible.builtin.file:
+        path: /var/lib/swarm
+        state: directory
+        mode: "0755"
+
+    - name: Get current load average
+      ansible.builtin.shell: |
+        set -o pipefail
+        uptime | awk -F'load average:' '{print $2}' | awk -F',' '{print $1}' | tr -d ' '
+      register: load_average
+      changed_when: false
+      args:
+        executable: /bin/bash
+
+    - name: Check for running swarm jobs
+      ansible.builtin.shell: |
+        pgrep -c 'swarm|compute|worker' 2>/dev/null || echo 0
+      register: running_jobs
+      changed_when: false
+      failed_when: false
+
+    - name: Determine if host is idle
+      ansible.builtin.set_fact:
+        host_is_idle: >-
+          {{ (load_average.stdout | float < 0.1) and (running_jobs.stdout | int == 0) }}
+
+    - name: Debug - Host idle status
+      ansible.builtin.debug:
+        msg: "Host {{ inventory_hostname }} - Load: {{ load_average.stdout }}, Jobs: {{ running_jobs.stdout }}, Idle: {{ host_is_idle }}"
+
+    - name: Check for existing idle marker
+      ansible.builtin.stat:
+        path: "{{ idle_marker_file }}"
+      register: idle_marker
+      when: host_is_idle | bool
+
+    - name: Create idle marker if newly idle
+      ansible.builtin.copy:
+        content: "{{ ansible_date_time.epoch }}"
+        dest: "{{ idle_marker_file }}"
+        mode: "0644"
+      when:
+        - host_is_idle | bool
+        - not idle_marker.stat.exists
+
+    - name: Read idle marker timestamp
+      ansible.builtin.slurp:
+        src: "{{ idle_marker_file }}"
+      register: idle_since_content
+      when:
+        - host_is_idle | bool
+        - idle_marker.stat.exists
+
+    - name: Calculate idle duration
+      ansible.builtin.set_fact:
+        idle_duration_minutes: >-
+          {{ ((ansible_date_time.epoch | int) - (idle_since_content.content | b64decode | int)) // 60 }}
+      when:
+        - host_is_idle | bool
+        - idle_marker.stat.exists
+
+    - name: Set idle duration to 0 if newly idle
+      ansible.builtin.set_fact:
+        idle_duration_minutes: 0
+      when:
+        - host_is_idle | bool
+        - not idle_marker.stat.exists
+
+    - name: Debug - Idle duration
+      ansible.builtin.debug:
+        msg: "Host {{ inventory_hostname }} idle for {{ idle_duration_minutes | default(0) }} minutes (threshold: {{ idle_threshold_minutes }})"
+      when: host_is_idle | bool
+
+    - name: Clear idle marker if host is active
+      ansible.builtin.file:
+        path: "{{ idle_marker_file }}"
+        state: absent
+      when: not (host_is_idle | bool)
+
+    - name: Log idle host exceeding threshold
+      ansible.builtin.lineinfile:
+        path: "{{ cost_guard_log }}"
+        line: "{{ ansible_date_time.iso8601 }} - Host {{ inventory_hostname }} idle for {{ idle_duration_minutes }} minutes - SHUTDOWN {{ 'SIMULATED' if dry_run else 'INITIATED' }}"
+        create: true
+        mode: "0644"
+      when:
+        - host_is_idle | bool
+        - idle_duration_minutes | int >= idle_threshold_minutes | int
+      delegate_to: localhost
+      become: false
+
+    - name: Schedule shutdown for idle hosts exceeding threshold (dry run)
+      ansible.builtin.debug:
+        msg: "[DRY RUN] Would shutdown {{ inventory_hostname }} - idle for {{ idle_duration_minutes }} minutes"
+      when:
+        - host_is_idle | bool
+        - idle_duration_minutes | int >= idle_threshold_minutes | int
+        - dry_run | bool
+
+    - name: Schedule shutdown for idle hosts exceeding threshold
+      ansible.builtin.command:
+        cmd: "shutdown -h +1 'Cost guard: idle shutdown after {{ idle_duration_minutes }} minutes'"
+      when:
+        - host_is_idle | bool
+        - idle_duration_minutes | int >= idle_threshold_minutes | int
+        - not (dry_run | bool)
+      async: 0
+      poll: 0
+      ignore_errors: true
+
+  handlers:
+    - name: Log shutdown event
+      ansible.builtin.lineinfile:
+        path: "{{ cost_guard_log }}"
+        line: "{{ ansible_date_time.iso8601 }} - Shutdown scheduled for {{ inventory_hostname }}"
+        create: true
+        mode: "0644"
+      delegate_to: localhost
+      become: false
