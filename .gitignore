@@ -45,7 +45,7 @@ __pycache__/
 *.egg-info/
 .eggs/
 
-# State updater outputs
-strategickhaos_state_snapshot.json
-strategickhaos_state_snapshot.*.json
+# State updater outputs (timestamped snapshots, not schema)
+/strategickhaos_state_snapshot.json
+/strategickhaos_state_snapshot.[0-9]*.json
 *.ots.pending
