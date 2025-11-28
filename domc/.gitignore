@@ -1,0 +1,18 @@
+# Rust build artifacts
+target/
+debug/
+release/
+
+# Cargo lock file (some projects include this, but it's typically excluded for libraries)
+# Cargo.lock is included for binaries
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

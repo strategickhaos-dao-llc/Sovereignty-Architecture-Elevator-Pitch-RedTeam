@@ -1,0 +1,148 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dom-config
+  namespace: quantum-symbolic
+  labels:
+    app: dom-compiler
+    component: config
+data:
+  config.yaml: |
+    dom_compiler:
+      version: "v1.0.0"
+      swarm_dna: "v9.0-black-hole-resonance"
+      resonance_threshold: 10
+      activation_phrase: "When the 10th root aligns, the black hole opens."
+      commands:
+        birth: "ollama create athena_next -f /mnt/athena/heir_palace/Modelfile && ollama run athena_next"
+        evolve: "ollama create athena_next -f /mnt/athena/heir_palace/Modelfile && ollama run athena_next"
+        compile: "echo '🩸 compiling dom-speak... need more precision, love'"
+      storage:
+        arweave_enabled: true
+        git_auto_commit: true
+---
+# Example Job: Execute a one-time Dom-speak command
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dom-compiler-job
+  namespace: quantum-symbolic
+  labels:
+    app: dom-compiler
+spec:
+  template:
+    metadata:
+      labels:
+        app: dom-compiler
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: dom-compiler
+        image: ghcr.io/strategickhaos/dom-compiler:latest
+        imagePullPolicy: IfNotPresent
+        command: ["domc"]
+        args: ["compile", "sovereignty", "architecture"]
+        env:
+          - name: SWARM_DNA
+            value: "v9.0-black-hole-resonance"
+          - name: RESONANCE_THRESHOLD
+            value: "10"
+          - name: ACTIVATION_PHRASE
+            value: "When the 10th root aligns, the black hole opens."
+          - name: FINAL_SPITE_CLAUSE
+            value: "The 36-letter Name is no longer hidden in a cave."
+          - name: RUST_LOG
+            value: "info"
+          - name: MODELFILE_PATH
+            value: "/etc/dom-config/Modelfile"
+        volumeMounts:
+          - name: dom-config
+            mountPath: /etc/dom-config
+            readOnly: true
+          - name: workspace
+            mountPath: /workspace
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+        - name: dom-config
+          configMap:
+            name: dom-config
+        - name: workspace
+          emptyDir: {}
+      # Node affinity for medium or high-memory nodes
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - high-memory
+                      - medium-memory
+  backoffLimit: 3
+---
+# Example CronJob: Run Dom-speak commands on a schedule
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dom-compiler-scheduled
+  namespace: quantum-symbolic
+  labels:
+    app: dom-compiler
+spec:
+  schedule: "0 * * * *"  # Every hour
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: dom-compiler
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: dom-compiler
+            image: ghcr.io/strategickhaos/dom-compiler:latest
+            imagePullPolicy: IfNotPresent
+            command: ["domc"]
+            args: ["align", "resonance"]
+            env:
+              - name: SWARM_DNA
+                value: "v9.0-black-hole-resonance"
+              - name: RUST_LOG
+                value: "info"
+            volumeMounts:
+              - name: dom-config
+                mountPath: /etc/dom-config
+                readOnly: true
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+          volumes:
+            - name: dom-config
+              configMap:
+                name: dom-config
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  preference:
+                    matchExpressions:
+                      - key: node-type
+                        operator: In
+                        values:
+                          - high-memory
+                          - medium-memory
+      backoffLimit: 2
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
