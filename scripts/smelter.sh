@@ -7,7 +7,6 @@
 # Commands:
 #   list        List all available ingots
 #   load        Load and initialize an ingot
-#   unload      Unload an ingot
 #   run         Run an ingot CLI command
 #   test        Run tests for an ingot
 #   info        Show ingot information
@@ -66,22 +65,30 @@ cmd_list() {
             local manifest="${ingot_dir}manifest.yaml"
             
             if [[ -f "$manifest" ]]; then
-                local version description
+                local version description desc_display
                 # Try to extract version and description using grep/sed if yq not available
                 if command -v yq &> /dev/null; then
                     version=$(yq -r '.version // "unknown"' "$manifest" 2>/dev/null || echo "unknown")
                     description=$(yq -r '.description // "No description"' "$manifest" 2>/dev/null | head -1 | tr -d '\n' || echo "No description")
                 else
-                    version=$(grep -m1 "^version:" "$manifest" 2>/dev/null | sed 's/version:\s*["'\'']\?\([^"'\'']*\)["'\'']\?/\1/' | tr -d ' "' || echo "unknown")
-                    description=$(grep -m1 "^description:" "$manifest" 2>/dev/null | sed 's/description:\s*//' | head -c 60 || echo "No description")
+                    # Simple version extraction: look for version: followed by quoted or unquoted value
+                    version=$(grep -m1 "^version:" "$manifest" 2>/dev/null | cut -d':' -f2 | tr -d ' "'"'" || echo "unknown")
+                    description=$(grep -m1 "^description:" "$manifest" 2>/dev/null | cut -d':' -f2- | sed 's/^ *//' || echo "No description")
+                fi
+                
+                # Truncate description only if it exceeds 60 characters
+                if [[ ${#description} -gt 60 ]]; then
+                    desc_display="${description:0:57}..."
+                else
+                    desc_display="$description"
                 fi
                 
                 echo -e "  ${GREEN}●${NC} ${ingot_name} (v${version})"
-                echo "      ${description:0:60}..."
+                echo "      ${desc_display}"
             else
                 echo -e "  ${YELLOW}○${NC} ${ingot_name} (no manifest)"
             fi
-            ((count++))
+            count=$((count + 1))
         fi
     done
     
