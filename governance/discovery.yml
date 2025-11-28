@@ -1,0 +1,24 @@
+# discovery.yml - governance snapshot
+approvals:
+  prod_commands_require:
+    - ReleaseMgr
+
+channels:
+  deployments: "#deployments"
+  alerts: "#alerts"
+  recon: "#recon"
+
+model_routing:
+  claude-3: "PR reviews"
+  gpt-4o: "ops summaries"
+  autonomous_merges_allowed: false
+
+command_map:
+  deploy:
+    - ReleaseMgr
+    - OpsLead
+  scale:
+    - ReleaseMgr
+    - OpsLead
+  recon:
+    - Ops

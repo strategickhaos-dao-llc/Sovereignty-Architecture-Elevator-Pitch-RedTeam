@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: my-service-rollout
+  namespace: default
+spec:
+  replicas: 10
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: my-service
+  template:
+    metadata:
+      labels:
+        app: my-service
+    spec:
+      containers:
+        - name: my-service
+          image: my-registry/my-service:stable
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10                # canary percent flag maps to this
+        - pause:
+            duration: 15m
+        - setWeight: 50
+        - pause:
+            duration: 15m
+        - setWeight: 100
+      analysis:
+        templates:
+          - templateName: slo-check
+---
+# AnalysisTemplate example (Argo Rollouts)
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: slo-check
+  namespace: default
+spec:
+  metrics:
+    - name: error-rate
+      interval: 1m
+      successCondition: result[0] < 0.05
+      failureCondition: result[0] >= 0.05
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring.svc.cluster.local:9090
+          query: |
+            sum(rate(http_requests_total{job="my-service",status=~"5.."}[5m])) /
+            sum(rate(http_requests_total{job="my-service"}[5m]))
