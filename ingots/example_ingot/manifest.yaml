@@ -1,0 +1,14 @@
+name: example_ingot
+version: 1.0.0
+description: "A small ingot that processes text and detects numeric content."
+author: Strategickhaos DAO LLC
+license: MIT
+api:
+  function: process
+  module: src.main
+dependencies:
+  - python>=3.9
+tags:
+  - text-processing
+  - utility
+  - example
