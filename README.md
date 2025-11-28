@@ -2,6 +2,19 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🏛️ Nonprofit Organization
+
+**Strategickhaos DAO LLC + Valoryield Nonprofit Arm**
+
+- **EIN**: 39-2923503
+- **Status**: IRS 501(c)(3) application pending
+- **Filings**: Wyoming DAO LLC, Texas Foreign LLC
+- **Infrastructure**: Nodes in Longview, TX and Cheyenne, WY
+- **Security**: GPG-signed board minutes on Arweave, SHA-256 hashed donor records
+- **Compliance**: Monthly audits, zero-trust architecture
+
+📄 **[View Complete Nonprofit Structure Documentation](NONPROFIT_STRUCTURE.md)**
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,8 +22,11 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Nonprofit Operations** - GPG-signed governance, cryptographic donor records
 
 ## 🚀 Quick Start
+
+### Standard Deployment
 
 ```bash
 # 1. Clone and bootstrap
@@ -27,6 +43,33 @@ export PRS_CHANNEL="channel_id"
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
+
+### Nonprofit Stack Deployment
+
+For nonprofit organizations requiring GPG-signed governance and cryptographic donor records:
+
+```bash
+# Deploy complete nonprofit stack with cryptographic verification
+./deploy_nonprofit_stack.sh \
+  --ein "39-2923503" \
+  --jurisdiction "wyoming-dao" \
+  --foreign-entity "texas-llc" \
+  --board-minutes-gpg \
+  --arweave-permanent \
+  --donor-records-sha256 \
+  --audit-monthly \
+  --nodes "longview-tx,cheyenne-wy" \
+  --llm-stack "garza-1" \
+  --zero-trust \
+  --court-ready
+```
+
+**Features:**
+- **Permanence**: Board minutes stored on Arweave blockchain
+- **GPG-Signing**: Cryptographically signed governance documents
+- **Court-Readiness**: Legal-grade documentation and audit trails
+- **Privacy**: SHA-256 hashed donor records for security
+- **Compliance**: Automated monthly audits
 
 ## 📋 Core Components
 
