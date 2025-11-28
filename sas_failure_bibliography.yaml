@@ -21,6 +21,10 @@ metadata:
     - unchecked_recursion
   format: "APA-style citations"
   generated_by: "copilot/add-bibliographic-entries-on-failures"
+  notes:
+    - "Some entries appear multiple times intentionally (per source request) to emphasize different failure modes or perspectives on the same work"
+    - "Entries 1/18, 2/19, 3/20, 12/17/48/50 are intentional duplicates highlighting different failure aspects"
+    - "Risk categories map to granular risk_tags used in entries"
 
 categories:
   - id: "dao_failures"
@@ -566,11 +570,12 @@ entries:
     authors:
       - family: PhilPapers
         given: null
-    year: null
+    year: "ongoing"
     title: "Artificial intelligence safety bibliography"
     source: "PhilPapers"
     url: "https://philpapers.org/browse/artificial-intelligence-safety"
     failure_mode: "literature_collection"
+    note: "Continuously updated resource"
     risk_tags:
       - ai_safety_literature
       - philosophical_analysis
