@@ -21,7 +21,8 @@ import hashlib
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+import uuid
+from typing import Any, List, Optional
 from dataclasses import dataclass, asdict
 from enum import Enum
 
@@ -66,7 +67,7 @@ class StateUpdater:
         """
         self.state_path = state_path or self.DEFAULT_STATE_PATH
         self._state: Optional[dict] = None
-        self._update_log: list[StateUpdate] = []
+        self._update_log: List[StateUpdate] = []
     
     @property
     def state(self) -> dict:
@@ -234,7 +235,7 @@ class StateUpdater:
         self.set("context_history.recent_events", recent_events, updated_by)
     
     def add_decision(self, topic: str, outcome: str, rationale: str,
-                     participants: list[str], updated_by: str = "managing_member",
+                     participants: List[str], updated_by: str = "managing_member",
                      requires_human_approval: bool = False) -> str:
         """
         Record a governance decision.
@@ -251,7 +252,9 @@ class StateUpdater:
             The generated decision ID.
         """
         now = datetime.now(timezone.utc)
-        decision_id = f"DEC-{now.strftime('%Y-%m-%d')}-{len(self.get('context_history.decisions_made', [])) + 1:03d}"
+        # Use UUID suffix for uniqueness to avoid race conditions
+        unique_suffix = str(uuid.uuid4())[:8]
+        decision_id = f"DEC-{now.strftime('%Y-%m-%d')}-{unique_suffix}"
         
         decision = {
             "decision_id": decision_id,
@@ -271,7 +274,7 @@ class StateUpdater:
         
         return decision_id
     
-    def add_pending_decision(self, topic: str, options: list[str], 
+    def add_pending_decision(self, topic: str, options: List[str], 
                              context: str, updated_by: str = "system") -> str:
         """
         Add a pending decision that requires governance action.
@@ -286,7 +289,9 @@ class StateUpdater:
             The generated pending decision ID.
         """
         now = datetime.now(timezone.utc)
-        pending_id = f"PEND-{now.strftime('%Y-%m-%d')}-{len(self.get('governance.pending_decisions', [])) + 1:03d}"
+        # Use UUID suffix for uniqueness to avoid race conditions
+        unique_suffix = str(uuid.uuid4())[:8]
+        pending_id = f"PEND-{now.strftime('%Y-%m-%d')}-{unique_suffix}"
         
         pending = {
             "id": pending_id,
@@ -365,7 +370,7 @@ class StateUpdater:
         self.set("verification.integrity_checks.state_consistent", True, verified_by)
         self.set("verification.integrity_checks.checksums_match", True, verified_by)
     
-    def get_update_log(self) -> list[dict]:
+    def get_update_log(self) -> List[dict]:
         """Get the log of all updates made in this session."""
         return [asdict(update) for update in self._update_log]
     
