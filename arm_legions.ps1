@@ -202,7 +202,7 @@ function Download-Resource {
         } catch {
             $retries--
             if ($retries -gt 0) {
-                Warn "Retry $($MaxRetries - $retries + 1)/$MaxRetries for: $Url"
+                Warn "Retry $($MaxRetries - $retries)/$MaxRetries for: $Url"
                 Start-Sleep -Seconds $RetryDelaySeconds
             } else {
                 Error "Failed after $MaxRetries attempts: $Url - $_"
