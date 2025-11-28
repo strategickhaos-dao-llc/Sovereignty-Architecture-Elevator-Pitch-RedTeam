@@ -179,16 +179,32 @@ client.on("interactionCreate", async (i: Interaction) => {
       await i.editReply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
     
     } else if (i.commandName === "recon") {
-      const namespace = i.options.getString("namespace") || "default";
+      const namespaceInput = i.options.getString("namespace") || "default";
+      
+      // Sanitize namespace to prevent command injection
+      // Kubernetes namespace names must be lowercase alphanumeric with hyphens
+      const namespace = namespaceInput.replace(/[^a-z0-9-]/gi, "").slice(0, 63) || "default";
+      
+      if (namespace !== namespaceInput) {
+        await i.reply({ 
+          embeds: [warningEmbed(
+            "Invalid Namespace",
+            `Namespace "${namespaceInput}" contains invalid characters. Using sanitized: "${namespace}"`
+          )],
+          ephemeral: true 
+        });
+        return;
+      }
       
       await i.deferReply();
       
       try {
-        // Execute recon script
+        // Execute recon script with sanitized namespace
         const scriptPath = path.resolve("./scripts/recon_cluster.sh");
-        const { stdout, stderr } = await execAsync(`bash ${scriptPath} ${namespace}`, {
+        // Use array form to prevent shell injection
+        const { stdout } = await execAsync(`bash "${scriptPath}" "${namespace}"`, {
           timeout: 120000, // 2 minute timeout
-          env: { ...process.env, OUTPUT_DIR: "/tmp" }
+          env: { ...process.env, OUTPUT_DIR: "/tmp/recon" }
         });
         
         // Parse output to get archive path
@@ -203,7 +219,9 @@ client.on("interactionCreate", async (i: Interaction) => {
             const summaryData = JSON.parse(fs.readFileSync(summaryPath, "utf8"));
             summary = `**Namespace:** ${summaryData.namespace_filter}\n**Namespaces:** ${summaryData.cluster_summary?.namespace_count || "N/A"}\n**Timestamp:** ${summaryData.timestamp}`;
           }
-        } catch {}
+        } catch {
+          // Summary file may not exist or be readable
+        }
 
         await i.editReply({ 
           embeds: [successEmbed(

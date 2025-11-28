@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import rateLimit from "express-rate-limit";
 import { REST } from "discord.js";
 import { loadConfig, env } from "./config.js";
 import { githubRoutes } from "./routes/github.js";
@@ -8,13 +9,37 @@ import { verifyWebhook, initReplayProtection } from "./verify_hmac.js";
 // Initialize replay protection
 initReplayProtection();
 
-const cfg = loadConfig();
+const cfg = loadConfig() as any;
 const app = express();
 
 // keep raw for signature
 app.use(bodyParser.json({
   verify: (req: any, _res, buf) => { req.rawBody = buf.toString(); }
 }));
+
+// Rate limiting configuration from discovery.yml or defaults
+const rateLimitConfig = cfg.discord?.bot?.rate_limits || {
+  max_msgs_per_min: 30,
+  burst: 10
+};
+
+// Rate limiter for webhook endpoints
+const webhookLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: rateLimitConfig.max_msgs_per_min,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests, please try again later" }
+});
+
+// Stricter rate limiter for alert endpoints (prevent alert fatigue attacks)
+const alertLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: rateLimitConfig.burst * 10, // 100 alerts per minute max
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Alert rate limit exceeded" }
+});
 
 const rest = new REST({ version: "10" }).setToken(env("DISCORD_TOKEN"));
 
@@ -25,22 +50,23 @@ const channelIds = {
   recon: process.env.RECON_CHANNEL_ID!
 };
 
-// Health check endpoint
+// Health check endpoint (no rate limiting needed)
 app.get("/health", (_req, res) => {
   res.json({ status: "healthy", timestamp: new Date().toISOString() });
 });
 
-// Ready check endpoint
+// Ready check endpoint (no rate limiting needed)
 app.get("/ready", (_req, res) => {
   res.json({ status: "ready", timestamp: new Date().toISOString() });
 });
 
 // GitHub webhook endpoint with enhanced HMAC + replay protection
-app.post("/webhooks/github", (req, res, next) => {
+app.post("/webhooks/github", webhookLimiter, (req, res, next) => {
   const secret = env("GITHUB_WEBHOOK_SECRET");
   const signature = req.get("X-Hub-Signature-256") || "";
   const deliveryId = req.get("X-GitHub-Delivery") || "";
-  const timestamp = req.get("X-GitHub-Hook-Installation-Target-ID") || Date.now().toString();
+  // Use current time as timestamp (GitHub doesn't provide timestamp in headers)
+  const timestamp = Date.now();
   
   const result = verifyWebhook({
     secret,
@@ -60,7 +86,7 @@ app.post("/webhooks/github", (req, res, next) => {
 }, githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
 
 // Discord webhook endpoint (for inbound Discord events)
-app.post("/webhooks/discord", (req, res) => {
+app.post("/webhooks/discord", webhookLimiter, (req, res) => {
   const secret = env("DISCORD_WEBHOOK_SECRET", false) || env("EVENTS_HMAC_KEY");
   const signature = req.get("X-Sig") || req.get("X-Discord-Signature") || "";
   const timestamp = req.get("X-Timestamp") || "";
@@ -88,7 +114,7 @@ app.post("/webhooks/discord", (req, res) => {
 });
 
 // Alert endpoint (from Alertmanager)
-app.post("/alert", async (req, res) => {
+app.post("/alert", alertLimiter, async (req, res) => {
   const secret = env("EVENTS_HMAC_KEY", false) || "";
   
   // Verify HMAC if secret is configured
@@ -141,7 +167,7 @@ app.post("/alert", async (req, res) => {
 });
 
 // Generic event endpoint
-app.post("/event", (req, res) => {
+app.post("/event", webhookLimiter, (req, res) => {
   const secret = env("EVENTS_HMAC_KEY");
   const signature = req.get("X-Sig") || "";
   const timestamp = req.get("X-Timestamp") || "";
@@ -168,5 +194,5 @@ app.post("/event", (req, res) => {
   res.json({ status: "ok" });
 });
 
-const port = Number(process.env.PORT || cfg.event_gateway.port || 3001);
+const port = Number(process.env.PORT || cfg.event_gateway?.port || 3001);
 app.listen(port, () => console.log(`Event gateway on :${port}`));

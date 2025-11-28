@@ -116,9 +116,20 @@ run_security_audit() {
     echo "# Namespace: $NS" >> "$audit_file"
     echo "" >> "$audit_file"
     
-    # Check for pods running as root
+    # Check for pods running as root (more robust check)
     echo "## Pods Running as Root" >> "$audit_file"
-    kubectl get pods -A -o jsonpath='{range .items[*]}{.metadata.namespace}/{.metadata.name}: runAsNonRoot={.spec.securityContext.runAsNonRoot}{"\n"}{end}' 2>/dev/null | grep -v "runAsNonRoot=true" >> "$audit_file" || echo "No pods running as root found" >> "$audit_file"
+    echo "# Pods where runAsNonRoot is explicitly false or runAsUser is 0" >> "$audit_file"
+    kubectl get pods -A -o json 2>/dev/null | jq -r '
+      .items[] | 
+      select(
+        (.spec.securityContext.runAsNonRoot == false) or 
+        (.spec.securityContext.runAsUser == 0) or
+        (.spec.containers[].securityContext.runAsNonRoot == false) or
+        (.spec.containers[].securityContext.runAsUser == 0) or
+        ((.spec.securityContext.runAsNonRoot | not) and (.spec.securityContext.runAsUser | not))
+      ) | 
+      "\(.metadata.namespace)/\(.metadata.name): runAsNonRoot=\(.spec.securityContext.runAsNonRoot // "unset"), runAsUser=\(.spec.securityContext.runAsUser // "unset")"
+    ' >> "$audit_file" 2>/dev/null || echo "Unable to query or no pods running as root found" >> "$audit_file"
     echo "" >> "$audit_file"
     
     # Check for images using 'latest' tag

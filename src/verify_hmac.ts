@@ -211,5 +211,5 @@ export function createHmacMiddleware(config: {
   };
 }
 
-// Initialize replay protection on module load
-initReplayProtection();
+// Note: Call initReplayProtection() from your application entry point
+// to start the replay protection cleanup interval
