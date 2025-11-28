@@ -7,6 +7,7 @@
 
 import { ChatInputCommandInteraction } from "discord.js";
 import util from "util";
+import path from "path";
 import { execFile as execFileCb } from "child_process";
 const execFile = util.promisify(execFileCb);
 
@@ -63,8 +64,10 @@ export async function deployCommand(interaction: ChatInputCommandInteraction) {
     }
 
     // full deploy - use execFile with arguments array to prevent shell injection
+    // Note: This script should be created in deploy-scripts/ directory as part of deployment setup
     await interaction.editReply({ content: `Starting full deploy for ${svc}` });
-    await execFile("./deploy-scripts/deploy_service.sh", [svc]);
+    const deployScript = path.join(".", "deploy-scripts", "deploy_service.sh");
+    await execFile(deployScript, [svc]);
     await interaction.followUp({ content: `Full deploy kicked off for ${svc}` });
   } catch (err) {
     console.error("deploy error", err);
@@ -75,12 +78,20 @@ export async function deployCommand(interaction: ChatInputCommandInteraction) {
 async function generatePlan(svc: string): Promise<string> {
   // Example: run kubectl diff or helm diff plugin
   // Use execFile with arguments array to prevent shell injection
+  // Use path.join to safely construct the overlay path
   try {
+    const overlayPath = path.join(".", "overlays", svc);
+    // Validate path doesn't escape overlays directory
+    const normalizedPath = path.normalize(overlayPath);
+    if (!normalizedPath.startsWith("overlays" + path.sep)) {
+      return "Invalid service path";
+    }
+    
     const { stdout } = await execFile("kubectl", [
       "--namespace=default",
       "diff",
       "-f",
-      `./overlays/${svc}`
+      normalizedPath
     ]).catch(() => ({ stdout: "(no diff)" }));
     return stdout || "(no diff)";
   } catch (err) {
@@ -91,7 +102,9 @@ async function generatePlan(svc: string): Promise<string> {
 async function startCanary(svc: string, percent: number) {
   // Integrate with rollout tool (Argo Rollouts, Flagger, or k8s native) to incrementally direct traffic.
   // Use execFile with arguments array to prevent shell injection
-  await execFile("./deploy-scripts/canary.sh", [svc, percent.toString()]);
+  // Note: This script should be created in deploy-scripts/ directory as part of deployment setup
+  const canaryScript = path.join(".", "deploy-scripts", "canary.sh");
+  await execFile(canaryScript, [svc, percent.toString()]);
 }
 
 /*

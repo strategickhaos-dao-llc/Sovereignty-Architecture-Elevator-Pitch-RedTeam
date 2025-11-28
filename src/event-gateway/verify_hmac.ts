@@ -68,9 +68,11 @@ export function verifyHmac(opts: Options) {
       const expectedBuf = Buffer.from(expected);
       const maxLen = Math.max(computedBuf.length, expectedBuf.length);
       
-      // Pad both buffers to the same length with zeros for constant-time comparison
-      const paddedComputed = Buffer.concat([computedBuf], maxLen);
-      const paddedExpected = Buffer.concat([expectedBuf], maxLen);
+      // Properly pad both buffers to the same length with zeros for constant-time comparison
+      const paddedComputed = Buffer.alloc(maxLen, 0);
+      computedBuf.copy(paddedComputed);
+      const paddedExpected = Buffer.alloc(maxLen, 0);
+      expectedBuf.copy(paddedExpected);
       
       // Perform constant-time comparison, but also track if lengths were different
       const lengthMatch = computedBuf.length === expectedBuf.length;

@@ -46,7 +46,11 @@ export async function reconCommand(interaction: ChatInputCommandInteraction) {
 }
 
 async function runRecon(ns: string): Promise<string> {
-  const script = path.resolve(__dirname, "../../scripts/recon_cluster.sh");
+  // Use import.meta.url for ESM compatibility, with __dirname fallback for CommonJS
+  const currentDir = typeof __dirname !== 'undefined' 
+    ? __dirname 
+    : path.dirname(new URL(import.meta.url).pathname);
+  const script = path.resolve(currentDir, "../../scripts/recon_cluster.sh");
   if (!fs.existsSync(script)) throw new Error("recon script not found");
   const out = await execFileP(script, [ns, "/tmp"]);
   // script prints path to tarball
