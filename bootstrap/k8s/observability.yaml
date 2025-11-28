@@ -1,0 +1,250 @@
+# Strategickhaos Observability Configuration
+# Prometheus ServiceMonitors and Grafana dashboards for the Discord DevOps Control Plane
+
+---
+# ServiceMonitor for Discord Ops Bot
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+spec:
+  selector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: bot
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - ops
+
+---
+# ServiceMonitor for Event Gateway
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: event-gateway
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: gateway
+spec:
+  selector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: gateway
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - ops
+
+---
+# PrometheusRule for alerting
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: discord-ops-alerts
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+    - name: discord-ops-bot
+      rules:
+        - alert: DiscordOpsBotDown
+          annotations:
+            description: Discord Ops Bot has been down for more than 5 minutes.
+            summary: Discord Ops Bot is not responding
+          expr: |
+            absent(up{job="discord-ops-bot"}) == 1
+          for: 5m
+          labels:
+            severity: critical
+            team: devops
+
+        - alert: DiscordOpsBotHighLatency
+          annotations:
+            description: Discord command latency is above 5 seconds for more than 5 minutes.
+            summary: High command latency in Discord Ops Bot
+          expr: |
+            histogram_quantile(0.95, sum(rate(discord_command_latency_seconds_bucket[5m])) by (le, command)) > 5
+          for: 5m
+          labels:
+            severity: warning
+            team: devops
+
+        - alert: DiscordOpsBotHighErrorRate
+          annotations:
+            description: Discord Ops Bot error rate is above 5% for more than 5 minutes.
+            summary: High error rate in Discord Ops Bot
+          expr: |
+            (sum(rate(discord_commands_total{status="error"}[5m])) / sum(rate(discord_commands_total[5m]))) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+            team: devops
+
+    - name: event-gateway
+      rules:
+        - alert: EventGatewayDown
+          annotations:
+            description: Event Gateway has been down for more than 5 minutes.
+            summary: Event Gateway is not responding
+          expr: |
+            absent(up{job="event-gateway"}) == 1
+          for: 5m
+          labels:
+            severity: critical
+            team: devops
+
+        - alert: EventGatewayHighLatency
+          annotations:
+            description: Event processing latency is above 2 seconds for more than 5 minutes.
+            summary: High event processing latency
+          expr: |
+            histogram_quantile(0.95, sum(rate(event_latency_seconds_bucket[5m])) by (le, event_type)) > 2
+          for: 5m
+          labels:
+            severity: warning
+            team: devops
+
+        - alert: WebhookVerificationFailures
+          annotations:
+            description: High rate of webhook signature verification failures detected.
+            summary: Webhook verification failures
+          expr: |
+            sum(rate(events_total{status="unauthorized"}[5m])) > 0.1
+          for: 5m
+          labels:
+            severity: warning
+            team: security
+
+---
+# Grafana Dashboard ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-discord-ops
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    grafana_dashboard: "1"
+data:
+  discord-ops-dashboard.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "liveNow": false,
+      "panels": [
+        {
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+          "id": 1,
+          "targets": [
+            {
+              "expr": "sum(rate(discord_commands_total[5m])) by (command)",
+              "legendFormat": "{{command}}"
+            }
+          ],
+          "title": "Commands Rate",
+          "type": "timeseries"
+        },
+        {
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+          "id": 2,
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(discord_command_latency_seconds_bucket[5m])) by (le, command))",
+              "legendFormat": "{{command}} p95"
+            }
+          ],
+          "title": "Command Latency (p95)",
+          "type": "timeseries"
+        },
+        {
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+          "id": 3,
+          "targets": [
+            {
+              "expr": "sum(rate(events_total[5m])) by (event_type, status)",
+              "legendFormat": "{{event_type}} - {{status}}"
+            }
+          ],
+          "title": "Events Rate",
+          "type": "timeseries"
+        },
+        {
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+          "id": 4,
+          "targets": [
+            {
+              "expr": "sum(rate(discord_messages_total[5m])) by (channel, status)",
+              "legendFormat": "{{channel}} - {{status}}"
+            }
+          ],
+          "title": "Discord Messages Rate",
+          "type": "timeseries"
+        }
+      ],
+      "schemaVersion": 38,
+      "style": "dark",
+      "tags": ["strategickhaos", "discord-ops"],
+      "templating": { "list": [] },
+      "time": { "from": "now-6h", "to": "now" },
+      "timepicker": {},
+      "timezone": "",
+      "title": "Strategickhaos Discord Ops",
+      "uid": "strategickhaos-discord-ops",
+      "version": 1
+    }
+
+---
+# PodDisruptionBudget for high availability
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: discord-ops-bot-pdb
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: bot
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: event-gateway-pdb
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: gateway
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: gateway

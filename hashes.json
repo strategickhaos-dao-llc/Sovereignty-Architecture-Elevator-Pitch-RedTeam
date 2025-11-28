@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "description": "Strategickhaos Sovereignty Architecture - File Hashes",
+  "verification": {
+    "algorithm": "sha256",
+    "generated_by": "verify_sovereignty.py"
+  },
+  "files": {
+    "README.md": "cd4b42bb6fe17d7c13167f432e1fbb9b67d901d03e877f5fffddb81d1e958f78",
+    "discovery.yml": "c664c68724beac7f1478e415dd1261da8f3956184ceec63d82a74959592e8579",
+    "TREE.md": "614a615fc4b14fef11f93200825faa9826c91f233b2c8d1967fd2af5b7fb8d01",
+    "bootstrap/deploy.sh": "4519513ce4aa1a55b5042a26f1324947a7d997616cf96069b38eb95613422709",
+    "bootstrap/k8s/namespace.yaml": "fdb40ced645ece8abc558c892f942434c551b4fb9cd549e1680bc801aefeb805",
+    "bootstrap/k8s/bot-deployment.yaml": "b2ddd0f336dcc76f1ebdf6687f81313acf152188d894ea29911b21ec8a39a32f",
+    "bootstrap/k8s/gateway-deployment.yaml": "d01ba3ac0ea64f3739488ab85f21d48e0e5561f18dca6f64cde00f00d13b9d96",
+    "bootstrap/k8s/rbac.yaml": "8a4bcdedb5a235feba85112682264382a231d51a074e871c640fed4a982af30d",
+    "bootstrap/k8s/configmap.yaml": "10eccbb18f49c2382ec8499f4d43bfebea6f21f478153200cfb07e0d574449b7",
+    "bootstrap/k8s/secrets.yaml": "850e8d3bd546f9a713b040d99765a516be3efd955109108cd4c7cea43e4aa5cf",
+    "bootstrap/k8s/ingress.yaml": "a55cc7e12c6943e7e96cd503546ed75650c9b15e3515b963ef68e7b5e00fe4ef",
+    "bootstrap/k8s/observability.yaml": "cee3ba83f5c956f6a436ffa1b4d52146dcc5ecdc49da39cb1825981582619dff",
+    "bots/discord-ops-bot/Dockerfile": "21a4c6b5401233d5f81dee2f2d71ac54b46ca7bb195050c97bceed8252460161",
+    "bots/discord-ops-bot/requirements.txt": "6dfeff3cc5992e653689e86e6ac333fef17c32bd06f8b7c5b78c35c521bf5106",
+    "bots/discord-ops-bot/bot.py": "3eaff84cb27a0b07a6d102462d58cf28e33143941bd16b56cbc7c4d974e1101f",
+    "gateway/event-gateway/Dockerfile": "8b9db66ce920fc3697bc169efbe1329aeb2b294ee21e5701aeda0165d1bf886c",
+    "gateway/event-gateway/requirements.txt": "ffab61d0128e17905f5f6903575d223e15a1b6dce39ebe374023c121bb4f7978",
+    "gateway/event-gateway/main.py": "def61d4efd823523cdbdcc32acaf06d0a848ca89133b95c7aa2e48e8a978f3a9",
+    "scripts/gl2discord.sh": "55fc17178b6bbc5dc26246c4de18551a72f52bb90e05176df7b6a0b66fa0aaa1",
+    "docs/ARCHITECTURE.md": "3bac800ad9cfbe6008030bd9947a5a7a3f4ebff6aa27b8919cec8ff09f3586db"
+  }
+}
