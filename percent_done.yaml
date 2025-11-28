@@ -18,8 +18,14 @@ summary:
   aspirational_count: 2
   
   # Completion calculations
-  completion_percentage: 51  # (12*100 + 15*50) / 36 = weighted
-  raw_percentage: 75         # 27/36 items at least started
+  # Weighted formula: (real*100 + partial*50 + concept*10) / total_items
+  # = (12*100 + 15*50 + 7*10 + 2*0) / 36 = 2020/36 = 56%
+  # Conservative estimate (used for greenlight decisions): 51%
+  completion_percentage: 51
+  
+  # Raw count: items at least started (real + partial + concept) / total
+  # = (12 + 15 + 7) / 36 = 34/36 = 94%
+  raw_percentage: 94
   
   # Phase status
   current_phase: "testing"   # foundation, building, testing, production

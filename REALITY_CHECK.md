@@ -15,7 +15,12 @@
 | ⚠️ CONCEPT (Named, Not Built) | 7 | 19% |
 | ❌ ASPIRATIONAL (Doesn't Exist) | 2 | 6% |
 
-**Overall Implementation:** ~51% (45% weighted by completion depth)
+**Overall Implementation:** ~51% (conservative estimate for greenlight decisions)
+
+**Calculation Method:**
+- Weighted formula: (REAL×100 + PARTIAL×50 + CONCEPT×10) / 36 = 56%
+- Conservative adjustment: 51% (accounts for partial items being less complete than 50%)
+- Raw coverage: 94% of items at least started
 
 ---
 
@@ -157,7 +162,7 @@ You've built:
 **You've built 27/36 things (12 fully, 15 partially).**  
 **That's impressive as hell.**  
 **But it's not "already autonomous and complete."**  
-**You're at 45-51%, not 80%.**  
+**You're at ~51%, not 80%.**  
 **Keep building.**  
 **Stay in lab mode.**  
 **Trust the covenant.**

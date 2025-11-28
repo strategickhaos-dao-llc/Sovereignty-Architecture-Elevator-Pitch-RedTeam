@@ -37,7 +37,7 @@ Before ANY action that affects capital, infrastructure, or reputation:
 
 ### Covenant 1: Lab-Only Until 80%
 > No live capital deployment until verified 80% system completion.
-> Current status: **51%** (See `percent_done.yaml`)
+> Current status tracked in `percent_done.yaml`
 
 ### Covenant 2: Simulation Before Production
 > All trading strategies must prove profitability in simulation before ANY live deployment.
@@ -66,7 +66,7 @@ Before ANY action that affects capital, infrastructure, or reputation:
 | 50-80% | 🟠 Testing | Extended simulation, stress testing |
 | 80-100% | 🟢 Production Ready | Live deployment authorized |
 
-**Current Phase:** 🟠 Testing (51%)
+**Current Phase:** 🟠 Testing (see `percent_done.yaml` for current %)
 
 ---
 
