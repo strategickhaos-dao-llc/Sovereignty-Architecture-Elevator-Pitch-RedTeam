@@ -243,6 +243,19 @@ governance:
     link: "https://wiki.strategickhaos.internal/change-management"
   data_handling:
     post_pii_to_discord: false
+  # Governance framework integration
+  framework:
+    state_snapshot: "/governance/board/strategickhaos_state_snapshot.json"
+    risk_corpus: "/governance/risks/risks_bibliography.json"
+    current_risks: "/governance/risks/risks_from_corpus.json"
+    lab_rules: "/LAB_RULES.md"
+    maturity: 51  # percent - production threshold is 80%
+    status: "lab-only"
+  board_layer:
+    enabled: true
+    protocol: "/governance/board/governance_board_agent.md"
+    query_examples: "/governance/board/board_query_examples.md"
+    state_updater: "/governance/board/state_updater.py"
 
 testing:
   sandbox_guild_id: null
