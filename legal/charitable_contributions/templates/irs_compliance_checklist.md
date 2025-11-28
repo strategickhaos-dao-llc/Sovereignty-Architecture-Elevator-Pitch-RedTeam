@@ -174,12 +174,12 @@ This checklist ensures compliance with IRS substantiation requirements for chari
 
 ## Red Flags to Avoid
 
-### Common Mistakes
-- [ ] NOT filing trust with Wyoming SOS thinking it makes it irrevocable (FALSE)
-- [ ] NOT calling it a CRUT when it doesn't meet §664 requirements
-- [ ] NOT taking deduction without proper substantiation
-- [ ] NOT missing the acknowledgment deadline
-- [ ] NOT providing false valuations on Form 8283
+### Common Mistakes to Avoid
+- [ ] Avoid: Filing trust with Wyoming SOS thinking it makes it irrevocable (it does NOT)
+- [ ] Avoid: Calling it a CRUT when it doesn't meet §664 requirements
+- [ ] Avoid: Taking deduction without proper substantiation
+- [ ] Avoid: Missing the acknowledgment deadline
+- [ ] Avoid: Providing false valuations on Form 8283
 
 ### Audit Risk Factors
 - [ ] Contribution value over $500,000 (high audit probability)
