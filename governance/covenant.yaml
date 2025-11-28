@@ -1,0 +1,171 @@
+# covenant.yaml
+# Strategickhaos DAO LLC — Autonomy Spine Layer 4: MORALITY
+# Ethical boundaries formalized as machine-readable constraints
+version: "1.0"
+created: "2025-11-28"
+updated: "2025-11-28"
+
+# Purpose: Ensure the system enforces values without human policing
+# This covenant survives founder attention gaps and pivots
+
+metadata:
+  layer: "Layer 4: MORALITY (Value Enforcement)"
+  autonomy_function: "System enforces values without you policing"
+  dependencies:
+    - "access_matrix.yaml"
+    - "ai_constitution.yaml"
+    - "dao_record.yaml"
+
+# Core Covenants - Immutable ethical boundaries
+core_covenants:
+  non_exploitation:
+    name: "Non-Exploitation Covenant"
+    description: "The system shall never exploit users, contributors, or stakeholders"
+    constraints:
+      - "No predatory pricing or dark patterns"
+      - "No unauthorized data collection or sale"
+      - "No manipulation of vulnerable populations"
+      - "No extraction of value without fair exchange"
+      - "No lock-in tactics that harm user autonomy"
+    enforcement: "Automatic rejection of any proposal violating these constraints"
+    penalty: "Immediate halt and governance board review"
+
+  no_scam_pledge:
+    name: "No-Scam Pledge"
+    description: "All representations must be truthful and verifiable"
+    constraints:
+      - "No false claims about capabilities or credentials"
+      - "No misleading marketing or testimonials"
+      - "No hidden fees or undisclosed conflicts of interest"
+      - "All evidence must be cryptographically verifiable"
+      - "Provenance must be logged for all significant claims"
+    enforcement: "All public claims require evidence in evidence_dossier"
+    penalty: "Claim retraction and public disclosure of error"
+
+  value_preservation:
+    name: "Value Preservation Rules"
+    description: "Core mission values must persist regardless of circumstances"
+    protected_values:
+      - value: "7% Charity Commitment"
+        description: "7% of net revenue flows to charitable causes"
+        immutable: true
+        bypass_conditions: ["legal_compliance_conflict", "entity_dissolution"]
+      - value: "Open Governance"
+        description: "Governance decisions are transparent and auditable"
+        immutable: true
+        bypass_conditions: ["security_threat_to_system"]
+      - value: "Human Agency"
+        description: "Humans retain ultimate decision authority"
+        immutable: true
+        bypass_conditions: []
+      - value: "Truthfulness"
+        description: "System outputs are honest and verifiable"
+        immutable: true
+        bypass_conditions: []
+    enforcement: "Governance board must unanimously approve any value modifications"
+
+  fair_compensation:
+    name: "Fair Compensation Covenant"
+    description: "Contributors receive fair value for their contributions"
+    constraints:
+      - "No unpaid labor exploitation"
+      - "Transparent compensation structures"
+      - "Attribution for all significant contributions"
+      - "Revenue sharing when applicable"
+    enforcement: "Compensation audits required quarterly"
+
+# Override Conditions - When ethical constraints can be suspended
+override_conditions:
+  description: "Extreme circumstances where covenant constraints may be suspended"
+  
+  legal_compliance:
+    trigger: "Legal requirement conflicts with covenant"
+    authority: "Wyoming-licensed attorney must approve in writing"
+    logging: "Full audit trail with reasoning documented"
+    duration: "Minimum time necessary for compliance"
+    restoration: "Automatic return to covenant when conflict resolved"
+
+  existential_threat:
+    trigger: "System survival at immediate risk"
+    authority: "Governance board unanimous approval"
+    logging: "Full audit trail with threat documentation"
+    duration: "Maximum 72 hours without renewal"
+    restoration: "Automatic return to covenant after threat mitigation"
+
+  security_emergency:
+    trigger: "Active security breach or attack"
+    authority: "Managing member or designated security officer"
+    logging: "Full audit trail within 24 hours of resolution"
+    duration: "Duration of active threat only"
+    restoration: "Immediate return to covenant after security restored"
+
+  never_overridable:
+    - "Non-exploitation of vulnerable populations"
+    - "Prohibition on fraud or theft"
+    - "Human agency preservation"
+    - "Truthfulness in safety-critical contexts"
+
+# Enforcement Mechanisms
+enforcement:
+  automated_checks:
+    - name: "covenant_compliance_check"
+      frequency: "continuous"
+      implementation: "Pre-decision covenant verification"
+      
+    - name: "value_drift_detection"
+      frequency: "daily"
+      implementation: "Compare current state against protected values"
+      
+    - name: "exploitation_pattern_scan"
+      frequency: "weekly"
+      implementation: "Analyze system outputs for exploitation indicators"
+
+  human_oversight:
+    - name: "quarterly_covenant_review"
+      frequency: "quarterly"
+      participants: ["managing_member", "legal_counsel"]
+      
+    - name: "annual_ethics_audit"
+      frequency: "annual"
+      participants: ["external_auditor", "governance_board"]
+
+  violation_response:
+    severity_levels:
+      minor:
+        description: "Unintentional deviation with no harm"
+        response: "Automatic correction and logging"
+        escalation: false
+      moderate:
+        description: "Pattern of deviation or minor harm"
+        response: "System pause and governance review"
+        escalation: true
+      severe:
+        description: "Intentional violation or significant harm"
+        response: "System halt and legal review"
+        escalation: true
+        notification: ["managing_member", "legal_counsel"]
+      critical:
+        description: "Fundamental breach of core covenant"
+        response: "Full system shutdown pending investigation"
+        escalation: true
+        notification: ["all_stakeholders", "regulatory_authorities"]
+
+# Verification
+verification:
+  cryptographic_proof:
+    method: "GPG signature by managing member"
+    hash_algorithm: "SHA-256"
+    timestamp: "OpenTimestamps anchoring"
+  
+  audit_trail:
+    log_file: "covenant_enforcement.log.jsonl"
+    retention: "Permanent"
+    format: "JSON Lines with timestamp, action, outcome, reasoning"
+
+# Signature Block
+signature:
+  signer: "Domenic Garza"
+  role: "Managing Member"
+  date: "2025-11-28"
+  gpg_fingerprint: "TBD - To be signed"
+  commitment: "I affirm these covenants as binding ethical constraints on Strategickhaos DAO LLC operations"
