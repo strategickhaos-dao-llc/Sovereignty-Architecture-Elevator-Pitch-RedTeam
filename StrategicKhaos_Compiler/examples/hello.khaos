@@ -1,0 +1,9 @@
+; hello.khaos - The first StrategicKhaos program
+; Born: 2025-11-21
+; Purpose: Announce the arrival of controlled chaos
+
+; Print a welcome message to the chaos realm
+(print "Welcome to the chaos realm")
+
+; Print the answer to life, the universe, and everything
+(print 42)
