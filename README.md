@@ -12,6 +12,21 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### Get Visual Proof of Autonomous Progress (NEW!)
+```bash
+# See all autonomous work with checkmarks
+./scripts/activate-progress.sh show
+
+# Quick status check
+./scripts/activate-progress.sh status
+
+# Emergency activation when stuck
+./scripts/activate-progress.sh emergency
+```
+
+**→ [Full Visual Proof Documentation](./VISUAL_PROOF_SYSTEM.md)**
+
+### Standard Deployment
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -30,8 +45,15 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🧠 Visual Proof System (NEW!)
+- **Activation Protocol**: Unlocks executive function with visual progress proof
+- **Progress Tracking**: See autonomous work with checkmarks and concrete outputs
+- **Discord Integration**: `/progress` command shows real-time autonomous progress
+- **Emergency Override**: Instant access to all completion proof when stuck
+- **[→ Full Documentation](./VISUAL_PROOF_SYSTEM.md)**
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/progress`
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch

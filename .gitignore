@@ -35,3 +35,9 @@ target/
 
 # Workspace data
 workspace/
+
+# TypeScript build artifacts
+dist/
+
+# Progress tracking state
+.progress-state.json
