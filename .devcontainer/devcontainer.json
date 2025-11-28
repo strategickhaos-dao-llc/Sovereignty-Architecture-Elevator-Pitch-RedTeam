@@ -1,7 +1,7 @@
 {
   "name": "Strategickhaos Ingot Forge",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "postCreateCommand": "pip install pyyaml && pip install -r ingots/example_ingot/requirements.txt 2>/dev/null || true",
+  "postCreateCommand": "pip install -r requirements.forge.txt && pip install -r ingots/example_ingot/requirements.txt 2>/dev/null || true",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {}
   },

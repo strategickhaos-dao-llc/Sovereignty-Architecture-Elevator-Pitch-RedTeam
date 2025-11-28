@@ -66,8 +66,11 @@ def load_ingot(name: str):
     """
     manifest = get_ingot_manifest(name)
 
+    # Get module path from manifest, defaulting to src.main
+    module_path = manifest.get("api", {}).get("module", "src.main")
+
     # Import the module
-    module = importlib.import_module(f"ingots.{name}.src.main")
+    module = importlib.import_module(f"ingots.{name}.{module_path}")
 
     # Get the function specified in the manifest
     fn_name = manifest["api"]["function"]
