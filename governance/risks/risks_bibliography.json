@@ -1,0 +1,821 @@
+{
+  "bibliography_version": "1.0",
+  "generated_at": "2025-11-28T00:00:00Z",
+  "total_entries": 100,
+  "categories": [
+    "legal_regulatory",
+    "financial_trading",
+    "cybersecurity",
+    "ai_governance",
+    "organizational",
+    "technical",
+    "compliance",
+    "operational"
+  ],
+  "entries": [
+    {
+      "id": "LR001",
+      "category": "legal_regulatory",
+      "title": "Wyoming SF0068 DAO LLC Framework",
+      "type": "legislation",
+      "jurisdiction": "Wyoming",
+      "year": 2022,
+      "relevance": "Primary legal framework for DAO LLC structure",
+      "risk_level": "critical"
+    },
+    {
+      "id": "LR002",
+      "category": "legal_regulatory",
+      "title": "Unauthorized Practice of Law (UPL) Guidelines",
+      "type": "regulatory",
+      "jurisdiction": "Wyoming",
+      "relevance": "Boundaries for AI-assisted legal work",
+      "risk_level": "high"
+    },
+    {
+      "id": "LR003",
+      "category": "legal_regulatory",
+      "title": "SEC Guidance on Digital Assets",
+      "type": "regulatory",
+      "jurisdiction": "Federal",
+      "year": 2023,
+      "relevance": "Classification of digital assets and tokens",
+      "risk_level": "high"
+    },
+    {
+      "id": "LR004",
+      "category": "legal_regulatory",
+      "title": "CFTC Futures Trading Regulations",
+      "type": "regulatory",
+      "jurisdiction": "Federal",
+      "relevance": "ES futures trading compliance",
+      "risk_level": "high"
+    },
+    {
+      "id": "LR005",
+      "category": "legal_regulatory",
+      "title": "IRS Nonprofit Tax Compliance",
+      "type": "regulatory",
+      "jurisdiction": "Federal",
+      "relevance": "ValorYield Engine tax status",
+      "risk_level": "high"
+    },
+    {
+      "id": "FT001",
+      "category": "financial_trading",
+      "title": "Position Sizing and Risk Management",
+      "type": "best_practice",
+      "source": "Industry Standard",
+      "relevance": "ATR-based position sizing methodology",
+      "risk_level": "high"
+    },
+    {
+      "id": "FT002",
+      "category": "financial_trading",
+      "title": "Automated Trading Kill Switches",
+      "type": "best_practice",
+      "source": "FINRA Guidelines",
+      "relevance": "Daily loss limit enforcement",
+      "risk_level": "critical"
+    },
+    {
+      "id": "FT003",
+      "category": "financial_trading",
+      "title": "Algorithmic Trading Risk Controls",
+      "type": "regulatory",
+      "source": "SEC Rule 15c3-5",
+      "relevance": "Market access risk management",
+      "risk_level": "high"
+    },
+    {
+      "id": "FT004",
+      "category": "financial_trading",
+      "title": "Futures Contract Specifications",
+      "type": "reference",
+      "source": "CME Group",
+      "relevance": "ES futures contract details",
+      "risk_level": "medium"
+    },
+    {
+      "id": "FT005",
+      "category": "financial_trading",
+      "title": "Backtesting and Simulation Best Practices",
+      "type": "best_practice",
+      "relevance": "Trading system validation",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS001",
+      "category": "cybersecurity",
+      "title": "NIST Cybersecurity Framework",
+      "type": "framework",
+      "source": "NIST",
+      "year": 2023,
+      "relevance": "Core security framework",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS002",
+      "category": "cybersecurity",
+      "title": "OWASP Top 10",
+      "type": "standard",
+      "source": "OWASP",
+      "year": 2021,
+      "relevance": "Web application security",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS003",
+      "category": "cybersecurity",
+      "title": "CIS Kubernetes Benchmark",
+      "type": "benchmark",
+      "source": "CIS",
+      "relevance": "K8s security configuration",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS004",
+      "category": "cybersecurity",
+      "title": "GPG Key Management Best Practices",
+      "type": "best_practice",
+      "relevance": "Commit signing and identity verification",
+      "risk_level": "medium"
+    },
+    {
+      "id": "CS005",
+      "category": "cybersecurity",
+      "title": "Secret Management Standards",
+      "type": "best_practice",
+      "source": "HashiCorp Vault",
+      "relevance": "Credential and secret storage",
+      "risk_level": "critical"
+    },
+    {
+      "id": "AI001",
+      "category": "ai_governance",
+      "title": "NIST AI Risk Management Framework",
+      "type": "framework",
+      "source": "NIST",
+      "year": 2023,
+      "relevance": "AI system governance",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI002",
+      "category": "ai_governance",
+      "title": "EU AI Act Compliance Guidelines",
+      "type": "regulatory",
+      "jurisdiction": "EU",
+      "year": 2024,
+      "relevance": "International AI compliance",
+      "risk_level": "medium"
+    },
+    {
+      "id": "AI003",
+      "category": "ai_governance",
+      "title": "Human-in-the-Loop Requirements",
+      "type": "best_practice",
+      "relevance": "AI decision oversight",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI004",
+      "category": "ai_governance",
+      "title": "AI Transparency and Explainability",
+      "type": "best_practice",
+      "relevance": "Decision audit trails",
+      "risk_level": "medium"
+    },
+    {
+      "id": "AI005",
+      "category": "ai_governance",
+      "title": "Autonomous Agent Boundaries",
+      "type": "internal",
+      "relevance": "Agent action limitations",
+      "risk_level": "critical"
+    },
+    {
+      "id": "ORG001",
+      "category": "organizational",
+      "title": "DAO Governance Best Practices",
+      "type": "best_practice",
+      "source": "a16z",
+      "relevance": "Decentralized governance patterns",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG002",
+      "category": "organizational",
+      "title": "Nonprofit Board Governance",
+      "type": "best_practice",
+      "source": "BoardSource",
+      "relevance": "ValorYield Engine governance",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG003",
+      "category": "organizational",
+      "title": "Conflict of Interest Policies",
+      "type": "policy",
+      "relevance": "Managing member conflicts",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG004",
+      "category": "organizational",
+      "title": "Succession Planning",
+      "type": "best_practice",
+      "relevance": "Key person risk mitigation",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG005",
+      "category": "organizational",
+      "title": "Stakeholder Communication",
+      "type": "best_practice",
+      "relevance": "Transparency requirements",
+      "risk_level": "low"
+    },
+    {
+      "id": "TECH001",
+      "category": "technical",
+      "title": "Kubernetes Security Best Practices",
+      "type": "best_practice",
+      "source": "CNCF",
+      "relevance": "Infrastructure security",
+      "risk_level": "high"
+    },
+    {
+      "id": "TECH002",
+      "category": "technical",
+      "title": "GitOps Security Patterns",
+      "type": "best_practice",
+      "relevance": "CI/CD security",
+      "risk_level": "high"
+    },
+    {
+      "id": "TECH003",
+      "category": "technical",
+      "title": "Discord Bot Security",
+      "type": "best_practice",
+      "relevance": "Bot token and permission management",
+      "risk_level": "medium"
+    },
+    {
+      "id": "TECH004",
+      "category": "technical",
+      "title": "API Rate Limiting",
+      "type": "best_practice",
+      "relevance": "Service protection",
+      "risk_level": "medium"
+    },
+    {
+      "id": "TECH005",
+      "category": "technical",
+      "title": "Logging and Monitoring Standards",
+      "type": "best_practice",
+      "relevance": "Audit trail maintenance",
+      "risk_level": "medium"
+    },
+    {
+      "id": "COMP001",
+      "category": "compliance",
+      "title": "SOC 2 Type II Controls",
+      "type": "standard",
+      "source": "AICPA",
+      "relevance": "Service organization controls",
+      "risk_level": "medium"
+    },
+    {
+      "id": "COMP002",
+      "category": "compliance",
+      "title": "GDPR Compliance",
+      "type": "regulatory",
+      "jurisdiction": "EU",
+      "relevance": "Data protection",
+      "risk_level": "medium"
+    },
+    {
+      "id": "COMP003",
+      "category": "compliance",
+      "title": "CCPA Compliance",
+      "type": "regulatory",
+      "jurisdiction": "California",
+      "relevance": "Consumer privacy",
+      "risk_level": "medium"
+    },
+    {
+      "id": "COMP004",
+      "category": "compliance",
+      "title": "AML/KYC Requirements",
+      "type": "regulatory",
+      "relevance": "Financial services compliance",
+      "risk_level": "high"
+    },
+    {
+      "id": "COMP005",
+      "category": "compliance",
+      "title": "Record Retention Requirements",
+      "type": "regulatory",
+      "relevance": "Audit log retention",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS001",
+      "category": "operational",
+      "title": "Incident Response Procedures",
+      "type": "procedure",
+      "relevance": "Security incident handling",
+      "risk_level": "high"
+    },
+    {
+      "id": "OPS002",
+      "category": "operational",
+      "title": "Business Continuity Planning",
+      "type": "procedure",
+      "relevance": "Service availability",
+      "risk_level": "high"
+    },
+    {
+      "id": "OPS003",
+      "category": "operational",
+      "title": "Change Management Process",
+      "type": "procedure",
+      "relevance": "Production change controls",
+      "risk_level": "high"
+    },
+    {
+      "id": "OPS004",
+      "category": "operational",
+      "title": "Vendor Management",
+      "type": "procedure",
+      "relevance": "Third-party risk",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS005",
+      "category": "operational",
+      "title": "Disaster Recovery Testing",
+      "type": "procedure",
+      "relevance": "Recovery capability verification",
+      "risk_level": "high"
+    },
+    {
+      "id": "LR006",
+      "category": "legal_regulatory",
+      "title": "Wyoming Business Entity Statutes",
+      "type": "legislation",
+      "jurisdiction": "Wyoming",
+      "relevance": "LLC operating requirements",
+      "risk_level": "medium"
+    },
+    {
+      "id": "LR007",
+      "category": "legal_regulatory",
+      "title": "Contract Law Fundamentals",
+      "type": "reference",
+      "relevance": "Agreement enforceability",
+      "risk_level": "medium"
+    },
+    {
+      "id": "LR008",
+      "category": "legal_regulatory",
+      "title": "Intellectual Property Protection",
+      "type": "best_practice",
+      "relevance": "Code and documentation IP",
+      "risk_level": "medium"
+    },
+    {
+      "id": "LR009",
+      "category": "legal_regulatory",
+      "title": "Employment Law Compliance",
+      "type": "regulatory",
+      "jurisdiction": "Federal/Texas",
+      "relevance": "Contractor vs employee classification",
+      "risk_level": "medium"
+    },
+    {
+      "id": "LR010",
+      "category": "legal_regulatory",
+      "title": "Privacy Policy Requirements",
+      "type": "regulatory",
+      "relevance": "User data handling",
+      "risk_level": "medium"
+    },
+    {
+      "id": "FT006",
+      "category": "financial_trading",
+      "title": "Margin Requirements",
+      "type": "regulatory",
+      "source": "CME/CFTC",
+      "relevance": "Futures margin management",
+      "risk_level": "high"
+    },
+    {
+      "id": "FT007",
+      "category": "financial_trading",
+      "title": "Market Circuit Breakers",
+      "type": "regulatory",
+      "source": "CME",
+      "relevance": "Trading halt procedures",
+      "risk_level": "medium"
+    },
+    {
+      "id": "FT008",
+      "category": "financial_trading",
+      "title": "Order Book Dynamics",
+      "type": "reference",
+      "relevance": "Market microstructure",
+      "risk_level": "low"
+    },
+    {
+      "id": "FT009",
+      "category": "financial_trading",
+      "title": "Slippage and Execution Quality",
+      "type": "best_practice",
+      "relevance": "Trade execution optimization",
+      "risk_level": "medium"
+    },
+    {
+      "id": "FT010",
+      "category": "financial_trading",
+      "title": "Tax Implications of Futures Trading",
+      "type": "regulatory",
+      "source": "IRS",
+      "relevance": "Section 1256 contracts",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS006",
+      "category": "cybersecurity",
+      "title": "Zero Trust Architecture",
+      "type": "framework",
+      "source": "NIST SP 800-207",
+      "relevance": "Network security model",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS007",
+      "category": "cybersecurity",
+      "title": "Supply Chain Security",
+      "type": "best_practice",
+      "relevance": "Dependency management",
+      "risk_level": "high"
+    },
+    {
+      "id": "CS008",
+      "category": "cybersecurity",
+      "title": "Penetration Testing Standards",
+      "type": "standard",
+      "source": "PTES",
+      "relevance": "Security assessment",
+      "risk_level": "medium"
+    },
+    {
+      "id": "CS009",
+      "category": "cybersecurity",
+      "title": "Security Incident Classification",
+      "type": "framework",
+      "relevance": "Incident severity levels",
+      "risk_level": "medium"
+    },
+    {
+      "id": "CS010",
+      "category": "cybersecurity",
+      "title": "Vulnerability Management",
+      "type": "procedure",
+      "relevance": "Patch management",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI006",
+      "category": "ai_governance",
+      "title": "Model Governance Framework",
+      "type": "framework",
+      "relevance": "AI model lifecycle management",
+      "risk_level": "medium"
+    },
+    {
+      "id": "AI007",
+      "category": "ai_governance",
+      "title": "Bias Detection and Mitigation",
+      "type": "best_practice",
+      "relevance": "Fair AI systems",
+      "risk_level": "medium"
+    },
+    {
+      "id": "AI008",
+      "category": "ai_governance",
+      "title": "AI System Testing",
+      "type": "best_practice",
+      "relevance": "Validation and verification",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI009",
+      "category": "ai_governance",
+      "title": "Prompt Injection Defense",
+      "type": "best_practice",
+      "relevance": "LLM security",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI010",
+      "category": "ai_governance",
+      "title": "Agent Sandboxing",
+      "type": "best_practice",
+      "relevance": "Autonomous agent containment",
+      "risk_level": "critical"
+    },
+    {
+      "id": "ORG006",
+      "category": "organizational",
+      "title": "Risk Committee Charter",
+      "type": "governance",
+      "relevance": "Risk oversight structure",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG007",
+      "category": "organizational",
+      "title": "Audit Committee Guidelines",
+      "type": "governance",
+      "relevance": "Financial oversight",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG008",
+      "category": "organizational",
+      "title": "Whistleblower Policy",
+      "type": "policy",
+      "relevance": "Issue reporting mechanisms",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG009",
+      "category": "organizational",
+      "title": "Code of Conduct",
+      "type": "policy",
+      "relevance": "Behavioral expectations",
+      "risk_level": "low"
+    },
+    {
+      "id": "ORG010",
+      "category": "organizational",
+      "title": "Decision-Making Framework",
+      "type": "governance",
+      "relevance": "Authority and delegation",
+      "risk_level": "medium"
+    },
+    {
+      "id": "TECH006",
+      "category": "technical",
+      "title": "Database Security",
+      "type": "best_practice",
+      "relevance": "Data storage protection",
+      "risk_level": "high"
+    },
+    {
+      "id": "TECH007",
+      "category": "technical",
+      "title": "API Security Standards",
+      "type": "best_practice",
+      "source": "OWASP API Top 10",
+      "relevance": "API protection",
+      "risk_level": "high"
+    },
+    {
+      "id": "TECH008",
+      "category": "technical",
+      "title": "Container Security",
+      "type": "best_practice",
+      "relevance": "Docker/container hardening",
+      "risk_level": "high"
+    },
+    {
+      "id": "TECH009",
+      "category": "technical",
+      "title": "TLS Configuration",
+      "type": "best_practice",
+      "relevance": "Transport security",
+      "risk_level": "high"
+    },
+    {
+      "id": "TECH010",
+      "category": "technical",
+      "title": "Backup and Recovery",
+      "type": "procedure",
+      "relevance": "Data protection",
+      "risk_level": "high"
+    },
+    {
+      "id": "COMP006",
+      "category": "compliance",
+      "title": "ISO 27001 Controls",
+      "type": "standard",
+      "relevance": "Information security management",
+      "risk_level": "medium"
+    },
+    {
+      "id": "COMP007",
+      "category": "compliance",
+      "title": "PCI DSS Requirements",
+      "type": "standard",
+      "relevance": "Payment card security",
+      "risk_level": "high"
+    },
+    {
+      "id": "COMP008",
+      "category": "compliance",
+      "title": "HIPAA Compliance",
+      "type": "regulatory",
+      "relevance": "Health data protection",
+      "risk_level": "low"
+    },
+    {
+      "id": "COMP009",
+      "category": "compliance",
+      "title": "Export Control Regulations",
+      "type": "regulatory",
+      "relevance": "Technology export restrictions",
+      "risk_level": "medium"
+    },
+    {
+      "id": "COMP010",
+      "category": "compliance",
+      "title": "Accessibility Standards",
+      "type": "standard",
+      "source": "WCAG 2.1",
+      "relevance": "Digital accessibility",
+      "risk_level": "low"
+    },
+    {
+      "id": "OPS006",
+      "category": "operational",
+      "title": "Capacity Planning",
+      "type": "procedure",
+      "relevance": "Resource management",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS007",
+      "category": "operational",
+      "title": "Performance Monitoring",
+      "type": "procedure",
+      "relevance": "System health tracking",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS008",
+      "category": "operational",
+      "title": "Release Management",
+      "type": "procedure",
+      "relevance": "Deployment coordination",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS009",
+      "category": "operational",
+      "title": "On-Call Procedures",
+      "type": "procedure",
+      "relevance": "Incident response availability",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS010",
+      "category": "operational",
+      "title": "Post-Incident Review",
+      "type": "procedure",
+      "relevance": "Continuous improvement",
+      "risk_level": "medium"
+    },
+    {
+      "id": "LR011",
+      "category": "legal_regulatory",
+      "title": "Terms of Service Requirements",
+      "type": "best_practice",
+      "relevance": "User agreements",
+      "risk_level": "medium"
+    },
+    {
+      "id": "LR012",
+      "category": "legal_regulatory",
+      "title": "Liability Limitation Clauses",
+      "type": "best_practice",
+      "relevance": "Contract protections",
+      "risk_level": "medium"
+    },
+    {
+      "id": "FT011",
+      "category": "financial_trading",
+      "title": "Portfolio Diversification",
+      "type": "best_practice",
+      "relevance": "Risk distribution",
+      "risk_level": "medium"
+    },
+    {
+      "id": "FT012",
+      "category": "financial_trading",
+      "title": "Counterparty Risk",
+      "type": "best_practice",
+      "relevance": "Broker selection",
+      "risk_level": "medium"
+    },
+    {
+      "id": "CS011",
+      "category": "cybersecurity",
+      "title": "Security Awareness Training",
+      "type": "best_practice",
+      "relevance": "Human factor security",
+      "risk_level": "medium"
+    },
+    {
+      "id": "CS012",
+      "category": "cybersecurity",
+      "title": "Phishing Defense",
+      "type": "best_practice",
+      "relevance": "Social engineering protection",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI011",
+      "category": "ai_governance",
+      "title": "AI Alignment Principles",
+      "type": "framework",
+      "relevance": "AI value alignment",
+      "risk_level": "high"
+    },
+    {
+      "id": "AI012",
+      "category": "ai_governance",
+      "title": "Emergent Behavior Monitoring",
+      "type": "best_practice",
+      "relevance": "Unexpected AI behaviors",
+      "risk_level": "high"
+    },
+    {
+      "id": "ORG011",
+      "category": "organizational",
+      "title": "Member Agreement Templates",
+      "type": "template",
+      "relevance": "DAO membership",
+      "risk_level": "medium"
+    },
+    {
+      "id": "ORG012",
+      "category": "organizational",
+      "title": "Voting Procedures",
+      "type": "governance",
+      "relevance": "Decision ratification",
+      "risk_level": "medium"
+    },
+    {
+      "id": "TECH011",
+      "category": "technical",
+      "title": "Code Review Standards",
+      "type": "best_practice",
+      "relevance": "Code quality assurance",
+      "risk_level": "medium"
+    },
+    {
+      "id": "TECH012",
+      "category": "technical",
+      "title": "Documentation Standards",
+      "type": "best_practice",
+      "relevance": "Knowledge management",
+      "risk_level": "low"
+    },
+    {
+      "id": "COMP011",
+      "category": "compliance",
+      "title": "Audit Trail Requirements",
+      "type": "regulatory",
+      "relevance": "Activity logging",
+      "risk_level": "high"
+    },
+    {
+      "id": "COMP012",
+      "category": "compliance",
+      "title": "Evidence Preservation",
+      "type": "procedure",
+      "relevance": "Legal hold procedures",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS011",
+      "category": "operational",
+      "title": "SLA Management",
+      "type": "procedure",
+      "relevance": "Service level commitments",
+      "risk_level": "medium"
+    },
+    {
+      "id": "OPS012",
+      "category": "operational",
+      "title": "Root Cause Analysis",
+      "type": "procedure",
+      "relevance": "Problem investigation",
+      "risk_level": "medium"
+    }
+  ]
+}
