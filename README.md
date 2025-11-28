@@ -28,6 +28,23 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 🌐 Public Tunnel Setup (Make Your Local Server Globally Accessible)
+
+Want to share your local development server with the world? We've got you covered with **Cloudflare Tunnel** - zero config, zero account, zero cost.
+
+**Quick Setup (12 seconds):**
+```bash
+# Windows
+./setup-tunnel.ps1
+
+# Linux/Mac
+./setup-tunnel.sh
+```
+
+**Read the full guide:** [TUNNEL_SETUP.md](./TUNNEL_SETUP.md)
+
+This solves the **ERR_NGROK_4018** issue and gives you instant public HTTPS URLs for your local services.
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
