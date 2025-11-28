@@ -40,8 +40,8 @@ function Get-FileHash256 {
 
 function Test-OTSInstallation {
     try {
-        $result = & python -c "import opentimestamps" 2>&1
-        return $true
+        $null = & python -c "import opentimestamps" 2>&1
+        return $LASTEXITCODE -eq 0
     } catch {
         return $false
     }
@@ -89,14 +89,14 @@ function Invoke-ManualTimestamp {
         try {
             Write-Status "Submitting to: $calendar"
             
-            $response = Invoke-WebRequest `
+            Invoke-WebRequest `
                 -Uri $calendar `
                 -Method POST `
                 -Body $content `
                 -ContentType "application/octet-stream" `
                 -UseBasicParsing `
                 -TimeoutSec 30 `
-                -OutFile $outFile
+                -OutFile $outFile | Out-Null
             
             if (Test-Path $outFile) {
                 $size = (Get-Item $outFile).Length

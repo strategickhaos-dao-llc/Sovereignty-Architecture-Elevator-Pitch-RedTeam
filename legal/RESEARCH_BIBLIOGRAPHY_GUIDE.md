@@ -90,6 +90,12 @@ function Get-ResearchResource {
     
     $outputPath = Join-Path $categoryPath $filename
     
+    # Validate URL (must be HTTPS)
+    if ($Url -notmatch '^https://') {
+        Write-Host "Error: Only HTTPS URLs are allowed for security" -ForegroundColor Red
+        return $null
+    }
+    
     try {
         Write-Host "Downloading: $Url"
         Invoke-WebRequest -Uri $Url -OutFile $outputPath -UseBasicParsing -TimeoutSec 30

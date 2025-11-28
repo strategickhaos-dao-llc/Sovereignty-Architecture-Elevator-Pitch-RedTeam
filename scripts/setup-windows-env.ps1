@@ -178,7 +178,7 @@ function Invoke-NetworkDiagnostics {
     # Test HTTPS connectivity
     $testUrls = @(
         "https://api.github.com/zen",
-        "https://raw.githubusercontent.com"
+        "https://raw.githubusercontent.com/octocat/Hello-World/master/README"
     )
     foreach ($url in $testUrls) {
         try {
