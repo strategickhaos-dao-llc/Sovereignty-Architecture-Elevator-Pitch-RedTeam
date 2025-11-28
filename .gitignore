@@ -35,3 +35,17 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# State updater outputs
+strategickhaos_state_snapshot.json
+strategickhaos_state_snapshot.*.json
+*.ots.pending
