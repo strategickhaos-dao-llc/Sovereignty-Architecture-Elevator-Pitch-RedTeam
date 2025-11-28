@@ -7,8 +7,19 @@
 
 import { ChatInputCommandInteraction } from "discord.js";
 import util from "util";
-import { exec as execCb } from "child_process";
-const exec = util.promisify(execCb);
+import { execFile as execFileCb } from "child_process";
+const execFile = util.promisify(execFileCb);
+
+// Validate service name to prevent command injection
+function validateServiceName(svc: string): boolean {
+  // Only allow alphanumeric characters, hyphens, and underscores
+  return /^[a-zA-Z0-9_-]+$/.test(svc);
+}
+
+// Validate canary percentage
+function validateCanaryPercent(percent: number): boolean {
+  return Number.isInteger(percent) && percent >= 0 && percent <= 100;
+}
 
 export async function deployCommand(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply({ ephemeral: true });
@@ -16,6 +27,17 @@ export async function deployCommand(interaction: ChatInputCommandInteraction) {
   const svc = interaction.options.getString("service", true);
   const plan = interaction.options.getBoolean("plan") ?? false;
   const canary = interaction.options.getInteger("canary") ?? 0;
+
+  // Validate inputs to prevent command injection
+  if (!validateServiceName(svc)) {
+    await interaction.editReply({ content: "Invalid service name. Only alphanumeric characters, hyphens, and underscores are allowed." });
+    return;
+  }
+
+  if (canary > 0 && !validateCanaryPercent(canary)) {
+    await interaction.editReply({ content: "Invalid canary percentage. Must be between 0 and 100." });
+    return;
+  }
 
   try {
     if (plan) {
@@ -40,9 +62,9 @@ export async function deployCommand(interaction: ChatInputCommandInteraction) {
       return;
     }
 
-    // full deploy
+    // full deploy - use execFile with arguments array to prevent shell injection
     await interaction.editReply({ content: `Starting full deploy for ${svc}` });
-    await exec(`./deploy-scripts/deploy_service.sh ${svc}`);
+    await execFile("./deploy-scripts/deploy_service.sh", [svc]);
     await interaction.followUp({ content: `Full deploy kicked off for ${svc}` });
   } catch (err) {
     console.error("deploy error", err);
@@ -52,8 +74,14 @@ export async function deployCommand(interaction: ChatInputCommandInteraction) {
 
 async function generatePlan(svc: string): Promise<string> {
   // Example: run kubectl diff or helm diff plugin
+  // Use execFile with arguments array to prevent shell injection
   try {
-    const { stdout } = await exec(`kubectl --namespace=default diff -f ./overlays/${svc} || true`);
+    const { stdout } = await execFile("kubectl", [
+      "--namespace=default",
+      "diff",
+      "-f",
+      `./overlays/${svc}`
+    ]).catch(() => ({ stdout: "(no diff)" }));
     return stdout || "(no diff)";
   } catch (err) {
     return `Failed to generate plan: ${(err as Error).message}`;
@@ -62,16 +90,17 @@ async function generatePlan(svc: string): Promise<string> {
 
 async function startCanary(svc: string, percent: number) {
   // Integrate with rollout tool (Argo Rollouts, Flagger, or k8s native) to incrementally direct traffic.
-  // This is a placeholder shell invocation to a rollout controller.
-  await exec(`./deploy-scripts/canary.sh ${svc} ${percent}`);
+  // Use execFile with arguments array to prevent shell injection
+  await execFile("./deploy-scripts/canary.sh", [svc, percent.toString()]);
 }
 
 /*
 Placeholder for posting to Discord channel
+Note: This is intentionally a placeholder - actual implementation should use Discord.js REST API
 */
 async function postToChannel(channelId: string, text: string, attachments: { name: string; content: string }[]): Promise<void> {
-  // This is a placeholder implementation - the actual implementation
-  // should use the Discord.js REST API
-  console.log(`Posting to channel ${channelId}: ${text}`);
-  attachments.forEach((a) => console.log(`Attachment: ${a.name}`));
+  // TODO: Implement using Discord.js REST API
+  // This is a placeholder that logs the intent - actual implementation depends on bot setup
+  console.log(`[TODO] Post to channel ${channelId}: ${text}`);
+  attachments.forEach((a) => console.log(`[TODO] Attachment: ${a.name}`));
 }

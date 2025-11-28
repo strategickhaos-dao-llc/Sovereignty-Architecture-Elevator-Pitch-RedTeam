@@ -13,17 +13,30 @@ import util from "util";
 
 const execFileP = util.promisify(execFile);
 
+// Validate namespace to prevent command injection
+function validateNamespace(ns: string): boolean {
+  // Kubernetes namespace naming rules: lowercase alphanumeric, hyphens allowed
+  return /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/.test(ns);
+}
+
 export async function reconCommand(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply({ ephemeral: true });
 
   const ns = interaction.options.getString("namespace") ?? "default";
+  
+  // Validate namespace input
+  if (!validateNamespace(ns)) {
+    await interaction.editReply({ content: "Invalid namespace. Only lowercase alphanumeric characters and hyphens are allowed." });
+    return;
+  }
+  
   const out = await runRecon(ns);
   // upload to recon channel
   try {
     const reconChannelId = process.env.RECON_CHANNEL_ID;
     if (!reconChannelId) throw new Error("RECON_CHANNEL_ID not configured");
 
-    const uploadRes = await uploadFileToChannel(reconChannelId, out, `recon_${ns}.tar.gz`);
+    await uploadFileToChannel(reconChannelId, out, `recon_${ns}.tar.gz`);
     const summary = await summarizeTarball(out);
     await interaction.editReply({ content: `Recon completed and posted to <#${reconChannelId}>.\nSummary:\n${summary}` });
   } catch (err) {
@@ -50,9 +63,10 @@ async function summarizeTarball(tarPath: string): Promise<string> {
 
 /*
 Placeholder for bot-specific upload. Implement in bot utils.
+Note: This is intentionally a placeholder - actual implementation should use Discord.js REST API
 */
 async function uploadFileToChannel(channelId: string, filePath: string, name: string): Promise<void> {
-  // This is a placeholder implementation - the actual implementation
-  // should use the Discord.js REST API to upload files
-  console.log(`Uploading ${filePath} as ${name} to channel ${channelId}`);
+  // TODO: Implement using Discord.js REST API to upload files
+  // This is a placeholder that logs the intent - actual implementation depends on bot setup
+  console.log(`[TODO] Upload ${filePath} as ${name} to channel ${channelId}`);
 }

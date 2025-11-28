@@ -62,18 +62,24 @@ export function verifyHmac(opts: Options) {
       const computed = crypto.createHmac(algorithm, secret).update(raw).digest("hex");
       const expected = sigHeader.startsWith(`${algorithm}=`) ? sigHeader.split("=")[1] : sigHeader;
 
-      // Constant-time comparison (handle different lengths safely)
+      // Constant-time comparison that handles different lengths safely
+      // Pad shorter buffer to match longer one to prevent timing attacks from length checks
       const computedBuf = Buffer.from(computed);
       const expectedBuf = Buffer.from(expected);
+      const maxLen = Math.max(computedBuf.length, expectedBuf.length);
       
-      // First check lengths - if different, signatures can't match
-      // Still compare to prevent timing attacks
-      if (computedBuf.length !== expectedBuf.length) {
+      // Pad both buffers to the same length with zeros for constant-time comparison
+      const paddedComputed = Buffer.concat([computedBuf], maxLen);
+      const paddedExpected = Buffer.concat([expectedBuf], maxLen);
+      
+      // Perform constant-time comparison, but also track if lengths were different
+      const lengthMatch = computedBuf.length === expectedBuf.length;
+      const contentMatch = crypto.timingSafeEqual(paddedComputed, paddedExpected);
+      
+      // Both length and content must match
+      if (!lengthMatch || !contentMatch) {
         return res.status(401).send("Invalid signature");
       }
-      
-      const match = crypto.timingSafeEqual(computedBuf, expectedBuf);
-      if (!match) return res.status(401).send("Invalid signature");
 
       // Replay protection: require nonce header
       const nonce = req.header(nonceHeader) ?? null;

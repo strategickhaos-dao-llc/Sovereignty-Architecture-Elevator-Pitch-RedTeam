@@ -20,7 +20,7 @@ kubectl get networkpolicy -A -o yaml > "${TMP}/netpol.yaml"
 kubectl get clusterrole,role,clusterrolebinding,rolebinding -A -o yaml > "${TMP}/rbac.yaml"
 kubectl get sa -A -o yaml > "${TMP}/sa.yaml"
 kubectl get validatingwebhookconfiguration,mutatingwebhookconfiguration -A -o yaml > "${TMP}/webhooks.yaml" || true
-kubectl get podsecuritypolicy -A -o yaml 2>/dev/null || true > "${TMP}/podsecuritypolicy.yaml" || true
+kubectl get podsecuritypolicy -A -o yaml > "${TMP}/podsecuritypolicy.yaml" 2>/dev/null || true
 kubectl get cm -A -o yaml > "${TMP}/configmaps.yaml" || true
 
 # Dump image tags from manifests and pods
