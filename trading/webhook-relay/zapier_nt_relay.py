@@ -48,13 +48,25 @@ app = Flask(__name__)
 # =============================================================================
 
 # Allowed tickers - only these symbols will be processed
-ALLOWED_TICKERS = ['ES', 'MNQ', 'NQ', 'BTC', 'ETH', 'SPY', 'QQQ']
+# Configure via ALLOWED_TICKERS env var (comma-separated) or modify this list
+ALLOWED_TICKERS_DEFAULT = ['ES', 'MNQ', 'NQ', 'BTC', 'ETH', 'SPY', 'QQQ']
+ALLOWED_TICKERS = os.getenv('ALLOWED_TICKERS', ','.join(ALLOWED_TICKERS_DEFAULT)).split(',')
+ALLOWED_TICKERS = [t.strip().upper() for t in ALLOWED_TICKERS if t.strip()]
 
 # Maximum position size per order (contracts/shares)
-MAX_SIZE = 5
+MAX_SIZE = int(os.getenv('MAX_SIZE', '5'))
+
+# High-value trade threshold for manual approval
+HIGH_VALUE_THRESHOLD = float(os.getenv('HIGH_VALUE_THRESHOLD', '10000'))
 
 # Target portfolio weights for rebalancing verification
-TARGET_WEIGHTS = yaml.safe_load('''
+# Configure via PORTFOLIO_CONFIG_FILE env var for external config
+PORTFOLIO_CONFIG_FILE = os.getenv('PORTFOLIO_CONFIG_FILE')
+if PORTFOLIO_CONFIG_FILE and os.path.exists(PORTFOLIO_CONFIG_FILE):
+    with open(PORTFOLIO_CONFIG_FILE) as f:
+        TARGET_WEIGHTS = yaml.safe_load(f)
+else:
+    TARGET_WEIGHTS = yaml.safe_load('''
 portfolio:
   ES: 0.4
   MNQ: 0.3
@@ -63,12 +75,15 @@ portfolio:
 ''')
 
 # Daily risk tracking
+# NOTE: This is suitable for single-process deployments. For multi-worker
+# deployments (e.g., gunicorn with multiple workers), use Redis or database
+# for shared state. See README for production deployment guidance.
 daily_state = {
     'date': None,
     'pnl': 0.0,
     'trade_count': 0,
-    'max_daily_loss': -500.0,  # Dollars
-    'max_trades': 10
+    'max_daily_loss': float(os.getenv('MAX_DAILY_LOSS', '-500.0')),  # Dollars
+    'max_trades': int(os.getenv('MAX_DAILY_TRADES', '10'))
 }
 
 # NinjaTrader local API endpoint (configure for your setup)
@@ -101,7 +116,8 @@ def parse_signal(signal: str) -> list:
     - "SELL 1 shares of MNQ @ $18500"
     """
     # Pattern: BUY/SELL quantity shares of TICKER @ $price
-    pattern = r'(BUY|SELL)\s+(\d+\.?\d*)\s+shares?\s+of\s+(\w+)\s+@\s+\$?(\d+\.?\d*)'
+    # Supports: "BUY 2 shares of ES @ $5200.50", "SELL 1.5 shares of MNQ @ $18500"
+    pattern = r'(BUY|SELL)\s+(\d+(?:\.\d+)?)\s+shares?\s+of\s+(\w+)\s+@\s+\$?(\d+(?:\.\d+)?)'
     matches = re.findall(pattern, signal, re.IGNORECASE)
     
     orders = []
@@ -178,23 +194,33 @@ def forward_to_ninjatrader(orders: list) -> bool:
     """
     Forward validated orders to NinjaTrader API.
     
-    In production, implement actual HTTP call to NT:
+    IMPORTANT: This is a STUB implementation for development/testing.
+    In production, you MUST implement actual forwarding to your NT instance.
+    
+    Production implementation example:
         import requests
         response = requests.post(NT_API_URL, json={'orders': orders}, timeout=5)
         return response.ok
-    """
-    # Placeholder - implement actual forwarding
-    logger.info(f"Forwarding to NT: {orders}")
     
-    # Uncomment for production:
+    Returns:
+        bool: True if forwarding succeeded (stub always returns True)
+    """
+    # Log the orders that would be forwarded
+    logger.warning("STUB: forward_to_ninjatrader - implement actual NT API call for production")
+    logger.info(f"Would forward to NT ({NT_API_URL}): {orders}")
+    
+    # Production implementation (uncomment and configure):
     # try:
     #     import requests
     #     response = requests.post(NT_API_URL, json={'orders': orders}, timeout=5)
+    #     if not response.ok:
+    #         logger.error(f"NT API error: {response.status_code} - {response.text}")
     #     return response.ok
     # except Exception as e:
     #     logger.error(f"NT forward failed: {e}")
     #     return False
     
+    # Stub returns True for testing/development
     return True
 
 
@@ -261,7 +287,7 @@ def handle_signal():
         # In production: Send notification (email/SMS/Discord) and await approval
         # For now, auto-approve low-risk orders
         total_value = sum(o['qty'] * o['price'] for o in sanitized_orders)
-        if total_value > 10000:  # High value threshold
+        if total_value > HIGH_VALUE_THRESHOLD:
             logger.info(f"High-value order requires manual approval: ${total_value:.2f}")
             return jsonify({
                 'status': 'pending_approval',

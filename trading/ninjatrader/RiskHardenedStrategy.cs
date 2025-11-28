@@ -115,16 +115,18 @@ namespace NinjaTrader.Custom.Strategies
                 Print($"[RiskGuard] New trading day: {currentDay:yyyy-MM-dd} | Account Balance: ${accountBalance:N2}");
             }
 
-            // =====================================================
-            // Signal Generation: Replace with your custom logic
-            // Example: Integrate with Grok/Zapier external signals
-            // =====================================================
-            bool buySignal = false;  // Your buy condition here
-            bool sellSignal = false; // Your sell condition here
+    # =====================================================
+    # Signal Generation: Replace with your custom logic
+    # Example: Integrate with Grok/Zapier external signals
+    # NOTE: These are intentionally set to false as placeholders
+    # Users must implement their own signal logic
+    # =====================================================
+    bool buySignal = false;  // TODO: Your buy condition here
+    bool sellSignal = false; // TODO: Your sell condition here
 
-            // Example placeholder signals (remove in production):
-            // buySignal = CrossAbove(SMA(14), SMA(50), 1);
-            // sellSignal = CrossBelow(SMA(14), SMA(50), 1);
+    // Example signal implementations (uncomment to test):
+    // buySignal = CrossAbove(SMA(14), SMA(50), 1);
+    // sellSignal = CrossBelow(SMA(14), SMA(50), 1);
 
             if (buySignal || sellSignal)
             {
