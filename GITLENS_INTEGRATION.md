@@ -86,7 +86,7 @@ brew install gitkraken-cli
 # Authenticate with GitKraken
 gk login
 
-# Create a Workspaces
+# Create a Workspace
 gk ws create my-workspace
 
 # Clone repositories into workspace
