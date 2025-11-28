@@ -7,6 +7,8 @@ A comprehensive bibliography of 100 entries analyzing "how this can fail" for th
 - **Biology of Organisms**: Emergent risks and evolutionary pressures
 - **Music of Harmony**: Miscoordination and governance failures
 
+> **Note on Duplicates**: Some entries appear multiple times across categories with emphasis on different aspects relevant to each category. This is intentional—foundational works like DuPont (2017) on The DAO have implications across DAO governance, blockchain collapses, and sovereign systems. Cross-referencing reinforces the interconnected nature of failure modes.
+
 ---
 
 ## 1-20: DAO Failures & Case Studies

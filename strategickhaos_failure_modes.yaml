@@ -134,12 +134,13 @@ strategickhaos_failure_modes:
       - "Springer (2024) - Digital sovereignty normative approach"
     risks:
       dependency_risks:
-        description: "xAI/Grok downtime halts agents"
+        description: "External AI service downtime halts agents"
         severity: "high"
         mitigation_status: "minimal"
         controls:
           - "Multi-provider routing in discovery.yml"
           - "Fallback channel configurations"
+          - "Provider-agnostic agent interfaces"
       regulatory_barriers:
         description: "DAO scrutiny from SEC"
         severity: "medium"
@@ -201,7 +202,8 @@ strategickhaos_failure_modes:
 # Overall System Assessment
 overall_assessment:
   percent_done: 51  # Average across all categories
-  calculation: "(60 + 75 + 50 + 40 + 30) / 5 = 51%"
+  # Note: Update this calculation when individual percent_done values change
+  calculation: "Average of dao_failures, ai_governance, blockchain_collapses, sovereign_ai, multi_agent"
   status: "Lab-Only Mode"
   target_for_production: 80
   
