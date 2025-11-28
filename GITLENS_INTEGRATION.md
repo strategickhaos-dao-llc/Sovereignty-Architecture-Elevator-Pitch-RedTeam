@@ -61,7 +61,39 @@ export DISCORD_TOKEN="your_bot_token"
    - Commit Graph (visual Git history)
    - Advanced integrations
 
-### 5. Configuration
+### 5. GitKraken CLI Setup
+
+GitKraken CLI (`gk`) provides command-line Git productivity tools that complement GitLens.
+
+**Installation:**
+
+```bash
+# Via npm (recommended for devcontainers)
+npm install -g @gitkraken/cli
+
+# Via snap (on Ubuntu/Linux systems with snapd)
+sudo snap install gitkraken-cli
+
+# Via Homebrew (macOS)
+brew install gitkraken-cli
+```
+
+**Note:** The devcontainer automatically installs GitKraken CLI via npm when the container is created.
+
+**Usage Examples:**
+
+```bash
+# Authenticate with GitKraken
+gk login
+
+# Create a Workspaces
+gk ws create my-workspace
+
+# Clone repositories into workspace
+gk ws clone my-workspace
+```
+
+### 6. Configuration
 
 1. Fill in your `discovery.yml` with actual values:
    ```yaml
