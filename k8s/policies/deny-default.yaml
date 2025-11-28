@@ -1,0 +1,187 @@
+# Default Deny Network Policy
+# Strategickhaos DAO LLC - Zero Trust Network Security
+# Denies all ingress/egress by default; allowlist services explicitly
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: baseline
+spec:
+  podSelector: {}  # Applies to all pods in namespace
+  policyTypes:
+    - Ingress
+    - Egress
+---
+# Allow DNS resolution for all pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: baseline
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+# Allow Discord Bot to communicate with Discord API
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-discord-bot-egress
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: application
+spec:
+  podSelector:
+    matchLabels:
+      component: bot
+  policyTypes:
+    - Egress
+  egress:
+    # Discord API (HTTPS)
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+    # Discord Gateway (WebSocket)
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+---
+# Allow Event Gateway to receive webhooks
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-event-gateway-ingress
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: application
+spec:
+  podSelector:
+    matchLabels:
+      component: gateway
+  policyTypes:
+    - Ingress
+  ingress:
+    # From ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+    # From monitoring (Prometheus)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+      ports:
+        - protocol: TCP
+          port: 9090
+---
+# Allow Event Gateway egress to Discord and internal services
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-event-gateway-egress
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: application
+spec:
+  podSelector:
+    matchLabels:
+      component: gateway
+  policyTypes:
+    - Egress
+  egress:
+    # Discord API
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+    # Redis for replay cache
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: ops
+        - podSelector:
+            matchLabels:
+              app: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+---
+# Allow internal communication between bot and gateway
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-internal-comms
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: internal
+spec:
+  podSelector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: strategickhaos-discord-ops
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: strategickhaos-discord-ops
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+# Allow Vault access for secrets
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-vault-access
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    policy-type: secrets
+spec:
+  podSelector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: vault
+      ports:
+        - protocol: TCP
+          port: 8200
