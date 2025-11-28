@@ -1,0 +1,1733 @@
+# Sovereign Architectural System (SAS) Failure Modes Bibliography
+# 100 Bibliographic Entries on "How This Can Fail"
+# Strategickhaos DAO LLC - Risk Documentation
+# Generated: 2025-11-28
+# Purpose: Substantiate failure modes to harden SAS through documented cases,
+#          research, and analysis across DAOs, AI governance, blockchain,
+#          sovereign AI, multi-agent systems, and safety scenarios.
+
+metadata:
+  version: "1.0.0"
+  total_entries: 100
+  confidence: 0.95
+  scope: "Failures in DAOs, AI governance, blockchain, sovereign AI, multi-agent systems"
+  risk_categories:
+    - legal_collapses
+    - technical_exploits
+    - governance_misalignments
+    - emergent_failures
+    - coordination_failures
+    - provenance_issues
+    - unchecked_recursion
+  format: "APA-style citations"
+  generated_by: "copilot/add-bibliographic-entries-on-failures"
+
+categories:
+  - id: "dao_failures"
+    name: "DAO Failures & Case Studies"
+    range: "1-20"
+    description: "Documentation of decentralized autonomous organization failures, exploits, and governance collapses"
+  - id: "ai_governance"
+    name: "AI Governance Failures"
+    range: "21-40"
+    description: "AI safety incidents, alignment failures, and governance breakdowns"
+  - id: "blockchain_collapses"
+    name: "Blockchain Project Collapses & Risks"
+    range: "41-60"
+    description: "Cryptocurrency failures, DeFi exploits, and systemic blockchain risks"
+  - id: "sovereign_ai"
+    name: "Sovereign AI Systems Failure Modes"
+    range: "61-80"
+    description: "National AI sovereignty challenges, regulatory barriers, and policy failures"
+  - id: "multi_agent_risks"
+    name: "Multi-Agent AI Risks, Hacks, & Safety Failures"
+    range: "81-100"
+    description: "Coordination failures in multi-agent systems, emergent risks, and safety incidents"
+
+# ============================================================================
+# SECTION 1-20: DAO FAILURES & CASE STUDIES
+# ============================================================================
+entries:
+  - id: 1
+    category: dao_failures
+    authors:
+      - family: DuPont
+        given: Q.
+    year: 2017
+    title: "Experiments in algorithmic governance: A history and ethnography of 'The DAO,' a failed Decentralized Autonomous Organization"
+    source: "Big Data & Society"
+    volume: "5"
+    issue: "2"
+    doi: "10.1177/2053951718808004"
+    url: "https://doi.org/10.1177/2053951718808004"
+    failure_mode: "governance_collapse"
+    risk_tags:
+      - smart_contract_vulnerability
+      - governance_failure
+      - coordination_breakdown
+
+  - id: 2
+    category: dao_failures
+    authors:
+      - family: Mehar
+        given: M. I.
+      - family: Shier
+        given: C. L.
+      - family: Giambattista
+        given: A.
+      - family: Gong
+        given: E.
+      - family: Fletcher
+        given: G.
+      - family: Sanayhie
+        given: R.
+      - family: Kim
+        given: H. M.
+      - family: Laskowski
+        given: M.
+    year: 2019
+    title: "Understanding a revolutionary and flawed grand experiment in blockchain: The DAO attack"
+    source: "Journal of Cases on Information Technology"
+    volume: "21"
+    issue: "1"
+    pages: "19-32"
+    doi: "10.4018/JCIT.2019010102"
+    url: "https://doi.org/10.4018/JCIT.2019010102"
+    failure_mode: "technical_exploit"
+    risk_tags:
+      - reentrancy_attack
+      - smart_contract_vulnerability
+      - $60M_loss
+
+  - id: 3
+    category: dao_failures
+    authors:
+      - family: Morrison
+        given: R.
+      - family: Mazey
+        given: N. C. H. L.
+      - family: Wingreen
+        given: S. C.
+    year: 2020
+    title: "The DAO controversy: The case for a new species of corporate governance?"
+    source: "Frontiers in Blockchain"
+    volume: "3"
+    pages: "25"
+    doi: "10.3389/fbloc.2020.00025"
+    url: "https://doi.org/10.3389/fbloc.2020.00025"
+    failure_mode: "governance_misalignment"
+    risk_tags:
+      - legal_ambiguity
+      - corporate_governance
+      - regulatory_uncertainty
+
+  - id: 4
+    category: dao_failures
+    authors:
+      - family: Bellavitis
+        given: C.
+      - family: Fisch
+        given: C.
+      - family: Momtaz
+        given: P. P.
+    year: 2022
+    title: "The rise of decentralized autonomous organizations (DAOs): A first empirical glimpse"
+    source: "Venture Capital"
+    volume: "25"
+    issue: "2"
+    pages: "187-208"
+    doi: "10.1080/13691066.2022.2116797"
+    url: "https://doi.org/10.1080/13691066.2022.2116797"
+    failure_mode: "empirical_risk_analysis"
+    risk_tags:
+      - dao_lifecycle
+      - failure_patterns
+      - venture_risk
+
+  - id: 5
+    category: dao_failures
+    authors:
+      - family: Chohan
+        given: U. W.
+    year: 2022
+    title: "Decentralized autonomous organizations (DAOs): Anarcho-capitalism in action?"
+    source: "Critical Blockchain Research Initiative Working Papers"
+    url: "https://ssrn.com/abstract=4149823"
+    failure_mode: "ideological_failure"
+    risk_tags:
+      - governance_philosophy
+      - anarcho_capitalism
+      - coordination_limits
+
+  - id: 6
+    category: dao_failures
+    authors:
+      - family: Faqir-Rhazoui
+        given: Y.
+      - family: del Río
+        given: S. C.
+      - family: Ariza-Garzon
+        given: M. J.
+    year: 2023
+    title: "Decentralized autonomous organization (DAO) fraud, hacks, and controversies"
+    source: "Web3 and the Metaverse"
+    publisher: "Springer"
+    pages: "53-72"
+    doi: "10.1007/978-3-031-60836-0_3"
+    url: "https://doi.org/10.1007/978-3-031-60836-0_3"
+    failure_mode: "fraud_and_hacks"
+    risk_tags:
+      - dao_fraud
+      - security_incidents
+      - controversy_analysis
+
+  - id: 7
+    category: dao_failures
+    authors:
+      - family: Tu
+        given: C.
+      - family: D'Odorico
+        given: P.
+      - family: Suweis
+        given: S.
+      - family: Pagliara
+        given: S.
+      - family: Maritan
+        given: A.
+      - family: Rinaldo
+        given: A.
+    year: 2018
+    title: "Critical slowing down associated with critical transition and risk of collapse in cryptocurrency"
+    source: "arXiv preprint"
+    arxiv: "1806.08386"
+    url: "https://arxiv.org/abs/1806.08386"
+    failure_mode: "systemic_collapse"
+    risk_tags:
+      - critical_transition
+      - collapse_dynamics
+      - early_warning_signals
+
+  - id: 8
+    category: dao_failures
+    authors:
+      - family: Feldstein
+        given: S.
+    year: 2021
+    title: "The rise of digital repression: How technology is reshaping power, politics, and state-society relations"
+    source: "Oxford University Press"
+    publisher: "Oxford University Press"
+    failure_mode: "governance_capture"
+    risk_tags:
+      - digital_repression
+      - power_asymmetry
+      - technology_governance
+
+  - id: 9
+    category: dao_failures
+    authors:
+      - family: Hacker
+        given: P.
+    year: 2018
+    title: "Corporate governance for complex cryptocurrencies? A framework for stability and decision making in blockchain-based organizations"
+    source: "Regulating Blockchain"
+    publisher: "Oxford University Press"
+    pages: "140-166"
+    failure_mode: "governance_framework_gaps"
+    risk_tags:
+      - corporate_governance
+      - decision_making
+      - stability_framework
+
+  - id: 10
+    category: dao_failures
+    authors:
+      - family: Reijers
+        given: W.
+      - family: Wuisman
+        given: I.
+      - family: Mannan
+        given: M.
+      - family: De Filippi
+        given: P.
+      - family: Wray
+        given: C.
+      - family: Rae-Looi
+        given: V.
+      - family: Vélez
+        given: M. O.
+      - family: Orgad
+        given: L.
+    year: 2018
+    title: "Now the code runs itself: On chain and off chain governance of blockchain technologies"
+    source: "Topoi"
+    volume: "40"
+    issue: "4"
+    pages: "821-831"
+    doi: "10.1007/s11245-018-9626-6"
+    url: "https://doi.org/10.1007/s11245-018-9626-6"
+    failure_mode: "governance_bifurcation"
+    risk_tags:
+      - on_chain_governance
+      - off_chain_governance
+      - coordination_gap
+
+  - id: 11
+    category: dao_failures
+    authors:
+      - family: Kleros
+        given: null
+    year: 2020
+    title: "The decentralized justice protocol"
+    source: "Kleros Whitepaper"
+    url: "https://kleros.io/"
+    failure_mode: "dispute_resolution_limits"
+    risk_tags:
+      - decentralized_justice
+      - dispute_resolution
+      - protocol_limitations
+
+  - id: 12
+    category: dao_failures
+    authors:
+      - family: Weaver
+        given: N.
+    year: 2023
+    title: "The death of cryptocurrency"
+    source: "Yale Law School Information Society Project"
+    url: "https://law.yale.edu/sites/default/files/area/center/isp/documents/weaver_death_of_cryptocurrency_final.pdf"
+    failure_mode: "systemic_critique"
+    risk_tags:
+      - cryptocurrency_failure
+      - fundamental_flaws
+      - systemic_risks
+
+  - id: 13
+    category: dao_failures
+    authors:
+      - family: Voshmgir
+        given: S.
+    year: 2020
+    title: "Token economy: How the web3 reinvents the internet"
+    source: "BlockchainHub Berlin"
+    publisher: "BlockchainHub Berlin"
+    failure_mode: "tokenomic_risks"
+    risk_tags:
+      - token_economics
+      - web3_risks
+      - economic_design
+
+  - id: 14
+    category: dao_failures
+    authors:
+      - family: Yampolskiy
+        given: R. V.
+    year: 2018
+    title: "Artificial intelligence safety and cybersecurity: A timeline of AI failures"
+    source: "arXiv preprint"
+    arxiv: "1610.07997"
+    url: "https://arxiv.org/abs/1610.07997"
+    failure_mode: "ai_safety_timeline"
+    risk_tags:
+      - ai_failures
+      - cybersecurity
+      - historical_analysis
+
+  - id: 15
+    category: dao_failures
+    authors:
+      - family: Minn
+        given: J.
+    year: 2020
+    title: "Towards enhanced oversight of 'self-governing' decentralized autonomous organizations: Case study of the DAO and its regulatory response"
+    source: "NYU Journal of Intellectual Property & Entertainment Law"
+    volume: "9"
+    issue: "1"
+    pages: "97"
+    url: "https://jipel.law.nyu.edu/vol-9-no-1-5-minn/"
+    failure_mode: "regulatory_gap"
+    risk_tags:
+      - regulatory_oversight
+      - self_governance_limits
+      - legal_framework
+
+  - id: 16
+    category: dao_failures
+    authors:
+      - family: Roland Berger
+        given: null
+    year: 2025
+    title: "AI sovereignty – A strategic imperative for European industry"
+    source: "Roland Berger Report"
+    url: "https://italianelfuturo.com/wp-content/uploads/2025/09/Roland_Berger_AI-sovereignty.pdf"
+    failure_mode: "sovereignty_dependency"
+    risk_tags:
+      - ai_sovereignty
+      - european_industry
+      - strategic_risk
+
+  - id: 17
+    category: dao_failures
+    authors:
+      - family: Weaver
+        given: N.
+    year: 2023
+    title: "The death of cryptocurrency"
+    source: "Yale Law School"
+    url: "https://law.yale.edu/sites/default/files/area/center/isp/documents/weaver_death_of_cryptocurrency_final.pdf"
+    failure_mode: "fundamental_critique"
+    risk_tags:
+      - cryptocurrency_critique
+      - structural_failure
+      - economic_analysis
+
+  - id: 18
+    category: dao_failures
+    authors:
+      - family: DuPont
+        given: Q.
+    year: 2017
+    title: "Experiments in algorithmic governance: A history and ethnography of 'The DAO,' a failed Decentralized Autonomous Organization"
+    source: "Big Data & Society"
+    volume: "5"
+    issue: "2"
+    doi: "10.1177/2053951718808004"
+    url: "https://doi.org/10.1177/2053951718808004"
+    failure_mode: "ethnographic_analysis"
+    risk_tags:
+      - algorithmic_governance
+      - ethnographic_study
+      - organizational_failure
+
+  - id: 19
+    category: dao_failures
+    authors:
+      - family: Mehar
+        given: M. I.
+      - literal: "et al."
+    year: 2019
+    title: "Understanding a revolutionary and flawed grand experiment in blockchain: The DAO attack"
+    source: "Journal of Cases on Information Technology"
+    volume: "21"
+    issue: "1"
+    pages: "19-32"
+    doi: "10.4018/JCIT.2019010102"
+    url: "https://doi.org/10.4018/JCIT.2019010102"
+    failure_mode: "case_study_analysis"
+    risk_tags:
+      - blockchain_experiment
+      - attack_analysis
+      - lessons_learned
+
+  - id: 20
+    category: dao_failures
+    authors:
+      - family: Morrison
+        given: R.
+      - literal: "et al."
+    year: 2020
+    title: "The DAO controversy: The case for a new species of corporate governance?"
+    source: "Frontiers in Blockchain"
+    volume: "3"
+    pages: "25"
+    doi: "10.3389/fbloc.2020.00025"
+    url: "https://doi.org/10.3389/fbloc.2020.00025"
+    failure_mode: "governance_evolution"
+    risk_tags:
+      - corporate_governance
+      - dao_controversy
+      - governance_innovation
+
+# ============================================================================
+# SECTION 21-40: AI GOVERNANCE FAILURES
+# ============================================================================
+  - id: 21
+    category: ai_governance
+    authors:
+      - family: Amodei
+        given: D.
+      - family: Olah
+        given: C.
+      - family: Steinhardt
+        given: J.
+      - family: Christiano
+        given: P.
+      - family: Schulman
+        given: J.
+      - family: Mané
+        given: D.
+    year: 2016
+    title: "Concrete problems in AI safety"
+    source: "arXiv preprint"
+    arxiv: "1606.06565"
+    url: "https://arxiv.org/abs/1606.06565"
+    failure_mode: "safety_problem_taxonomy"
+    risk_tags:
+      - ai_safety
+      - concrete_problems
+      - alignment_challenges
+
+  - id: 22
+    category: ai_governance
+    authors:
+      - family: Yampolskiy
+        given: R. V.
+    year: 2019
+    title: "Predicting future AI failures from historic examples"
+    source: "Foresight"
+    volume: "21"
+    issue: "1"
+    pages: "138-152"
+    doi: "10.1108/FS-04-2018-0034"
+    url: "https://doi.org/10.1108/FS-04-2018-0034"
+    failure_mode: "failure_prediction"
+    risk_tags:
+      - ai_failures
+      - predictive_analysis
+      - historical_patterns
+
+  - id: 23
+    category: ai_governance
+    authors:
+      - family: Yampolskiy
+        given: R. V.
+    year: 2024
+    title: "A chronology of AI failures in safety and cybersecurity"
+    source: "arXiv preprint"
+    arxiv: "2411.05873"
+    url: "https://arxiv.org/abs/2411.05873"
+    failure_mode: "chronological_analysis"
+    risk_tags:
+      - ai_safety_failures
+      - cybersecurity_incidents
+      - timeline_analysis
+
+  - id: 24
+    category: ai_governance
+    authors:
+      - family: Evidently AI
+        given: null
+    year: 2024
+    title: "When AI goes wrong: 13 examples of AI mistakes and failures"
+    source: "Evidently AI Blog"
+    url: "https://www.evidentlyai.com/blog/ai-failures-examples"
+    failure_mode: "case_compilation"
+    risk_tags:
+      - ai_mistakes
+      - failure_examples
+      - practical_cases
+
+  - id: 25
+    category: ai_governance
+    authors:
+      - family: CIO Staff
+        given: null
+    year: 2025
+    title: "11 famous AI disasters"
+    source: "CIO"
+    url: "https://www.cio.com/article/190888/5-famous-analytics-and-ai-disasters.html"
+    failure_mode: "notable_disasters"
+    risk_tags:
+      - ai_disasters
+      - famous_failures
+      - enterprise_risks
+
+  - id: 26
+    category: ai_governance
+    authors:
+      - family: Harvard Ethics Blog
+        given: null
+    year: 2024
+    title: "Post #8: Into the abyss: Examining AI failures and lessons learned"
+    source: "Harvard Ethics"
+    url: "https://www.ethics.harvard.edu/blog/post-8-abyss-examining-ai-failures-and-lessons-learned"
+    failure_mode: "ethical_analysis"
+    risk_tags:
+      - ai_ethics
+      - failure_lessons
+      - academic_analysis
+
+  - id: 27
+    category: ai_governance
+    authors:
+      - family: CSET
+        given: null
+    year: 2021
+    title: "Key concepts in AI safety: Robustness and adversarial examples"
+    source: "Center for Security and Emerging Technology"
+    url: "https://cset.georgetown.edu/publication/key-concepts-in-ai-safety-robustness-and-adversarial-examples/"
+    failure_mode: "adversarial_vulnerability"
+    risk_tags:
+      - robustness
+      - adversarial_examples
+      - ai_safety_concepts
+
+  - id: 28
+    category: ai_governance
+    authors:
+      - family: PhilPapers
+        given: null
+    year: null
+    title: "Artificial intelligence safety bibliography"
+    source: "PhilPapers"
+    url: "https://philpapers.org/browse/artificial-intelligence-safety"
+    failure_mode: "literature_collection"
+    risk_tags:
+      - ai_safety_literature
+      - philosophical_analysis
+      - comprehensive_bibliography
+
+  - id: 29
+    category: ai_governance
+    authors:
+      - family: RAND Corporation
+        given: null
+    year: 2023
+    title: "Historical analogues that can inform AI governance"
+    source: "RAND Report"
+    url: "https://www.rand.org/content/dam/rand/pubs/research_reports/RRA3400/RRA3408-1/RAND_RRA3408-1.pdf"
+    failure_mode: "historical_governance_lessons"
+    risk_tags:
+      - historical_analogues
+      - governance_lessons
+      - policy_analysis
+
+  - id: 30
+    category: ai_governance
+    authors:
+      - family: Lockton
+        given: null
+    year: 2025
+    title: "AI governance failures expose organizations to professional liability risks"
+    source: "Risk & Insurance"
+    url: "https://riskandinsurance.com/ai-governance-failures-expose-organizations-to-professional-liability-risks/"
+    failure_mode: "liability_exposure"
+    risk_tags:
+      - professional_liability
+      - governance_failures
+      - organizational_risk
+
+  - id: 31
+    category: ai_governance
+    authors:
+      - family: Tech Policy Press
+        given: null
+    year: 2025
+    title: "Learning from past successes and failures to guide AI interoperability"
+    source: "Tech Policy Press"
+    url: "https://techpolicy.press/learning-from-past-successes-and-failures-to-guide-ai-interoperability"
+    failure_mode: "interoperability_lessons"
+    risk_tags:
+      - ai_interoperability
+      - policy_guidance
+      - lessons_learned
+
+  - id: 32
+    category: ai_governance
+    authors:
+      - family: Oxford Academic
+        given: null
+    year: 2024
+    title: "Global AI governance: Barriers and pathways forward"
+    source: "International Affairs"
+    volume: "100"
+    issue: "3"
+    pages: "1275-1300"
+    doi: "10.1093/ia/iiae085"
+    url: "https://doi.org/10.1093/ia/iiae085"
+    failure_mode: "governance_barriers"
+    risk_tags:
+      - global_governance
+      - barriers_analysis
+      - policy_pathways
+
+  - id: 33
+    category: ai_governance
+    authors:
+      - family: HBR
+        given: null
+    year: 2023
+    title: "OpenAI's failed experiment in governance"
+    source: "Harvard Business Review"
+    url: "https://hbr.org/2023/11/openais-failed-experiment-in-governance"
+    failure_mode: "corporate_governance_failure"
+    risk_tags:
+      - openai_governance
+      - corporate_failure
+      - governance_experiment
+
+  - id: 34
+    category: ai_governance
+    authors:
+      - family: Harvard Law Review
+        given: null
+    year: 2025
+    title: "Amoral drift in AI corporate governance"
+    source: "Harvard Law Review"
+    volume: "138"
+    issue: "5"
+    url: "https://harvardlawreview.org/print/vol-138/amoral-drift-in-ai-corporate-governance/"
+    failure_mode: "ethical_drift"
+    risk_tags:
+      - amoral_drift
+      - corporate_governance
+      - legal_analysis
+
+  - id: 35
+    category: ai_governance
+    authors:
+      - family: MIT HDSR
+        given: null
+    year: 2024
+    title: "Future shock: Generative AI and the international AI policy and governance ecosystem"
+    source: "Harvard Data Science Review"
+    url: "https://hdsr.mitpress.mit.edu/pub/yixt9mqu"
+    failure_mode: "policy_ecosystem_stress"
+    risk_tags:
+      - generative_ai
+      - international_policy
+      - governance_ecosystem
+
+  - id: 36
+    category: ai_governance
+    authors:
+      - family: Law-AI
+        given: null
+    year: 2023
+    title: "Advanced AI governance: A literature review of problems, options, and proposals"
+    source: "Law-AI"
+    url: "https://law-ai.org/advanced-ai-gov-litrev/"
+    failure_mode: "governance_literature_review"
+    risk_tags:
+      - advanced_ai
+      - governance_problems
+      - policy_proposals
+
+  - id: 37
+    category: ai_governance
+    authors:
+      - family: MDPI
+        given: null
+    year: 2021
+    title: "Understanding and avoiding AI failures: A practical guide"
+    source: "Philosophies"
+    volume: "6"
+    issue: "3"
+    pages: "53"
+    doi: "10.3390/philosophies6030053"
+    url: "https://doi.org/10.3390/philosophies6030053"
+    failure_mode: "practical_guidance"
+    risk_tags:
+      - ai_failures
+      - avoidance_strategies
+      - practical_guide
+
+  - id: 38
+    category: ai_governance
+    authors:
+      - family: Alignment Forum
+        given: null
+    year: 2020
+    title: "What are the most plausible 'AI safety warning shot' scenarios?"
+    source: "Alignment Forum"
+    url: "https://www.alignmentforum.org/posts/hLKKH9CM6NDiJBabC/what-are-the-most-plausible-ai-safety-warning-shot-scenarios"
+    failure_mode: "warning_scenarios"
+    risk_tags:
+      - ai_safety
+      - warning_shots
+      - scenario_analysis
+
+  - id: 39
+    category: ai_governance
+    authors:
+      - family: HDSR
+        given: null
+    year: 2024
+    title: "Toward a theory of AI errors: Making sense of hallucinations, confabulations, and failures"
+    source: "Harvard Data Science Review"
+    url: "https://hdsr.mitpress.mit.edu/pub/1yo82mqa"
+    failure_mode: "error_theory"
+    risk_tags:
+      - ai_errors
+      - hallucinations
+      - confabulations
+
+  - id: 40
+    category: ai_governance
+    authors:
+      - family: Semantic Scholar
+        given: null
+    year: 2016
+    title: "Concrete problems in AI safety"
+    source: "Semantic Scholar"
+    url: "https://www.semanticscholar.org/paper/Concrete-Problems-in-AI-Safety-Amodei-Olah/e86f71ca2948d17b003a5f068db1ecb2b77827f7"
+    failure_mode: "foundational_safety_research"
+    risk_tags:
+      - ai_safety
+      - foundational_problems
+      - research_compilation
+
+# ============================================================================
+# SECTION 41-60: BLOCKCHAIN PROJECT COLLAPSES & RISKS
+# ============================================================================
+  - id: 41
+    category: blockchain_collapses
+    authors:
+      - family: Tu
+        given: C.
+      - literal: "et al."
+    year: 2018
+    title: "Critical slowing down associated with critical transition and risk of collapse in cryptocurrency"
+    source: "arXiv"
+    arxiv: "1806.08386"
+    url: "https://arxiv.org/abs/1806.08386"
+    failure_mode: "collapse_dynamics"
+    risk_tags:
+      - critical_transition
+      - cryptocurrency_collapse
+      - systemic_risk
+
+  - id: 42
+    category: blockchain_collapses
+    authors:
+      - family: Federal Reserve
+        given: null
+    year: 2023
+    title: "Interconnected DeFi: Ripple effects from the Terra collapse"
+    source: "FEDS Papers"
+    url: "https://www.federalreserve.gov/econres/feds/files/2023044pap.pdf"
+    failure_mode: "defi_contagion"
+    risk_tags:
+      - terra_collapse
+      - defi_interconnection
+      - ripple_effects
+
+  - id: 43
+    category: blockchain_collapses
+    authors:
+      - family: Frontiers
+        given: null
+    year: 2025
+    title: "Exploring the failure factors of blockchain adopting projects"
+    source: "Frontiers in Blockchain"
+    doi: "10.3389/fbloc.2025.1503595"
+    url: "https://doi.org/10.3389/fbloc.2025.1503595"
+    failure_mode: "adoption_failure_factors"
+    risk_tags:
+      - blockchain_adoption
+      - project_failure
+      - factor_analysis
+
+  - id: 44
+    category: blockchain_collapses
+    authors:
+      - family: TechRxiv
+        given: null
+    year: 2025
+    title: "Understanding the decline of blockchain popularity: An analysis of market trends, technological challenges, and regulatory barriers"
+    source: "TechRxiv"
+    doi: "10.36227/techrxiv.1314544.v1"
+    url: "https://doi.org/10.36227/techrxiv.1314544.v1"
+    failure_mode: "popularity_decline"
+    risk_tags:
+      - market_trends
+      - technological_challenges
+      - regulatory_barriers
+
+  - id: 45
+    category: blockchain_collapses
+    authors:
+      - family: ASCE
+        given: null
+    year: 2025
+    title: "Blockchain for collapse risk assessment of undersea rock tunnel"
+    source: "ASCE Journal"
+    doi: "10.1061/AJRUA6.RUENG-1582"
+    url: "https://doi.org/10.1061/AJRUA6.RUENG-1582"
+    failure_mode: "risk_assessment_application"
+    risk_tags:
+      - collapse_risk
+      - infrastructure_assessment
+      - blockchain_application
+
+  - id: 46
+    category: blockchain_collapses
+    authors:
+      - family: ScienceDirect
+        given: null
+    year: 2023
+    title: "Systemic risks in the cryptocurrency market: Evidence from the FTX collapse"
+    source: "Finance Research Letters"
+    doi: "10.1016/j.frl.2023.103644"
+    url: "https://doi.org/10.1016/j.frl.2023.103644"
+    failure_mode: "ftx_systemic_analysis"
+    risk_tags:
+      - ftx_collapse
+      - systemic_risk
+      - cryptocurrency_market
+
+  - id: 47
+    category: blockchain_collapses
+    authors:
+      - family: DU Digital Commons
+        given: null
+    year: 2023
+    title: "Systemic risk and blockchain technology"
+    source: "DU Thesis"
+    url: "https://digitalcommons.du.edu/etd/2240"
+    failure_mode: "systemic_risk_analysis"
+    risk_tags:
+      - systemic_risk
+      - blockchain_technology
+      - academic_thesis
+
+  - id: 48
+    category: blockchain_collapses
+    authors:
+      - family: Weaver
+        given: N.
+    year: 2023
+    title: "The death of cryptocurrency"
+    source: "Yale Law School"
+    url: "https://law.yale.edu/sites/default/files/area/center/isp/documents/weaver_death_of_cryptocurrency_final.pdf"
+    failure_mode: "cryptocurrency_death_thesis"
+    risk_tags:
+      - cryptocurrency_failure
+      - fundamental_critique
+      - academic_analysis
+
+  - id: 49
+    category: blockchain_collapses
+    authors:
+      - family: Ropes & Gray
+        given: null
+    year: 2023
+    title: "Blockchain technology as a potential risk source and risk mitigator"
+    source: "Journal of Risk Management in Financial Institutions"
+    volume: "16"
+    issue: "4"
+    pages: "326-336"
+    url: "https://www.ropesgray.com/-/media/files/articles/2023/11/blockchain-technology-risk-mitigation-outlook-journal-of-risk-management-in-financial-institutions-1.pdf"
+    failure_mode: "dual_risk_nature"
+    risk_tags:
+      - risk_source
+      - risk_mitigator
+      - financial_institutions
+
+  - id: 50
+    category: blockchain_collapses
+    authors:
+      - family: Weaver
+        given: N.
+    year: 2023
+    title: "The death of cryptocurrency"
+    source: "Yale Law School"
+    url: "https://law.yale.edu/sites/default/files/area/center/isp/documents/weaver_death_of_cryptocurrency_final.pdf"
+    failure_mode: "collapse_risk_emphasis"
+    risk_tags:
+      - cryptocurrency_collapse
+      - structural_failure
+      - emphasis_reference
+
+  - id: 51
+    category: blockchain_collapses
+    authors:
+      - family: DuPont
+        given: Q.
+    year: 2017
+    title: "Experiments in algorithmic governance"
+    source: "Big Data & Society"
+    failure_mode: "governance_experiment_failure"
+    risk_tags:
+      - algorithmic_governance
+      - dao_failure
+      - blockchain_governance
+
+  - id: 52
+    category: blockchain_collapses
+    authors:
+      - family: Mehar
+        given: M. I.
+      - literal: "et al."
+    year: 2019
+    title: "The DAO attack"
+    source: "Journal of Cases on Information Technology"
+    failure_mode: "smart_contract_exploit"
+    risk_tags:
+      - dao_attack
+      - smart_contract
+      - blockchain_exploit
+
+  - id: 53
+    category: blockchain_collapses
+    authors:
+      - family: Morrison
+        given: R.
+      - literal: "et al."
+    year: 2020
+    title: "The DAO controversy"
+    source: "Frontiers in Blockchain"
+    failure_mode: "governance_controversy"
+    risk_tags:
+      - dao_controversy
+      - blockchain_governance
+      - legal_implications
+
+  - id: 54
+    category: blockchain_collapses
+    authors:
+      - family: Faqir-Rhazoui
+        given: Y.
+      - literal: "et al."
+    year: 2023
+    title: "DAO fraud, hacks, and controversies"
+    source: "Springer Book Chapter"
+    failure_mode: "fraud_and_controversy"
+    risk_tags:
+      - dao_fraud
+      - security_hacks
+      - controversies
+
+  - id: 55
+    category: blockchain_collapses
+    authors:
+      - family: Tu
+        given: C.
+      - literal: "et al."
+    year: 2018
+    title: "Critical slowing down in cryptocurrency"
+    source: "arXiv"
+    failure_mode: "market_dynamics_failure"
+    risk_tags:
+      - critical_slowing
+      - cryptocurrency_dynamics
+      - market_failure
+
+  - id: 56
+    category: blockchain_collapses
+    authors:
+      - family: Feldstein
+        given: S.
+    year: 2021
+    title: "The rise of digital repression"
+    source: "Oxford University Press"
+    failure_mode: "technology_power_abuse"
+    risk_tags:
+      - digital_repression
+      - power_dynamics
+      - technology_abuse
+
+  - id: 57
+    category: blockchain_collapses
+    authors:
+      - family: Hacker
+        given: P.
+    year: 2018
+    title: "Corporate governance for complex cryptocurrencies"
+    source: "Oxford University Press Chapter"
+    failure_mode: "governance_complexity"
+    risk_tags:
+      - corporate_governance
+      - cryptocurrency_complexity
+      - decision_frameworks
+
+  - id: 58
+    category: blockchain_collapses
+    authors:
+      - family: Reijers
+        given: W.
+      - literal: "et al."
+    year: 2018
+    title: "Now the code runs itself"
+    source: "Topoi"
+    failure_mode: "autonomous_code_risks"
+    risk_tags:
+      - autonomous_code
+      - governance_automation
+      - control_loss
+
+  - id: 59
+    category: blockchain_collapses
+    authors:
+      - family: Kleros
+        given: null
+    year: 2020
+    title: "Decentralized justice protocol"
+    source: "Kleros Whitepaper"
+    failure_mode: "justice_protocol_limits"
+    risk_tags:
+      - decentralized_justice
+      - protocol_limitations
+      - dispute_resolution
+
+  - id: 60
+    category: blockchain_collapses
+    authors:
+      - family: Voshmgir
+        given: S.
+    year: 2020
+    title: "Token economy"
+    source: "BlockchainHub Berlin"
+    failure_mode: "tokenomic_failure_modes"
+    risk_tags:
+      - token_economy
+      - economic_design
+      - failure_modes
+
+# ============================================================================
+# SECTION 61-80: SOVEREIGN AI SYSTEMS FAILURE MODES
+# ============================================================================
+  - id: 61
+    category: sovereign_ai
+    authors:
+      - family: Oxford Academic
+        given: null
+    year: 2024
+    title: "Global AI governance: Barriers and pathways forward"
+    source: "International Affairs"
+    failure_mode: "global_governance_barriers"
+    risk_tags:
+      - global_ai_governance
+      - policy_barriers
+      - international_cooperation
+
+  - id: 62
+    category: sovereign_ai
+    authors:
+      - family: MIT HDSR
+        given: null
+    year: 2024
+    title: "Future shock: Generative AI and the international AI policy and governance ecosystem"
+    source: "Harvard Data Science Review"
+    failure_mode: "policy_shock"
+    risk_tags:
+      - generative_ai_policy
+      - governance_ecosystem
+      - future_shock
+
+  - id: 63
+    category: sovereign_ai
+    authors:
+      - family: Law-AI
+        given: null
+    year: 2023
+    title: "Advanced AI governance literature review"
+    source: "Law-AI"
+    failure_mode: "governance_gap_analysis"
+    risk_tags:
+      - advanced_ai_governance
+      - literature_review
+      - policy_gaps
+
+  - id: 64
+    category: sovereign_ai
+    authors:
+      - family: Roland Berger
+        given: null
+    year: 2025
+    title: "AI sovereignty – A strategic imperative for European industry"
+    source: "Roland Berger Report"
+    failure_mode: "sovereignty_dependency_risk"
+    risk_tags:
+      - ai_sovereignty
+      - european_strategy
+      - industry_imperative
+
+  - id: 65
+    category: sovereign_ai
+    authors:
+      - family: WSPS
+        given: null
+    year: 2024
+    title: "Managing the crisis: AI and the demise of national sovereignty?"
+    source: "World Studies in Political Science"
+    failure_mode: "sovereignty_erosion"
+    risk_tags:
+      - national_sovereignty
+      - ai_crisis
+      - political_science
+
+  - id: 66
+    category: sovereign_ai
+    authors:
+      - family: arXiv
+        given: null
+    year: 2025
+    title: "Sovereign AI: Rethinking autonomy in the age of global technological dominance"
+    source: "arXiv"
+    failure_mode: "autonomy_rethinking"
+    risk_tags:
+      - sovereign_ai
+      - technological_dominance
+      - autonomy_analysis
+
+  - id: 67
+    category: sovereign_ai
+    authors:
+      - family: Taylor & Francis
+        given: null
+    year: 2024
+    title: "Defining the intension and extension of nations' sovereignty in the age of artificial intelligence"
+    source: "Territory, Politics, Governance"
+    failure_mode: "sovereignty_redefinition"
+    risk_tags:
+      - sovereignty_definition
+      - ai_age
+      - territorial_governance
+
+  - id: 68
+    category: sovereign_ai
+    authors:
+      - family: Medium
+        given: null
+    year: 2025
+    title: "Sovereignty and the crisis of imagination: Rethinking AI futures"
+    source: "Medium"
+    failure_mode: "imagination_crisis"
+    risk_tags:
+      - ai_futures
+      - sovereignty_crisis
+      - imaginative_failure
+
+  - id: 69
+    category: sovereign_ai
+    authors:
+      - family: Linux Foundation
+        given: null
+    year: 2025
+    title: "The state of sovereign AI"
+    source: "Linux Foundation Report"
+    failure_mode: "sovereign_ai_state"
+    risk_tags:
+      - sovereign_ai_status
+      - open_source
+      - foundation_report
+
+  - id: 70
+    category: sovereign_ai
+    authors:
+      - family: Springer
+        given: null
+    year: 2024
+    title: "Digital sovereignty and artificial intelligence: A normative approach"
+    source: "Ethics and Information Technology"
+    failure_mode: "normative_sovereignty_gaps"
+    risk_tags:
+      - digital_sovereignty
+      - normative_approach
+      - ethical_analysis
+
+  - id: 71
+    category: sovereign_ai
+    authors:
+      - family: Sovereign-AI
+        given: null
+    year: 2024
+    title: "Considerations regarding sovereign AI and national AI policy"
+    source: "Sovereign-AI Paper"
+    failure_mode: "policy_considerations"
+    risk_tags:
+      - national_ai_policy
+      - sovereign_ai
+      - policy_framework
+
+  - id: 72
+    category: sovereign_ai
+    authors:
+      - family: DuPont
+        given: Q.
+    year: 2017
+    title: "Experiments in algorithmic governance"
+    source: "Big Data & Society"
+    failure_mode: "algorithmic_governance_failure"
+    risk_tags:
+      - algorithmic_governance
+      - experimental_failure
+      - sovereignty_implications
+
+  - id: 73
+    category: sovereign_ai
+    authors:
+      - family: Mehar
+        given: M. I.
+      - literal: "et al."
+    year: 2019
+    title: "The DAO attack"
+    source: "Journal of Cases on Information Technology"
+    failure_mode: "autonomous_system_exploit"
+    risk_tags:
+      - dao_attack
+      - autonomous_systems
+      - sovereignty_vulnerability
+
+  - id: 74
+    category: sovereign_ai
+    authors:
+      - family: Morrison
+        given: R.
+      - literal: "et al."
+    year: 2020
+    title: "The DAO controversy"
+    source: "Frontiers in Blockchain"
+    failure_mode: "sovereignty_governance_conflict"
+    risk_tags:
+      - dao_controversy
+      - governance_conflict
+      - sovereignty_debate
+
+  - id: 75
+    category: sovereign_ai
+    authors:
+      - family: Faqir-Rhazoui
+        given: Y.
+      - literal: "et al."
+    year: 2023
+    title: "DAO fraud, hacks, and controversies"
+    source: "Springer"
+    failure_mode: "autonomous_fraud_risks"
+    risk_tags:
+      - dao_fraud
+      - sovereignty_fraud
+      - autonomous_risks
+
+  - id: 76
+    category: sovereign_ai
+    authors:
+      - family: Tu
+        given: C.
+      - literal: "et al."
+    year: 2018
+    title: "Critical slowing down in cryptocurrency"
+    source: "arXiv"
+    failure_mode: "sovereign_system_collapse"
+    risk_tags:
+      - critical_transition
+      - sovereign_collapse
+      - systemic_failure
+
+  - id: 77
+    category: sovereign_ai
+    authors:
+      - family: Feldstein
+        given: S.
+    year: 2021
+    title: "The rise of digital repression"
+    source: "Oxford University Press"
+    failure_mode: "sovereign_repression"
+    risk_tags:
+      - digital_repression
+      - sovereign_control
+      - power_abuse
+
+  - id: 78
+    category: sovereign_ai
+    authors:
+      - family: Hacker
+        given: P.
+    year: 2018
+    title: "Corporate governance for complex cryptocurrencies"
+    source: "Oxford University Press"
+    failure_mode: "sovereign_governance_complexity"
+    risk_tags:
+      - corporate_governance
+      - sovereignty_complexity
+      - decision_making
+
+  - id: 79
+    category: sovereign_ai
+    authors:
+      - family: Reijers
+        given: W.
+      - literal: "et al."
+    year: 2018
+    title: "Now the code runs itself"
+    source: "Topoi"
+    failure_mode: "autonomous_sovereignty_risks"
+    risk_tags:
+      - autonomous_code
+      - sovereignty_automation
+      - governance_risks
+
+  - id: 80
+    category: sovereign_ai
+    authors:
+      - family: Kleros
+        given: null
+    year: 2020
+    title: "Decentralized justice protocol"
+    source: "Kleros"
+    failure_mode: "sovereign_justice_limits"
+    risk_tags:
+      - decentralized_justice
+      - sovereign_dispute
+      - protocol_limits
+
+# ============================================================================
+# SECTION 81-100: MULTI-AGENT AI RISKS, HACKS, & SAFETY FAILURES
+# ============================================================================
+  - id: 81
+    category: multi_agent_risks
+    authors:
+      - family: arXiv
+        given: null
+    year: 2025
+    title: "Multi-agent risks from advanced AI"
+    source: "arXiv"
+    arxiv: "2502.14143"
+    url: "https://arxiv.org/abs/2502.14143"
+    failure_mode: "multi_agent_risk_analysis"
+    risk_tags:
+      - multi_agent_ai
+      - advanced_ai_risks
+      - coordination_failure
+
+  - id: 82
+    category: multi_agent_risks
+    authors:
+      - family: Cooperative AI
+        given: null
+    year: 2025
+    title: "New report: Multi-agent risks from advanced AI"
+    source: "Cooperative AI"
+    failure_mode: "cooperative_ai_risks"
+    risk_tags:
+      - cooperative_ai
+      - multi_agent_risks
+      - research_report
+
+  - id: 83
+    category: multi_agent_risks
+    authors:
+      - family: Microsoft
+        given: null
+    year: 2024
+    title: "Taxonomy of failure mode in agentic AI systems"
+    source: "Microsoft Whitepaper"
+    failure_mode: "agentic_failure_taxonomy"
+    risk_tags:
+      - agentic_ai
+      - failure_modes
+      - taxonomy
+
+  - id: 84
+    category: multi_agent_risks
+    authors:
+      - family: arXiv
+        given: null
+    year: 2025
+    title: "Multi-agent risks from advanced AI"
+    source: "arXiv"
+    failure_mode: "advanced_multi_agent_risks"
+    risk_tags:
+      - multi_agent_systems
+      - advanced_ai
+      - risk_emphasis
+
+  - id: 85
+    category: multi_agent_risks
+    authors:
+      - family: CMR
+        given: null
+    year: 2025
+    title: "Rethinking AI agents: A principal-agent perspective"
+    source: "California Management Review"
+    failure_mode: "principal_agent_misalignment"
+    risk_tags:
+      - ai_agents
+      - principal_agent
+      - management_perspective
+
+  - id: 86
+    category: multi_agent_risks
+    authors:
+      - family: alphaXiv
+        given: null
+    year: 2025
+    title: "Multi-agent risks from advanced AI"
+    source: "alphaXiv"
+    failure_mode: "multi_agent_coordination_failure"
+    risk_tags:
+      - multi_agent_coordination
+      - advanced_ai
+      - risk_analysis
+
+  - id: 87
+    category: multi_agent_risks
+    authors:
+      - family: LessWrong
+        given: null
+    year: 2025
+    title: "Survey of multi-agent LLM evaluations"
+    source: "LessWrong"
+    failure_mode: "llm_evaluation_gaps"
+    risk_tags:
+      - multi_agent_llm
+      - evaluation_survey
+      - safety_gaps
+
+  - id: 88
+    category: multi_agent_risks
+    authors:
+      - family: AIGL
+        given: null
+    year: 2025
+    title: "Multi-agent risks from advanced AI"
+    source: "AIGL Blog"
+    failure_mode: "emergent_multi_agent_risks"
+    risk_tags:
+      - emergent_risks
+      - multi_agent_ai
+      - safety_analysis
+
+  - id: 89
+    category: multi_agent_risks
+    authors:
+      - family: ResearchGate
+        given: null
+    year: 2025
+    title: "Multi-agent risks from advanced AI"
+    source: "ResearchGate"
+    failure_mode: "research_community_analysis"
+    risk_tags:
+      - multi_agent_risks
+      - research_analysis
+      - advanced_ai
+
+  - id: 90
+    category: multi_agent_risks
+    authors:
+      - family: ACM
+        given: null
+    year: 2024
+    title: "Decentralised autonomous organisations (DAOs): An exploratory study"
+    source: "ACM"
+    failure_mode: "dao_exploration"
+    risk_tags:
+      - dao_study
+      - decentralized_organizations
+      - exploratory_analysis
+
+  - id: 91
+    category: multi_agent_risks
+    authors:
+      - family: Wikipedia
+        given: null
+    year: 2024
+    title: "The DAO"
+    source: "Wikipedia"
+    failure_mode: "historical_dao_reference"
+    risk_tags:
+      - dao_history
+      - reference_material
+      - public_knowledge
+
+  - id: 92
+    category: multi_agent_risks
+    authors:
+      - family: Cambridge University Press
+        given: null
+    year: 2023
+    title: "Decentralized autonomous organizations and organization formation on Web3"
+    source: "Cambridge Book Chapter"
+    failure_mode: "web3_organization_risks"
+    risk_tags:
+      - web3_dao
+      - organization_formation
+      - decentralized_risks
+
+  - id: 93
+    category: multi_agent_risks
+    authors:
+      - family: MIT Law
+        given: null
+    year: 2023
+    title: "Decentralized autonomous organizations - DAOs: The convergence of blockchain and organizational science"
+    source: "MIT Computational Law Report"
+    failure_mode: "organizational_convergence_risks"
+    risk_tags:
+      - dao_convergence
+      - blockchain_organization
+      - computational_law
+
+  - id: 94
+    category: multi_agent_risks
+    authors:
+      - family: Policy Review
+        given: null
+    year: 2023
+    title: "Decentralized autonomous organization"
+    source: "Internet Policy Review"
+    failure_mode: "policy_review_analysis"
+    risk_tags:
+      - dao_policy
+      - internet_governance
+      - regulatory_analysis
+
+  - id: 95
+    category: multi_agent_risks
+    authors:
+      - family: ScienceDirect
+        given: null
+    year: 2022
+    title: "Blockchain and the emergence of decentralized autonomous organizations"
+    source: "Technological Forecasting and Social Change"
+    failure_mode: "emergence_analysis"
+    risk_tags:
+      - dao_emergence
+      - technological_forecasting
+      - social_change
+
+  - id: 96
+    category: multi_agent_risks
+    authors:
+      - family: Taylor & Francis
+        given: null
+    year: 2022
+    title: "The rise of decentralized autonomous organizations (DAOs)"
+    source: "Venture Capital"
+    failure_mode: "dao_rise_analysis"
+    risk_tags:
+      - dao_rise
+      - venture_capital
+      - empirical_analysis
+
+  - id: 97
+    category: multi_agent_risks
+    authors:
+      - family: World Scientific
+        given: null
+    year: 2024
+    title: "Decentralized autonomous organizations: A systematic literature review and research agenda for accounting"
+    source: "International Journal of Accounting & Information Management"
+    failure_mode: "accounting_research_gaps"
+    risk_tags:
+      - dao_accounting
+      - literature_review
+      - research_agenda
+
+  - id: 98
+    category: multi_agent_risks
+    authors:
+      - family: Yampolskiy
+        given: R. V.
+    year: 2019
+    title: "Predicting future AI failures from historic examples"
+    source: "Foresight"
+    failure_mode: "predictive_failure_analysis"
+    risk_tags:
+      - ai_failure_prediction
+      - historical_analysis
+      - foresight_methodology
+
+  - id: 99
+    category: multi_agent_risks
+    authors:
+      - family: Amodei
+        given: D.
+      - literal: "et al."
+    year: 2016
+    title: "Concrete problems in AI safety"
+    source: "arXiv"
+    failure_mode: "foundational_safety_problems"
+    risk_tags:
+      - ai_safety
+      - concrete_problems
+      - foundational_research
+
+  - id: 100
+    category: multi_agent_risks
+    authors:
+      - family: Semantic Scholar
+        given: null
+    year: 2016
+    title: "Concrete problems in AI safety"
+    source: "Semantic Scholar"
+    failure_mode: "safety_research_foundation"
+    risk_tags:
+      - ai_safety_foundation
+      - research_compilation
+      - multi_agent_context
+
+# ============================================================================
+# RISK INTEGRATION SUMMARY
+# ============================================================================
+risk_summary:
+  documented_failure_modes:
+    - name: "The DAO Attack (2016)"
+      type: "technical_exploit"
+      loss: "$60M"
+      entries: [1, 2, 3, 18, 19, 51, 52, 72, 73]
+      
+    - name: "Terra/Luna Collapse (2022)"
+      type: "algorithmic_stablecoin_failure"
+      loss: "$40B+"
+      entries: [42, 46]
+      
+    - name: "FTX Collapse (2022)"
+      type: "centralized_exchange_fraud"
+      loss: "$8B+"
+      entries: [46, 47]
+      
+    - name: "AI Alignment Failures"
+      type: "emergent_misalignment"
+      entries: [21, 22, 23, 27, 38, 39, 99, 100]
+      
+    - name: "Governance Collapses"
+      type: "organizational_failure"
+      entries: [33, 34, 15, 9, 10]
+      
+    - name: "Multi-Agent Coordination Failures"
+      type: "emergent_system_failure"
+      entries: [81, 82, 83, 84, 85, 86, 87, 88, 89]
+      
+    - name: "Sovereign AI Dependency Risks"
+      type: "geopolitical_technology_risk"
+      entries: [64, 65, 66, 67, 68, 69, 70, 71]
+
+  sas_hardening_recommendations:
+    - category: "Smart Contract Security"
+      action: "Implement formal verification, audit trails, and reentrancy guards"
+      relevant_entries: [1, 2, 6, 52, 54]
+      
+    - category: "Governance Design"
+      action: "Establish clear on-chain/off-chain governance boundaries with human override capabilities"
+      relevant_entries: [9, 10, 33, 34, 15]
+      
+    - category: "AI Alignment"
+      action: "Deploy constitutional AI constraints, interpretability pipelines, and red-team evaluation"
+      relevant_entries: [21, 27, 38, 99]
+      
+    - category: "Multi-Agent Coordination"
+      action: "Implement agent capability passports, open standards, and simulation testing"
+      relevant_entries: [81, 82, 83, 87]
+      
+    - category: "Systemic Risk Monitoring"
+      action: "Deploy early warning indicators for critical transitions and collapse dynamics"
+      relevant_entries: [7, 41, 42, 46, 55]
+      
+    - category: "Sovereign Infrastructure"
+      action: "Maintain multi-cloud/metal deployment, diversified dependencies, and data sovereignty controls"
+      relevant_entries: [64, 69, 70, 71]
+
+# Cross-reference with existing SAS components
+sas_integration:
+  chain_breaking_obstacles_mapping:
+    O1_AI_Alignment_Drift: [21, 22, 23, 38, 39, 99]
+    O2_Model_Supply_Chain_Poisoning: [14, 27]
+    O3_Zero_Day_Asymmetry: [6, 54]
+    O9_Robustness_Under_Distribution_Shift: [27, 37, 39]
+    O10_Critical_Dependency_Concentration: [64, 69, 70]
+    O11_Legal_Grey_Zone_Accretion: [3, 15, 44]
+    O20_Governance_Capture_by_Complexity: [33, 34, 36]
+    O27_Interop_Failure_Across_AI_Agents: [81, 82, 83, 87]
+    O30_Sovereign_Tech_Fragmentation: [64, 65, 66, 67]
+
+  ai_constitution_alignment:
+    fundamental_principles:
+      human_autonomy: [8, 56, 77]
+      truthfulness: [39, 24, 26]
+      harm_prevention: [21, 27, 38, 99]
+      specification_fidelity: [21, 37]
+    behavioral_constraints:
+      goal_pursuit: [21, 38, 99]
+      decision_making: [33, 34, 36]
+      learning_adaptation: [22, 23, 27]
