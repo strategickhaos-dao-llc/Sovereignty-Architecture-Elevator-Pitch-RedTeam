@@ -19,8 +19,8 @@ This document catalogs 100 documented failure modes across four major categories
 | # | Failure Mode | Description | Source Reference |
 |---|--------------|-------------|------------------|
 | 1 | Unsustainable Valuations | 99% of AI startups face death by 2026 due to inflated valuations without product-market fit | [skooloflife.medium.com](https://medium.com/skooloflife/99-of-ai-startups-will-be-dead-by-2026-heres-why-bfc974edd968) |
-| 2 | Zero ROI Hype | 95% of AI investments yield zero ROI due to failure to cut through hype | [medium.com](https://medium.com/ai-investment-roi-analysis) |
-| 3 | Hidden Safety Crises | Trillion-dollar valuations hiding catastrophic safety failures | [medium.com](https://medium.com/ai-safety-crisis) |
+| 2 | Zero ROI Hype | 95% of AI investments yield zero ROI due to failure to cut through hype | Industry analysis |
+| 3 | Hidden Safety Crises | Trillion-dollar valuations hiding catastrophic safety failures | Industry analysis |
 | 4 | Market Saturation | Entering markets already saturated with AI solutions | Industry analysis |
 | 5 | Moat Absence | Lack of defensible competitive advantages in AI products | [HBR AI Strategy](https://hbr.org/ai-competitive-moats) |
 | 6 | Bubble Timing | Launching during peak hype rather than sustainable demand | Market research |
@@ -37,13 +37,13 @@ This document catalogs 100 documented failure modes across four major categories
 
 | # | Failure Mode | Description | Source Reference |
 |---|--------------|-------------|------------------|
-| 11 | Leadership AI Illiteracy | GenAI projects fail from leadership lacking AI understanding | [medium.com/genai-leadership](https://medium.com/genai-leadership-failures) |
-| 12 | Poor Planning Execution | Insufficient project planning for AI implementation timelines | [medium.com](https://medium.com/ai-project-planning) |
+| 11 | Leadership AI Illiteracy | GenAI projects fail from leadership lacking AI understanding | Industry analysis |
+| 12 | Poor Planning Execution | Insufficient project planning for AI implementation timelines | Project management research |
 | 13 | Ethics Ignorance | Ignoring ethical considerations in AI deployment | [arxiv.org](https://arxiv.org/html/2404.05783v1) |
 | 14 | Adoption Overestimation | Overestimating user willingness to adopt AI solutions | Market research |
 | 15 | Data Quality Blindness | Deploying AI on poor quality data | [arxiv.org](https://arxiv.org/pdf/2307.10460) |
 | 16 | ROI Measurement Failure | No metrics to measure AI investment returns | Business analysis |
-| 17 | Ability Exaggeration | Exaggerating AI capabilities causing misalignment with reality | [medium.com](https://medium.com/ai-capability-gaps) |
+| 17 | Ability Exaggeration | Exaggerating AI capabilities causing misalignment with reality | Industry analysis |
 | 18 | Talent Mismatch | Hiring wrong skillsets for AI projects | HR analysis |
 | 19 | Siloed AI Teams | AI teams isolated from business units | Organizational studies |
 | 20 | Change Resistance | Organizational resistance to AI-driven process changes | Change management |
@@ -66,9 +66,9 @@ This document catalogs 100 documented failure modes across four major categories
 
 | # | Failure Mode | Description | Source Reference |
 |---|--------------|-------------|------------------|
-| 31 | Hallucination Events | LLMs generating false information with confidence | [medium.com/llm-hallucination](https://medium.com/llm-hallucination-risks) |
-| 32 | Incomplete Contracting | AI systems failing on edge cases not in training data | [arxiv.org](https://arxiv.org/abs/ai-incomplete-contracting) |
-| 33 | Alignment Failures | AI behavior not aligned with intended objectives | [arxiv.org](https://arxiv.org/abs/ai-alignment-problems) |
+| 31 | Hallucination Events | LLMs generating false information with confidence | AI safety research |
+| 32 | Incomplete Contracting | AI systems failing on edge cases not in training data | ML research |
+| 33 | Alignment Failures | AI behavior not aligned with intended objectives | AI safety research |
 | 34 | Data Science Ethics Breaches | Ethical breaches in data collection and usage | [arxiv.org](https://arxiv.org/pdf/2307.10460) |
 | 35 | Value Erosion | AI outputs eroding brand or organizational values | Business impact analysis |
 | 36 | Model Drift | Model performance degrading over time | ML operations |

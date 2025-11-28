@@ -24,10 +24,10 @@ This bibliography contains 100 curated resources across four domains essential f
 | 2 | Common Corpus: 1 Billion Ethical Training Data | [arXiv 2506.01732](https://arxiv.org/pdf/2506.01732) | Framework for ethical data collection and curation |
 | 3 | Incident Reporting for AI Harms | [arXiv 2511.05914](https://arxiv.org/pdf/2511.05914) | Systems for tracking and reporting AI-related harms |
 | 4 | Data Science Axiology: Values in Data Practice | [arXiv 2307.10460](https://arxiv.org/pdf/2307.10460) | Ethical foundations for data science practice |
-| 5 | AI Alignment: A Comprehensive Survey | [arXiv AI Alignment](https://arxiv.org/abs/ai-alignment-survey) | Survey of AI alignment techniques and challenges |
-| 6 | Constitutional AI: Harmlessness from AI Feedback | [Anthropic Research](https://arxiv.org/abs/constitutional-ai) | Training AI systems with constitutional principles |
-| 7 | Reward Hacking in Reinforcement Learning | [arXiv RL Safety](https://arxiv.org/abs/reward-hacking) | Understanding and preventing reward hacking |
-| 8 | Interpretability in Machine Learning | [arXiv Interpretability](https://arxiv.org/abs/ml-interpretability) | Methods for making AI decisions explainable |
+| 5 | AI Alignment: A Comprehensive Survey | AI safety research | Survey of AI alignment techniques and challenges |
+| 6 | Constitutional AI: Harmlessness from AI Feedback | Anthropic Research | Training AI systems with constitutional principles |
+| 7 | Reward Hacking in Reinforcement Learning | RL safety research | Understanding and preventing reward hacking |
+| 8 | Interpretability in Machine Learning | ML research | Methods for making AI decisions explainable |
 | 9 | Fairness and Machine Learning | [fairmlbook.org](https://fairmlbook.org/) | Comprehensive treatment of algorithmic fairness |
 | 10 | The Ethics of AI: Guidelines for Developers | [IEEE Ethics](https://standards.ieee.org/industry-connections/ec/autonomous-systems.html) | IEEE standards for ethical AI development |
 
@@ -73,9 +73,9 @@ This bibliography contains 100 curated resources across four domains essential f
 |---|-------|--------|-------------|
 | 31 | Open Problems in DAOs | [arXiv 2310.19201](https://arxiv.org/html/2310.19201v2) | Comprehensive analysis of DAO challenges |
 | 32 | LegalBench: Legal Reasoning Benchmark | [arXiv 2308.11462](https://arxiv.org/pdf/2308.11462) | AI benchmarks for legal reasoning |
-| 33 | Legal Framework for DAOs | [Stanford Law](https://papers.ssrn.com/dao-legal-framework) | Academic analysis of DAO legal status |
-| 34 | Smart Contracts and Legal Contracts | [Law & Technology](https://papers.ssrn.com/smart-contracts-legal) | Intersection of code and law |
-| 35 | DAO Governance Mechanisms | [Blockchain Research](https://arxiv.org/abs/dao-governance) | Survey of DAO governance structures |
+| 33 | Legal Framework for DAOs | Legal scholarship | Academic analysis of DAO legal status |
+| 34 | Smart Contracts and Legal Contracts | Law & Technology journals | Intersection of code and law |
+| 35 | DAO Governance Mechanisms | Blockchain research | Survey of DAO governance structures |
 
 ### Legal Frameworks & Jurisdictions
 
@@ -125,7 +125,7 @@ This bibliography contains 100 curated resources across four domains essential f
 | 56 | Uniform Trust Code | [ULC](https://www.uniformlaws.org/committees/community-home?CommunityKey=193ff839-7955-4846-8f3c-ce74ac23938d) | Model trust legislation |
 | 57 | Restatement (Third) of Trusts | [ALI](https://www.ali.org/publications/show/trusts/) | Authoritative trust law analysis |
 | 58 | Charitable Trust Administration | [ABA](https://www.americanbar.org/groups/real_property_trust_estate/) | Best practices for trust management |
-| 59 | Purpose Trusts | [Academic](https://papers.ssrn.com/purpose-trusts) | Non-charitable purpose trust structures |
+| 59 | Purpose Trusts | Legal scholarship | Non-charitable purpose trust structures |
 | 60 | Dynasty Trust Planning | [Estate Planning](https://www.wealthmanagement.com/estate-planning/dynasty-trusts) | Long-term trust strategies |
 
 ### Nonprofit Governance
