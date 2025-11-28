@@ -300,7 +300,7 @@ class TestPhase3Integration(unittest.TestCase):
         registry.register_handler("generate_anchor", handler_generate_anchor)
         
         # All handlers should be local (no external API calls)
-        self.assertEqual(len(registry._handlers), 3)
+        self.assertEqual(registry.get_handler_count(), 3)
 
 
 if __name__ == "__main__":

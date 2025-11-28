@@ -32,6 +32,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+# YAML special characters that require quoting
+YAML_SPECIAL_CHARS = [':', '#', '{', '}', '[', ']', ',', '&', '*', '?', '|', '-', '<', '>', '=', '!', '%', '@', '`']
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Optional
+
 
 def calculate_hash(file_path: str) -> str:
     """Calculate SHA-256 hash of a file."""
@@ -228,7 +234,7 @@ def generate_yaml(data: dict, indent: int = 0) -> str:
             lines.append(f"{prefix}{key}: {value}")
         else:
             # Quote strings that might need it
-            if any(c in str(value) for c in [':', '#', '{', '}', '[', ']', ',', '&', '*', '?', '|', '-', '<', '>', '=', '!', '%', '@', '`']):
+            if any(c in str(value) for c in YAML_SPECIAL_CHARS):
                 lines.append(f'{prefix}{key}: "{value}"')
             else:
                 lines.append(f"{prefix}{key}: {value}")

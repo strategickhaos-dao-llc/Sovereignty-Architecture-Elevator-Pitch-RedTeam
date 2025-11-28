@@ -101,6 +101,14 @@ class TaskRegistry:
         """List all registered tasks."""
         return list(self._tasks.values())
     
+    def get_handler_count(self) -> int:
+        """Get the count of registered handlers."""
+        return len(self._handlers)
+    
+    def get_task_count(self) -> int:
+        """Get the count of registered tasks."""
+        return len(self._tasks)
+    
     def record_result(self, result: ExecutionResult) -> None:
         """Record an execution result."""
         with self._lock:
@@ -465,12 +473,13 @@ def main():
     
     server = create_server(args.port)
     
+    port_str = str(args.port)
     print(f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║     PHASE 3 EXECUTOR SERVER - LOCAL SOVEREIGNTY ENGINE      ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  Status: ACTIVE                                              ║
-║  Port: {args.port:<5}                                              ║
+║  Port: {port_str:<54}║
 ║  Sovereignty: LOCAL (No external SaaS dependencies)          ║
 ║                                                              ║
 ║  Endpoints:                                                  ║
