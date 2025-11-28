@@ -22,7 +22,7 @@ on:
 env:
   EVENTS_URL: "https://events.strategickhaos.com/event"
   REGISTRY: ghcr.io
-  IMAGE_NAME: strategickhaos-swarm-intelligence/${{ github.event.repository.name }}
+  IMAGE_NAME: strategickhaos-swarm-intelligence/sovereignty-architecture-elevator-pitch
 
 jobs:
   build-and-test:
