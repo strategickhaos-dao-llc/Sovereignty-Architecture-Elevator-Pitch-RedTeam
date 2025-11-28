@@ -1,0 +1,59 @@
+# SUM.yaml  (Sovereign Universe Manifest)
+# The master ontology that ties together the entire Strategickhaos sovereignty architecture.
+# This file names the universe and everything the board cares about.
+
+version: "1.0.0"
+root_subject: "Domenic Gabriel Garza (Dom_010101)"
+operational_mode: "lab_only"   # lab_only | limited_release | public
+
+system:
+  id: "strategickhaos_sas"
+  name: "Strategickhaos Sovereign Architectural System"
+  covenant:
+    non_exploitation: true
+    monetization_allowed: false
+    notes:
+      - "No direct sale of access to Strategickhaos AI."
+      - "No predatory or deceptive uses."
+  state_snapshot_file: "strategickhaos_state_snapshot.json"
+  proof_dossier_repo: "https://github.com/Strategickhaos/strategickhaos-proof"
+
+entities:
+  - id: "strategickhaos_dao_llc"
+    type: "dao_llc"
+    status: "active"
+  - id: "valoryield_engine_nonprofit"
+    type: "nonprofit_corp"
+    status: "active"
+
+agents:
+  board_agent: ".github/agents/my-agent.agent.md"
+  proof_agent: ".github/agents/Proof.my-agent.agent.md"
+  dream_weaver_agent: ".github/agents/DreamWeaver.my-agent.agent.md"
+  omni_handshake_agent: ".github/agents/OmniHandshake.my-agent.agent.md"
+
+risks:
+  - id: "R_exploitation"
+    category: "ethical"
+    summary: "System accidentally used to exploit users."
+    mitigation: "covenant + license + lab_only mode"
+
+workflows:
+  - id: "WF_daily_board"
+    description: "Update snapshot, then query board."
+    steps:
+      - "python state_updater.py"
+      - "Send strategickhaos_state_snapshot.json + question to board_agent"
+
+# Referenced files in the sovereignty architecture
+referenced_files:
+  constitution: "ai_constitution.yaml"
+  dao_record: "dao_record.yaml"
+  dao_record_detailed: "dao_record_v1.0.yaml"
+  access_matrix: "governance/access_matrix.yaml"
+  benchmarks: "benchmarks_config.yaml"
+  automation: "bigtech_automation_v1.yaml"
+  recon: "recon.yaml"
+  cyber_recon: "cyber_recon_v2.yaml"
+  llm_recon: "llm_recon_v1.yaml"
+  comms: "comms_correlation_v1.yaml"
