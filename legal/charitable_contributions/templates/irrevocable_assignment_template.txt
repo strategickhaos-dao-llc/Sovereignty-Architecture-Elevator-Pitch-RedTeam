@@ -1,0 +1,287 @@
+================================================================================
+IRREVOCABLE ASSIGNMENT OF ROYALTY RIGHTS
+================================================================================
+
+INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+--------------------------------------------------------------------------------
+PARTIES AND IDENTIFICATION
+--------------------------------------------------------------------------------
+
+Assignor:     Domenic Gabriel Garza and Strategickhaos DAO LLC
+EIN:          39-2923503
+Date:         [DATE - e.g., November 28, 2025]
+Governing Law: Wyoming
+
+--------------------------------------------------------------------------------
+1. ASSIGNMENT
+--------------------------------------------------------------------------------
+
+Assignor irrevocably assigns and conveys to the Charitable Beneficiaries listed
+below a perpetual seven percent (7%) interest in gross royalties, license fees,
+and other revenue derived from the IP and Works listed in Exhibit A, including
+future derivatives and renewals to the extent permitted by law.
+
+This assignment is:
+- Present and absolute
+- Irrevocable from the date of execution
+- Binding on all successors, assigns, heirs, and legal representatives
+
+--------------------------------------------------------------------------------
+2. BENEFICIARIES AND SHARES
+--------------------------------------------------------------------------------
+
+The following 501(c)(3) charitable organizations shall receive the assigned
+interest in the proportions specified below (must sum to 100% of the 7%):
+
+Organization Name                        EIN              Share of 7%
+---------------------------------------------------------------------------
+[Charity Name 1]                        [EIN]            [X%]
+[Charity Name 2]                        [EIN]            [X%]
+[Charity Name 3]                        [EIN]            [X%]
+
+EXAMPLE:
+St. Jude Children's Research Hospital   35-1044585       [X%]
+Doctors Without Borders USA             13-3433452       [X%]
+
+--------------------------------------------------------------------------------
+3. DEFINITIONS
+--------------------------------------------------------------------------------
+
+"Gross Royalties" means all revenues, fees, payments, and other consideration
+received by Assignor or any entity controlled by Assignor from:
+
+a) Licensing of intellectual property listed in Exhibit A
+b) Royalties from distribution agreements
+c) Revenue from SaaS platforms derived from Exhibit A works
+d) Token royalties or blockchain-based revenue streams
+e) Any other monetization of Exhibit A works
+
+"IP and Works" means all intellectual property, copyrights, patents, patent
+applications, trademarks, trade secrets, software code, algorithms, datasets,
+and creative works as specifically enumerated in Exhibit A attached hereto.
+
+--------------------------------------------------------------------------------
+4. REPORTING AND PAYMENT OBLIGATIONS
+--------------------------------------------------------------------------------
+
+4.1 Payment Schedule
+    - Payments shall be made quarterly
+    - Due within thirty (30) days after each quarter-end
+    - Quarter-end dates: March 31, June 30, September 30, December 31
+
+4.2 Payment Statement
+    Each payment shall be accompanied by a statement including:
+    - Total gross receipts for the quarter
+    - Calculation of 7% assigned amount
+    - Allocation among beneficiaries per Section 2
+
+4.3 Audit Rights
+    - Beneficiaries may audit books and records upon fifteen (15) days' notice
+    - Audits limited to once per calendar year per beneficiary
+    - Audit shall be at beneficiary's expense unless material discrepancy found
+
+--------------------------------------------------------------------------------
+5. IRREVOCABILITY AND NO RETAINED CONTROL
+--------------------------------------------------------------------------------
+
+5.1 Irrevocable Assignment
+    This is a present, absolute, and irrevocable assignment. Assignor hereby
+    relinquishes and releases any and all right, title, and interest in and to
+    the assigned seven percent (7%) interest.
+
+5.2 No Retained Powers
+    Assignor retains no power to:
+    - Revoke this assignment
+    - Redirect the assigned interest
+    - Modify the beneficiary designations
+    - Reduce the percentage assigned
+    - Delay or defer payments due
+
+5.3 Delivery Completion
+    This assignment shall be effective and complete upon delivery of executed
+    copies to each named beneficiary.
+
+--------------------------------------------------------------------------------
+6. NOTICES AND SUCCESSORS
+--------------------------------------------------------------------------------
+
+6.1 Binding Effect
+    This Assignment shall be binding upon and inure to the benefit of the
+    parties hereto and their respective successors, assigns, heirs, executors,
+    administrators, and legal representatives.
+
+6.2 Notices
+    All notices required or permitted hereunder shall be in writing and
+    delivered to the addresses specified in Exhibit B.
+
+6.3 Change of Address
+    Any party may change its notice address by written notice to all other
+    parties.
+
+--------------------------------------------------------------------------------
+7. REPRESENTATIONS AND WARRANTIES
+--------------------------------------------------------------------------------
+
+Assignor represents and warrants that:
+
+7.1 Assignor has full legal right, power, and authority to make this assignment
+
+7.2 The IP and Works listed in Exhibit A are owned or controlled by Assignor
+
+7.3 This assignment does not violate any existing agreement, court order, or
+    legal obligation
+
+7.4 There are no liens, encumbrances, or third-party claims against the
+    assigned interest
+
+7.5 Each named beneficiary is a qualified 501(c)(3) organization
+
+--------------------------------------------------------------------------------
+8. MISCELLANEOUS
+--------------------------------------------------------------------------------
+
+8.1 Governing Law
+    This Assignment shall be governed by the laws of the State of Wyoming.
+
+8.2 Severability
+    If any provision is held invalid, the remaining provisions shall continue
+    in full force and effect.
+
+8.3 Entire Agreement
+    This Assignment, including Exhibits A and B, constitutes the entire
+    agreement regarding the subject matter hereof.
+
+8.4 Amendment
+    This Assignment may not be amended or modified except by written instrument
+    signed by all parties.
+
+================================================================================
+EXECUTION
+================================================================================
+
+IN WITNESS WHEREOF, Assignor has executed this Irrevocable Assignment of
+Royalty Rights as of the date first written above.
+
+ASSIGNOR:
+
+_______________________________________
+Domenic Gabriel Garza, Individually
+
+_______________________________________
+Print Name: Domenic Gabriel Garza
+
+_______________________________________
+Date
+
+_______________________________________
+Domenic Gabriel Garza, Managing Member
+Strategickhaos DAO LLC
+
+_______________________________________
+Date
+
+--------------------------------------------------------------------------------
+NOTARY ACKNOWLEDGMENT
+--------------------------------------------------------------------------------
+
+STATE OF _______________
+COUNTY OF ______________
+
+On this _____ day of ______________, 20___, before me personally appeared
+Domenic Gabriel Garza, known to me (or proved to me on the basis of
+satisfactory evidence) to be the person whose name is subscribed to the
+within instrument and acknowledged to me that he executed the same in his
+authorized capacity, and that by his signature on the instrument the person,
+or the entity upon behalf of which the person acted, executed the instrument.
+
+WITNESS my hand and official seal.
+
+_______________________________________
+Notary Public
+
+My Commission Expires: _________________
+
+[NOTARY SEAL]
+
+================================================================================
+EXHIBIT A: ENUMERATED IP AND WORKS
+================================================================================
+
+List all intellectual property, repositories, domains, patents/applications,
+works, and revenue channels covered by this assignment:
+
+COPYRIGHTS AND SOFTWARE:
+------------------------
+1. [Repository/Project Name] - [URL/Description]
+2. [Repository/Project Name] - [URL/Description]
+3. [Additional items...]
+
+PATENTS AND APPLICATIONS:
+-------------------------
+1. [Patent/Application Number] - [Title/Description]
+2. [Additional items...]
+
+DOMAINS AND PLATFORMS:
+----------------------
+1. [Domain Name] - [Description of associated revenue]
+2. [Additional items...]
+
+LICENSE AGREEMENTS:
+-------------------
+1. [Licensee Name] - [Agreement Description]
+2. [Additional items...]
+
+REVENUE STREAMS:
+----------------
+1. [Platform/Service] - [Description]
+2. [Additional items...]
+
+================================================================================
+EXHIBIT B: NOTICE ADDRESSES AND PAYMENT DETAILS
+================================================================================
+
+ASSIGNOR:
+---------
+Domenic Gabriel Garza / Strategickhaos DAO LLC
+1216 S Fredonia St
+Longview, TX 75602-2544
+Email: [contact email]
+Phone: [contact phone]
+
+CHARITABLE BENEFICIARIES:
+-------------------------
+
+[Charity Name 1]
+Attn: [Department/Contact]
+[Street Address]
+[City, State ZIP]
+Email: [contact email]
+Payment Method: [Wire/ACH/Check]
+Account Details: [As provided by charity]
+
+[Charity Name 2]
+Attn: [Department/Contact]
+[Street Address]
+[City, State ZIP]
+Email: [contact email]
+Payment Method: [Wire/ACH/Check]
+Account Details: [As provided by charity]
+
+[Add additional beneficiaries as needed]
+
+================================================================================
+END OF DOCUMENT
+================================================================================
+
+INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+This document is an internal draft prepared by Strategickhaos DAO LLC for
+planning purposes only. This document does not constitute legal advice and
+should not be relied upon for legal or compliance decisions.
+
+WE ARE NOT A LAW FIRM. No attorney-client relationship is created by this
+document. All legal matters must be reviewed by a Wyoming-licensed attorney
+before implementation or filing.
+
+© 2025 Strategickhaos DAO LLC. Internal use only.
