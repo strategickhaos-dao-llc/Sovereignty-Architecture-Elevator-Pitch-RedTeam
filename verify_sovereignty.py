@@ -64,9 +64,15 @@ def find_repo_root() -> Path:
     if (current / "discovery.yml").exists():
         return current
     
+    # Check environment variable first for portability
+    env_root = os.getenv("SOVEREIGNTY_REPO_ROOT")
+    if env_root:
+        env_path = Path(env_root)
+        if env_path.exists() and (env_path / "discovery.yml").exists():
+            return env_path
+    
     # Check common locations
     for path in [
-        Path("/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-/Sovereignty-Architecture-Elevator-Pitch-"),
         Path.home() / "sovereignty-architecture",
         current / "sovereignty-architecture",
     ]:

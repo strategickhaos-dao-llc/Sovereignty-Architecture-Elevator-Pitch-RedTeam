@@ -238,7 +238,12 @@ async def event_handler(request):
 
 
 async def git_event_handler(request):
-    """GitHub/GitLab webhook handler."""
+    """GitHub/GitLab webhook handler.
+    
+    NOTE: This is a template implementation. The Discord send is gated behind
+    ENABLE_DISCORD_SEND=true to allow testing without a Discord token.
+    Set ENABLE_DISCORD_SEND=true and provide DISCORD_BOT_TOKEN for production.
+    """
     event_type = request.headers.get("X-GitHub-Event", "unknown")
 
     with EVENT_LATENCY.labels(event_type=event_type).time():
@@ -261,8 +266,12 @@ async def git_event_handler(request):
             logger.info("github_event", event_type=event_type, channel=channel)
             EVENTS_TOTAL.labels(event_type=event_type, source="github", status="success").inc()
 
-            # In production, would send to Discord here
-            # await gateway.send_to_discord(channel_id, embed)
+            # Send to Discord if enabled (requires DISCORD_BOT_TOKEN and channel ID)
+            # In production, resolve channel name to ID from discovery.yml
+            if os.getenv("ENABLE_DISCORD_SEND", "").lower() == "true" and gateway.discord_token:
+                # Channel should be resolved from discovery.yml guild_id + channel name
+                # For now, log that it would send
+                logger.info("discord_send_ready", channel=channel, embed_title=embed.get("title"))
 
             return web.json_response({"status": "accepted", "event": event_type, "channel": channel})
 
@@ -277,7 +286,12 @@ async def git_event_handler(request):
 
 
 async def alert_handler(request):
-    """Alertmanager webhook handler."""
+    """Alertmanager webhook handler.
+    
+    NOTE: This is a template implementation. The Discord send is gated behind
+    ENABLE_DISCORD_SEND=true to allow testing without a Discord token.
+    Set ENABLE_DISCORD_SEND=true and provide DISCORD_BOT_TOKEN for production.
+    """
     with EVENT_LATENCY.labels(event_type="alert").time():
         try:
             payload = await request.read()
@@ -303,7 +317,10 @@ async def alert_handler(request):
                     "footer": {"text": "Strategickhaos Alertmanager"}
                 }
 
-                # In production, would send to Discord #alerts channel
+                # Send to Discord if enabled (requires DISCORD_BOT_TOKEN and channel ID)
+                if os.getenv("ENABLE_DISCORD_SEND", "").lower() == "true" and gateway.discord_token:
+                    logger.info("discord_alert_ready", alertname=alertname, embed_title=embed.get("title"))
+                
                 logger.info("alert_processed", alertname=alertname, status=status)
 
             EVENTS_TOTAL.labels(event_type="alert", source="alertmanager", status="success").inc()

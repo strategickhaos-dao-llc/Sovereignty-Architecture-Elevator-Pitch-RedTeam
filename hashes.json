@@ -20,10 +20,10 @@
     "bootstrap/k8s/observability.yaml": "cee3ba83f5c956f6a436ffa1b4d52146dcc5ecdc49da39cb1825981582619dff",
     "bots/discord-ops-bot/Dockerfile": "21a4c6b5401233d5f81dee2f2d71ac54b46ca7bb195050c97bceed8252460161",
     "bots/discord-ops-bot/requirements.txt": "6dfeff3cc5992e653689e86e6ac333fef17c32bd06f8b7c5b78c35c521bf5106",
-    "bots/discord-ops-bot/bot.py": "3eaff84cb27a0b07a6d102462d58cf28e33143941bd16b56cbc7c4d974e1101f",
+    "bots/discord-ops-bot/bot.py": "b2c7cb078e0902c3a4e483b0cc6ce2f68bd8c824e2969015c67cf8494e4daecc",
     "gateway/event-gateway/Dockerfile": "8b9db66ce920fc3697bc169efbe1329aeb2b294ee21e5701aeda0165d1bf886c",
     "gateway/event-gateway/requirements.txt": "ffab61d0128e17905f5f6903575d223e15a1b6dce39ebe374023c121bb4f7978",
-    "gateway/event-gateway/main.py": "def61d4efd823523cdbdcc32acaf06d0a848ca89133b95c7aa2e48e8a978f3a9",
+    "gateway/event-gateway/main.py": "18ee4e51dffa7c1b38c4a6aed7dfe22202e35791b77e474f6bbdb8e2aedc98b3",
     "scripts/gl2discord.sh": "55fc17178b6bbc5dc26246c4de18551a72f52bb90e05176df7b6a0b66fa0aaa1",
     "docs/ARCHITECTURE.md": "3bac800ad9cfbe6008030bd9947a5a7a3f4ebff6aa27b8919cec8ff09f3586db"
   }

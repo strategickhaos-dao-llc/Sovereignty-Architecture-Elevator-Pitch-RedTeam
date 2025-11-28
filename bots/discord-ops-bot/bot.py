@@ -104,12 +104,21 @@ def has_prod_role():
 @bot.tree.command(name="status", description="Get service status")
 @app_commands.describe(service="Service name to check status")
 async def status_command(interaction: discord.Interaction, service: str):
-    """Get status of a Kubernetes service."""
+    """Get status of a Kubernetes service.
+    
+    NOTE: This is a template implementation that returns mock data.
+    In production, integrate with kubernetes.client to fetch real status:
+        from kubernetes import client, config
+        config.load_incluster_config()
+        v1 = client.AppsV1Api()
+        deployment = v1.read_namespaced_deployment(service, "ops")
+    """
     with COMMAND_LATENCY.labels(command="status").time():
         try:
             await interaction.response.defer()
 
-            # Simulate K8s status check
+            # TODO: Replace with real K8s API call
+            # This is mock data demonstrating the response format
             embed = discord.Embed(
                 title=f"📊 Service Status: {service}",
                 color=discord.Color.green()
@@ -132,11 +141,21 @@ async def status_command(interaction: discord.Interaction, service: str):
 @bot.tree.command(name="logs", description="Tail service logs")
 @app_commands.describe(service="Service name", tail="Number of lines to tail")
 async def logs_command(interaction: discord.Interaction, service: str, tail: int = 200):
-    """Tail logs from a Kubernetes service."""
+    """Tail logs from a Kubernetes service.
+    
+    NOTE: This is a template implementation that returns mock data.
+    In production, integrate with kubernetes.client to fetch real logs:
+        from kubernetes import client, config
+        config.load_incluster_config()
+        v1 = client.CoreV1Api()
+        logs = v1.read_namespaced_pod_log(pod_name, "ops", tail_lines=tail)
+    """
     with COMMAND_LATENCY.labels(command="logs").time():
         try:
             await interaction.response.defer()
 
+            # TODO: Replace with real K8s API call
+            # This is mock data demonstrating the response format
             embed = discord.Embed(
                 title=f"📜 Logs: {service}",
                 description=f"Last {tail} lines",
