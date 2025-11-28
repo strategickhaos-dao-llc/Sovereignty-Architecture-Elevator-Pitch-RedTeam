@@ -202,7 +202,7 @@ function Download-Resource {
         } catch {
             $retries--
             if ($retries -gt 0) {
-                Warn "Retry $($MaxRetries - $retries)/$MaxRetries for: $Url"
+                Warn "Retry $($MaxRetries - $retries + 1)/$MaxRetries for: $Url"
                 Start-Sleep -Seconds $RetryDelaySeconds
             } else {
                 Error "Failed after $MaxRetries attempts: $Url - $_"
@@ -439,7 +439,7 @@ function Get-CuratedBibUrls {
         "https://arxiv.org/pdf/2103.14722.pdf",       # Learning from Human Feedback
         "https://arxiv.org/pdf/2106.02790.pdf",       # Reward Modeling
         "https://arxiv.org/pdf/2109.00725.pdf",       # Red Teaming LLMs
-        "https://arxiv.org/pdf/2112.00861.pdf",       # Recursively Summarizing Books
+        "https://arxiv.org/pdf/2203.07162.pdf",       # InstructGPT Recursively Summarizing
         
         # Autonomous Systems
         "https://arxiv.org/pdf/1611.03673.pdf",       # Safe Reinforcement Learning
