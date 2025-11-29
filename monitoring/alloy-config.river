@@ -1,0 +1,32 @@
+// Grafana Alloy configuration for Grafana Cloud integration
+// Alternative to Prometheus remote_write for advanced use cases
+
+prometheus.remote_write "cloud" {
+  endpoint {
+    url = "https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push"
+
+    basic_auth {
+      username = "2786173"
+      password = env("GRAFANA_CLOUD_API_TOKEN")
+    }
+
+    queue_config {
+      capacity = 10000
+      max_shards = 200
+      max_samples_per_send = 5000
+      batch_send_deadline = "5s"
+    }
+  }
+
+  external_labels = {
+    cluster = "sovereign-local"
+    environment = "development"
+  }
+
+  // Optional relabel to drop high-cardinality series
+  write_relabel_config {
+    source_labels = ["__name__"]
+    action = "keep"
+    regex = "^(node_|process_|prometheus_|kube_|container_|discord_|event_gateway_|refinory_|up).*"
+  }
+}

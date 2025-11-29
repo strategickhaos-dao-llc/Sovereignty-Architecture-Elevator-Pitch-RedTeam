@@ -2,7 +2,7 @@
 apiVersion: 1
 
 datasources:
-  # Prometheus for metrics
+  # Prometheus for metrics (local)
   - name: Prometheus
     type: prometheus
     access: proxy
@@ -18,6 +18,22 @@ datasources:
       exemplarTraceIdDestinations:
         - name: trace_id
           datasourceUid: jaeger
+
+  # Grafana Cloud Prometheus (for hybrid dashboards and long-term storage)
+  - name: Grafana Cloud - me1010101-prom
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: https://prometheus-prod-56-prod-us-east-2.grafana.net
+    basicAuth: true
+    basicAuthUser: "2786173"
+    jsonData:
+      timeInterval: 30s
+      httpTimeout: 30
+    secureJsonData:
+      basicAuthPassword: ${GRAFANA_CLOUD_API_TOKEN}
+    isDefault: false
+    editable: true
 
   # Loki for logs  
   - name: Loki
