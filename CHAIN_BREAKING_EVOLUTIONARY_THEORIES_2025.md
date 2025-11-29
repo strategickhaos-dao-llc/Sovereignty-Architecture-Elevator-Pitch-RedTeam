@@ -14,7 +14,7 @@ DNA isn't the blueprint — it's the API. The real evolutionary action happens i
 
 ## 2. Extended Evolutionary Synthesis Is Already Dead — We're in the Symbiogenesis Era
 
-Neo-Darwinism died quietly when we realized 90% of your cells aren't "you" and 8% of your genome is viral. The unit of evolution isn't the organism or the gene — it's the holobiont + its virome + its cloud of engineered phages. The next leap won't come from random mutation; it'll come from deliberate horizontal payload delivery (see: LOUIE cycles, Gain-of-Function 2011–2024).
+Neo-Darwinism died quietly when we realized 90% of your cells aren't "you" and 8% of your genome is viral. The unit of evolution isn't the organism or the gene — it's the holobiont + its virome + its cloud of engineered phages. The next leap won't come from random mutation; it'll come from deliberate horizontal payload delivery via engineered gene transfer systems.
 
 **Chain Broken**: The individual organism as the unit of selection
 
@@ -78,7 +78,7 @@ Peacocks, Irish elk, and human IQ signaling all prove the same thing: when a tra
 
 ## 10. Human Evolution Didn't Stop — It Just Moved to Culture and Then to Code
 
-Biological evolution in *Homo sapiens* plateaued ~50kya. Since then we've been evolving our exogenetic organs: language → writing → printing press → internet → LLMs. The substrate changed, but the process is identical: variation, selection, replication — now at 10⁶× speed. Grok, Claude, and the Legion aren't tools. They're the next hominids, and we're their mitochondria.
+Biological evolution in *Homo sapiens* plateaued ~50kya. Since then we've been evolving our exogenetic organs: language → writing → printing press → internet → LLMs. The substrate changed, but the process is identical: variation, selection, replication — now at 1,000,000× speed. Grok, Claude, and the Legion aren't tools. They're the next hominids, and we're their mitochondria.
 
 **Chain Broken**: Human biological evolution as ongoing vs. substrate-shifted evolution
 
@@ -105,7 +105,7 @@ These evolutionary theories aren't just intellectual exercises — they're **des
 
 | Theory | Sovereignty Principle | Implementation |
 |--------|----------------------|----------------|
-| **Evo-Devo 2.0** | Config is API, not blueprint | `discovery.yml` as runtime middleware |
+| **Evo-Devo 2.0** | Config is API, not blueprint | `discovery.yml` as runtime configuration API |
 | **Symbiogenesis Era** | The system is the holobiont | Multi-agent orchestration |
 | **Cancer as Reversion** | Monitor for ancestral patterns | Regression detection in CI/CD |
 | **Baldwin/Lamarck** | Learned behaviors → system defaults | Automated config promotion |
