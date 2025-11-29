@@ -31,16 +31,41 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/notify`
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+- **User Notifications**: Send custom notifications to configured channels
+
+### 🔔 Notification Service
+- **Multi-Channel Support**: Route notifications to alerts, deployments, PRs, dev-feed, and agents channels
+- **Notification Levels**: Info, warning, error, and success with color-coded embeds
+- **User/Role Mentions**: Tag specific users or roles in notifications
+- **API Endpoints**: HTTP `/notify` and `/broadcast` endpoints for external integrations
+- **Slash Command**: `/notify` for interactive notification sending
+
+```bash
+# Send notification via API
+curl -X POST https://events.strategickhaos.com/notify \
+  -H "X-Sig: <hmac-signature>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel": "alerts",
+    "title": "Deployment Alert",
+    "message": "Production deployment in progress",
+    "level": "warning"
+  }'
+
+# Discord slash command
+/notify channel:alerts title:"Build Complete" message:"v1.2.3 deployed to prod" level:success
+```
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
 - **HMAC Verification**: Cryptographic webhook validation
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
+- **Notification Endpoints**: `/notify` for single-channel, `/broadcast` for multi-channel notifications
 
 ### 🔄 GitLens Integration
 - **VS Code Tasks**: One-click Discord notifications from GitLens
@@ -124,8 +149,11 @@ git:
 ```bash
 # Discord Integration
 DISCORD_BOT_TOKEN=your_bot_token
-PRS_CHANNEL=channel_id_for_prs
-DEV_FEED_CHANNEL=channel_id_for_dev_updates
+PRS_CHANNEL_ID=channel_id_for_prs
+DEV_FEED_CHANNEL_ID=channel_id_for_dev_updates
+ALERTS_CHANNEL_ID=channel_id_for_alerts
+DEPLOYMENTS_CHANNEL_ID=channel_id_for_deployments
+AGENTS_CHANNEL_ID=channel_id_for_agents
 
 # GitHub App
 GITHUB_APP_ID=your_app_id
@@ -136,7 +164,7 @@ GITHUB_APP_PRIVATE_KEY_PATH=/path/to/key.pem
 OPENAI_API_KEY=sk-your-api-key
 PGVECTOR_CONN=postgresql://user:pass@host:5432/db
 
-# Infrastructure
+# Infrastructure / Notifications
 EVENTS_HMAC_KEY=your_64_char_hmac_key
 ```
 

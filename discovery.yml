@@ -29,12 +29,42 @@ discord:
         - "/deploy"
         - "/scale"
         - "/review"
+        - "/notify"
       prod_protected_commands:
         - "/deploy"
         - "/scale"
     rate_limits:
       max_msgs_per_min: 30
       burst: 10
+  notifications:
+    enabled: true
+    default_channel: "alerts"
+    levels:
+      info:
+        color: 0x2f81f7
+        emoji: "ℹ️"
+      warning:
+        color: 0xf0ad4e
+        emoji: "⚠️"
+      error:
+        color: 0xd73a49
+        emoji: "❌"
+      success:
+        color: 0x28a745
+        emoji: "✅"
+    routes:
+      - source: "alertmanager"
+        channel: "alerts"
+        level: "warning"
+      - source: "github"
+        channel: "prs"
+        level: "info"
+      - source: "deploy"
+        channel: "deployments"
+        level: "info"
+      - source: "agent"
+        channel: "agents"
+        level: "info"
 
 infra:
   environments: ["dev", "staging", "prod"]
@@ -169,6 +199,51 @@ event_gateway:
         - event: "push"
           branches: ["main","release/*"]
           discord_channel: "#deployments"
+    - path: "/notify"
+      description: "Send notification to Discord channel"
+      verify: "hmac"
+      allowed_services: ["*"]
+      methods: ["POST"]
+      body_schema:
+        channel:
+          type: "string"
+          enum: ["alerts","deployments","prs","dev_feed","agents"]
+        title:
+          type: "string"
+          required: true
+        message:
+          type: "string"
+          required: true
+        level:
+          type: "string"
+          enum: ["info","warning","error","success"]
+          default: "info"
+        mentionUsers:
+          type: "array"
+          items: "string"
+        mentionRoles:
+          type: "array"
+          items: "string"
+    - path: "/broadcast"
+      description: "Send notification to multiple Discord channels"
+      verify: "hmac"
+      allowed_services: ["*"]
+      methods: ["POST"]
+      body_schema:
+        channels:
+          type: "array"
+          items: "string"
+          required: true
+        title:
+          type: "string"
+          required: true
+        message:
+          type: "string"
+          required: true
+        level:
+          type: "string"
+          enum: ["info","warning","error","success"]
+          default: "info"
 
 commands:
   enabled: true
@@ -205,6 +280,26 @@ commands:
           type: "string"
         - name: "replicas"
           type: "int"
+    - name: "notify"
+      description: "Send notification to Discord channel"
+      params:
+        - name: "channel"
+          type: "string"
+          enum: ["alerts","deployments","prs","dev_feed","agents"]
+          required: true
+        - name: "title"
+          type: "string"
+          required: true
+        - name: "message"
+          type: "string"
+          required: true
+        - name: "level"
+          type: "string"
+          enum: ["info","warning","error","success"]
+          default: "info"
+        - name: "mention"
+          type: "user"
+          required: false
     - name: "request"
       description: "Create Refinory architecture request"
       params:
