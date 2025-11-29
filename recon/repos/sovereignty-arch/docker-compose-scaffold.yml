@@ -34,3 +34,24 @@ services:
     volumes:
       - ./monitoring/loki-config.yml:/etc/loki/local-config.yml:ro
     restart: unless-stopped
+
+  # Security & Penetration Testing Terminals
+  kali:
+    image: kalilinux/kali-rolling
+    container_name: kali-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    command: /bin/bash
+
+  parrot:
+    image: parrotsec/security:latest
+    container_name: parrot-dom
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ~/strategic-khaos-private:/root/swarm
+    command: /bin/bash
