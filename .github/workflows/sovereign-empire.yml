@@ -57,17 +57,17 @@ on:
   release:
     types: [published, created]
 
+# Minimal permissions for all jobs
+permissions:
+  contents: read
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   empire:
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        runner: [ubuntu-latest]
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
@@ -127,7 +127,7 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           EMOJI="🚀"
-          [[ "$STATUS" == "success" ]] && EMOJI="✅" || EMOJI="❌"
+          [ "$STATUS" = "success" ] && EMOJI="✅" || EMOJI="❌"
           
           if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
             curl -X POST "$PUSHCUT_WEBHOOK_URL" \
@@ -166,7 +166,8 @@ jobs:
 
   monday-report:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' && github.event.schedule == '0 9 * * 1'
+    # This job runs only on the Monday 9 AM schedule (second cron entry)
+    if: github.event_name == 'schedule'
     
     steps:
       - name: Checkout code
