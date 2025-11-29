@@ -1,0 +1,73 @@
+# Network Configuration for Agent Collaboration
+# This configuration enables secure communication between inline agents and Kubernetes cluster
+
+network:
+  vpn:
+    enabled: true
+    provider: wireguard  # or openvpn
+    config_path: /etc/wireguard/wg0.conf
+    interface: wg0
+    # Agents should connect through VPN to access cluster
+    allowed_peers:
+      - comment: "Agent Node 1"
+        public_key: "<AGENT_1_PUBLIC_KEY>"
+        allowed_ips: "10.100.0.2/32"
+      - comment: "Agent Node 2"
+        public_key: "<AGENT_2_PUBLIC_KEY>"
+        allowed_ips: "10.100.0.3/32"
+
+  # Port forwarding configurations
+  port_forwarding:
+    docker:
+      # Example: Expose container port 80 to host port 8080
+      - service: web-app
+        container_port: 80
+        host_port: 8080
+        protocol: tcp
+      - service: api-gateway
+        container_port: 8443
+        host_port: 8443
+        protocol: tcp
+
+    kubernetes:
+      # NodePort services for agent access
+      - service: agent-api
+        port: 80
+        node_port: 30000
+        namespace: ops
+      - service: metrics-endpoint
+        port: 9090
+        node_port: 30090
+        namespace: monitoring
+
+  # IP whitelisting for security
+  security:
+    allowed_cidr_blocks:
+      - "10.100.0.0/24"  # VPN subnet
+      - "192.168.1.0/24"  # Internal network
+
+    firewall_rules:
+      ingress:
+        - port: 30000
+          protocol: tcp
+          source: "10.100.0.0/24"
+          description: "Agent API access"
+        - port: 30090
+          protocol: tcp
+          source: "10.100.0.0/24"
+          description: "Metrics access"
+
+      egress:
+        - port: 443
+          protocol: tcp
+          destination: "0.0.0.0/0"
+          description: "HTTPS outbound"
+
+  # DNS configuration for service discovery
+  dns:
+    cluster_domain: cluster.local
+    service_discovery:
+      - name: agent-api.ops.svc.cluster.local
+        ip: internal
+      - name: metrics.monitoring.svc.cluster.local
+        ip: internal

@@ -1,0 +1,146 @@
+# Agent API Service Configuration
+# RESTful API for agent communication with Kubernetes cluster
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-api
+  namespace: ops
+  labels:
+    app: agent-api
+    component: communication
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      nodePort: 30000
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 8443
+      nodePort: 30443
+      protocol: TCP
+  selector:
+    app: agent-api
+    component: communication
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-api
+  namespace: ops
+  labels:
+    app: agent-api
+    component: communication
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: agent-api
+      component: communication
+  template:
+    metadata:
+      labels:
+        app: agent-api
+        component: communication
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: inline-agent
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: api
+          # TODO: Replace with actual agent API image when available
+          # For now using nginx:alpine as placeholder for service structure
+          # Build actual image with: docker build -t strategickhaos/agent-api:latest .
+          image: nginx:alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: API_PORT
+              value: "8080"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: AGENT_MODE
+              value: "collaboration"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/agent-api
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: agent-api-config
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-api-config
+  namespace: ops
+data:
+  endpoints.yaml: |
+    endpoints:
+      - path: /api/v1/pods
+        method: GET
+        description: "List pods in agent namespace"
+      - path: /api/v1/execute
+        method: POST
+        description: "Execute command in pod"
+      - path: /api/v1/logs
+        method: GET
+        description: "Get pod logs"
+      - path: /api/v1/metrics
+        method: GET
+        description: "Get cluster metrics"
+
+    auth:
+      type: bearer
+      required: true
+
+    rate_limits:
+      requests_per_minute: 100
+      burst: 20

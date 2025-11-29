@@ -1,0 +1,135 @@
+# Kubernetes RBAC Configuration for Inline Agents
+# Implements least-privilege access control for agent interactions
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: agents
+  labels:
+    app: strategickhaos-agents
+    security: restricted
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: inline-agent
+  namespace: agents
+  labels:
+    app: strategickhaos-agents
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: agent-reader
+  namespace: agents
+rules:
+  # Allow agents to read pod information
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "pods/status"]
+    verbs: ["get", "list", "watch"]
+
+  # Allow agents to read services
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get", "list"]
+
+  # Allow agents to read configmaps (limited)
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+
+  # Allow agents to create events for audit trail
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: agent-executor
+  namespace: agents
+rules:
+  # Allow agents to execute commands in pods
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+
+  # Allow agents to read and update deployments (limited)
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
+
+  # Allow agents to view jobs
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: agent-reader-binding
+  namespace: agents
+subjects:
+  - kind: ServiceAccount
+    name: inline-agent
+    namespace: agents
+roleRef:
+  kind: Role
+  name: agent-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: agent-executor-binding
+  namespace: agents
+subjects:
+  - kind: ServiceAccount
+    name: inline-agent
+    namespace: agents
+roleRef:
+  kind: Role
+  name: agent-executor
+  apiGroup: rbac.authorization.k8s.io
+---
+# Network Policy for agent pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: agent-network-policy
+  namespace: agents
+spec:
+  podSelector:
+    matchLabels:
+      app: inline-agent
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow ingress from monitoring
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+      ports:
+        - protocol: TCP
+          port: 9090
+  egress:
+    # Allow DNS
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+    # Allow HTTPS
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow communication with ops namespace
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: ops
+      ports:
+        - protocol: TCP
+          port: 8080

@@ -1,0 +1,106 @@
+# Docker Compose Configuration for Agent Services
+# Exposes services for agent collaboration with proper port forwarding
+
+version: '3.8'
+
+networks:
+  agent_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+services:
+  # Agent API Gateway - accessible via NodePort
+  agent-api-gateway:
+    image: nginx:alpine
+    container_name: agent-api-gateway
+    ports:
+      - "8080:80"    # HTTP access
+      - "8443:443"   # HTTPS access
+    networks:
+      agent_network:
+        ipv4_address: 172.20.0.10
+    volumes:
+      - ./nginx-agent.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Agent Command Executor
+  agent-executor:
+    image: strategickhaos/agent-executor:latest
+    container_name: agent-executor
+    ports:
+      - "9000:9000"  # Executor API
+    networks:
+      agent_network:
+        ipv4_address: 172.20.0.20
+    environment:
+      - EXECUTOR_PORT=9000
+      - LOG_LEVEL=INFO
+      - ALLOWED_ORIGINS=*
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for container management
+      - ./agent-workspace:/workspace
+    restart: unless-stopped
+
+  # Monitoring Metrics Endpoint
+  agent-metrics:
+    image: prom/prometheus:latest
+    container_name: agent-metrics
+    ports:
+      - "9090:9090"  # Prometheus UI and API
+    networks:
+      agent_network:
+        ipv4_address: 172.20.0.30
+    volumes:
+      - ./monitoring/prometheus-agent.yml:/etc/prometheus/prometheus.yml
+      - prometheus_agent_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  # Logging Aggregator
+  agent-logs:
+    image: grafana/loki:latest
+    container_name: agent-logs
+    ports:
+      - "3100:3100"  # Loki API
+    networks:
+      agent_network:
+        ipv4_address: 172.20.0.40
+    volumes:
+      - ./monitoring/loki-agent.yml:/etc/loki/local-config.yaml
+      - loki_agent_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+  # Redis Cache for agent coordination
+  agent-redis:
+    image: redis:7-alpine
+    container_name: agent-redis
+    ports:
+      - "6379:6379"  # Redis port
+    networks:
+      agent_network:
+        ipv4_address: 172.20.0.50
+    volumes:
+      - redis_agent_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  prometheus_agent_data:
+  loki_agent_data:
+  redis_agent_data:

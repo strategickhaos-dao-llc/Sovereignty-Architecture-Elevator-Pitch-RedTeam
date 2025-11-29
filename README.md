@@ -48,6 +48,25 @@ export PRS_CHANNEL="channel_id"
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
 
+### 🤝 Agent Collaboration Infrastructure
+- **VPN Access**: Secure WireGuard/OpenVPN connectivity for agent terminals
+- **RBAC Security**: Kubernetes role-based access control for inline agents
+- **API Gateway**: RESTful endpoints via NodePort (30000, 30090)
+- **Monitoring**: Prometheus metrics and Loki log aggregation
+- **Automation**: Scripts for Kali Linux/Parrot OS environment setup
+
+```bash
+# Quick setup for agent collaboration
+cd agents/setup
+./kali-parrot-setup.sh
+
+# Test connection
+cd ../scripts
+./test-agent-connection.sh
+```
+
+**See:** [Agent Collaboration Guide](docs/agents/AGENT_COLLABORATION.md) | [Quick Start](docs/agents/QUICK_START.md)
+
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features
 - **Build Tools**: Maven 3.6.3 and Gradle 4.4.1 pre-installed
