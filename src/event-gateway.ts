@@ -13,6 +13,32 @@ app.use(bodyParser.json({
   verify: (req: any, _res, buf) => { req.rawBody = buf.toString(); }
 }));
 
+// Simple in-memory rate limiter
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_MAX = 30; // max requests per window
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+
+function rateLimiter(req: express.Request, res: express.Response, next: express.NextFunction) {
+  const ip = req.ip || req.socket.remoteAddress || "unknown";
+  const now = Date.now();
+  
+  let record = rateLimitStore.get(ip);
+  
+  if (!record || now > record.resetTime) {
+    record = { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS };
+    rateLimitStore.set(ip, record);
+  } else {
+    record.count++;
+  }
+  
+  if (record.count > RATE_LIMIT_MAX) {
+    res.status(429).json({ error: "Too many requests. Please try again later." });
+    return;
+  }
+  
+  next();
+}
+
 const rest = new REST({ version: "10" }).setToken(env("DISCORD_TOKEN"));
 
 const channelIds = {
@@ -26,10 +52,10 @@ const channelIds = {
 // GitHub webhook handler
 app.post("/webhooks/github", githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
 
-// Notification endpoints
+// Notification endpoints with rate limiting
 const hmacSecret = env("EVENTS_HMAC_KEY", false) || env("GITHUB_WEBHOOK_SECRET");
-app.post("/notify", notificationRoutes(rest, channelIds, hmacSecret));
-app.post("/broadcast", broadcastRoutes(rest, channelIds, hmacSecret));
+app.post("/notify", rateLimiter, notificationRoutes(rest, channelIds, hmacSecret));
+app.post("/broadcast", rateLimiter, broadcastRoutes(rest, channelIds, hmacSecret));
 
 // Health check endpoint
 app.get("/health", (_req, res) => {
