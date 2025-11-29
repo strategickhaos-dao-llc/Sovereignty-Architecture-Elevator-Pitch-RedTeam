@@ -141,7 +141,7 @@ Every scientific claim has a falsifiable core. The path forward is rigorous expe
 
 ---
 
-## 7. GOE as Catabolic Collapse (Incomplete)
+## 7. GOE as Catabolic Collapse
 
 ### Solid Evidence
 - **Oxygen toxicity**: Well-documented lethality to anaerobes
@@ -149,7 +149,7 @@ Every scientific claim has a falsifiable core. The path forward is rigorous expe
 - **Metabolic retooling**: Evolutionary transition to aerobic metabolism
 
 ### Speculative Claims
-- **"Greenhouse gas from hell" framing**: Oxygen as catastrophic waste product
+- **Oxygen toxicity paradigm**: Oxygen as catastrophic metabolic waste product
 - **Biosphere "undoing" oxygen via anthropogenic carbon**: Cyclical reversal hypothesis
 
 ### Break Test
