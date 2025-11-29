@@ -272,6 +272,19 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🏰 Strategickhaos Hogwarts — AI Magitech University
+
+This project includes the **School of LLM Arts & Engineering** architecture — a comprehensive framework that maps our infrastructure to an intuitive magical school metaphor:
+
+- **[Hogwarts Architecture](STRATEGICKHAOS_HOGWARTS_ARCHITECTURE.md)** - The complete AI Magitech University blueprint
+- **Houses**: Compute nodes as Gryffindor (Nova), Ravenclaw (Athena), Hufflepuff (Lyra), Slytherin (Azure)
+- **Wands**: API keys as magical instruments (Elder Wand = Claude, Oracle Wand = OpenAI, etc.)
+- **Professors**: LLM platforms as faculty members teaching different disciplines
+- **Curriculum**: Structured learning paths from Year 1 foundations to Year 4 mastery
+- **Silicon Wizardry Lab**: Semiconductor design and chip theory department
+
+> *"The School of LLM Arts & Engineering — Where every classroom is an API, and every hallway is a compute pipeline."*
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
