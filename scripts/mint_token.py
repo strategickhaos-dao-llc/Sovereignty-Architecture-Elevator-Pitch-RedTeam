@@ -72,13 +72,10 @@ def mint_token(
         if secret_env:
             secret = secret_env.encode()
         else:
-            # Generate a placeholder secret (NOT FOR PRODUCTION)
-            print(
-                "WARNING: Using placeholder secret. "
-                "Set SWARM_JWT_SECRET in production.",
-                file=sys.stderr,
+            raise ValueError(
+                "SWARM_JWT_SECRET environment variable is required. "
+                "Generate a secure secret with: openssl rand -base64 32"
             )
-            secret = b"PLACEHOLDER_SECRET_DO_NOT_USE_IN_PRODUCTION"
 
     header = create_jwt_header()
     payload = create_jwt_payload(node_id, expiry_hours)

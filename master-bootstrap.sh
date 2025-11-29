@@ -84,6 +84,13 @@ check_os() {
 check_network() {
     log "Checking network connectivity..."
     
+    # In air-gapped mode, skip external connectivity checks
+    if [[ "${AIRGAPPED:-false}" == "true" ]]; then
+        log "Air-gapped mode enabled, skipping external connectivity check"
+        PUBLIC_IP="airgapped"
+        return 0
+    fi
+    
     # Check if we have a public IP or at least network access
     if command -v curl &>/dev/null; then
         if curl -s --max-time 5 https://api.ipify.org &>/dev/null; then
@@ -144,6 +151,7 @@ install_nats() {
     local nats_version="${NATS_VERSION:-2.10.7}"
     local nats_url="https://github.com/nats-io/nats-server/releases/download/v${nats_version}/nats-server-v${nats_version}-linux-amd64.tar.gz"
     local nats_dir="/opt/nats"
+    local offline_archive="${SWARM_HOME}/artifacts/nats-server-v${nats_version}-linux-amd64.tar.gz"
     
     if [[ -x "${nats_dir}/nats-server" ]]; then
         log "NATS server already installed"
@@ -151,6 +159,24 @@ install_nats() {
     fi
     
     mkdir -p "${nats_dir}"
+    
+    # Check for pre-staged offline archive first (air-gapped mode)
+    if [[ -f "${offline_archive}" ]]; then
+        log "Using pre-staged NATS archive for air-gapped installation"
+        tar -xzf "${offline_archive}" -C /tmp
+        mv /tmp/nats-server-v${nats_version}-linux-amd64/nats-server "${nats_dir}/"
+        chmod +x "${nats_dir}/nats-server"
+        rm -rf /tmp/nats-server-*
+        log "NATS server installed from offline archive"
+        return 0
+    fi
+    
+    # Fall back to downloading if not air-gapped
+    if [[ "${AIRGAPPED:-false}" == "true" ]]; then
+        warn "Air-gapped mode enabled but no pre-staged NATS archive found at ${offline_archive}"
+        warn "Please pre-stage the NATS binary for air-gapped installation"
+        return 1
+    fi
     
     if curl -fsSL "${nats_url}" -o /tmp/nats.tar.gz; then
         tar -xzf /tmp/nats.tar.gz -C /tmp
