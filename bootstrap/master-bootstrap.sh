@@ -134,7 +134,13 @@ get_node_ip() {
         mobile2)  echo "10.44.0.3" ;;
         edge3)    echo "10.44.0.4" ;;
         edge4)    echo "10.44.0.5" ;;
-        *)        echo "10.44.0.$((RANDOM % 250 + 6))" ;;
+        *)
+            # Deterministic IP based on node ID hash (avoids conflicts)
+            local hash
+            hash=$(echo -n "$NODE_ID" | sha256sum | cut -c1-4)
+            local ip_suffix=$((16#$hash % 250 + 6))
+            echo "10.44.0.$ip_suffix"
+            ;;
     esac
 }
 
@@ -152,8 +158,27 @@ install_packages() {
     
     # Ensure PyNaCl is installed via pip for reliable nacl.signing import
     # Debian's python3-nacl package can have import path issues in mixed setups
-    log "Installing PyNaCl via pip for reliable EdDSA support..."
-    pip3 install --break-system-packages pynacl 2>/dev/null || pip3 install pynacl
+    # Try system package first, then pip as fallback
+    log "Verifying PyNaCl installation for EdDSA support..."
+    if ! python3 -c "from nacl.signing import SigningKey" 2>/dev/null; then
+        log_warn "System python3-nacl not working, installing via pip..."
+        # Create a venv for swarm-specific Python dependencies
+        python3 -m venv /opt/sovereign-swarm-venv 2>/dev/null || true
+        if [ -f /opt/sovereign-swarm-venv/bin/pip ]; then
+            /opt/sovereign-swarm-venv/bin/pip install pynacl
+            # Update PATH to use venv
+            export PATH="/opt/sovereign-swarm-venv/bin:$PATH"
+        else
+            # Fallback to system pip if venv fails
+            pip3 install --break-system-packages pynacl 2>/dev/null || pip3 install pynacl
+        fi
+    fi
+    
+    # Verify installation
+    if ! python3 -c "from nacl.signing import SigningKey" 2>/dev/null; then
+        log_error "PyNaCl installation verification failed"
+        exit 1
+    fi
     
     log_success "Base packages installed"
 }
@@ -178,10 +203,21 @@ generate_keys() {
     log "Generating CA and node keys..."
     
     # CA key (only on command0 or if not exists)
+    # For Ed25519/NaCl, the 32-byte random seed IS the private key
+    # The public key is derived mathematically by PyNaCl when signing
     if [ ! -f ca/state/swarm-ed25519.key ]; then
-        log "Generating CA key..."
+        log "Generating CA seed (32-byte Ed25519 private key)..."
         openssl rand 32 > ca/state/swarm-ed25519.key
-        sha256sum ca/state/swarm-ed25519.key | awk '{print $1}' | xxd -r -p | head -c 32 > ca/state/swarm-ed25519.pub
+        # Derive public key using PyNaCl (proper Ed25519 derivation)
+        python3 -c "
+from nacl.signing import SigningKey
+seed = open('ca/state/swarm-ed25519.key', 'rb').read()
+sk = SigningKey(seed)
+open('ca/state/swarm-ed25519.pub', 'wb').write(bytes(sk.verify_key))
+" || {
+            log_error "Failed to derive CA public key - PyNaCl issue"
+            exit 1
+        }
     fi
     
     if [ ! -f ca/state/swarm-ed25519.key ]; then
@@ -202,11 +238,21 @@ generate_keys() {
     fi
     log_success "WireGuard key ready: $(cat "nodes/$NODE_ID/wg.pub")"
     
-    # Ed25519 key for node identity
+    # Ed25519 key for node identity (same approach as CA)
     if [ ! -f "nodes/$NODE_ID/ed25519.key" ]; then
         log "Generating Ed25519 key for $NODE_ID..."
         openssl rand 32 > "nodes/$NODE_ID/ed25519.key"
-        sha256sum "nodes/$NODE_ID/ed25519.key" | awk '{print $1}' > "nodes/$NODE_ID/ed25519.fp"
+        # Generate fingerprint from derived public key
+        python3 -c "
+from nacl.signing import SigningKey
+import hashlib
+seed = open('nodes/$NODE_ID/ed25519.key', 'rb').read()
+sk = SigningKey(seed)
+fp = hashlib.sha256(bytes(sk.verify_key)).hexdigest()
+open('nodes/$NODE_ID/ed25519.fp', 'w').write(fp)
+" || {
+            log_warn "Could not derive Ed25519 fingerprint"
+        }
     fi
     
     if [ ! -f "nodes/$NODE_ID/ed25519.key" ]; then
@@ -359,6 +405,15 @@ configure_wireguard() {
     local WG_PRIVKEY
     WG_PRIVKEY=$(cat "nodes/$NODE_ID/wg.key")
     
+    # Detect default network interface dynamically
+    local DEFAULT_IF
+    DEFAULT_IF=$(ip route show default 2>/dev/null | awk '/default/ {print $5}' | head -n1)
+    if [ -z "$DEFAULT_IF" ]; then
+        DEFAULT_IF="eth0"
+        log_warn "Could not detect default interface, using eth0"
+    fi
+    log "Using network interface: $DEFAULT_IF"
+    
     # Check if WireGuard is already running
     if systemctl is-active --quiet "wg-quick@${WG_IF}"; then
         log_warn "WireGuard already running, stopping for reconfiguration..."
@@ -383,9 +438,9 @@ SaveConfig = false
 # Post-up rules for mesh routing
 PostUp = sysctl -w net.ipv4.ip_forward=1
 PostUp = iptables -A FORWARD -i %i -j ACCEPT
-PostUp = iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE || true
+PostUp = iptables -t nat -A POSTROUTING -o ${DEFAULT_IF} -j MASQUERADE || true
 PostDown = iptables -D FORWARD -i %i -j ACCEPT || true
-PostDown = iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE || true
+PostDown = iptables -t nat -D POSTROUTING -o ${DEFAULT_IF} -j MASQUERADE || true
 EOF
 
     # Add Command-0 as peer if we're not Command-0
