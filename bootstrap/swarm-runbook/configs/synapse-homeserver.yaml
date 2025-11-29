@@ -1,0 +1,53 @@
+# =============================================================================
+# Synapse Homeserver Configuration
+# Sovereign Swarm - Bind only to WireGuard interface
+# =============================================================================
+
+server_name: "swarm.sovereign.local"
+
+# Bind only to WireGuard interface - no external exposure
+listeners:
+  - port: 8008
+    bind_addresses: ['10.13.33.2']
+    type: http
+    tls: false
+    resources:
+      - names: [client, federation]
+        compress: false
+
+# Database configuration (SQLite for simplicity, PostgreSQL for production)
+database:
+  name: sqlite3
+  args:
+    database: /var/lib/matrix-synapse/homeserver.db
+
+# Media storage
+media_store_path: /var/lib/matrix-synapse/media_store
+max_upload_size: 50M
+
+# Logging
+log_config: /etc/matrix-synapse/log.yaml
+
+# Security settings
+enable_registration: false
+allow_guest_access: false
+enable_metrics: false
+
+# Federation (WireGuard mesh only)
+federation_domain_whitelist:
+  - "swarm.sovereign.local"
+  - "10.13.33.0/24"
+
+# Disable external federation by default
+federation_ip_range_whitelist:
+  - "10.13.33.0/24"
+
+# Trusted key servers (self only)
+trusted_key_servers: []
+suppress_key_server_warning: true
+
+# Signing key (auto-generated)
+signing_key_path: /etc/matrix-synapse/signing.key
+
+# Report stats
+report_stats: false
