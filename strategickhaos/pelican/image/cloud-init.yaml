@@ -1,0 +1,45 @@
+#cloud-config
+# Sovereign Swarm Edge Node (Pelican) Cloud-Init Configuration
+
+hostname: pelican-edge
+manage_etc_hosts: true
+
+users:
+  - name: swarm
+    groups: sudo, docker
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh_authorized_keys: []
+
+packages:
+  - wireguard-tools
+  - nftables
+  - python3
+  - python3-pip
+  - syncthing
+  - docker.io
+
+write_files:
+  - path: /etc/sysctl.d/99-swarm.conf
+    content: |
+      net.ipv4.ip_forward=1
+      net.ipv6.conf.all.forwarding=1
+
+  - path: /etc/nftables.d/swarmsg.nft
+    content: |
+      table inet swarmsg {
+        set caps { type ipv4_addr; flags interval; }
+        chain preraw {
+          type filter hook prerouting priority -300; policy accept;
+          ip saddr @caps tcp dport { 4222, 6222 } accept
+        }
+      }
+
+runcmd:
+  - sysctl --system
+  - systemctl enable --now nftables
+  - pip3 install pyjwt pynacl
+  - systemctl enable --now swarmsgd
+  - echo "Sovereign Swarm Pelican node ready"
+
+final_message: "Sovereign Swarm Pelican node boot complete. System ready."

@@ -1,0 +1,12 @@
+[Unit]
+Description=Headscale coordination server
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/headscale serve
+User=headscale
+Group=headscale
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

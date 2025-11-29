@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  grok-node:
+    image: ghcr.io/strategickhaos/grok-node:latest
+    container_name: grok-node
+    restart: unless-stopped
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - /var/lib/grok-node:/data
+    environment:
+      - SWARM_NODE_ID=${SWARM_NODE_ID:-grok-0}
+      - NATS_URL=nats://10.44.0.1:4222
+      - MATRIX_HOMESERVER=http://10.44.1.1:8008
+    network_mode: "host"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G

@@ -1,0 +1,33 @@
+# Caddyfile for Sovereign Swarm Rendezvous
+# Primary dish: 3476D3 (Starlink Mini)
+
+{
+    admin off
+    auto_https disable_redirects
+}
+
+# WireGuard key exchange endpoint
+swarm.local:443 {
+    tls internal
+
+    # SwarmGate token verification
+    handle /api/v1/token/* {
+        reverse_proxy 127.0.0.1:8080
+    }
+
+    # Headscale coordination
+    handle /headscale/* {
+        reverse_proxy 127.0.0.1:8090
+    }
+
+    # Health check
+    handle /health {
+        respond "OK" 200
+    }
+}
+
+# Matrix federation (optional)
+matrix.swarm.local:8448 {
+    tls internal
+    reverse_proxy 127.0.0.1:8008
+}

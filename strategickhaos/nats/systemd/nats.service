@@ -1,0 +1,12 @@
+[Unit]
+Description=NATS Server
+After=network-online.target wg-quick@wg0.service
+
+[Service]
+ExecStart=/usr/local/bin/nats-server -c /etc/nats/nats.conf
+User=nats
+Group=nats
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

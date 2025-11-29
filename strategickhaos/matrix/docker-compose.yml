@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: synapse
+    restart: unless-stopped
+    volumes:
+      - ./synapse:/data
+    environment:
+      - SYNAPSE_SERVER_NAME=swarm.local
+      - SYNAPSE_REPORT_STATS=no
+    network_mode: "host"

@@ -1,0 +1,32 @@
+server_name: "swarm.local"
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+enable_registration: false
+password_config:
+  enabled: false
+registrations_require_3pid: []
+allow_guest_access: false
+federation_domain_whitelist: []
+media_store_path: /data/media
+max_upload_size: 50M
+retention:
+  enabled: true
+  default_policy:
+    min_lifetime: 1d
+    max_lifetime: 30d
+encryption_enabled_by_default_for_room_type: "all"
+
+# SwarmGate JWT auth module
+modules:
+  - module: "jwt_login_provider.JWTLoginProvider"
+    config:
+      enabled: true
+      secret: "__PUBLIC_KEY_FROM_SWARMSG__"
+      algorithm: "EdDSA"
+      audience: "matrix"
+      subject_claim: "sub"
