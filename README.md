@@ -31,7 +31,8 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/register`
+- **User Registration**: Register users with optional email for tracking
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
