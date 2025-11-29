@@ -1,0 +1,95 @@
+# OpenTimestamps Creation Instructions
+
+Due to network restrictions in the build environment, the .ots file must be created manually.
+
+## Quick Command (Bash/Linux/Mac)
+
+```bash
+curl -X POST \
+  --data-binary @SOVEREIGN_MANIFEST_v1.0.md \
+  https://btc.calendar.opentimestamps.org \
+  -o SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## PowerShell Command (Windows)
+
+```powershell
+Invoke-WebRequest https://btc.calendar.opentimestamps.org `
+  -Method POST `
+  -Body (Get-Content .\SOVEREIGN_MANIFEST_v1.0.md -Raw) `
+  -OutFile SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## Alternative Calendar Servers
+
+If the primary server is unavailable, try these alternatives:
+
+```bash
+# Alice calendar
+curl -X POST --data-binary @SOVEREIGN_MANIFEST_v1.0.md \
+  https://alice.btc.calendar.opentimestamps.org \
+  -o SOVEREIGN_MANIFEST_v1.0.md.ots
+
+# Finney calendar  
+curl -X POST --data-binary @SOVEREIGN_MANIFEST_v1.0.md \
+  https://finney.calendar.eternitywall.com \
+  -o SOVEREIGN_MANIFEST_v1.0.md.ots
+
+# Bob calendar
+curl -X POST --data-binary @SOVEREIGN_MANIFEST_v1.0.md \
+  https://bob.btc.calendar.opentimestamps.org \
+  -o SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## What is OpenTimestamps?
+
+OpenTimestamps is a free and open-source timestamping service that proves a file existed at a specific point in time by anchoring it to the Bitcoin blockchain.
+
+### Benefits:
+- **Immutable proof**: Once anchored to Bitcoin, the timestamp cannot be changed
+- **No registration**: Completely anonymous and free
+- **Cryptographically secure**: Uses SHA256 and Bitcoin's proof-of-work
+- **Permanent**: As long as Bitcoin exists, your timestamp is verifiable
+
+### How it works:
+1. Your file's SHA256 hash is submitted to the calendar server
+2. The server collects hashes and creates a merkle tree
+3. The merkle root is committed to the Bitcoin blockchain
+4. A .ots file is created containing the proof path
+
+### Verification:
+
+Once created, you can verify the timestamp:
+
+```bash
+# Install ots client
+pip install opentimestamps-client
+
+# Upgrade timestamp (wait for Bitcoin confirmation)
+ots upgrade SOVEREIGN_MANIFEST_v1.0.md.ots
+
+# Verify timestamp
+ots verify SOVEREIGN_MANIFEST_v1.0.md.ots
+
+# Show timestamp info
+ots info SOVEREIGN_MANIFEST_v1.0.md.ots
+```
+
+## Expected Result
+
+After running the command, you should have a `.ots` file that:
+- Is approximately 100-400 bytes in size
+- Contains binary timestamp data
+- Can be verified against the Bitcoin blockchain
+- Proves the manifest existed at the time of creation
+
+## Notes
+
+- It may take a few hours for the timestamp to be anchored to Bitcoin
+- The .ots file is small and should be kept alongside the manifest
+- Multiple timestamps of the same file will create different .ots files
+- This is completely free and requires no API keys or registration
+
+## Integration in finalize-sovereignty.sh
+
+The finalization script (`finalize-sovereignty.sh`) automatically attempts to create the .ots file using the commands above. If it fails, you can run the commands manually as shown here.
