@@ -71,6 +71,27 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🌐 Sovereign Swarm Edge Nodes
+Deploy sovereign edge nodes with WireGuard VPN mesh, NATS messaging, and Matrix/Synapse for decentralized infrastructure.
+
+- **WireGuard VPN**: Secure peer-to-peer mesh connectivity
+- **NATS Server**: High-performance messaging with JetStream
+- **Matrix Synapse**: Federated communication and data sovereignty
+- **Auto-Configuration**: One-command bootstrap for fresh Ubuntu 24.04
+
+```bash
+# Deploy edge3 on Ubuntu 24.04
+sudo mkdir -p /opt/sovereign-swarm && cd /opt/sovereign-swarm
+
+# Run bootstrap
+sudo NODE_ID=edge3 ./master-bootstrap.sh
+
+# Connect to the mesh
+sudo ./wg-peer-setup.sh
+```
+
+See [sovereign-swarm/README.md](sovereign-swarm/README.md) for complete documentation.
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
