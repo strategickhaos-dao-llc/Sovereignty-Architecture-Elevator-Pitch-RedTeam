@@ -1,0 +1,18 @@
+[Unit]
+Description=Pelican Connectivity Watchdog
+Documentation=https://github.com/Strategickhaos/sovereign-swarm
+After=wg-quick@wg0.service
+Wants=wg-quick@wg0.service
+
+[Service]
+Type=simple
+ExecStart=/opt/sovereign-swarm/watchdog.sh
+Restart=always
+RestartSec=10
+User=root
+
+# Watchdog needs permission to restart WireGuard
+CapabilityBoundingSet=CAP_NET_ADMIN
+
+[Install]
+WantedBy=multi-user.target

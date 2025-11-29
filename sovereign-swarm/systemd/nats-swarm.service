@@ -1,0 +1,23 @@
+[Unit]
+Description=NATS Server for Sovereign Swarm
+Documentation=https://docs.nats.io
+After=network.target wg-quick@wg0.service
+Wants=wg-quick@wg0.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/nats-server -c /opt/sovereign-swarm/config/nats.conf
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+User=root
+LimitNOFILE=65536
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/sovereign-swarm/nats-data /var/log/sovereign-swarm
+
+[Install]
+WantedBy=multi-user.target

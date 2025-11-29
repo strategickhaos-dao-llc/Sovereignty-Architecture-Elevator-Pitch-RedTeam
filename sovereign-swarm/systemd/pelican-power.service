@@ -1,0 +1,8 @@
+[Unit]
+Description=Pelican Power Manager
+Documentation=https://github.com/Strategickhaos/sovereign-swarm
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/sovereign-swarm/power-manager.sh optimize

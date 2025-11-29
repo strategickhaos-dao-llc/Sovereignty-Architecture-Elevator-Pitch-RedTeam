@@ -1,0 +1,55 @@
+# Sovereign Swarm NATS Configuration
+# This is an example configuration file
+
+# Server identification
+server_name: command0
+
+# Listen on WireGuard mesh interface only
+listen: 10.44.0.1:4222
+
+# JetStream configuration for persistent messaging
+jetstream {
+    store_dir: /opt/sovereign-swarm/nats-data
+    max_memory_store: 256MB
+    max_file_store: 1GB
+}
+
+# Cluster configuration for high availability
+cluster {
+    name: sovereign-swarm
+    listen: 10.44.0.1:6222
+    routes: [
+        nats://10.44.0.1:6222
+        nats://10.44.0.2:6222
+    ]
+}
+
+# Authorization (using capability tokens)
+authorization {
+    # Default permissions for unauthenticated connections
+    default_permissions {
+        publish: ["swarm.>"]
+        subscribe: ["swarm.>", "_INBOX.>"]
+    }
+}
+
+# Logging configuration
+log_file: /var/log/sovereign-swarm/nats.log
+debug: false
+trace: false
+logtime: true
+
+# Connection limits
+max_payload: 1MB
+max_pending: 64MB
+max_connections: 1024
+max_subscriptions: 10000
+
+# Monitoring (bound to mesh only)
+http: 10.44.0.1:8222
+
+# TLS configuration (optional, WireGuard already provides encryption)
+# tls {
+#     cert_file: /opt/sovereign-swarm/certs/server.crt
+#     key_file: /opt/sovereign-swarm/certs/server.key
+# }
