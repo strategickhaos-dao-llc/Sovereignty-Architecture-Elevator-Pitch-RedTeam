@@ -41,9 +41,9 @@ setup_build_env() {
     log_success "Build environment ready at $BUILD_DIR"
 }
 
-# === Generate First-Boot Join Script ===
+# Generate First-Boot Join Script for Pelican Nodes
 generate_first_boot_script() {
-    log_info "Generating first-boot-join.sh..."
+    log_info "Generating first-boot-join.sh for Pelican auto-join..."
 
     cat > "$BUILD_DIR/scripts/first-boot-join.sh" << 'FIRST_BOOT_EOF'
 #!/bin/bash

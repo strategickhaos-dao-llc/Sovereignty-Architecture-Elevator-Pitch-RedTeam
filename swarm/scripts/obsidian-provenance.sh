@@ -40,12 +40,24 @@ check_dependencies() {
 }
 
 # Hash a file with BLAKE3 (or SHA256 fallback)
+# Supports both file paths and stdin via /dev/stdin or - argument
 hash_file() {
-    local file="$1"
-    if command -v b3sum &> /dev/null; then
-        b3sum "$file" | awk '{print $1}'
+    local input="$1"
+    
+    if [[ "$input" == "/dev/stdin" || "$input" == "-" ]]; then
+        # Handle stdin input
+        if command -v b3sum &> /dev/null; then
+            b3sum - | awk '{print $1}'
+        else
+            sha256sum - | awk '{print $1}'
+        fi
     else
-        sha256sum "$file" | awk '{print $1}'
+        # Handle file path
+        if command -v b3sum &> /dev/null; then
+            b3sum "$input" | awk '{print $1}'
+        else
+            sha256sum "$input" | awk '{print $1}'
+        fi
     fi
 }
 

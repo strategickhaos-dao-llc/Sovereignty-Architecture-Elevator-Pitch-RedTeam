@@ -113,6 +113,9 @@ class GrokDispatcher:
     async def connect(self) -> None:
         """Connect to NATS server."""
         try:
+            # Deferred import: nats-py is optional and may not be installed
+            # in all deployment scenarios. This allows the module to load
+            # even without nats-py for testing/development purposes.
             import nats
             self.nc = await nats.connect(NATS_URL)
             self.js = self.nc.jetstream()

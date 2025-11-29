@@ -64,8 +64,13 @@ install_dependencies() {
 
     # Install NATS client tools
     if ! command -v nats &> /dev/null; then
-        curl -L https://github.com/nats-io/natscli/releases/latest/download/nats-0.1.1-linux-amd64.zip -o /tmp/nats.zip 2>/dev/null || true
-        unzip -o /tmp/nats.zip -d /usr/local/bin/ 2>/dev/null || true
+        log_info "Installing NATS CLI..."
+        # Download specific version for stability
+        NATS_VERSION="0.1.5"
+        curl -sL "https://github.com/nats-io/natscli/releases/download/v${NATS_VERSION}/nats-${NATS_VERSION}-linux-amd64.zip" -o /tmp/nats.zip 2>/dev/null || true
+        unzip -o /tmp/nats.zip -d /tmp/nats-extract 2>/dev/null || true
+        mv /tmp/nats-extract/nats-*/nats /usr/local/bin/nats 2>/dev/null || true
+        rm -rf /tmp/nats.zip /tmp/nats-extract 2>/dev/null || true
     fi
 
     log_success "Dependencies installed"
