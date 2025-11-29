@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Bloodline sync configuration and logs
+sync_bloodline_config.json
+C:\Logs\bloodline_sync/
