@@ -64,8 +64,9 @@ configure_ufw() {
 configure_iptables() {
     echo_info "Configuring iptables rules..."
     
-    # Flush existing rules (careful!)
-    # sudo iptables -F
+    # WARNING: Do NOT flush existing rules without careful consideration
+    # Flushing rules while connected remotely could lock you out
+    # Only uncomment for fresh installations with physical access
     
     # Allow established connections
     sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -114,7 +115,8 @@ ClientAliveInterval 300
 ClientAliveCountMax 2
 
 # Restrict to WireGuard network (uncomment after mesh is established)
-# ListenAddress 10.13.33.0
+# NOTE: Replace with your node's actual WireGuard IP (e.g., 10.13.33.1)
+# ListenAddress REPLACE_WITH_NODE_IP
 EOF
     
     # Restart SSH

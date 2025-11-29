@@ -153,7 +153,13 @@ generate_qr_codes() {
         fi
     done
     
-    echo_warning "QR codes contain private keys - handle with extreme care!"
+    echo ""
+    echo_warning "⚠️  SECURITY WARNING ⚠️"
+    echo_warning "QR codes contain PRIVATE KEYS - handle with EXTREME care!"
+    echo_warning "- Store QR images in encrypted storage only"
+    echo_warning "- Delete QR images immediately after use"
+    echo_warning "- Never share or transmit QR images over insecure channels"
+    echo_warning "QR codes saved to: $qr_dir"
 }
 
 # Print key summary

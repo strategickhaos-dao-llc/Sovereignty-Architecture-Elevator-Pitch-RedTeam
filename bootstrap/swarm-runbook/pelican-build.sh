@@ -75,7 +75,8 @@ DNS = 10.13.33.1
 
 [Peer]
 # Command-0 Hub
-PublicKey = COMMAND0_PUBLIC_KEY_PLACEHOLDER
+# NOTE: Replace REPLACE_WITH_COMMAND0_PUBKEY with actual Command-0 public key from phase1
+PublicKey = REPLACE_WITH_COMMAND0_PUBKEY
 Endpoint = command0.sovereign.local:51820
 AllowedIPs = 10.13.33.0/24
 PersistentKeepalive = 25

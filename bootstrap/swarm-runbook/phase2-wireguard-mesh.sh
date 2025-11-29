@@ -65,7 +65,13 @@ get_external_ip() {
     external_ip=$(curl -s --max-time 5 ifconfig.me 2>/dev/null || \
                   curl -s --max-time 5 icanhazip.com 2>/dev/null || \
                   curl -s --max-time 5 ipinfo.io/ip 2>/dev/null || \
-                  echo "EXTERNAL_IP_PLACEHOLDER")
+                  echo "REPLACE_WITH_EXTERNAL_IP")
+    
+    # Warn if we couldn't detect external IP
+    if [ "$external_ip" = "REPLACE_WITH_EXTERNAL_IP" ]; then
+        echo_warning "Could not detect external IP. Please replace REPLACE_WITH_EXTERNAL_IP in generated configs." >&2
+    fi
+    
     echo "$external_ip"
 }
 
