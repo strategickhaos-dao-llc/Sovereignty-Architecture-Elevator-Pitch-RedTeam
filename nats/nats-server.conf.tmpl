@@ -1,0 +1,77 @@
+# NATS Server Configuration Template
+# Sovereign Swarm — Zero-Trust AI Orchestration Mesh
+# Generate actual config with envsubst
+
+# Server identification
+server_name: "${NATS_SERVER_NAME:-swarm-nats}"
+
+# Network bindings
+listen: 0.0.0.0:4222
+http_port: 8222
+
+# Cluster settings (for multi-node deployments)
+cluster {
+  name: sovereign-swarm
+  listen: 0.0.0.0:6222
+  
+  # Routes to other NATS servers in the swarm
+  # routes = [
+  #   nats://node1:6222
+  #   nats://node2:6222
+  # ]
+}
+
+# TLS configuration
+tls {
+  cert_file: "${NATS_TLS_CERT:-/etc/nats/certs/server.crt}"
+  key_file: "${NATS_TLS_KEY:-/etc/nats/certs/server.key}"
+  ca_file: "${NATS_TLS_CA:-/etc/nats/certs/ca.crt}"
+  verify: true
+  verify_and_map: true
+}
+
+# Authorization
+authorization {
+  # Default permissions for authenticated clients
+  default_permissions {
+    publish = ["swarm.>"]
+    subscribe = ["swarm.>", "_INBOX.>"]
+  }
+  
+  # System account for internal operations
+  users = [
+    {
+      user: "${NATS_SYSTEM_USER:-system}"
+      password: "${NATS_SYSTEM_PASS:-PLACEHOLDER_GENERATE_PASSWORD}"
+      permissions: {
+        publish: ">"
+        subscribe: ">"
+      }
+    }
+  ]
+}
+
+# JetStream configuration (persistent messaging)
+jetstream {
+  store_dir: "${NATS_STORE_DIR:-/var/lib/nats/jetstream}"
+  max_mem: 256MB
+  max_file: 1GB
+}
+
+# Logging
+debug: false
+trace: false
+logtime: true
+log_file: "${NATS_LOG_FILE:-/var/log/nats/nats-server.log}"
+
+# Limits
+max_connections: 1000
+max_payload: 1MB
+max_pending: 64MB
+
+# Monitoring
+ping_interval: 30s
+ping_max: 3
+
+# Write deadline for slow consumers
+write_deadline: 10s

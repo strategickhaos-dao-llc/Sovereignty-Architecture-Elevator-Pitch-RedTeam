@@ -1,0 +1,38 @@
+# WireGuard Configuration Template
+# Sovereign Swarm — Zero-Trust AI Orchestration Mesh
+# Generate actual config with envsubst
+
+[Interface]
+# Node identifier: ${NODE_ID:-command0}
+Address = ${WG_ADDRESS:-10.100.0.1/24}
+ListenPort = ${WG_PORT:-51820}
+PrivateKey = ${WG_PRIVATE_KEY:-PLACEHOLDER_GENERATE_PRIVATE_KEY}
+
+# DNS server (optional, for split-horizon DNS)
+# DNS = ${WG_DNS:-10.100.0.1}
+
+# Post-up/down scripts for firewall management
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${WG_EXTERNAL_IF:-eth0} -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${WG_EXTERNAL_IF:-eth0} -j MASQUERADE
+
+# === PEER CONFIGURATIONS ===
+# Add one [Peer] block for each node in the swarm
+
+# Example peer configuration:
+# [Peer]
+# # Node: edge1
+# PublicKey = PLACEHOLDER_PEER_PUBLIC_KEY
+# PresharedKey = PLACEHOLDER_PEER_PSK
+# AllowedIPs = 10.100.0.2/32
+# Endpoint = edge1.example.com:51820
+# PersistentKeepalive = 25
+
+# Peer template (uncomment and duplicate for each peer):
+#
+# [Peer]
+# # Node: ${PEER_NODE_ID}
+# PublicKey = ${PEER_PUBLIC_KEY}
+# PresharedKey = ${PEER_PSK}
+# AllowedIPs = ${PEER_ALLOWED_IPS}
+# Endpoint = ${PEER_ENDPOINT}:${WG_PORT:-51820}
+# PersistentKeepalive = 25
