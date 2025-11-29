@@ -101,7 +101,7 @@ setup_system() {
         wireguard \
         wireguard-tools \
         docker.io \
-        docker-compose \
+        docker-compose-plugin \
         ufw \
         curl \
         jq \
@@ -250,7 +250,7 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/nats-server -c /etc/nats/nats.conf
-ExecReload=/bin/kill -HUP \$MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
 RestartSec=5
 LimitNOFILE=65536
@@ -312,7 +312,7 @@ EOF
 
     # Start Synapse
     cd /opt/synapse
-    docker-compose up -d
+    docker compose up -d
 
     log OK "Matrix Synapse configured and running"
 }

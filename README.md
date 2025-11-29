@@ -83,6 +83,11 @@ Deploy sovereign edge nodes with WireGuard VPN mesh, NATS messaging, and Matrix/
 # Deploy edge3 on Ubuntu 24.04
 sudo mkdir -p /opt/sovereign-swarm && cd /opt/sovereign-swarm
 
+# Clone repo and copy scripts
+git clone https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
+cp Sovereignty-Architecture-Elevator-Pitch-/sovereign-swarm/*.sh .
+chmod +x *.sh
+
 # Run bootstrap
 sudo NODE_ID=edge3 ./master-bootstrap.sh
 

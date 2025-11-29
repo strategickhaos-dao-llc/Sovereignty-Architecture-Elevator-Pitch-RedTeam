@@ -158,8 +158,8 @@ sudo systemctl status nats
 sudo systemctl restart nats
 
 # Synapse
-cd /opt/synapse && sudo docker-compose logs -f
-cd /opt/synapse && sudo docker-compose restart
+cd /opt/synapse && sudo docker compose logs -f
+cd /opt/synapse && sudo docker compose restart
 ```
 
 ## 🌐 Mesh Topology
@@ -259,7 +259,7 @@ sudo ss -tlnp | grep nats
 sudo docker logs synapse
 
 # Restart container
-cd /opt/synapse && sudo docker-compose down && sudo docker-compose up -d
+cd /opt/synapse && sudo docker compose down && sudo docker compose up -d
 ```
 
 ## 📜 License
