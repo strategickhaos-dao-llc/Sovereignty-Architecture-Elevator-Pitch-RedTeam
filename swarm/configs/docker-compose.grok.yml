@@ -1,0 +1,79 @@
+# docker-compose.grok.yml — Sovereign Swarm v2.0
+# Local LLM Reasoning Node (Evolution #8)
+# Ollama-based offline AI reasoning with NATS integration
+#
+# Strategickhaos DAO LLC / Valoryield Engine
+# Author: Domenic Garza (Node 137)
+
+version: '3.8'
+
+networks:
+  swarm-grok:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24
+
+volumes:
+  ollama_models:
+  grok_data:
+
+services:
+  # Ollama LLM Server
+  ollama:
+    image: ollama/ollama:latest
+    container_name: swarm-ollama
+    restart: unless-stopped
+    volumes:
+      - ollama_models:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - swarm-grok
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grok Dispatcher — NATS to LLM Bridge
+  grok-dispatcher:
+    build:
+      context: .
+      dockerfile: Dockerfile.grok
+    container_name: swarm-grok-dispatcher
+    restart: unless-stopped
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      NATS_URL: ${NATS_URL:-nats://swarm:swarm@10.44.0.1:4222}
+      OLLAMA_URL: http://ollama:11434
+      GROK_MODEL: ${GROK_MODEL:-llama3:8b}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - grok_data:/data
+      - ./grok:/app:ro
+    networks:
+      - swarm-grok
+    command: python /app/dispatcher.py
+
+  # Prometheus Metrics Exporter
+  grok-exporter:
+    image: prom/prometheus:latest
+    container_name: swarm-grok-exporter
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus/grok.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9292:9090"
+    networks:
+      - swarm-grok

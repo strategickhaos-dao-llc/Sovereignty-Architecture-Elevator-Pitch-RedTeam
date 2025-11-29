@@ -1,0 +1,117 @@
+# docker-compose.matrix.yml — Sovereign Swarm v2.0
+# Matrix Synapse with NATS Bridge (Evolution #5)
+# Hardened federation + AI bridge integration
+#
+# Strategickhaos DAO LLC / Valoryield Engine
+# Author: Domenic Garza (Node 137)
+
+version: '3.8'
+
+networks:
+  swarm-matrix:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+
+volumes:
+  synapse_data:
+  synapse_media:
+  mautrix_data:
+  postgres_matrix:
+
+services:
+  # PostgreSQL for Matrix
+  postgres:
+    image: postgres:15-alpine
+    container_name: swarm-matrix-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: ${MATRIX_DB_PASSWORD:-synapse-secure-password}
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_matrix:/var/lib/postgresql/data
+    networks:
+      - swarm-matrix
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Matrix Synapse Server
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: swarm-synapse
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SYNAPSE_SERVER_NAME: ${SYNAPSE_SERVER_NAME:-swarm.local}
+      SYNAPSE_REPORT_STATS: "no"
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+    volumes:
+      - synapse_data:/data
+      - synapse_media:/data/media_store
+      - ./synapse/homeserver.yaml:/data/homeserver.yaml:ro
+      - ./synapse/log.config:/data/log.config:ro
+    ports:
+      - "8008:8008"
+    networks:
+      - swarm-matrix
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Matrix-NATS Bridge (Evolution #5)
+  # Bridges Matrix rooms to NATS subjects for AI integration
+  mautrix-nats:
+    image: dock.mau.dev/mautrix/nats:latest
+    container_name: swarm-mautrix-nats
+    restart: unless-stopped
+    depends_on:
+      - synapse
+    environment:
+      NATS_URL: ${NATS_URL:-nats://swarm:swarm@10.44.0.1:4222}
+      MATRIX_HOMESERVER: http://synapse:8008
+      MATRIX_ACCESS_TOKEN: ${MAUTRIX_ACCESS_TOKEN}
+    volumes:
+      - mautrix_data:/data
+      - ./mautrix/config.yaml:/data/config.yaml:ro
+    networks:
+      - swarm-matrix
+
+  # Element Web Client (optional)
+  element:
+    image: vectorim/element-web:latest
+    container_name: swarm-element
+    restart: unless-stopped
+    depends_on:
+      - synapse
+    volumes:
+      - ./element/config.json:/app/config.json:ro
+    ports:
+      - "8080:80"
+    networks:
+      - swarm-matrix
+
+  # Prometheus Exporter for Matrix metrics
+  synapse-exporter:
+    image: prom/prometheus:latest
+    container_name: swarm-synapse-exporter
+    restart: unless-stopped
+    depends_on:
+      - synapse
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus/matrix.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9191:9090"
+    networks:
+      - swarm-matrix
