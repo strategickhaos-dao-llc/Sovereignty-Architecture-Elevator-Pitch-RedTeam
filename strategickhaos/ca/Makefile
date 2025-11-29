@@ -27,5 +27,6 @@ yubi-ca:
 	ykhsma init --label SwarmCA --algorithm ed25519 --out $(SWARM_PUB)
 
 yubi-sign:
-	@test -n "$(ID)" && @test -n "$(CAP)"
+	@test -n "$(ID)" || (echo "ID required"; exit 1)
+	@test -n "$(CAP)" || (echo "CAP required"; exit 1)
 	python3 scripts/mint_token.py --yubi 1 --node nodes/$(ID) --cap "$(CAP)" --aud wg --ttl 24h

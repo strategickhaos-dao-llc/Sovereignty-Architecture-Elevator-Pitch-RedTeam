@@ -31,7 +31,23 @@ header = {"alg":"EdDSA","typ":"JWT"}
 pl = b'.'.join([b64u(json.dumps(header).encode()), b64u(json.dumps(claims).encode())])
 
 if args.yubi:
-    sig = subprocess.check_output(["yubihsm-eddsa-sign","--id","1"], input=pl)
+    # Sign using YubiHSM2 via yubihsm-shell (requires yubihsm-connector running)
+    # Key ID should be specified via --yubi flag
+    # This uses PKCS#11 interface for Ed25519 signing
+    import tempfile
+    with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        f.write(pl)
+        payload_file = f.name
+    try:
+        # Use yubihsm-shell to sign with Ed25519 key
+        # Requires: yubihsm-shell, yubihsm-connector service running
+        sig = subprocess.check_output([
+            "yubihsm-shell", "-a", "sign-eddsa",
+            "-i", str(args.yubi),  # Key ID in YubiHSM2
+            "--in", payload_file
+        ])
+    finally:
+        os.unlink(payload_file)
 else:
     # sign with age key using age-plugin mini-jws (simple ed25519); replace with your ed signer
     sk = open(args.ca,"rb").read()

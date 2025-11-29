@@ -2,7 +2,7 @@
 set -e
 ID="$1"
 [ -n "$ID" ] || { echo "Usage: bootstrap-node.sh <node-id>"; exit 1; }
-mkdir -p /etc/wireguard/psk /etc/nftables.d /usr/local/bin /var/lib/swarmsgd
+mkdir -p /etc/wireguard/psk /etc/nftables.d /usr/local/bin /var/lib/swarmsgd /usr/local/swarmsgd /etc/swarmsgd
 cp wireguard/conf/${ID}.conf /etc/wireguard/wg0.conf
 cp swarmgate/nft/swarmsg.nft /etc/nftables.d/
 cp swarmgate/swarmsgd/agent.py /usr/local/swarmsgd/agent.py
