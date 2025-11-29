@@ -95,23 +95,34 @@ validate_pynacl() {
     
     log_warning "PyNaCl not found or not working. Attempting to install..."
     
+    # Update package lists first for apt installation
+    log_info "Updating package lists..."
+    apt-get update || log_warning "apt-get update had issues, continuing..."
+    
     # Try apt first (Debian's python3-nacl)
-    if apt-get install -y python3-nacl 2>/dev/null; then
+    log_info "Attempting to install python3-nacl via apt..."
+    if apt-get install -y python3-nacl; then
         if python3 -c "from nacl.signing import SigningKey; print('PyNaCl OK')" 2>/dev/null; then
             log_success "PyNaCl installed via apt"
             return 0
         fi
+        log_warning "apt installed python3-nacl but import still fails, trying pip..."
+    else
+        log_warning "apt install failed, trying pip..."
     fi
     
     # Fallback to pip
-    log_info "Trying pip installation..."
-    apt-get install -y python3-pip 2>/dev/null || true
-    pip3 install pynacl 2>/dev/null || true
+    log_info "Attempting pip installation..."
+    if ! command -v pip3 &>/dev/null; then
+        log_info "Installing pip3..."
+        apt-get install -y python3-pip || log_warning "pip3 installation had issues"
+    fi
     
-    # Final validation
-    if python3 -c "from nacl.signing import SigningKey; print('PyNaCl OK')" 2>/dev/null; then
-        log_success "PyNaCl installed via pip"
-        return 0
+    if pip3 install pynacl; then
+        if python3 -c "from nacl.signing import SigningKey; print('PyNaCl OK')" 2>/dev/null; then
+            log_success "PyNaCl installed via pip"
+            return 0
+        fi
     fi
     
     log_error "Failed to install PyNaCl. Cannot continue."
@@ -179,8 +190,17 @@ setup_wireguard() {
 setup_firewall() {
     log_info "Configuring firewall..."
     
-    # Enable UFW if not already enabled
-    ufw --force enable || true
+    # Check if UFW is already enabled
+    if ufw status | grep -q "Status: active"; then
+        log_info "UFW is already enabled, adding rules..."
+    else
+        log_info "Enabling UFW..."
+        # Use yes to auto-confirm the enable prompt instead of --force
+        # This allows the user to see what's happening
+        yes | ufw enable || {
+            log_warning "Could not enable UFW, you may need to enable it manually"
+        }
+    fi
     
     # Allow SSH (always keep SSH open!)
     ufw allow 22/tcp comment 'SSH'
@@ -235,7 +255,7 @@ verify_installation() {
     
     # UFW status
     echo "--- UFW Firewall Status ---"
-    ufw status verbose
+    ufw status verbose || echo "UFW status check failed"
     echo ""
     
     # Service status (if configured)
@@ -247,9 +267,14 @@ verify_installation() {
     fi
     echo ""
     
-    # PyNaCl validation
+    # PyNaCl validation with proper error handling
     echo "--- PyNaCl Validation ---"
-    python3 -c "from nacl.signing import SigningKey; print('PyNaCl OK')"
+    if python3 -c "from nacl.signing import SigningKey; print('PyNaCl OK')" 2>/dev/null; then
+        echo "PyNaCl validation: PASSED"
+    else
+        log_error "PyNaCl validation: FAILED"
+        log_error "The nacl.signing import is not working properly"
+    fi
     echo ""
     
     log_success "Verification complete for node: $NODE_ID"
