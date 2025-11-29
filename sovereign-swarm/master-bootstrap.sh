@@ -491,8 +491,14 @@ verify_token() {
     # Verify signature (simplified - in production use proper JWT library)
     local message="${header}.${payload}"
     
-    # Decode payload
-    local payload_json=$(echo "$payload" | base64 -d 2>/dev/null || echo '{}')
+    # Decode payload using base64url decoding
+    # Add padding and convert from base64url to standard base64
+    local padded_payload="$payload"
+    local len=$((${#payload} % 4))
+    if [[ $len -eq 2 ]]; then padded_payload="${payload}=="
+    elif [[ $len -eq 3 ]]; then padded_payload="${payload}="
+    fi
+    local payload_json=$(echo "$padded_payload" | tr '_-' '/+' | base64 -d 2>/dev/null || echo '{}')
     
     # Check expiration
     local exp=$(echo "$payload_json" | jq -r '.exp // 0')

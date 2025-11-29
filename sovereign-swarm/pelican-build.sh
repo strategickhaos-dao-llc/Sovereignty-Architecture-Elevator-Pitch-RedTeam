@@ -340,7 +340,7 @@ optimize_hardware() {
     
     # Reduce WiFi power (if using ethernet/LTE)
     if [[ -d /sys/class/net/wlan0 ]]; then
-        iwconfig wlan0 power on 2>/dev/null || true
+        iwconfig wlan0 power off 2>/dev/null || true
     fi
     
     # Disable Bluetooth (if not needed)
@@ -380,6 +380,9 @@ After=network.target
 Type=oneshot
 ExecStart=${power_script} optimize
 Environment=POWER_MODE=${POWER_MODE}
+
+[Install]
+WantedBy=multi-user.target
 EOF
 
     cat > /etc/systemd/system/pelican-power.timer << EOF
