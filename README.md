@@ -42,6 +42,14 @@ export PRS_CHANNEL="channel_id"
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
 
+### 📥 Webhook Inbox (`webhook-inbox`)
+- **Python/Flask Service**: Containerized webhook listener for GitHub events
+- **Persistent Storage**: Events logged to Docker volume for later processing
+- **HMAC Verification**: Secure signature validation matching Event Gateway
+- **AI-Ready**: Python-based for easy integration with ML/AI tools
+- **Development Mode**: Perfect for local testing with ngrok
+- See [Webhook Inbox README](webhook-inbox/README.md) and [Integration Guide](WEBHOOK_INBOX_INTEGRATION.md)
+
 ### 🔄 GitLens Integration
 - **VS Code Tasks**: One-click Discord notifications from GitLens
 - **Review Workflows**: Automated PR lifecycle notifications

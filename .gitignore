@@ -35,3 +35,4 @@ target/
 
 # Workspace data
 workspace/
+__pycache__/
