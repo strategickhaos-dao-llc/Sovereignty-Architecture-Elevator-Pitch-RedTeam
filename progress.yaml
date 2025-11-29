@@ -1,0 +1,130 @@
+progress:
+  - item: Set up 7% royalty lock legally (irrevocable charitable assignment documents signed)
+    status: in_progress
+    notes: Manifest written and GPG-signed (main 2cbd9aa); push failed; OTS/SHA256 done locally; CRT not created
+  - item: Document the PLAN for 7% lock as proof of intent
+    status: complete
+    notes: SOVEREIGN_MANIFEST_v1.0.md signed; SHA256 FAA198DA05318742531B6405384319563933F63DB4D91866E70AE7701FCDCDED
+  - item: Confirm Strategickhaos DAO LLC (Wyoming) existence
+    status: complete
+    notes: Verified with certs and EIN
+  - item: Identify or create other operational legal entities (charitable arms/nonprofit recipients)
+    status: complete
+    notes: ValorYield Engine confirmed
+  - item: Prepare evidence for investors/partners (business proof)
+    status: pending
+    notes: Not primary
+  - item: Prepare evidence for legal defense (courtroom-grade documentation)
+    status: in_progress
+    notes: Signed manifest + certs; needs push/OTS
+  - item: Prepare evidence for academic submission (SNHU capstone)
+    status: in_progress
+    notes: Framed as academic
+  - item: Prepare evidence for public transparency (X platform, GitHub)
+    status: in_progress
+    notes: Bio update suggested and ready to paste; repo push pending
+  - item: File Charitable Remainder Unitrust (CRT)
+    status: pending
+    notes: Not done
+  - item: Record Copyright Royalty Assignment with county recorder
+    status: pending
+    notes: Not done
+  - item: Amend DAO LLC operating agreement to reference manifest + timestamps
+    status: pending
+    notes: Not done
+  - item: Publish full proof chain on IPFS + Arweave + GitHub
+    status: pending
+    notes: Git push failed; Arweave not installed
+  - item: File micro-entity declaration (Form SB/15A)
+    status: in_progress
+    notes: URL opened
+  - item: File provisional patent application
+    status: pending
+    notes: EFS-Web opened; PDF not generated
+  - item: Update X bio with legal-safe version
+    status: in_progress
+    notes: New version provided; paste to complete
+  - item: Pin post with proofs (receipts, timestamps)
+    status: pending
+    notes: No patent receipt
+  - item: Fix GPG signing for Git commits
+    status: complete
+    notes: Key rsa4096/261AEA44C0AF89CD created; commit -S succeeded (2cbd9aa)
+  - item: Install and run OpenTimestamps for manifest
+    status: pending
+    notes: ots not found; DNS works
+  - item: Upload to Arweave
+    status: pending
+    notes: npm not found
+  - item: Provide Wyoming Articles of Organization PDF
+    status: complete
+    notes: Certs provided
+  - item: Provide EIN Confirmation Letter
+    status: complete
+    notes: CP 575 E provided
+  - item: Provide UIDP Smart Contract Code Snippet or Tx Hash
+    status: pending
+    notes: Not provided
+  - item: Provide Donation-Triggered Mint Script
+    status: pending
+    notes: Not provided
+  - item: Provide Notarization Proof (Git SHA or .ots)
+    status: in_progress
+    notes: Signed commit 2cbd9aa; SHA256 done; no push/OTS
+  - item: Keep personal assets under $5k forever
+    status: N/A
+    notes: Ongoing
+  - item: Publish annual transparency report on IPFS + GitHub
+    status: pending
+    notes: Not created
+  - item: Fix PowerShell profile syntax error
+    status: pending
+    notes: Errors persist
+  - item: Install GPG
+    status: complete
+    notes: Gpg4win installed (gpg 2.4.8)
+  - item: Install Node.js/npm
+    status: pending
+    notes: Not installed
+  - item: Install Pandoc
+    status: pending
+    notes: Not installed
+  - item: Install Claude Code
+    status: complete
+    notes: Version 2.0.50; PATH added
+  - item: Add .local\bin to PATH
+    status: complete
+    notes: Added
+  - item: WSL path fixes
+    status: N/A
+    notes: Errors but running
+  - item: Git init repo
+    status: complete
+    notes: rev-parse true
+  - item: Git commit with GPG
+    status: complete
+    notes: Amended with -S (2cbd9aa)
+  - item: Git push to GitHub
+    status: pending
+    notes: Fails (origin wrong)
+  - item: Create GitHub repo
+    status: pending
+    notes: gh create fails; remove origin and retry
+  - item: Download ots.exe
+    status: pending
+    notes: Not downloaded
+  - item: Stamp manifest with OpenTimestamps
+    status: pending
+    notes: DNS works
+  - item: Convert MD to PDF for patent
+    status: pending
+    notes: pandoc not found
+  - item: Add patent files to git
+    status: pending
+    notes: Files not exist
+  - item: Add GPG to GitHub
+    status: pending
+    notes: Format wrong; need armored public key
+  - item: Acquire xAI API key
+    status: complete
+    notes: Key created; tested curl
