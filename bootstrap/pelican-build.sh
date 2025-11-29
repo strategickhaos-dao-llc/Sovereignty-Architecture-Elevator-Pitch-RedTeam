@@ -56,7 +56,15 @@ apt-get install -y wireguard wireguard-tools nftables ufw curl jq python3 python
 mkdir -p "${SWARM_ROOT}/nodes" "${SWARM_ROOT}/ca/state"
 
 # Copy credentials from boot partition
-NODE_ID=$(cat "${SWARM_BOOT}/node_id" 2>/dev/null || echo "edge")
+if [ ! -f "${SWARM_BOOT}/node_id" ]; then
+  log "ERROR: ${SWARM_BOOT}/node_id file not found. Cannot determine node identity."
+  exit 1
+fi
+NODE_ID=$(cat "${SWARM_BOOT}/node_id")
+if [ -z "${NODE_ID}" ]; then
+  log "ERROR: node_id is empty. Cannot proceed without valid node identifier."
+  exit 1
+fi
 mkdir -p "${SWARM_ROOT}/nodes/${NODE_ID}"
 cp "${SWARM_BOOT}/creds/"* "${SWARM_ROOT}/nodes/${NODE_ID}/"
 cp "${SWARM_BOOT}/ca/"* "${SWARM_ROOT}/ca/state/"

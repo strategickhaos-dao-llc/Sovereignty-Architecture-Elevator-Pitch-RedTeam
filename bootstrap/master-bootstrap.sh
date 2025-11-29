@@ -48,7 +48,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get install -y \
   wireguard wireguard-tools nftables ufw curl jq git ca-certificates \
-  python3 python3-pip python3-venv \
+  python3 python3-pip python3-venv python3-nacl \
   docker.io docker-compose-plugin \
   nats-server syncthing
 
@@ -270,6 +270,13 @@ fi
 
 # NATS config
 log "Configuring NATS..."
+# Generate NATS credentials if not provided
+NATS_USER="${NATS_USER:-swarm}"
+NATS_PASS="${NATS_PASS:-$(head -c 32 /dev/urandom | base64 | tr -d '/+=' | head -c 24)}"
+# Store generated password for reference
+echo "${NATS_PASS}" > "${REPO_ROOT}/nats/conf/.nats_pass"
+chmod 600 "${REPO_ROOT}/nats/conf/.nats_pass"
+
 install -D -m 644 /dev/stdin nats/conf/nats.conf <<NC
 port: ${NATS_PORT}
 server_name: ${NODE_ID}
@@ -278,7 +285,7 @@ leafnodes: {
   listen: ${NATS_LEAF_PORT}
 }
 cluster { name: swarm; listen: "0.0.0.0:${NATS_CLUSTER_PORT}" }
-authorization: { users: [ { user: "swarm", pass: "swarm", permissions: { publish: ["telemetry.>","alerts.>"], subscribe: ["cmd.>","telemetry.>"] } } ] }
+authorization: { users: [ { user: "${NATS_USER}", pass: "${NATS_PASS}", permissions: { publish: ["telemetry.>","alerts.>"], subscribe: ["cmd.>","telemetry.>"] } } ] }
 NC
 
 install -D -m 644 /dev/stdin nats/systemd/nats.service <<'UNIT'
@@ -305,11 +312,13 @@ systemctl daemon-reload
 systemctl enable --now nats.service
 
 # Matrix (Synapse) via docker
+# Use pinned version for reproducible builds (v1.98.0 is stable as of late 2024)
+SYNAPSE_VERSION="${SYNAPSE_VERSION:-v1.98.0}"
 log "Configuring Matrix Synapse (docker)..."
 install -D -m 644 /dev/stdin matrix/docker-compose.yml <<DC
 services:
   synapse:
-    image: matrixdotorg/synapse:latest
+    image: matrixdotorg/synapse:${SYNAPSE_VERSION}
     container_name: synapse
     restart: unless-stopped
     network_mode: host
@@ -322,7 +331,7 @@ DC
 
 mkdir -p matrix/synapse
 if [ ! -f matrix/synapse/homeserver.yaml ]; then
-  docker run --rm -it -v ${REPO_ROOT}/matrix/synapse:/data -e SYNAPSE_SERVER_NAME=${DOMAIN} -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:latest generate
+  docker run --rm -it -v ${REPO_ROOT}/matrix/synapse:/data -e SYNAPSE_SERVER_NAME=${DOMAIN} -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:${SYNAPSE_VERSION} generate
   # harden basics
   sed -i 's/^enable_registration:.*/enable_registration: false/' matrix/synapse/homeserver.yaml || true
   sed -i 's/^max_upload_size:.*/max_upload_size: 50M/' matrix/synapse/homeserver.yaml || true
