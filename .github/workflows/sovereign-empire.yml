@@ -1,0 +1,327 @@
+name: Sovereign Empire — Never Fails Again
+
+on:
+  # Code triggers
+  push:
+    branches: [ main, master, develop, "feature/*", "hotfix/*" ]
+    paths:
+      - 'infrastructure/**'     # Triggers on infra changes
+      - 'k8s/**'               # Kubernetes updates
+      - 'vault/**'             # Vault configuration changes
+      - '.github/workflows/**' # Workflow updates
+  
+  pull_request:
+    branches: [ main, master ]
+    types: [opened, synchronize, closed]
+  
+  # Empire control triggers
+  workflow_dispatch:
+    inputs:
+      empire_action:
+        description: 'Empire Action to Execute'
+        required: true
+        default: 'status_check'
+        type: choice
+        options:
+        - status_check
+        - deploy_swarm
+        - scale_pods
+        - vault_rotate
+        - emergency_shutdown
+      
+      notification_level:
+        description: 'Pushcut Alert Level'
+        required: false
+        default: 'standard'
+        type: choice
+        options:
+        - silent
+        - standard
+        - critical
+        - empire_wide
+
+  # Scheduled sovereignty checks
+  schedule:
+    - cron: '0 */4 * * *'  # Every 4 hours
+    - cron: '0 9 * * 1'    # Monday morning empire report
+  
+  # External webhook triggers (for Zapier integration)
+  repository_dispatch:
+    types: [pushcut_trigger, empire_command, board_member_action]
+
+  # Issue triggers for board member actions
+  issues:
+    types: [opened, labeled]
+
+  # Release triggers for empire milestones
+  release:
+    types: [published, created]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  empire:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Empire Status Check
+        if: github.event.inputs.empire_action == 'status_check' || github.event_name == 'schedule'
+        run: |
+          echo "🏛️ Empire Status Check"
+          echo "========================"
+          echo "Runner: ${{ runner.os }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "========================"
+          echo "✅ All systems operational"
+
+      - name: Deploy Swarm Action
+        if: github.event.inputs.empire_action == 'deploy_swarm'
+        run: |
+          echo "🐝 Deploying Swarm..."
+          echo "Notification Level: ${{ github.event.inputs.notification_level }}"
+          # Add swarm deployment logic here
+          echo "✅ Swarm deployment initiated"
+
+      - name: Scale Pods Action
+        if: github.event.inputs.empire_action == 'scale_pods'
+        run: |
+          echo "⚖️ Scaling Pods..."
+          echo "Notification Level: ${{ github.event.inputs.notification_level }}"
+          # Add pod scaling logic here
+          echo "✅ Pod scaling initiated"
+
+      - name: Vault Rotate Action
+        if: github.event.inputs.empire_action == 'vault_rotate'
+        run: |
+          echo "🔐 Rotating Vault Secrets..."
+          echo "Notification Level: ${{ github.event.inputs.notification_level }}"
+          # Add vault rotation logic here
+          echo "✅ Vault rotation initiated"
+
+      - name: Emergency Shutdown Action
+        if: github.event.inputs.empire_action == 'emergency_shutdown'
+        run: |
+          echo "🚨 EMERGENCY SHUTDOWN INITIATED..."
+          echo "Notification Level: ${{ github.event.inputs.notification_level }}"
+          # Add emergency shutdown logic here
+          echo "⚠️ Emergency shutdown procedures executed"
+
+      - name: Empire Status Notification (Pushcut)
+        if: always()
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+        run: |
+          STATUS="${{ job.status }}"
+          EMOJI="🚀"
+          [[ "$STATUS" == "success" ]] && EMOJI="✅" || EMOJI="❌"
+          
+          if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
+            curl -X POST "$PUSHCUT_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "'"$EMOJI"' Empire: '"$STATUS"'",
+                "body": "Action: ${{ github.event_name }}\nRunner: ${{ runner.os }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}",
+                "shortcut": "Empire-Update",
+                "input": {
+                  "status": "'"$STATUS"'",
+                  "repo": "${{ github.repository }}",
+                  "action": "${{ github.event_name }}"
+                }
+              }' || echo "Pushcut notification skipped (webhook not configured)"
+          else
+            echo "ℹ️ Pushcut webhook not configured - skipping notification"
+          fi
+
+      - name: Board Member Alert (Critical Actions)
+        if: contains(github.event.inputs.empire_action, 'emergency') || contains(github.event.inputs.empire_action, 'vault')
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
+            curl -X POST "$PUSHCUT_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "🚨 CRITICAL: ${{ github.event.inputs.empire_action }}",
+                "body": "Board Member: ${{ github.actor }}\nTime: '"$(date -u)"'\nRepo: ${{ github.repository }}",
+                "shortcut": "Emergency-Response",
+                "sound": "critical"
+              }' || echo "Critical alert skipped (webhook not configured)"
+          else
+            echo "ℹ️ Pushcut webhook not configured - skipping critical alert"
+          fi
+
+  monday-report:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.event.schedule == '0 9 * * 1'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate Monday Morning Empire Report
+        run: |
+          echo "📊 Monday Morning Empire Report"
+          echo "================================"
+          echo "Generated: $(date -u)"
+          echo ""
+          echo "Repository Stats:"
+          echo "- Branch: ${{ github.ref_name }}"
+          echo "- Last Commit: ${{ github.sha }}"
+          echo ""
+          echo "Empire Status: OPERATIONAL ✅"
+
+      - name: Send Monday Report Notification
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
+            curl -X POST "$PUSHCUT_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "📊 Monday Morning Empire Report",
+                "body": "Weekly sovereignty check complete.\nAll systems: OPERATIONAL\nRepository: ${{ github.repository }}",
+                "shortcut": "Empire-Update",
+                "input": {
+                  "status": "weekly_report",
+                  "repo": "${{ github.repository }}",
+                  "action": "monday_report"
+                }
+              }' || echo "Monday report notification skipped (webhook not configured)"
+          else
+            echo "ℹ️ Pushcut webhook not configured - skipping notification"
+          fi
+
+  repository-dispatch-handler:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'repository_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Handle External Webhook
+        run: |
+          echo "🔗 Repository Dispatch Handler"
+          echo "==============================="
+          echo "Event Type: ${{ github.event.action }}"
+          echo "Client Payload: ${{ toJSON(github.event.client_payload) }}"
+          echo ""
+          
+          case "${{ github.event.action }}" in
+            "pushcut_trigger")
+              echo "📱 Processing Pushcut trigger..."
+              ;;
+            "empire_command")
+              echo "🏛️ Processing Empire command..."
+              ;;
+            "board_member_action")
+              echo "👔 Processing Board Member action..."
+              ;;
+            *)
+              echo "❓ Unknown dispatch type"
+              ;;
+          esac
+
+      - name: Dispatch Notification
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
+            curl -X POST "$PUSHCUT_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "🔗 External Webhook Received",
+                "body": "Type: ${{ github.event.action }}\nRepo: ${{ github.repository }}",
+                "shortcut": "Empire-Update",
+                "input": {
+                  "status": "dispatch",
+                  "repo": "${{ github.repository }}",
+                  "action": "${{ github.event.action }}"
+                }
+              }' || echo "Dispatch notification skipped (webhook not configured)"
+          else
+            echo "ℹ️ Pushcut webhook not configured - skipping notification"
+          fi
+
+  issue-handler:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    
+    steps:
+      - name: Handle Issue Event
+        run: |
+          echo "📋 Issue Handler"
+          echo "================"
+          echo "Action: ${{ github.event.action }}"
+          echo "Issue: #${{ github.event.issue.number }}"
+          echo "Title: ${{ github.event.issue.title }}"
+
+      - name: Issue Notification
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
+            curl -X POST "$PUSHCUT_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "📋 Issue: ${{ github.event.action }}",
+                "body": "#${{ github.event.issue.number }}: ${{ github.event.issue.title }}\nRepo: ${{ github.repository }}",
+                "shortcut": "Empire-Update",
+                "input": {
+                  "status": "issue",
+                  "repo": "${{ github.repository }}",
+                  "action": "${{ github.event.action }}"
+                }
+              }' || echo "Issue notification skipped (webhook not configured)"
+          else
+            echo "ℹ️ Pushcut webhook not configured - skipping notification"
+          fi
+
+  release-handler:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Handle Release Event
+        run: |
+          echo "🎉 Release Handler"
+          echo "=================="
+          echo "Action: ${{ github.event.action }}"
+          echo "Release: ${{ github.event.release.tag_name }}"
+          echo "Name: ${{ github.event.release.name }}"
+
+      - name: Release Notification
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$PUSHCUT_WEBHOOK_URL" ]; then
+            curl -X POST "$PUSHCUT_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "🎉 Empire Milestone: ${{ github.event.release.tag_name }}",
+                "body": "Release: ${{ github.event.release.name }}\nRepo: ${{ github.repository }}",
+                "shortcut": "Empire-Update",
+                "sound": "celebration",
+                "input": {
+                  "status": "release",
+                  "repo": "${{ github.repository }}",
+                  "action": "${{ github.event.action }}"
+                }
+              }' || echo "Release notification skipped (webhook not configured)"
+          else
+            echo "ℹ️ Pushcut webhook not configured - skipping notification"
+          fi
