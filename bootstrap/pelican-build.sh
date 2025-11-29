@@ -511,17 +511,28 @@ deploy_site() {
         
         gh-pages)
             log_info "Deploying to GitHub Pages..."
-            cd "$OUTPUT_DIR"
-            git init
-            git add -A
-            git commit -m "Deploy $(date +%Y-%m-%d)"
             
-            if [[ -n "${GITHUB_PAGES_REPO:-}" ]]; then
-                git push -f "git@github.com:${GITHUB_PAGES_REPO}.git" main:gh-pages
-                log_success "Deployed to GitHub Pages"
-            else
+            if [[ -z "${GITHUB_PAGES_REPO:-}" ]]; then
                 log_error "GITHUB_PAGES_REPO environment variable not set"
                 exit 1
+            fi
+            
+            cd "$OUTPUT_DIR"
+            git init
+            
+            # Configure git for the commit
+            git config user.email "deploy@strategickhaos.local"
+            git config user.name "Pelican Deploy"
+            
+            git add -A
+            
+            # Check if there are changes to commit
+            if git diff --cached --quiet; then
+                log_warning "No changes to deploy"
+            else
+                git commit -m "Deploy $(date +%Y-%m-%d)"
+                git push -f "git@github.com:${GITHUB_PAGES_REPO}.git" main:gh-pages
+                log_success "Deployed to GitHub Pages"
             fi
             ;;
         

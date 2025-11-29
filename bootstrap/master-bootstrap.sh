@@ -223,7 +223,8 @@ setup_wireguard() {
 
 [Interface]
 PrivateKey = ${PRIVATE_KEY}
-Address = ${WG_SUBNET%.*}.$(( (RANDOM % 253) + 2 ))/24
+# Deterministic IP based on hash of node name (avoids conflicts)
+Address = ${WG_SUBNET%.*}.$(( $(echo -n "$NODE_NAME" | md5sum | cut -c1-4 | xargs printf "%d" 0x) % 253 + 2 ))/24
 ListenPort = ${WG_PORT}
 SaveConfig = false
 
@@ -269,12 +270,10 @@ import sys
 import json
 import time
 import base64
-import hashlib
 from pathlib import Path
 
 try:
     from nacl.signing import SigningKey
-    from nacl.encoding import Base64Encoder
 except ImportError:
     print("Error: PyNaCl not installed. Run: pip3 install pynacl", file=sys.stderr)
     sys.exit(1)
@@ -301,11 +300,16 @@ def create_jwt(payload: dict, private_key_pem: str) -> str:
     message = f"{header_b64}.{payload_b64}".encode()
     
     # Load private key and sign
-    # Extract raw key from PEM (simplified - assumes standard format)
+    # Extract raw Ed25519 seed from PEM-encoded PKCS#8 structure
+    # Ed25519 private keys in PKCS#8 have the 32-byte seed at offset -32
     key_lines = private_key_pem.strip().split('\n')
-    key_data = ''.join(key_lines[1:-1])
+    if not key_lines[0].startswith('-----BEGIN'):
+        raise ValueError("Invalid PEM format: missing header")
+    key_data = ''.join(line for line in key_lines if not line.startswith('-----'))
     raw_key = base64.b64decode(key_data)
-    # Ed25519 private key is last 32 bytes of the DER structure
+    if len(raw_key) < 32:
+        raise ValueError("Invalid Ed25519 private key: too short")
+    # Ed25519 private key seed is the last 32 bytes of the DER structure
     seed = raw_key[-32:]
     
     signing_key = SigningKey(seed)
@@ -424,19 +428,27 @@ add_peer() {
     
     echo "Adding peer: $peer_name"
     
-    local wg_cmd="wg set $WG_INTERFACE peer $peer_pubkey allowed-ips ${peer_ip}/32"
+    # Build WireGuard command with proper PSK handling
+    local wg_args=("set" "$WG_INTERFACE" "peer" "$peer_pubkey" "allowed-ips" "${peer_ip}/32")
     
     if [[ -n "$peer_endpoint" ]]; then
-        wg_cmd="$wg_cmd endpoint ${peer_endpoint}:51820"
+        wg_args+=("endpoint" "${peer_endpoint}:51820")
     fi
     
+    wg_args+=("persistent-keepalive" "25")
+    
+    # Handle PSK securely via temp file (not command line)
     if [[ -n "$psk" ]]; then
-        wg_cmd="$wg_cmd preshared-key <(echo '$psk')"
+        local psk_file
+        psk_file=$(mktemp)
+        chmod 600 "$psk_file"
+        echo "$psk" > "$psk_file"
+        wg "${wg_args[@]}" preshared-key "$psk_file"
+        rm -f "$psk_file"
+    else
+        wg "${wg_args[@]}"
     fi
     
-    wg_cmd="$wg_cmd persistent-keepalive 25"
-    
-    eval "$wg_cmd"
     echo "Peer $peer_name added successfully"
 }
 
