@@ -481,6 +481,19 @@ log "WireGuard mesh active"
 # ========= PHASE 8: NATS =========
 log "Configuring NATS..."
 
+# Generate NATS password if not exists
+NATS_CREDS_FILE="${REPO_ROOT}/.nats-credentials"
+if [ ! -f "$NATS_CREDS_FILE" ]; then
+    NATS_PASS=$(openssl rand -base64 24)
+    echo "NATS_USER=swarm" > "$NATS_CREDS_FILE"
+    echo "NATS_PASS=$NATS_PASS" >> "$NATS_CREDS_FILE"
+    chmod 600 "$NATS_CREDS_FILE"
+    log "Generated NATS credentials at $NATS_CREDS_FILE"
+else
+    # shellcheck source=/dev/null
+    source "$NATS_CREDS_FILE"
+fi
+
 cat > nats/conf/nats.conf <<NATSEOF
 listen: 0.0.0.0:4222
 http: 127.0.0.1:8222
@@ -504,8 +517,8 @@ cluster: {
 authorization: {
     users: [
         {
-            user: "swarm"
-            pass: "swarm"
+            user: "${NATS_USER:-swarm}"
+            pass: "${NATS_PASS}"
             permissions: {
                 publish: ["telemetry.>", "alerts.>", "cmd.>"]
                 subscribe: ["telemetry.>", "cmd.>"]
