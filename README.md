@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> 📖 **New here?** Start with the **[Elevator Pitch](ELEVATOR_PITCH.md)** — *"It looks like an expensive Wi-Fi bill, but it's actually the engine for the first platform on Earth that's completely ours from orbit to bank account."*
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -276,6 +278,7 @@ curl -X POST https://events.strategickhaos.com/health
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
 
+- **[Elevator Pitch](ELEVATOR_PITCH.md)** - The 30-second vision: Starlink + Verizon mesh powering sovereignty
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
