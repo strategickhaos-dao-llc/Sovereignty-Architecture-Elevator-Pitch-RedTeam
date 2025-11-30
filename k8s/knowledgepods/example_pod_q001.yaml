@@ -1,0 +1,201 @@
+# Example KnowledgePod - Question 001
+# 
+# Target Audience: Infrastructure & Cloud, Security Operations
+# Purpose: Demonstrate how a single question maps to a KnowledgePod instance
+#
+# This example shows Question #1: "Evaluate the trade-offs between using a 
+# monolithic architecture versus microservices for a startup's MVP."
+#
+# Usage:
+#   kubectl apply -f example_pod_q001.yaml -n knowledgepods
+#   kubectl get knowledgepod knowledgepod-q001 -n knowledgepods
+
+apiVersion: education.strategickhaos.io/v1
+kind: KnowledgePod
+metadata:
+  name: knowledgepod-q001
+  namespace: knowledgepods
+  labels:
+    app: knowledgepod
+    question-id: Q001
+    module: foundations-computing
+    bloom-level: "5"
+  annotations:
+    description: "Evaluate architectural trade-offs for startup MVPs"
+    snhu-alignment: "CS-499 Capstone, CS-340 Software Design"
+    last-updated: "2025-11-30"
+spec:
+  # Question identification
+  questionId: "Q001"
+  module: foundations-computing
+  bloomLevel: 5
+  
+  # Video content (hosted on CDN)
+  video:
+    url: "https://cdn.strategickhaos.io/videos/q001.mp4"
+    duration: "12:34"
+    sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    format: mp4
+  
+  # Captions for accessibility
+  captions:
+    url: "https://cdn.strategickhaos.io/captions/q001.vtt"
+    language: "en-US"
+  
+  # Thumbnail for previews
+  thumbnail:
+    url: "https://cdn.strategickhaos.io/thumbs/q001.jpg"
+  
+  # Additional content
+  content:
+    markdownUrl: "https://cdn.strategickhaos.io/content/q001/README.md"
+    assessmentUrl: "https://cdn.strategickhaos.io/content/q001/assessment.json"
+  
+  # No prerequisites for Q001 (entry point question)
+  prerequisites: []
+  
+  # Learning objectives
+  learningObjectives:
+    - "Identify key characteristics of monolithic and microservices architectures"
+    - "Analyze trade-offs including team size, timeline, scalability, and operational complexity"
+    - "Evaluate which architecture is appropriate for different startup scenarios"
+    - "Justify architectural recommendations with evidence-based reasoning"
+  
+  # Resource allocation
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  
+  # Scaling configuration
+  scaling:
+    minReplicas: 1
+    maxReplicas: 10
+    scaleToZero: false
+
+---
+# Service for the KnowledgePod
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledgepod-q001-service
+  namespace: knowledgepods
+  labels:
+    app: knowledgepod
+    question-id: Q001
+spec:
+  selector:
+    app: knowledgepod
+    question-id: Q001
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP
+
+---
+# ConfigMap for question content
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knowledgepod-q001-content
+  namespace: knowledgepods
+  labels:
+    app: knowledgepod
+    question-id: Q001
+data:
+  question.md: |
+    # Question Q001: Monolithic vs Microservices Architecture
+    
+    ## Question
+    
+    Evaluate the trade-offs between using a monolithic architecture versus 
+    microservices for a startup's MVP. What factors should influence this decision?
+    
+    ## Bloom's Level
+    
+    **Level 5: Evaluate** - Requires analysis and judgment based on criteria.
+    
+    ## Context
+    
+    You are advising a startup that has raised $2M in seed funding and plans to 
+    launch their MVP in 6 months. They have a team of 5 developers and need to 
+    choose between a monolithic architecture and microservices.
+    
+    ## Evaluation Criteria
+    
+    Your response should address:
+    
+    1. **Team Size Impact** - How does a 5-person team affect the choice?
+    2. **Timeline Considerations** - 6 months to MVP—what does this mean?
+    3. **Budget Constraints** - $2M runway—how does infrastructure cost factor in?
+    4. **Scalability Needs** - What growth is anticipated?
+    5. **Operational Complexity** - What can the team realistically manage?
+    
+    ## Assessment Rubric
+    
+    | Criterion | Exemplary (4) | Proficient (3) | Developing (2) | Beginning (1) |
+    |-----------|---------------|----------------|----------------|---------------|
+    | Analysis | Comprehensive | Thorough | Adequate | Superficial |
+    | Evidence | Strong sources | Adequate sources | Limited sources | No sources |
+    | Reasoning | Logical, clear | Generally logical | Some gaps | Illogical |
+    
+    ## Learning Resources
+    
+    - Video: [Watch the AI-generated explanation](https://cdn.strategickhaos.io/videos/q001.mp4)
+    - Reading: Martin Fowler's Microservices Guide
+    - Case Study: Amazon's monolith-to-microservices journey
+    
+  rubric.json: |
+    {
+      "questionId": "Q001",
+      "maxScore": 100,
+      "criteria": [
+        {
+          "name": "Analysis Depth",
+          "weight": 25,
+          "levels": [
+            {"score": 4, "description": "Comprehensive analysis with multiple perspectives"},
+            {"score": 3, "description": "Thorough analysis with most key perspectives"},
+            {"score": 2, "description": "Adequate analysis but missing some perspectives"},
+            {"score": 1, "description": "Superficial analysis lacking depth"}
+          ]
+        },
+        {
+          "name": "Evidence Quality",
+          "weight": 25,
+          "levels": [
+            {"score": 4, "description": "Strong, relevant evidence from authoritative sources"},
+            {"score": 3, "description": "Adequate evidence from appropriate sources"},
+            {"score": 2, "description": "Limited evidence or questionable sources"},
+            {"score": 1, "description": "Minimal or no supporting evidence"}
+          ]
+        },
+        {
+          "name": "Reasoning",
+          "weight": 25,
+          "levels": [
+            {"score": 4, "description": "Logical, coherent reasoning with clear connections"},
+            {"score": 3, "description": "Generally logical with minor gaps"},
+            {"score": 2, "description": "Some logical gaps or unclear connections"},
+            {"score": 1, "description": "Illogical or disjointed reasoning"}
+          ]
+        },
+        {
+          "name": "Recommendation",
+          "weight": 25,
+          "levels": [
+            {"score": 4, "description": "Clear, well-justified recommendation"},
+            {"score": 3, "description": "Reasonable recommendation with justification"},
+            {"score": 2, "description": "Recommendation present but weakly justified"},
+            {"score": 1, "description": "No clear recommendation"}
+          ]
+        }
+      ]
+    }

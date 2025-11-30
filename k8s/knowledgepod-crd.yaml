@@ -1,0 +1,278 @@
+# KnowledgePod Custom Resource Definition
+# This CRD defines the schema for KnowledgePod resources in Kubernetes
+# 
+# Target Audience: Infrastructure & Cloud, Security Operations
+# Purpose: Enable Kubernetes-native management of educational content pods
+#
+# Usage:
+#   kubectl apply -f knowledgepod-crd.yaml
+#   kubectl get knowledgepods -n knowledgepods
+
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: knowledgepods.education.strategickhaos.io
+  labels:
+    app: knowledgepod
+    component: crd
+spec:
+  group: education.strategickhaos.io
+  names:
+    kind: KnowledgePod
+    listKind: KnowledgePodList
+    plural: knowledgepods
+    singular: knowledgepod
+    shortNames:
+      - kp
+      - kpod
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - questionId
+                - module
+              properties:
+                questionId:
+                  type: string
+                  description: "Unique identifier for the question (e.g., Q001)"
+                  pattern: "^Q[0-9]{3}$"
+                module:
+                  type: string
+                  description: "Module this question belongs to"
+                  enum:
+                    - foundations-computing
+                    - infrastructure-cloud
+                    - security-compliance
+                    - ai-ml-operations
+                    - business-strategy
+                    - educational-technology
+                bloomLevel:
+                  type: integer
+                  description: "Bloom's Taxonomy level (5 = Evaluate, 6 = Create)"
+                  minimum: 5
+                  maximum: 6
+                  default: 5
+                video:
+                  type: object
+                  description: "Video content configuration"
+                  properties:
+                    url:
+                      type: string
+                      description: "URL to the video content (CDN URL)"
+                    duration:
+                      type: string
+                      description: "Video duration in MM:SS format"
+                      pattern: "^[0-9]{1,2}:[0-9]{2}$"
+                    sha256:
+                      type: string
+                      description: "SHA256 checksum of video file for integrity"
+                    format:
+                      type: string
+                      description: "Video format"
+                      enum:
+                        - mp4
+                        - webm
+                      default: mp4
+                captions:
+                  type: object
+                  description: "Captions/subtitles configuration"
+                  properties:
+                    url:
+                      type: string
+                      description: "URL to captions file (VTT format)"
+                    language:
+                      type: string
+                      description: "Language code (e.g., en-US)"
+                      default: "en-US"
+                thumbnail:
+                  type: object
+                  description: "Thumbnail image configuration"
+                  properties:
+                    url:
+                      type: string
+                      description: "URL to thumbnail image"
+                content:
+                  type: object
+                  description: "Additional content configuration"
+                  properties:
+                    markdownUrl:
+                      type: string
+                      description: "URL to markdown content file"
+                    assessmentUrl:
+                      type: string
+                      description: "URL to assessment configuration"
+                prerequisites:
+                  type: array
+                  description: "List of prerequisite question IDs"
+                  items:
+                    type: string
+                    pattern: "^Q[0-9]{3}$"
+                learningObjectives:
+                  type: array
+                  description: "Learning objectives for this question"
+                  items:
+                    type: string
+                resources:
+                  type: object
+                  description: "Resource allocation for this pod"
+                  properties:
+                    requests:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                          default: "100m"
+                        memory:
+                          type: string
+                          default: "128Mi"
+                    limits:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                          default: "500m"
+                        memory:
+                          type: string
+                          default: "512Mi"
+                scaling:
+                  type: object
+                  description: "Scaling configuration"
+                  properties:
+                    minReplicas:
+                      type: integer
+                      minimum: 0
+                      default: 1
+                    maxReplicas:
+                      type: integer
+                      minimum: 1
+                      default: 10
+                    scaleToZero:
+                      type: boolean
+                      description: "Allow scaling to zero when idle"
+                      default: false
+            status:
+              type: object
+              properties:
+                phase:
+                  type: string
+                  description: "Current phase of the KnowledgePod"
+                  enum:
+                    - Pending
+                    - Running
+                    - Ready
+                    - Failed
+                    - Scaling
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+                      reason:
+                        type: string
+                      message:
+                        type: string
+                replicas:
+                  type: integer
+                  description: "Current number of replicas"
+                readyReplicas:
+                  type: integer
+                  description: "Number of ready replicas"
+                lastVideoUpdate:
+                  type: string
+                  format: date-time
+                  description: "Timestamp of last video content update"
+                videoIntegrity:
+                  type: string
+                  description: "Video integrity verification status"
+                  enum:
+                    - Verified
+                    - Failed
+                    - Pending
+      subresources:
+        status: {}
+        scale:
+          specReplicasPath: .spec.scaling.minReplicas
+          statusReplicasPath: .status.replicas
+      additionalPrinterColumns:
+        - name: Question
+          type: string
+          jsonPath: .spec.questionId
+        - name: Module
+          type: string
+          jsonPath: .spec.module
+        - name: Bloom
+          type: integer
+          jsonPath: .spec.bloomLevel
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Ready
+          type: integer
+          jsonPath: .status.readyReplicas
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+---
+# RBAC for KnowledgePod controller
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: knowledgepod-controller
+  namespace: knowledgepods
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: knowledgepod-controller
+rules:
+  - apiGroups: ["education.strategickhaos.io"]
+    resources: ["knowledgepods"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["education.strategickhaos.io"]
+    resources: ["knowledgepods/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: knowledgepod-controller
+subjects:
+  - kind: ServiceAccount
+    name: knowledgepod-controller
+    namespace: knowledgepods
+roleRef:
+  kind: ClusterRole
+  name: knowledgepod-controller
+  apiGroup: rbac.authorization.k8s.io
