@@ -133,14 +133,17 @@ ls -l privatekey  # Should show -rw------- (600)
 ### Step 2.2: Create Verified Configuration
 
 ```bash
+# Read the private key first
+PRIVATE_KEY=$(sudo cat /etc/wireguard/privatekey)
+
 # Create WireGuard config with minimal permissions
 sudo tee /etc/wireguard/wg0.conf <<EOF
 [Interface]
 # Hub private IP (RFC1918 private range)
 Address = 10.44.0.1/24
 
-# Private key (auto-populated)
-PrivateKey = $(sudo cat /etc/wireguard/privatekey)
+# Private key (inserted from variable)
+PrivateKey = ${PRIVATE_KEY}
 
 # Standard WireGuard port
 ListenPort = 51820
@@ -154,6 +157,9 @@ EOF
 # Set restrictive permissions
 sudo chmod 600 /etc/wireguard/wg0.conf
 sudo chown root:root /etc/wireguard/wg0.conf
+
+# Clear the variable containing the private key
+unset PRIVATE_KEY
 ```
 
 **Security Check**:
@@ -195,39 +201,83 @@ interface: wg0
 ### Step 3.1: Egress Filtering (Block Phone-Home)
 
 ```bash
-# Create egress control rules
-sudo tee /etc/ufw/after.rules.d/egress-filter <<'EOF'
-# Block outbound to known C2 domains/IPs
--A OUTPUT -d discord.com -j REJECT
--A OUTPUT -d discordapp.com -j REJECT
+# Add egress filtering rules to UFW's after.rules
+# Note: This appends to the existing filter table in /etc/ufw/after.rules
+sudo tee -a /etc/ufw/after.rules <<'EOF'
 
-# Log suspicious outbound attempts
--A OUTPUT -p tcp --dport 6667:6669 -j LOG --log-prefix "[IRC C2 ATTEMPT] "
--A OUTPUT -p tcp --dport 6667:6669 -j REJECT
+# BEGIN SWARM EGRESS FILTERING
+*filter
+:ufw-after-output - [0:0]
+
+# Log suspicious outbound IRC C2 attempts
+-A ufw-after-output -p tcp --dport 6667:6669 -j LOG --log-prefix "[UFW IRC C2 ATTEMPT] "
+-A ufw-after-output -p tcp --dport 6667:6669 -j REJECT
+
+COMMIT
+# END SWARM EGRESS FILTERING
 EOF
+
+# Block specific domains at the IP level (resolve and block)
+# For Discord/webhook blocking, use DNS-based blocking instead (see Step 3.2)
 
 # Reload firewall
 sudo ufw reload
 ```
 
-### Step 3.2: DNS Monitoring
+**Note**: Domain-based blocking is handled through DNS filtering in the next step, as iptables cannot block by domain name directly.
+
+### Step 3.2: DNS Monitoring and Blocking
 
 ```bash
+# On Ubuntu 24.04, disable systemd-resolved to avoid conflicts
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+
+# Remove the symlink and create a static resolv.conf
+sudo rm /etc/resolv.conf
+echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf
+echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
+
 # Install DNS query logging
 sudo apt install -y dnsmasq
 
-# Configure logging
-sudo tee -a /etc/dnsmasq.conf <<EOF
+# Configure dnsmasq for logging and domain blocking
+sudo tee /etc/dnsmasq.d/swarm-security.conf <<EOF
+# Enable query logging
 log-queries
 log-facility=/var/log/dnsmasq.log
+
+# Block known C2/exfiltration domains (return NXDOMAIN)
+address=/discord.com/
+address=/discordapp.com/
+address=/discord.gg/
+address=/.webhook.site/
+
+# Listen on localhost
+listen-address=127.0.0.1
+bind-interfaces
+
+# Upstream DNS servers
+server=8.8.8.8
+server=1.1.1.1
 EOF
 
+# Create log file with proper permissions
+sudo touch /var/log/dnsmasq.log
+sudo chmod 640 /var/log/dnsmasq.log
+
 # Restart service
+sudo systemctl enable dnsmasq
 sudo systemctl restart dnsmasq
+
+# Verify DNS is working
+nslookup google.com 127.0.0.1
 
 # Monitor for suspicious queries
 sudo tail -f /var/log/dnsmasq.log | grep -i 'discord\|webhook'
 ```
+
+**Note**: The domain blocking configuration returns empty responses for blocked domains, effectively preventing phone-home behavior.
 
 ---
 
@@ -298,12 +348,28 @@ sudo journalctl -u falco -f
 ### Step 5.1: Install Verification Tools
 
 ```bash
-# Install cosign for image signing
-wget https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
-sudo mv cosign-linux-amd64 /usr/local/bin/cosign
-sudo chmod +x /usr/local/bin/cosign
+# Install cosign for image signing with checksum verification
+COSIGN_VERSION="v2.2.4"
+COSIGN_CHECKSUM="8d664dd9dd32f50b56e9bea56dbdc18c1d0beeff5e10cd07fc66d67c2e2cacd1"
 
-# Install Trivy for vulnerability scanning
+wget -q "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64"
+
+# Verify checksum before installing
+echo "${COSIGN_CHECKSUM}  cosign-linux-amd64" | sha256sum -c -
+if [ $? -eq 0 ]; then
+    sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+    sudo chmod +x /usr/local/bin/cosign
+    echo "✅ cosign installed and verified"
+else
+    echo "❌ Checksum verification failed! Do not use this binary."
+    rm cosign-linux-amd64
+    exit 1
+fi
+
+# Verify cosign installation
+cosign version
+
+# Install Trivy for vulnerability scanning (from signed apt repository)
 wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | \
   sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
 echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] \
@@ -312,7 +378,12 @@ echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] \
 
 sudo apt update
 sudo apt install -y trivy
+
+# Verify trivy installation
+trivy --version
 ```
+
+**Note**: Always verify checksums when downloading binaries. Update the `COSIGN_VERSION` and `COSIGN_CHECKSUM` values from the official [cosign releases page](https://github.com/sigstore/cosign/releases) before installation.
 
 ### Step 5.2: Image Verification Workflow
 
