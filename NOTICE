@@ -1,0 +1,52 @@
+NOTICE
+
+Sovereignty Architecture - Discord DevOps Control Plane
+Copyright (c) 2025 Strategickhaos
+
+This product includes software developed by Strategickhaos and the contributors
+listed in the CONTRIBUTORS.md file.
+
+Licensed under the MIT License. See LICENSE file for details.
+
+---
+
+ATTRIBUTION AND OWNERSHIP
+
+Primary Author and Owner:
+  Domenic Garza (DOM_010101)
+  Strategickhaos DAO LLC / Valoryield Engine
+
+This project is part of the Strategickhaos ecosystem and represents collaborative
+work by The Legion - a community of contributors who choose to build, create, and
+contribute out of passion for sovereignty and collective intelligence.
+
+---
+
+THIRD-PARTY COMPONENTS
+
+This software may include components developed by third parties, each subject to
+their own license terms. Where applicable, attribution for third-party components
+is maintained within the source code or in separate ATTRIBUTION files.
+
+---
+
+EXTERNAL AI DISCUSSIONS AND ARTIFACTS
+
+This project incorporates insights, design discussions, and architectural decisions
+from various AI-assisted conversations and external knowledge sources. These are
+documented in the docs/external_discussions.md file and serve as audit trails for
+meta-evolution, agent training, and compliance documentation.
+
+All external AI artifacts referenced in this project are used in accordance with
+their respective terms of service and are acknowledged as collaborative tools in
+the creative process, not as replacement for human judgment and decision-making.
+
+---
+
+For questions about attribution, ownership, or contribution guidelines, please
+refer to:
+- CONTRIBUTORS.md - Recognition of all contributors
+- COMMUNITY.md - Community philosophy and contribution model
+- GitHub Repository - https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-
+
+Last Updated: 2025-11-21

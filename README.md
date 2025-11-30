@@ -278,11 +278,14 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Guidelines for collaboration and community interaction
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
+- **Legal Notices**: [NOTICE](NOTICE) file - Attribution and ownership information
+- **External AI Discussions**: [Archive](docs/external_discussions.md) - Design decisions and audit trails
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
