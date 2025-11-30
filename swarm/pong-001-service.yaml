@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pong-001-service
+  namespace: default
+  labels:
+    app: pong-001
+    component: swarm-test
+spec:
+  selector:
+    app: pong-001
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

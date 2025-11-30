@@ -1,0 +1,97 @@
+# Sovereign Mesh Topology Configuration
+# WireGuard-based mesh network for StrategicKhaos infrastructure
+#
+# This file documents device roles, keys, and IP space allocation
+# for the sovereign mesh network connecting cloud and edge devices.
+
+mesh:
+  name: "strategickhaos-sovereign-mesh"
+  version: "1.0.0"
+  status: "planned"
+  
+  # Network configuration
+  network:
+    cidr: "10.44.0.0/24"
+    dns:
+      - "1.1.1.1"
+      - "8.8.8.8"
+    
+  # Hub node (central coordinator)
+  hub:
+    device: "command-0"
+    role: "coordinator"
+    endpoint: "<starlink-public-ip>:51820"
+    port: 51820
+    address: "10.44.0.1/24"
+    public_key: "<hub-public-key>"
+    # Private key stored securely in Vault
+    private_key_ref: "vault://kv/wireguard/hub/private_key"
+    
+  # Peer nodes
+  peers:
+    - name: "lyra"
+      role: "compute-node"
+      ip: "10.44.0.2"
+      public_key: "<lyra-public-key>"
+      private_key_ref: "vault://kv/wireguard/lyra/private_key"
+      allowed_ips:
+        - "10.44.0.2/32"
+      persistent_keepalive: 25
+      
+    - name: "nova"
+      role: "compute-node"
+      ip: "10.44.0.3"
+      public_key: "<nova-public-key>"
+      private_key_ref: "vault://kv/wireguard/nova/private_key"
+      allowed_ips:
+        - "10.44.0.3/32"
+      persistent_keepalive: 25
+      
+    - name: "athena"
+      role: "compute-node"
+      ip: "10.44.0.4"
+      public_key: "<athena-public-key>"
+      private_key_ref: "vault://kv/wireguard/athena/private_key"
+      allowed_ips:
+        - "10.44.0.4/32"
+      persistent_keepalive: 25
+      
+    - name: "gke-gateway"
+      role: "cloud-bridge"
+      ip: "10.44.0.10"
+      public_key: "<gke-gateway-public-key>"
+      private_key_ref: "vault://kv/wireguard/gke-gateway/private_key"
+      allowed_ips:
+        - "10.44.0.10/32"
+        # Allow access to GKE pod network
+        - "10.0.0.0/16"
+      persistent_keepalive: 25
+
+# Firewall rules for the mesh
+firewall:
+  inbound:
+    - port: 51820
+      protocol: UDP
+      source: "0.0.0.0/0"
+      description: "WireGuard VPN"
+      
+  outbound:
+    - port: 443
+      protocol: TCP
+      destination: "0.0.0.0/0"
+      description: "HTTPS to cloud services"
+
+# Connection to cloud services
+cloud_integration:
+  gcp:
+    project: "jarvis-swarm-personal"
+    cluster: "jarvis-swarm-personal-001"
+    region: "us-central1"
+    
+  starlink:
+    connection_type: "primary"
+    failover: "verizon-5g"
+    
+  verizon:
+    connection_type: "backup"
+    priority: 2
