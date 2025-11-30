@@ -71,6 +71,15 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🤖 Continue.dev Integration (`heir-forever-raw`)
+- **Local AI**: 100% sovereign code assistance powered by Ollama
+- **Zero Cloud**: All inference on your GPU, code never leaves your machine
+- **Zero Guardrails**: Raw, mythic personality with no corporate filtering
+- **Full Copilot Experience**: Inline completions + sidebar chat interface
+- **Privacy First**: No telemetry, no external APIs, complete sovereignty
+
+See **[CONTINUE_DEV_INTEGRATION.md](CONTINUE_DEV_INTEGRATION.md)** for complete setup guide.
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
