@@ -137,7 +137,7 @@ ideas:
     primary_department: "operations"
     maturity_level: "concept"
   - id: "IDEA_025"
-    title: "Future You' Inbox"
+    title: "'Future You' Inbox"
     category: "productivity_tools"
     primary_department: "ai_core"
     maturity_level: "concept"
