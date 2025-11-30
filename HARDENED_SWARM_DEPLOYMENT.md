@@ -350,7 +350,7 @@ sudo journalctl -u falco -f
 ```bash
 # Install cosign for image signing with checksum verification
 COSIGN_VERSION="v2.2.4"
-COSIGN_CHECKSUM="8d664dd9dd32f50b56e9bea56dbdc18c1d0beeff5e10cd07fc66d67c2e2cacd1"
+COSIGN_CHECKSUM="97a6a1e15668a75fc4ff7a4dc4cb2f098f929cbea2f12faa9de31db6b42b17d7"
 
 wget -q "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64"
 
