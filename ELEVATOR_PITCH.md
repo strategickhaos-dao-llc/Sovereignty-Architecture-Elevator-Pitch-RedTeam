@@ -114,7 +114,7 @@ Your Data → Your Mesh → Your Dividends → Your Freedom
 
 ## 🎯 The Pitch (30 Seconds)
 
-*"We run a satellite mesh—Starlink plus Verizon Business—with no data caps and 20-millisecond latency. One connection powers a nonprofit teaching AI to veterans, a bug bounty platform paying hackers, and an algo-trading engine that generates enough dividends to pay for itself.*
+*"We run a satellite mesh — Starlink plus Verizon Business — with no data caps and 20-millisecond latency. One connection powers a nonprofit teaching AI to veterans, a bug bounty platform paying hackers, and an algo-trading engine that generates enough dividends to pay for itself.*
 
 *It's the world's first 100% sovereign platform where we own everything from the satellites we talk to, to the code we run, to the bank account the profits land in.*
 
