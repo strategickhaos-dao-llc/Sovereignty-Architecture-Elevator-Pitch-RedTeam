@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  # === AI "board member" style services ===
+
+  svc-gpt-duck:
+    image: strategickhaos/gpt-orchestrator:latest
+    container_name: gpt_duck
+    environment:
+      - ROLE=pattern_analyst
+      - DEPARTMENT=meta
+    volumes:
+      - ./ideas:/app/ideas
+      - ./docs:/app/docs
+    networks:
+      - strategickhaos_net
+
+  svc-claude-prime:
+    image: strategickhaos/claude-crystallizer:latest
+    container_name: claude_prime
+    environment:
+      - ROLE=verification_node
+      - DEPARTMENT=governance
+    volumes:
+      - ./board:/app/board
+      - ./policies:/app/policies
+    networks:
+      - strategickhaos_net
+
+  svc-grok-guardian:
+    image: strategickhaos/grok-guardian:latest
+    container_name: grok_guardian
+    environment:
+      - ROLE=boundary_enforcer
+      - DEPARTMENT=security_ops
+    volumes:
+      - ./risk:/app/risk
+      - ./logs:/app/logs
+    networks:
+      - strategickhaos_net
+
+  # === Example idea services (when they become real) ===
+
+  svc-contextual-memory:
+    image: strategickhaos/contextual-memory-assistant:dev
+    container_name: svc_contextual_memory
+    depends_on:
+      - svc-gpt-duck
+    environment:
+      - IDEA_ID=IDEA_001
+      - NAMESPACE=ns-education
+    volumes:
+      - ./repos/contextual-memory-assistant:/app
+    networks:
+      - strategickhaos_net
+
+  svc-code-diagram:
+    image: strategickhaos/code-diagram-translator:dev
+    container_name: svc_code_diagram
+    depends_on:
+      - svc-claude-prime
+    environment:
+      - IDEA_ID=IDEA_002
+      - NAMESPACE=ns-infra
+    volumes:
+      - ./repos/code-diagram-translator:/app
+    networks:
+      - strategickhaos_net
+
+networks:
+  strategickhaos_net:
+    name: strategickhaos_net
