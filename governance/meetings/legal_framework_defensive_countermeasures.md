@@ -338,7 +338,7 @@ The following activities are **strictly prohibited**:
 ### 8.1 Legal Coordination in IR
 
 ```
-Detection → Containment → Legal Review → Eradication → Recovery → Reporting
+Detection -> Containment -> Legal Review -> Eradication -> Recovery -> Reporting
 
 Legal Touchpoints:
 - Evidence preservation requirements
