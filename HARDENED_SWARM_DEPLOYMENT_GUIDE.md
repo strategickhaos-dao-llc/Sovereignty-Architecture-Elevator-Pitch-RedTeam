@@ -195,15 +195,18 @@ interface: wg0
 ### Step 3.1: Egress Filtering (Block Phone-Home)
 
 ```bash
-# Create egress control rules
-sudo tee /etc/ufw/after.rules.d/egress-filter <<'EOF'
-# Block outbound to known C2 domains/IPs
--A OUTPUT -d discord.com -j REJECT
--A OUTPUT -d discordapp.com -j REJECT
+# Add egress control rules to UFW after.rules file
+# The rules go in the *filter section before the COMMIT line
+sudo tee -a /etc/ufw/after.rules <<'EOF'
 
-# Log suspicious outbound attempts
--A OUTPUT -p tcp --dport 6667:6669 -j LOG --log-prefix "[IRC C2 ATTEMPT] "
--A OUTPUT -p tcp --dport 6667:6669 -j REJECT
+# Custom egress filtering rules
+# Block outbound to known C2 domains/IPs
+-A ufw-after-output -d discord.com -j REJECT
+-A ufw-after-output -d discordapp.com -j REJECT
+
+# Log suspicious outbound attempts (IRC commonly used for C2)
+-A ufw-after-output -p tcp --dport 6667:6669 -j LOG --log-prefix "[IRC C2 ATTEMPT] "
+-A ufw-after-output -p tcp --dport 6667:6669 -j REJECT
 EOF
 
 # Reload firewall
@@ -298,12 +301,29 @@ sudo journalctl -u falco -f
 ### Step 5.1: Install Verification Tools
 
 ```bash
-# Install cosign for image signing
-wget https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
+# Install jq for JSON parsing (required for SBOM analysis)
+sudo apt install -y jq
+
+# Install cosign for image signing with signature verification
+# Get the latest version and verify the checksum
+COSIGN_VERSION=$(curl -sL https://api.github.com/repos/sigstore/cosign/releases/latest | jq -r '.tag_name')
+wget "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64"
+wget "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64.sig"
+wget "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign_checksums.txt"
+
+# Verify checksum before installation
+sha256sum cosign-linux-amd64
+grep "cosign-linux-amd64" cosign_checksums.txt
+# Compare the checksums manually before proceeding
+
+# Install after verification
 sudo mv cosign-linux-amd64 /usr/local/bin/cosign
 sudo chmod +x /usr/local/bin/cosign
 
-# Install Trivy for vulnerability scanning
+# Clean up verification files
+rm -f cosign-linux-amd64.sig cosign_checksums.txt
+
+# Install Trivy for vulnerability scanning (using APT with GPG verification)
 wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | \
   sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
 echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] \
