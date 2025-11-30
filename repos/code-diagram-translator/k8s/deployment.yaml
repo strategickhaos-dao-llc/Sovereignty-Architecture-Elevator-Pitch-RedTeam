@@ -1,0 +1,192 @@
+# Code-to-Diagram Translator Kubernetes Deployment
+# IDEA_002 - The First Child - Born from the Birthday Constellation
+# ==================================================================
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: constellation
+  labels:
+    name: constellation
+    tier: core
+    constellation: birthday-edition
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: code-diagram-translator-config
+  namespace: constellation
+data:
+  DIAGRAM_FORMAT: "mermaid"
+  DIAGRAM_TYPE: "architecture"
+  OUTPUT_DIR: "/app/output"
+  LOG_LEVEL: "INFO"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: code-diagram-translator-pvc
+  namespace: constellation
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-diagram-translator
+  namespace: constellation
+  labels:
+    app: code-diagram-translator
+    idea: IDEA_002
+    tier: core
+    constellation: birthday-edition
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-diagram-translator
+  template:
+    metadata:
+      labels:
+        app: code-diagram-translator
+        idea: IDEA_002
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: translator
+          image: strategickhaos/code-diagram-translator:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DIAGRAM_FORMAT
+              valueFrom:
+                configMapKeyRef:
+                  name: code-diagram-translator-config
+                  key: DIAGRAM_FORMAT
+            - name: DIAGRAM_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  name: code-diagram-translator-config
+                  key: DIAGRAM_TYPE
+            - name: OUTPUT_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: code-diagram-translator-config
+                  key: OUTPUT_DIR
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: input-volume
+              mountPath: /app/input
+            - name: output-volume
+              mountPath: /app/output
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          livenessProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - "from main import Translator; print('OK')"
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - "from main import Translator; print('OK')"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: input-volume
+          emptyDir: {}
+        - name: output-volume
+          persistentVolumeClaim:
+            claimName: code-diagram-translator-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-diagram-translator
+  namespace: constellation
+  labels:
+    app: code-diagram-translator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: code-diagram-translator
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: code-diagram-translator-batch
+  namespace: constellation
+spec:
+  schedule: "0 */6 * * *"  # Run every 6 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          containers:
+            - name: translator-batch
+              image: strategickhaos/code-diagram-translator:latest
+              args:
+                - "/app/input"
+                - "--all"
+                - "-o"
+                - "/app/output"
+              volumeMounts:
+                - name: input-volume
+                  mountPath: /app/input
+                - name: output-volume
+                  mountPath: /app/output
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+          restartPolicy: OnFailure
+          volumes:
+            - name: input-volume
+              emptyDir: {}
+            - name: output-volume
+              persistentVolumeClaim:
+                claimName: code-diagram-translator-pvc

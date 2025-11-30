@@ -1,0 +1,130 @@
+# KnowledgePod for Code-to-Diagram Translator (IDEA_002)
+# The First Child - Born from the Birthday Constellation
+# ======================================================
+
+apiVersion: sovereignty.strategickhaos.io/v1
+kind: KnowledgePod
+metadata:
+  name: code-diagram-translator-pod
+  namespace: constellation
+  labels:
+    idea: IDEA_002
+    tier: core
+    constellation: birthday-edition
+spec:
+  idea_id: "IDEA_002"
+  name: "Code-to-Diagram Translator Knowledge Pod"
+  description: |
+    Learn how to transform codebases into visual architecture diagrams
+    using AST analysis and multiple diagram formats.
+  tier: core
+  
+  # Bloom's Taxonomy Learning Objectives
+  bloom_levels:
+    remember: |
+      What are the supported diagram types and output formats?
+      - List the diagram types: architecture, class, flowchart, dependency
+      - List the output formats: Mermaid, PlantUML, D2, JSON
+      - Name the supported programming languages
+      
+    understand: |
+      Explain how AST (Abstract Syntax Tree) analysis works.
+      - Describe how Python's ast module parses source code
+      - Explain the difference between static and dynamic analysis
+      - Understand the relationship between symbols and dependencies
+      
+    apply: |
+      Generate diagrams for a sample repository.
+      - Run the translator on your own codebase
+      - Configure output formats for your documentation
+      - Integrate with CI/CD pipelines for automatic updates
+      
+    analyze: |
+      Compare Mermaid vs PlantUML vs D2 outputs.
+      - Identify strengths of each format
+      - Determine which format suits different audiences
+      - Analyze trade-offs between readability and detail
+      
+    evaluate: |
+      Which diagram type best suits microservices architecture?
+      - Evaluate architecture diagrams for system overview
+      - Assess sequence diagrams for API flows
+      - Judge dependency graphs for service coupling analysis
+      
+    create: |
+      Design a new diagram type for event sourcing systems.
+      - Create custom templates for domain-specific diagrams
+      - Extend the analyzer for new language support
+      - Contribute new output formats to the project
+
+  prerequisites: []
+  
+  resources:
+    documentation: "repos/code-diagram-translator/README.md"
+    repository: "https://github.com/strategickhaos/code-diagram-translator"
+    video: "repos/code-diagram-translator/scripts/ai_video_script.md"
+    
+  assessment:
+    quiz_questions: 10
+    practical_exercises: 3
+    passing_score: 70
+
+---
+# Supporting ConfigMap for KnowledgePod runtime
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: code-diagram-translator-learning
+  namespace: constellation
+data:
+  # Quick reference card
+  quick_reference.md: |
+    # Code-to-Diagram Translator Quick Reference
+    
+    ## Basic Commands
+    ```bash
+    # Architecture diagram (default)
+    python main.py /path/to/repo
+    
+    # Class diagram
+    python main.py /path/to/repo --type class
+    
+    # All diagrams
+    python main.py /path/to/repo --all -o diagrams/
+    ```
+    
+    ## Supported Formats
+    | Format   | Best For              |
+    |----------|----------------------|
+    | Mermaid  | Documentation, GitHub|
+    | PlantUML | Detailed UML         |
+    | D2       | Modern styling       |
+    | JSON     | Programmatic access  |
+    
+    ## Integration Examples
+    ```yaml
+    # GitHub Action
+    - name: Generate Diagrams
+      run: python main.py . --all -o docs/diagrams/
+    ```
+
+  # Practice exercise
+  exercise_1.md: |
+    # Exercise 1: Analyze Your First Repository
+    
+    ## Objective
+    Generate architecture and class diagrams for a Python repository.
+    
+    ## Steps
+    1. Clone a sample repository (or use your own)
+    2. Run the translator in default mode
+    3. Run again with `--type class`
+    4. Compare the outputs
+    
+    ## Expected Outcomes
+    - Architecture diagram showing module relationships
+    - Class diagram showing inheritance and methods
+    
+    ## Bonus Challenge
+    - Create a custom output format
+    - Add support for a new language
