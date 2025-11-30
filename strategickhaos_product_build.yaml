@@ -1,0 +1,176 @@
+# StrategicKhaos Product Build Spec - Mission YAML
+# Version: 2025-11-30
+# 
+# This YAML serves as the canonical specification for Claude/LLM to generate
+# all deliverables for the StrategicKhaos Educational Swarm Rollout.
+#
+# Usage: Paste this config into Claude.ai with prompt:
+#   "Use this YAML as the project spec and generate all defined deliverables."
+#
+# ---
+
+strategickhaos_product_build:
+  version: "2025-11-30"
+  project_name: "StrategicKhaos Educational Swarm Rollout"
+  
+  source_of_truth:
+    board_minutes: "StrategicKhaos_DAO_Board_Minutes_2025-11-30.pdf"
+    resolutions:
+      - "Execution Plan D: AI Video Empire + KnowledgePods + Nonprofit Board Packet"
+      - "Bug Bounty Program Authorization (defensive only, CFAA-compliant)"
+      - "Risk Mitigation Framework (100 failure modes)"
+      - "Legal Compliance Mandate (no hack-back, strictly defensive ops)"
+  
+  high_level_objectives:
+    - "Turn the 100 Bloom's Taxonomy BS/CS questions into a shippable, department-ready product line."
+    - "Produce clear, non-technical documents each department can use without touching YAML/Kubernetes."
+    - "Align everything with the board resolutions and defensive-ops mandate."
+
+  # === INPUT MATERIALS THE MODEL SHOULD ASSUME OR REQUEST ===
+  inputs:
+    educational_questions_file: "questions/100_blooms_questions.md"   # 6 sections, 100 Qs
+    failure_modes_file: "risk/100_failure_modes.md"                   # optional appendix
+    legal_framework_summary: "legal/defensive_ops_summary.md"         # CFAA/DMCA/ECPA/etc.
+    infra_overview: "infra/infrastructure_verification.md"            # cluster, WAN, nodes overview
+    existing_policies_dir: "policies/"                                # safe harbor, bounty, etc.
+
+  target_departments:
+    - id: "education"
+      name: "Education & Curriculum"
+      goal: "Use the 100 questions as a modular learning framework (SNHU-aligned, Bloom Level 5–6)."
+    
+    - id: "security_ops"
+      name: "Security Operations"
+      goal: "Deploy KnowledgePods + hardened infra without touching board-level theory."
+    
+    - id: "infra_cloud"
+      name: "Infrastructure & Cloud"
+      goal: "Run Kubernetes, GitHub Actions, and storage for video + quiz delivery."
+    
+    - id: "finance_legal"
+      name: "Finance & Legal"
+      goal: "Understand budgets, risk, legal boundaries, and what is/ISN'T authorized."
+    
+    - id: "comms_outreach"
+      name: "Comms, Outreach & Grants"
+      goal: "Explain the program to donors, SNHU, partners, and the public."
+
+  # === FINAL DELIVERABLES THE AI SHOULD PRODUCE ===
+  deliverables:
+    - id: "master_playbook"
+      type: "markdown"
+      path: "docs/StrategicKhaos_Educational_Swarm_Playbook.md"
+      audience: "all_departments"
+      description: >
+        A top-level narrative: what this project is, why it exists, how the 100 questions,
+        AI videos, KnowledgePods, and risk/legal frameworks fit together.
+      sections:
+        - "Executive Summary"
+        - "Architecture Overview (human language, diagrams allowed)"
+        - "Board Resolutions & Constraints (no hack-back, defensive only)"
+        - "Educational Flow using the 100 Questions"
+        - "Operational Flow: From repo → video → pod → learner"
+        - "Risk & Legal Guardrails (plain English)"
+        - "Roadmap: 30/90/365 days"
+
+    - id: "dept_education_brief"
+      type: "markdown"
+      path: "docs/departments/education_brief.md"
+      audience: "education"
+      description: "How to use the 100 questions as a curriculum + AI video series."
+      include:
+        - "Mapping of all 100 questions by module + difficulty"
+        - "Suggested sequence & prerequisites"
+        - "Instructions for generating/using the AI videos in class or self-study"
+        - "Assessment ideas and rubrics (Bloom Level 5–6)"
+
+    - id: "dept_security_ops_runbook"
+      type: "markdown"
+      path: "docs/departments/security_ops_runbook.md"
+      audience: "security_ops"
+      description: "Concrete steps to deploy hardened infra, Falco, and KnowledgePods."
+      include:
+        - "Prereqs: clusters, namespaces, secrets, storage"
+        - "How to deploy the KnowledgePod CRD + controller"
+        - "How to safely expose pods (ingress, TLS, auth)"
+        - "Monitoring & alerting basics (Falco/Prometheus hooks)"
+        - "Clear statement of legal boundaries (defensive only, no hack-back)"
+
+    - id: "dept_infra_cloud_runbook"
+      type: "markdown"
+      path: "docs/departments/infra_cloud_runbook.md"
+      audience: "infra_cloud"
+      description: "GitHub Actions, storage, and scaling guidelines."
+      include:
+        - "Where the AI-generated videos live (e.g., S3/GCS + CDN)"
+        - "How GitHub Actions build and attach videos/metadata per repo node"
+        - "Resource planning: CPU/GPU/storage estimates"
+        - "Backup + disaster recovery expectations"
+
+    - id: "dept_finance_legal_brief"
+      type: "markdown"
+      path: "docs/departments/finance_legal_brief.md"
+      audience: "finance_legal"
+      description: "Money, risk, and law in one place."
+      include:
+        - "Summary of board minutes relevant to cost and risk"
+        - "Budget ranges for infra, AI, and bounty payouts"
+        - "Plain-language summary of CFAA/DMCA/ECPA/CISA and board's defensive-only stance"
+        - "Explanation of LLC self-hire structure and what still needs attorney review"
+        - "List of HIGH-priority risks and how we're mitigating them"
+
+    - id: "dept_comms_outreach_brief"
+      type: "markdown"
+      path: "docs/departments/comms_outreach_brief.md"
+      audience: "comms_outreach"
+      description: "Messaging, story, and external positioning."
+      include:
+        - "Simple story: 'What is this program?' for donors/students/press"
+        - "Non-technical explanation of AI videos + K8s pods ('living courseware')"
+        - "Key phrases to avoid (e.g., anything that sounds like hack-back)"
+        - "FAQ section for partners / SNHU / auditors"
+
+    - id: "k8s_knowledgepod_crd"
+      type: "yaml"
+      path: "k8s/knowledgepod-crd.yaml"
+      audience: "infra_cloud, security_ops"
+      description: "CustomResourceDefinition for KnowledgePods."
+      notes: "Model should generate a valid Kubernetes CRD skeleton, not production-perfect, but structurally sound."
+
+    - id: "k8s_knowledgepod_example"
+      type: "yaml"
+      path: "k8s/knowledgepods/example_pod_q001.yaml"
+      audience: "infra_cloud, security_ops"
+      description: "Example KnowledgePod instance wired to Question #1 and its video."
+      notes: "Show how one question maps to one pod, with references to video URL + markdown."
+
+    - id: "board_packet_outline"
+      type: "markdown"
+      path: "board/StrategicKhaos_Educational_Impact_2026-2030_Outline.md"
+      audience: "board, donors, SNHU"
+      description: "Outline for the 40-page board/nonprofit packet approved in Resolution 1."
+      include:
+        - "Executive Summary"
+        - "Mission & Impact Model"
+        - "Educational Architecture using AI + K8s"
+        - "Governance & Risk"
+        - "Appendix hooks for 100 Questions, 100 Failure Modes, Legal Summary"
+
+  constraints:
+    legal:
+      - "All content must assume strictly defensive, CFAA-compliant operations."
+      - "No language that suggests 'hacking back' or attacking third-party infrastructure."
+      - "Bug bounties are ONLY for assets owned/controlled by StrategicKhaos."
+    tone:
+      - "Board-appropriate, professor-readable, department-friendly."
+      - "No roleplay, no anthropomorphizing AIs; describe tools and systems, not personalities."
+    style:
+      - "Use clear section headings, bullet points, and short paragraphs."
+      - "Assume departments are intelligent but not steeped in cluster/AI jargon."
+
+  model_instructions_for_claude:
+    - "Read and internalize the board minutes and resolutions first."
+    - "Use this YAML as the canonical spec of what to produce."
+    - "Generate each deliverable in turn, starting with master_playbook."
+    - "For each deliverable, restate the target audience and goal before writing."
+    - "If some referenced file is missing, describe what SHOULD go there so Dom can fill it in."
