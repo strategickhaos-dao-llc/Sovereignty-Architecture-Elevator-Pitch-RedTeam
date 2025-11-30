@@ -74,24 +74,8 @@ spec:
           emptyDir: {}
 
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: svc-code-diagram
-  namespace: ns-infra
-  labels:
-    app: svc-code-diagram
-    idea-id: IDEA_002
-spec:
-  selector:
-    app: svc-code-diagram
-  ports:
-    - port: 8080
-      targetPort: 8080
-      protocol: TCP
-  type: ClusterIP
-
----
+# NOTE: Service and ConfigMap are placeholder scaffolds for future HTTP API mode
+# The current implementation is CLI-based (Job/CronJob pattern)
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -102,4 +86,3 @@ metadata:
     idea-id: IDEA_002
 data:
   OUTPUT_FORMAT: "mermaid"
-  WATCH_MODE: "false"
