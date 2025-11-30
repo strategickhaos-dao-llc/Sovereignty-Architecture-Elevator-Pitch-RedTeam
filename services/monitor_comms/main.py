@@ -1,18 +1,18 @@
 # monitor_comms service - Gmail/Drive Monitoring
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from faststream.nats import NatsBroker
 import asyncio
 import os
 import json
 
-app = FastAPI()
-broker = NatsBroker(os.getenv("NATS_URL", "nats://nats:4222"))
-
 GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS", "/secrets/credentials.json")
 POLL_INTERVAL = int(os.getenv("POLL_INTERVAL", "300"))
 
-# Flag to control polling
-polling_active = False
+broker = NatsBroker(os.getenv("NATS_URL", "nats://nats:4222"))
+
+# Use asyncio.Event for clean task management
+shutdown_event = asyncio.Event()
 
 
 async def poll_gmail():
@@ -51,29 +51,32 @@ async def poll_drive():
 
 
 async def poll_loop():
-    """Main polling loop."""
-    global polling_active
-    while polling_active:
+    """Main polling loop with clean shutdown support."""
+    while not shutdown_event.is_set():
         await poll_gmail()
         await poll_drive()
-        await asyncio.sleep(POLL_INTERVAL)
+        try:
+            await asyncio.wait_for(shutdown_event.wait(), timeout=POLL_INTERVAL)
+        except asyncio.TimeoutError:
+            pass
 
 
-@app.on_event("startup")
-async def startup():
-    """Connect to NATS and start polling."""
-    global polling_active
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage NATS broker lifecycle and polling task."""
     await broker.connect()
-    polling_active = True
-    asyncio.create_task(poll_loop())
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    """Stop polling and disconnect from NATS."""
-    global polling_active
-    polling_active = False
+    task = asyncio.create_task(poll_loop())
+    yield
+    shutdown_event.set()
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
     await broker.close()
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/health")
@@ -83,7 +86,7 @@ async def health():
         "status": "healthy",
         "service": "monitor_comms",
         "polling_interval": POLL_INTERVAL,
-        "polling_active": polling_active
+        "polling_active": not shutdown_event.is_set()
     }
 
 

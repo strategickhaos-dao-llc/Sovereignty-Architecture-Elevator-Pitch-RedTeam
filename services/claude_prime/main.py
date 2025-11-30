@@ -1,13 +1,24 @@
 # claude_prime agent - Verification Node
 # Use faststream for NATS integration
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from faststream.nats import NatsBroker
 import os
 import json
 import httpx
 
-app = FastAPI()
 broker = NatsBroker(os.getenv("NATS_URL", "nats://nats:4222"))
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage NATS broker lifecycle."""
+    await broker.connect()
+    yield
+    await broker.close()
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @broker.subscriber("board.deliberate")
@@ -32,18 +43,6 @@ async def opa_approve(decision: dict) -> bool:
             return resp.json().get("result", False)
         except Exception:
             return False
-
-
-@app.on_event("startup")
-async def connect():
-    """Connect to NATS broker on startup."""
-    await broker.connect()
-
-
-@app.on_event("shutdown")
-async def disconnect():
-    """Disconnect from NATS broker on shutdown."""
-    await broker.close()
 
 
 @app.post("/trigger_deliberation")

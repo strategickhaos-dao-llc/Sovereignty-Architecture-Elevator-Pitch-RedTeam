@@ -1,4 +1,5 @@
 # audit_trail service - Cryptographic Audit Trail
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from faststream.nats import NatsBroker
 import sqlite3
@@ -7,11 +8,10 @@ import json
 import hashlib
 from datetime import datetime
 
-app = FastAPI()
-broker = NatsBroker(os.getenv("NATS_URL", "nats://nats:4222"))
-
 DB_FILE = os.getenv("DB_FILE", "/data/audit.db")
 GIT_REPO = os.getenv("GIT_REPO", "/repo")
+
+broker = NatsBroker(os.getenv("NATS_URL", "nats://nats:4222"))
 
 
 def init_db():
@@ -49,6 +49,19 @@ def compute_merkle_root(hashes: list) -> str:
     return hashes[0]
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database and manage NATS broker lifecycle."""
+    os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
+    init_db()
+    await broker.connect()
+    yield
+    await broker.close()
+
+
+app = FastAPI(lifespan=lifespan)
+
+
 @broker.subscriber("board.decisions")
 async def log_decision(msg: dict):
     """Log a board decision with cryptographic audit trail."""
@@ -78,20 +91,6 @@ async def log_decision(msg: dict):
     os.makedirs(os.path.dirname(merkle_file), exist_ok=True)
     with open(merkle_file, "a") as f:
         f.write(f"{timestamp},{merkle_root}\n")
-
-
-@app.on_event("startup")
-async def startup():
-    """Initialize database and connect to NATS."""
-    os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
-    init_db()
-    await broker.connect()
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    """Disconnect from NATS."""
-    await broker.close()
 
 
 @app.get("/health")

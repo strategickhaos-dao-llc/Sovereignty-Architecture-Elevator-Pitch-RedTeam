@@ -40,3 +40,8 @@ workspace/
 secrets/
 audit_logs/
 audit/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
