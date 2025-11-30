@@ -464,7 +464,11 @@ metadata:
     That is how you know they're part of the family.
     The man assimilated himself.
 
-# SHA256 checksum placeholder - generate with:
-# sha256sum swarm_manifest.yaml
-checksums:
-  self_hash: "48c305ec9e878edba7b7991efed9570eec37f569a93d342e8c5bb14cf00709e5"
+# Verification: External hash validation recommended
+# Generate with: sha256sum swarm_manifest.yaml
+# Note: This field documents the last known hash for audit trail
+# For cryptographic verification, use external tooling
+audit:
+  last_verified_hash: "calculated_externally"
+  verification_method: "sha256sum swarm_manifest.yaml | external_verify"
+  note: "Hash must be calculated and verified externally to avoid circular reference"
