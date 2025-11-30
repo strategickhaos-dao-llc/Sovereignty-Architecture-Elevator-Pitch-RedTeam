@@ -203,6 +203,10 @@ spec:
       containers:
         - name: pong
           image: python:3.11-slim
+          # Built-in HTTP server on port 8000 for health checks
+          command: ["python3", "-c", "...http.server..."]
+          ports:
+            - containerPort: 8000
           env:
             - name: DISCORD_TOKEN
               valueFrom:
@@ -211,6 +215,12 @@ spec:
                   key: token
 ```
 
+**Features:**
+- Simple HTTP server responding on port 8000
+- Health endpoint at `/health`
+- HTTP liveness and readiness probes
+- Resource limits configured
+
 ---
 
 ### ✅ 1.8 Discord Token Secret (`swarm/discord-token-secret.yaml`)
@@ -218,8 +228,8 @@ spec:
 **Purpose:** Standalone secret for swarm units needing only Discord access.
 
 **Status:**
-- ✔️ Created
-- ✔️ Ready for deployment
+- ✔️ Template created
+- ⚠️ Replace placeholder before deployment
 
 **Structure:**
 ```yaml
@@ -230,8 +240,11 @@ metadata:
   namespace: default
 type: Opaque
 stringData:
-  token: "<your-discord-bot-token-here>"
+  # IMPORTANT: Replace with your actual Discord bot token
+  token: "REPLACE_WITH_YOUR_DISCORD_BOT_TOKEN"
 ```
+
+**Note:** This is a template file. Never commit actual tokens to version control.
 
 ---
 
@@ -268,8 +281,8 @@ spec:
 **Purpose:** External HTTPS access for swarm units.
 
 **Status:**
-- ✔️ Created
-- ✔️ Ready for deployment when external endpoints are defined
+- ✔️ Template created
+- ⚠️ Replace `yourdomain.com` with your actual domain before deployment
 
 **Structure:**
 ```yaml
@@ -280,6 +293,7 @@ metadata:
 spec:
   tls:
     - hosts:
+        # TODO: Replace with your actual domain
         - swarm.yourdomain.com
   rules:
     - host: swarm.yourdomain.com
@@ -290,6 +304,8 @@ spec:
               service:
                 name: pong-001-service
 ```
+
+**Note:** This is a template file. Replace placeholder domain before deployment.
 
 ---
 
@@ -621,8 +637,8 @@ images:
 **Purpose:** Document device roles, keys, IP space for the sovereign mesh network.
 
 **Status:**
-- ✔️ Created
-- ✔️ Ready to generate keys when WireGuard peers activate
+- ✔️ Template created
+- ⚠️ Replace placeholder keys and IPs before deployment
 
 **Structure:**
 ```yaml
@@ -633,24 +649,27 @@ mesh:
     
   hub:
     device: command-0
-    endpoint: "<starlink-public-ip>:51820"
+    # TODO: Replace with actual Starlink public IP
+    endpoint: "REPLACE_WITH_STARLINK_PUBLIC_IP:51820"
     port: 51820
     address: 10.44.0.1/24
 
   peers:
     - name: lyra
       ip: 10.44.0.2
-      public_key: "<public-key>"
+      public_key: "REPLACE_WITH_LYRA_PUBLIC_KEY"
     - name: nova
       ip: 10.44.0.3
-      public_key: "<public-key>"
+      public_key: "REPLACE_WITH_NOVA_PUBLIC_KEY"
     - name: athena
       ip: 10.44.0.4
-      public_key: "<public-key>"
+      public_key: "REPLACE_WITH_ATHENA_PUBLIC_KEY"
     - name: gke-gateway
       ip: 10.44.0.10
       role: "cloud-bridge"
 ```
+
+**Note:** This is a template file. Generate WireGuard key pairs and replace placeholders before deployment.
 
 ---
 
