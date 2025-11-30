@@ -27,7 +27,7 @@ See separate [SAFE_HARBOR.md](SAFE_HARBOR.md)
 
 ## Submission
 
-**Encrypted PGP email only** → key on `khaosbounty.io/contact`
+**Encrypted PGP email only** → key will be available on `khaosbounty.io/contact` after domain registration
 
 ---
 
