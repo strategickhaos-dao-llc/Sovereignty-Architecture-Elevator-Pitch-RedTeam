@@ -1,0 +1,21 @@
+# Fibonacci sequence in StrategicKhaos
+# Classic recursive implementation
+
+fn fibonacci(n) {
+    if n <= 1 {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+# Calculate and display Fibonacci numbers
+print "Fibonacci Sequence:";
+
+let i = 0;
+while i < 10 {
+    let fib = fibonacci(i);
+    print "fib(" + i + ") = " + fib;
+    i = i + 1;
+}
+
+print "Chaos math complete.";

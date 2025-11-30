@@ -1,0 +1,26 @@
+# Example showing neural optimization hints
+# Stage 3 feature - for future implementation
+
+# Regular function - standard optimization
+fn process_item(x) {
+    return x * 2 + 1;
+}
+
+# Neural-optimized hot loop
+# The @optimize decorator hints to the compiler that this function
+# should be optimized using neural learning algorithms
+@optimize(neural=true, priority="high")
+fn hot_loop(data) {
+    let result = 0;
+    for item in data {
+        result = result + process_item(item);
+    }
+    return result;
+}
+
+# Example usage
+let test_data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let output = hot_loop(test_data);
+
+print "Result: " + output;
+print "Neural optimization: ENABLED";

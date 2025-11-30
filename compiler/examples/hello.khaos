@@ -1,0 +1,34 @@
+# Hello world in the future language of the empire
+# StrategicKhaos Language - Example Program
+
+print "Welcome to the chaos realm";
+
+# Variable declarations
+let x = 40 + 2;
+show x;
+
+# Function definition
+fn greet(name) {
+    print "Hello, " + name + "!";
+    print "The empire recognizes your sovereignty.";
+}
+
+# Call the function
+greet("Builder");
+
+# Conditional logic
+let power_level = 9001;
+if power_level > 9000 {
+    print "POWER LEVEL IS OVER 9000!";
+} else {
+    print "Power level is acceptable.";
+}
+
+# Loop example
+let counter = 0;
+while counter < 3 {
+    print "Iteration: " + counter;
+    counter = counter + 1;
+}
+
+print "Compilation of reality: COMPLETE";
