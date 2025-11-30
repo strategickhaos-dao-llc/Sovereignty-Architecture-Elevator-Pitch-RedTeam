@@ -215,3 +215,63 @@ services:
       - refinory-api
       - grafana
     restart: unless-stopped
+
+  # === AI Board Orchestration Services (Governance Layer) ===
+
+  gpt_duck:
+    image: strategickhaos/gpt-orchestrator:dev
+    container_name: gpt_duck
+    environment:
+      - ROLE=pattern_analyst
+      - GOVERNANCE_SPEC=/governance/spec.yaml
+    volumes:
+      - ./governance/spec.yaml:/governance/spec.yaml:ro
+      - ./ideas/ideas_catalog.yaml:/ideas/ideas_catalog.yaml:ro
+      - ./repos:/repos
+    networks:
+      - strategickhaos_network
+    profiles:
+      - ai-board
+
+  claude_prime:
+    image: strategickhaos/claude-crystallizer:dev
+    container_name: claude_prime
+    environment:
+      - ROLE=verification_node
+    volumes:
+      - ./board:/board
+      - ./governance/spec.yaml:/governance/spec.yaml:ro
+    networks:
+      - strategickhaos_network
+    profiles:
+      - ai-board
+
+  grok_guardian:
+    image: strategickhaos/grok-guardian:dev
+    container_name: grok_guardian
+    environment:
+      - ROLE=boundary_enforcer
+    volumes:
+      - ./risk:/risk
+      - ./governance/spec.yaml:/governance/spec.yaml:ro
+    networks:
+      - strategickhaos_network
+    profiles:
+      - ai-board
+
+  # === First Child: IDEA_002 - Code-to-Diagram Translator ===
+
+  code_diagram_translator:
+    build:
+      context: ./repos/code-diagram-translator
+      dockerfile: Dockerfile
+    container_name: svc_code_diagram
+    environment:
+      - IDEA_ID=IDEA_002
+      - SERVICE_NAME=svc-code-diagram
+    ports:
+      - "8000:8000"
+    networks:
+      - strategickhaos_network
+    profiles:
+      - ideas

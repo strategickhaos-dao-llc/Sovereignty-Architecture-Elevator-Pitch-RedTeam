@@ -1,0 +1,46 @@
+# Ideas Catalog - StrategicKhaos DAO
+# Machine-readable catalog of project ideas (100 Seeds)
+# DRAFT – pending review
+
+ideas_catalog:
+  version: "2025-11-30"
+  organization: "StrategicKhaos DAO LLC"
+  
+  ideas:
+    - id: "IDEA_001"
+      name: "Contextual Memory Assistant"
+      description: >
+        AI-powered contextual memory system that maintains conversation
+        history and context across sessions for improved interactions.
+      status: "concept"
+      priority: "high"
+      domains:
+        - "ai"
+        - "memory"
+        - "context"
+      dependencies: []
+      
+    - id: "IDEA_002"
+      name: "Code-to-Diagram Translator"
+      description: >
+        Service that analyzes code repositories and generates visual
+        diagrams representing architecture, data flows, and dependencies.
+      status: "skeleton_ready"
+      priority: "high"
+      domains:
+        - "visualization"
+        - "architecture"
+        - "documentation"
+      dependencies: []
+      repo_path: "repos/code-diagram-translator/"
+      service_name: "svc-code-diagram"
+      
+    # Additional ideas to be populated by operator
+    # Template for new ideas:
+    # - id: "IDEA_XXX"
+    #   name: "Project Name"
+    #   description: "Brief description of the project idea"
+    #   status: "concept|skeleton_ready|in_progress|complete"
+    #   priority: "low|medium|high|critical"
+    #   domains: []
+    #   dependencies: []
