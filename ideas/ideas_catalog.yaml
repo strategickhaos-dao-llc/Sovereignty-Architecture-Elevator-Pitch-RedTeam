@@ -1,0 +1,165 @@
+# Ideas Catalog YAML - The "Database" of Concepts
+# Central registry of all BS/CS + ecosystem software concepts
+
+strategickhaos_ideas_catalog:
+  version: "2025-11-30"
+  owner: "StrategicKhaos DAO LLC"
+  purpose: >
+    Central registry of all BS/CS + ecosystem software concepts so AIs or humans
+    can generate specs, videos, docs, and services consistently.
+
+  idea_template_definition:  # This defines the schema for an idea entry
+    id: "IDEA_XXX (Unique Identifier)"
+    title: "Short title"
+    category: "category-name (e.g., devtools, edtech, security)"
+    description: "1–3 sentence high-level summary"
+    maturity_level: "concept | research | prototype | mvp | production"
+    primary_department: "Must match governance spec (e.g., education, infra_cloud)"
+    repo_path: "repos/<repo-name>/ (Where code will eventually live)"
+    service_name: "svc-<short-name> (Docker/K8s service identifier)"
+    video_module_id: "Q### (If tied to one of the 100 Bloom's Qs)"
+    notes: "Any freeform strategic notes"
+
+  ideas:
+    # --- IDEA_001 ---
+    - id: "IDEA_001"
+      title: "Contextual Memory Assistant"
+      category: "ai-enhanced-personalization"
+      description: >
+        An assistant that builds a knowledge graph of user interactions and
+        surfaces context-aware prompts and memory support during future tasks.
+      maturity_level: "concept"
+      primary_department: "education"
+      repo_path: "repos/contextual-memory-assistant/"
+      service_name: "svc-contextual-memory"
+      video_module_id: "Q001"
+      notes: "High-priority candidate for MVP; tie into BS/CS curriculum."
+
+    # --- IDEA_002 ---
+    - id: "IDEA_002"
+      title: "Code-to-Diagram Translator"
+      category: "devtools"
+      description: >
+        Tool that ingests source code and generates living architecture diagrams
+        that update automatically as the codebase evolves.
+      maturity_level: "concept"
+      primary_department: "infra_cloud"
+      repo_path: "repos/code-diagram-translator/"
+      service_name: "svc-code-diagram"
+      video_module_id: "Q034"
+      notes: "Ideal for KnowledgePod demo; strongly aligned with 100-question set."
+
+    # --- IDEA_003 ---
+    - id: "IDEA_003"
+      title: "Sovereignty Compliance Checker"
+      category: "security"
+      description: >
+        Automated tool that validates code and infrastructure against sovereignty
+        principles and regulatory requirements for data residency.
+      maturity_level: "concept"
+      primary_department: "governance_legal"
+      repo_path: "repos/sovereignty-compliance-checker/"
+      service_name: "svc-sovereignty-check"
+      video_module_id: "Q012"
+      notes: "Core to DAO operations; integrate with CI/CD pipelines."
+
+    # --- IDEA_004 ---
+    - id: "IDEA_004"
+      title: "AI Board Voting System"
+      category: "governance"
+      description: >
+        Decentralized voting mechanism allowing AI board members to participate
+        in governance decisions with weighted influence and audit trails.
+      maturity_level: "concept"
+      primary_department: "governance_legal"
+      repo_path: "repos/ai-board-voting/"
+      service_name: "svc-ai-voting"
+      video_module_id: "Q007"
+      notes: "Foundation for DAO governance; requires constitutional alignment checks."
+
+    # --- IDEA_005 ---
+    - id: "IDEA_005"
+      title: "Learning Path Optimizer"
+      category: "edtech"
+      description: >
+        AI-driven curriculum optimizer that personalizes learning paths based on
+        Bloom's taxonomy mastery levels and student progress analytics.
+      maturity_level: "concept"
+      primary_department: "education"
+      repo_path: "repos/learning-path-optimizer/"
+      service_name: "svc-learning-path"
+      video_module_id: "Q023"
+      notes: "Tied to BS/CS 100-question framework; high educational impact."
+
+    # --- IDEA_006 ---
+    - id: "IDEA_006"
+      title: "OSINT Aggregator Dashboard"
+      category: "security"
+      description: >
+        Open-source intelligence aggregation platform that collects, correlates,
+        and visualizes threat intelligence from multiple public sources.
+      maturity_level: "concept"
+      primary_department: "security_ops"
+      repo_path: "repos/osint-aggregator/"
+      service_name: "svc-osint-agg"
+      video_module_id: "Q045"
+      notes: "Aligned with PI/cybersecurity services; compliance-first design."
+
+    # --- IDEA_007 ---
+    - id: "IDEA_007"
+      title: "Constitutional AI Monitor"
+      category: "ai-safety"
+      description: >
+        Real-time monitoring system that evaluates AI outputs against constitutional
+        principles and flags alignment drift or policy violations.
+      maturity_level: "concept"
+      primary_department: "governance_legal"
+      repo_path: "repos/constitutional-ai-monitor/"
+      service_name: "svc-const-monitor"
+      video_module_id: "Q003"
+      notes: "Critical safety infrastructure; integrate with all AI board members."
+
+    # --- IDEA_008 ---
+    - id: "IDEA_008"
+      title: "Knowledge Pod Generator"
+      category: "edtech"
+      description: >
+        Automated system that generates educational video scripts, slides, and
+        quizzes from structured curriculum YAML definitions.
+      maturity_level: "concept"
+      primary_department: "education"
+      repo_path: "repos/knowledge-pod-generator/"
+      service_name: "svc-knowledge-pod"
+      video_module_id: "Q056"
+      notes: "Core content pipeline for BS/CS curriculum delivery."
+
+    # --- IDEA_009 ---
+    - id: "IDEA_009"
+      title: "Service Mesh Visualizer"
+      category: "devtools"
+      description: >
+        Real-time visualization of microservice communications, dependencies,
+        and health status across the entire infrastructure.
+      maturity_level: "concept"
+      primary_department: "infra_cloud"
+      repo_path: "repos/service-mesh-visualizer/"
+      service_name: "svc-mesh-viz"
+      video_module_id: "Q067"
+      notes: "Complement to Code-to-Diagram; operational focus."
+
+    # --- IDEA_010 ---
+    - id: "IDEA_010"
+      title: "DAO Treasury Analytics"
+      category: "finance"
+      description: >
+        Financial analytics dashboard tracking DAO treasury health, token flows,
+        and budget allocation across departments.
+      maturity_level: "concept"
+      primary_department: "finance"
+      repo_path: "repos/dao-treasury-analytics/"
+      service_name: "svc-treasury-analytics"
+      video_module_id: "Q078"
+      notes: "Essential for transparent DAO financial governance."
+
+    # --- Additional ideas can be added following the same pattern ---
+    # Continue adding ideas up to IDEA_100 as needed

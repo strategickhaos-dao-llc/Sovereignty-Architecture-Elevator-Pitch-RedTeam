@@ -1,0 +1,251 @@
+# Conceptual Docker-Compose Template - AI Board + Idea Services
+# This is a schema/scaffold that maps how "Board Member AIs" exist alongside
+# "Idea Services" in the future technical architecture.
+#
+# NOTE: You don't need to actually run this docker-compose file yet – 
+# it's a schema you can hand to any model or dev and say:
+# "Fill this in / generate from this pattern."
+
+version: "3.9"
+
+services:
+  # =========================================
+  # === THE AI "BOARD MEMBER" SERVICES ===
+  # These are permanent infrastructure nodes.
+  # =========================================
+
+  svc-gpt-duck:
+    # Imaginary image placeholder
+    image: strategickhaos/gpt-orchestrator:latest 
+    container_name: board_gpt_duck
+    environment:
+      - ROLE=creative_director_pattern_analyst
+      - DEPARTMENT=meta
+    volumes:
+      # It can "see" the ideas catalog and general docs
+      - ./ideas:/app/ideas:ro
+      - ./docs:/app/docs:ro
+    networks:
+      - strategickhaos_board_net
+
+  svc-claude-prime:
+    image: strategickhaos/claude-crystallizer:latest
+    container_name: board_claude_prime
+    environment:
+      - ROLE=governance_verification_node
+      - DEPARTMENT=governance_legal
+    volumes:
+      # It can "see" policies and specs to verify things against
+      - ./governance:/app/governance:ro
+    networks:
+      - strategickhaos_board_net
+
+  svc-grok-guardian:
+    image: strategickhaos/grok-guardian:latest
+    container_name: board_grok_guardian
+    environment:
+      - ROLE=security_boundary_enforcer
+      - DEPARTMENT=security_ops
+    volumes:
+      # It monitors risk logs
+      - ./risk_logs:/app/logs
+    networks:
+      - strategickhaos_board_net
+
+  svc-llama-analyst:
+    image: strategickhaos/llama-analyst:latest
+    container_name: board_llama_analyst
+    environment:
+      - ROLE=data_analytics_strategist
+      - DEPARTMENT=finance
+    volumes:
+      - ./analytics:/app/analytics:ro
+    networks:
+      - strategickhaos_board_net
+
+  svc-gemini-educator:
+    image: strategickhaos/gemini-educator:latest
+    container_name: board_gemini_educator
+    environment:
+      - ROLE=curriculum_design_coordinator
+      - DEPARTMENT=education
+    volumes:
+      - ./curriculum:/app/curriculum:ro
+    networks:
+      - strategickhaos_board_net
+
+  # =========================================
+  # === THE IDEA IMPLEMENTATION SERVICES ===
+  # These spin up as ideas become real products.
+  # =========================================
+
+  # Implementation of IDEA_001 - Contextual Memory Assistant
+  svc-contextual-memory:
+    # Placeholder for the future actual code image
+    image: strategickhaos/contextual-memory-assistant:dev
+    container_name: prod_svc_contextual_memory
+    depends_on:
+      - svc-gpt-duck # Conceptually links to the board member overseeing it
+    environment:
+      - IDEA_ID=IDEA_001
+      - RUN_MODE=mvp
+      - PRIMARY_DEPARTMENT=education
+    volumes:
+      # Mounts the actual future code repo
+      - ./repos/contextual-memory-assistant:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_002 - Code-to-Diagram Translator
+  svc-code-diagram:
+    image: strategickhaos/code-diagram-translator:dev
+    container_name: prod_svc_code_diagram
+    depends_on:
+      - svc-claude-prime
+    environment:
+      - IDEA_ID=IDEA_002
+      - RUN_MODE=prototype
+      - PRIMARY_DEPARTMENT=infra_cloud
+    volumes:
+      - ./repos/code-diagram-translator:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_003 - Sovereignty Compliance Checker
+  svc-sovereignty-check:
+    image: strategickhaos/sovereignty-compliance-checker:dev
+    container_name: prod_svc_sovereignty_check
+    depends_on:
+      - svc-claude-prime
+      - svc-grok-guardian
+    environment:
+      - IDEA_ID=IDEA_003
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=governance_legal
+    volumes:
+      - ./repos/sovereignty-compliance-checker:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_004 - AI Board Voting System
+  svc-ai-voting:
+    image: strategickhaos/ai-board-voting:dev
+    container_name: prod_svc_ai_voting
+    depends_on:
+      - svc-claude-prime
+    environment:
+      - IDEA_ID=IDEA_004
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=governance_legal
+    volumes:
+      - ./repos/ai-board-voting:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_005 - Learning Path Optimizer
+  svc-learning-path:
+    image: strategickhaos/learning-path-optimizer:dev
+    container_name: prod_svc_learning_path
+    depends_on:
+      - svc-gemini-educator
+    environment:
+      - IDEA_ID=IDEA_005
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=education
+    volumes:
+      - ./repos/learning-path-optimizer:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_006 - OSINT Aggregator Dashboard
+  svc-osint-agg:
+    image: strategickhaos/osint-aggregator:dev
+    container_name: prod_svc_osint_agg
+    depends_on:
+      - svc-grok-guardian
+    environment:
+      - IDEA_ID=IDEA_006
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=security_ops
+    volumes:
+      - ./repos/osint-aggregator:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_007 - Constitutional AI Monitor
+  svc-const-monitor:
+    image: strategickhaos/constitutional-ai-monitor:dev
+    container_name: prod_svc_const_monitor
+    depends_on:
+      - svc-claude-prime
+      - svc-grok-guardian
+    environment:
+      - IDEA_ID=IDEA_007
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=governance_legal
+    volumes:
+      - ./repos/constitutional-ai-monitor:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_008 - Knowledge Pod Generator
+  svc-knowledge-pod:
+    image: strategickhaos/knowledge-pod-generator:dev
+    container_name: prod_svc_knowledge_pod
+    depends_on:
+      - svc-gemini-educator
+      - svc-gpt-duck
+    environment:
+      - IDEA_ID=IDEA_008
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=education
+    volumes:
+      - ./repos/knowledge-pod-generator:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_009 - Service Mesh Visualizer
+  svc-mesh-viz:
+    image: strategickhaos/service-mesh-visualizer:dev
+    container_name: prod_svc_mesh_viz
+    depends_on:
+      - svc-claude-prime
+    environment:
+      - IDEA_ID=IDEA_009
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=infra_cloud
+    volumes:
+      - ./repos/service-mesh-visualizer:/app
+    networks:
+      - strategickhaos_board_net
+
+  # Implementation of IDEA_010 - DAO Treasury Analytics
+  svc-treasury-analytics:
+    image: strategickhaos/dao-treasury-analytics:dev
+    container_name: prod_svc_treasury_analytics
+    depends_on:
+      - svc-llama-analyst
+    environment:
+      - IDEA_ID=IDEA_010
+      - RUN_MODE=concept
+      - PRIMARY_DEPARTMENT=finance
+    volumes:
+      - ./repos/dao-treasury-analytics:/app
+    networks:
+      - strategickhaos_board_net
+
+networks:
+  strategickhaos_board_net:
+    name: strategickhaos_board_net
+    driver: bridge
+
+# Key Takeaways:
+# -------------
+# * Board Roles defined by ENV vars: Each AI board member service gets its 
+#   personality via environment variables (e.g., ROLE=governance_verification_node).
+#
+# * Ideas linked by ID: Each product service knows what it is because we pass 
+#   in IDEA_ID=IDEA_XXX, linking it back to the catalog YAML.
+#
+# * The mental map is complete: You can see how the governance layer (the board 
+#   services at the top) sits above the execution layer (the idea services at the bottom).

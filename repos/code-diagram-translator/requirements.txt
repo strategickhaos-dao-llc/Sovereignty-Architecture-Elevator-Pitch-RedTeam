@@ -1,0 +1,5 @@
+# Code-to-Diagram Translator Dependencies
+# IDEA_002 - StrategicKhaos DAO LLC
+
+# Core dependencies - versions pinned for reproducibility
+# Note: Using minimal dependencies for initial scaffold
