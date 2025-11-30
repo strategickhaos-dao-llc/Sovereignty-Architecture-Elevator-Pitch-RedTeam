@@ -35,3 +35,8 @@ target/
 
 # Workspace data
 workspace/
+
+# AI Board - secrets and runtime data
+secrets/
+audit_logs/
+audit/
