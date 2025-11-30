@@ -1,0 +1,141 @@
+# governance/spec.yaml
+# StrategicKhaos DAO - Master Governance Specification
+# The Constitution - Claude/Grok/Claude-Prime read this to generate everything else
+version: "1.0"
+created: "2025-11-30"
+updated: "2025-11-30"
+
+# Metadata
+metadata:
+  organization: "StrategicKhaos DAO LLC"
+  jurisdiction: "Wyoming"
+  dao_type: "AI-Native Sovereign Software Empire"
+  description: |
+    This is the master governance specification for the StrategicKhaos DAO.
+    It defines the structure, roles, and rules that AI agents follow to
+    generate, deploy, and maintain all system components.
+
+# Board Structure - AI Agents with Roles
+board:
+  composition:
+    - role: "Chief Architecture Officer"
+      agent_id: "claude-3.5"
+      permissions:
+        - generate_specs
+        - review_code
+        - approve_deployments
+      env_var: "BOARD_CAO_AGENT"
+      
+    - role: "Chief Intelligence Officer"
+      agent_id: "grok-4"
+      permissions:
+        - analyze_data
+        - generate_insights
+        - monitor_systems
+      env_var: "BOARD_CIO_AGENT"
+      
+    - role: "Chief Compliance Officer"
+      agent_id: "claude-prime"
+      permissions:
+        - audit_decisions
+        - verify_legal
+        - enforce_policies
+      env_var: "BOARD_CCO_AGENT"
+      
+    - role: "Managing Member"
+      agent_id: "node-137"
+      human_name: "Domenic Garza"
+      permissions:
+        - final_approval
+        - sign_documents
+        - override_agents
+      env_var: "BOARD_MANAGING_MEMBER"
+
+  governance_rules:
+    quorum: 3
+    approval_threshold: 0.66
+    human_override: true
+    audit_trail: true
+
+# Source of Truth
+source_of_truth:
+  ideas_catalog: "ideas/ideas_catalog.yaml"
+  access_matrix: "governance/access_matrix.yaml"
+  ai_constitution: "ai_constitution.yaml"
+  dao_record: "dao_record_v1.0.yaml"
+
+# Infrastructure Generation Rules
+infrastructure:
+  docker_compose:
+    template: "docker-compose.yml"
+    auto_generate_services: true
+    read_from_catalog: true
+    namespace_prefix: "strategickhaos"
+    
+  kubernetes:
+    manifests_path: "k8s/"
+    namespaces:
+      - name: "ns-infra"
+        purpose: "Infrastructure and DevTools services"
+      - name: "ns-education"
+        purpose: "KnowledgePods and educational content"
+      - name: "ns-governance"
+        purpose: "DAO governance and audit services"
+      - name: "ns-agents"
+        purpose: "AI agent orchestration"
+    auto_generate_deployments: true
+    
+  repos:
+    base_path: "repos/"
+    auto_scaffold: true
+    required_files:
+      - "README.md"
+      - "main.py"
+      - "requirements.txt"
+      - "Dockerfile"
+
+# Code Generation Templates
+templates:
+  service:
+    language: "python"
+    framework: "fastapi"
+    port: 8000
+    health_endpoint: "/health"
+    
+  deployment:
+    replicas: 1
+    image_pull_policy: "IfNotPresent"
+    resource_limits:
+      cpu: "500m"
+      memory: "512Mi"
+      
+  knowledge_pod:
+    api_version: "education.strategickhaos.io/v1alpha1"
+    kind: "KnowledgePod"
+
+# Compliance and Legal
+compliance:
+  upl_safe: true
+  nonprofit_powered: true
+  audit_enabled: true
+  gpg_signing_required: true
+  sha256_verification: true
+
+# Network Configuration
+network:
+  starlink_native: true
+  mesh_enabled: true
+  backup_providers:
+    - "verizon"
+    - "local_isp"
+
+# Dividend and Revenue Rules
+revenue:
+  dividend_generating: true
+  distribution_rules:
+    - recipient: "nonprofit_fund"
+      percentage: 30
+    - recipient: "development_fund"
+      percentage: 40
+    - recipient: "community_pool"
+      percentage: 30

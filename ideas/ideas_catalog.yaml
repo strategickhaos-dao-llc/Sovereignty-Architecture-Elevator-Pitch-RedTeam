@@ -1,0 +1,199 @@
+# ideas/ideas_catalog.yaml
+# The 100 Seeds - Single Source of Truth for all Ideas
+# Your birthday gift to humanity - the Constellation Map
+version: "1.0"
+created: "2025-11-30"
+updated: "2025-11-30"
+
+metadata:
+  total_ideas: 100
+  active_ideas: 2
+  maturity_levels:
+    - concept
+    - prototype
+    - beta
+    - production
+  categories:
+    - devtools
+    - education
+    - governance
+    - infrastructure
+    - ai_agents
+    - compliance
+    - analytics
+    - communication
+    - security
+    - automation
+
+# The Living Catalog - Ideas become Services
+ideas:
+  - id: "IDEA_001"
+    title: "Contextual Memory Assistant"
+    category: "ai_agents"
+    maturity_level: "concept"
+    description: |
+      An AI-powered assistant that maintains context across conversations
+      and projects, providing relevant memory recall and suggestions.
+    primary_department: "ai_agents"
+    repo_path: "repos/contextual-memory-assistant/"
+    service_name: "svc-memory-assistant"
+    k8s_namespace: "ns-agents"
+    video_module_id: "Q001"
+    dependencies: []
+    priority: "high"
+    status: "planned"
+
+  - id: "IDEA_002"
+    title: "Code-to-Diagram Translator"
+    category: "devtools"
+    maturity_level: "prototype"
+    description: |
+      Ingests source code and produces machine-readable graph representations
+      of the architecture - functions, classes, and call relationships.
+    primary_department: "infra_cloud"
+    repo_path: "repos/code-diagram-translator/"
+    service_name: "svc-code-diagram"
+    k8s_namespace: "ns-infra"
+    video_module_id: "Q034"
+    dependencies: []
+    priority: "high"
+    status: "active"
+    api_spec:
+      endpoint: "/analyze"
+      method: "POST"
+      input:
+        language: "string"
+        source: "string"
+      output:
+        nodes: "array"
+        edges: "array"
+        meta: "object"
+
+  - id: "IDEA_003"
+    title: "Governance Audit Trail"
+    category: "governance"
+    maturity_level: "concept"
+    description: |
+      Cryptographic audit trail for all DAO governance decisions using
+      Sigstore/cosign and Merkle trees for tamper-proof logging.
+    primary_department: "compliance"
+    repo_path: "repos/governance-audit-trail/"
+    service_name: "svc-audit-trail"
+    k8s_namespace: "ns-governance"
+    video_module_id: "Q002"
+    dependencies: []
+    priority: "high"
+    status: "planned"
+
+  - id: "IDEA_004"
+    title: "KnowledgePod Generator"
+    category: "education"
+    maturity_level: "concept"
+    description: |
+      Automatically generates KnowledgePod CRDs from Bloom's Taxonomy
+      questions, linking educational content to running services.
+    primary_department: "education"
+    repo_path: "repos/knowledgepod-generator/"
+    service_name: "svc-kp-generator"
+    k8s_namespace: "ns-education"
+    video_module_id: "Q003"
+    dependencies:
+      - "IDEA_002"
+    priority: "medium"
+    status: "planned"
+
+  - id: "IDEA_005"
+    title: "AI Board Member Orchestrator"
+    category: "ai_agents"
+    maturity_level: "concept"
+    description: |
+      Multi-agent AI orchestration system for autonomous board member
+      decisions with OPA/Rego policy guardrails.
+    primary_department: "governance"
+    repo_path: "repos/ai-board-orchestrator/"
+    service_name: "svc-board-orchestrator"
+    k8s_namespace: "ns-governance"
+    video_module_id: "Q004"
+    dependencies:
+      - "IDEA_003"
+    priority: "critical"
+    status: "planned"
+
+  # Placeholder entries for remaining ideas (IDEA_006 through IDEA_100)
+  # These will be populated as the constellation grows
+  
+  - id: "IDEA_006"
+    title: "Document Signing Automation"
+    category: "compliance"
+    maturity_level: "concept"
+    description: "Automated document signing with digital signatures and GPG verification."
+    primary_department: "legal"
+    repo_path: "repos/document-signing/"
+    service_name: "svc-doc-signing"
+    k8s_namespace: "ns-governance"
+    video_module_id: "Q005"
+    status: "planned"
+
+  - id: "IDEA_007"
+    title: "Financial Spending Cap Enforcer"
+    category: "governance"
+    maturity_level: "concept"
+    description: "Automated spending cap enforcement with real-time budget monitoring."
+    primary_department: "finance"
+    repo_path: "repos/spending-enforcer/"
+    service_name: "svc-spending-enforcer"
+    k8s_namespace: "ns-governance"
+    video_module_id: "Q006"
+    status: "planned"
+
+  - id: "IDEA_008"
+    title: "Communication Monitor"
+    category: "communication"
+    maturity_level: "concept"
+    description: "Gmail/Google Drive monitoring for board-relevant communications."
+    primary_department: "communications"
+    repo_path: "repos/comm-monitor/"
+    service_name: "svc-comm-monitor"
+    k8s_namespace: "ns-agents"
+    video_module_id: "Q007"
+    status: "planned"
+
+  - id: "IDEA_009"
+    title: "Vector Embedding Audit Logs"
+    category: "security"
+    maturity_level: "concept"
+    description: "SQLite-vec for vector embeddings in audit logs for semantic search."
+    primary_department: "security"
+    repo_path: "repos/vector-audit/"
+    service_name: "svc-vector-audit"
+    k8s_namespace: "ns-governance"
+    video_module_id: "Q008"
+    status: "planned"
+
+  - id: "IDEA_010"
+    title: "Git-Anchored Merkle Roots"
+    category: "security"
+    maturity_level: "concept"
+    description: "Tamper-proof decision logs using Git-anchored Merkle roots."
+    primary_department: "security"
+    repo_path: "repos/merkle-anchor/"
+    service_name: "svc-merkle-anchor"
+    k8s_namespace: "ns-governance"
+    video_module_id: "Q009"
+    status: "planned"
+
+# Template for new ideas
+idea_template:
+  id: "IDEA_XXX"
+  title: ""
+  category: ""
+  maturity_level: "concept"
+  description: ""
+  primary_department: ""
+  repo_path: "repos/<name>/"
+  service_name: "svc-<name>"
+  k8s_namespace: "ns-<namespace>"
+  video_module_id: "Q0XX"
+  dependencies: []
+  priority: "medium"
+  status: "planned"

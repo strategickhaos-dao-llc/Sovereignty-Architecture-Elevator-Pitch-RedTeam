@@ -1,0 +1,34 @@
+apiVersion: education.strategickhaos.io/v1alpha1
+kind: KnowledgePod
+metadata:
+  name: kp-code-diagram-q034
+  namespace: ns-education
+  labels:
+    question-id: Q034
+    idea-id: IDEA_002
+spec:
+  questionId: "Q034"
+  ideaId: "IDEA_002"
+  title: "From Code to Architecture: Visualizing Systems Automatically"
+  description: >
+    Demonstration pod for the Code-to-Diagram Translator service. Students
+    send source code and inspect the resulting graph representation to
+    understand system structure.
+  service:
+    name: code-diagram-translator
+    namespace: ns-infra
+    port: 80
+    path: "/analyze"
+    method: "POST"
+  resources:
+    videoRef: "videos/Q034-code-diagram-translator.mp4"
+    markdownRef: "docs/questions/Q034.md"
+  assessment:
+    type: "short-answer"
+    prompt: >
+      Given a sample output graph, explain how the relationships between
+      nodes help you reason about refactoring opportunities.
+    expectedOutcomes:
+      - "Student recognizes modules, functions, and classes as graph nodes."
+      - "Student can infer potential coupling and responsibility distribution."
+      - "Student can suggest at least one architectural improvement."
