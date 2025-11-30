@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: code-diagram-translator
-          image: strategickhaos/code-diagram-translator:dev
+          image: strategickhaos/code-diagram-translator:v0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
