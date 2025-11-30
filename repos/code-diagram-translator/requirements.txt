@@ -1,5 +1,12 @@
 # Code-to-Diagram Translator Dependencies
 # IDEA_002 - StrategicKhaos DAO LLC
 
-# Core dependencies - versions pinned for reproducibility
-# Note: Using minimal dependencies for initial scaffold
+# This scaffold uses only Python standard library modules:
+# - argparse (CLI argument parsing)
+# - os, sys (system operations)
+# - dataclasses (structured configuration)
+# - pathlib (file path operations)
+# - typing (type hints)
+#
+# No external dependencies required for the initial scaffold.
+# Add dependencies below as the project evolves.

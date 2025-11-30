@@ -24,9 +24,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install Python dependencies
+# Copy requirements and install Python dependencies (if any)
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt || true
+# Note: Initial scaffold uses only standard library; pip install skipped if empty
+RUN if grep -v '^\s*#' requirements.txt | grep -v '^\s*$' | head -1 > /dev/null 2>&1; then \
+        pip install --no-cache-dir -r requirements.txt; \
+    fi
 
 # Copy application code
 COPY . .
