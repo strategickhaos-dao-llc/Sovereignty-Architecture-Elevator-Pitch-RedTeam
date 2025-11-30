@@ -6,6 +6,20 @@ company:
   formation_jurisdiction: "Wyoming"
   formation_date: "2025-06-25"
   dissolution_date: null
+  wyoming_entity_id: "2025-001708194"
+
+affiliated_entities:
+  - name: "ValorYield Engine"
+    type: "501(c)(3) Nonprofit"
+    ein: "39-2923503"
+    status: "Active"
+
+business_accounts:
+  - name: "Skyline Strategies"
+    provider: "Verizon Business"
+    account_id: "942748515-00001"
+    lines_active: 7
+    status: "Active"
 
 contact:
   principal_address:
