@@ -1,0 +1,170 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: elgato-capture
+  labels:
+    app: strategickhaos-synthesis
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elgato-primary-recordings
+  namespace: elgato-capture
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: local-path
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elgato-secondary-recordings
+  namespace: elgato-capture
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: local-path
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elgato-primary-capture
+  namespace: elgato-capture
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elgato-primary
+  template:
+    metadata:
+      labels:
+        app: elgato-primary
+    spec:
+      hostNetwork: true
+      containers:
+      - name: capture-engine
+        image: strategickhaos/elgato-capture:latest
+        securityContext:
+          privileged: true
+        env:
+        - name: CAPTURE_DEVICE
+          value: "/dev/video0"
+        - name: OLLAMA_ENDPOINT
+          value: "http://127.0.0.1:11434"
+        - name: RTMP_ENDPOINT
+          value: "rtmp://192.168.1.175:1935/live/primary"
+        - name: NAS_BACKUP
+          value: "\\\\192.168.4.62\\Intel\\Captures\\Primary"
+        volumeMounts:
+        - name: recordings
+          mountPath: /recordings
+        - name: dev-video
+          mountPath: /dev
+        resources:
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+      volumes:
+      - name: recordings
+        persistentVolumeClaim:
+          claimName: elgato-primary-recordings
+      - name: dev-video
+        hostPath:
+          path: /dev
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elgato-primary-service
+  namespace: elgato-capture
+spec:
+  selector:
+    app: elgato-primary
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http-dashboard
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama-video-analyzer
+  namespace: elgato-capture
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama-analyzer
+  template:
+    metadata:
+      labels:
+        app: ollama-analyzer
+    spec:
+      containers:
+      - name: ollama
+        image: ollama/ollama:latest
+        command: ["ollama", "serve"]
+        ports:
+        - containerPort: 11434
+        env:
+        - name: OLLAMA_MODELS
+          value: "llava:latest"
+        volumeMounts:
+        - name: ollama-data
+          mountPath: /root/.ollama
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: "8Gi"
+            cpu: "4000m"
+      volumes:
+      - name: ollama-data
+        hostPath:
+          path: /mnt/ollama_models
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: elgato-capture
+spec:
+  selector:
+    app: ollama-analyzer
+  ports:
+  - port: 11434
+    targetPort: 11434
+  type: ClusterIP
+  clusterIP: None
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: elgato-dashboard
+  namespace: elgato-capture
+spec:
+  rules:
+  - host: elgato.lyra.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: elgato-primary-service
+            port:
+              number: 8080
