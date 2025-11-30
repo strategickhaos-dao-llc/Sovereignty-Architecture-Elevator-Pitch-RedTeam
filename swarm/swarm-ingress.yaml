@@ -1,3 +1,11 @@
+# Swarm Ingress Configuration
+# NOTE: This is a TEMPLATE file. Replace placeholder values before deployment.
+#
+# Required changes before deployment:
+#   - Replace 'swarm.yourdomain.com' with your actual domain
+#   - Configure DNS to point to your cluster's ingress controller IP
+#   - Ensure cert-manager is installed for TLS certificate provisioning
+#
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -13,9 +21,11 @@ metadata:
 spec:
   tls:
     - hosts:
+        # TODO: Replace with your actual domain
         - swarm.yourdomain.com
       secretName: swarm-tls
   rules:
+    # TODO: Replace with your actual domain
     - host: swarm.yourdomain.com
       http:
         paths:

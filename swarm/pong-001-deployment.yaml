@@ -1,3 +1,13 @@
+# Pong-001 Test Deployment
+# Purpose: First workload for GKE cluster to validate:
+#   - Pod scheduling
+#   - Image pulls
+#   - Authentication
+#   - Cluster connectivity
+#
+# This is a simple test container that stays alive for debugging purposes.
+# Replace with your actual application image for production use.
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,8 +28,37 @@ spec:
     spec:
       containers:
         - name: pong
+          # Using python:3.11-slim as a simple test container
+          # Replace with your actual application image for production
           image: python:3.11-slim
-          command: ["python3", "-c", "import time; print('Pong-001 alive'); time.sleep(3600)"]
+          # Simple HTTP server for testing - exposes port 8000
+          command:
+            - python3
+            - -c
+            - |
+              import http.server
+              import socketserver
+              import os
+
+              PORT = 8000
+              Handler = http.server.SimpleHTTPRequestHandler
+
+              class HealthHandler(http.server.SimpleHTTPRequestHandler):
+                  def do_GET(self):
+                      if self.path == '/health' or self.path == '/':
+                          self.send_response(200)
+                          self.send_header('Content-type', 'text/plain')
+                          self.end_headers()
+                          self.wfile.write(b'Pong-001 alive')
+                      else:
+                          super().do_GET()
+
+              with socketserver.TCPServer(("", PORT), HealthHandler) as httpd:
+                  print(f"Serving at port {PORT}")
+                  httpd.serve_forever()
+          ports:
+            - containerPort: 8000
+              name: http
           env:
             - name: DISCORD_TOKEN
               valueFrom:
@@ -34,18 +73,14 @@ spec:
               memory: "128Mi"
               cpu: "100m"
           livenessProbe:
-            exec:
-              command:
-                - python3
-                - -c
-                - "print('healthy')"
+            httpGet:
+              path: /health
+              port: 8000
             initialDelaySeconds: 10
             periodSeconds: 30
           readinessProbe:
-            exec:
-              command:
-                - python3
-                - -c
-                - "print('ready')"
+            httpGet:
+              path: /health
+              port: 8000
             initialDelaySeconds: 5
             periodSeconds: 10
