@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # sky-uplink.sh
 # Sovereign Sky Command Center - Auto-connect to sovereign mesh
 # Part of the Birthday Deployment - November 30, 2025
