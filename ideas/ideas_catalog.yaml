@@ -1,0 +1,53 @@
+# ideas/ideas_catalog.yaml
+# StrategicKhaos Ideas Catalog — Central Registry of All Software Concepts
+# Version: 2025-11-30
+
+strategickhaos_ideas_catalog:
+  version: "2025-11-30"
+  owner: "StrategicKhaos DAO LLC"
+  purpose: >
+    Central registry of all BS/CS + ecosystem software concepts so AIs or humans
+    can generate specs, videos, docs, and services consistently.
+
+  idea_template:  # how each idea should look
+    id: "IDEA_XXX"
+    title: "Short title"
+    category: "category-name"
+    description: "1–3 sentence description"
+    maturity_level: "concept | research | prototype | mvp | production"
+    primary_department: "education | security_ops | infra_cloud | finance_legal | comms_outreach"
+    repo_path: "repos/<repo-name>/"      # optional
+    service_name: "svc-<short-name>"     # if/when it becomes a microservice
+    k8s_namespace: "ns-<domain>"         # planned namespace
+    video_module_id: "Q###"              # if tied to one of the 100 Bloom's Qs
+    notes: "any freeform notes"
+
+  ideas:
+    - id: "IDEA_001"
+      title: "Contextual Memory Assistant"
+      category: "ai-enhanced-personalization"
+      description: >
+        An assistant that builds a knowledge graph of user interactions and
+        surfaces context-aware prompts and memory support during future tasks.
+      maturity_level: "concept"
+      primary_department: "education"
+      repo_path: "repos/contextual-memory-assistant/"
+      service_name: "svc-contextual-memory"
+      k8s_namespace: "ns-education"
+      video_module_id: "Q001"
+      notes: "High-priority candidate for MVP; tie into BS/CS curriculum."
+
+    - id: "IDEA_002"
+      title: "Code-to-Diagram Translator"
+      category: "devtools"
+      description: >
+        Tool that ingests source code and generates living architecture diagrams
+        that update automatically as the codebase evolves.
+      maturity_level: "concept"
+      primary_department: "infra_cloud"
+      repo_path: "repos/code-diagram-translator/"
+      service_name: "svc-code-diagram"
+      k8s_namespace: "ns-infra"
+      video_module_id: "Q034"
+      notes: "Ideal for KnowledgePod demo; strongly aligned with 100-question set."
+    # ...continue up to IDEA_100

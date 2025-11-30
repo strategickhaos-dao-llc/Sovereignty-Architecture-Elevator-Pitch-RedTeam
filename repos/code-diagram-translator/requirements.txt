@@ -1,0 +1,2 @@
+# Requirements for Code-to-Diagram Translator
+# No external dependencies needed - uses Python stdlib only
