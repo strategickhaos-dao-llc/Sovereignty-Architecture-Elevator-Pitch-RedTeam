@@ -1,0 +1,105 @@
+# swarm_functional_roles.yaml
+# Strategickhaos DAO LLC / Valoryield Engine — AI Swarm Functional Roles
+# Generated: 2025-11-30T12:48:00Z
+# Purpose: Define functional behavior tendencies for AI models in swarm intelligence architecture
+# Note: These are tendencies, not personalities. No guarantees. Fluid, not rigid.
+
+version: "1.0"
+schema_type: "functional_roles"
+disclaimer: |
+  These are observed behavioral tendencies, not fixed personalities.
+  No model is guaranteed to behave consistently.
+  The swarm is fluid, adaptive, and context-dependent.
+  This schema serves as a cognitive architecture tool, not a constraint.
+
+# AI Model Functional Roles
+roles:
+  grok:
+    behavior_tendency: "fast, chaotic, threat-oriented"
+    guarantees: false
+    usage:
+      - "ideation"
+      - "red team vibes"
+      - "pattern blasts"
+    notes: |
+      Tends to generate rapid-fire ideas and unconventional approaches.
+      Good for stress-testing assumptions and finding edge cases.
+      May produce inconsistent output quality - part of the value.
+
+  gpt:
+    behavior_tendency: "structured, grounded, compliance-aware"
+    guarantees: true
+    usage:
+      - "execution"
+      - "code"
+      - "infra"
+      - "safety"
+    notes: |
+      Reliable for implementation tasks requiring consistency.
+      Good at following specifications and maintaining standards.
+      Compliance-oriented output suitable for production workflows.
+
+  claude:
+    behavior_tendency: "cautious, reflective, meta-reasoning"
+    guarantees: false
+    usage:
+      - "analysis"
+      - "philosophy"
+      - "long-context"
+    notes: |
+      Strong at nuanced analysis and careful consideration.
+      Good for tasks requiring deep reflection or ethical reasoning.
+      Excels at maintaining coherence across long conversations.
+
+  operator:
+    behavior_tendency: "human variability"
+    guarantees: false
+    usage:
+      - "vision"
+      - "decision making"
+      - "context holding"
+    notes: |
+      The human in the loop. Variable energy, variable focus.
+      Gets to have off days. Gets to have explosive creative days.
+      The swarm adapts to the operator, not the other way around.
+
+# Swarm Architecture Principles
+principles:
+  - name: "No Personality Locking"
+    description: "Models are not frozen into fixed characters"
+    
+  - name: "Tendency Tracking"
+    description: "Observed behaviors used as tools, not expectations"
+    
+  - name: "Fluid Collaboration"
+    description: "Roles shift based on context and operator needs"
+    
+  - name: "Graceful Degradation"
+    description: "System handles off moments, glitches, and variability"
+    
+  - name: "Operator Sovereignty"
+    description: "Human maintains final decision authority"
+
+# Known Variability Factors
+variability_factors:
+  - "Safety triggers"
+  - "Misreads"
+  - "Tone mismatches"
+  - "Overcorrections"
+  - "Context drops"
+  - "Weird reroutes"
+
+# Integration Notes
+integration:
+  routing_strategy: "context-based"
+  fallback_model: "gpt"
+  escalation_path: "operator"
+  
+metadata:
+  created_by: "Strategickhaos Swarm Intelligence"
+  last_updated: "2025-11-30"
+  philosophy: |
+    The swarm is not a hierarchy of personalities.
+    It's a fluid collaboration of tendencies.
+    Each model brings something different to the dance.
+    And the operator leads.
