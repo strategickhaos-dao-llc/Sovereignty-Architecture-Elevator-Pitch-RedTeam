@@ -1,0 +1,271 @@
+version: '3.8'
+
+# Alexandria Resurrected - Sovereign Research Data Library
+# Docker Compose configuration for RAG-enabled research interface
+
+services:
+  # Qdrant Vector Database - Core vector storage
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: alexandria-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-storage:/qdrant/storage
+      - ./config/qdrant-config.yaml:/qdrant/config/production.yaml:ro
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__LOG_LEVEL=INFO
+    deploy:
+      resources:
+        limits:
+          memory: 32G
+          cpus: '8'
+        reservations:
+          memory: 16G
+          cpus: '4'
+    networks:
+      - alexandria-net
+      - cloudos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Embedding Service - BGE-large for vector generation
+  embedder:
+    image: michaelf34/infinity:latest
+    container_name: alexandria-embedder
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./models:/models:ro,cached
+    environment:
+      - MODEL_ID=BAAI/bge-large-en-v1.5
+      - MAX_BATCH_SIZE=32
+      - MAX_CLIENT_BATCH_SIZE=16
+      - BATCH_SIZE=32
+      - ENGINE=torch
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: '4'
+        reservations:
+          memory: 4G
+          cpus: '2'
+    networks:
+      - alexandria-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # LLM Inference Server - Local model serving
+  llm-server:
+    image: ghcr.io/ggerganov/llama.cpp:server
+    container_name: alexandria-llm
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./models/llama-3-70b-q4.gguf:/models/model.gguf:ro
+    command:
+      - "--model"
+      - "/models/model.gguf"
+      - "--ctx-size"
+      - "128000"
+      - "--n-gpu-layers"
+      - "35"
+      - "--port"
+      - "8080"
+      - "--host"
+      - "0.0.0.0"
+    deploy:
+      resources:
+        limits:
+          memory: 48G
+          cpus: '16'
+        reservations:
+          memory: 32G
+          cpus: '8'
+    networks:
+      - alexandria-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+
+  # Open WebUI - RAG interface for researchers
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: alexandria-webui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui-data:/app/backend/data
+      - ./config/webui-config.json:/app/backend/data/config.json:ro
+    environment:
+      - OLLAMA_BASE_URL=http://llm-server:8080
+      - WEBUI_AUTH=true
+      - WEBUI_NAME=Alexandria Resurrected
+      - WEBUI_URL=https://alexandria.tailscale
+      - ENABLE_RAG=true
+      - RAG_EMBEDDING_MODEL=bge-large-en-v1.5
+      - RAG_EMBEDDING_ENGINE=http://embedder:8081
+      - VECTOR_DB=qdrant
+      - QDRANT_URL=http://qdrant:6333
+      - DOCS_DIR=/data/docs
+      - ENABLE_SIGNUP=false
+      - DEFAULT_USER_ROLE=user
+      - ENABLE_LOGIN_FORM=true
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-this-secret-key}
+    depends_on:
+      - qdrant
+      - embedder
+      - llm-server
+    networks:
+      - alexandria-net
+      - cloudos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.alexandria.rule=Host(`alexandria.localhost`) || Host(`alexandria.tailscale`)"
+      - "traefik.http.routers.alexandria.entrypoints=web"
+      - "traefik.http.services.alexandria.loadbalancer.server.port=8080"
+
+  # Document Ingestor - Repository indexing service
+  ingestor:
+    build:
+      context: ./ingest
+      dockerfile: Dockerfile
+    container_name: alexandria-ingestor
+    restart: on-failure
+    volumes:
+      - ${ALEXANDRIA_DATA_PATH:-/data/alexandria}:/data:ro,cached
+      - ./ingest/config.yml:/app/config.yml:ro
+      - ./ingest/logs:/app/logs
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDER_URL=http://embedder:8081
+      - LOG_LEVEL=INFO
+      - CHUNK_SIZE=512
+      - CHUNK_OVERLAP=64
+      - BATCH_SIZE=32
+    depends_on:
+      - qdrant
+      - embedder
+    networks:
+      - alexandria-net
+    command: ["python", "ingest.py", "--watch"]
+
+  # RAG Retriever API - FastAPI endpoint for queries
+  retriever:
+    build:
+      context: ./retriever
+      dockerfile: Dockerfile
+    container_name: alexandria-retriever
+    restart: unless-stopped
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./retriever/config.yml:/app/config.yml:ro
+      - ./retriever/prompts.yml:/app/prompts.yml:ro
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDER_URL=http://embedder:8081
+      - LLM_URL=http://llm-server:8080
+      - LOG_LEVEL=INFO
+      - RETRIEVAL_K=20
+      - RERANK_K=8
+      - MIN_RELEVANCE=0.7
+    depends_on:
+      - qdrant
+      - embedder
+      - llm-server
+    networks:
+      - alexandria-net
+      - cloudos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rag-api.rule=PathPrefix(`/api/rag`)"
+      - "traefik.http.routers.rag-api.entrypoints=web"
+      - "traefik.http.services.rag-api.loadbalancer.server.port=7000"
+
+  # Access Logger - Query and access monitoring
+  access-logger:
+    build:
+      context: ./monitoring
+      dockerfile: Dockerfile.logger
+    container_name: alexandria-logger
+    restart: unless-stopped
+    volumes:
+      - ./logs:/logs
+      - ./monitoring/logger-config.yml:/app/config.yml:ro
+    environment:
+      - LOG_LEVEL=INFO
+      - RETENTION_DAYS=365
+      - ENCRYPT_QUERIES=true
+      - ENCRYPTION_KEY=${LOG_ENCRYPTION_KEY:-change-this-encryption-key}
+    networks:
+      - alexandria-net
+      - cloudos_network
+    depends_on:
+      - open-webui
+      - retriever
+
+  # Metrics Exporter - Prometheus metrics
+  metrics:
+    image: prom/prometheus:latest
+    container_name: alexandria-metrics
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=90d'
+    networks:
+      - alexandria-net
+      - cloudos_network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  alexandria-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.99.0.0/16
+  cloudos_network:
+    external: true
+
+volumes:
+  qdrant-storage:
+    driver: local
+  open-webui-data:
+    driver: local
+  prometheus-data:
+    driver: local

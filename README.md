@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **[Alexandria Resurrected](ALEXANDRIA_RESURRECTED.md)** - 32 TB sovereign research data library with RAG interface
 
 ## 🚀 Quick Start
 
@@ -279,6 +280,19 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 📚 Documentation
+
+### Core Infrastructure
+- **[Alexandria Resurrected](ALEXANDRIA_RESURRECTED.md)** - 32 TB sovereign research data library
+- **[RECON Stack v2](RECON_STACK_V2.md)** - Windows-native RAG integration
+- **[Strategic Khaos Synthesis](STRATEGIC_KHAOS_SYNTHESIS.md)** - Complete ecosystem overview
+- **[Vault Security Playbook](VAULT_SECURITY_PLAYBOOK.md)** - Security protocols
+
+### Operations & Deployment
+- **[Deployment Guide](DEPLOYMENT.md)** - Complete deployment procedures
+- **[TLS/DNS Configuration](TLS_DNS_CONFIG.md)** - Network setup
+- **[GitLens Integration](GITLENS_INTEGRATION.md)** - VS Code workflow automation
 
 ## 📄 License & Support
 
