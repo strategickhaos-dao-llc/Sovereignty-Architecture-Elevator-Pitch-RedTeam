@@ -68,7 +68,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: translator
-          image: strategickhaos/code-diagram-translator:latest
+          image: strategickhaos/code-diagram-translator:v1.0.0
           imagePullPolicy: IfNotPresent
           env:
             - name: DIAGRAM_FORMAT
@@ -166,7 +166,7 @@ spec:
             runAsGroup: 1000
           containers:
             - name: translator-batch
-              image: strategickhaos/code-diagram-translator:latest
+              image: strategickhaos/code-diagram-translator:v1.0.0
               args:
                 - "/app/input"
                 - "--all"

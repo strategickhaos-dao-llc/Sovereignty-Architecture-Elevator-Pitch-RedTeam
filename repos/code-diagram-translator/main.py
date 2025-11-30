@@ -6,6 +6,8 @@ The First Child - Born from the Birthday Constellation
 
 Analyzes code repositories and generates visual architecture diagrams,
 flowcharts, and dependency graphs using Mermaid, PlantUML, or D2.
+
+Requires Python 3.10+ (uses modern type hint syntax: list[str], str | Path)
 """
 
 import ast
@@ -129,12 +131,21 @@ class CodeAnalyzer:
         return self.result
     
     def _analyze_file(self, file_path: Path) -> None:
-        """Analyze a single file."""
+        """Analyze a single file.
+        
+        To add support for new languages:
+        1. Add the file extension to SUPPORTED_EXTENSIONS
+        2. Create a new _analyze_<language>_file method
+        3. Add a condition here to call the new analyzer
+        
+        Example: For JavaScript support, create _analyze_javascript_file()
+        that parses the AST using a JS parser library.
+        """
         ext = file_path.suffix
         
         if ext == '.py':
             self._analyze_python_file(file_path)
-        # Add more language analyzers here
+        # Future: Add more language analyzers (JS, Go, Rust, etc.)
     
     def _analyze_python_file(self, file_path: Path) -> None:
         """Analyze a Python file using AST."""
