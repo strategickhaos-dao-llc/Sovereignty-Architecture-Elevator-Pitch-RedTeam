@@ -28,7 +28,8 @@ roles:
 
   gpt:
     behavior_tendency: "structured, grounded, compliance-aware"
-    guarantees: true
+    guarantees: false
+    reliability_tendency: "high"
     usage:
       - "execution"
       - "code"
