@@ -1,0 +1,109 @@
+---
+# Immune Operator Deployment
+# The "ribosome" that reads CRD (DNA) and builds immune cells
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immune-operator
+  namespace: kube-system
+  labels:
+    app: swarm-immune-operator
+    component: operator
+    cell-type: ribosome
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swarm-immune-operator
+      component: operator
+  template:
+    metadata:
+      labels:
+        app: swarm-immune-operator
+        component: operator
+        cell-type: ribosome
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: immune-operator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+      containers:
+        - name: operator
+          image: strategickhaos/swarm-immune-operator:latest
+          imagePullPolicy: Always
+          args:
+            - --metrics-bind-address=:8080
+            - --health-probe-bind-address=:8081
+            - --leader-elect=true
+          ports:
+            - name: metrics
+              containerPort: 8080
+              protocol: TCP
+            - name: health
+              containerPort: 8081
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      terminationGracePeriodSeconds: 10
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+---
+# Service for operator metrics
+apiVersion: v1
+kind: Service
+metadata:
+  name: immune-operator-metrics
+  namespace: kube-system
+  labels:
+    app: swarm-immune-operator
+    component: operator
+spec:
+  selector:
+    app: swarm-immune-operator
+    component: operator
+  ports:
+    - name: metrics
+      port: 8080
+      targetPort: metrics
+      protocol: TCP
+  type: ClusterIP

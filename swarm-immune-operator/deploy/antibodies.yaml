@@ -1,0 +1,118 @@
+---
+# Antibody StatefulSet - Qdrant Vector Database
+# Like antibodies remembering past threats, this stores threat signatures
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: antibody-memory
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: antibody
+    vector-db: qdrant
+    managed-by: immune-operator
+spec:
+  serviceName: "qdrant-headless"
+  replicas: 1
+  selector:
+    matchLabels:
+      cell-type: antibody
+      vector-db: qdrant
+  template:
+    metadata:
+      labels:
+        app: swarm-immune
+        cell-type: antibody
+        vector-db: qdrant
+        managed-by: immune-operator
+    spec:
+      containers:
+        - name: qdrant
+          image: qdrant/qdrant:latest
+          ports:
+            - containerPort: 6333
+              name: http
+            - containerPort: 6334
+              name: grpc
+          volumeMounts:
+            - name: antibody-storage
+              mountPath: /qdrant/storage
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: QDRANT__SERVICE__HTTP_PORT
+              value: "6333"
+            - name: QDRANT__SERVICE__GRPC_PORT
+              value: "6334"
+  volumeClaimTemplates:
+    - metadata:
+        name: antibody-storage
+        labels:
+          app: swarm-immune
+          cell-type: antibody
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+---
+# Headless service for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant-headless
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: antibody
+spec:
+  clusterIP: None
+  selector:
+    cell-type: antibody
+    vector-db: qdrant
+  ports:
+    - port: 6333
+      targetPort: 6333
+      name: http
+    - port: 6334
+      targetPort: 6334
+      name: grpc
+---
+# Regular service for client access
+apiVersion: v1
+kind: Service
+metadata:
+  name: antibody-memory
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: antibody
+spec:
+  selector:
+    cell-type: antibody
+    vector-db: qdrant
+  ports:
+    - port: 6333
+      targetPort: 6333
+      name: http
+    - port: 6334
+      targetPort: 6334
+      name: grpc
+  type: ClusterIP

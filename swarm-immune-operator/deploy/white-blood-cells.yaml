@@ -1,0 +1,118 @@
+---
+# White Blood Cell DaemonSet - Falco Security Scanner
+# Like white blood cells defending the body, this scans for threats across all nodes
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: wbc-scanner
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: white-blood
+    scanner: falco
+    managed-by: immune-operator
+spec:
+  selector:
+    matchLabels:
+      cell-type: white-blood
+      scanner: falco
+  template:
+    metadata:
+      labels:
+        app: swarm-immune
+        cell-type: white-blood
+        scanner: falco
+        managed-by: immune-operator
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8765"
+    spec:
+      serviceAccountName: wbc-scanner
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: falco
+          image: falcosecurity/falco:latest
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /host/proc
+              name: proc
+              readOnly: true
+            - mountPath: /host/dev
+              name: dev
+              readOnly: true
+            - mountPath: /host/boot
+              name: boot
+              readOnly: true
+            - mountPath: /host/lib/modules
+              name: lib-modules
+              readOnly: true
+            - mountPath: /host/usr
+              name: usr
+              readOnly: true
+            - mountPath: /host/etc
+              name: etc
+              readOnly: true
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: dev
+          hostPath:
+            path: /dev
+        - name: boot
+          hostPath:
+            path: /boot
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: usr
+          hostPath:
+            path: /usr
+        - name: etc
+          hostPath:
+            path: /etc
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+---
+# ServiceAccount for WBC scanners in strategickhaos namespace
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wbc-scanner
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: white-blood
+---
+# RoleBinding to connect to the cluster-wide scanner role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: wbc-scanner-strategickhaos
+  labels:
+    app: swarm-immune
+subjects:
+  - kind: ServiceAccount
+    name: wbc-scanner
+    namespace: strategickhaos
+roleRef:
+  kind: ClusterRole
+  name: wbc-scanner
+  apiGroup: rbac.authorization.k8s.io
