@@ -2,6 +2,9 @@
 # notarize_cognition.sh
 # REFLEXSHELL BRAIN v1 — IPFS + OpenTimestamps Cognitive State Notarization
 # Strategickhaos DAO LLC — Cryptographic Proof of Neural State Transitions
+#
+# NOTE: For permanent R&D conversation ledger with GPG + OTS Bitcoin attestation,
+#       see the evidence/ directory and evidence/README.md for verification.
 
 set -euo pipefail
 

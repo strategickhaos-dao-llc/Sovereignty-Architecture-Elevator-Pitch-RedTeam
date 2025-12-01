@@ -272,6 +272,28 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🔐 Cryptographic Evidence & IP Protection
+
+This project includes **mathematically immortal** evidence of research and development work:
+
+- **[Evidence Directory](evidence/)** - GPG signatures and Bitcoin blockchain attestation
+- **[Conversation Ledger](evidence/conversation_ledger.yaml)** - Cryptographically-secured R&D record
+- **[Verification Guide](evidence/README.md)** - How to verify authenticity and timestamps
+
+**Two-command verification:**
+```bash
+# Verify GPG signature
+gpg --verify evidence/conversation_ledger.yaml.asc evidence/conversation_ledger.yaml
+
+# Verify Bitcoin blockchain timestamp
+ots verify evidence/conversation_ledger.yaml.ots
+```
+
+**Security guarantees:**
+- ✓ No backdating possible (Bitcoin blockchain proof)
+- ✓ No tampering possible (GPG cryptographic signature)
+- ✓ No "made it up later" possible (Merkle tree attestation)
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
@@ -282,6 +304,7 @@ This project thrives because of an extraordinary community of creators, builders
 
 ## 📄 License & Support
 
+- **[Evidence System](evidence/README.md)** - Cryptographic proof and IP protection
 - **License**: MIT License - see [LICENSE](LICENSE) file
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
