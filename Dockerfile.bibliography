@@ -1,0 +1,38 @@
+# Dockerfile.bibliography
+# Bibliography Service Container
+# Scrapes and indexes academic papers
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies
+RUN apk add --no-cache curl python3 py3-pip
+
+# Copy package files
+COPY package*.json ./
+RUN npm ci --only=production 2>/dev/null || npm install
+
+# Copy source code
+COPY src/chess-collider/bibliography.ts ./src/chess-collider/
+COPY src/config.ts ./src/
+COPY tsconfig.json ./
+
+# Install tsx
+RUN npm install -g tsx
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S bibliography -u 1001
+
+RUN mkdir -p /app/artifacts /app/cache && \
+    chown -R bibliography:nodejs /app
+
+USER bibliography
+
+EXPOSE 8091
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8091/health || exit 1
+
+CMD ["tsx", "src/chess-collider/bibliography-service.ts"]
