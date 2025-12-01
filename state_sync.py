@@ -116,7 +116,7 @@ class SovereignStateSync:
                     "message": "Discord bot NOT found in cluster",
                     "location": "external (Windows laptop?)"
                 }
-        except:
+        except (FileNotFoundError, subprocess.SubprocessError, subprocess.TimeoutExpired):
             return {
                 "status": "cannot_verify",
                 "message": "kubectl not working, can't check bot status"
@@ -169,7 +169,7 @@ class SovereignStateSync:
                     "status": "not_deployed",
                     "message": "Falco NOT deployed"
                 }
-        except:
+        except (FileNotFoundError, subprocess.SubprocessError, subprocess.TimeoutExpired):
             return {
                 "status": "cannot_verify",
                 "message": "kubectl not working"
@@ -245,13 +245,16 @@ class SovereignStateSync:
             hours_awake = op_state.get('hours_awake', 'unknown')
             
             if isinstance(hours_awake, str) and '+' in hours_awake:
-                hours = int(hours_awake.replace('+', ''))
-                if hours > 24:
-                    print(f"❌ Operator NOT READY")
-                    print(f"   Awake: {hours_awake} hours")
-                    print(f"   Recommendation: REST before major decisions")
-                else:
-                    print(f"✅ Operator READY")
+                try:
+                    hours = int(hours_awake.replace('+', ''))
+                    if hours > 24:
+                        print(f"❌ Operator NOT READY")
+                        print(f"   Awake: {hours_awake} hours")
+                        print(f"   Recommendation: REST before major decisions")
+                    else:
+                        print(f"✅ Operator READY")
+                except ValueError:
+                    print(f"⚠️  Invalid hours_awake format: {hours_awake}")
             else:
                 print(f"⚠️  Operator state unknown")
     
