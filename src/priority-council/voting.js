@@ -154,7 +154,10 @@ export class VotingSystem {
     };
 
     for (const vote of votes) {
-      tally[vote.voteType] = (tally[vote.voteType] || 0) + vote.weight;
+      const voteType = vote.voteType;
+      if (voteType in tally) {
+        tally[voteType] += vote.weight;
+      }
     }
 
     const netApproval = tally.approve - tally.reject;
@@ -266,10 +269,10 @@ export class VotingSystem {
         },
         {
           name: 'Votes',
-          value: `✅ Approve: ${results.currentTally.tally.approve}\n` +
-                 `❌ Reject: ${results.currentTally.tally.reject}\n` +
-                 `⬆️ Prioritize: ${results.currentTally.tally.prioritize}\n` +
-                 `⬇️ Deprioritize: ${results.currentTally.tally.deprioritize}`,
+          value: `✅ Approve: ${results.currentTally.tally.approve || 0}\n` +
+                 `❌ Reject: ${results.currentTally.tally.reject || 0}\n` +
+                 `⬆️ Prioritize: ${results.currentTally.tally.prioritize || 0}\n` +
+                 `⬇️ Deprioritize: ${results.currentTally.tally.deprioritize || 0}`,
           inline: false
         },
         {

@@ -151,8 +151,8 @@ export class PriorityCouncil {
 
       // Then by vote count (if voting enabled)
       if (this.config.votingEnabled) {
-        const aVoteScore = a.votes.approve + a.votes.prioritize - a.votes.reject - a.votes.deprioritize;
-        const bVoteScore = b.votes.approve + b.votes.prioritize - b.votes.reject - b.votes.deprioritize;
+        const aVoteScore = (a.votes.approve || 0) + (a.votes.prioritize || 0) - (a.votes.reject || 0) - (a.votes.deprioritize || 0);
+        const bVoteScore = (b.votes.approve || 0) + (b.votes.prioritize || 0) - (b.votes.reject || 0) - (b.votes.deprioritize || 0);
         return bVoteScore - aVoteScore;
       }
 
@@ -204,12 +204,15 @@ export class PriorityCouncil {
     const existingVote = this.votes.get(voteKey);
     
     // Remove previous vote if exists
-    if (existingVote) {
-      entry.votes[existingVote.type] -= existingVote.weight;
+    if (existingVote && existingVote.type in entry.votes) {
+      entry.votes[existingVote.type] = (entry.votes[existingVote.type] || 0) - existingVote.weight;
     }
 
-    // Record new vote
-    entry.votes[voteType] = (entry.votes[voteType] || 0) + weight;
+    // Record new vote - ensure the key exists
+    if (!(voteType in entry.votes)) {
+      entry.votes[voteType] = 0;
+    }
+    entry.votes[voteType] += weight;
     this.votes.set(voteKey, { type: voteType, weight, timestamp: new Date().toISOString() });
     this.stats.votesProcessed++;
 
@@ -223,17 +226,17 @@ export class PriorityCouncil {
    * Check if vote thresholds trigger any actions
    */
   checkVoteThresholds(entry) {
-    const totalVotes = entry.votes.approve + entry.votes.reject + 
-                       entry.votes.prioritize + entry.votes.deprioritize;
+    const totalVotes = (entry.votes.approve || 0) + (entry.votes.reject || 0) + 
+                       (entry.votes.prioritize || 0) + (entry.votes.deprioritize || 0);
 
     if (totalVotes >= this.config.minVotesRequired) {
       // Majority approve -> mark for review
-      if (entry.votes.approve > entry.votes.reject) {
+      if ((entry.votes.approve || 0) > (entry.votes.reject || 0)) {
         entry.status = PRStatus.IN_REVIEW;
       }
       
       // Strong prioritization -> boost priority
-      if (entry.votes.prioritize >= 3) {
+      if ((entry.votes.prioritize || 0) >= 3) {
         entry.analysis.impactScore = Math.min(100, entry.analysis.impactScore + 20);
       }
     }
@@ -256,13 +259,13 @@ export class PriorityCouncil {
    */
   generateCouncilDecision(entry) {
     const { votes } = entry;
-    const netApproval = votes.approve - votes.reject;
-    const netPriority = votes.prioritize - votes.deprioritize;
+    const netApproval = (votes.approve || 0) - (votes.reject || 0);
+    const netPriority = (votes.prioritize || 0) - (votes.deprioritize || 0);
 
     return {
       decision: netApproval >= 0 ? 'approved' : 'rejected',
       priorityAdjustment: netPriority > 0 ? 'boost' : netPriority < 0 ? 'lower' : 'maintain',
-      totalVotes: votes.approve + votes.reject + votes.prioritize + votes.deprioritize,
+      totalVotes: (votes.approve || 0) + (votes.reject || 0) + (votes.prioritize || 0) + (votes.deprioritize || 0),
       consensus: Math.abs(netApproval) >= 3 ? 'strong' : 'weak',
       decidedAt: new Date().toISOString()
     };

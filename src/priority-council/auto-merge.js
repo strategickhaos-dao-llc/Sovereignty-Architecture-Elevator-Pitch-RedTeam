@@ -93,7 +93,7 @@ export class AutoMergeEngine {
     checks.push(ciCheck);
 
     // Approval check
-    const approvals = pr.approvals || (pr.reviews?.filter(r => r.state === 'APPROVED').length) || 0;
+    const approvals = pr.approvals || ((pr.reviews?.filter(r => r.state === 'APPROVED'))?.length ?? 0);
     const approvalCheck = {
       name: 'approvals',
       passed: !this.config.requireApproval || approvals >= this.config.minApprovals,
