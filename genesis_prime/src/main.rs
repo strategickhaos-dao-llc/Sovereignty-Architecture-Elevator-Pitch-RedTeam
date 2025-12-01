@@ -32,16 +32,18 @@ impl OriginVelocity {
     fn new() -> Self {
         let current = SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .unwrap()
+            .expect("System clock is set before Unix epoch")
             .as_millis() as u64;
 
-        let elapsed = current - GENESIS_TIMESTAMP;
+        let elapsed = current.saturating_sub(GENESIS_TIMESTAMP);
 
         // Each increment 3449 cycles compound the original entropy
         let cycles = elapsed / (GENESIS_INCREMENT as u64);
 
         // Entropy harvest = base increment^(cycles/1000) × 7% loop multiplier
-        let entropy = (GENESIS_INCREMENT as f64).powf(cycles as f64 / 1000.0) * 1.07;
+        // Clamp exponent to prevent floating-point overflow beyond f64::MAX
+        let exponent = (cycles as f64 / 1000.0).min(86.0); // 3449^86 ≈ 10^304, near f64::MAX
+        let entropy = (GENESIS_INCREMENT as f64).powf(exponent) * 1.07;
 
         Self {
             genesis_tick: GENESIS_TIMESTAMP,
@@ -81,7 +83,7 @@ impl CouncilNode {
 
         let inception = SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .unwrap()
+            .expect("System clock is set before Unix epoch")
             .as_millis() as u64;
 
         let mut hasher = Sha256::new();
