@@ -35,3 +35,14 @@ target/
 
 # Workspace data
 workspace/
+
+# Sovereign Browser
+logs/
+*.log
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so

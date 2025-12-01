@@ -1,0 +1,33 @@
+# swarm_llm_endpoints.yaml
+# Sovereign Swarm Endpoints Configuration
+# Distributed LLM + Browser + Search Infrastructure
+
+version: "1.0"
+last_updated: "2025-11-21"
+
+# LLM Endpoints
+llm_port: null
+llm_endpoint: null  # e.g., http://ip:llm_port/v1/chat/completions
+
+# Search Endpoints  
+search_port: null
+search_endpoint: null  # e.g., http://ip:search_port/search?q=...
+
+# Browser Endpoints
+browser_port: null
+browser_endpoint: null  # e.g., http://ip:browser_port/browse?url=...
+
+# Configuration Notes
+# - Set these values per machine in your swarm
+# - Each node can have unique VPN exit IP
+# - Ports should be forwarded appropriately
+# - Use internal IPs for swarm-only access
+# - Use external IPs with auth for remote access
+
+# Example Configuration:
+# llm_port: 8000
+# llm_endpoint: "http://192.168.1.100:8000/v1/chat/completions"
+# search_port: 8001  
+# search_endpoint: "http://192.168.1.100:8001/search"
+# browser_port: 8002
+# browser_endpoint: "http://192.168.1.100:8002/browse"
