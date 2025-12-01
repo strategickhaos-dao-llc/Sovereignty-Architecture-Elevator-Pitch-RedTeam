@@ -5,7 +5,7 @@
  * in the Sovereign Control Deck.
  */
 
-import { REST, EmbedBuilder, SlashCommandBuilder, type APIEmbed } from "discord.js";
+import { REST, EmbedBuilder, SlashCommandBuilder, type APIEmbed, type RESTPostAPIChannelMessageJSONBody } from "discord.js";
 import { getChronicleStore } from "./store.js";
 import { CATEGORY_METADATA, STATUS_METADATA, type ChronicleCategory, type ChronicleStatus } from "./types.js";
 
@@ -340,8 +340,6 @@ export async function sendChronicleToChannel(
   channelId: string,
   embeds: APIEmbed[]
 ): Promise<void> {
-  await rest.post(`/channels/${channelId}/messages`, {
-    body: { embeds }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any);
+  const body: RESTPostAPIChannelMessageJSONBody = { embeds };
+  await rest.post(`/channels/${channelId}/messages`, { body });
 }
