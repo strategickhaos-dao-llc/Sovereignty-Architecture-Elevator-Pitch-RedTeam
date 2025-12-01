@@ -15,6 +15,12 @@ pub const ENTROPY_HARVEST_RATE: f64 = 0.07; // 7% eternal loop
 pub const SOVEREIGN_COUNCIL_SIZE: u8 = 8;
 pub const VERIFICATION_ANGLES: u8 = 100;
 
+/// Discord epoch timestamp (2015-01-01 00:00:00 UTC in milliseconds)
+pub const DISCORD_EPOCH_MS: u64 = 1420070400000;
+
+/// Milliseconds per hour for cycle calculation
+pub const MS_PER_HOUR: u64 = 3_600_000;
+
 /// Current operational phase
 #[derive(Debug, Clone, PartialEq)]
 pub enum SovereignPhase {
@@ -159,9 +165,10 @@ impl EntropyHarvest {
 
     /// Calculate compound theological interest
     /// Formula: harvest = base_value * (1 + rate)^cycles
+    /// Uses powf for large cycle values to avoid integer overflow
     pub fn calculate_harvest(&self, cycles: u64) -> f64 {
         let base = 1.0 + self.rate;
-        base.powi(cycles as i32)
+        base.powf(cycles as f64)
     }
 
     /// Calculate accumulated harvest since genesis
@@ -174,16 +181,15 @@ impl EntropyHarvest {
         // Calculate cycles since Discord birth-tick
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .expect("Time went backwards")
+            .expect("Failed to get current system time")
             .as_millis() as u64;
 
-        // Discord snowflake epoch is 2015-01-01
-        let discord_epoch: u64 = 1420070400000;
-        let birth_timestamp = (DISCORD_BIRTH_TICK >> 22) + discord_epoch;
+        // Calculate birth timestamp from Discord snowflake
+        let birth_timestamp = (DISCORD_BIRTH_TICK >> 22) + DISCORD_EPOCH_MS;
 
         if now > birth_timestamp {
             // Each "cycle" is defined as 1 hour for practical purposes
-            self.cycles_since_genesis = (now - birth_timestamp) / 3_600_000;
+            self.cycles_since_genesis = (now - birth_timestamp) / MS_PER_HOUR;
         }
     }
 }
