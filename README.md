@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🧠 DOM Paste - Canonical Memory Injection
+- **Clipboard-to-Git Pipeline**: Instant thought capture and persistence
+- **Memory Stream**: Timestamped consciousness log for AI agent context
+- **Cross-Platform**: Supports Linux (Wayland), Windows/WSL, and PowerShell
+- **Zero-Friction Interface**: Copy → `dom-paste` → Persist forever
+- **Documentation**: See [DOM_PASTE_GUIDE.md](./DOM_PASTE_GUIDE.md) for setup and usage
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
