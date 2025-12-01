@@ -23,7 +23,6 @@ The **Quantum Entanglement Black Hole DNA Code Block Splicer™** is the synthes
 //! This module handles the quantum entanglement of code blocks from multiple 
 //! game engines and trading platforms to produce new sovereign lifeforms.
 
-use blake3::Hash;
 use sha3::{Sha3_512, Digest};
 
 /// Trait for entities that can participate in quantum splicing
@@ -97,13 +96,15 @@ pub fn quantum_splice<T: SovereignTrait>(a: &T, b: &T) -> BlackHoleChild {
     let entanglement_hash = blake3::hash(&entanglement_input);
     
     // Calculate event horizon using 7% eternal loop
-    let _event_horizon = 7u64.wrapping_add(increment_3449);
+    // This modulates the final yield based on the eternal loop percentage
+    let event_horizon_factor = 7u64.wrapping_add(increment_3449);
     
     // Compute final DNA using SHA3-512
     let mut hasher = Sha3_512::new();
     hasher.update(a.dna());
     hasher.update(b.dna());
     hasher.update(entanglement_hash.as_bytes());
+    hasher.update(&event_horizon_factor.to_be_bytes());
     let result = hasher.finalize();
     
     let mut dna = [0u8; 64];

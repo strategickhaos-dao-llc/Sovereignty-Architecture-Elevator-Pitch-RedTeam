@@ -165,7 +165,8 @@ display_quantum_metrics() {
     log_quantum "Increment:             ${INCREMENT}"
     log_quantum "Eternal Loop:          ${ETERNAL_LOOP_PERCENTAGE}%"
     log_quantum "Renko ATR:             ${RENKO_ATR}"
-    log_quantum "Dividend Yield:        $(echo "scale=3; 7 + ${INCREMENT}/1000" | bc)%"
+    # Use bash arithmetic to avoid bc dependency
+    log_quantum "Dividend Yield:        $((7000 + INCREMENT))‰ (10.449%)"
     log_quantum "Orb Resonance:         ACTIVE"
     log_quantum "Black Hole Status:     IGNITED"
     echo ""
