@@ -200,9 +200,17 @@ export class MoonlightSunshineProtocol {
   
   // Generate session key using ECDH
   generateSessionKey(privateKey: crypto.KeyObject, publicKey: crypto.KeyObject): Buffer {
-    const ecdh = crypto.createECDH('secp384r1');
-    ecdh.setPrivateKey(privateKey.export({ type: 'pkcs8', format: 'der' }));
-    return ecdh.computeSecret(publicKey.export({ type: 'spki', format: 'der' }));
+    if (!privateKey || !publicKey) {
+      throw new Error('Both private and public keys are required');
+    }
+    
+    try {
+      const ecdh = crypto.createECDH('secp384r1');
+      ecdh.setPrivateKey(privateKey.export({ type: 'pkcs8', format: 'der' }));
+      return ecdh.computeSecret(publicKey.export({ type: 'spki', format: 'der' }));
+    } catch (error: any) {
+      throw new Error(`Key exchange failed: ${error.message}`);
+    }
   }
 
   // Moonlight: Send encrypted message (night transmission)
@@ -214,11 +222,16 @@ export class MoonlightSunshineProtocol {
   }): MoonlightMessage {
     const { sourceLayerId, targetLayerId, payload, sessionKey } = params;
     
+    // Validate session key
+    if (!sessionKey || sessionKey.length < 32) {
+      throw new Error('Session key must be at least 32 bytes for AES-256');
+    }
+    
     // Generate IV
     const iv = crypto.randomBytes(16);
     
     // Encrypt payload
-    const cipher = crypto.createCipheriv(this.algorithm, sessionKey.slice(0, 32), iv);
+    const cipher = crypto.createCipheriv(this.algorithm, sessionKey.slice(0, 32), iv) as crypto.CipherGCM;
     let encrypted = cipher.update(payload, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     const authTag = cipher.getAuthTag();
@@ -254,7 +267,7 @@ export class MoonlightSunshineProtocol {
     const iv = Buffer.from(ivHex, 'hex');
     const authTag = Buffer.from(authTagHex, 'hex');
 
-    const decipher = crypto.createDecipheriv(this.algorithm, sessionKey.slice(0, 32), iv);
+    const decipher = crypto.createDecipheriv(this.algorithm, sessionKey.slice(0, 32), iv) as crypto.DecipherGCM;
     decipher.setAuthTag(authTag);
     
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');

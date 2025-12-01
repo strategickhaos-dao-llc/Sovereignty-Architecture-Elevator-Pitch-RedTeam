@@ -97,9 +97,10 @@ const CIRCLE_OF_FIFTHS_FREQUENCIES: Record<number, number> = {
   10: 1318.51,  // E6
 };
 
-// Chess piece roles per layer
+// Chess piece roles per layer (64 total: 1 king, 1 queen, 2 rooks, 2 bishops, 2 knights, 56 pawns)
+const PAWN_COUNT = 56;
 const CHESS_ROLES = ['king', 'queen', 'rook', 'rook', 'bishop', 'bishop', 'knight', 'knight', 
-  ...Array(56).fill('pawn')];
+  ...Array(PAWN_COUNT).fill('pawn')];
 
 // =============================================================================
 // API ENDPOINTS

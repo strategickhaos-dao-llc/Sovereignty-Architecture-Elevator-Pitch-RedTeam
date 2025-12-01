@@ -521,11 +521,26 @@ export class ResearchSynthesizer {
   }
 
   private escapeLatex(text: string): string {
-    return text
-      .replace(/\\/g, '\\textbackslash{}')
-      .replace(/[&%$#_{}]/g, '\\$&')
-      .replace(/~/g, '\\textasciitilde{}')
-      .replace(/\^/g, '\\textasciicircum{}');
+    // Escape LaTeX special characters in proper order
+    // First escape backslashes, then other characters
+    const escapeMap: [RegExp, string][] = [
+      [/\\/g, '\\textbackslash{}'],  // Must be first
+      [/&/g, '\\&'],
+      [/%/g, '\\%'],
+      [/\$/g, '\\$'],
+      [/#/g, '\\#'],
+      [/_/g, '\\_'],
+      [/\{/g, '\\{'],
+      [/\}/g, '\\}'],
+      [/~/g, '\\textasciitilde{}'],
+      [/\^/g, '\\textasciicircum{}']
+    ];
+    
+    let result = text;
+    for (const [pattern, replacement] of escapeMap) {
+      result = result.replace(pattern, replacement);
+    }
+    return result;
   }
 
   private escapeXml(text: string): string {
