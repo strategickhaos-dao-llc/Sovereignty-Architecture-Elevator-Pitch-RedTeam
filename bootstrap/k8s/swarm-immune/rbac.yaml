@@ -32,9 +32,8 @@ rules:
   - apiGroups: [""]
     resources: ["pods/log", "pods/status"]
     verbs: ["get", "list"]
-  - apiGroups: [""]
-    resources: ["pods/exec"]
-    verbs: ["create"]
+  # Note: pods/exec is intentionally omitted for security
+  # The controller uses pod deletion and network policies for threat response
 
   # Deployment management (Apoptosis, Circadian scaling)
   - apiGroups: ["apps"]

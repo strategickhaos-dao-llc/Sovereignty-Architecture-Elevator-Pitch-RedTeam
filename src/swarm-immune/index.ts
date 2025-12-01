@@ -87,22 +87,42 @@ export const DEFAULTS = {
   },
 } as const;
 
+// Time conversion constants
+const MS_PER_SECOND = 1000;
+const SECONDS_PER_MINUTE = 60;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+
 /**
  * Parse duration string to milliseconds
+ * @throws Error if duration format is invalid
  */
 export function parseDuration(duration: string): number {
   const match = duration.match(/^(\d+)(s|m|h|d)$/);
-  if (!match) return 0;
+  if (!match) {
+    throw new Error(`Invalid duration format: ${duration}. Expected format: <number><unit> where unit is s, m, h, or d`);
+  }
   
   const value = parseInt(match[1], 10);
   const unit = match[2];
   
   switch (unit) {
-    case 's': return value * 1000;
-    case 'm': return value * 60 * 1000;
-    case 'h': return value * 60 * 60 * 1000;
-    case 'd': return value * 24 * 60 * 60 * 1000;
-    default: return 0;
+    case 's': return value * MS_PER_SECOND;
+    case 'm': return value * SECONDS_PER_MINUTE * MS_PER_SECOND;
+    case 'h': return value * MINUTES_PER_HOUR * SECONDS_PER_MINUTE * MS_PER_SECOND;
+    case 'd': return value * HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE * MS_PER_SECOND;
+    default: throw new Error(`Unknown duration unit: ${unit}`);
+  }
+}
+
+/**
+ * Safely parse duration, returning default on error
+ */
+export function parseDurationSafe(duration: string, defaultMs: number = 0): number {
+  try {
+    return parseDuration(duration);
+  } catch {
+    return defaultMs;
   }
 }
 
@@ -112,9 +132,29 @@ export function parseDuration(duration: string): number {
 export function parseTimeRange(range: string): { start: number; end: number } {
   const [start, end] = range.split('-').map(t => {
     const [hours, minutes] = t.split(':').map(Number);
-    return hours + minutes / 60;
+    return hours + minutes / SECONDS_PER_MINUTE;
   });
   return { start, end };
+}
+
+// Cache for timezone formatters to avoid repeated instantiation
+const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
+/**
+ * Get or create a cached DateTimeFormat for a timezone
+ */
+function getTimezoneFormatter(timezone: string): Intl.DateTimeFormat {
+  let formatter = formatterCache.get(timezone);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false,
+      timeZone: timezone,
+    });
+    formatterCache.set(timezone, formatter);
+  }
+  return formatter;
 }
 
 /**
@@ -126,16 +166,11 @@ export function isInSunshineMode(
 ): boolean {
   const { start, end } = parseTimeRange(sunshineHours);
   
-  // Get current hour in specified timezone
+  // Get current hour in specified timezone using cached formatter
   const now = new Date();
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: false,
-    timeZone: timezone,
-  });
+  const formatter = getTimezoneFormatter(timezone);
   const [hours, minutes] = formatter.format(now).split(':').map(Number);
-  const currentHour = hours + minutes / 60;
+  const currentHour = hours + minutes / SECONDS_PER_MINUTE;
   
   // Handle overnight ranges (e.g., 22:00-06:00)
   if (start < end) {
@@ -199,6 +234,25 @@ export function determinePhase(
   return 'Healthy';
 }
 
+// Cache for compiled allowlist patterns
+const patternCache = new Map<string, RegExp>();
+
+/**
+ * Get or create a cached regex for a glob pattern
+ */
+function getPatternRegex(pattern: string): RegExp {
+  let regex = patternCache.get(pattern);
+  if (!regex) {
+    // Escape special regex characters except * and ?
+    const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&');
+    // Convert glob wildcards to regex
+    const regexStr = '^' + escaped.replace(/\*/g, '.*').replace(/\?/g, '.') + '$';
+    regex = new RegExp(regexStr);
+    patternCache.set(pattern, regex);
+  }
+  return regex;
+}
+
 /**
  * Check if an image matches allowlist patterns
  */
@@ -207,10 +261,7 @@ export function isImageAllowed(
   allowlist: string[]
 ): boolean {
   return allowlist.some(pattern => {
-    // Convert glob pattern to regex
-    const regex = new RegExp(
-      '^' + pattern.replace(/\*/g, '.*').replace(/\?/g, '.') + '$'
-    );
+    const regex = getPatternRegex(pattern);
     return regex.test(image);
   });
 }
