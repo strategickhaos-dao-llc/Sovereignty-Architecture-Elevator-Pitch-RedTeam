@@ -2,6 +2,31 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+---
+
+## 🧠 NEW: Legends of Minds - Unified Agent Orchestration Platform
+
+**Production-grade meta-system for unified agent orchestration with total sovereignty, full automation, and end-to-end audit.**
+
+### Quick Start Legends of Minds
+```bash
+./start-legends-of-minds.sh
+```
+
+**Access Command Center**: http://localhost:8080
+
+**Features**:
+- ✅ 10 Departments (Proof Ledger, Legal Compliance with 30+ laws, GitLens, Refinery MCP, and more)
+- ✅ Universal Web Command Center with live terminal agents
+- ✅ Immutable Proof Action Ledger with blockchain-style hash chain
+- ✅ Multi-jurisdiction legal compliance (US Federal, Wyoming, California, EU, UK)
+- ✅ WebSocket-based terminal agents for command augmentation
+- ✅ Docker-compose orchestration (FastAPI, PostgreSQL, Redis, Qdrant)
+
+**Full Documentation**: [LEGENDS_OF_MINDS_DEPLOYMENT.md](LEGENDS_OF_MINDS_DEPLOYMENT.md)
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +34,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Legends of Minds** - Unified orchestration platform with 10 departments
 
 ## 🚀 Quick Start
 
