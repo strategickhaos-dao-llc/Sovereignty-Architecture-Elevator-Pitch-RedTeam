@@ -96,8 +96,14 @@ def send_mesh_alert(
         formatted_message = f"[{severity.value.upper()}] {message}"
         
         # Truncate if too long for LoRa (max ~237 bytes for TEXT_MESSAGE)
-        if len(formatted_message.encode()) > 230:
-            formatted_message = formatted_message[:227] + "..."
+        # Use byte-safe truncation to handle multi-byte UTF-8 characters
+        max_bytes = 227
+        encoded = formatted_message.encode('utf-8')
+        if len(encoded) > max_bytes:
+            # Truncate by bytes, then decode safely
+            truncated = encoded[:max_bytes]
+            # Decode with error handling to avoid partial character issues
+            formatted_message = truncated.decode('utf-8', errors='ignore') + "..."
             
         interface.sendText(formatted_message)
         logger.info(f"Sent mesh alert: {formatted_message[:50]}...")

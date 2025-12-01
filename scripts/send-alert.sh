@@ -53,11 +53,15 @@ send_sms() {
     
     log_message "INFO" "Sending SMS alert..."
     
+    # Create JSON payload securely using printf to avoid command line exposure
+    local payload
+    payload=$(printf '{"to": "%s", "message": "%s"}' "$recipient" "$message")
+    
     for ((i=1; i<=RETRY_COUNT; i++)); do
-        if curl -s -X POST "$api_endpoint/send" \
+        if printf '%s' "$payload" | curl -s -X POST "$api_endpoint/send" \
             -H "Authorization: Bearer $api_key" \
             -H "Content-Type: application/json" \
-            -d "{\"to\": \"$recipient\", \"message\": \"$message\"}" \
+            -d @- \
             --max-time 10 > /dev/null 2>&1; then
             log_message "INFO" "SMS sent successfully"
             return 0
@@ -91,10 +95,14 @@ send_satellite() {
         return 1
     fi
     
+    # Create JSON payload securely
+    local payload
+    payload=$(printf '{"message": "%s"}' "$message")
+    
     for ((i=1; i<=RETRY_COUNT; i++)); do
-        if curl -s -X POST "$satellite_endpoint/message" \
+        if printf '%s' "$payload" | curl -s -X POST "$satellite_endpoint/message" \
             -H "Content-Type: application/json" \
-            -d "{\"message\": \"$message\"}" \
+            -d @- \
             --max-time 30 > /dev/null 2>&1; then
             log_message "INFO" "Satellite message sent successfully"
             return 0
@@ -156,10 +164,14 @@ send_vpn() {
         return 1
     fi
     
+    # Create JSON payload securely
+    local payload
+    payload=$(printf '{"text": "%s", "source": "sovereignty-alerts"}' "$message")
+    
     for ((i=1; i<=RETRY_COUNT; i++)); do
-        if curl -s -X POST "$vpn_webhook" \
+        if printf '%s' "$payload" | curl -s -X POST "$vpn_webhook" \
             -H "Content-Type: application/json" \
-            -d "{\"text\": \"$message\", \"source\": \"sovereignty-alerts\"}" \
+            -d @- \
             --max-time 10 > /dev/null 2>&1; then
             log_message "INFO" "VPN mesh message sent successfully"
             return 0
