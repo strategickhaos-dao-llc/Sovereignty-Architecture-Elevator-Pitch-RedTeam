@@ -20,6 +20,10 @@ on:
         default: 'false'
         type: boolean
 
+# Default permissions for all jobs
+permissions:
+  contents: read
+
 env:
   PAPERS_DIR: papers
   OUTPUT_DIR: dist/papers
@@ -28,6 +32,8 @@ jobs:
   compile-latex:
     name: Compile LaTeX to PDF
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -63,6 +69,8 @@ jobs:
     name: Verify Citations
     runs-on: ubuntu-latest
     needs: compile-latex
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -134,6 +142,8 @@ jobs:
     name: Grammar and Style Check
     runs-on: ubuntu-latest
     needs: compile-latex
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -164,6 +174,8 @@ jobs:
     name: Plagiarism Check
     runs-on: ubuntu-latest
     needs: compile-latex
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -253,6 +265,8 @@ jobs:
     needs: [compile-latex, verify-citations]
     if: ${{ github.event.inputs.publish_arxiv == 'true' }}
     environment: arxiv-production
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -284,6 +298,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [deploy-github-pages]
     if: always()
+    permissions: {}  # No permissions needed for this job
     
     steps:
       - name: Send Discord notification

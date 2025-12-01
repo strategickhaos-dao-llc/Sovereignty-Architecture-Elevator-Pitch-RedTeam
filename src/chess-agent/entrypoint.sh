@@ -19,9 +19,13 @@ if [ -f /frequency/agent_frequency ]; then
     echo "Frequency: ${FREQUENCY_HZ} Hz"
 fi
 
-# Start SSH server in background (for debugging)
-if [ -x /usr/sbin/sshd ]; then
-    sudo /usr/sbin/sshd -D &
+# Note: SSH server is disabled by default for security
+# For debugging, use kubectl exec instead:
+#   kubectl exec -it <pod-name> -n chess-council -- /bin/bash
+# If SSH is absolutely required, enable via ENABLE_SSH=true environment variable
+if [ "${ENABLE_SSH:-false}" = "true" ] && [ -x /usr/sbin/sshd ]; then
+    echo "WARNING: SSH server enabled - use only in development"
+    /usr/sbin/sshd -D &
     echo "SSH server started on port 22"
 fi
 

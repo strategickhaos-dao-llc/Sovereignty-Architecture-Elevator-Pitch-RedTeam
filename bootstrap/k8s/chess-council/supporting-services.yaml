@@ -5,6 +5,7 @@
 
 # ═══════════════════════════════════════════════════════════
 # Ollama Service - Local LLM Inference
+# GPU sharing enabled - adjust replicas based on GPU availability
 # ═══════════════════════════════════════════════════════════
 apiVersion: apps/v1
 kind: Deployment
@@ -14,7 +15,7 @@ metadata:
   labels:
     app: ollama-service
 spec:
-  replicas: 4  # Multiple replicas for load balancing
+  replicas: 1  # Reduced to 1 replica - scale based on available GPUs
   selector:
     matchLabels:
       app: ollama-service
@@ -30,11 +31,12 @@ spec:
             requests:
               cpu: "8"
               memory: "32Gi"
-              nvidia.com/gpu: "1"
+              # GPU optional - remove if running on CPU-only nodes
+              # nvidia.com/gpu: "1"
             limits:
               cpu: "16"
               memory: "64Gi"
-              nvidia.com/gpu: "1"
+              # nvidia.com/gpu: "1"
           ports:
             - containerPort: 11434
               name: api

@@ -289,8 +289,22 @@ class ChessAgent:
                 )
                 response.raise_for_status()
                 return response.json().get("message", {}).get("content", "")
+            except httpx.HTTPStatusError as e:
+                logger.error(
+                    f"LLM query failed - model: {model}, status: {e.response.status_code}, "
+                    f"prompt_length: {len(prompt)}, host: {self.config.ollama_host}"
+                )
+                raise
+            except httpx.RequestError as e:
+                logger.error(
+                    f"LLM request error - model: {model}, host: {self.config.ollama_host}, "
+                    f"error: {type(e).__name__}: {e}"
+                )
+                raise
             except Exception as e:
-                logger.error(f"LLM query failed: {e}")
+                logger.error(
+                    f"LLM unexpected error - model: {model}, error: {type(e).__name__}: {e}"
+                )
                 raise
     
     # ═══════════════════════════════════════════════════════════════════════════

@@ -130,6 +130,8 @@ stringData:
 ---
 # ═══════════════════════════════════════════════════════════
 # Shared PVC for Bibliography Cache
+# Note: Uses 'standard' storage class by default
+# Override with: kubectl apply -f ... --set storageClassName=<your-class>
 # ═══════════════════════════════════════════════════════════
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -142,10 +144,13 @@ spec:
   resources:
     requests:
       storage: 500Gi
-  storageClassName: standard-rwx
+  # Note: Change to your cluster's RWX-capable storage class
+  # Common options: nfs, efs, azurefile, gcs-fuse-csi
+  storageClassName: standard
 ---
 # ═══════════════════════════════════════════════════════════
 # Shared PVC for Game Logs
+# Note: Uses 'standard' storage class by default
 # ═══════════════════════════════════════════════════════════
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -158,7 +163,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: standard-rwx
+  storageClassName: standard
 ---
 # ═══════════════════════════════════════════════════════════
 # ResourceQuota for Chess Council Namespace

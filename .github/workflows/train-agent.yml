@@ -21,6 +21,10 @@ on:
         default: 'true'
         type: boolean
 
+# Default permissions for all jobs
+permissions:
+  contents: read
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/chess-agent
@@ -29,6 +33,8 @@ jobs:
   evaluate-performance:
     name: Evaluate Agent Performance
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       top_agents: ${{ steps.evaluate.outputs.top_agents }}
       performance_report: ${{ steps.evaluate.outputs.report }}
@@ -94,6 +100,8 @@ jobs:
     name: Generate Training Data
     runs-on: ubuntu-latest
     needs: evaluate-performance
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -155,6 +163,8 @@ jobs:
     name: Fine-tune Agent Models
     runs-on: ubuntu-latest
     needs: generate-training-data
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -252,6 +262,8 @@ jobs:
     needs: build-updated-image
     if: ${{ github.event.inputs.deploy_updated != 'false' }}
     environment: production
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -284,13 +296,20 @@ jobs:
       - name: Promote to 50%
         run: |
           echo "Promoting to 50% of agents..."
-          # kubectl rollout resume deployment/chess-agents
+          # In production, update 5 of 10 boards:
+          # for board in 0 1 2 3 4; do
+          #   kubectl set image statefulset/chess-board-$board -n chess-council agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # done
           sleep 5
           echo "Promoted to 50%"
       
       - name: Promote to 100%
         run: |
           echo "Promoting to 100% of agents..."
+          # In production, update remaining boards:
+          # for board in 5 6 7 8 9; do
+          #   kubectl set image statefulset/chess-board-$board -n chess-council agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # done
           sleep 5
           echo "Full deployment complete"
   
@@ -299,6 +318,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [evaluate-performance, deploy-canary]
     if: always()
+    permissions: {}  # No permissions needed for this job
     
     steps:
       - name: Send Discord notification

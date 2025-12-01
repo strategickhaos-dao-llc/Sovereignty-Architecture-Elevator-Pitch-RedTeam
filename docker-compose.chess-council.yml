@@ -74,7 +74,9 @@ services:
     environment:
       POSTGRES_DB: chess_council
       POSTGRES_USER: chess_admin
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
+      # SECURITY: Always set POSTGRES_PASSWORD environment variable
+      # Never use default passwords in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD environment variable is required}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./bootstrap/k8s/chess-council/init-schema.sql:/docker-entrypoint-initdb.d/01-init-schema.sql
