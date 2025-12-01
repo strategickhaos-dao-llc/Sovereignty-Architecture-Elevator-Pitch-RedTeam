@@ -112,8 +112,11 @@ show_urls() {
 start_services() {
     echo -e "${GREEN}Starting Mirror Lab services...${NC}"
     
-    # Create necessary directories
-    mkdir -p mirror-lab/redis
+    # Create necessary directories with error handling
+    if ! mkdir -p mirror-lab/redis 2>/dev/null; then
+        echo -e "${RED}Error: Failed to create mirror-lab/redis directory${NC}"
+        exit 1
+    fi
     
     # Build and start containers
     docker compose -f docker-compose.mirror-lab.yml up -d --build

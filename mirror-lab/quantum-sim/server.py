@@ -11,7 +11,7 @@ Features:
 
 import os
 import json
-import asyncio
+import time
 import threading
 from datetime import datetime
 from flask import Flask, render_template_string, jsonify, request
@@ -97,8 +97,15 @@ def run_simulation_step():
     
     # Calculate "energy" from measurement results (simplified)
     total_counts = sum(counts.values())
-    weighted_sum = sum(int(k, 2) * v for k, v in counts.items())
-    normalized = weighted_sum / (total_counts * (2**num_qubits - 1))
+    # Safely convert binary strings to integers, filtering invalid keys
+    weighted_sum = 0
+    for k, v in counts.items():
+        try:
+            if all(c in '01' for c in k):  # Validate binary string
+                weighted_sum += int(k, 2) * v
+        except ValueError:
+            continue  # Skip invalid keys
+    normalized = weighted_sum / (total_counts * (2**num_qubits - 1)) if total_counts > 0 else 0
     
     # Convergence towards target energy
     progress = simulation_state['current_iteration'] / simulation_state['total_iterations']
@@ -129,7 +136,7 @@ def simulation_loop():
     while True:
         if simulation_state['status'] == 'running':
             run_simulation_step()
-        asyncio.run(asyncio.sleep(0.5))  # Run every 500ms
+        time.sleep(0.5)  # Run every 500ms
 
 # Start background thread
 sim_thread = threading.Thread(target=simulation_loop, daemon=True)
