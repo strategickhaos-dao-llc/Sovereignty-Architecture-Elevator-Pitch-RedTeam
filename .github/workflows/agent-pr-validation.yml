@@ -1,0 +1,149 @@
+name: Agent PR Validation
+
+# This workflow validates PRs opened by agents to ensure compliance with
+# our agent authorization model
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+  contents: read
+  statuses: write
+
+jobs:
+  validate-agent-pr:
+    name: Validate Agent PR Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if PR author is a bot
+        id: check_bot
+        run: |
+          AUTHOR="${{ github.event.pull_request.user.login }}"
+          BOT_SUFFIX="[bot]"
+          
+          if [[ "$AUTHOR" == *"$BOT_SUFFIX" ]] || [[ "$AUTHOR" == "copilot"* ]] || [[ "$AUTHOR" == "github-actions"* ]]; then
+            echo "is_bot=true" >> $GITHUB_OUTPUT
+            echo "✅ PR author is a bot: $AUTHOR"
+          else
+            echo "is_bot=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ PR author is not a bot: $AUTHOR"
+          fi
+
+      - name: Validate branch name for bot PRs
+        if: steps.check_bot.outputs.is_bot == 'true'
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          ALLOWED_PREFIXES=("copilot/" "agent/" "feature/")
+          
+          VALID=false
+          for prefix in "${ALLOWED_PREFIXES[@]}"; do
+            if [[ "$BRANCH" == "$prefix"* ]]; then
+              VALID=true
+              break
+            fi
+          done
+          
+          if [ "$VALID" = false ]; then
+            echo "❌ ERROR: Bot PR branch '$BRANCH' does not follow naming convention"
+            echo "Allowed prefixes: ${ALLOWED_PREFIXES[*]}"
+            echo "Please create branches with names like: copilot/feature-name"
+            exit 1
+          fi
+          
+          echo "✅ Branch name '$BRANCH' is valid"
+
+      - name: Check for forbidden file changes
+        if: steps.check_bot.outputs.is_bot == 'true'
+        run: |
+          # List of file patterns that agents should not modify
+          FORBIDDEN_PATTERNS=(
+            "*.key"
+            "*.pem"
+            "kubeconfig*"
+            ".env"
+            "secrets.yaml"
+            "secrets.yml"
+          )
+          
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          echo ""
+          
+          VIOLATIONS=""
+          for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
+            MATCHES=$(echo "$CHANGED_FILES" | grep -E "$pattern" || true)
+            if [ -n "$MATCHES" ]; then
+              VIOLATIONS="$VIOLATIONS\n$MATCHES"
+            fi
+          done
+          
+          if [ -n "$VIOLATIONS" ]; then
+            echo "❌ ERROR: Bot PR contains forbidden file changes:"
+            echo -e "$VIOLATIONS"
+            echo ""
+            echo "Agents cannot modify sensitive files like secrets, keys, or kubeconfigs"
+            exit 1
+          fi
+          
+          echo "✅ No forbidden file changes detected"
+
+      - name: Scan for secrets in PR
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: true
+          GITLEAKS_NOTIFY_USER_LIST: "@Strategickhaos"
+
+      - name: Validate PR description
+        if: steps.check_bot.outputs.is_bot == 'true'
+        run: |
+          DESCRIPTION="${{ github.event.pull_request.body }}"
+          
+          if [ -z "$DESCRIPTION" ]; then
+            echo "⚠️ WARNING: PR has no description"
+            echo "Consider adding a description explaining the changes"
+          else
+            echo "✅ PR has description"
+          fi
+
+      - name: Comment on PR with validation results
+        if: steps.check_bot.outputs.is_bot == 'true' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🤖 Agent PR Validation Passed ✅
+              
+              This PR from \`${{ github.event.pull_request.user.login }}\` has passed automated compliance checks:
+              
+              - ✅ Branch name follows convention (\`${{ github.event.pull_request.head.ref }}\`)
+              - ✅ No forbidden file types detected
+              - ✅ No secrets detected in changes
+              
+              ### Next Steps:
+              - **Human review required** before merge
+              - See [AGENT_AUTHORIZATION_MODEL.md](../AGENT_AUTHORIZATION_MODEL.md) for details
+              
+              *This is an automated message from the Agent Authorization Model*`
+            })
+
+      - name: Report validation status
+        run: |
+          if [ "${{ steps.check_bot.outputs.is_bot }}" == "true" ]; then
+            echo "🤖 Agent PR validation complete"
+          else
+            echo "👤 Human PR - standard review process applies"
+          fi

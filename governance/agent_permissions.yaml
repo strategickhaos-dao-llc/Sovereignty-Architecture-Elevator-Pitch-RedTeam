@@ -1,0 +1,306 @@
+# agent_permissions.yaml
+# Explicit permission model for GitHub Copilot Agents
+# Version: 1.0
+# Last Updated: 2025-11-21
+
+version: "1.0"
+scope: "Strategickhaos DAO LLC / Sovereignty Architecture"
+
+# ============================================================================
+# AGENT IDENTITY & AUTHORIZATION
+# ============================================================================
+
+agents:
+  github_copilot:
+    type: "github_app"
+    installation_level: "organization"  # or "repository"
+    scopes:
+      # What the agent can read
+      read:
+        - "repository_contents"
+        - "repository_metadata"
+        - "issues"
+        - "pull_requests"
+        - "commit_statuses"
+      
+      # What the agent can write (always via PR)
+      write:
+        - "pull_requests"  # Create, update PRs
+        - "issues"         # Comment on issues
+        - "contents"       # Edit files via PR branches only
+      
+      # What the agent CANNOT do
+      forbidden:
+        - "merge_pull_requests"      # Human approval required
+        - "push_to_protected_branch" # Branch protection enforced
+        - "delete_repository"
+        - "modify_settings"
+        - "manage_secrets"
+        - "manage_webhooks"
+        - "admin_access"
+
+# ============================================================================
+# REPOSITORY PERMISSIONS
+# ============================================================================
+
+repository_access:
+  branches:
+    protected:
+      - "main"
+      - "develop"
+      - "release/*"
+    
+    agent_can_create:
+      - "copilot/*"
+      - "agent/*"
+      - "feature/*"
+    
+    agent_cannot_push_to:
+      - "main"
+      - "develop"
+      - "release/*"
+      - "hotfix/*"
+  
+  pull_requests:
+    agent_can:
+      - "create"
+      - "update_description"
+      - "add_comments"
+      - "request_review"
+      - "add_labels"
+    
+    agent_cannot:
+      - "merge"
+      - "approve"
+      - "dismiss_review"
+      - "close_without_approval"
+    
+    required_reviews:
+      minimum_count: 1
+      dismiss_stale: true
+      require_code_owner: true
+  
+  files:
+    agent_can_edit:
+      - "**/*.md"           # Documentation
+      - "**/*.yaml"         # Configurations
+      - "**/*.yml"          # Configurations
+      - "**/*.json"         # Configurations
+      - "**/*.ts"           # TypeScript code
+      - "**/*.js"           # JavaScript code
+      - "**/*.py"           # Python code
+      - "**/*.sh"           # Shell scripts
+      - "Dockerfile*"       # Container configs
+      - "docker-compose*.yml"
+    
+    agent_must_not_edit:
+      - ".github/workflows/*-prod.yml"  # Prod workflows need extra review
+      - "governance/**/*"                # Governance changes need review
+      - "SECURITY.md"                    # Security policy needs review
+    
+    agent_cannot_create:
+      - "**/.env"           # No secrets
+      - "**/*.key"          # No keys
+      - "**/*.pem"          # No certificates
+      - "**/kubeconfig*"    # No cluster configs
+
+# ============================================================================
+# INFRASTRUCTURE ACCESS (what agents CANNOT access)
+# ============================================================================
+
+infrastructure_boundaries:
+  local_systems:
+    kubernetes_desktop: "NO_ACCESS"
+    docker_desktop: "NO_ACCESS"
+    k3s_cluster: "NO_ACCESS"
+    local_kubeconfig: "NO_ACCESS"
+    local_machines: "NO_ACCESS"
+    network_devices: "NO_ACCESS"
+  
+  cloud_systems:
+    kubernetes_clusters: "NO_ACCESS"  # Only via approved CI/CD
+    aws_account: "NO_ACCESS"
+    gcp_account: "NO_ACCESS"
+    azure_account: "NO_ACCESS"
+    cloud_databases: "NO_ACCESS"
+    cloud_storage: "NO_ACCESS"
+  
+  secrets:
+    github_secrets: "NO_ACCESS"
+    vault: "NO_ACCESS"
+    api_keys: "NO_ACCESS"
+    kubeconfigs: "NO_ACCESS"
+    tls_certificates: "NO_ACCESS"
+  
+  ci_cd:
+    github_actions: "NO_DIRECT_TRIGGER"  # Only via PR merge
+    deployment_environments: "NO_ACCESS"
+    workflow_secrets: "NO_ACCESS"
+
+# ============================================================================
+# WORKFLOW PERMISSIONS
+# ============================================================================
+
+workflows:
+  agent_interaction:
+    # Agent workflow: Create PR → Human Review → Human Merge → CI/CD Deploy
+    steps:
+      1_create_branch:
+        agent_can: true
+        branch_pattern: "copilot/*"
+      
+      2_commit_changes:
+        agent_can: true
+        to_branches: ["copilot/*", "agent/*", "feature/*"]
+      
+      3_open_pull_request:
+        agent_can: true
+        target_branches: ["main", "develop"]
+      
+      4_request_review:
+        agent_can: true
+        reviewers: ["CODEOWNERS", "team-members"]
+      
+      5_merge_pull_request:
+        agent_can: false
+        requires: "human_approval"
+      
+      6_trigger_deployment:
+        agent_can: false
+        triggered_by: "merge_event"
+        requires: "ci_cd_workflow"
+  
+  deployment_gates:
+    lab:
+      auto_deploy: false  # Recommended: manual kubectl apply
+      requires_approval: false
+      blast_radius: "local_only"
+    
+    dev:
+      auto_deploy: true   # OK for dev environment
+      requires_approval: false
+      blast_radius: "dev_namespace"
+      on_branch: "develop"
+    
+    staging:
+      auto_deploy: true
+      requires_approval: true  # Wait timer
+      blast_radius: "staging_namespace"
+      on_branch: "main"
+      wait_minutes: 2
+    
+    production:
+      auto_deploy: false
+      requires_approval: true
+      blast_radius: "production_namespace"
+      on_branch: "main"
+      trigger: "manual_workflow_dispatch"
+      required_reviewers: ["@strategickhaos-admins"]
+      wait_minutes: 5
+
+# ============================================================================
+# AUDIT & MONITORING
+# ============================================================================
+
+audit:
+  log_all:
+    - "agent_pr_creation"
+    - "agent_file_edits"
+    - "agent_comments"
+    - "pr_approvals"
+    - "pr_merges"
+    - "workflow_triggers"
+    - "deployment_events"
+  
+  alert_on:
+    - "agent_attempts_protected_branch_push"
+    - "agent_attempts_merge"
+    - "agent_edits_forbidden_file"
+    - "unusual_pr_volume"
+    - "failed_deployment"
+    - "secret_access_attempt"
+  
+  destinations:
+    - "github_audit_log"
+    - "discord_#alerts"
+    - "kubernetes_audit_log"
+    - "loki"
+
+# ============================================================================
+# ESCALATION & EXCEPTIONS
+# ============================================================================
+
+exceptions:
+  # If agent needs expanded permissions, require:
+  process:
+    1_request: "Open issue with tag 'agent-permission-request'"
+    2_review: "Team reviews in #agents Discord channel"
+    3_approve: "Requires consensus from @strategickhaos-admins"
+    4_document: "Update this file with new permissions"
+    5_audit: "Review after 30 days, revoke if not needed"
+  
+  emergency_revocation:
+    # If agent behaves unexpectedly:
+    immediate_actions:
+      - "Suspend GitHub App installation"
+      - "Lock all protected branches"
+      - "Review recent PRs and commits"
+      - "Alert team in Discord #alerts"
+      - "Document incident"
+    
+    contact:
+      primary: "Domenic Garza"
+      discord: "#alerts"
+      email: "admin@strategickhaos.com"
+
+# ============================================================================
+# COMPLIANCE & VALIDATION
+# ============================================================================
+
+validation:
+  quarterly_review:
+    next_date: "2026-02-21"
+    reviewer: "Domenic Garza"
+    checklist:
+      - "Verify agent scopes match GitHub App config"
+      - "Review recent agent PRs for patterns"
+      - "Check for permission violations in audit logs"
+      - "Update documentation if needed"
+      - "Test branch protection rules"
+  
+  automated_checks:
+    - name: "Branch protection enforced"
+      script: ".github/scripts/check-branch-protection.sh"
+      frequency: "weekly"
+    
+    - name: "No secrets in repo"
+      tool: "gitleaks"
+      frequency: "on_commit"
+    
+    - name: "CODEOWNERS file valid"
+      script: ".github/scripts/validate-codeowners.sh"
+      frequency: "on_pr"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  documentation:
+    - "AGENT_AUTHORIZATION_MODEL.md"
+    - "SECURITY.md"
+    - "VAULT_SECURITY_PLAYBOOK.md"
+  
+  github_settings:
+    - "Repository → Settings → Branches → Branch protection rules"
+    - "Repository → Settings → Environments → Production"
+    - "Organization → Settings → GitHub Apps → Copilot"
+  
+  external:
+    - "https://docs.github.com/en/apps/creating-github-apps/setting-up-a-github-app/choosing-permissions-for-a-github-app"
+    - "https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment"
+
+# Notes:
+# - This file is declarative and should be synced with actual GitHub settings
+# - Any deviation should be flagged in quarterly review
+# - Principle: Explicit is better than implicit for security

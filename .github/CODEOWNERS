@@ -1,0 +1,87 @@
+# CODEOWNERS
+# 
+# This file defines who must review and approve changes to specific parts
+# of the repository. GitHub will automatically request reviews from these
+# people when a PR touches the specified paths.
+#
+# Learn more: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ==============================================================================
+# DEFAULT OWNERSHIP
+# ==============================================================================
+# Default owner for everything in the repo
+* @Strategickhaos
+
+# ==============================================================================
+# CRITICAL INFRASTRUCTURE & SECURITY
+# ==============================================================================
+
+# Kubernetes manifests - changes affect deployed infrastructure
+/bootstrap/k8s/ @Strategickhaos
+bootstrap/k8s/rbac.yaml @Strategickhaos
+bootstrap/k8s/*-deployment.yaml @Strategickhaos
+bootstrap/k8s/ingress.yaml @Strategickhaos
+
+# GitHub Actions workflows - changes affect CI/CD pipeline
+/.github/workflows/ @Strategickhaos
+.github/workflows/*-prod.yml @Strategickhaos
+
+# Security and governance documents
+/SECURITY.md @Strategickhaos
+/AGENT_AUTHORIZATION_MODEL.md @Strategickhaos
+/VAULT_SECURITY_PLAYBOOK.md @Strategickhaos
+/governance/ @Strategickhaos
+
+# Docker configurations affecting production
+/Dockerfile.* @Strategickhaos
+/docker-compose*.yml @Strategickhaos
+
+# ==============================================================================
+# CONFIGURATION FILES
+# ==============================================================================
+
+# Discovery and core configuration
+/discovery.yml @Strategickhaos
+/discovery-scaffold.yml @Strategickhaos
+
+# Environment configuration examples
+/.env.example @Strategickhaos
+
+# Package dependencies (security implications)
+/package.json @Strategickhaos
+/package-lock.json @Strategickhaos
+/requirements*.txt @Strategickhaos
+
+# ==============================================================================
+# LEGAL & COMPLIANCE
+# ==============================================================================
+
+/legal/ @Strategickhaos
+/LICENSE @Strategickhaos
+/dao_record*.yaml @Strategickhaos
+
+# ==============================================================================
+# SCRIPTS WITH DEPLOYMENT IMPACT
+# ==============================================================================
+
+# Deployment scripts
+/deploy-*.sh @Strategickhaos
+/bootstrap/deploy.sh @Strategickhaos
+/*-deploy.sh @Strategickhaos
+/quick-deploy.sh @Strategickhaos
+
+# Infrastructure scripts
+/activate_control_plane.sh @Strategickhaos
+/start-cloudos*.sh @Strategickhaos
+/launch-recon.sh @Strategickhaos
+
+# ==============================================================================
+# NOTES FOR CONTRIBUTORS
+# ==============================================================================
+#
+# - Changes to paths listed here require approval from the specified owners
+# - Owners are automatically requested as reviewers on PRs
+# - At least one approval from an owner is required to merge
+# - This protects critical infrastructure and security-sensitive files
+# - For questions, contact @Strategickhaos in Discord #agents channel
+#

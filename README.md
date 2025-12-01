@@ -2,13 +2,23 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🔒 Security & Agent Authorization
+
+**Important:** This repository implements a safe permission model for GitHub Copilot Agents with explicit boundaries and human-in-the-loop controls.
+
+📚 **Key Documentation:**
+- **[Agent Authorization Model](./AGENT_AUTHORIZATION_MODEL.md)** - Complete guide to what agents can/cannot access
+- **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAM.md)** - Visual representation of system boundaries
+- **[Security Policy](./SECURITY.md)** - Security practices, incident response, and vulnerability reporting
+- **[Branch Protection Setup](/.github/BRANCH_PROTECTION_SETUP.md)** - Configuration guide for safe workflows
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
 - **Discord** - Command & control interface
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
-- **AI Agents** - Intelligent assistance with vector knowledge base
+- **AI Agents** - Intelligent assistance with vector knowledge base (with explicit permission boundaries)
 
 ## 🚀 Quick Start
 
@@ -176,6 +186,9 @@ ai_agents:
 - **Network Policies**: Microsegmentation for pod communication
 - **Audit Logging**: Comprehensive activity tracking
 - **Content Redaction**: Automatic PII and credential filtering
+- **Agent Authorization**: Explicit boundaries for AI agents ([details](./AGENT_AUTHORIZATION_MODEL.md))
+- **Branch Protection**: CODEOWNERS and required reviews
+- **Secret Scanning**: Automated Gitleaks scanning in CI/CD
 
 ### Production Safeguards
 ```yaml
@@ -184,7 +197,23 @@ governance:
     prod_commands_require: ["ReleaseMgr"]
   change_management:
     link: "https://wiki.strategickhaos.internal/change-management"
+  agent_permissions:
+    # Agents open PRs only - cannot merge
+    # Production requires manual approval
+    # See: governance/agent_permissions.yaml
 ```
+
+### Agent Safety Model
+
+This repository implements **The Three Gates** model:
+
+1. **Gate 1 (Repository)** - Agents can propose changes via PR, humans approve
+2. **Gate 2 (CI/CD)** - Automated builds/tests, deployment triggers require approval
+3. **Gate 3 (Infrastructure)** - K8s RBAC, network policies, namespace isolation
+
+**Key Principle:** Agents edit code → Humans approve → Automation deploys
+
+See [Agent Authorization Model](./AGENT_AUTHORIZATION_MODEL.md) for complete details.
 
 ## 📊 Monitoring & Alerts
 
