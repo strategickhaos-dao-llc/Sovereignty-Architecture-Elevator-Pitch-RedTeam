@@ -7,7 +7,7 @@ const WebSocket = require('ws');
 const http = require('http');
 
 const PORT = process.env.OBS_WEBSOCKET_PORT || 4455;
-const AGENT_COUNT = parseInt(process.env.AGENT_COUNT) || 640;
+const AGENT_COUNT = parseInt(process.env.AGENT_COUNT, 10) || 640;
 const LAWS_COUNT = 10;
 const AGENTS_PER_LAW = AGENT_COUNT / LAWS_COUNT;
 

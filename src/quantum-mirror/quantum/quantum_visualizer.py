@@ -5,10 +5,11 @@ Provides real-time visualization of quantum computing simulations
 
 import os
 import json
-from datetime import datetime
-from flask import Flask, jsonify, Response
+import time
 import random
 import math
+from datetime import datetime
+from flask import Flask, jsonify, Response
 
 app = Flask(__name__)
 
@@ -148,7 +149,6 @@ def stream():
             quantum_state.step()
             data = json.dumps(quantum_state.to_dict())
             yield f"data: {data}\n\n"
-            import time
             time.sleep(0.5)
     
     return Response(generate(), mimetype='text/event-stream')
