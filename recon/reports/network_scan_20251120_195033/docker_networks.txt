@@ -1,0 +1,4 @@
+NAME      DRIVER    SCOPE
+bridge    bridge    local
+host      host      local
+none      null      local

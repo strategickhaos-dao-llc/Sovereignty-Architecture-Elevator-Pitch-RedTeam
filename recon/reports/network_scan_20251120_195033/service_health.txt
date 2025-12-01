@@ -1,0 +1,10 @@
+| PostgreSQL | tcp://localhost:5432 | ❌ DOWN | - |
+| Qdrant (Main) | http://localhost:6333/healthz | ❌ DOWN | - |
+| Event Gateway | http://localhost:8080/health | ❌ DOWN | - |
+| Qdrant (Recon) | http://localhost:6333/health | ❌ DOWN | - |
+| Prometheus | http://localhost:9090/-/healthy | ❌ DOWN | - |
+| RAG Retriever | http://localhost:7000/health | ❌ DOWN | - |
+| Embedder | http://localhost:8081/health | ❌ DOWN | - |
+| Redis | tcp://localhost:6379 | ❌ DOWN | - |
+| Grafana | http://localhost:3000/api/health | ❌ DOWN | - |
+| Refinory API | http://localhost:8085/health | ❌ DOWN | - |

@@ -30,6 +30,27 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🎯 Network Reconnaissance System
+- **Automated Discovery**: Complete infrastructure scanning and service discovery
+- **Health Monitoring**: Real-time service health checks and status reporting
+- **Security Analysis**: Port exposure detection and vulnerability scanning
+- **Topology Mapping**: Automated network architecture visualization
+- **Interactive Reports**: Browse infrastructure status with detailed analytics
+
+Quick start:
+```bash
+# Run complete network reconnaissance
+./network_recon.sh
+
+# View interactive report
+./view_recon_report.sh --summary
+
+# Python-based service discovery
+python3 recon/network_discovery.py
+```
+
+See [NETWORK_RECON_GUIDE.md](NETWORK_RECON_GUIDE.md) for complete documentation.
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
