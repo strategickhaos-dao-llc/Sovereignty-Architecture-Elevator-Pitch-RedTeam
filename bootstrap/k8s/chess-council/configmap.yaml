@@ -1,0 +1,250 @@
+# ConfigMap for Chess Council Frequency Mapping
+# Maps 640 agents to 88 piano keys using Circle of 5ths
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frequency-map
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: frequency-mapping
+data:
+  # Base frequency configuration
+  base-frequency: "440"  # A4 = 440 Hz
+  
+  # Layer configurations (C0 to C10 range)
+  layer-0-range: "16.35-32.70"   # C0-C1 - Empirical Data
+  layer-1-range: "32.70-65.41"   # C1-C2 - Preprocessing
+  layer-2-range: "65.41-130.81"  # C2-C3 - Analysis
+  layer-3-range: "130.81-261.63" # C3-C4 - Synthesis
+  layer-4-range: "261.63-523.25" # C4-C5 - Modeling
+  layer-5-range: "523.25-1046.50" # C5-C6 - Strategic
+  layer-6-range: "1046.50-2093.00" # C6-C7 - Ethical
+  layer-7-range: "2093.00-4186.01" # C7-C8 - Linguistic
+  layer-8-range: "4186.01-8372.02" # C8-C9 - Validation
+  layer-9-range: "8372.02-16744.04" # C9-C10 - Publication
+  
+  # Frequency calculation script
+  frequency-calculator.py: |
+    #!/usr/bin/env python3
+    """
+    Calculate agent frequency based on board position.
+    Uses Circle of 5ths mapping to 88-key piano.
+    """
+    import math
+    import os
+    
+    def calculate_frequency(board: int, row: int, col: int) -> float:
+        """
+        Calculate frequency for agent at given position.
+        
+        Args:
+            board: Board layer (0-9)
+            row: Row on board (0-7)
+            col: Column on board (0-7)
+        
+        Returns:
+            Frequency in Hz
+        """
+        # Calculate position in 640-agent array
+        board_offset = board * 64
+        position = board_offset + (row * 8) + col
+        
+        # Map to 88 piano keys (wrap around)
+        piano_key = position % 88
+        
+        # Calculate frequency (A4 = 440 Hz, key 49)
+        # f = 440 * 2^((n-49)/12)
+        frequency = 440.0 * math.pow(2, (piano_key - 49) / 12.0)
+        
+        return round(frequency, 2)
+    
+    def get_harmonic_partners(frequency: float) -> dict:
+        """
+        Find harmonically related frequencies.
+        
+        Returns:
+            Dict with perfect 5th, major 3rd, and octave partners
+        """
+        return {
+            "perfect_5th": round(frequency * 3/2, 2),
+            "perfect_4th": round(frequency * 4/3, 2),
+            "major_3rd": round(frequency * 5/4, 2),
+            "minor_3rd": round(frequency * 6/5, 2),
+            "octave_up": round(frequency * 2, 2),
+            "octave_down": round(frequency / 2, 2)
+        }
+    
+    def note_name(piano_key: int) -> str:
+        """Convert piano key to note name."""
+        notes = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
+        octave = (piano_key + 8) // 12
+        note = notes[(piano_key - 1) % 12]
+        return f"{note}{octave}"
+    
+    if __name__ == "__main__":
+        board = int(os.environ.get("BOARD_LAYER", 0))
+        position = int(os.environ.get("AGENT_POSITION", 0))
+        row = position // 8
+        col = position % 8
+        
+        freq = calculate_frequency(board, row, col)
+        key = (board * 64 + position) % 88
+        note = note_name(key + 1)
+        partners = get_harmonic_partners(freq)
+        
+        print(f"Agent Position: Board {board}, Row {row}, Col {col}")
+        print(f"Piano Key: {key + 1}")
+        print(f"Note: {note}")
+        print(f"Frequency: {freq} Hz")
+        print(f"Harmonic Partners: {partners}")
+---
+# ConfigMap for Chess Council Board Layer Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: board-layers-config
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: board-config
+data:
+  layers.yaml: |
+    layers:
+      - id: 0
+        name: "Empirical Data Layer"
+        description: "Raw data collection, sensor readings, bibliographic scraping"
+        roles:
+          - "Data scrapers (Google Scholar, .gov, arXiv)"
+          - "Sensor fusion agents (IoT, API polling)"
+          - "OCR and document parsers"
+          - "Database query optimizers"
+        
+      - id: 1
+        name: "Data Preprocessing Layer"
+        description: "Cleaning, normalization, vectorization"
+        roles:
+          - "Text cleaners and normalizers"
+          - "Vector embedding generators"
+          - "Outlier detection and removal"
+          - "Feature extraction specialists"
+        
+      - id: 2
+        name: "Statistical Analysis Layer"
+        description: "Hypothesis testing, correlation, regression"
+        roles:
+          - "Statistical testers"
+          - "Regression analysts"
+          - "Time series forecasters"
+          - "Causal inference engines"
+        
+      - id: 3
+        name: "Knowledge Synthesis Layer"
+        description: "Cross-domain pattern recognition, meta-analysis"
+        roles:
+          - "Meta-analysts"
+          - "Systematic reviewers"
+          - "Cross-domain linkers"
+          - "Contradiction resolvers"
+        
+      - id: 4
+        name: "Predictive Modeling Layer"
+        description: "ML model training, simulation, scenario planning"
+        roles:
+          - "Model trainers"
+          - "Hyperparameter optimizers"
+          - "Ensemble learners"
+          - "Simulation runners"
+        
+      - id: 5
+        name: "Strategic Reasoning Layer"
+        description: "Game theory, adversarial planning, optimization"
+        roles:
+          - "Game theorists"
+          - "Nash equilibrium solvers"
+          - "Multi-agent coordinators"
+          - "Resource allocators"
+        
+      - id: 6
+        name: "Ethical Evaluation Layer"
+        description: "Risk assessment, compliance, bias detection"
+        roles:
+          - "Bias auditors"
+          - "Risk assessors"
+          - "Compliance checkers"
+          - "Fairness optimizers"
+        
+      - id: 7
+        name: "Linguistic Generation Layer"
+        description: "Paper writing, documentation, communication"
+        roles:
+          - "Academic writers"
+          - "Citation formatters"
+          - "Peer review simulators"
+          - "Translation specialists"
+        
+      - id: 8
+        name: "Validation & Verification Layer"
+        description: "Reproducibility checks, peer review, fact-checking"
+        roles:
+          - "Reproducibility testers"
+          - "Fact checkers"
+          - "Peer reviewers"
+          - "Contradiction detectors"
+        
+      - id: 9
+        name: "Publication & Dissemination Layer"
+        description: "arXiv upload, GitHub release, patent filing"
+        roles:
+          - "arXiv submitters"
+          - "Patent drafters"
+          - "GitHub publishers"
+          - "Media liaisons"
+---
+# ConfigMap for Chess Game Mechanics
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-mechanics-config
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: game-mechanics
+data:
+  scoring.yaml: |
+    games:
+      bibliographic_synthesis:
+        name: "Bibliographic Synthesis Chess"
+        scoring:
+          novel_insight: 10
+          cross_domain_link: 5
+          contradicted_claim: -5
+          invalid_citation: -10
+        win_condition: "peer_reviewed_thesis"
+        
+      adversarial_hypothesis:
+        name: "Adversarial Hypothesis Testing"
+        scoring:
+          surviving_challenge: 10
+          falsifying_hypothesis: 15
+          synthesizing_better: 20
+        win_condition: "convergence_or_stalemate"
+        
+      literature_review_race:
+        name: "Multi-Agent Literature Review Race"
+        time_limit: "24h"
+        scoring:
+          relevant_paper: 1
+          cross_domain_connection: 5
+          research_gap: 10
+          meta_analysis_insight: 20
+        win_condition: "most_comprehensive_review"
+    
+    referee:
+      engine: "stockfish"
+      version: "16 NNUE"
+      evaluation_metrics:
+        - citation_accuracy
+        - logical_coherence
+        - novelty_score
+        - peer_review_prediction

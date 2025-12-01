@@ -1,0 +1,99 @@
+# Chess Council Ingress Configuration
+# External access to the chess council API and monitoring
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chess-council-ingress
+  namespace: chess-council
+  labels:
+    app: chess-council
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  tls:
+    - hosts:
+        - chess-council.strategickhaos.com
+        - api.chess-council.strategickhaos.com
+      secretName: chess-council-tls
+  
+  rules:
+    # Main API endpoint
+    - host: api.chess-council.strategickhaos.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: game-orchestrator
+                port:
+                  number: 8080
+    
+    # Game streaming endpoint (WebSocket)
+    - host: stream.chess-council.strategickhaos.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: game-orchestrator
+                port:
+                  number: 9000
+    
+    # Metrics endpoint (internal use)
+    - host: metrics.chess-council.strategickhaos.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chess-agents
+                port:
+                  number: 9090
+---
+# Ingress for VNC/Sunshine streaming (requires separate handling)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chess-council-streaming
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: streaming
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Enable WebSocket support for Moonlight
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+spec:
+  tls:
+    - hosts:
+        - vnc.chess-council.strategickhaos.com
+      secretName: chess-council-vnc-tls
+  
+  rules:
+    - host: vnc.chess-council.strategickhaos.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chess-agents
+                port:
+                  number: 47989

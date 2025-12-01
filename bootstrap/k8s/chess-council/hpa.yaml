@@ -1,0 +1,109 @@
+# Chess Council HPA and Resource Policies
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chess-agents-hpa
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: chess-board
+  minReplicas: 64    # Minimum 64 agents per board
+  maxReplicas: 128   # Can scale up during high-load games
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Pods
+          value: 8
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 120
+---
+# Pod Disruption Budget to ensure game continuity
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: chess-agents-pdb
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: availability
+spec:
+  minAvailable: 50%  # At least half the agents must be available
+  selector:
+    matchLabels:
+      app: chess-council
+      component: agent
+---
+# Priority Class for game-critical agents
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: chess-council-high
+  labels:
+    app: chess-council
+value: 1000000
+globalDefault: false
+description: "High priority for active game participants"
+---
+# Priority Class for idle agents
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: chess-council-low
+  labels:
+    app: chess-council
+value: 100000
+globalDefault: false
+description: "Lower priority for idle/training agents"
+---
+# Limit Range for agent containers
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: chess-council-limits
+  namespace: chess-council
+  labels:
+    app: chess-council
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: "2"
+        memory: "8Gi"
+      defaultRequest:
+        cpu: "1"
+        memory: "4Gi"
+      max:
+        cpu: "4"
+        memory: "16Gi"
+      min:
+        cpu: "500m"
+        memory: "1Gi"
+    - type: PersistentVolumeClaim
+      max:
+        storage: "100Gi"
+      min:
+        storage: "1Gi"

@@ -1,0 +1,299 @@
+# Chess Council RBAC Configuration
+# Role-based access control for the chess council namespace
+
+# ServiceAccount for agents
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chess-agent
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: agent
+---
+# ServiceAccount for orchestrator
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chess-orchestrator
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: orchestrator
+---
+# Role for agents - limited access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: chess-agent-role
+  namespace: chess-council
+  labels:
+    app: chess-council
+rules:
+  # Read own pod info
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  
+  # Read configmaps for frequency mapping
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+  
+  # Read secrets for API keys
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["grok-credentials", "serpapi-credentials", "qdrant-credentials"]
+    verbs: ["get"]
+---
+# Role for orchestrator - broader access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: chess-orchestrator-role
+  namespace: chess-council
+  labels:
+    app: chess-council
+rules:
+  # Manage pods (for agent coordination)
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "pods/status"]
+    verbs: ["get", "list", "watch"]
+  
+  # Manage services
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  
+  # Full access to configmaps
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  
+  # Read secrets
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+  
+  # Manage statefulsets for scaling
+  - apiGroups: ["apps"]
+    resources: ["statefulsets", "statefulsets/scale"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+---
+# RoleBinding for agents
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: chess-agent-binding
+  namespace: chess-council
+  labels:
+    app: chess-council
+subjects:
+  - kind: ServiceAccount
+    name: chess-agent
+    namespace: chess-council
+roleRef:
+  kind: Role
+  name: chess-agent-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# RoleBinding for orchestrator
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: chess-orchestrator-binding
+  namespace: chess-council
+  labels:
+    app: chess-council
+subjects:
+  - kind: ServiceAccount
+    name: chess-orchestrator
+    namespace: chess-council
+roleRef:
+  kind: Role
+  name: chess-orchestrator-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# NetworkPolicy for agent-to-agent communication
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: chess-agent-network
+  namespace: chess-council
+  labels:
+    app: chess-council
+spec:
+  podSelector:
+    matchLabels:
+      component: agent
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic from other agents
+    - from:
+        - podSelector:
+            matchLabels:
+              component: agent
+      ports:
+        - port: 8080
+          protocol: TCP
+        - port: 9090
+          protocol: TCP
+    
+    # Allow traffic from orchestrator
+    - from:
+        - podSelector:
+            matchLabels:
+              component: orchestrator
+      ports:
+        - port: 8080
+          protocol: TCP
+        - port: 9090
+          protocol: TCP
+    
+    # Allow traffic from monitoring
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+      ports:
+        - port: 9090
+          protocol: TCP
+  
+  egress:
+    # Allow traffic to other agents
+    - to:
+        - podSelector:
+            matchLabels:
+              component: agent
+      ports:
+        - port: 8080
+          protocol: TCP
+    
+    # Allow traffic to orchestrator
+    - to:
+        - podSelector:
+            matchLabels:
+              component: orchestrator
+      ports:
+        - port: 8080
+          protocol: TCP
+        - port: 9000
+          protocol: TCP
+    
+    # Allow traffic to infrastructure
+    - to:
+        - podSelector:
+            matchLabels:
+              app: qdrant
+      ports:
+        - port: 6333
+          protocol: TCP
+        - port: 6334
+          protocol: TCP
+    
+    - to:
+        - podSelector:
+            matchLabels:
+              app: ollama
+      ports:
+        - port: 11434
+          protocol: TCP
+    
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    
+    # Allow external API access (Grok, Scholar, arXiv)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - port: 443
+          protocol: TCP
+        - port: 80
+          protocol: TCP
+---
+# NetworkPolicy for orchestrator
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: chess-orchestrator-network
+  namespace: chess-council
+  labels:
+    app: chess-council
+spec:
+  podSelector:
+    matchLabels:
+      component: orchestrator
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from ingress
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - port: 8080
+          protocol: TCP
+    
+    # Allow from agents
+    - from:
+        - podSelector:
+            matchLabels:
+              component: agent
+      ports:
+        - port: 8080
+          protocol: TCP
+        - port: 9000
+          protocol: TCP
+  
+  egress:
+    # Allow to agents
+    - to:
+        - podSelector:
+            matchLabels:
+              component: agent
+      ports:
+        - port: 8080
+          protocol: TCP
+    
+    # Allow to infrastructure
+    - to:
+        - podSelector: {}
+      ports:
+        - port: 6333  # Qdrant
+          protocol: TCP
+        - port: 6379  # Redis
+          protocol: TCP
+        - port: 5432  # PostgreSQL
+          protocol: TCP
+        - port: 11434 # Ollama
+          protocol: TCP
+        - port: 8081  # Stockfish
+          protocol: TCP
+    
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP

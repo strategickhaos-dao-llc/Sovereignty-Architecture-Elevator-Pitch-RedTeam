@@ -1,0 +1,177 @@
+# Chess Council Agent Container
+# Full OS with LLM capabilities, research tools, and streaming support
+FROM parrotsec/security:latest
+
+LABEL maintainer="Strategickhaos DAO <agent@strategickhaos.com>"
+LABEL description="10D Chess Council Agent - Adversarial Research AI"
+LABEL version="1.0.0"
+
+# Avoid interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Core utilities
+    curl \
+    wget \
+    git \
+    vim \
+    nano \
+    emacs-nox \
+    tmux \
+    screen \
+    htop \
+    jq \
+    # Shell options
+    zsh \
+    fish \
+    # SSH server
+    openssh-server \
+    # X11 and VNC
+    xvfb \
+    x11vnc \
+    fluxbox \
+    # Networking tools
+    nmap \
+    masscan \
+    tcpdump \
+    net-tools \
+    dnsutils \
+    httpie \
+    # Development
+    build-essential \
+    cmake \
+    pkg-config \
+    # Python
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    # Node.js
+    nodejs \
+    npm \
+    # LaTeX for paper generation
+    texlive-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-bibtex-extra \
+    biber \
+    pandoc \
+    # Stockfish chess engine
+    stockfish \
+    # PDF tools
+    poppler-utils \
+    # OCR
+    tesseract-ocr \
+    libtesseract-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN useradd -m -s /bin/bash -G sudo agent \
+    && echo "agent ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Install Python packages for research
+RUN pip3 install --no-cache-dir \
+    # Data science
+    numpy \
+    pandas \
+    scipy \
+    scikit-learn \
+    statsmodels \
+    # ML frameworks
+    torch \
+    transformers \
+    sentence-transformers \
+    # Visualization
+    matplotlib \
+    seaborn \
+    plotly \
+    # Web scraping
+    beautifulsoup4 \
+    scrapy \
+    selenium \
+    requests \
+    httpx \
+    aiohttp \
+    # API clients
+    arxiv \
+    scholarly \
+    biopython \
+    # Vector databases
+    qdrant-client \
+    chromadb \
+    # LLM integration
+    ollama \
+    openai \
+    anthropic \
+    # Document processing
+    pypdf \
+    pdfplumber \
+    python-docx \
+    bibtexparser \
+    # Async and utilities
+    asyncio \
+    pydantic \
+    rich \
+    typer \
+    # Metrics
+    prometheus-client \
+    # Testing
+    pytest \
+    pytest-asyncio
+
+# Install Node.js packages for tooling
+RUN npm install -g \
+    puppeteer \
+    playwright \
+    @mcp/server \
+    typescript \
+    ts-node
+
+# Configure SSH server
+RUN mkdir /var/run/sshd \
+    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config \
+    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+
+# Create workspace directories
+RUN mkdir -p /workspace/papers \
+    /workspace/citations \
+    /workspace/syntheses \
+    /workspace/games \
+    /workspace/models \
+    /cache/bibliography \
+    /cache/embeddings \
+    /config \
+    /logs
+
+# Copy agent entrypoint and configuration
+COPY scripts/agent-entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY scripts/health-check.py /usr/local/bin/health-check.py
+COPY scripts/agent-api.py /usr/local/bin/agent-api.py
+RUN chmod +x /usr/local/bin/entrypoint.sh \
+    /usr/local/bin/health-check.py \
+    /usr/local/bin/agent-api.py
+
+# Set working directory
+WORKDIR /workspace
+
+# Expose ports
+EXPOSE 22     # SSH
+EXPOSE 5900   # VNC
+EXPOSE 8080   # API
+EXPOSE 9090   # Metrics
+EXPOSE 47989  # Sunshine
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD python3 /usr/local/bin/health-check.py
+
+# Run as agent user by default
+USER agent
+
+# Default command
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["agent"]

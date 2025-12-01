@@ -1,0 +1,233 @@
+# Chess Council StatefulSet for Board Layer 0-9
+# This creates 64 agents per board (8x8 chess board pattern)
+# Template for board layers - deploy 10 copies with BOARD_LAYER=0-9
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: chess-board
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: agent-board
+spec:
+  serviceName: chess-agents
+  replicas: 64  # 8x8 squares per board
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: chess-council
+      component: agent
+  template:
+    metadata:
+      labels:
+        app: chess-council
+        component: agent
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: false
+        fsGroup: 1000
+      
+      initContainers:
+        - name: init-frequency
+          image: python:3.11-slim
+          command:
+            - python
+            - /scripts/frequency-calculator.py
+          env:
+            - name: BOARD_LAYER
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['board-layer']
+            - name: AGENT_POSITION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          volumeMounts:
+            - name: frequency-scripts
+              mountPath: /scripts
+            - name: agent-config
+              mountPath: /config
+      
+      containers:
+        - name: agent
+          image: ghcr.io/strategickhaos/chess-agent:latest
+          imagePullPolicy: Always
+          
+          ports:
+            - name: ssh
+              containerPort: 22
+            - name: vnc
+              containerPort: 5900
+            - name: sunshine
+              containerPort: 47989
+            - name: api
+              containerPort: 8080
+            - name: metrics
+              containerPort: 9090
+          
+          env:
+            - name: BOARD_LAYER
+              value: "0"  # Override per-board deployment
+            - name: AGENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: GROK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: grok-credentials
+                  key: api-key
+            - name: SERPAPI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: serpapi-credentials
+                  key: api-key
+            - name: POSTGRES_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: connection-string
+            - name: QDRANT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: qdrant-credentials
+                  key: api-key
+            - name: QDRANT_URL
+              value: "http://qdrant.chess-council:6333"
+            - name: OLLAMA_HOST
+              value: "http://ollama.chess-council:11434"
+            - name: PRIMARY_MODEL
+              value: "qwen2.5:72b"
+            - name: STOCKFISH_PATH
+              value: "/usr/games/stockfish"
+          
+          resources:
+            requests:
+              cpu: "2"
+              memory: "8Gi"
+            limits:
+              cpu: "4"
+              memory: "16Gi"
+              # GPU sharing configured at node level via MIG/MPS
+              # nvidia.com/gpu: "1"
+          
+          volumeMounts:
+            - name: agent-workspace
+              mountPath: /workspace
+            - name: bibliography-cache
+              mountPath: /cache
+            - name: agent-config
+              mountPath: /config
+            - name: ssh-keys
+              mountPath: /root/.ssh
+              readOnly: true
+          
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: api
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: api
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+        
+        # Sidecar for Sunshine streaming
+        - name: sunshine
+          image: ghcr.io/strategickhaos/sunshine:latest
+          imagePullPolicy: Always
+          ports:
+            - name: sunshine-ctrl
+              containerPort: 47989
+            - name: sunshine-video
+              containerPort: 47984
+            - name: sunshine-audio
+              containerPort: 47985
+          env:
+            - name: DISPLAY
+              value: ":0"
+            - name: SUNSHINE_USERNAME
+              value: "observer"
+            - name: SUNSHINE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sunshine-credentials
+                  key: password
+                  optional: true
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+          volumeMounts:
+            - name: x11-socket
+              mountPath: /tmp/.X11-unix
+      
+      volumes:
+        - name: frequency-scripts
+          configMap:
+            name: frequency-map
+            items:
+              - key: frequency-calculator.py
+                path: frequency-calculator.py
+                mode: 0755
+        - name: agent-config
+          emptyDir: {}
+        - name: ssh-keys
+          secret:
+            secretName: agent-ssh-keys
+            defaultMode: 0600
+        - name: x11-socket
+          emptyDir: {}
+  
+  volumeClaimTemplates:
+    - metadata:
+        name: agent-workspace
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "standard"
+        resources:
+          requests:
+            storage: 50Gi
+    
+    - metadata:
+        name: bibliography-cache
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "standard"
+        resources:
+          requests:
+            storage: 20Gi
+---
+# Shared bibliography cache PVC (read-many)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-bibliography-pvc
+  namespace: chess-council
+  labels:
+    app: chess-council
+    component: storage
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "standard"  # Replace with NFS or similar for RWX
+  resources:
+    requests:
+      storage: 1Ti
