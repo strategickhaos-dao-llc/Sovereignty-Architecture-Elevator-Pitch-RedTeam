@@ -241,6 +241,37 @@ export PRS_CHANNEL="dev_channel_id"
 4. **Submit** PR with improvements
 5. **Share** configuration patterns with community
 
+## 🔍 Recon Scripts - Resource Collection
+
+The repository includes powerful **recon-style scripts** for systematically collecting resources using `curl -L -s` patterns:
+
+### Cybersecurity Resources
+```bash
+# Collect 30 cybersecurity resources (NIST, MITRE, OWASP, etc.)
+./collect_cyber_sources.sh
+```
+
+Downloads industry-standard security frameworks, vulnerability databases, and compliance guides to `recon/cyber_v2/`.
+
+### Creative Resources (NEW)
+```bash
+# Collect 30 video editing and content creation resources
+./collect_creative_sources.sh
+```
+
+Downloads Share Factory Studio guides, video editing tutorials, platform guidelines, free assets, and technical documentation to `recon/creative_v1/`.
+
+**Features:**
+- 🎯 30 curated resources per script
+- 🔄 Automatic retry logic with 2 attempts
+- ⏱️ 120-second timeout protection per request
+- 📊 Success rate reporting
+- 🚀 Respectful scraping with delays
+
+**Documentation:**
+- **[BOOT_RECON.md](BOOT_RECON.md)** - Complete recon stack documentation and 26 diagnostic commands
+- **[CREATIVE_RECON.md](CREATIVE_RECON.md)** - Creative resources collection guide for Share Factory Studio
+
 ## 🆘 Troubleshooting
 
 ### Common Issues
