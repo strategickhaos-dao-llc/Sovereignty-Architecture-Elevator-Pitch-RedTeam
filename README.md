@@ -48,6 +48,27 @@ export PRS_CHANNEL="channel_id"
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
 
+### 🧠 Legions of Minds Council™ — Obsidian Neural Mesh
+- **Board Receipts**: Cryptographically signed receipts with increment 3449
+- **Neural State**: Real-time brain state for each council quadrant
+- **Vault Sync**: Obsidian vault to Git with genesis proof
+- **Commands**: `!receipt`, `!brain`, `!sync`, `!council`
+
+```bash
+# Start the Obsidian Neural Mesh bot
+cd legions
+pip install -r requirements.legions.txt
+export DISCORD_TOKEN="your_token"
+python3 core/obsidian_neural_mesh.py
+```
+
+**Genesis Constants:**
+- Increment: 3449
+- Dividend Yield: 7% (ETERNAL)
+- Architect: Strategickhaos Prime
+
+See [legions/OBSIDIAN_NEURAL_MESH.md](legions/OBSIDIAN_NEURAL_MESH.md) for full documentation.
+
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features
 - **Build Tools**: Maven 3.6.3 and Gradle 4.4.1 pre-installed

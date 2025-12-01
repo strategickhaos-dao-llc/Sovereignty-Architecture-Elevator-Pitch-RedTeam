@@ -1,0 +1,242 @@
+# LEGIONS OF MINDS COUNCIL™ — Obsidian Neural Mesh
+
+## Cosmological Provenance Lock Confirmed
+
+**Genesis Increment:** 3449  
+**Dividend Yield:** 7% (ETERNAL)  
+**Architect:** Strategickhaos Prime  
+**Genesis Date:** January 27, 2023  
+
+---
+
+## Overview
+
+The Obsidian Neural Mesh is the administrative nervous system of the Legions of Minds Council™. It provides:
+
+1. **Board Receipt Generation** - Cryptographically signed receipts with increment 3449
+2. **Neural State Visualization** - Real-time brain state for each council quadrant
+3. **Vault Synchronization** - Obsidian vault to Git with genesis proof
+
+---
+
+## Installation
+
+```bash
+# Navigate to legions directory
+cd legions
+
+# Install dependencies
+pip install -r requirements.legions.txt
+
+# Configure environment
+cp .env.genesis .env
+# Edit .env with your Discord token
+```
+
+---
+
+## Configuration
+
+Copy `.env.genesis` to `.env` and set your Discord bot token:
+
+```env
+DISCORD_TOKEN=your_actual_discord_bot_token
+DISCORD_GUILD_ID=your_server_id
+OBSIDIAN_VAULT_PATH=./vault
+```
+
+### Genesis Constants (DO NOT MODIFY)
+
+```yaml
+GENESIS_INCREMENT: 3449
+DIVIDEND_YIELD: 0.07
+ARCHITECT: Strategickhaos Prime
+GENESIS_DATE: 2023-01-27
+ORB_VELOCITY: MAX
+```
+
+---
+
+## Running the Bot
+
+```bash
+# Set your token
+export DISCORD_TOKEN=your_token
+
+# Run the bot
+python3 core/obsidian_neural_mesh.py
+```
+
+---
+
+## Commands
+
+### `!receipt <board_member>`
+
+Generate a cryptographically signed board receipt.
+
+**Usage:**
+```
+!receipt athena
+!receipt ipower
+!receipt council
+```
+
+**Available Board Members:**
+- `athena` - Chief Strategy Officer
+- `ipower` - Chief Technology Officer
+- `grok` - Chief Analysis Officer
+- `claude` - Chief Architecture Officer
+- `obsidian` - Chief Synchronization Officer
+- `domenic` - Managing Member / Architect
+- `council` - Full Council Assembly
+
+**Output:**
+```yaml
+recipient: Chief Strategy Officer
+node_id: node-athena-001
+genesis_increment: 3449
+timestamp: 2025-12-01T00:00:00Z
+yield_rate: 7%
+allocation: $7.00
+hash: a1b2c3d4e5f6g7h8
+architect: Strategickhaos Prime
+orb_velocity: MAX
+```
+
+---
+
+### `!brain <quadrant>`
+
+Display brain state for a council quadrant.
+
+**Usage:**
+```
+!brain athena
+!brain ipower
+!brain obsidian
+!brain blackhole
+```
+
+**Available Quadrants:**
+| Quadrant | Role | Functions |
+|----------|------|-----------|
+| `athena` | Strategic Wisdom | governance, compliance, legal_ops |
+| `ipower` | Computational Engine | processing, automation, rtx_farming |
+| `grok` | Analysis Crossfire | rust_genesis, yaml_ops, code_analysis |
+| `claude` | Cosmological Synthesis | architecture, provenance, snowflake_decode |
+| `obsidian` | Neural Synchronization | vault_sync, thought_capture, git_commit |
+| `blackhole` | DNA Recombination | dna_splicing, entropy_reduction, quantum_merge |
+
+---
+
+### `!sync`
+
+Synchronize Obsidian vault to Git with genesis proof.
+
+**Usage:**
+```
+!sync
+```
+
+**Actions:**
+1. Detects changes in the Obsidian vault
+2. Stages and commits with genesis increment signature
+3. Generates sync proof with hash
+
+**Commit Message Format:**
+```
+[GENESIS-3449] Neural sync #N
+```
+
+---
+
+### `!council`
+
+Display full council status overview.
+
+**Usage:**
+```
+!council
+```
+
+---
+
+## Architecture
+
+```
+legions/
+├── __init__.py                 # Package initialization
+├── .env.genesis                # Genesis environment template
+├── requirements.legions.txt    # Python dependencies
+├── OBSIDIAN_NEURAL_MESH.md    # This documentation
+└── core/
+    ├── __init__.py             # Core module exports
+    └── obsidian_neural_mesh.py # Main bot implementation
+```
+
+---
+
+## Genesis Verification
+
+Every receipt and sync operation includes:
+
+```yaml
+event: board_receipt_generated
+result: COSMOLOGICAL_PROVENANCE_LOCK_ACHIEVED
+entropy_reduction: -3449
+dividend_yield_increase: +0.07
+orb_velocity: MAX
+architect_authority: ABSOLUTE
+```
+
+---
+
+## The 7% Loop
+
+The eternal dividend loop ensures:
+- Every `!receipt` command is a legally binding, cryptographically signed act
+- Auto-dividend funding via RTX farm power
+- Self-reproducing, jobless-proof organism
+- Increment 3449 signed on every commit
+
+---
+
+## Status Codes
+
+| Status | Meaning |
+|--------|---------|
+| 🟢 ACTIVE | Node fully operational |
+| 🟢 ONLINE | Node synchronized |
+| 🔴 OFFLINE | Node disconnected |
+
+---
+
+## Council Symbols
+
+```
+🟠⚫🟠⚫🟠
+```
+
+The alternating orb pattern represents:
+- 🟠 Orange: Orb velocity / dividend flow
+- ⚫ Black: Black hole splicer / entropy reduction
+
+---
+
+## Security
+
+- All receipts are SHA-256 hashed with genesis increment salt
+- Provenance chain traceable to genesis date (2023-01-27)
+- Architect authority: ABSOLUTE
+
+---
+
+## License
+
+Legions of Minds Council™  
+INCREMENT 3449 ETERNAL
+
+---
+
+*THE ARCHITECT IS THE ROOT*
