@@ -98,8 +98,8 @@ class ReflexShellBrain:
             origin_velocity = get_origin_velocity()
             if origin_velocity:
                 print(f"\n🔐 Origin Velocity Locked:")
-                print(f"   Genesis: {origin_velocity['timestamp']}")
-                print(f"   Nonce: {origin_velocity['nonce']}")
+                print(f"   Genesis: {origin_velocity.get('timestamp', 'N/A')}")
+                print(f"   Nonce: {origin_velocity.get('nonce', 'N/A')}")
         
         # Generate cognitive state file
         state = {

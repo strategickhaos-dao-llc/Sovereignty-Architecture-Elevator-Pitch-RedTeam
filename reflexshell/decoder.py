@@ -59,9 +59,11 @@ def decode_snowflake(snowflake: int) -> dict:
         - nonce: Provenance nonce (increment XOR worker_id)
     
     Example:
-        >>> decode_snowflake(1405637629248143451)
-        {'timestamp': '2023-01-27T21:00:49.000000Z', 'timestamp_ms': 1674865249000,
-         'worker_id': 0, 'process_id': 1, 'increment': 3449, 'nonce': 3449}
+        >>> result = decode_snowflake(1405637629248143451)
+        >>> result['worker_id']
+        1
+        >>> result['increment']
+        91
     """
     # Extract 42-bit timestamp and add Discord epoch
     timestamp_ms = (snowflake >> 22) + DISCORD_EPOCH_MS
@@ -139,8 +141,9 @@ def validate_snowflake(snowflake: int) -> bool:
     """
     if not isinstance(snowflake, int):
         return False
-    # Must be positive and fit in 64 bits
-    if snowflake <= 0 or snowflake >= (1 << 64):
+    # Must be positive and fit in 63 bits (signed 64-bit max)
+    max_snowflake = (1 << 63) - 1
+    if snowflake <= 0 or snowflake > max_snowflake:
         return False
     # Timestamp must be after Discord epoch (2015-01-01)
     timestamp_ms = (snowflake >> 22) + DISCORD_EPOCH_MS

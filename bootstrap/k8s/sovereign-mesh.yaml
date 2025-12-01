@@ -45,9 +45,18 @@ kind: Secret
 metadata:
   name: sovereign-mesh-secrets
   namespace: sovereign-mesh
+  annotations:
+    # IMPORTANT: Replace placeholder values before deployment!
+    # Use kubectl create secret or external secrets operator in production
+    strategickhaos.io/note: "Placeholder values - must be replaced before deployment"
 type: Opaque
 stringData:
-  # Placeholder - replace with actual secrets
+  # PLACEHOLDER VALUES - DO NOT USE IN PRODUCTION
+  # Replace with actual secrets using:
+  # kubectl create secret generic sovereign-mesh-secrets \
+  #   --from-literal=DISCORD_BOT_TOKEN=<real-token> \
+  #   --from-literal=REDIS_PASSWORD=<real-password> \
+  #   --from-literal=QDRANT_API_KEY=<real-key>
   DISCORD_BOT_TOKEN: "REPLACE_WITH_ACTUAL_TOKEN"
   REDIS_PASSWORD: "REPLACE_WITH_ACTUAL_PASSWORD"
   QDRANT_API_KEY: "REPLACE_WITH_ACTUAL_KEY"
@@ -78,7 +87,7 @@ spec:
     spec:
       containers:
         - name: athena
-          image: ghcr.io/strategickhaos/reflex-node:latest
+          image: ghcr.io/strategickhaos/reflex-node:v1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -144,7 +153,7 @@ spec:
     spec:
       containers:
         - name: lyra
-          image: ghcr.io/strategickhaos/reflex-node:latest
+          image: ghcr.io/strategickhaos/reflex-node:v1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -210,7 +219,7 @@ spec:
     spec:
       containers:
         - name: nova
-          image: ghcr.io/strategickhaos/reflex-node:latest
+          image: ghcr.io/strategickhaos/reflex-node:v1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -276,7 +285,7 @@ spec:
     spec:
       containers:
         - name: ipower
-          image: ghcr.io/strategickhaos/reflex-node:latest
+          image: ghcr.io/strategickhaos/reflex-node:v1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -337,7 +346,7 @@ spec:
     spec:
       containers:
         - name: gitlens
-          image: ghcr.io/strategickhaos/gitlens-webhook:latest
+          image: ghcr.io/strategickhaos/gitlens-webhook:v1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
