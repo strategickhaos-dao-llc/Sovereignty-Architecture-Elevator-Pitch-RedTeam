@@ -1,0 +1,125 @@
+# Yamal Immune Stack - Sample ImmuneSystem Configuration
+# This CR implements a biological immune model for self-healing swarm infrastructure
+#
+# Biology → Infrastructure Mapping:
+# ├── DNA          → Container images (immutable blueprints)
+# ├── Cells        → Running containers
+# ├── Tissue       → Pod groups / deployments
+# ├── Organs       → Namespaces / services
+# ├── Bloodstream  → Volumes + message buses
+# ├── Bone Marrow  → Image registry (spawns new cells)
+# ├── Lymph Nodes  → Qdrant/vector DBs (threat memory)
+# ├── Skin         → Ingress / firewall (first barrier)
+# ├── Fever        → Resource throttling under attack
+# └── Apoptosis    → Graceful container termination
+
+apiVersion: swarm.strategickhaos.ai/v1
+kind: ImmuneSystem
+metadata:
+  name: yamal-immune
+  namespace: ops
+  labels:
+    app: swarm-immune
+    environment: production
+  annotations:
+    description: "Primary immune system for Strategickhaos production infrastructure"
+spec:
+  # 🩸 RED BLOOD CELLS (O2 Carriers)
+  # Message queues and data transport between services
+  # Carries compute payload to where it's needed
+  redBloodCells:
+    transport: redis
+    volumeClass: fast-nvme
+    replicationFactor: 3
+    serializationFormat: protobuf
+    healthCheckInterval: "5s"
+  
+  # 🔬 WHITE BLOOD CELLS (Immune Response)
+  # Security scanners, auto-kill, garbage collection
+  # Threat neutralization via network policy
+  whiteBloodCells:
+    scanner: trivy
+    runtimeMonitor: falco
+    responseTime: "5s"
+    autoKill: true
+    quarantineNamespace: infected
+    garbageCollection:
+      enabled: true
+      schedule: "0 */4 * * *"
+      retentionPeriod: "48h"
+    networkPolicy:
+      enabled: true
+      defaultDeny: true
+      allowedNamespaces:
+        - "kube-system"
+        - "monitoring"
+        - "ops"
+  
+  # 🛡️ ANTIBODIES (Pattern Memory)
+  # Vector embeddings for learned threat signatures
+  # Persistent across reboots (immune memory)
+  antibodies:
+    vectorDB: qdrant
+    vectorDBEndpoint: "http://qdrant.ops.svc:6333"
+    signatureRetention: "90d"
+    learningMode: active
+    imageAllowlist:
+      - "ollama/*"
+      - "strategickhaos/*"
+      - "ghcr.io/strategickhaos-swarm-intelligence/*"
+    behavioralFingerprints:
+      enabled: true
+      sensitivity: high
+  
+  # ☀️🌙 CIRCADIAN RHYTHM (Day/Night Cycle)
+  # Sunshine = active metabolism, GPU burst, high compute
+  # Moonlight = low-power surveillance, batch jobs, healing
+  circadianRhythm:
+    enabled: true
+    timezone: "America/Chicago"
+    sunshineHours: "06:00-22:00"
+    moonlightHours: "22:00-06:00"
+    sunshineReplicas: 10
+    moonlightReplicas: 2
+    gpuBurst:
+      enabled: true
+      maxGPUs: 4
+      burstThreshold: "80%"
+  
+  # 🚫 AUTOIMMUNE PROTECTION
+  # Prevent the immune system from attacking healthy components
+  autoimmune:
+    enabled: false
+    trustedImages:
+      - "ollama/*"
+      - "strategickhaos/*"
+      - "ghcr.io/strategickhaos-swarm-intelligence/*"
+    trustedNamespaces:
+      - "kube-system"
+      - "cert-manager"
+      - "ingress-nginx"
+    selfHealingDelay: "30s"
+  
+  # 🤒 FEVER RESPONSE
+  # Resource throttling when under active attack
+  feverResponse:
+    enabled: true
+    triggerThreshold: 5
+    throttlePercent: 50
+    duration: "5m"
+  
+  # ⚰️ APOPTOSIS (Graceful Termination)
+  # Programmed cell death for orderly replacement
+  apoptosis:
+    enabled: true
+    gracePeriod: "30s"
+    drainConnections: true
+    preStopHook: "/bin/sh -c 'sleep 5'"
+  
+  # 🦴 BONE MARROW (Cell Factory)
+  # Image registry - where new cells are born
+  boneMarrow:
+    registry: "ghcr.io/strategickhaos-swarm-intelligence"
+    pullSecretRef: "ghcr-pull-secret"
+    scanOnPush: true
+    immutableTags: true

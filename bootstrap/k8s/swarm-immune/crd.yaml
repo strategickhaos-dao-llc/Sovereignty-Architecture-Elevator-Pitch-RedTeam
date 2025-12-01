@@ -1,0 +1,352 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: immunesystems.swarm.strategickhaos.ai
+  labels:
+    app: swarm-immune
+    component: crd
+  annotations:
+    description: "Biological immune system model for self-healing swarm infrastructure"
+spec:
+  group: swarm.strategickhaos.ai
+  names:
+    kind: ImmuneSystem
+    listKind: ImmuneSystemList
+    plural: immunesystems
+    singular: immunesystem
+    shortNames:
+      - immune
+      - is
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              required:
+                - redBloodCells
+                - whiteBloodCells
+              properties:
+                # Red Blood Cells - Data Transport (O2 Carriers)
+                redBloodCells:
+                  type: object
+                  description: "Message transport layer - carries compute payload like hemoglobin carries oxygen"
+                  required:
+                    - transport
+                  properties:
+                    transport:
+                      type: string
+                      description: "Message queue system"
+                      enum: ["redis", "nats", "kafka", "rabbitmq"]
+                    volumeClass:
+                      type: string
+                      description: "StorageClass for bloodstream volumes"
+                      default: "standard"
+                    replicationFactor:
+                      type: integer
+                      description: "Number of replicas for transport layer"
+                      minimum: 1
+                      maximum: 10
+                      default: 3
+                    serializationFormat:
+                      type: string
+                      description: "Hemoglobin equivalent - data encoding"
+                      enum: ["json", "protobuf", "msgpack", "avro"]
+                      default: "json"
+                    healthCheckInterval:
+                      type: string
+                      description: "Interval for transport health checks"
+                      default: "10s"
+                
+                # White Blood Cells - Immune Response
+                whiteBloodCells:
+                  type: object
+                  description: "Security scanners and auto-remediation - threat neutralization"
+                  required:
+                    - scanner
+                  properties:
+                    scanner:
+                      type: string
+                      description: "Container security scanner"
+                      enum: ["trivy", "falco", "grype", "snyk"]
+                    runtimeMonitor:
+                      type: string
+                      description: "Runtime security monitor"
+                      enum: ["falco", "sysdig", "tetragon", "none"]
+                      default: "falco"
+                    responseTime:
+                      type: string
+                      description: "Maximum time to respond to threats"
+                      default: "5s"
+                    autoKill:
+                      type: boolean
+                      description: "Automatically terminate compromised containers"
+                      default: true
+                    quarantineNamespace:
+                      type: string
+                      description: "Namespace to isolate infected containers"
+                      default: "quarantine"
+                    garbageCollection:
+                      type: object
+                      description: "Cleanup pods for resource reclamation"
+                      properties:
+                        enabled:
+                          type: boolean
+                          default: true
+                        schedule:
+                          type: string
+                          description: "Cron schedule for garbage collection"
+                          default: "0 */6 * * *"
+                        retentionPeriod:
+                          type: string
+                          description: "How long to retain terminated pods"
+                          default: "24h"
+                    networkPolicy:
+                      type: object
+                      description: "Network-level threat neutralization"
+                      properties:
+                        enabled:
+                          type: boolean
+                          default: true
+                        defaultDeny:
+                          type: boolean
+                          default: true
+                        allowedNamespaces:
+                          type: array
+                          items:
+                            type: string
+                
+                # Antibodies - Pattern Memory
+                antibodies:
+                  type: object
+                  description: "Learned threat signatures - immune memory via vector embeddings"
+                  properties:
+                    vectorDB:
+                      type: string
+                      description: "Vector database for threat signatures"
+                      enum: ["qdrant", "pinecone", "milvus", "pgvector", "weaviate"]
+                      default: "qdrant"
+                    vectorDBEndpoint:
+                      type: string
+                      description: "Endpoint for vector database"
+                    signatureRetention:
+                      type: string
+                      description: "How long to retain threat signatures"
+                      default: "90d"
+                    learningMode:
+                      type: string
+                      description: "Active learns new patterns, passive uses existing"
+                      enum: ["active", "passive", "hybrid"]
+                      default: "active"
+                    imageAllowlist:
+                      type: array
+                      description: "Trusted image patterns (immune to scanning)"
+                      items:
+                        type: string
+                    behavioralFingerprints:
+                      type: object
+                      description: "Runtime behavior pattern matching"
+                      properties:
+                        enabled:
+                          type: boolean
+                          default: true
+                        sensitivity:
+                          type: string
+                          enum: ["low", "medium", "high"]
+                          default: "medium"
+                
+                # Circadian Rhythm - Day/Night Cycle
+                circadianRhythm:
+                  type: object
+                  description: "Active metabolism (sunshine) vs healing phase (moonlight)"
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: true
+                    timezone:
+                      type: string
+                      description: "Timezone for circadian schedule"
+                      default: "UTC"
+                    sunshineHours:
+                      type: string
+                      description: "Active hours (HH:MM-HH:MM format)"
+                      default: "06:00-22:00"
+                    moonlightHours:
+                      type: string
+                      description: "Low-power hours (HH:MM-HH:MM format)"
+                      default: "22:00-06:00"
+                    sunshineReplicas:
+                      type: integer
+                      description: "Replica count during active hours"
+                      minimum: 1
+                      default: 10
+                    moonlightReplicas:
+                      type: integer
+                      description: "Replica count during sleep hours"
+                      minimum: 1
+                      default: 2
+                    gpuBurst:
+                      type: object
+                      description: "GPU scaling for compute-intensive workloads"
+                      properties:
+                        enabled:
+                          type: boolean
+                          default: false
+                        maxGPUs:
+                          type: integer
+                          minimum: 0
+                          default: 4
+                        burstThreshold:
+                          type: string
+                          description: "CPU/memory threshold to trigger GPU burst"
+                          default: "80%"
+                
+                # Autoimmune Protection
+                autoimmune:
+                  type: object
+                  description: "Prevent the immune system from attacking healthy components"
+                  properties:
+                    enabled:
+                      type: boolean
+                      description: "Enable autoimmune protection (prevents self-attack)"
+                      default: false
+                    trustedImages:
+                      type: array
+                      description: "Image patterns that are always trusted"
+                      items:
+                        type: string
+                    trustedNamespaces:
+                      type: array
+                      description: "Namespaces that are immune to scanning"
+                      items:
+                        type: string
+                    selfHealingDelay:
+                      type: string
+                      description: "Delay before triggering self-healing"
+                      default: "30s"
+                
+                # Fever Response - Resource Throttling Under Attack
+                feverResponse:
+                  type: object
+                  description: "Resource throttling when under active attack"
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: true
+                    triggerThreshold:
+                      type: integer
+                      description: "Number of threats to trigger fever mode"
+                      minimum: 1
+                      default: 5
+                    throttlePercent:
+                      type: integer
+                      description: "Percentage to throttle non-essential resources"
+                      minimum: 0
+                      maximum: 100
+                      default: 50
+                    duration:
+                      type: string
+                      description: "How long fever mode lasts"
+                      default: "5m"
+                
+                # Apoptosis - Graceful Termination
+                apoptosis:
+                  type: object
+                  description: "Graceful container termination and replacement"
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: true
+                    gracePeriod:
+                      type: string
+                      description: "Time allowed for graceful shutdown"
+                      default: "30s"
+                    drainConnections:
+                      type: boolean
+                      description: "Drain active connections before termination"
+                      default: true
+                    preStopHook:
+                      type: string
+                      description: "Command to run before termination"
+                
+                # Bone Marrow - Image Registry (Cell Factory)
+                boneMarrow:
+                  type: object
+                  description: "Image registry configuration - spawns new cells"
+                  properties:
+                    registry:
+                      type: string
+                      description: "Container registry URL"
+                    pullSecretRef:
+                      type: string
+                      description: "Secret reference for registry auth"
+                    scanOnPush:
+                      type: boolean
+                      description: "Scan images when pushed to registry"
+                      default: true
+                    immutableTags:
+                      type: boolean
+                      description: "Enforce immutable image tags"
+                      default: true
+                
+            status:
+              type: object
+              properties:
+                phase:
+                  type: string
+                  enum: ["Initializing", "Healthy", "UnderAttack", "Fever", "Healing", "Degraded"]
+                lastTransitionTime:
+                  type: string
+                  format: date-time
+                activeThreats:
+                  type: integer
+                neutralizedThreats:
+                  type: integer
+                learnedSignatures:
+                  type: integer
+                circadianMode:
+                  type: string
+                  enum: ["sunshine", "moonlight"]
+                currentReplicas:
+                  type: integer
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+                      reason:
+                        type: string
+                      message:
+                        type: string
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Mode
+          type: string
+          jsonPath: .status.circadianMode
+        - name: Threats
+          type: integer
+          jsonPath: .status.activeThreats
+        - name: Signatures
+          type: integer
+          jsonPath: .status.learnedSignatures
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp

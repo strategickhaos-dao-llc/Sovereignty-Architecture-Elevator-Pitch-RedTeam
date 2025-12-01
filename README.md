@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, SwarmImmune biological infrastructure, and sovereign infrastructure management.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **🧬 SwarmImmune** - Biological immune system for self-healing container orchestration
 
 ## 🚀 Quick Start
 
@@ -71,6 +72,23 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🧬 SwarmImmune (`swarm-immune-controller`)
+A Kubernetes operator implementing biological immune response for self-healing infrastructure:
+
+- **🩸 Red Blood Cells**: Message transport (Redis, NATS) - carries compute like hemoglobin carries oxygen
+- **🔬 White Blood Cells**: Security scanners (Trivy, Falco) - auto-kill compromised containers
+- **🛡️ Antibodies**: Vector DB (Qdrant) - learned threat signatures, persistent immune memory
+- **☀️🌙 Circadian Rhythm**: Day/night scaling - sunshine (high compute) vs moonlight (healing)
+- **🤒 Fever Response**: Resource throttling under active attack
+- **⚰️ Apoptosis**: Graceful container termination and replacement
+
+```yaml
+# Deploy SwarmImmune
+kubectl apply -f bootstrap/k8s/swarm-immune/
+```
+
+See **[SWARM_IMMUNE.md](SWARM_IMMUNE.md)** for complete documentation.
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
@@ -86,6 +104,7 @@ kubectl apply -f bootstrap/k8s/
 - RBAC with least-privilege access
 - Network policies for secure communication
 - Ingress with TLS and rate limiting
+- **SwarmImmune** - Biological immune system controller
 
 ### Observability Stack
 - **Prometheus** - Metrics collection from all components
