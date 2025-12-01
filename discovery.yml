@@ -331,10 +331,11 @@ library_of_alexandria:
   repo_path: "/library_of_alexandria"
   
   statistics:
-    article_count: 1
+    new_articles: 1                    # Articles created in library_of_alexandria/
     total_citations: 47
-    domains_covered: 4
+    domains_covered: 4                  # Including existing legal/ documentation
     last_updated: "2025-12-01"
+    note: "Domain coverage includes existing legal/ and ml_research/ directories"
   
   domains:
     - name: "drug_discovery"
@@ -342,21 +343,25 @@ library_of_alexandria:
       articles: 1
       citations: 47
       status: "active"
+      location: "library_of_alexandria/drug_discovery/"
     - name: "legal_compliance"
       description: "DAO law, SEC regulations, compliance frameworks"
       articles: 3
       citations: 30
       status: "active"
+      location: "legal/wyoming_sf0068/"
     - name: "cybersecurity"
       description: "MITRE ATT&CK, NIST frameworks, threat intelligence"
       articles: 30
       citations: 100
       status: "active"
+      location: "legal/cybersecurity_research/"
     - name: "machine_learning"
       description: "Transformers, LLMs, RLHF, scaling laws"
       articles: 28
       citations: 200
       status: "active"
+      location: "legal/wyoming_sf0068/legal/ml_research/"
   
   access_tiers:
     free:

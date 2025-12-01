@@ -140,7 +140,7 @@ alphafold3_capabilities:
 
 | Company | Drug | Indication | Stage | Timeline |
 |---------|------|------------|-------|----------|
-| Insilico Medicine | INS018_055 | Idiopathic Pulmonary Fibrosis | Phase II | 18 months |
+| Insilico Medicine | ISM001-055 (Rentosertib) | Idiopathic Pulmonary Fibrosis | Phase II | 18 months |
 | Exscientia | EXS21546 | Cancer | Phase I | 12 months |
 | Recursion | REC-994 | Cerebral Cavernous Malformation | Phase II | 24 months |
 | AbCellera | Bamlanivimab | COVID-19 | Approved | 3 months |

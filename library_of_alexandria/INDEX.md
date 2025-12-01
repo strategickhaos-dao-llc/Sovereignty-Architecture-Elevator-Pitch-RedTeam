@@ -173,8 +173,8 @@ grep -r "AlphaFold" /workspace/library_of_alexandria/
 # Get citation count
 find . -name "*.md" -exec grep -l "PMC" {} \; | wc -l
 
-# Generate cross-domain links
-./scripts/generate_cross_links.sh drug_discovery legal_compliance
+# List cross-domain articles
+grep -r "cross_domain_links" /workspace/library_of_alexandria/ --include="*.md"
 ```
 
 ### For Human Researchers
