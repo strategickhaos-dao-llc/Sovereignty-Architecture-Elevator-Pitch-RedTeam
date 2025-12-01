@@ -229,8 +229,12 @@ class VaultWatcher(FileSystemEventHandler):
             await asyncio.sleep(self.debounce_ms / 1000)
             self.callback(path, event_type)
 
-        loop = asyncio.get_event_loop()
-        self._pending_events[path] = loop.create_task(debounced_callback())
+        try:
+            loop = asyncio.get_running_loop()
+            self._pending_events[path] = loop.create_task(debounced_callback())
+        except RuntimeError:
+            # No running event loop, create a new task when loop starts
+            logger.debug("No running event loop, deferring task creation")
 
 
 class VaultReader:

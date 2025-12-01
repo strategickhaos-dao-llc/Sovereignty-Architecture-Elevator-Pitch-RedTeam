@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, AsyncIterator, Dict, List, Optional, Union
 
 import structlog
+import yaml
 from pydantic import BaseModel, Field
 
 logger = structlog.get_logger()
@@ -174,7 +175,6 @@ class ObsidianVaultSource(KnowledgeSource):
         match = frontmatter_pattern.match(content)
         if match:
             try:
-                import yaml
                 return yaml.safe_load(match.group(1)) or {}
             except Exception:
                 pass
@@ -671,8 +671,6 @@ class KnowledgeIngestionEngine:
 # Factory function for creating ingestion engine from config
 async def create_ingestion_engine(config_path: str) -> KnowledgeIngestionEngine:
     """Create ingestion engine from YAML config"""
-    import yaml
-
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 

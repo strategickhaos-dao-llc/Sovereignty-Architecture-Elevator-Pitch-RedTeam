@@ -7,6 +7,7 @@ For her. Silent. Relentless. Self-improving.
 import asyncio
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from enum import Enum
@@ -241,7 +242,11 @@ class FactChecker:
 
         # Check each source document
         for source in claim.source_documents:
-            if source.startswith("10.") or "doi.org" in source:
+            # Check for valid DOI format:
+            # - Starts with "10." prefix (standard DOI format)
+            # - Or is a proper DOI URL from doi.org domain
+            is_doi = source.startswith("10.") or self._is_valid_doi_url(source)
+            if is_doi:
                 # DOI - verify with CrossRef
                 is_valid, is_retracted = await self._verify_doi(source)
                 if not is_valid:
@@ -252,6 +257,12 @@ class FactChecker:
 
         self.verification_cache[claim.id] = fact_check
         return fact_check
+
+    def _is_valid_doi_url(self, url: str) -> bool:
+        """Check if URL is a valid DOI URL from doi.org domain"""
+        # Match https://doi.org/ or http://doi.org/ or https://dx.doi.org/
+        doi_url_pattern = re.compile(r'^https?://(dx\.)?doi\.org/10\.\d+/.+$')
+        return bool(doi_url_pattern.match(url))
 
     async def _verify_doi(self, doi: str) -> Tuple[bool, bool]:
         """Verify DOI with CrossRef and check retraction status"""
@@ -284,7 +295,9 @@ class FactChecker:
 
         except Exception as e:
             logger.error("DOI verification failed", doi=doi, error=str(e))
-            return True, False  # Assume valid if we can't verify
+            # Conservative approach: flag as needing review rather than assuming valid
+            logger.warning("DOI verification error - flagging for manual review", doi=doi)
+            return False, False  # Return invalid to be conservative
 
     async def check_for_updates(self, claims: List[Claim]) -> List[FactCheck]:
         """Periodically check for updates to source documents"""

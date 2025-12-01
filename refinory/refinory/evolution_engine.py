@@ -735,9 +735,16 @@ async def create_evolution_engine(config_path: str) -> EvolutionEngine:
     # Parse generation config
     generations_config = layer_4_config.get("generations", {})
 
-    # Parse frequency (e.g., "7d" -> 7)
-    frequency_str = generations_config.get("frequency", "7d")
-    frequency_days = int(frequency_str.replace("d", ""))
+    # Parse frequency (e.g., "7d" -> 7) with proper validation
+    frequency_str = str(generations_config.get("frequency", "7d"))
+    import re
+    frequency_match = re.match(r'^(\d+)d$', frequency_str)
+    if frequency_match:
+        frequency_days = int(frequency_match.group(1))
+    else:
+        # Default to 7 days if format is unexpected
+        logger.warning("Invalid frequency format, defaulting to 7 days", frequency=frequency_str)
+        frequency_days = 7
 
     engine = EvolutionEngine(
         population_size=generations_config.get("population_size", 640),
