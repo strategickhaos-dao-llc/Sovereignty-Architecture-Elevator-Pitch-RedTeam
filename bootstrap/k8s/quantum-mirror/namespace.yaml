@@ -1,0 +1,119 @@
+# Quantum Mirror Lab - Kubernetes Namespace and Core Resources
+# Creates the namespace and core infrastructure for the visualization layer
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    purpose: visualization
+    security: private
+---
+# ConfigMap for Mirror Lab Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quantum-mirror-config
+  namespace: quantum-mirror-lab
+data:
+  AGENT_COUNT: "640"
+  LAWS_COUNT: "10"
+  AGENTS_PER_LAW: "64"
+  SUNSHINE_PORT: "47989"
+  OBS_WEBSOCKET_PORT: "4455"
+  NATS_URL: "nats://nats:4222"
+  DISCOVERY_FEED_PORT: "8765"
+  DASHBOARD_PORT: "3001"
+  QUANTUM_VISUALIZER_PORT: "5000"
+  STREAMING_RESOLUTION: "1920x1080"
+  STREAMING_FRAMERATE: "60"
+  STREAMING_CODEC: "H.265"
+---
+# Secret for sensitive configuration
+apiVersion: v1
+kind: Secret
+metadata:
+  name: quantum-mirror-secrets
+  namespace: quantum-mirror-lab
+type: Opaque
+stringData:
+  IBM_QUANTUM_TOKEN: ""
+  AZURE_QUANTUM_KEY: ""
+---
+# ServiceAccount for Mirror Lab pods
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: quantum-mirror-sa
+  namespace: quantum-mirror-lab
+---
+# RBAC - Role for Mirror Lab
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: quantum-mirror-role
+  namespace: quantum-mirror-lab
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "services", "configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+---
+# RBAC - RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: quantum-mirror-rolebinding
+  namespace: quantum-mirror-lab
+subjects:
+- kind: ServiceAccount
+  name: quantum-mirror-sa
+  namespace: quantum-mirror-lab
+roleRef:
+  kind: Role
+  name: quantum-mirror-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Network Policy - Restrict access to family only
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: quantum-mirror-network-policy
+  namespace: quantum-mirror-lab
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    # Allow from same namespace
+    - namespaceSelector:
+        matchLabels:
+          app: quantum-mirror
+    # Allow from primary lab namespace
+    - namespaceSelector:
+        matchLabels:
+          app: laws-of-physics
+    # Allow from specific CIDR (family network)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+  egress:
+  - to:
+    # Allow to same namespace
+    - namespaceSelector:
+        matchLabels:
+          app: quantum-mirror
+    # Allow to primary lab
+    - namespaceSelector:
+        matchLabels:
+          app: laws-of-physics
+    # Allow to external APIs (quantum providers)
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 169.254.0.0/16
+        - 172.16.0.0/12
