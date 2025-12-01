@@ -115,7 +115,8 @@ activation_commands:
     description: "Run once on your main rig"
     commands:
       - "curl -fsSL https://tailscale.com/install.sh | sh"
-      - "tailscale up --operator=yourname --advertise-exit-node --advertise-routes=10.0.0.0/8"
+      - "tailscale up --operator=$USER --advertise-exit-node --advertise-routes=10.0.0.0/8"
+    note: "Replace $USER with your system username if not using shell expansion"
   other_devices:
     description: "On every other device (including iPad via Tailscale app)"
     commands:
