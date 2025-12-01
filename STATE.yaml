@@ -14,8 +14,19 @@ meta:
     - Contradictory advice from different nodes
     - Business decisions based on outdated state
   genesis_lock: true
+  # Discord User ID for the primary architect/operator - used for command authorization
   architect_snowflake: 1067614449693569044
   increment: 3449
+
+# ═══════════════════════════════════════════════════════════
+# COST THRESHOLDS
+# Configurable values for cost optimization decision gates
+# ═══════════════════════════════════════════════════════════
+
+cost_thresholds:
+  target_monthly_spend: 200
+  current_monthly_spend: 825
+  cost_warning_enabled: true
 
 # ═══════════════════════════════════════════════════════════
 # CURRENT STATE SNAPSHOT (As of 2025-11-30 23:30 CST)
@@ -156,10 +167,11 @@ decision_gates:
         warn_if_false: true
         message: "Mesh is designed but NOT deployed. Don't reference it as if it's running."
 
-      - question: "Are costs optimized (<$200/month)?"
+      - question: "Are costs optimized?"
         current_state: false
         warn_if_false: true
-        message: "Current spend ~$825/month. Optimize before adding resources."
+        # See cost_thresholds section for configurable values
+        message: "Current spend exceeds target. See cost_thresholds section. Optimize before adding resources."
 
   # Before recommending financial decisions
   pre_financial_check:
@@ -256,6 +268,8 @@ state_maintenance:
       action: "Update legal_entities"
 
   storage_locations:
+    # NOTE: Primary path is environment-specific. Update to match your local setup.
+    # Use environment variables like $HOME or %USERPROFILE% when scripting access.
     primary: "C:/Users/garza/OneDrive/Desktop/ObsidianRecon/.obsidian/Strategickhaos/STATE.yaml"
     backup: "github.com/strategickhaos/obsidian-neural-mesh/STATE.yaml"
     access: "All AI nodes query this before giving advice"
@@ -327,7 +341,8 @@ gpt_5_1_correction:
   corrected_advice:
     step_1: "Click DONE on GCP principals screen (don't add any)"
     step_2: "Download service account JSON key"
-    step_3: "Save to C:\\Users\\garza\\.gcloud\\keys\\strategickhaos-bot.json"
+    # NOTE: Path is environment-specific. Adjust for your OS and username.
+    step_3: "Save to $HOME/.gcloud/keys/strategickhaos-bot.json (or %USERPROFILE%\\.gcloud\\keys\\ on Windows)"
     step_4: "Install gke-gcloud-auth-plugin"
     step_5: "Activate service account"
     step_6: "Fix kubectl"
@@ -381,7 +396,8 @@ operator_commands:
   force_update:
     syntax: "UPDATE STATE [section] [key] [value]"
     example: "UPDATE STATE deployed.discord_bot_location 'IN CLUSTER'"
-    requires: "Architect signature (snowflake 1067614449693569044)"
+    # Requires Discord User ID verification from meta.architect_snowflake
+    requires: "Architect signature (Discord User ID from meta.architect_snowflake)"
 
   emergency_halt:
     syntax: "HALT ALL RECOMMENDATIONS"
