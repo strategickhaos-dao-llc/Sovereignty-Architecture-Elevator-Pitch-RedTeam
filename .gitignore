@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Legal-Firewall generated components (output directory)
+generated_components/
