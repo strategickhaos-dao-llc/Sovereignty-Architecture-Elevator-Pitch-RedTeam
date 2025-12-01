@@ -8,6 +8,21 @@ global:
     cluster: 'strategickhaos-dev'
     environment: '${REFINORY_ENV:-development}'
 
+# Grafana Cloud Remote Write Configuration
+remote_write:
+  - url: https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push
+    basic_auth:
+      username: 2786173
+      password: ${GRAFANA_CLOUD_API_TOKEN}
+    queue_config:
+      capacity: 10000
+      max_shards: 200
+      min_shards: 1
+      max_samples_per_send: 5000
+      batch_send_deadline: 5s
+      min_backoff: 30ms
+      max_backoff: 100ms
+
 rule_files:
   - "alerts.yml"
 

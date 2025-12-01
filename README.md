@@ -89,6 +89,7 @@ kubectl apply -f bootstrap/k8s/
 
 ### Observability Stack
 - **Prometheus** - Metrics collection from all components
+- **Grafana Cloud** - Centralized cloud-based metrics with remote_write ([Setup Guide](GRAFANA_CLOUD_INTEGRATION.md))
 - **Loki** - Centralized logging aggregation
 - **OpenTelemetry** - Distributed tracing
 - **Alertmanager** - Alert routing to Discord channels

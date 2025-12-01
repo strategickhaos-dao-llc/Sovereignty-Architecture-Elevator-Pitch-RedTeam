@@ -1,0 +1,146 @@
+// Grafana Alloy Configuration for Strategickhaos Sovereignty Architecture
+// Alternative to Prometheus remote_write with better performance and features
+//
+// To use this configuration:
+// 1. Install Grafana Alloy: https://grafana.com/docs/alloy/latest/get-started/install/
+// 2. Set environment variables: GRAFANA_CLOUD_INSTANCE_ID, GRAFANA_CLOUD_API_TOKEN
+// 3. Run: alloy run monitoring/alloy-config.river
+
+// Prometheus Scrape Targets - Discord Bot
+prometheus.scrape "discord_bot" {
+  targets = [
+    {"__address__" = "bot:3000"},
+    {"__address__" = "localhost:3000"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/metrics"
+  scrape_interval = "30s"
+  scrape_timeout = "10s"
+}
+
+// Prometheus Scrape Targets - Event Gateway
+prometheus.scrape "event_gateway" {
+  targets = [
+    {"__address__" = "gateway:8080"},
+    {"__address__" = "localhost:8080"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/metrics"
+  scrape_interval = "15s"
+}
+
+// Prometheus Scrape Targets - Refinory API
+prometheus.scrape "refinory_api" {
+  targets = [
+    {"__address__" = "refinory-api:8000"},
+    {"__address__" = "localhost:8000"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/metrics"
+  scrape_interval = "30s"
+}
+
+// Prometheus Scrape Targets - Infrastructure
+prometheus.scrape "redis" {
+  targets = [
+    {"__address__" = "redis:6379"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/metrics"
+  scrape_interval = "60s"
+}
+
+prometheus.scrape "postgres" {
+  targets = [
+    {"__address__" = "postgres:5432"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/metrics"
+  scrape_interval = "60s"
+}
+
+prometheus.scrape "qdrant" {
+  targets = [
+    {"__address__" = "qdrant:6333"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/metrics"
+  scrape_interval = "30s"
+}
+
+prometheus.scrape "vault" {
+  targets = [
+    {"__address__" = "vault:8200"},
+  ]
+  forward_to = [prometheus.relabel.add_labels.receiver]
+  metrics_path = "/v1/sys/metrics"
+  params = {
+    format = ["prometheus"],
+  }
+  scrape_interval = "60s"
+}
+
+// Add common labels to all metrics
+prometheus.relabel "add_labels" {
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+
+  rule {
+    target_label = "cluster"
+    replacement  = "strategickhaos-dev"
+  }
+
+  rule {
+    target_label = "environment"
+    replacement  = env("REFINORY_ENV")
+  }
+
+  // Drop high cardinality labels if needed
+  rule {
+    source_labels = ["__name__"]
+    regex         = "go_gc_.*"
+    action        = "drop"
+  }
+}
+
+// Remote Write to Grafana Cloud
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = "https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push"
+
+    basic_auth {
+      username = "2786173"
+      password = env("GRAFANA_CLOUD_API_TOKEN")
+    }
+
+    queue_config {
+      capacity             = 10000
+      max_shards           = 200
+      min_shards           = 1
+      max_samples_per_send = 5000
+      batch_send_deadline  = "5s"
+      min_backoff          = "30ms"
+      max_backoff          = "100ms"
+    }
+  }
+
+  // External labels
+  external_labels = {
+    cluster     = "strategickhaos-dev",
+    environment = env("REFINORY_ENV"),
+  }
+}
+
+// Optional: Metrics for Alloy itself
+prometheus.exporter.self "alloy" {
+}
+
+prometheus.scrape "alloy_self" {
+  targets    = prometheus.exporter.self.alloy.targets
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+// Logging configuration
+logging {
+  level  = "info"
+  format = "json"
+}

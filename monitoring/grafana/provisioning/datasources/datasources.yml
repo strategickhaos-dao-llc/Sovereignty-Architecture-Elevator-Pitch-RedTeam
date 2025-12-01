@@ -65,3 +65,19 @@ datasources:
       spanBar:
         type: 'Tag'
         tag: 'http.path'
+
+  # Grafana Cloud Prometheus
+  - name: Grafana Cloud - me1010101
+    type: prometheus
+    access: proxy
+    url: https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom
+    editable: true
+    basicAuth: true
+    basicAuthUser: 2786173
+    secureJsonData:
+      basicAuthPassword: ${GRAFANA_CLOUD_API_TOKEN}
+    jsonData:
+      httpMethod: POST
+      prometheusType: Prometheus
+      cacheLevel: 'High'
+      incrementalQuerying: true
