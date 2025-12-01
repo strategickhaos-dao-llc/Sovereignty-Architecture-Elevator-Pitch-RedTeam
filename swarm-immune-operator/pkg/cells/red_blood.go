@@ -23,10 +23,10 @@ func NewRedBloodCellDeployment(namespace, transport string, replicas int32) *app
 	port := int32(6379)
 	switch transport {
 	case "kafka":
-		image = "bitnami/kafka:latest"
+		image = "bitnami/kafka:3.6"
 		port = 9092
 	case "nats":
-		image = "nats:latest"
+		image = "nats:2.10"
 		port = 4222
 	}
 

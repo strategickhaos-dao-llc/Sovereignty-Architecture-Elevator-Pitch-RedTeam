@@ -33,7 +33,7 @@ spec:
         fsGroup: 65532
       containers:
         - name: operator
-          image: strategickhaos/swarm-immune-operator:latest
+          image: strategickhaos/swarm-immune-operator:v1.0.0
           imagePullPolicy: Always
           args:
             - --metrics-bind-address=:8080

@@ -137,11 +137,9 @@ func (r *ImmuneReconciler) reconcileRedBloodCells(ctx context.Context, immune *s
 		}
 	}
 
-	// Update status
+	// Update status - always update even if 0
 	immune.Status.RedBloodCells.Desired = spec.Replicas
-	if found.Status.ReadyReplicas > 0 {
-		immune.Status.RedBloodCells.Ready = found.Status.ReadyReplicas
-	}
+	immune.Status.RedBloodCells.Ready = found.Status.ReadyReplicas
 	immune.Status.RedBloodCells.Message = fmt.Sprintf("%d/%d healthy", immune.Status.RedBloodCells.Ready, spec.Replicas)
 
 	return nil
@@ -184,14 +182,14 @@ func (r *ImmuneReconciler) reconcileWhiteBloodCells(ctx context.Context, immune 
 			},
 		},
 	}
-	if err := r.Create(ctx, quarantineNs); err != nil && !errors.IsAlreadyExists(err) {
-		logger.Error(err, "Failed to create quarantine namespace")
+	if err := r.Create(ctx, quarantineNs); err != nil {
+		if !errors.IsAlreadyExists(err) {
+			logger.Error(err, "Failed to create quarantine namespace")
+		}
 	}
 
-	// Update status
-	if found.Status.NumberReady > 0 {
-		immune.Status.WhiteBloodCells.Ready = found.Status.NumberReady
-	}
+	// Update status - always update even if 0
+	immune.Status.WhiteBloodCells.Ready = found.Status.NumberReady
 	immune.Status.WhiteBloodCells.Desired = found.Status.DesiredNumberScheduled
 	immune.Status.WhiteBloodCells.Message = fmt.Sprintf("%d/%d scanning", immune.Status.WhiteBloodCells.Ready, immune.Status.WhiteBloodCells.Desired)
 
@@ -219,12 +217,21 @@ func (r *ImmuneReconciler) reconcileAntibodies(ctx context.Context, immune *swar
 		if err := r.Create(ctx, statefulSet); err != nil {
 			return err
 		}
+		// Initialize status for new StatefulSet
+		immune.Status.AntibodiesLoaded = 0
 	} else if err != nil {
 		return err
+	} else {
+		// StatefulSet exists - update status based on ready replicas
+		// In production, this would query the actual vector DB for signature count
+		if found.Status.ReadyReplicas > 0 {
+			// Placeholder: would query vector DB endpoint for actual count
+			// e.g., GET http://antibody-memory:6333/collections
+			immune.Status.AntibodiesLoaded = 1247
+		} else {
+			immune.Status.AntibodiesLoaded = 0
+		}
 	}
-
-	// Update status - antibodies loaded (simulated, would query vector DB in production)
-	immune.Status.AntibodiesLoaded = 1247 // Placeholder - would query actual DB
 
 	return nil
 }
@@ -322,7 +329,10 @@ func (r *ImmuneReconciler) updateStatus(ctx context.Context, immune *swarmv1.Imm
 	return r.Status().Update(ctx, immune)
 }
 
-// parseHours parses time range string like "06:00-22:00" into start and end hours
+// parseHours parses a time range string in "HH:MM-HH:MM" format and returns
+// the start and end hours as integers. For example, "06:00-22:00" returns (6, 22).
+// If parsing fails, it returns default values of (6, 22) for sunrise at 6 AM
+// and sunset at 10 PM.
 func parseHours(timeRange string) (int, int) {
 	// Default values
 	startHour := 6

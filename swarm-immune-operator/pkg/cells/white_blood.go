@@ -24,7 +24,7 @@ func NewWhiteBloodCellDaemonSet(namespace, scanner string) *appsv1.DaemonSet {
 	case "trivy":
 		container = corev1.Container{
 			Name:  "trivy",
-			Image: "aquasec/trivy:latest",
+			Image: "aquasec/trivy:0.48.0",
 			Args:  []string{"server", "--listen", "0.0.0.0:4954"},
 			Ports: []corev1.ContainerPort{
 				{
@@ -41,7 +41,7 @@ func NewWhiteBloodCellDaemonSet(namespace, scanner string) *appsv1.DaemonSet {
 	default: // falco
 		container = corev1.Container{
 			Name:  "falco",
-			Image: "falcosecurity/falco:latest",
+			Image: "falcosecurity/falco:0.37.0",
 			SecurityContext: &corev1.SecurityContext{
 				Privileged: boolPtr(true),
 			},

@@ -18,17 +18,17 @@ func NewAntibodyStatefulSet(namespace, vectorDB string) *appsv1.StatefulSet {
 	}
 
 	// Determine image and ports based on vector DB type
-	image := "qdrant/qdrant:latest"
+	image := "qdrant/qdrant:v1.7.4"
 	port := int32(6333)
 	grpcPort := int32(6334)
 	switch vectorDB {
 	case "milvus":
-		image = "milvusdb/milvus:latest"
+		image = "milvusdb/milvus:v2.3.4"
 		port = 19530
 		grpcPort = 19530
 	case "pinecone":
 		// Pinecone is a cloud service, use a placeholder
-		image = "alpine:latest"
+		image = "alpine:3.19"
 		port = 8080
 		grpcPort = 8080
 	}

@@ -33,7 +33,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: falco
-          image: falcosecurity/falco:latest
+          image: falcosecurity/falco:0.37.0
           securityContext:
             privileged: true
           volumeMounts:
