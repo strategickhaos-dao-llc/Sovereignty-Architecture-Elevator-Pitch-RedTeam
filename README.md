@@ -28,6 +28,22 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 💰 Flagship Service: Sovereign LLM Safety & Evidence Vault
+
+**NEW**: Turn your LLM security into a billable asset. A comprehensive consulting + productized service for auditing, hardening, and documenting LLM safety implementations.
+
+📂 **[See full service details →](SovereignLLM_SafetyVault/README.md)**
+
+**What you get:**
+- 100-point LLM safety audit framework
+- Evidence vault with timestamped documentation
+- Grafana dashboards for real-time safety monitoring
+- Patent-ready technical documentation
+
+**Pricing:** $1k (solo dev) to $5k (small company) one-time, or $500-$2k/month retainer
+
+---
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)

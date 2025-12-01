@@ -1,0 +1,206 @@
+{
+  "dashboard": {
+    "title": "LLM Safety Monitoring Dashboard",
+    "tags": ["llm", "safety", "security"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(llm_requests_total[5m])",
+            "legendFormat": "Requests/sec"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Safety Filter Blocks",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(llm_safety_blocks_total[5m])",
+            "legendFormat": "{{reason}}"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Prompt Injection Attempts",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 8, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(llm_injection_attempts_total[1h]))",
+            "legendFormat": "Last Hour"
+          }
+        ],
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto"
+        }
+      },
+      {
+        "id": 4,
+        "title": "Jailbreak Attempts",
+        "type": "stat",
+        "gridPos": {"x": 6, "y": 8, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(llm_jailbreak_attempts_total[1h]))",
+            "legendFormat": "Last Hour"
+          }
+        ],
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area"
+        }
+      },
+      {
+        "id": 5,
+        "title": "PII Redactions",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 8, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(llm_pii_redactions_total[1h]))",
+            "legendFormat": "Last Hour"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Toxicity Blocks",
+        "type": "stat",
+        "gridPos": {"x": 18, "y": 8, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(llm_toxicity_blocks_total[1h]))",
+            "legendFormat": "Last Hour"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Response Latency (p95)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 12, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(llm_response_duration_seconds_bucket[5m]))",
+            "legendFormat": "p95 latency"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Error Rate",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 12, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(llm_errors_total[5m])",
+            "legendFormat": "{{error_type}}"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Rate Limit Hits",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 20, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(llm_rate_limit_hits_total[5m])",
+            "legendFormat": "{{limit_type}}"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Active Users",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 20, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "count(count by (user_id) (rate(llm_requests_total[5m])))",
+            "legendFormat": "Active Users"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Model Drift Score",
+        "type": "gauge",
+        "gridPos": {"x": 18, "y": 20, "w": 6, "h": 8},
+        "targets": [
+          {
+            "expr": "llm_model_drift_score",
+            "legendFormat": "Drift Score"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 0.3, "color": "yellow"},
+                {"value": 0.7, "color": "red"}
+              ]
+            },
+            "min": 0,
+            "max": 1
+          }
+        }
+      },
+      {
+        "id": 12,
+        "title": "Recent Safety Alerts",
+        "type": "logs",
+        "gridPos": {"x": 0, "y": 28, "w": 24, "h": 8},
+        "targets": [
+          {
+            "expr": "{job=\"llm-safety\"} |= \"ALERT\"",
+            "legendFormat": ""
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "environment",
+          "type": "custom",
+          "options": [
+            {"text": "Production", "value": "prod"},
+            {"text": "Staging", "value": "staging"},
+            {"text": "Development", "value": "dev"}
+          ]
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Deployments",
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "deployment_timestamp"
+        }
+      ]
+    }
+  }
+}
