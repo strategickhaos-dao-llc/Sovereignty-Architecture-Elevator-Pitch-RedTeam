@@ -1,0 +1,305 @@
+# Approved Charitable Beneficiary Organizations
+# 7% Eternal Commitment - Strategickhaos DAO LLC
+
+# This file maintains the list of pre-approved 501(c)(3) organizations
+# eligible to receive charitable distributions.
+
+version: "1.0"
+last_updated: "2025-11-23"
+managed_by: "Managing Member (Domenic Garza)"
+
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+# ===================================================================
+# CHILDREN'S WELFARE ORGANIZATIONS (Target: 40% of allocation)
+# ===================================================================
+
+children_welfare:
+  - name: "[Organization Name TBD]"
+    ein: "XX-XXXXXXX"
+    category: "children_healthcare"
+    status: "pending_approval"
+    added_date: null
+    verification:
+      irs_501c3: false
+      charity_navigator_rating: null
+      guidestar_verified: false
+      financial_transparency: null
+    contact:
+      website: null
+      email: null
+      phone: null
+    programs:
+      - "Pediatric healthcare"
+      - "Medical assistance for low-income families"
+    geography: ["Texas", "National"]
+    minimum_distribution: 500  # USD
+    notes: "Placeholder - to be researched and approved"
+
+  - name: "[Organization Name TBD]"
+    ein: "XX-XXXXXXX"
+    category: "children_education"
+    status: "pending_approval"
+    added_date: null
+    verification:
+      irs_501c3: false
+      charity_navigator_rating: null
+      guidestar_verified: false
+      financial_transparency: null
+    contact:
+      website: null
+      email: null
+      phone: null
+    programs:
+      - "Scholarships for underprivileged children"
+      - "After-school programs"
+    geography: ["Texas", "Wyoming"]
+    minimum_distribution: 500
+    notes: "Placeholder - to be researched and approved"
+
+# ===================================================================
+# VETERANS SUPPORT ORGANIZATIONS (Target: 40% of allocation)
+# ===================================================================
+
+veterans_support:
+  - name: "[Organization Name TBD]"
+    ein: "XX-XXXXXXX"
+    category: "veterans_healthcare"
+    status: "pending_approval"
+    added_date: null
+    verification:
+      irs_501c3: false
+      charity_navigator_rating: null
+      guidestar_verified: false
+      financial_transparency: null
+    contact:
+      website: null
+      email: null
+      phone: null
+    programs:
+      - "Mental health services for veterans"
+      - "PTSD treatment programs"
+      - "Suicide prevention"
+    geography: ["National"]
+    minimum_distribution: 500
+    notes: "Placeholder - to be researched and approved"
+
+  - name: "[Organization Name TBD]"
+    ein: "XX-XXXXXXX"
+    category: "veterans_housing"
+    status: "pending_approval"
+    added_date: null
+    verification:
+      irs_501c3: false
+      charity_navigator_rating: null
+      guidestar_verified: false
+      financial_transparency: null
+    contact:
+      website: null
+      email: null
+      phone: null
+    programs:
+      - "Housing assistance for homeless veterans"
+      - "Transitional housing programs"
+      - "Housing first initiatives"
+    geography: ["Texas", "National"]
+    minimum_distribution: 500
+    notes: "Placeholder - to be researched and approved"
+
+# ===================================================================
+# COMMUNITY HEALING ORGANIZATIONS (Target: 20% of allocation)
+# ===================================================================
+
+community_healing:
+  - name: "[Organization Name TBD]"
+    ein: "XX-XXXXXXX"
+    category: "mental_health"
+    status: "pending_approval"
+    added_date: null
+    verification:
+      irs_501c3: false
+      charity_navigator_rating: null
+      guidestar_verified: false
+      financial_transparency: null
+    contact:
+      website: null
+      email: null
+      phone: null
+    programs:
+      - "Trauma recovery services"
+      - "Addiction recovery programs"
+      - "Community mental health support"
+    geography: ["Local", "Regional"]
+    minimum_distribution: 500
+    notes: "Placeholder - to be researched and approved"
+
+  - name: "[Organization Name TBD]"
+    ein: "XX-XXXXXXX"
+    category: "disaster_relief"
+    status: "pending_approval"
+    added_date: null
+    verification:
+      irs_501c3: false
+      charity_navigator_rating: null
+      guidestar_verified: false
+      financial_transparency: null
+    contact:
+      website: null
+      email: null
+      phone: null
+    programs:
+      - "Emergency disaster response"
+      - "Humanitarian aid"
+      - "Community rebuilding"
+    geography: ["National", "International"]
+    minimum_distribution: 1000
+    notes: "For emergency/disaster allocations - to be researched and approved"
+
+# ===================================================================
+# VETTING CRITERIA (Applied to all organizations before approval)
+# ===================================================================
+
+vetting_criteria:
+  required:
+    - "Valid 501(c)(3) tax-exempt status (verified via IRS.gov)"
+    - "Good standing with state/federal regulators (no pending investigations)"
+    - "Transparent financial reporting (Form 990 publicly available)"
+    - "Direct service delivery to beneficiaries (not just administrative overhead)"
+    - "Alignment with beneficiary categories (children, veterans, or community healing)"
+  
+  preferred:
+    - "Charity Navigator rating: 3+ stars (if rated)"
+    - "GuideStar Bronze level or higher"
+    - "Program efficiency: >70% to direct services"
+    - "Financial stability: Positive net assets"
+    - "Geographic alignment: Texas, Wyoming, or National"
+    - "Accepts cryptocurrency donations (for Bitcoin distributions)"
+  
+  disqualifying:
+    - "Under investigation for fraud or misconduct"
+    - "IRS tax-exempt status revoked or suspended"
+    - "Discriminatory policies or practices"
+    - "Controlled by Members or immediate family (conflict of interest)"
+    - "Primary purpose is political lobbying (not service delivery)"
+
+# ===================================================================
+# APPROVAL PROCESS
+# ===================================================================
+
+approval_process:
+  step_1:
+    name: "Research and Identification"
+    responsible: "Managing Member or Charitable Committee"
+    actions:
+      - "Identify potential organizations via research"
+      - "Review Charity Navigator, GuideStar, IRS.gov"
+      - "Assess alignment with beneficiary categories"
+  
+  step_2:
+    name: "Due Diligence"
+    responsible: "Managing Member"
+    actions:
+      - "Verify 501(c)(3) status via IRS Exempt Organizations database"
+      - "Review Form 990 (last 3 years if available)"
+      - "Check state charity registration status"
+      - "Review financial efficiency ratios"
+      - "Contact organization for additional information"
+  
+  step_3:
+    name: "Approval Decision"
+    responsible: "Managing Member (or Charitable Committee when formed)"
+    actions:
+      - "Review all due diligence materials"
+      - "Confirm no conflicts of interest"
+      - "Document approval decision"
+      - "Add to approved-organizations.yaml"
+      - "Update distribution plans"
+  
+  step_4:
+    name: "Annual Review"
+    responsible: "Managing Member or Charitable Committee"
+    frequency: "Annually (or sooner if concerns arise)"
+    actions:
+      - "Re-verify 501(c)(3) status"
+      - "Review updated Form 990"
+      - "Check for any adverse news or investigations"
+      - "Confirm continued alignment with mission"
+      - "Update or remove organizations as needed"
+
+# ===================================================================
+# DISTRIBUTION GUIDELINES
+# ===================================================================
+
+distribution_guidelines:
+  minimum_amounts:
+    children_welfare: 500      # USD
+    veterans_support: 500      # USD
+    community_healing: 500     # USD
+    emergency_disaster: 1000   # USD
+  
+  payment_methods:
+    - "Bank transfer (ACH or wire)"
+    - "Check (for smaller amounts)"
+    - "Bitcoin (if organization accepts)"
+    - "In-kind services at fair market value (with proper documentation)"
+  
+  timing:
+    accrual: "Monthly (7% of each month's revenue)"
+    distribution: "Quarterly (within 30 days of quarter-end)"
+    reporting: "Quarterly report published within 30 days"
+  
+  documentation_required:
+    from_organization:
+      - "501(c)(3) determination letter"
+      - "W-9 form (for tax reporting)"
+      - "Donation acknowledgment letter"
+      - "Program description and impact metrics (when available)"
+    
+    internal:
+      - "Distribution authorization by Managing Member"
+      - "Payment confirmation (receipt/transaction ID)"
+      - "Quarterly report entry"
+      - "Annual tax reporting (Form 1099 if required)"
+
+# ===================================================================
+# CONTACT AND UPDATES
+# ===================================================================
+
+maintenance:
+  updates: "As organizations are vetted and approved"
+  managed_by: "Managing Member (Domenic Garza)"
+  review_frequency: "Quarterly (minimum)"
+  change_log: "Tracked via Git commit history"
+
+contact:
+  questions: "Open GitHub issue with tag 'beneficiary-organizations'"
+  email: "domenic.garza@snhu.edu"
+  response_time: "Within 7 business days"
+
+# ===================================================================
+# VERIFICATION
+# ===================================================================
+
+verification:
+  document_hash: "[TO BE CALCULATED]"
+  gpg_signature_file: "approved-organizations.yaml.asc"
+  last_signed_by: "Domenic Garza, Managing Member"
+  last_signed_date: null
+
+# ===================================================================
+# NOTES
+# ===================================================================
+
+notes:
+  - "This is an initial template - organizations will be added after proper vetting"
+  - "First distributions expected Q4 2025 or Q1 2026 (once revenue is generated)"
+  - "Priority: Local/regional organizations first, then expand nationally"
+  - "Bitcoin distributions preferred when organizations accept crypto"
+  - "All distributions public via quarterly transparency reports"
+  - "Community input welcomed via GitHub discussions"
+
+# ===================================================================
+
+eternal_commitment: "Seven percent. Forever. For healing."
+
+# 🧠⚡❤️🐐∞

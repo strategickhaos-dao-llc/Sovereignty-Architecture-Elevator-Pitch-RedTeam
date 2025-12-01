@@ -280,6 +280,24 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🌟 The 7% Eternal Commitment
+
+Strategickhaos DAO LLC has established an **irrevocable, perpetual commitment** to allocate **7% of all revenues** to charitable purposes—specifically to heal children, veterans, and the broken.
+
+This commitment is:
+- **Locked in Bitcoin** - Multi-signature wallet with public transparency
+- **Secured by GPG** - Cryptographically signed quarterly reports
+- **Grounded in Federal Law** - IRS Code Section 170(c) and Wyoming UPMIFA framework
+
+**Learn More:**
+- 📋 [Full Charitable Commitment](CHARITABLE_COMMITMENT.md)
+- ⚖️ [Governance Article 9](governance/article_9_charitable_distributions.md)
+- 📊 [Transparency Reports](charitable-reports/)
+
+*Seven percent. Forever. For healing.*
+
+---
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
