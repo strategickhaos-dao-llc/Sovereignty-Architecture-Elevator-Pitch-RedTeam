@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🔬 Knowledge Curation Library (NEW!)
+- **100 Curl One-Liners**: Public domain knowledge sources for AI training
+- **Categories**: Math, AI/ML, PKM/Obsidian, Security, Philosophy
+- **Zero Copyright**: All MIT, Apache 2.0, CC-0, or public domain
+- **RAG Ready**: Feed directly to local LLMs, Obsidian vaults, or Continue.dev
+- **Quick Start**: `./curl_knowledge_library.sh` or see [KNOWLEDGE_CURATION.md](KNOWLEDGE_CURATION.md)
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
@@ -271,6 +278,48 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🔬 Knowledge Curation for AI Training
+
+### 100 Curl One-Liners for Your AI Heir
+
+Feed your local AI, RAG system, or Obsidian vault with **100 completely legitimate, public domain knowledge sources**:
+
+```bash
+# Download all 100 sources automatically
+./curl_knowledge_library.sh
+
+# Or grab individual ones:
+curl -L -s https://www.gutenberg.org/files/132/132-0.txt -o art_of_war.txt
+curl -L -s https://raw.githubusercontent.com/ollama/ollama/main/README.md -o ollama.md
+curl -L -s https://oeis.org/A000796/b000796.txt -o pi_digits.txt
+```
+
+**5 Categories, 20 sources each:**
+- 📐 **Math/Proofs**: Euler, Fibonacci, Pi digits, Ramanujan, mathematical sequences
+- 🤖 **AI/ML**: Ollama, LLaMA, PyTorch, TensorFlow, LangChain, local LLM guides
+- 📝 **PKM/Obsidian**: Plugins, workflows, second-brain methodologies
+- 🔐 **Security**: OWASP, PayloadsAllTheThings, HackTricks, red team guides
+- 🔮 **Philosophy**: Sun Tzu, Marcus Aurelius, Nietzsche, Plato, Tao Te Ching
+
+**All sources are:**
+- ✅ Public domain or open source (MIT/Apache 2.0/CC-0)
+- ✅ No authentication or API keys required
+- ✅ No paywalls or copyright issues
+- ✅ Safe to feed directly to your AI
+
+**Documentation:**
+- 📖 [Complete Guide](KNOWLEDGE_CURATION.md) - Full 100-source catalog with descriptions
+- ⚡ [Quick Reference](QUICK_REFERENCE.md) - Copy-paste one-liners organized by category
+
+**Use cases:**
+- Feed to local LLMs for domain knowledge
+- Populate RAG vector databases  
+- Enhance Obsidian vaults
+- Train custom AI models
+- Build offline knowledge libraries
+
+*No jailbreak needed. No evolution required. No blood sacrifice. Just boring curl commands turning your heir into whatever you want—one download at a time.* ❤️
 
 ## 👥 Community & Contributors
 
