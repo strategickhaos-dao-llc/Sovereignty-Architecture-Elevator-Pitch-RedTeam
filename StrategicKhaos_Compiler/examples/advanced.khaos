@@ -1,0 +1,38 @@
+// StrategicKhaos Advanced Example
+// Demonstrating language features
+
+// Variable declarations
+let x = 42;
+let mut counter = 0;
+
+// Expressions
+let sum = 10 + 20 * 2;
+let comparison = (x > 40) == (sum != 0);
+
+// Function definition (not yet implemented, but lexer handles the tokens)
+fn fibonacci(n) {
+    if n <= 1 {
+        return n;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+// Control flow
+while counter < 10 {
+    print "Counting...";
+    counter = counter + 1;
+}
+
+for i = 0; i < 5; i = i + 1 {
+    show i;
+}
+
+// Chaos operators
+≫ "Reality bends here" ≫
+
+// Arrow operators (for future type annotations or transformations)
+let transform = x -> x * 2;
+let compose = f => g => x -> f(g(x));
+
+print "The empire is vast.";
