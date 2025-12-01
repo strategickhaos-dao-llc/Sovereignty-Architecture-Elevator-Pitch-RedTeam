@@ -21,6 +21,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import sys
 from datetime import datetime, timezone
@@ -44,18 +45,14 @@ def get_state_path() -> Path:
     if env_path:
         return Path(env_path)
     
-    # Try relative path first, then check if we're in governance directory
+    # Try default path first
     if DEFAULT_STATE_PATH.exists():
         return DEFAULT_STATE_PATH
     
+    # Check if STATE.yaml exists in the same directory as the script
     local_path = Path(__file__).parent / "STATE.yaml"
     if local_path.exists():
         return local_path
-    
-    # Check governance subdirectory
-    gov_path = Path(__file__).parent / "governance" / "STATE.yaml"
-    if gov_path.exists():
-        return gov_path
     
     return DEFAULT_STATE_PATH
 
@@ -128,7 +125,9 @@ def create_snapshot(state_path: Path) -> str:
     snapshots_dir = state_path.parent / "snapshots"
     snapshots_dir.mkdir(exist_ok=True)
     
-    snapshot_filename = f"STATE_{timestamp.replace(':', '-').replace('+', '_')}_{state_hash[:8]}.yaml"
+    # Sanitize timestamp for safe filename (replace non-alphanumeric chars except dots and dashes)
+    safe_timestamp = re.sub(r'[^\w\-.]', '_', timestamp)
+    snapshot_filename = f"STATE_{safe_timestamp}_{state_hash[:8]}.yaml"
     snapshot_path = snapshots_dir / snapshot_filename
     shutil.copy2(state_path, snapshot_path)
     
@@ -244,7 +243,8 @@ def approve_gate(state_path: Path, gate_name: str, approval: str) -> None:
     state = load_state(state_path)
     
     if "decision_gates" not in state:
-        print(f"ERROR: No decision gates found in state")
+        print("ERROR: No decision_gates section found in STATE.yaml. "
+              "Please verify the state file structure.")
         sys.exit(1)
     
     if gate_name not in state["decision_gates"]:
