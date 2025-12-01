@@ -224,10 +224,11 @@ export class BoardReceiptSystem {
     threshold: number;
     deadline: Date;
     outcome?: "passed" | "failed" | "pending";
-  }): Promise<string | null> {
+  }): Promise<{ messageId: string | null; error?: string }> {
     if (!this.rest || !this.channelId) {
-      console.warn("Discord not configured, skipping council vote post");
-      return null;
+      const errorMsg = "Discord not configured, skipping council vote post";
+      console.warn(errorMsg);
+      return { messageId: null, error: errorMsg };
     }
 
     try {
@@ -236,10 +237,11 @@ export class BoardReceiptSystem {
         body: { embeds: [embed.toJSON()] }
       }) as { id: string };
 
-      return response.id;
+      return { messageId: response.id };
     } catch (error) {
-      console.error("Failed to post council vote to Discord:", error);
-      return null;
+      const errorMsg = error instanceof Error ? error.message : "Unknown Discord API error";
+      console.error("Failed to post council vote to Discord:", errorMsg);
+      return { messageId: null, error: errorMsg };
     }
   }
 

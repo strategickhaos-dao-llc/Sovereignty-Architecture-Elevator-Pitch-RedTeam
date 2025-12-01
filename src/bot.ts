@@ -29,35 +29,39 @@ client.on("interactionCreate", async (i: Interaction) => {
   try {
     if (i.commandName === "status") {
       const svc = i.options.getString("service", true);
-      const r = await fetch(`${cfg.control_api.base_url}/status/${svc}`, {
+      const response = await fetch(`${cfg.control_api.base_url}/status/${svc}`, {
         headers: { Authorization: `Bearer ${env(cfg.control_api.bearer_env)}` }
-      }).then(r => r.json() as Promise<{ state: string; version: string }>);
+      });
+      const r = await response.json() as { state: string; version: string };
       await i.reply({ embeds: [embed(`Status: ${svc}`, `state: ${r.state}\nversion: ${r.version}`)] });
     } else if (i.commandName === "logs") {
       const svc = i.options.getString("service", true);
       const tail = i.options.getInteger("tail") || 200;
-      const r = await fetch(`${cfg.control_api.base_url}/logs/${svc}?tail=${tail}`, {
+      const response = await fetch(`${cfg.control_api.base_url}/logs/${svc}?tail=${tail}`, {
         headers: { Authorization: `Bearer ${env(cfg.control_api.bearer_env)}` }
-      }).then(r => r.text());
+      });
+      const r = await response.text();
       await i.reply({ content: "```\n" + r.slice(0, 1800) + "\n```" });
     } else if (i.commandName === "deploy") {
       const envName = i.options.getString("env", true);
       const tag = i.options.getString("tag", true);
-      const r = await fetch(`${cfg.control_api.base_url}/deploy`, {
+      const deployResponse = await fetch(`${cfg.control_api.base_url}/deploy`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${env(cfg.control_api.bearer_env)}` },
         body: JSON.stringify({ env: envName, tag })
-      }).then(r => r.json() as Promise<{ status: string }>);
+      });
+      const r = await deployResponse.json() as { status: string };
       await i.reply({ embeds: [embed("Deploy", `env: ${envName}\ntag: ${tag}\nresult: ${r.status}`)] });
     } else if (i.commandName === "scale") {
       const svc = i.options.getString("service", true);
       const replicas = i.options.getInteger("replicas", true);
-      const r = await fetch(`${cfg.control_api.base_url}/scale`, {
+      const scaleResponse = await fetch(`${cfg.control_api.base_url}/scale`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${env(cfg.control_api.bearer_env)}` },
         body: JSON.stringify({ service: svc, replicas })
-      }).then(r => r.json() as Promise<{ status: string }>);
-      await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+      });
+      const scaleResult = await scaleResponse.json() as { status: string };
+      await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${scaleResult.status}`)] });
     } 
     // Council Commands - Board Receipt System
     else if (i.commandName === "council") {

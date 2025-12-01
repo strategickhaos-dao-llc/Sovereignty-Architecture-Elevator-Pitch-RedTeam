@@ -22,10 +22,12 @@ export interface HealthConfig {
     name: string;
     url?: string;
     checkFn?: () => Promise<boolean>;
+    timeout?: number; // Timeout in milliseconds for health checks
   }[];
   discordToken?: string;
   alertChannelId?: string;
   healthCheckInterval?: number;
+  defaultTimeout?: number; // Default timeout for services without specific timeout
 }
 
 export class HealthBot {
@@ -101,8 +103,9 @@ export class HealthBot {
           status = isHealthy ? "healthy" : "unhealthy";
           message = isHealthy ? "Check passed" : "Check failed";
         } else if (serviceConfig.url) {
+          const timeout = serviceConfig.timeout || this.config.defaultTimeout || 10000;
           const response = await fetch(serviceConfig.url, { 
-            signal: AbortSignal.timeout(10000) 
+            signal: AbortSignal.timeout(timeout) 
           });
           
           if (response.ok) {
