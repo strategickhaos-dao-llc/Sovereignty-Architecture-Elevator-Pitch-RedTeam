@@ -28,6 +28,14 @@ from pathlib import Path
 
 import yaml
 
+# Default increment counter starting value (linked to Discord birth-tick)
+DEFAULT_INCREMENT_START = 3449
+
+
+def get_utc_timestamp() -> str:
+    """Generate a UTC timestamp string with timezone info."""
+    return datetime.now(timezone.utc).isoformat() + 'Z'
+
 
 def load_state(state_file: str = "STATE.yaml") -> dict:
     """Load the STATE.yaml file."""
@@ -36,14 +44,22 @@ def load_state(state_file: str = "STATE.yaml") -> dict:
         print(f"❌ STATE.yaml not found at {state_path}")
         sys.exit(1)
     
-    with open(state_path, 'r') as f:
+    with open(state_path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
 
 def save_state(state: dict, state_file: str = "STATE.yaml") -> None:
     """Save state to STATE.yaml file."""
-    with open(state_file, 'w') as f:
+    with open(state_file, 'w', encoding='utf-8') as f:
         yaml.dump(state, f, default_flow_style=False, indent=2, sort_keys=False)
+
+
+def ensure_audit_trail(state: dict) -> None:
+    """Ensure the audit_trail section exists in state."""
+    if 'audit_trail' not in state:
+        state['audit_trail'] = {'retain_days': 365, 'last_entries': []}
+    if 'last_entries' not in state['audit_trail']:
+        state['audit_trail']['last_entries'] = []
 
 
 def compute_state_hash(state: dict) -> str:
@@ -58,17 +74,20 @@ def create_snapshot(state_file: str = "STATE.yaml") -> None:
     """Create a cryptographically signed snapshot of the current state."""
     state = load_state(state_file)
     
-    timestamp = datetime.now(timezone.utc).isoformat() + 'Z'
+    timestamp = get_utc_timestamp()
     
     # Update metadata FIRST (before computing hash)
     state['metadata']['last_modified'] = timestamp
     
     # Increment the truth counter
-    state['metadata']['increment'] = state['metadata'].get('increment', 3449) + 1
+    state['metadata']['increment'] = state['metadata'].get('increment', DEFAULT_INCREMENT_START) + 1
     
     # Update integrity section (except hash)
     state['integrity']['last_snapshot'] = timestamp
     state['integrity']['snapshot_count'] = state['integrity'].get('snapshot_count', 0) + 1
+    
+    # Ensure audit trail exists
+    ensure_audit_trail(state)
     
     # Add audit entry BEFORE hash computation
     audit_entry = {
@@ -77,9 +96,6 @@ def create_snapshot(state_file: str = "STATE.yaml") -> None:
         'actor': 'state_sync.py',
         'details': f'Increment: {state["metadata"]["increment"]}'
     }
-    
-    if 'audit_trail' not in state:
-        state['audit_trail'] = {'retain_days': 365, 'last_entries': []}
     
     # Keep last 100 entries
     state['audit_trail']['last_entries'] = (
@@ -99,7 +115,7 @@ def create_snapshot(state_file: str = "STATE.yaml") -> None:
     snapshots_dir.mkdir(exist_ok=True)
     
     snapshot_file = snapshots_dir / f"state_snapshot_{timestamp.replace(':', '-').replace('.', '-')}.json"
-    with open(snapshot_file, 'w') as f:
+    with open(snapshot_file, 'w', encoding='utf-8') as f:
         json.dump({
             'state': state,
             'hash': state_hash,
@@ -141,9 +157,13 @@ def verify_state(state_file: str = "STATE.yaml") -> bool:
 
 
 def update_field(field_path: str, value: str, state_file: str = "STATE.yaml") -> None:
-    """Update a specific field in the state and regenerate hash."""
+    """Update a specific field in the state and regenerate hash.
+    
+    Note: Values are stored as strings by default. Boolean ('true'/'false') and
+    null ('null'/'none') are converted to their Python equivalents.
+    """
     state = load_state(state_file)
-    timestamp = datetime.now(timezone.utc).isoformat() + 'Z'
+    timestamp = get_utc_timestamp()
     
     # Navigate to the field
     parts = field_path.split('.')
@@ -151,6 +171,9 @@ def update_field(field_path: str, value: str, state_file: str = "STATE.yaml") ->
     for part in parts[:-1]:
         if part not in target:
             target[part] = {}
+        elif not isinstance(target[part], dict):
+            print(f"❌ Cannot traverse path: '{part}' is not a dictionary")
+            return
         target = target[part]
     
     old_value = target.get(parts[-1])
@@ -167,8 +190,11 @@ def update_field(field_path: str, value: str, state_file: str = "STATE.yaml") ->
     
     # Update metadata
     state['metadata']['last_modified'] = timestamp
-    state['metadata']['increment'] = state['metadata'].get('increment', 3449) + 1
+    state['metadata']['increment'] = state['metadata'].get('increment', DEFAULT_INCREMENT_START) + 1
     state['integrity']['last_snapshot'] = timestamp
+    
+    # Ensure audit trail exists
+    ensure_audit_trail(state)
     
     # Add audit entry BEFORE hash computation
     audit_entry = {
@@ -245,7 +271,7 @@ def check_gate(gate_name: str, state_file: str = "STATE.yaml") -> bool:
 def pass_requirement(gate_name: str, requirement_name: str, state_file: str = "STATE.yaml") -> None:
     """Mark a requirement as passed and update gate status."""
     state = load_state(state_file)
-    timestamp = datetime.now(timezone.utc).isoformat() + 'Z'
+    timestamp = get_utc_timestamp()
     
     gates = state.get('decision_gates', {})
     if gate_name not in gates:
@@ -274,8 +300,11 @@ def pass_requirement(gate_name: str, requirement_name: str, state_file: str = "S
     
     # Update metadata
     state['metadata']['last_modified'] = timestamp
-    state['metadata']['increment'] = state['metadata'].get('increment', 3449) + 1
+    state['metadata']['increment'] = state['metadata'].get('increment', DEFAULT_INCREMENT_START) + 1
     state['integrity']['last_snapshot'] = timestamp
+    
+    # Ensure audit trail exists
+    ensure_audit_trail(state)
     
     # Add audit entry BEFORE hash computation
     audit_entry = {
@@ -313,8 +342,11 @@ def show_status(state_file: str = "STATE.yaml") -> None:
     
     # Integrity
     integrity = state.get('integrity', {})
+    state_hash = integrity.get('state_hash', 'N/A')
+    # Safely truncate hash if longer than 32 chars
+    hash_display = state_hash[:32] + '...' if len(state_hash) > 32 else state_hash
     print("🔐 INTEGRITY")
-    print(f"   Hash: {integrity.get('state_hash', 'N/A')[:32]}...")
+    print(f"   Hash: {hash_display}")
     print(f"   Snapshots: {integrity.get('snapshot_count', 0)}")
     print()
     
