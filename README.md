@@ -177,6 +177,12 @@ ai_agents:
 - **Audit Logging**: Comprehensive activity tracking
 - **Content Redaction**: Automatic PII and credential filtering
 
+### AI Logs as Legal Evidence
+- **9.5/10 Admissibility**: Achieve near-perfect legal evidence strength for AI logs
+- **GPG Signing**: Cryptographically sign all commits for integrity verification
+- **Sworn Declarations**: Ready-to-use templates for legal authentication
+- **Documentation**: See [legal/AI_LOGS_LEGAL_STATUS.md](legal/AI_LOGS_LEGAL_STATUS.md) and [legal/QUICK_REFERENCE.md](legal/QUICK_REFERENCE.md)
+
 ### Production Safeguards
 ```yaml
 governance:
@@ -283,6 +289,7 @@ This project thrives because of an extraordinary community of creators, builders
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
+- **Legal**: [AI Logs Legal Status](legal/AI_LOGS_LEGAL_STATUS.md) - 9.5/10 admissibility for AI evidence
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
