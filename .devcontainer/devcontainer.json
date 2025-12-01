@@ -1,4 +1,8 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {}
+  "postCreateCommand": "bash .devcontainer/codespace-bootstrap.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/gcloud:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
+  }
 }
