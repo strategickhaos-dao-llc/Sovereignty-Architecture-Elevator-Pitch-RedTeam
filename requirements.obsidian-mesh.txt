@@ -1,0 +1,11 @@
+# Obsidian Neural Mesh Discord Bot Dependencies
+# Genesis Lock: Increment 3449
+
+# Discord bot framework
+discord.py>=2.3.0
+
+# Configuration parsing
+PyYAML>=6.0
+
+# Async HTTP client
+aiohttp>=3.9.0

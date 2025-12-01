@@ -1,0 +1,394 @@
+---
+# Obsidian Neural Mesh Configuration
+# Sovereign knowledge graph system for Strategickhaos DAO
+# Genesis Lock: Increment 3449 | Architect: 1067614449693569044
+
+genesis:
+  increment: 3449
+  architect_snowflake: 1067614449693569044
+  created: "2024-01-01T00:00:00Z"
+  version: "1.0.0"
+
+# Archive Vault - Central repository of sovereign assets
+archive_vault:
+  base_path: "/vault/legions-of-minds"
+  structure:
+    licenses:
+      - name: "Unity Pro"
+        file: "licenses/unity-pro.md"
+        type: "commercial"
+        assigned_to: ["nova", "lyra"]
+        expires: "2025-12-31"
+      - name: "Unreal Engine"
+        file: "licenses/unreal-engine.md"
+        type: "royalty"
+        assigned_to: ["nova"]
+        expires: null
+      - name: "NinjaTrader"
+        file: "licenses/ninjatrader.md"
+        type: "commercial"
+        assigned_to: ["ipower"]
+        expires: "2025-06-30"
+      - name: "GitHub Copilot Business"
+        file: "licenses/github-copilot.md"
+        type: "subscription"
+        assigned_to: ["athena", "nova", "lyra", "ipower"]
+        expires: "2025-12-31"
+
+    apis:
+      - name: "Discord API"
+        file: "api/discord-api.md"
+        credentials_ref: "vault://kv/discord/api_key"
+        rate_limit: 50
+        used_by: ["athena", "nova"]
+      - name: "GitHub API"
+        file: "api/github-api.md"
+        credentials_ref: "vault://kv/github/pat"
+        rate_limit: 5000
+        used_by: ["athena", "nova", "lyra", "ipower"]
+      - name: "NinjaTrader API"
+        file: "api/ninjatrader-api.md"
+        credentials_ref: "vault://kv/ninjatrader/api_key"
+        rate_limit: 100
+        used_by: ["ipower"]
+      - name: "OpenAI API"
+        file: "api/openai-api.md"
+        credentials_ref: "vault://kv/openai/api_key"
+        rate_limit: 10000
+        used_by: ["athena", "lyra"]
+      - name: "Anthropic Claude API"
+        file: "api/anthropic-api.md"
+        credentials_ref: "vault://kv/anthropic/api_key"
+        rate_limit: 10000
+        used_by: ["athena", "lyra"]
+
+    mcp_tools:
+      - name: "Sequential Thinking"
+        server: "@anthropic/mcp-sequential-thinking"
+        description: "Multi-step reasoning and problem decomposition"
+        enabled: true
+      - name: "Filesystem"
+        server: "@anthropic/mcp-filesystem"
+        description: "File system operations for vault management"
+        enabled: true
+      - name: "Git"
+        server: "@anthropic/mcp-git"
+        description: "Git operations for version control"
+        enabled: true
+      - name: "Brave Search"
+        server: "@anthropic/mcp-brave-search"
+        description: "Web search for research and discovery"
+        enabled: true
+      - name: "GitHub MCP"
+        server: "github-mcp-server"
+        description: "GitHub integration for repo operations"
+        enabled: true
+
+    code_libraries:
+      - name: "SwarmGate"
+        path: "code/swarmgate/"
+        description: "Distributed task orchestration"
+        language: "typescript"
+      - name: "Quantum Splicer"
+        path: "code/quantum-splicer/"
+        description: "Quantum-symbolic emulation engine"
+        language: "python"
+      - name: "ReflexShell"
+        path: "code/reflexshell/"
+        description: "AI-powered shell automation"
+        language: "python"
+
+# Department Brain Configuration
+departments:
+  - name: "Athena"
+    quadrant: "Strategy & Intelligence"
+    color: "#FF4500"
+    tag: "#athena"
+    brain_path: "brains/athena"
+    sandbox_path: "sandboxes/athena"
+    methodology_file: "brains/athena/METHODOLOGY.md"
+    git_branch: "brain/athena"
+    discord_channel_id: null  # Fill with actual channel ID
+    board_receipt_template: "templates/board-receipts/athena-receipt.md"
+    licenses:
+      - "GitHub Copilot Business"
+    apis:
+      - "Discord API"
+      - "GitHub API"
+      - "OpenAI API"
+      - "Anthropic Claude API"
+    mcp_tools:
+      - "Sequential Thinking"
+      - "Filesystem"
+      - "Git"
+      - "Brave Search"
+      - "GitHub MCP"
+
+  - name: "Lyra"
+    quadrant: "Creative & Innovation"
+    color: "#00CED1"
+    tag: "#lyra"
+    brain_path: "brains/lyra"
+    sandbox_path: "sandboxes/lyra"
+    methodology_file: "brains/lyra/METHODOLOGY.md"
+    git_branch: "brain/lyra"
+    discord_channel_id: null  # Fill with actual channel ID
+    board_receipt_template: "templates/board-receipts/lyra-receipt.md"
+    licenses:
+      - "Unity Pro"
+      - "GitHub Copilot Business"
+    apis:
+      - "GitHub API"
+      - "OpenAI API"
+      - "Anthropic Claude API"
+    mcp_tools:
+      - "Sequential Thinking"
+      - "Filesystem"
+      - "Git"
+
+  - name: "Nova"
+    quadrant: "Engineering & Development"
+    color: "#9400D3"
+    tag: "#nova"
+    brain_path: "brains/nova"
+    sandbox_path: "sandboxes/nova"
+    methodology_file: "brains/nova/METHODOLOGY.md"
+    git_branch: "brain/nova"
+    discord_channel_id: null  # Fill with actual channel ID
+    board_receipt_template: "templates/board-receipts/nova-receipt.md"
+    licenses:
+      - "Unity Pro"
+      - "Unreal Engine"
+      - "GitHub Copilot Business"
+    apis:
+      - "Discord API"
+      - "GitHub API"
+    mcp_tools:
+      - "Sequential Thinking"
+      - "Filesystem"
+      - "Git"
+      - "GitHub MCP"
+
+  - name: "IPower"
+    quadrant: "Finance & Trading"
+    color: "#FFD700"
+    tag: "#ipower"
+    brain_path: "brains/ipower"
+    sandbox_path: "sandboxes/ipower"
+    methodology_file: "brains/ipower/METHODOLOGY.md"
+    git_branch: "brain/ipower"
+    discord_channel_id: null  # Fill with actual channel ID
+    board_receipt_template: "templates/board-receipts/ipower-receipt.md"
+    licenses:
+      - "NinjaTrader"
+      - "GitHub Copilot Business"
+    apis:
+      - "GitHub API"
+      - "NinjaTrader API"
+    mcp_tools:
+      - "Sequential Thinking"
+      - "Filesystem"
+      - "Git"
+
+# Obsidian Configuration
+obsidian:
+  vault_name: "Legions of Minds"
+  vault_path: "/vault/legions-of-minds"
+  plugins:
+    required:
+      - name: "dataview"
+        description: "Live queries for brain connections"
+      - name: "obsidian-git"
+        description: "Auto-commit and sync to GitHub"
+      - name: "canvas"
+        description: "Visual brain mapping"
+      - name: "templater"
+        description: "Dynamic templates for receipts"
+      - name: "quickadd"
+        description: "Quick capture and macros"
+    optional:
+      - name: "excalidraw"
+        description: "Whiteboard for architecture diagrams"
+      - name: "calendar"
+        description: "Time-based methodology tracking"
+
+  git_settings:
+    auto_commit: true
+    commit_message_template: "🟠 Brain sync | Increment {increment} | {date}"
+    auto_pull_on_startup: true
+    push_on_backup: true
+    backup_interval_minutes: 10
+
+  graph_view:
+    color_groups:
+      - query: "tag:#athena"
+        color: "#FF4500"
+      - query: "tag:#lyra"
+        color: "#00CED1"
+      - query: "tag:#nova"
+        color: "#9400D3"
+      - query: "tag:#ipower"
+        color: "#FFD700"
+      - query: "tag:#genesis"
+        color: "#FFFFFF"
+      - query: "tag:#methodology"
+        color: "#00FF00"
+    link_thickness: 2
+    center_strength: 0.5
+    repel_strength: 10
+
+# Claude Integration
+claude_integration:
+  enabled: true
+  api_ref: "vault://kv/anthropic/api_key"
+  model: "claude-3-5-sonnet-20241022"
+  features:
+    - "methodology_review"
+    - "receipt_verification"
+    - "brain_analysis"
+    - "knowledge_synthesis"
+  prompts:
+    methodology_review: |
+      Review this department methodology for completeness and coherence.
+      Check for: clear objectives, defined processes, measurable outcomes.
+      Department: {department}
+      Content: {content}
+    receipt_verification: |
+      Verify this board receipt for accuracy and completeness.
+      Genesis Lock: Increment {increment}
+      Department: {department}
+      Receipt: {receipt}
+
+# Sync Pipeline Configuration
+sync_pipeline:
+  triggers:
+    - event: "file_change"
+      actions:
+        - "graph_update"
+        - "git_commit"
+        - "discord_notification"
+    - event: "receipt_generation"
+      actions:
+        - "claude_verification"
+        - "discord_post"
+        - "git_commit"
+    - event: "methodology_update"
+      actions:
+        - "diff_embed"
+        - "discord_notification"
+        - "graph_refresh"
+
+  discord:
+    notifications:
+      enabled: true
+      channels:
+        brain_updates: null  # Fill with channel ID
+        receipts: null       # Fill with channel ID
+        methodology: null    # Fill with channel ID
+    embeds:
+      color_success: 0x00FF00
+      color_warning: 0xFFD700
+      color_error: 0xFF0000
+      color_genesis: 0xFF4500
+
+  git:
+    auto_push: true
+    branch_strategy: "per-department"
+    merge_to_main: false
+    require_review: true
+
+# Discord Bot Commands
+discord_commands:
+  prefix: "!"
+  commands:
+    - name: "receipt"
+      description: "Generate board member receipt for a department"
+      usage: "!receipt [department]"
+      example: "!receipt athena"
+    - name: "brain"
+      description: "Show current brain state for a department"
+      usage: "!brain [department]"
+      example: "!brain nova"
+    - name: "sync"
+      description: "Force sync Obsidian vault to Git and Discord"
+      usage: "!sync"
+      example: "!sync"
+    - name: "archive"
+      description: "Search archive vault for licenses, APIs, or tools"
+      usage: "!archive [query]"
+      example: "!archive unity license"
+    - name: "health"
+      description: "Show cluster health and mesh status"
+      usage: "!health"
+      example: "!health"
+
+# Board Receipt Template (embedded)
+board_receipt_template: |
+  ---
+  type: board-receipt
+  department: {department}
+  generated: {date}
+  genesis_increment: {increment}
+  tags:
+    - #{department_tag}
+    - #board-receipt
+    - #genesis
+  ---
+
+  # 📋 Board Member Receipt: {department_name}
+
+  ## 🔒 Genesis Lock
+  - **Increment:** {increment}
+  - **Architect Snowflake:** {architect_snowflake}
+  - **Generated:** {timestamp}
+
+  ## 🏛️ Department Information
+  - **Name:** {department_name}
+  - **Quadrant:** {quadrant_name}
+  - **Brain Path:** `{brain_path}`
+  - **Sandbox Path:** `{sandbox_path}`
+  - **Git Branch:** `{git_branch}`
+  - **Discord Channel:** <#{discord_channel_id}>
+
+  ## 📜 Licenses Held
+  ```dataview
+  LIST
+  FROM "licenses"
+  WHERE contains(assigned_to, "{department_tag}")
+  ```
+
+  ## 🔌 API Access
+  ```dataview
+  LIST
+  FROM "api"
+  WHERE contains(used_by, "{department_tag}")
+  ```
+
+  ## 🛠️ MCP Tools Available
+  ```dataview
+  LIST
+  FROM "mcp-tools"
+  WHERE enabled = true
+  ```
+
+  ## 📝 Current Methodology
+  ![[{methodology_file}]]
+
+  ## 📊 Recent File Changes
+  ```dataview
+  TABLE file.mtime AS "Modified", file.size AS "Size"
+  FROM "{brain_path}"
+  SORT file.mtime DESC
+  LIMIT 10
+  ```
+
+  ## 🔗 Graph Connections
+  ```dataview
+  LIST
+  FROM [[]]
+  WHERE contains(tags, "#{department_tag}")
+  ```
+
+  ---
+  *Genesis Proof: {genesis_proof}*
+  *This receipt is sovereign property of Strategickhaos DAO LLC*
