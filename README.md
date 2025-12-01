@@ -2,6 +2,17 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🛡️ Legal Protection & Intellectual Property
+
+**Patent Portfolio:** Three provisional patents filed with the USPTO (November 23, 2025)
+- **[63/643,894](./legal/patents/provisional/63-643-894_Negative-Balance-Training-Protocol.md)** - Negative-Balance Training Protocol
+- **[63/643,895](./legal/patents/provisional/63-643-895_Neurodivergent-Biomimetic-Swarm-Impulse-Armor.md)** - Neurodivergent Biomimetic Swarm + Impulse Armor
+- **[63/643,896](./legal/patents/provisional/63-643-896_Sovereign-Expression-Shield.md)** - Sovereign Expression Shield
+
+**Academic Shield:** DOI [10.5281/zenodo.13741337](https://doi.org/10.5281/zenodo.13741337)
+
+See [Patent Portfolio Documentation](./legal/patents/README.md) for complete details.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
