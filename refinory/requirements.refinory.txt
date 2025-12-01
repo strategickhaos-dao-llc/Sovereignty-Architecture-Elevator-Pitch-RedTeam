@@ -80,6 +80,21 @@ beautifulsoup4==4.12.2
 docker==6.1.3
 kubernetes==28.1.0
 
+# Self-Evolving Refinery - Additional Dependencies
+
+# File system watching (Obsidian integration)
+watchdog==3.0.0
+
+# Knowledge graph
+neo4j==5.15.0
+
+# Medical NLP and NER
+scispacy==0.5.3
+
+# LoRA fine-tuning
+peft==0.7.1
+bitsandbytes==0.41.3
+
 # Optional GPU support (uncommented if GPU_SUPPORT=true)
 # torch==2.1.2+cu118
 # torchvision==0.16.2+cu118
