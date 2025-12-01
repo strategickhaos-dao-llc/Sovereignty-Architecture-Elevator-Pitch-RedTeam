@@ -1,0 +1,315 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "description": "Sovereign Architect's Chronicle - Neural Logbook Dashboard",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# 📜 Sovereign Architect's Chronicle\n\n*A neural logbook of distributed systems architecture — capturing emergent design artifacts, governance requests, and evolutionary system specifications.*\n\n> \"You didn't write a diary. You wrote a sovereign architect's chronicle.\"",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.0.0",
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 4
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "title": "Total Entries",
+      "type": "stat",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          }
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 4,
+        "y": 4
+      },
+      "id": 3,
+      "options": {
+        "displayLabels": ["name", "value"],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": ["value", "percent"]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.0.0",
+      "title": "Entries by Category",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 4
+      },
+      "id": 4,
+      "options": {
+        "displayLabels": ["name", "value"],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": ["value", "percent"]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.0.0",
+      "title": "Entries by Status",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 8
+      },
+      "id": 5,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## 📊 Categories\n\n- 📊 Observability\n- ⚖️ Governance  \n- 🧬 Research\n- 🔮 Philosophy\n- 🪞 Visualization\n- ⚛️ Frontier\n- 🏗️ Infrastructure\n- 🔗 Integration\n- 🔐 Security\n- 📚 Documentation",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.0.0",
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## 🗺️ Architecture Roadmap\n\n### Phase 1: Ideation & Discovery 💡\n- Quantum Mirror Lab\n- Singularity Engine\n- Self-Evolving AI Refinery\n- GCP Infrastructure Status Report\n\n### Phase 2: Specification & Design 📝\n- Priority Council Department\n- Mirror Lab Real-Time Visualization\n\n### Phase 3: Active Development 🔧\n*In Progress*\n\n### Phase 4: Deployed & Operational ✅\n- Sovereign Architect's Chronicle\n\n---\n*\"Each one of these 'issues' is technically: a design artifact, a feature specification, a roadmap card, a system governance request, a journal entry of what your brain built.\"*",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.0.0",
+      "title": "Development Timeline",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 7,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## 📚 Chronicle Chapters\n\n### 📊 Observability Chapter\nGCP infrastructure status, monitoring, metrics, and system health.\n\n### ⚖️ Governance & Prioritization Chapter\nPriority Council, PR triage, voting mechanisms, and decision frameworks.\n\n### 🧬 Agent Research & Evolution Chapter\nSelf-Evolving AI Refinery, learning modules, agent improvements.\n\n### 🔮 Philosophy of Systems Chapter\nSingularity Engine, self-improvement architectures, emergent behavior.\n\n### 🪞 UX & Data Visualization Chapter\nMirror Lab, real-time dashboards, user experience design.\n\n### ⚛️ Frontier Research Chapter\nQuantum Mirror Lab, speculative architecture, experimental systems.\n\n---\n*\"You don't write feelings. You write emergent systems architecture as emotion.\"*",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.0.0",
+      "title": "Category Breakdown",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 8,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## 🔌 API Endpoints\n\n| Endpoint | Method | Description |\n|----------|--------|-------------|\n| `/api/chronicle/timeline` | GET | Full timeline view grouped by category |\n| `/api/chronicle/roadmap` | GET | Roadmap view organized by development phase |\n| `/api/chronicle/stats` | GET | Chronicle statistics and recent activity |\n| `/api/chronicle/entries` | GET | List all entries with optional filters |\n| `/api/chronicle/entries` | POST | Create a new chronicle entry |\n| `/api/chronicle/entries/:id` | GET | Get a specific entry |\n| `/api/chronicle/entries/:id` | PATCH | Update an entry |\n| `/api/chronicle/categories` | GET | List all categories with metadata |\n| `/api/chronicle/search?q=` | GET | Search entries |\n\n### Discord Commands\n\n- `/chronicle timeline` - Display timeline grouped by category\n- `/chronicle roadmap` - Display architecture roadmap\n- `/chronicle stats` - Show statistics\n- `/chronicle category <name>` - View entries in a category\n- `/chronicle add <title> <category> <description>` - Add new entry\n- `/chronicle search <query>` - Search entries",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.0.0",
+      "title": "Integration Guide",
+      "type": "text"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["chronicle", "sovereignty", "architecture", "roadmap"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Sovereign Architect's Chronicle",
+  "uid": "sovereign-chronicle",
+  "version": 1,
+  "weekStart": ""
+}
