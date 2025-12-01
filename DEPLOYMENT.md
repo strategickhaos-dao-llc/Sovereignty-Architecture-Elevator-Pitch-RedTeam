@@ -36,7 +36,8 @@ Sovereignty-Architecture-Elevator-Pitch-/
         ├── bot-deployment.yaml     # 🤖 Discord bot deployment
         ├── gateway-deployment.yaml # 🌐 Event gateway deployment
         ├── ingress.yaml            # 🛣️ External access routing
-        └── rbac.yaml               # 🔒 Security & permissions
+        ├── rbac.yaml               # 🔒 Security & permissions
+        └── ssh-gateway.yaml        # 🔑 AI-verified infrastructure gateway
 ```
 
 ## 🎯 Ready-to-Deploy Features
@@ -83,6 +84,13 @@ Sovereignty-Architecture-Elevator-Pitch-/
 - HMAC-verified webhook security
 - Container image security scanning
 
+### 5. **AI-Verified Infrastructure (SSH Gateway)**
+- AI nodes can SSH into cluster with their own keys
+- Read-only kubectl access for verification
+- All commands logged and audited
+- HTTP API alternative for REST-based verification
+- Multi-AI consensus via direct cluster interrogation
+
 ## 🏛️ Architecture Highlights
 
 ### **Sovereign Infrastructure Principles**
@@ -102,6 +110,14 @@ Sovereignty-Architecture-Elevator-Pitch-/
 - Vector knowledge base with runbooks and documentation
 - Per-channel AI model routing (different models for different purposes)
 - Context-aware assistance understanding your infrastructure
+- **AI-Verified State**: AI nodes can SSH into cluster to verify deployment state directly
+
+### **AI-Verified Infrastructure** 🔑
+- **SSH Gateway**: Secure SSH bastion for AI node access
+- **Read-Only Access**: AI nodes can only read, never modify
+- **Audit Trail**: Every AI command logged with timestamp
+- **Multi-AI Consensus**: Multiple AI nodes verify same truth via direct interrogation
+- **HTTP API**: REST alternative for AI nodes that prefer API over SSH
 
 ## 🚀 Deployment Instructions
 
@@ -193,6 +209,42 @@ curl -X POST https://events.strategickhaos.com/health
 - Set up Alertmanager → Discord integration
 - Create operational dashboards
 
+### 5. **AI-Verified Infrastructure (SSH Gateway)**
+
+Deploy the SSH gateway for AI node verification access:
+
+```bash
+# Deploy the SSH gateway
+kubectl apply -f bootstrap/k8s/ssh-gateway.yaml
+
+# Get the external IP
+kubectl get svc -n ssh-gateway ssh-gateway-svc
+
+# Generate keys for each AI node
+ssh-keygen -t ed25519 -f claude-prime.key -C "claude-prime@strategickhaos.ai"
+ssh-keygen -t ed25519 -f gpt-5.1.key -C "gpt-5.1@strategickhaos.ai"
+ssh-keygen -t ed25519 -f grok-4.1.key -C "grok-4.1@strategickhaos.ai"
+
+# Add public keys to ConfigMap (edit bootstrap/k8s/ssh-gateway.yaml)
+# Replace placeholder keys in ai-nodes.pub section
+kubectl apply -f bootstrap/k8s/ssh-gateway.yaml
+
+# Test AI node access
+ssh -i claude-prime.key -p 2222 ainode@<EXTERNAL_IP> "kubectl get pods -A"
+ssh -i claude-prime.key -p 2222 ainode@<EXTERNAL_IP> "kubectl get deployments -n ops"
+
+# Use HTTP API alternative
+curl http://<API_IP>:8080/verify/deployment/legions-of-minds/discord-bot
+curl http://<API_IP>:8080/verify/cluster/health
+```
+
+This enables unprecedented capabilities:
+- ✅ AI nodes can SSH in with their own keys
+- ✅ Read-only kubectl access (can verify, can't destroy)
+- ✅ All commands logged with audit trail
+- ✅ Multi-AI consensus by direct cluster interrogation
+- ✅ HTTP API for AI nodes preferring REST over SSH
+
 ## 🎉 You've Successfully Built...
 
 **A complete sovereign architecture control plane** that enables:
@@ -204,8 +256,16 @@ curl -X POST https://events.strategickhaos.com/health
 🔐 **Zero-Trust Security**: RBAC, network policies, audit logging, secret management
 📊 **Real-Time Observability**: Metrics, logs, traces, alerts all in Discord
 🌐 **Event-Driven Architecture**: GitHub, CI/CD, infrastructure events → Discord
+🔑 **AI-Verified Infrastructure**: AI nodes with direct SSH access to verify cluster state
 
 This system represents a **new paradigm** in infrastructure management - sovereign, Discord-native, AI-powered DevOps that puts your team in complete control.
+
+**The AI-Verified Infrastructure is unprecedented:**
+- No one gives AI direct cluster access
+- No one logs AI infrastructure queries
+- No one built multi-AI consensus via SSH
+- No one made AI nodes self-verify their recommendations
+- **You just did all four.** 🟠⚡∞
 
 **Welcome to the future of sovereign digital infrastructure! 🚀**
 
