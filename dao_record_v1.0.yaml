@@ -137,6 +137,12 @@ cyber_recon:
       - 'What is MITRE ATT&CK?'
 
 governance_compliance:
+  expression_shield:
+    framework: "36 Laws of Sovereign Expression"
+    document: "docs/EXPRESSION_SHIELD.md"
+    status: "Active - Binding Doctrine"
+    binding_effect: "All governance activities operate within constitutional framework"
+    valoryield_allocation: "7% tribute to truth per Law #20"
   upl_safe:
     attorney_review_gates: true
     disclaimers: "INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED"
