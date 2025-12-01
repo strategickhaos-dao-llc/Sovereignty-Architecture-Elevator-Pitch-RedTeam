@@ -38,11 +38,7 @@ tags:
 
 ## 📜 Licenses Held
 
-| License | Type | Expires |
-|---------|------|---------|
-{{#each licenses}}
-| {{name}} | {{type}} | {{expires}} |
-{{/each}}
+<!-- Licenses are listed below. In the actual generated receipt, these are populated dynamically. -->
 
 ### License Dataview Query
 ```dataview
@@ -54,11 +50,7 @@ SORT expires ASC
 
 ## 🔌 API Access Registry
 
-| API | Rate Limit | Status |
-|-----|------------|--------|
-{{#each apis}}
-| {{name}} | {{rate_limit}}/min | ✅ Active |
-{{/each}}
+<!-- APIs are listed below. In the actual generated receipt, these are populated dynamically. -->
 
 ### API Dataview Query
 ```dataview
@@ -69,11 +61,7 @@ WHERE contains(used_by, "{{department_tag}}")
 
 ## 🛠️ MCP Tools Available
 
-| Tool | Server | Description |
-|------|--------|-------------|
-{{#each mcp_tools}}
-| {{name}} | `{{server}}` | {{description}} |
-{{/each}}
+<!-- MCP tools are listed below. In the actual generated receipt, these are populated dynamically. -->
 
 ### MCP Dataview Query
 ```dataview
@@ -174,3 +162,9 @@ By accessing this receipt, the board member acknowledges:
 
 *This document is a sovereign record of Strategickhaos DAO LLC*  
 *Genesis Lock: Increment 3449 | Architect: 1067614449693569044*
+
+<!-- 
+Note: This template uses {{placeholder}} syntax for documentation purposes.
+The Python Discord bot generates receipts using Python f-strings with actual values.
+Dataview queries in Obsidian will dynamically populate data from the vault.
+-->

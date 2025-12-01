@@ -270,8 +270,8 @@ if [ "$SKIP_BOT" = false ]; then
     # Activate virtual environment and install dependencies
     source venv/bin/activate
     
-    pip install --quiet discord.py pyyaml aiohttp
-    print_status "Installed Python dependencies"
+    pip install --quiet -r "$REPO_ROOT/requirements.obsidian-mesh.txt"
+    print_status "Installed Python dependencies from requirements file"
     
     deactivate
     

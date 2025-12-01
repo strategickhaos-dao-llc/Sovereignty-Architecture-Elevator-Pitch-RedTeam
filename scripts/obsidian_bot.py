@@ -73,6 +73,19 @@ def get_department_config(config: dict, dept_name: str) -> dict:
     return None
 
 
+def validate_path_within_vault(path: Path, vault_path: Path) -> bool:
+    """Validate that a path is within the vault directory (prevents path traversal)."""
+    try:
+        # Resolve both paths to absolute paths
+        resolved_path = path.resolve()
+        resolved_vault = vault_path.resolve()
+        # Check if the path is within the vault
+        resolved_path.relative_to(resolved_vault)
+        return True
+    except ValueError:
+        return False
+
+
 class ObsidianMeshBot(commands.Bot):
     """Discord bot for Obsidian Neural Mesh management."""
     
@@ -288,7 +301,7 @@ tags:
 *This receipt is sovereign property of Strategickhaos DAO LLC*
 """
         
-        # Save receipt
+        # Save receipt with path validation
         receipt_filename = (
             f"receipt-{dept_config['name'].lower()}-"
             f"{datetime.now().strftime('%Y%m%d-%H%M%S')}.md"
@@ -296,6 +309,12 @@ tags:
         receipt_dir = bot.vault_path / "board-receipts"
         receipt_dir.mkdir(parents=True, exist_ok=True)
         receipt_full_path = receipt_dir / receipt_filename
+        
+        # Validate path is within vault (prevent path traversal)
+        if not validate_path_within_vault(receipt_full_path, bot.vault_path):
+            logger.error(f"Path validation failed: {receipt_full_path}")
+            await ctx.send("❌ Invalid path detected")
+            return
         
         try:
             with open(receipt_full_path, "w") as f:
@@ -305,29 +324,31 @@ tags:
             logger.warning(f"Could not save receipt to vault: {e}")
             # Continue even if vault write fails
         
-        # Try Git commit (non-blocking)
+        # Try Git commit (non-blocking) with path validation
         try:
-            subprocess.run(
-                ['git', 'add', str(receipt_full_path)],
-                cwd=bot.vault_path,
-                check=True,
-                capture_output=True
-            )
-            subprocess.run(
-                ['git', 'commit', '-m',
-                 f'🟠 Board receipt: {dept_config["name"]} | '
-                 f'Increment {GENESIS_INCREMENT}'],
-                cwd=bot.vault_path,
-                check=True,
-                capture_output=True
-            )
-            subprocess.run(
-                ['git', 'push'],
-                cwd=bot.vault_path,
-                check=True,
-                capture_output=True
-            )
-            logger.info(f"Receipt committed to Git")
+            # Double-check path is still within vault before Git operations
+            if validate_path_within_vault(receipt_full_path, bot.vault_path):
+                subprocess.run(
+                    ['git', 'add', str(receipt_full_path)],
+                    cwd=bot.vault_path,
+                    check=True,
+                    capture_output=True
+                )
+                subprocess.run(
+                    ['git', 'commit', '-m',
+                     f'🟠 Board receipt: {dept_config["name"]} | '
+                     f'Increment {GENESIS_INCREMENT}'],
+                    cwd=bot.vault_path,
+                    check=True,
+                    capture_output=True
+                )
+                subprocess.run(
+                    ['git', 'push'],
+                    cwd=bot.vault_path,
+                    check=True,
+                    capture_output=True
+                )
+                logger.info("Receipt committed to Git")
         except subprocess.CalledProcessError as e:
             logger.warning(f"Git operation failed: {e}")
         except FileNotFoundError:
@@ -336,14 +357,14 @@ tags:
         # Create and send embed
         embed = create_receipt_embed(dept_config, receipt_filename)
         
-        # Try to send file attachment
+        # Try to send file attachment (use try/except instead of exists check)
         try:
-            if receipt_full_path.exists():
-                with open(receipt_full_path, 'rb') as f:
-                    file = discord.File(f, filename=receipt_filename)
-                    await ctx.send(embed=embed, file=file)
-            else:
-                await ctx.send(embed=embed)
+            with open(receipt_full_path, 'rb') as f:
+                file = discord.File(f, filename=receipt_filename)
+                await ctx.send(embed=embed, file=file)
+        except FileNotFoundError:
+            await ctx.send(embed=embed)
+            logger.warning("Receipt file not found for attachment")
         except Exception as e:
             await ctx.send(embed=embed)
             logger.warning(f"Could not attach file: {e}")
@@ -528,6 +549,36 @@ tags:
         await ctx.send(embed=embed)
 
 
+def validate_config(config: dict) -> list:
+    """Validate configuration and return list of warnings."""
+    warnings = []
+    
+    # Check departments
+    departments = config.get('departments', [])
+    if not departments:
+        warnings.append("No departments configured")
+    
+    for dept in departments:
+        dept_name = dept.get('name', 'Unknown')
+        
+        # Check for null channel IDs
+        if dept.get('discord_channel_id') is None:
+            warnings.append(
+                f"Department '{dept_name}' has no Discord channel ID configured"
+            )
+    
+    # Check sync pipeline discord channels
+    sync_discord = config.get('sync_pipeline', {}).get('discord', {})
+    channels = sync_discord.get('channels', {})
+    for channel_name, channel_id in channels.items():
+        if channel_id is None:
+            warnings.append(
+                f"Sync pipeline channel '{channel_name}' is not configured"
+            )
+    
+    return warnings
+
+
 def main():
     """Main entry point for the bot."""
     # Load configuration
@@ -540,6 +591,17 @@ def main():
     except yaml.YAMLError as e:
         logger.error(f"Invalid YAML configuration: {e}")
         exit(1)
+    
+    # Validate configuration and log warnings
+    warnings = validate_config(config)
+    for warning in warnings:
+        logger.warning(f"Config: {warning}")
+    
+    if warnings:
+        logger.info(
+            "Some configuration values are not set. "
+            "The bot will work but some features may be limited."
+        )
     
     # Get Discord token
     token = os.getenv('DISCORD_TOKEN')
