@@ -310,6 +310,43 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 
 ---
+# Service account for verification API with limited permissions
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: verification-api-sa
+  namespace: ssh-gateway
+
+---
+# More limited role for the HTTP API (only deployments and cluster health)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: verification-api-reader
+rules:
+# Limited read access for API endpoints
+- apiGroups: [""]
+  resources: ["pods", "nodes"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: verification-api-rb
+subjects:
+- kind: ServiceAccount
+  name: verification-api-sa
+  namespace: ssh-gateway
+roleRef:
+  kind: ClusterRole
+  name: verification-api-reader
+  apiGroup: rbac.authorization.k8s.io
+
+---
 # ═══════════════════════════════════════════════════════════
 # COMPONENT 3: AI NODE CLIENT SCRIPTS
 # Scripts AI nodes run to verify cluster state
@@ -587,9 +624,10 @@ spec:
       labels:
         app: verification-api
     spec:
-      serviceAccountName: ssh-gateway-sa
+      serviceAccountName: verification-api-sa  # Use limited service account
       initContainers:
       # Use init container to install dependencies once, avoiding repeated downloads
+      # NOTE: For production, use a pre-built image with these dependencies
       - name: install-deps
         image: python:3.11-slim
         command:
@@ -598,8 +636,13 @@ spec:
         - |
           pip install --no-cache-dir flask -t /deps
           apt-get update && apt-get install -y --no-install-recommends curl
-          curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          # Pin kubectl version and verify checksum for supply chain security
+          KUBECTL_VERSION="v1.29.0"
+          curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+          curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl.sha256"
+          echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
           install -o root -g root -m 0755 kubectl /deps/kubectl
+          rm kubectl kubectl.sha256
         volumeMounts:
         - name: deps
           mountPath: /deps
