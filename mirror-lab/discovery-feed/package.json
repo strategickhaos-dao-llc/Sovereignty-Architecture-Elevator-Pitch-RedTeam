@@ -1,0 +1,15 @@
+{
+  "name": "mirror-lab-discovery-feed",
+  "version": "1.0.0",
+  "description": "Real-time Discovery Feed - Watch breakthroughs happen live",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "ws": "^8.18.0",
+    "redis": "^4.7.0"
+  }
+}

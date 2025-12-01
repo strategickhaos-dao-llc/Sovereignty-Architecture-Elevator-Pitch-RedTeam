@@ -1,0 +1,15 @@
+{
+  "name": "mirror-lab-agent-grid",
+  "version": "1.0.0",
+  "description": "80 Agent Grid Visualization - Click to watch any agent work",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "ws": "^8.18.0",
+    "redis": "^4.7.0"
+  }
+}

@@ -1,0 +1,96 @@
+# Quantum Circuit Configurations for Mirror Lab
+# These circuits are used for protein binding energy calculations
+
+circuits:
+  # VQE circuit for NMDA-Memantine binding energy
+  nmda_memantine_binding:
+    name: "NMDA-Memantine Binding Energy"
+    description: "Variational Quantum Eigensolver for calculating binding energy"
+    qubits: 6
+    depth: 3
+    ansatz: "EfficientSU2"
+    optimizer: "COBYLA"
+    target_energy: -42.3  # kcal/mol
+    max_iterations: 100
+    shots: 1024
+
+  # Protein folding circuit
+  protein_folding:
+    name: "Protein Folding Optimization"
+    description: "QAOA-based protein folding path optimization"
+    qubits: 8
+    depth: 4
+    ansatz: "TwoLocal"
+    optimizer: "SPSA"
+    max_iterations: 200
+    shots: 2048
+
+  # Drug docking circuit
+  drug_docking:
+    name: "Drug Docking Score"
+    description: "Quantum-enhanced docking score calculation"
+    qubits: 4
+    depth: 2
+    ansatz: "RealAmplitudes"
+    optimizer: "COBYLA"
+    max_iterations: 50
+    shots: 512
+
+# Backend configurations
+backends:
+  local:
+    name: "Qiskit Aer Simulator"
+    cost_per_shot: 0
+    max_qubits: 32
+    noise_model: false
+    
+  ibm_free:
+    name: "IBM Quantum (Free Tier)"
+    provider: "ibm"
+    hub: "ibm-q"
+    group: "open"
+    project: "main"
+    cost_per_shot: 0
+    max_qubits: 127
+    queue_wait: "variable"
+    
+  ibm_premium:
+    name: "IBM Quantum (Premium)"
+    provider: "ibm"
+    hub: "ibm-q-research"
+    cost_per_shot: 0.01  # USD estimate
+    max_qubits: 433
+    queue_priority: "high"
+    
+  azure_ionq:
+    name: "Azure Quantum - IonQ"
+    provider: "azure"
+    target: "ionq.simulator"
+    cost_per_shot: 0.00003  # USD
+    max_qubits: 29
+    
+  azure_quantinuum:
+    name: "Azure Quantum - Quantinuum"
+    provider: "azure"
+    target: "quantinuum.hqs-lt-s1"
+    cost_per_shot: 0.0001  # USD estimate
+    max_qubits: 20
+
+# Molecule library
+molecules:
+  memantine:
+    name: "Memantine"
+    smiles: "CC12CC3CC(C1)CC(N)(C3)C2"
+    target: "NMDA receptor"
+    use_case: "Drug repurposing for chronic pain"
+    
+  ketamine:
+    name: "Ketamine"
+    smiles: "CNC1(C)CCCCC1=O"
+    target: "NMDA receptor"
+    use_case: "Reference compound"
+    
+  target_protein:
+    name: "NMDA Receptor GluN1"
+    pdb_id: "5KCJ"
+    binding_site: "agonist binding domain"

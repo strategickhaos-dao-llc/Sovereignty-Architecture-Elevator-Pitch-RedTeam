@@ -1,0 +1,162 @@
+{
+  "name": "Mirror Lab - 7 Screen Layout",
+  "description": "OBS Scene Collection for Mirror Lab visualization",
+  "scenes": [
+    {
+      "name": "Main View - All Screens",
+      "items": [
+        {
+          "name": "Mission Control",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://mission-control:3001",
+            "width": 960,
+            "height": 540
+          },
+          "transform": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "name": "Agent Grid",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://agent-grid:3000",
+            "width": 960,
+            "height": 540
+          },
+          "transform": {
+            "x": 960,
+            "y": 0
+          }
+        },
+        {
+          "name": "Progress Graphs",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://progress-graphs:3005",
+            "width": 640,
+            "height": 360
+          },
+          "transform": {
+            "x": 0,
+            "y": 540
+          }
+        },
+        {
+          "name": "Discovery Feed",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://discovery-feed:3006",
+            "width": 640,
+            "height": 360
+          },
+          "transform": {
+            "x": 640,
+            "y": 540
+          }
+        },
+        {
+          "name": "Quantum Sim",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://quantum-sim:3007",
+            "width": 640,
+            "height": 360
+          },
+          "transform": {
+            "x": 1280,
+            "y": 540
+          }
+        }
+      ]
+    },
+    {
+      "name": "Focus - Agent Grid",
+      "items": [
+        {
+          "name": "Agent Grid Full",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://agent-grid:3000",
+            "width": 1920,
+            "height": 1080
+          },
+          "transform": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Focus - Quantum Simulation",
+      "items": [
+        {
+          "name": "Quantum Sim Full",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://quantum-sim:3007",
+            "width": 1920,
+            "height": 1080
+          },
+          "transform": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Focus - Discovery Feed",
+      "items": [
+        {
+          "name": "Discovery Feed Full",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://discovery-feed:3006",
+            "width": 1920,
+            "height": 1080
+          },
+          "transform": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Focus - Mission Control",
+      "items": [
+        {
+          "name": "Mission Control Full",
+          "type": "browser_source",
+          "settings": {
+            "url": "http://mission-control:3001",
+            "width": 1920,
+            "height": 1080
+          },
+          "transform": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }
+  ],
+  "transitions": [
+    {
+      "name": "Fade",
+      "type": "fade_transition",
+      "duration": 300
+    }
+  ],
+  "hotkeys": {
+    "switch_to_main": "F1",
+    "switch_to_agents": "F2",
+    "switch_to_quantum": "F3",
+    "switch_to_discoveries": "F4",
+    "switch_to_mission": "F5"
+  }
+}
