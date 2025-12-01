@@ -1,0 +1,178 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Namespace and Core Resources
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chess-council
+  labels:
+    app.kubernetes.io/name: chess-council
+    app.kubernetes.io/part-of: sovereignty-architecture
+---
+# ═══════════════════════════════════════════════════════════
+# ConfigMap - Frequency Mapping for 640 Agents
+# Maps agent position to piano key frequency (Circle of 5ths)
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frequency-map
+  namespace: chess-council
+data:
+  # Formula: frequency = 440 * 2^((piano_key - 49) / 12)
+  # Agent position = board * 64 + row * 8 + col
+  # piano_key = position % 88
+  frequency-calculator.py: |
+    import math
+    
+    def calculate_frequency(board: int, row: int, col: int) -> float:
+        """Calculate frequency for agent at given position."""
+        position = board * 64 + row * 8 + col
+        piano_key = position % 88
+        frequency = 440 * (2 ** ((piano_key - 49) / 12))
+        return round(frequency, 2)
+    
+    def get_harmonic_partners(frequency: float) -> list:
+        """Find agents at harmonic intervals (perfect 5th, 4th, major 3rd)."""
+        perfect_fifth = frequency * 1.5
+        perfect_fourth = frequency * (4/3)
+        major_third = frequency * 1.25
+        return {
+            'perfect_fifth': round(perfect_fifth, 2),
+            'perfect_fourth': round(perfect_fourth, 2),
+            'major_third': round(major_third, 2)
+        }
+  
+  board-layers.json: |
+    {
+      "layers": [
+        {"id": 0, "name": "Empirical Data", "frequency_range": "C0-C1 (16.35-32.70 Hz)"},
+        {"id": 1, "name": "Data Preprocessing", "frequency_range": "C1-C2 (32.70-65.41 Hz)"},
+        {"id": 2, "name": "Statistical Analysis", "frequency_range": "C2-C3 (65.41-130.81 Hz)"},
+        {"id": 3, "name": "Knowledge Synthesis", "frequency_range": "C3-C4 (130.81-261.63 Hz)"},
+        {"id": 4, "name": "Predictive Modeling", "frequency_range": "C4-C5 (261.63-523.25 Hz)"},
+        {"id": 5, "name": "Strategic Reasoning", "frequency_range": "C5-C6 (523.25-1046.50 Hz)"},
+        {"id": 6, "name": "Ethical Evaluation", "frequency_range": "C6-C7 (1046.50-2093.00 Hz)"},
+        {"id": 7, "name": "Linguistic Generation", "frequency_range": "C7-C8 (2093.00-4186.01 Hz)"},
+        {"id": 8, "name": "Validation & Verification", "frequency_range": "C8-C9 (4186.01-8372.02 Hz)"},
+        {"id": 9, "name": "Publication & Dissemination", "frequency_range": "C9-C10 (8372.02-16744.04 Hz)"}
+      ]
+    }
+---
+# ═══════════════════════════════════════════════════════════
+# ConfigMap - Agent Configuration
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-config
+  namespace: chess-council
+data:
+  agent.yaml: |
+    llm:
+      primary_model: "Qwen2.5:72b"
+      fallback_models:
+        - "Llama 3.3:70b"
+        - "Mixtral 8x7b"
+      ollama_host: "http://ollama-service:11434"
+      
+    game_mechanics:
+      types:
+        - bibliographic_synthesis_chess
+        - adversarial_hypothesis_testing
+        - multi_agent_literature_review
+      
+      scoring:
+        novel_insight: 10
+        cross_domain_link: 5
+        contradicted_claim: -5
+        invalid_citation: -10
+        surviving_challenge: 10
+        falsifying_hypothesis: 15
+        synthesizing_better: 20
+        
+    data_sources:
+      google_scholar:
+        api: "serpapi.com/google-scholar"
+        rate_limit: 100
+      arxiv:
+        api: "export.arxiv.org/api/query"
+        rate_limit: null
+      pubmed:
+        api: "eutils.ncbi.nlm.nih.gov/entrez"
+        rate_limit: 3
+      
+    streaming:
+      enabled: true
+      codec: "H.265"
+      resolution: "1920x1080"
+      fps: 60
+---
+# ═══════════════════════════════════════════════════════════
+# Secrets Template (to be filled with actual values)
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: Secret
+metadata:
+  name: chess-council-secrets
+  namespace: chess-council
+type: Opaque
+stringData:
+  # API Keys (replace with actual values or use external secrets)
+  GROK_API_KEY: "${GROK_API_KEY}"
+  SERPAPI_KEY: "${SERPAPI_KEY}"
+  ARXIV_API_KEY: "${ARXIV_API_KEY}"
+  OPENAI_API_KEY: "${OPENAI_API_KEY}"
+  
+  # Database credentials
+  POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+  QDRANT_API_KEY: "${QDRANT_API_KEY}"
+---
+# ═══════════════════════════════════════════════════════════
+# Shared PVC for Bibliography Cache
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-bibliography-pvc
+  namespace: chess-council
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: standard-rwx
+---
+# ═══════════════════════════════════════════════════════════
+# Shared PVC for Game Logs
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: game-logs-pvc
+  namespace: chess-council
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: standard-rwx
+---
+# ═══════════════════════════════════════════════════════════
+# ResourceQuota for Chess Council Namespace
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: chess-council-quota
+  namespace: chess-council
+spec:
+  hard:
+    requests.cpu: "1280"       # 2 CPU per agent × 640
+    requests.memory: "5120Gi"  # 8Gi per agent × 640
+    limits.cpu: "2560"         # 4 CPU limit per agent × 640
+    limits.memory: "10240Gi"   # 16Gi limit per agent × 640
+    persistentvolumeclaims: "20"
+    pods: "700"

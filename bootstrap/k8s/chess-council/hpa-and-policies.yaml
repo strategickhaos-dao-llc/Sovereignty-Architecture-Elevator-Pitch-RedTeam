@@ -1,0 +1,166 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Horizontal Pod Autoscaler
+# Scales agents based on CPU and memory utilization
+# ═══════════════════════════════════════════════════════════
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chess-council-hpa
+  namespace: chess-council
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: chess-board-0  # Apply to each board individually
+  minReplicas: 64
+  maxReplicas: 128
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 8
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 600
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 120
+---
+# ═══════════════════════════════════════════════════════════
+# Pod Disruption Budget - Ensure minimum availability
+# ═══════════════════════════════════════════════════════════
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: chess-council-pdb
+  namespace: chess-council
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels:
+      app: chess-agent
+---
+# ═══════════════════════════════════════════════════════════
+# Network Policy - Agent Communication Rules
+# ═══════════════════════════════════════════════════════════
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: chess-agent-network-policy
+  namespace: chess-council
+spec:
+  podSelector:
+    matchLabels:
+      app: chess-agent
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic from other agents
+    - from:
+        - podSelector:
+            matchLabels:
+              app: chess-agent
+      ports:
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 9090
+    # Allow traffic from game orchestrator
+    - from:
+        - podSelector:
+            matchLabels:
+              app: game-orchestrator
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow Sunshine streaming from outside namespace
+    - from:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 47989
+        - protocol: UDP
+          port: 47998
+        - protocol: UDP
+          port: 47999
+        - protocol: UDP
+          port: 48000
+  egress:
+    # Allow communication with other agents
+    - to:
+        - podSelector:
+            matchLabels:
+              app: chess-agent
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow communication with supporting services
+    - to:
+        - podSelector:
+            matchLabels:
+              app: ollama-service
+      ports:
+        - protocol: TCP
+          port: 11434
+    - to:
+        - podSelector:
+            matchLabels:
+              app: qdrant
+      ports:
+        - protocol: TCP
+          port: 6333
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Allow external API access (arXiv, Scholar, etc.)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 80
+---
+# ═══════════════════════════════════════════════════════════
+# ServiceMonitor for Prometheus
+# ═══════════════════════════════════════════════════════════
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: chess-agents-monitor
+  namespace: chess-council
+  labels:
+    app: chess-agent
+spec:
+  selector:
+    matchLabels:
+      app: chess-agent
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - chess-council

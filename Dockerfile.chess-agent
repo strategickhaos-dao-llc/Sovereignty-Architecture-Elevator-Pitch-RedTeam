@@ -1,0 +1,138 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Agent Container
+# Full OS container with LLM capabilities, research tools,
+# and streaming support (Moonlight/Sunshine)
+# ═══════════════════════════════════════════════════════════
+
+FROM parrotsec/security:latest
+
+LABEL maintainer="Strategickhaos DAO LLC <ops@strategickhaos.com>"
+LABEL description="10D Chess Council Agent - AI Research Agent with full OS"
+LABEL version="1.0.0"
+
+# Environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Agent-specific environment (set at runtime)
+ENV BOARD_LAYER=""
+ENV AGENT_POSITION=""
+ENV LAYER_NAME=""
+ENV FREQUENCY_HZ=""
+ENV OLLAMA_HOST="http://ollama-service:11434"
+ENV PRIMARY_MODEL="qwen2.5:72b"
+
+# ═══════════════════════════════════════════════════════════
+# System Updates and Base Tools
+# ═══════════════════════════════════════════════════════════
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    # Terminal essentials
+    bash \
+    zsh \
+    fish \
+    tmux \
+    screen \
+    vim \
+    nano \
+    emacs-nox \
+    # Networking tools
+    curl \
+    wget \
+    httpie \
+    nmap \
+    masscan \
+    wireshark-common \
+    tcpdump \
+    netcat-openbsd \
+    openssh-server \
+    # Development tools
+    git \
+    build-essential \
+    cmake \
+    pkg-config \
+    # Python ecosystem
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    # Node.js
+    nodejs \
+    npm \
+    # R for statistical analysis
+    r-base \
+    # LaTeX for paper generation
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    pandoc \
+    # VNC and streaming
+    xvfb \
+    x11vnc \
+    xfce4 \
+    xfce4-terminal \
+    dbus-x11 \
+    # Utilities
+    jq \
+    yq \
+    htop \
+    iotop \
+    tree \
+    unzip \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# ═══════════════════════════════════════════════════════════
+# Python Research Tools
+# ═══════════════════════════════════════════════════════════
+COPY requirements-agent.txt /tmp/requirements-agent.txt
+RUN pip3 install --no-cache-dir --break-system-packages -r /tmp/requirements-agent.txt
+
+# ═══════════════════════════════════════════════════════════
+# Sunshine Streaming Server (for Moonlight clients)
+# ═══════════════════════════════════════════════════════════
+RUN wget -qO /tmp/sunshine.deb \
+    https://github.com/LizardByte/Sunshine/releases/latest/download/sunshine-debian-bookworm-amd64.deb \
+    && dpkg -i /tmp/sunshine.deb || apt-get install -f -y \
+    && rm /tmp/sunshine.deb
+
+# ═══════════════════════════════════════════════════════════
+# Create Agent User
+# ═══════════════════════════════════════════════════════════
+RUN useradd -m -s /bin/bash agent \
+    && echo "agent:agent" | chpasswd \
+    && mkdir -p /workspace /cache /config /frequency \
+    && chown -R agent:agent /workspace /cache /config /frequency
+
+# ═══════════════════════════════════════════════════════════
+# SSH Server Configuration
+# ═══════════════════════════════════════════════════════════
+RUN mkdir -p /var/run/sshd \
+    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config \
+    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# ═══════════════════════════════════════════════════════════
+# Agent Application Code
+# ═══════════════════════════════════════════════════════════
+WORKDIR /app
+COPY src/chess-agent/ /app/
+
+# Make scripts executable
+RUN chmod +x /app/entrypoint.sh /app/agent.py
+
+# ═══════════════════════════════════════════════════════════
+# Health Check Endpoint
+# ═══════════════════════════════════════════════════════════
+EXPOSE 22 5900 47989 47998/udp 47999/udp 48000/udp 8080 9090
+
+# ═══════════════════════════════════════════════════════════
+# Entrypoint
+# ═══════════════════════════════════════════════════════════
+USER agent
+WORKDIR /workspace
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["python3", "/app/agent.py"]

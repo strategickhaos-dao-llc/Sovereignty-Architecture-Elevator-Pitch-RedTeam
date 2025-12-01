@@ -322,3 +322,90 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# 10D Chess Council - AI Research Super-Collider
+chess_council:
+  enabled: true
+  namespace: "chess-council"
+  total_agents: 640  # 10 boards × 8×8 squares
+  architecture: "10D Stacked Chess Boards"
+  
+  board_layers:
+    - id: 0
+      name: "Empirical Data"
+      frequency_range: "C0-C1 (16.35-32.70 Hz)"
+    - id: 1
+      name: "Data Preprocessing"
+      frequency_range: "C1-C2 (32.70-65.41 Hz)"
+    - id: 2
+      name: "Statistical Analysis"
+      frequency_range: "C2-C3 (65.41-130.81 Hz)"
+    - id: 3
+      name: "Knowledge Synthesis"
+      frequency_range: "C3-C4 (130.81-261.63 Hz)"
+    - id: 4
+      name: "Predictive Modeling"
+      frequency_range: "C4-C5 (261.63-523.25 Hz)"
+    - id: 5
+      name: "Strategic Reasoning"
+      frequency_range: "C5-C6 (523.25-1046.50 Hz)"
+    - id: 6
+      name: "Ethical Evaluation"
+      frequency_range: "C6-C7 (1046.50-2093.00 Hz)"
+    - id: 7
+      name: "Linguistic Generation"
+      frequency_range: "C7-C8 (2093.00-4186.01 Hz)"
+    - id: 8
+      name: "Validation & Verification"
+      frequency_range: "C8-C9 (4186.01-8372.02 Hz)"
+    - id: 9
+      name: "Publication & Dissemination"
+      frequency_range: "C9-C10 (8372.02-16744.04 Hz)"
+  
+  agent_config:
+    container_image: "ghcr.io/strategickhaos/chess-agent:latest"
+    base_os: "parrotsec/security:latest"
+    primary_model: "qwen2.5:72b"
+    cpu_limit: "4"
+    memory_limit: "16Gi"
+  
+  game_mechanics:
+    types:
+      - "bibliographic_synthesis_chess"
+      - "adversarial_hypothesis_testing"
+      - "multi_agent_literature_review"
+    scoring:
+      novel_insight: 10
+      cross_domain_link: 5
+      contradicted_claim: -5
+      invalid_citation: -10
+  
+  data_sources:
+    - name: "Google Scholar"
+      api: "serpapi.com/google-scholar"
+    - name: "arXiv"
+      api: "export.arxiv.org/api/query"
+    - name: "PubMed"
+      api: "eutils.ncbi.nlm.nih.gov/entrez"
+  
+  discord:
+    research_channel: "#research"
+    games_channel: "#chess-games"
+    publications_channel: "#publications"
+    commands:
+      - "!research <topic>"
+      - "!game <agent_a> <agent_b>"
+      - "!replay <game_id>"
+      - "!publish <game_id>"
+  
+  training:
+    method: "adversarial_self_play"
+    schedule: "0 3 * * *"  # Daily at 03:00 UTC
+    deployment_strategy: "canary"
+  
+  streaming:
+    enabled: true
+    server: "sunshine"
+    client: "moonlight"
+    codec: "H.265"
+    resolution: "1920x1080"
