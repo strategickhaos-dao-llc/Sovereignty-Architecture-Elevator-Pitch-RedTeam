@@ -8,7 +8,7 @@ import json
 import os
 import math
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from typing import Any
+from typing import Any, Dict, Optional, Union
 from urllib.parse import urlparse, parse_qs
 import subprocess
 
@@ -26,7 +26,7 @@ class AgentConfig:
         self.ollama_host = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
         self.qdrant_url = os.environ.get('QDRANT_URL', 'http://qdrant:6333')
     
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             'agent_id': self.agent_id,
             'board_layer': self.board_layer,
@@ -42,7 +42,7 @@ class AgentConfig:
 config = AgentConfig()
 
 
-def calculate_harmonic_partners(frequency: float) -> dict[str, float]:
+def calculate_harmonic_partners(frequency: float) -> Dict[str, float]:
     """Calculate harmonically related frequencies."""
     return {
         'perfect_5th': round(frequency * 3/2, 2),
@@ -54,7 +54,7 @@ def calculate_harmonic_partners(frequency: float) -> dict[str, float]:
     }
 
 
-def run_stockfish_eval(fen: str = None, moves: list[str] = None) -> dict[str, Any]:
+def run_stockfish_eval(fen: str = None, moves: list = None) -> Dict[str, Any]:
     """Run Stockfish evaluation on a position."""
     try:
         stockfish_path = os.environ.get('STOCKFISH_PATH', '/usr/games/stockfish')
@@ -104,7 +104,7 @@ def run_stockfish_eval(fen: str = None, moves: list[str] = None) -> dict[str, An
 class AgentHandler(BaseHTTPRequestHandler):
     """HTTP request handler for agent API."""
     
-    def _send_json(self, data: dict[str, Any], status: int = 200):
+    def _send_json(self, data: Dict[str, Any], status: int = 200):
         """Send JSON response."""
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
@@ -217,7 +217,7 @@ chess_agent_frequency_hz{{agent_id="{config.agent_id}"}} {config.frequency_hz}
         else:
             self._send_json({'error': 'Not found'}, 404)
     
-    def _get_layer_info(self) -> dict[str, Any]:
+    def _get_layer_info(self) -> Dict[str, Any]:
         """Get information about the agent's layer."""
         layers = [
             {'id': 0, 'name': 'Empirical Data', 'role': 'Data collection'},
@@ -233,7 +233,7 @@ chess_agent_frequency_hz{{agent_id="{config.agent_id}"}} {config.frequency_hz}
         ]
         return layers[config.board_layer] if config.board_layer < len(layers) else {}
     
-    def _find_relationship(self, target_freq: float) -> str | None:
+    def _find_relationship(self, target_freq: float) -> Optional[str]:
         """Find harmonic relationship to target frequency."""
         if not target_freq:
             return None

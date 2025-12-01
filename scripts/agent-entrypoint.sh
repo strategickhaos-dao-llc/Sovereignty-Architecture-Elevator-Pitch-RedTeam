@@ -100,7 +100,7 @@ agent:
     api: "http://0.0.0.0:8080"
     metrics: "http://0.0.0.0:9090"
     qdrant: "${QDRANT_URL:-http://qdrant:6333}"
-    postgres: "\${POSTGRES_DSN}"
+    postgres: "${POSTGRES_DSN}"
 EOF
     
     log "Workspace initialized"

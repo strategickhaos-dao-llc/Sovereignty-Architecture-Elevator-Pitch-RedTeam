@@ -280,6 +280,7 @@ SELECT
         WHEN 10 THEN 'G'
         WHEN 11 THEN 'G#'
     END || (((layer * 64 + pos) % 88 + 8) / 12),
+    -- Piano keys are 1-88; use modulo and add 1 to ensure valid range
     ((layer * 64 + pos) % 88) + 1
 FROM generate_series(0, 9) AS layer
 CROSS JOIN generate_series(0, 3) AS pos  -- Only 4 agents per layer for dev

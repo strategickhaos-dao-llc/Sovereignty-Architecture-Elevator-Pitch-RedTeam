@@ -19,6 +19,12 @@ on:
         default: true
         type: boolean
 
+# Minimum required permissions
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 env:
   PAPER_OUTPUT_DIR: ./output
 
@@ -26,6 +32,8 @@ jobs:
   build:
     name: Build Paper
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -170,6 +178,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: always()
+    permissions: {}  # No permissions needed for external webhook calls
     
     steps:
       - name: Send Discord notification
