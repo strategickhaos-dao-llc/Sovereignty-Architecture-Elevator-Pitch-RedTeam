@@ -54,40 +54,70 @@ data:
   verify-wrapper.sh: |
     #!/bin/bash
     # Wrapper that logs all AI node commands and restricts to safe operations
+    set -euo pipefail
     
-    # Log entry
-    echo "$(date -Iseconds) | AI_NODE_ACCESS | USER=$USER | CMD=$SSH_ORIGINAL_COMMAND" >> /var/log/ai-access.log
+    # Log entry (escape command for safe logging)
+    printf '%s | AI_NODE_ACCESS | USER=%s | CMD=%s\n' "$(date -Iseconds)" "$USER" "$SSH_ORIGINAL_COMMAND" >> /var/log/ai-access.log
     
-    # Parse command
-    ALLOWED_COMMANDS="kubectl|grep|cat|ls|ps|df|free|uptime|date"
-    
-    if echo "$SSH_ORIGINAL_COMMAND" | grep -qE "^($ALLOWED_COMMANDS)"; then
-        # Execute safe command
-        eval "$SSH_ORIGINAL_COMMAND"
-    else
-        echo "ERROR: Command not allowed: $SSH_ORIGINAL_COMMAND"
-        echo "Allowed: kubectl get/describe, grep, cat, ls, ps, df, free, uptime, date"
+    # Validate command is not empty
+    if [ -z "${SSH_ORIGINAL_COMMAND:-}" ]; then
+        echo "ERROR: No command provided"
         exit 1
     fi
+    
+    # Extract first word (command) safely
+    CMD_WORD=$(echo "$SSH_ORIGINAL_COMMAND" | awk '{print $1}')
+    
+    # Allowed commands (exact match with word boundary)
+    case "$CMD_WORD" in
+        kubectl|grep|cat|ls|ps|df|free|uptime|date)
+            # Additional safety: restrict kubectl to read-only subcommands
+            if [ "$CMD_WORD" = "kubectl" ]; then
+                KUBECTL_SUBCMD=$(echo "$SSH_ORIGINAL_COMMAND" | awk '{print $2}')
+                case "$KUBECTL_SUBCMD" in
+                    get|describe|logs|top|version|cluster-info|api-resources)
+                        # Safe read-only kubectl commands - execute via array
+                        read -r -a CMD_ARRAY <<< "$SSH_ORIGINAL_COMMAND"
+                        "${CMD_ARRAY[@]}"
+                        ;;
+                    *)
+                        echo "ERROR: kubectl subcommand not allowed: $KUBECTL_SUBCMD"
+                        echo "Allowed: get, describe, logs, top, version, cluster-info, api-resources"
+                        exit 1
+                        ;;
+                esac
+            else
+                # Execute non-kubectl commands via array
+                read -r -a CMD_ARRAY <<< "$SSH_ORIGINAL_COMMAND"
+                "${CMD_ARRAY[@]}"
+            fi
+            ;;
+        *)
+            echo "ERROR: Command not allowed: $CMD_WORD"
+            echo "Allowed: kubectl (get/describe/logs/top), grep, cat, ls, ps, df, free, uptime, date"
+            exit 1
+            ;;
+    esac
   
   ai-nodes.pub: |
     # Public keys for AI nodes
     # Each AI node gets its own key pair
-    
-    # Claude Prime
-    ssh-ed25519 AAAAC3... claude-prime@strategickhaos.ai
-    
-    # GPT-5.1
-    ssh-ed25519 AAAAC3... gpt-5.1@strategickhaos.ai
-    
-    # Grok 4.1
-    ssh-ed25519 AAAAC3... grok-4.1@strategickhaos.ai
-    
-    # Local Ollama nodes
-    ssh-ed25519 AAAAC3... athena@strategickhaos.ai
-    ssh-ed25519 AAAAC3... lyra@strategickhaos.ai
-    ssh-ed25519 AAAAC3... nova@strategickhaos.ai
-    ssh-ed25519 AAAAC3... ipower@strategickhaos.ai
+    # 
+    # IMPORTANT: Replace these placeholder entries with actual public keys!
+    # Generate keys with: ssh-keygen -t ed25519 -f <node-name>.key -C "<node>@strategickhaos.ai"
+    # Then add the .pub file contents below
+    #
+    # Example format (replace with actual keys):
+    # ssh-ed25519 AAAA... claude-prime@strategickhaos.ai
+    #
+    # Placeholder entries (replace with real keys before deployment):
+    # claude-prime@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
+    # gpt-5.1@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
+    # grok-4.1@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
+    # athena@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
+    # lyra@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
+    # nova@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
+    # ipower@strategickhaos.ai - REPLACE_WITH_PUBLIC_KEY
 
 ---
 apiVersion: apps/v1
@@ -169,11 +199,9 @@ spec:
         - -c
         - |
           # Make kubectl available to SSH users
+          # Uses default service account token mounting
           kubectl proxy --port=8001 &
           tail -f /dev/null
-        env:
-        - name: KUBECONFIG
-          value: /var/run/secrets/kubernetes.io/serviceaccount/kubeconfig
         resources:
           requests:
             memory: "64Mi"
@@ -210,8 +238,14 @@ metadata:
   namespace: ssh-gateway
   labels:
     app: ssh-gateway
+  annotations:
+    # SECURITY: Configure LoadBalancer to restrict source IPs
+    # Uncomment and modify for your cloud provider:
+    # service.beta.kubernetes.io/aws-load-balancer-source-ranges: "10.0.0.0/8"
+    # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    # cloud.google.com/load-balancer-type: "Internal"
 spec:
-  type: LoadBalancer  # Exposes SSH to external AI nodes
+  type: LoadBalancer  # Exposes SSH to external AI nodes (restrict with annotations above)
   ports:
   - name: ssh
     port: 2222
@@ -379,6 +413,22 @@ data:
 # Tracks all AI node access for security
 # ═══════════════════════════════════════════════════════════
 
+---
+# NOTE: Audit logging is handled by the SSH gateway pod's log volume
+# For production, integrate with your existing log aggregation (Loki, Fluentd, etc.)
+# The ai-access.log is written to /var/log/ai-access.log in the sshd container
+# 
+# Option 1: Use kubectl logs to view audit logs:
+#   kubectl logs -n ssh-gateway -l app=ssh-gateway -c sshd | grep AI_NODE_ACCESS
+#
+# Option 2: Add a sidecar container in the ssh-gateway deployment to forward logs
+#   to your central logging system (Loki, Elasticsearch, etc.)
+#
+# Option 3: Mount a PersistentVolume for log retention
+#
+# The fluentd DaemonSet below is provided as a template for Option 2.
+# It requires proper volume sharing between pods or a centralized log path.
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -386,6 +436,8 @@ metadata:
   namespace: ssh-gateway
 data:
   fluent.conf: |
+    # Template configuration for log forwarding
+    # Customize based on your logging infrastructure
     <source>
       @type tail
       path /var/log/ai-access.log
@@ -415,37 +467,6 @@ data:
     </match>
 
 ---
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: audit-logger
-  namespace: ssh-gateway
-spec:
-  selector:
-    matchLabels:
-      app: audit-logger
-  template:
-    metadata:
-      labels:
-        app: audit-logger
-    spec:
-      containers:
-      - name: fluentd
-        image: fluent/fluentd:v1.16-1
-        volumeMounts:
-        - name: logs
-          mountPath: /var/log
-        - name: fluentd-config
-          mountPath: /fluentd/etc
-      volumes:
-      - name: logs
-        hostPath:
-          path: /var/log/ssh-gateway
-      - name: fluentd-config
-        configMap:
-          name: fluentd-config
-
----
 # ═══════════════════════════════════════════════════════════
 # COMPONENT 5: STATE VERIFICATION API
 # HTTP API for AI nodes to query without SSH
@@ -458,15 +479,32 @@ metadata:
   namespace: ssh-gateway
 data:
   app.py: |
-    from flask import Flask, jsonify
+    from flask import Flask, jsonify, abort
     import subprocess
     import json
+    import re
     
     app = Flask(__name__)
+    
+    # Kubernetes naming convention: lowercase, alphanumeric, hyphens, max 253 chars
+    K8S_NAME_PATTERN = re.compile(r'^[a-z0-9]([-a-z0-9]*[a-z0-9])?$')
+    MAX_NAME_LENGTH = 253
+    
+    def validate_k8s_name(name, param_name):
+        """Validate Kubernetes resource name to prevent injection"""
+        if not name or len(name) > MAX_NAME_LENGTH:
+            abort(400, description=f"Invalid {param_name}: must be 1-{MAX_NAME_LENGTH} characters")
+        if not K8S_NAME_PATTERN.match(name):
+            abort(400, description=f"Invalid {param_name}: must be lowercase alphanumeric with hyphens")
+        return name
     
     @app.route('/verify/deployment/<namespace>/<name>')
     def verify_deployment(namespace, name):
         """Verify deployment status"""
+        # Validate inputs against Kubernetes naming conventions
+        namespace = validate_k8s_name(namespace, 'namespace')
+        name = validate_k8s_name(name, 'name')
+        
         try:
             result = subprocess.run(
                 ['kubectl', 'get', 'deployment', name, '-n', namespace, '-o', 'json'],
@@ -528,6 +566,17 @@ kind: Deployment
 metadata:
   name: verification-api
   namespace: ssh-gateway
+  annotations:
+    # NOTE: For production, build a custom Docker image with flask and kubectl pre-installed
+    # Example Dockerfile:
+    #   FROM python:3.11-slim
+    #   RUN pip install --no-cache-dir flask && \
+    #       apt-get update && apt-get install -y --no-install-recommends curl && \
+    #       curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    #       install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
+    #       rm kubectl && apt-get clean && rm -rf /var/lib/apt/lists/*
+    #   COPY app.py /app/app.py
+    #   CMD ["python", "/app/app.py"]
 spec:
   replicas: 2
   selector:
@@ -539,6 +588,21 @@ spec:
         app: verification-api
     spec:
       serviceAccountName: ssh-gateway-sa
+      initContainers:
+      # Use init container to install dependencies once, avoiding repeated downloads
+      - name: install-deps
+        image: python:3.11-slim
+        command:
+        - /bin/sh
+        - -c
+        - |
+          pip install --no-cache-dir flask -t /deps
+          apt-get update && apt-get install -y --no-install-recommends curl
+          curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          install -o root -g root -m 0755 kubectl /deps/kubectl
+        volumeMounts:
+        - name: deps
+          mountPath: /deps
       containers:
       - name: api
         image: python:3.11-slim
@@ -546,18 +610,22 @@ spec:
         - /bin/sh
         - -c
         - |
-          pip install flask
-          apt-get update && apt-get install -y kubectl
+          export PYTHONPATH=/deps:$PYTHONPATH
+          export PATH=/deps:$PATH
           python /app/app.py
         ports:
         - containerPort: 8080
         volumeMounts:
         - name: app
           mountPath: /app
+        - name: deps
+          mountPath: /deps
       volumes:
       - name: app
         configMap:
           name: verification-api
+      - name: deps
+        emptyDir: {}
 
 ---
 apiVersion: v1
