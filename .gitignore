@@ -35,3 +35,9 @@ target/
 
 # Workspace data
 workspace/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
