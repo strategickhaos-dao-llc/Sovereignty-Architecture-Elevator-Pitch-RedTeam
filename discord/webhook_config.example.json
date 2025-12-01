@@ -1,0 +1,13 @@
+{
+  "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+  "name": "StrategicKhaos Operator",
+  "avatar_url": "https://example.com/operator-icon.png",
+  "enabled": true,
+  "notify_on": {
+    "startup": true,
+    "shutdown": true,
+    "model_pull": true,
+    "errors": true,
+    "status_change": true
+  }
+}
