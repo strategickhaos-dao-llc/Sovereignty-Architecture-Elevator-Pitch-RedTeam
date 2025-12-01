@@ -48,10 +48,10 @@ function routeToChannel(eventType: string): "immune_response" | "swarm_health" {
 }
 
 export function immuneRoutes(rest: REST, channelIds: ImmuneChannelIds, secret: string) {
-  return async (req: Request, res: Response) => {
+  return async (req: Request & { rawBody?: string }, res: Response) => {
     // Verify webhook signature
     const sig = req.get("X-Immune-Signature") || req.get("X-Sig") || "";
-    const raw = (req as Request & { rawBody?: string }).rawBody || "";
+    const raw = req.rawBody || "";
     
     if (secret && !sigOk(secret, raw, sig)) {
       return res.status(401).send("bad signature");
