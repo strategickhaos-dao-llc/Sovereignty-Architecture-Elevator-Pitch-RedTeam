@@ -1,0 +1,217 @@
+version: '3.8'
+
+# Singularity Engine - Self-Improving AI Refinery for Medical Research
+# Complete deployment stack with all components
+
+networks:
+  singularity_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+
+volumes:
+  singularity_models:
+  singularity_papers:
+  singularity_visualizations:
+  singularity_checkpoints:
+  singularity_obsidian:
+  postgres_singularity_data:
+  redis_singularity_data:
+  qdrant_singularity_data:
+
+services:
+  # ====================
+  # SINGULARITY ENGINE CORE
+  # ====================
+  
+  singularity-api:
+    build:
+      context: .
+      dockerfile: singularity/Dockerfile.singularity
+      args:
+        GPU_SUPPORT: "${GPU_SUPPORT:-false}"
+    container_name: singularity-api
+    ports:
+      - "8090:8090"
+    environment:
+      - SINGULARITY_ENV=production
+      - POSTGRES_DSN=postgresql://singularity:singularity123@postgres:5432/singularity
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_URL=http://qdrant:6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+      - OBSIDIAN_VAULT_PATH=/var/singularity/obsidian
+      - LOG_LEVEL=INFO
+    volumes:
+      - singularity_models:/var/singularity/models
+      - singularity_papers:/var/singularity/papers
+      - singularity_visualizations:/var/singularity/visualizations
+      - singularity_checkpoints:/var/singularity/checkpoints
+      - singularity_obsidian:/var/singularity/obsidian
+    networks:
+      - singularity_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          memory: 8G
+
+  singularity-worker:
+    build:
+      context: .
+      dockerfile: singularity/Dockerfile.singularity
+      args:
+        GPU_SUPPORT: "${GPU_SUPPORT:-false}"
+    container_name: singularity-worker
+    environment:
+      - SINGULARITY_ENV=production
+      - POSTGRES_DSN=postgresql://singularity:singularity123@postgres:5432/singularity
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_URL=http://qdrant:6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+      - LOG_LEVEL=INFO
+    volumes:
+      - singularity_models:/var/singularity/models
+      - singularity_papers:/var/singularity/papers
+      - singularity_checkpoints:/var/singularity/checkpoints
+    networks:
+      - singularity_network
+    depends_on:
+      - singularity-api
+    command: ["celery", "-A", "singularity.worker", "worker", "--loglevel=info"]
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 32G
+        reservations:
+          memory: 16G
+
+  # ====================
+  # INFRASTRUCTURE
+  # ====================
+  
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: singularity-postgres
+    environment:
+      - POSTGRES_DB=singularity
+      - POSTGRES_USER=singularity
+      - POSTGRES_PASSWORD=singularity123
+    volumes:
+      - postgres_singularity_data:/var/lib/postgresql/data
+    networks:
+      - singularity_network
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U singularity -d singularity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: singularity-redis
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_singularity_data:/data
+    networks:
+      - singularity_network
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.7.4
+    container_name: singularity-qdrant
+    ports:
+      - "6334:6333"
+      - "6335:6334"
+    volumes:
+      - qdrant_singularity_data:/qdrant/storage
+    environment:
+      - QDRANT__LOG_LEVEL=INFO
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    networks:
+      - singularity_network
+    restart: unless-stopped
+
+  # ====================
+  # MONITORING
+  # ====================
+  
+  prometheus-singularity:
+    image: prom/prometheus:v2.48.1
+    container_name: singularity-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus-singularity.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.retention.time=90d'
+    networks:
+      - singularity_network
+    restart: unless-stopped
+
+  grafana-singularity:
+    image: grafana/grafana:10.2.3
+    container_name: singularity-grafana
+    ports:
+      - "3003:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=singularity123
+      - GF_INSTALL_PLUGINS=redis-datasource,postgres-datasource
+    volumes:
+      - ./monitoring/grafana-singularity:/etc/grafana/provisioning
+    networks:
+      - singularity_network
+    depends_on:
+      - prometheus-singularity
+    restart: unless-stopped
+
+  # ====================
+  # VISUALIZATION SERVER
+  # ====================
+  
+  visualization-server:
+    image: nginx:alpine
+    container_name: singularity-viz-server
+    ports:
+      - "8091:80"
+    volumes:
+      - singularity_visualizations:/usr/share/nginx/html:ro
+      - ./nginx-viz.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - singularity_network
+    restart: unless-stopped

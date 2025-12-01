@@ -322,3 +322,189 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Singularity Engine - Self-Improving AI for Medical Research
+# THE SINGULARITY ENGINE: An AI that BECOMES THE WORLD'S EXPERT on a disease
+singularity:
+  enabled: true
+  version: "1.0.0"
+  description: "Self-improving AI refinery for medical research"
+  
+  # Core configuration
+  ports:
+    api: 8090
+    visualization: 8091
+    worker: 8092
+  
+  # Disease research profile (configure per deployment)
+  research:
+    # This would be configured with actual disease data
+    disease_profile:
+      name: null  # Set during initialization
+      icd_codes: []
+      omim_ids: []
+    
+    # Research parameters
+    papers_per_cycle: 100
+    hypothesis_per_cycle: 10
+    retrain_threshold: 1000  # Papers before retraining
+    
+    # Data sources
+    sources:
+      - type: "pubmed"
+        enabled: true
+      - type: "biorxiv"
+        enabled: true
+      - type: "clinical_trials"
+        enabled: true
+  
+  # LLM Training (LoRA fine-tuning)
+  training:
+    enabled: true
+    base_models:
+      - "meta-llama/Llama-2-7b-hf"
+      - "mistralai/Mistral-7B-v0.1"
+      - "microsoft/biogpt"
+    default_base: "meta-llama/Llama-2-7b-hf"
+    
+    # LoRA parameters
+    lora:
+      r: 16
+      alpha: 32
+      dropout: 0.05
+      target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+    
+    # Training schedule
+    schedule:
+      auto_retrain: true
+      retrain_interval_papers: 1000
+      max_epochs: 3
+    
+    # Cost estimate: $0-500/month for LoRA fine-tuning
+    cost_estimate:
+      min_monthly: 0
+      max_monthly: 500
+  
+  # Self-Correction System
+  self_correction:
+    enabled: true
+    min_validators: 3
+    max_validators: 7
+    consensus_threshold: 0.7
+    auto_correct: true
+    
+    # Validator agents
+    validators:
+      - name: "fact_checker"
+        specialization: "factual_accuracy"
+      - name: "logic_validator"
+        specialization: "logical_consistency"
+      - name: "source_verifier"
+        specialization: "source_verification"
+      - name: "medical_expert"
+        specialization: "medical_domain"
+      - name: "statistical_validator"
+        specialization: "statistical_analysis"
+  
+  # Genetic Evolution
+  evolution:
+    enabled: true
+    population_size: 20
+    elite_count: 2
+    mutation_rate: 0.1
+    crossover_rate: 0.7
+    selection_method: "tournament"
+    
+    # Target: 5-10% improvement per week
+    improvement_target:
+      weekly_min: 0.05
+      weekly_max: 0.10
+  
+  # Obsidian Integration (Long-term memory)
+  obsidian:
+    enabled: true
+    vault_path: "/var/singularity/obsidian"
+    sync_interval_minutes: 5
+    
+    # Vault structure
+    folders:
+      papers: "Papers"
+      hypotheses: "Hypotheses"
+      synthesis: "Synthesis"
+      proteins: "Biology/Proteins"
+      genes: "Biology/Genes"
+      treatments: "Treatments"
+      symptoms: "Symptoms"
+      daily_digest: "Daily Digests"
+  
+  # 3D Visualization (Unreal + Unity integration)
+  visualization:
+    enabled: true
+    default_engine: "webgl"
+    
+    # Supported engines (all free)
+    engines:
+      - name: "unreal"
+        version: "5.3"
+        cost: 0
+      - name: "unity"
+        version: "2023.2"
+        cost: 0
+      - name: "webgl"
+        cost: 0
+    
+    # Visualization types
+    types:
+      - "protein_3d"
+      - "molecular_docking"
+      - "symptom_map"
+      - "pathway_diagram"
+      - "disease_progression"
+    
+    # Export formats
+    formats:
+      - "gltf"
+      - "fbx"
+      - "usd"
+  
+  # Storage
+  storage:
+    models_dir: "/var/singularity/models"
+    papers_dir: "/var/singularity/papers"
+    visualizations_dir: "/var/singularity/visualizations"
+    checkpoints_dir: "/var/singularity/checkpoints"
+  
+  # Cost estimates
+  costs:
+    local_compute: 0  # Using existing hardware
+    cloud_overflow_min: 0
+    cloud_overflow_max: 3500
+    llm_training_min: 0
+    llm_training_max: 500
+    visualization: 0  # Unreal + Unity free
+    total_min: 0
+    total_max: 4000
+  
+  # Timeline
+  timeline:
+    setup_hours: 32
+    
+    # Expertise milestones
+    milestones:
+      week_1: "Better than any single researcher"
+      month_3: "Better than research teams"
+      month_6: "Better than academic institutions"
+      year_1: "Among world's top experts"
+  
+  # Discord integration
+  discord:
+    announce_channel: "#singularity"
+    alerts_channel: "#singularity-alerts"
+    research_channel: "#research-updates"
+    notify_events:
+      - "session_started"
+      - "papers_processed"
+      - "hypothesis_validated"
+      - "model_trained"
+      - "evolution_generation"
+      - "improvement_milestone"
