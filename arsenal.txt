@@ -1,0 +1,123 @@
+# Sovereign Arsenal - 100 Foundational Papers
+# Clean URL list for xargs/wget/curl processing
+# Last verified: Nov 23, 2025
+
+## CS/AI Foundations (15 papers)
+https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf
+https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf
+https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf
+https://arxiv.org/pdf/1706.03762.pdf
+https://arxiv.org/pdf/1810.04805.pdf
+https://arxiv.org/pdf/2005.14165.pdf
+https://arxiv.org/pdf/1409.0473.pdf
+https://arxiv.org/pdf/1312.6114.pdf
+https://arxiv.org/pdf/1411.1784.pdf
+https://arxiv.org/pdf/2303.08774.pdf
+https://arxiv.org/pdf/2303.12712.pdf
+https://arxiv.org/pdf/1701.07875.pdf
+https://arxiv.org/pdf/1802.05365.pdf
+https://arxiv.org/pdf/1706.03741.pdf
+https://arxiv.org/pdf/1803.08475.pdf
+
+## Cryptography & Zero Trust (10 papers)
+https://www.ssrc.ucsc.edu/PaperArchive/diffie-76.pdf
+https://people.csail.mit.edu/rivest/Rsapaper.pdf
+https://web.cs.ucdavis.edu/~rogaway/papers/moral-fn.pdf
+https://eprint.iacr.org/2016/260.pdf
+https://signal.org/docs/specifications/doubleratchet/doubleratchet.pdf
+https://eprint.iacr.org/2014/349.pdf
+https://eprint.iacr.org/2019/1021.pdf
+https://www.usenix.org/system/files/conference/nsdi14/nsdi14-paper-kohler.pdf
+https://www.usenix.org/system/files/login/articles/login_winter16_08_mickens.pdf
+https://eprint.iacr.org/2020/352.pdf
+
+## Distributed Systems (15 papers)
+http://lamport.azurewebsites.net/pubs/time-clocks.pdf
+http://lamport.azurewebsites.net/pubs/paxos-simple.pdf
+http://lamport.azurewebsites.net/pubs/byz.pdf
+https://raft.github.io/raft.pdf
+https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-ongaro.pdf
+https://www.cs.cornell.edu/fbs/publications/SMSurvey.pdf
+https://dl.acm.org/doi/pdf/10.1145/3360275
+https://www.usenix.org/system/files/conference/osdi16/osdi16-narayanan.pdf
+https://www.cs.princeton.edu/courses/archive/fall16/cos418/papers/cap.pdf
+https://dl.acm.org/doi/pdf/10.1145/1294261.1294281
+https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Part-Time-Parliament.pdf
+https://arxiv.org/pdf/1606.01387.pdf
+https://dl.acm.org/doi/pdf/10.1145/3293611.3331623
+https://www.usenix.org/system/files/nsdi20-paper-yang.pdf
+https://dl.acm.org/doi/pdf/10.1145/3377930.3390213
+
+## Law & Governance (10 papers)
+https://scholarship.law.columbia.edu/faculty_scholarship/1998/
+https://www.jstor.org/stable/pdf/1372643.pdf
+https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679
+https://www.congress.gov/117/bills/hr6580/BILLS-117hr6580ih.pdf
+https://www.whitehouse.gov/wp-content/uploads/2022/10/Blueprint-for-an-AI-Bill-of-Rights.pdf
+https://www.justice.gov/crt/us-constitution
+https://www.un.org/en/about-us/universal-declaration-of-human-rights
+https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3747515
+https://law.stanford.edu/wp-content/uploads/2018/05/JSLL_2018_Selbst_et_al.pdf
+https://arxiv.org/pdf/1912.01172.pdf
+
+## Neuroscience & Collective Intelligence (10 papers)
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1857737/pdf/11440574.pdf
+https://www.nature.com/articles/nrn3214.pdf
+https://www.frontiersin.org/articles/10.3389/fnhum.2013.00825/full
+https://www.pnas.org/doi/pdf/10.1073/pnas.1207143109
+https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0003384&type=printable
+https://arxiv.org/pdf/1911.06349.pdf
+https://www.cell.com/neuron/pdf/S0896-6273(12)00584-3.pdf
+https://www.nature.com/articles/nn.2575.pdf
+https://www.pnas.org/doi/pdf/10.1073/pnas.1314788110
+https://www.science.org/doi/pdf/10.1126/science.1210713
+
+## Mathematics & Formal Methods (10 papers)
+https://www.cs.cmu.edu/~crary/819-f09/Hoare69.pdf
+https://lamport.azurewebsites.net/pubs/lamport-verification.pdf
+https://www.microsoft.com/en-us/research/uploads/prod/2016/12/Specifying-Systems.pdf
+https://arxiv.org/pdf/1803.05316.pdf
+https://www.cs.cornell.edu/~kozen/Papers/Universal.pdf
+https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf
+https://arxiv.org/pdf/1505.05424.pdf
+https://www.cs.toronto.edu/~urtasun/courses/CSC2541/mdp.pdf
+https://arxiv.org/pdf/1701.08734.pdf
+https://arxiv.org/pdf/1312.5602.pdf
+
+## Licenses & Ethics (5 papers)
+https://www.gnu.org/licenses/gpl-3.0.txt
+https://opensource.org/license/mit
+https://www.apache.org/licenses/LICENSE-2.0.txt
+https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt
+https://arxiv.org/pdf/2009.13166.pdf
+
+## Energy & Hardware (10 papers)
+https://dl.acm.org/doi/pdf/10.1145/361011.361061
+https://www.computer.org/csdl/magazine/co/2007/01/r1032/13rRUwbs1dF
+https://arxiv.org/pdf/1807.11164.pdf
+https://arxiv.org/pdf/2004.05566.pdf
+https://arxiv.org/pdf/1602.07360.pdf
+https://www.nature.com/articles/s41586-019-1666-5.pdf
+https://arxiv.org/pdf/1812.04948.pdf
+https://arxiv.org/pdf/1906.00091.pdf
+https://arxiv.org/pdf/2005.12728.pdf
+https://dl.acm.org/doi/pdf/10.1145/3458817.3476165
+
+## Biology & Genome (5 papers)
+https://www.nature.com/articles/nature15393.pdf
+https://www.nature.com/articles/s41586-021-03819-2.pdf
+https://www.science.org/doi/pdf/10.1126/science.1058040
+https://www.nature.com/articles/nbt.3519.pdf
+https://arxiv.org/pdf/2106.09553.pdf
+
+## Misc Eternal (10 papers)
+https://www.usenix.org/system/files/1401_08-12_mickens.pdf
+http://worrydream.com/refs/Brooks-NoSilverBullet.pdf
+https://www.cs.utexas.edu/users/EWD/ewd02xx/EWD215.PDF
+https://dl.acm.org/doi/pdf/10.1145/3371389
+https://www.nap.edu/read/1863/chapter/1
+https://arxiv.org/pdf/1904.04232.pdf
+https://www.jstor.org/stable/pdf/24939139.pdf
+https://www.gwern.net/docs/www/www.lesswrong.com/57882e7e62c5aa8c7a6ec0cc4c5ba0c3eee3a761.pdf
+https://intelligence.org/files/AlignmentMachineLearning.pdf
+https://arxiv.org/pdf/2209.00626.pdf

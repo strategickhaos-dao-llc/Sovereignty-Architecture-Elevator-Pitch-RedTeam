@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> **🔥 NEW: [Sovereign Arsenal](SOVEREIGN_ARSENAL.md)** - 100 foundational papers for ungaslightable AI agents. One command to download, seed forever via torrent, and load 5.2GB of embeddings in <30 seconds. [Read the manifesto →](SOVEREIGN_ARSENAL.md)
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -152,11 +154,34 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 
 ## 🤖 AI Agent Integration
 
+### Sovereign Arsenal - Foundational Knowledge Base
+
+Make your agents **ungaslightable** with 100 foundational papers:
+
+```bash
+# Download all papers
+./download-all.sh
+
+# Load embeddings (5.2GB)
+curl -L -o arsenal-embeddings.jsonl.gz \
+  https://huggingface.co/datasets/strategickhaos/sovereign-arsenal-embeddings/resolve/main/arsenal-embeddings.jsonl.gz
+```
+
+**What's included:**
+- 🧠 **CS/AI Foundations**: Transformers, BERT, GPT-3, neural networks
+- 🔐 **Cryptography**: Signal Protocol, zero-knowledge proofs, homomorphic encryption
+- 🌐 **Distributed Systems**: Lamport, Paxos, Raft, Byzantine fault tolerance
+- ⚖️ **Law & Governance**: GDPR, AI Bill of Rights, Constitutional rights
+- 🔬 **Science**: Neuroscience, mathematics, biology, quantum computing
+
+See [SOVEREIGN_ARSENAL.md](SOVEREIGN_ARSENAL.md) for full details.
+
 ### Vector Knowledge Base
 - **Runbooks**: Operational procedures and troubleshooting guides
 - **Log Schemas**: Structured logging patterns and analysis
 - **Infrastructure Docs**: Architecture and deployment guides
 - **Code Patterns**: Development standards and examples
+- **Sovereign Arsenal**: 100 foundational papers with pre-computed embeddings
 
 ### Per-Channel Routing
 ```yaml
