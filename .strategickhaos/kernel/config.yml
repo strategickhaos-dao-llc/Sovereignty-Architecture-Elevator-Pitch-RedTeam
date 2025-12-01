@@ -1,0 +1,82 @@
+# Strategickhaos Legions OS - Governance Kernel Configuration
+# Version: 1.0.0
+# This file defines the governance rules for the DAO
+
+version: "1.0"
+
+# Departments represent stakeholder groups that vote on proposals
+departments:
+  legal:
+    name: "Legal Department"
+    description: "Reviews legal compliance and contract obligations"
+    weight: 1.5
+    veto_power: true
+    agents:
+      - id: "legal-compliance-agent"
+        model: "gpt-4"
+
+  technical:
+    name: "Technical Department"
+    description: "Evaluates technical feasibility and code quality"
+    weight: 1.0
+    veto_power: false
+    agents:
+      - id: "tech-review-agent"
+        model: "claude-3"
+
+  finance:
+    name: "Finance Department"
+    description: "Assesses financial impact and resource allocation"
+    weight: 1.0
+    veto_power: false
+    agents:
+      - id: "finance-agent"
+        model: "gpt-4"
+
+  ethics:
+    name: "Ethics Department"
+    description: "Ensures ethical compliance and stakeholder protection"
+    weight: 1.2
+    veto_power: true
+    agents:
+      - id: "ethics-agent"
+        model: "claude-3"
+
+  operations:
+    name: "Operations Department"
+    description: "Evaluates operational feasibility and implementation"
+    weight: 0.8
+    veto_power: false
+    agents:
+      - id: "ops-agent"
+        model: "gpt-4-turbo"
+
+# Voting rules for proposals
+voting:
+  quorum: 0.6          # 60% of departments must vote
+  threshold: 0.65      # 65% approval needed to pass
+  veto_timeout_hours: 48
+  auto_merge_on_pass: false
+
+# Integration settings
+integrations:
+  github:
+    enabled: true
+    proposal_branch_prefix: "proposal/"
+    auto_create_pr: true
+  
+  discord:
+    enabled: true
+    notification_channel: "#governance"
+  
+  legal_firewall:
+    enabled: true
+    auto_scan_proposals: true
+    require_compliance_check: true
+
+# Audit and logging
+audit:
+  enabled: true
+  log_path: "logs/governance_audit.log"
+  retention_days: 365
+  include_vote_details: true

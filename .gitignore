@@ -35,3 +35,20 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.eggs/
+*.egg-info/
+.venv/
+venv/
+
+# Legal Firewall generated artifacts (optional to track)
+.strategickhaos/proposals/
+.strategickhaos/requirements_stubs/
+.strategickhaos/legal_firewall_todos.md
+logs/governance_audit.log
