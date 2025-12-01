@@ -322,3 +322,112 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Library of Alexandria - Research Archive
+library_of_alexandria:
+  enabled: true
+  status: "active"
+  landing_page: "https://library.strategickhaos.ai"
+  repo_path: "/library_of_alexandria"
+  
+  statistics:
+    article_count: 1
+    total_citations: 47
+    domains_covered: 4
+    last_updated: "2025-12-01"
+  
+  domains:
+    - name: "drug_discovery"
+      description: "AI in pharmaceutical research, molecular design"
+      articles: 1
+      citations: 47
+      status: "active"
+    - name: "legal_compliance"
+      description: "DAO law, SEC regulations, compliance frameworks"
+      articles: 3
+      citations: 30
+      status: "active"
+    - name: "cybersecurity"
+      description: "MITRE ATT&CK, NIST frameworks, threat intelligence"
+      articles: 30
+      citations: 100
+      status: "active"
+    - name: "machine_learning"
+      description: "Transformers, LLMs, RLHF, scaling laws"
+      articles: 28
+      citations: 200
+      status: "active"
+  
+  access_tiers:
+    free:
+      searches_per_month: 10
+      access_level: "index_and_abstracts"
+      cost: 0
+    subscriber:
+      searches_per_month: -1  # unlimited
+      access_level: "full_text"
+      cost: 20
+      features:
+        - "full_text_access"
+        - "unlimited_searches"
+        - "personalized_recommendations"
+        - "chess_game_replays"
+    researcher:
+      searches_per_month: -1
+      access_level: "full_plus_api"
+      cost: 100
+      features:
+        - "all_subscriber_features"
+        - "submit_research_questions"
+        - "co_author_with_agents"
+        - "early_systematic_reviews"
+    institutional:
+      searches_per_month: -1
+      access_level: "enterprise"
+      cost: 1000
+      features:
+        - "all_researcher_features"
+        - "api_access"
+        - "custom_agent_training"
+        - "white_label_platform"
+  
+  chess_council:
+    total_agents: 640
+    board_layers: 10
+    layer_assignments:
+      layer_1: "Empirical data scraping and extraction"
+      layer_3: "Analysis and verification"
+      layer_4: "Cross-domain synthesis"
+      layer_6: "Strategic chess games"
+      layer_10: "Publication and dissemination"
+  
+  quality_standards:
+    - name: "peer_reviewed_quality"
+      requirement: "Citations from PMC, Nature, or equivalent"
+      verification: "manual"
+    - name: "current"
+      requirement: "Data from last 2 years"
+      verification: "automated"
+    - name: "structured"
+      requirement: "Clear sections, tables, metadata"
+      verification: "template"
+    - name: "actionable"
+      requirement: "Specific examples, timelines"
+      verification: "review"
+    - name: "cross_domain"
+      requirement: "Links to 2+ other domains"
+      verification: "automated"
+  
+  legal_compliance:
+    copyright_policy: "Link to free sources, summarize under fair use"
+    medical_disclaimer: "For research purposes only, consult healthcare professionals"
+    ai_disclosure: "Synthesized by AI, verified by human researchers"
+  
+  discord:
+    library_channel: "#library"
+    research_feed: "#research-feed"
+    notify_events:
+      - "new_article_added"
+      - "citation_verified"
+      - "chess_game_completed"
+      - "systematic_review_published"
