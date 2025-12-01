@@ -1,0 +1,342 @@
+# priority_council_config.yaml
+# Strategickhaos DAO LLC — Priority Council Department Configuration
+# "What to Solve Next" - PR Prioritization and Auto-Merge System
+# Generated: 2025-12-01
+# Operator: Domenic Garza (Node 137)
+
+version: "1.0"
+module_name: "priority-council"
+description: "PR Priority Queue, Impact Scoring, Dependency Mapping, Community Voting, and Auto-Merge"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PRIORITY QUEUE CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+council:
+  enabled: true
+  max_queue_size: 1000
+  
+  # Impact multipliers for different PR types
+  impact_multipliers:
+    her_cure: 2.0        # Her Cure research = TOP PRIORITY
+    security: 1.5        # Security fixes are critical
+    research: 1.3        # Research capabilities
+    ai_agents: 1.25      # AI/ML improvements
+    infrastructure: 1.2  # Infrastructure stability
+    feature: 1.0         # Standard features
+    documentation: 0.8   # Docs are quick wins
+    dependency: 0.5      # Dependency updates lower priority
+
+  # Priority level thresholds
+  priority_thresholds:
+    critical: 80   # Impact score >= 80
+    high: 60       # Impact score >= 60
+    medium: 40     # Impact score >= 40
+    low: 20        # Impact score >= 20
+    auto: 0        # Everything else (auto-merge candidates)
+
+  # Weights for impact scoring
+  impact_weights:
+    her_cure_research: 10
+    autonomous_learning: 9
+    quantum_computing: 8
+    ai_refinement: 8
+    data_pipeline: 7
+    security_compliance: 7
+    visualization: 6
+    community_tools: 5
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PR ANALYSIS CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+analyzer:
+  # Keywords that trigger high-priority categorization
+  critical_keywords:
+    - "her cure"
+    - "disease model"
+    - "personalized treatment"
+    - "quantum research"
+    - "autonomous learning"
+    - "security vulnerability"
+    - "critical fix"
+
+  # File patterns for category detection
+  file_patterns:
+    documentation:
+      - "*.md"
+      - "*.rst"
+      - "docs/**"
+      - "README*"
+    infrastructure:
+      - "Dockerfile*"
+      - "docker-compose*.yml"
+      - "*.tf"
+      - "k8s/**"
+      - "helm/**"
+    security:
+      - "**/security/**"
+      - "**/auth/**"
+      - "*.pem"
+      - "*.key"
+    tests:
+      - "**/*.test.*"
+      - "**/*.spec.*"
+      - "__tests__/**"
+
+  # Risk assessment thresholds
+  risk_thresholds:
+    none: 0           # Documentation only
+    low: 100          # < 100 lines changed
+    medium: 500       # < 500 lines changed
+    high: 1000        # >= 500 lines changed
+    critical: null    # Security-sensitive files
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# COMMUNITY VOTING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+voting:
+  enabled: true
+  voting_period_hours: 24
+  min_votes_to_close: 5
+  
+  # Role-based vote weights
+  weight_by_role:
+    core_maintainer: 3
+    council_member: 2
+    contributor: 1.5
+    community: 1
+
+  # Discord integration
+  discord:
+    enabled: true
+    voting_channel: "#pr-voting"
+    announce_channel: "#prs"
+    
+    # Emoji mappings for reactions
+    reaction_mappings:
+      approve: "✅"
+      reject: "❌"
+      prioritize: "⬆️"
+      deprioritize: "⬇️"
+      abstain: "🤷"
+
+  # Auto-close conditions
+  auto_close:
+    strong_consensus_threshold: 5   # Close if net votes >= 5
+    unanimous_close: true            # Close if all votes agree
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# AUTO-MERGE CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+auto_merge:
+  enabled: true
+  dry_run: false           # Set true to test without merging
+  
+  # Rate limiting
+  max_per_hour: 10
+  cooldown_minutes: 5
+  
+  # Requirements
+  require_ci_passing: true
+  require_approval: true
+  min_approvals: 1
+  
+  # Eligibility criteria
+  allowed_risk_levels:
+    - none
+    - low
+  
+  # Categories excluded from auto-merge
+  exclude_categories:
+    - security
+    - infrastructure
+    - her_cure          # Always want human review for cure research
+  
+  # Label-based controls
+  exclude_labels:
+    - "do-not-merge"
+    - "needs-review"
+    - "security"
+    - "breaking-change"
+    - "wip"
+  
+  include_labels:         # PRs with these labels are auto-merge candidates
+    - "auto-merge-ok"
+    - "documentation"
+    - "minor"
+    - "typo"
+    - "chore"
+  
+  # Notification settings
+  notify:
+    on_queue: true
+    on_merge: true
+    on_failure: true
+    channel: "#prs"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DEPENDENCY MAPPING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+dependencies:
+  enabled: true
+  
+  # Patterns to detect dependency relationships
+  detection_patterns:
+    blocks:
+      - "blocks #(\\d+)"
+      - "blocking #(\\d+)"
+    blocked_by:
+      - "blocked by #(\\d+)"
+      - "depends on #(\\d+)"
+      - "requires #(\\d+)"
+    related:
+      - "related to #(\\d+)"
+      - "see also #(\\d+)"
+      - "refs? #(\\d+)"
+
+  # Auto-update blocked PRs when blockers merge
+  auto_unblock: true
+  
+  # Visualize dependency graph
+  visualization:
+    enabled: true
+    format: "mermaid"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DISCORD INTEGRATION
+# ═══════════════════════════════════════════════════════════════════════════════
+discord:
+  bot:
+    commands:
+      - name: "priority"
+        description: "Show priority queue status"
+        subcommands:
+          - name: "list"
+            description: "List top PRs to work on"
+          - name: "next"
+            description: "Show the next PR to solve"
+          - name: "stats"
+            description: "Show queue statistics"
+          
+      - name: "vote"
+        description: "Vote on a PR"
+        params:
+          - name: "pr"
+            type: "integer"
+            required: true
+          - name: "action"
+            type: "string"
+            choices: ["approve", "reject", "prioritize", "deprioritize"]
+            required: true
+          - name: "comment"
+            type: "string"
+            required: false
+            
+      - name: "automerge"
+        description: "Auto-merge controls"
+        subcommands:
+          - name: "status"
+            description: "Show auto-merge status"
+          - name: "candidates"
+            description: "List auto-merge candidates"
+          - name: "enable"
+            description: "Enable auto-merge"
+          - name: "disable"
+            description: "Disable auto-merge"
+          - name: "process"
+            description: "Process auto-merge queue"
+
+  channels:
+    priority_queue: "#pr-priority"
+    voting: "#pr-voting"
+    auto_merge: "#auto-merge"
+    announcements: "#prs"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# REPORTING & NOTIFICATIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+reporting:
+  # Scheduled reports
+  daily_summary:
+    enabled: true
+    schedule: "0 9 * * *"    # 9 AM daily
+    channel: "#prs"
+    include:
+      - queue_stats
+      - top_10_prs
+      - blocked_prs
+      - auto_merge_candidates
+
+  # Real-time notifications
+  events:
+    pr_added:
+      enabled: true
+      template: "📥 PR #{number} added to queue (Priority: {priority})"
+    pr_merged:
+      enabled: true
+      template: "✅ PR #{number} merged ({merge_type})"
+    vote_cast:
+      enabled: true
+      template: "🗳️ {voter} voted {vote_type} on PR #{number}"
+    blocking_detected:
+      enabled: true
+      template: "⚠️ PR #{number} is blocking: {blocked_prs}"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# API ENDPOINTS
+# ═══════════════════════════════════════════════════════════════════════════════
+api:
+  base_path: "/api/priority-council"
+  endpoints:
+    - path: "/queue"
+      methods: ["GET"]
+      description: "Get priority queue"
+    - path: "/queue/:prNumber"
+      methods: ["GET", "POST", "DELETE"]
+      description: "Manage specific PR in queue"
+    - path: "/next"
+      methods: ["GET"]
+      description: "Get next PR to work on"
+    - path: "/vote/:prNumber"
+      methods: ["POST"]
+      description: "Cast vote on PR"
+    - path: "/automerge/candidates"
+      methods: ["GET"]
+      description: "List auto-merge candidates"
+    - path: "/automerge/process"
+      methods: ["POST"]
+      description: "Process auto-merge queue"
+    - path: "/stats"
+      methods: ["GET"]
+      description: "Get queue statistics"
+    - path: "/report"
+      methods: ["GET"]
+      description: "Get full priority report"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# GOVERNANCE & ACCESS CONTROL
+# ═══════════════════════════════════════════════════════════════════════════════
+governance:
+  roles:
+    admin:
+      - enable_disable_automerge
+      - modify_config
+      - force_merge
+      - close_voting
+    council_member:
+      - cast_weighted_vote
+      - view_all_reports
+      - queue_for_automerge
+    contributor:
+      - cast_vote
+      - view_queue
+      - suggest_priority
+    viewer:
+      - view_queue
+      - view_reports
+
+  audit:
+    log_all_actions: true
+    retention_days: 90
+
+operator: "Domenic Garza"
+last_updated: "2025-12-01T00:00:00Z"
