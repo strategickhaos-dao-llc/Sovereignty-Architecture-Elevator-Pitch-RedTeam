@@ -143,8 +143,8 @@ git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-archi
 cd sovereignty-architecture
 ./bootstrap/deploy.sh
 
-# Announce to Discord
-export DISCORD_TOKEN="your_bot_token"
+# Announce to Discord (use Vault secret reference or environment variable)
+export DISCORD_TOKEN="${DISCORD_TOKEN:-vault://kv/discord/bot_token}"
 ./gl2discord.sh "#general" "Swarm Awakens" "Sovereignty online in GKE!"
 ```
 
@@ -185,7 +185,7 @@ The "dendrites/synapses" of the swarm use **quorum sensing**—containers that c
 infra:
   message_bus:
     type: "redis"
-    url: "redis://redis.internal.strategickhaos:6379"
+    url: "${REDIS_URL}"  # Set via environment or Vault: vault://kv/redis/url
     topic_prefix: "ops."
 ```
 
