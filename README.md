@@ -278,6 +278,7 @@ This project thrives because of an extraordinary community of creators, builders
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
+- **[Neural Pathways Architecture](NEURAL_PATHWAYS_ARCHITECTURE.md)** - Deep dive into GKE, swarm intelligence, and the living infrastructure
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
