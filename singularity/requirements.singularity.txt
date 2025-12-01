@@ -94,10 +94,7 @@ pytest==7.4.4
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 
-# Optional: GPU support for model training (uncomment if GPU available)
-# torch==2.1.2+cu118
-# torchvision==0.16.2+cu118
-# torchaudio==2.1.2+cu118
-
-# For CPU-only environments
+# PyTorch - CPU version by default
+# For GPU support, install separately:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 torch==2.1.2

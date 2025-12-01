@@ -27,6 +27,13 @@ from enum import Enum
 
 import structlog
 
+# Try to import yaml, fall back to simple parser if not available
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
+
 logger = structlog.get_logger(__name__)
 
 
@@ -268,11 +275,10 @@ class ObsidianBrain:
         if content.startswith("---"):
             parts = content.split("---", 2)
             if len(parts) >= 3:
-                try:
-                    import yaml
+                if YAML_AVAILABLE:
                     frontmatter = yaml.safe_load(parts[1]) or {}
-                except ImportError:
-                    # Parse simple key: value frontmatter
+                else:
+                    # Parse simple key: value frontmatter when yaml not available
                     for line in parts[1].strip().split("\n"):
                         if ":" in line:
                             key, value = line.split(":", 1)

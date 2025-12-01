@@ -14,6 +14,7 @@ medical visualizations that help understand complex biology.
 
 import asyncio
 import json
+import random
 import uuid
 from datetime import datetime, timezone
 from enum import Enum
@@ -496,8 +497,7 @@ class VisualizationBridge:
             region = symptom_data.get("body_region", "chest")
             base_pos = body_positions.get(region, Vector3(0, 1.0, 0))
             
-            # Add some random offset
-            import random
+            # Add some random offset for visual separation
             offset = Vector3(
                 random.uniform(-0.1, 0.1),
                 random.uniform(-0.1, 0.1),
