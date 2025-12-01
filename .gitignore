@@ -35,3 +35,9 @@ target/
 
 # Workspace data
 workspace/
+
+# Research automation - downloaded content (can be regenerated)
+research/raw_pages/
+research/extracted_text/
+research/__pycache__/
+*.log

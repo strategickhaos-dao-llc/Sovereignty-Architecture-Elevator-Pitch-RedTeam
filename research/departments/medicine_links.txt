@@ -1,0 +1,117 @@
+# Medicine Department Research Links
+# NIH - National Institutes of Health
+https://www.nih.gov/
+https://www.nih.gov/institutes-nih
+https://www.nih.gov/health-information
+https://clinicaltrials.gov/
+# CDC - Centers for Disease Control
+https://www.cdc.gov/
+https://www.cdc.gov/vaccines/
+https://www.cdc.gov/chronicdisease/
+https://www.cdc.gov/infectiousdiseases/
+# FDA - Food & Drug Administration
+https://www.fda.gov/
+https://www.fda.gov/drugs
+https://www.fda.gov/medical-devices
+https://www.fda.gov/vaccines-blood-biologics
+# Mayo Clinic
+https://www.mayoclinic.org/
+https://www.mayoclinic.org/diseases-conditions
+https://www.mayoclinic.org/tests-procedures
+# Johns Hopkins Medicine
+https://www.hopkinsmedicine.org/
+https://www.hopkinsmedicine.org/health
+# Cleveland Clinic
+https://my.clevelandclinic.org/
+https://my.clevelandclinic.org/health
+# PubMed Central
+https://www.ncbi.nlm.nih.gov/pmc/
+https://pubmed.ncbi.nlm.nih.gov/
+# WHO - World Health Organization
+https://www.who.int/
+https://www.who.int/health-topics
+# Google Scholar - Medicine
+https://scholar.google.com/scholar?hl=en&q=cardiology
+https://scholar.google.com/scholar?hl=en&q=oncology
+https://scholar.google.com/scholar?hl=en&q=neurology
+https://scholar.google.com/scholar?hl=en&q=psychiatry
+https://scholar.google.com/scholar?hl=en&q=radiology
+https://scholar.google.com/scholar?hl=en&q=surgery
+https://scholar.google.com/scholar?hl=en&q=pediatrics
+https://scholar.google.com/scholar?hl=en&q=obstetrics
+https://scholar.google.com/scholar?hl=en&q=gynecology
+https://scholar.google.com/scholar?hl=en&q=internal+medicine
+https://scholar.google.com/scholar?hl=en&q=family+medicine
+https://scholar.google.com/scholar?hl=en&q=emergency+medicine
+https://scholar.google.com/scholar?hl=en&q=anesthesiology
+https://scholar.google.com/scholar?hl=en&q=pathology
+https://scholar.google.com/scholar?hl=en&q=dermatology
+https://scholar.google.com/scholar?hl=en&q=ophthalmology
+https://scholar.google.com/scholar?hl=en&q=otolaryngology
+https://scholar.google.com/scholar?hl=en&q=orthopedics
+https://scholar.google.com/scholar?hl=en&q=urology
+https://scholar.google.com/scholar?hl=en&q=nephrology
+https://scholar.google.com/scholar?hl=en&q=gastroenterology
+https://scholar.google.com/scholar?hl=en&q=endocrinology
+https://scholar.google.com/scholar?hl=en&q=rheumatology
+https://scholar.google.com/scholar?hl=en&q=pulmonology
+https://scholar.google.com/scholar?hl=en&q=infectious+disease
+https://scholar.google.com/scholar?hl=en&q=hematology
+https://scholar.google.com/scholar?hl=en&q=immunology
+https://scholar.google.com/scholar?hl=en&q=allergy
+https://scholar.google.com/scholar?hl=en&q=geriatrics
+https://scholar.google.com/scholar?hl=en&q=palliative+care
+https://scholar.google.com/scholar?hl=en&q=pain+management
+https://scholar.google.com/scholar?hl=en&q=rehabilitation
+https://scholar.google.com/scholar?hl=en&q=physical+therapy
+https://scholar.google.com/scholar?hl=en&q=occupational+therapy
+https://scholar.google.com/scholar?hl=en&q=clinical+trials
+https://scholar.google.com/scholar?hl=en&q=evidence+based+medicine
+https://scholar.google.com/scholar?hl=en&q=medical+ethics
+https://scholar.google.com/scholar?hl=en&q=bioethics
+https://scholar.google.com/scholar?hl=en&q=health+policy
+https://scholar.google.com/scholar?hl=en&q=healthcare+management
+https://scholar.google.com/scholar?hl=en&q=medical+education
+https://scholar.google.com/scholar?hl=en&q=medical+imaging
+https://scholar.google.com/scholar?hl=en&q=mri
+https://scholar.google.com/scholar?hl=en&q=ct+scan
+https://scholar.google.com/scholar?hl=en&q=ultrasound
+https://scholar.google.com/scholar?hl=en&q=molecular+diagnostics
+https://scholar.google.com/scholar?hl=en&q=laboratory+medicine
+https://scholar.google.com/scholar?hl=en&q=precision+medicine
+https://scholar.google.com/scholar?hl=en&q=personalized+medicine
+https://scholar.google.com/scholar?hl=en&q=genomic+medicine
+https://scholar.google.com/scholar?hl=en&q=gene+therapy
+https://scholar.google.com/scholar?hl=en&q=regenerative+medicine
+https://scholar.google.com/scholar?hl=en&q=stem+cell+therapy
+https://scholar.google.com/scholar?hl=en&q=immunotherapy
+https://scholar.google.com/scholar?hl=en&q=targeted+therapy
+https://scholar.google.com/scholar?hl=en&q=chemotherapy
+https://scholar.google.com/scholar?hl=en&q=radiation+therapy
+https://scholar.google.com/scholar?hl=en&q=minimally+invasive+surgery
+https://scholar.google.com/scholar?hl=en&q=robotic+surgery
+https://scholar.google.com/scholar?hl=en&q=transplantation
+https://scholar.google.com/scholar?hl=en&q=organ+donation
+https://scholar.google.com/scholar?hl=en&q=artificial+organs
+https://scholar.google.com/scholar?hl=en&q=medical+devices
+https://scholar.google.com/scholar?hl=en&q=wearable+health
+https://scholar.google.com/scholar?hl=en&q=telemedicine
+https://scholar.google.com/scholar?hl=en&q=digital+health
+https://scholar.google.com/scholar?hl=en&q=health+informatics
+https://scholar.google.com/scholar?hl=en&q=electronic+health+records
+https://scholar.google.com/scholar?hl=en&q=clinical+decision+support
+https://scholar.google.com/scholar?hl=en&q=medical+AI
+https://scholar.google.com/scholar?hl=en&q=diagnostic+algorithms
+https://scholar.google.com/scholar?hl=en&q=drug+development
+https://scholar.google.com/scholar?hl=en&q=pharmacogenomics
+https://scholar.google.com/scholar?hl=en&q=adverse+drug+reactions
+https://scholar.google.com/scholar?hl=en&q=drug+interactions
+https://scholar.google.com/scholar?hl=en&q=antibiotic+resistance
+https://scholar.google.com/scholar?hl=en&q=vaccine+development
+https://scholar.google.com/scholar?hl=en&q=public+health
+https://scholar.google.com/scholar?hl=en&q=epidemiology
+https://scholar.google.com/scholar?hl=en&q=global+health
+https://scholar.google.com/scholar?hl=en&q=maternal+health
+https://scholar.google.com/scholar?hl=en&q=child+health
+https://scholar.google.com/scholar?hl=en&q=mental+health
+https://scholar.google.com/scholar?hl=en&q=addiction+medicine
