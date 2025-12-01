@@ -234,7 +234,9 @@ impl QuantumSplicer {
         self.breeding_chamber.insert(child_id.clone(), child_dna);
         
         println!("✅ BLACK HOLE CHILD BIRTHED: {}", child_id);
-        println!("   DNA Hash: 0x{}", hex::encode(&child.dna[..16]));
+        // SHA-512 produces 64 bytes, but we safely handle shorter DNA
+        let dna_preview = child.dna.get(..16).unwrap_or(&child.dna);
+        println!("   DNA Hash: 0x{}", hex::encode(dna_preview));
         println!("   Consensus Score: {:.4}", child.quadrant_alignment.consensus_score);
         println!("   Dividend Yield: {:.2}%", child.dividend_yield);
         println!("   Deploy Targets: {:?}\n", child.deploy_targets);
