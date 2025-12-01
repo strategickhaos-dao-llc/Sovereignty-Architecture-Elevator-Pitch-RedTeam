@@ -186,6 +186,44 @@ governance:
     link: "https://wiki.strategickhaos.internal/change-management"
 ```
 
+## 🛡️ AI Governance - STATE.yaml
+
+The Sovereignty Architecture includes a canonical state file (`governance/STATE.yaml`) that serves as the **single source of truth** for multi-AI governance. This prevents context drift and ensures all AI nodes operate from verified state.
+
+### Core Concepts
+- **Decision Gates**: AI nodes cannot provide deployment/financial/legal advice until gates pass
+- **Cryptographic Integrity**: SHA-256 hash verification prevents unauthorized modifications
+- **Operator Override**: Emergency controls for human authority
+- **Council Rules**: Automated enforcement of governance policies
+
+### State Synchronization
+```bash
+# Create a cryptographically signed snapshot
+python state_sync.py snapshot
+
+# Verify state integrity
+python state_sync.py verify
+
+# Check governance status
+python state_sync.py status
+
+# View decision gate status
+python state_sync.py gates
+
+# Approve a gate requirement
+python state_sync.py approve pre_deployment_check infrastructure_review
+
+# Increment governance tick
+python state_sync.py tick
+```
+
+### AI Council Rules
+All AI nodes must read `STATE.yaml` before providing advice:
+- No deployment advice until `pre_deployment_check` passes
+- No financial advice until `pre_financial_check` passes
+- No legal advice until `pre_legal_check` passes
+- Violating nodes will be muted by the swarm
+
 ## 📊 Monitoring & Alerts
 
 ### Key Metrics

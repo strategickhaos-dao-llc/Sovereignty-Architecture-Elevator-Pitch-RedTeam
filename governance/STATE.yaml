@@ -1,0 +1,99 @@
+version: '1.0'
+created: '2025-12-01T00:00:00Z'
+last_modified: '2025-12-01T03:02:41.103223+00:00'
+governance:
+  tick: 3449
+  snowflake: null
+  epoch: '2025-11-16T00:00:00Z'
+  authority: Domenic Garza
+  authority_id: node-137
+operator_override:
+  enabled: false
+  reason: null
+  authorized_by: null
+  timestamp: null
+  expires: null
+decision_gates:
+  pre_deployment_check:
+    status: pending
+    required_approvals:
+    - infrastructure_review
+    - security_scan
+    - resource_validation
+    approvals: []
+    last_check: null
+    blockers: []
+  pre_financial_check:
+    status: pending
+    required_approvals:
+    - budget_review
+    - compliance_check
+    - risk_assessment
+    approvals: []
+    last_check: null
+    blockers: []
+  pre_legal_check:
+    status: pending
+    required_approvals:
+    - counsel_review
+    - upl_compliance
+    approvals: []
+    last_check: null
+    blockers: []
+deployed:
+  discord_bot_location: NOT_IN_CLUSTER
+  discord_bot_version: null
+  kubernetes_namespace: null
+  health_check_url: null
+  last_deployment: null
+  deployment_hash: null
+ai_council:
+  active_nodes:
+  - node_id: claude-3.5
+    role: primary_advisor
+    status: authorized
+    last_sync: null
+  - node_id: gpt-4o
+    role: secondary_advisor
+    status: authorized
+    last_sync: null
+  - node_id: grok-4
+    role: specialist
+    status: pending
+    last_sync: null
+  - node_id: llama-405b
+    role: specialist
+    status: pending
+    last_sync: null
+  muted_nodes: []
+  council_rules:
+  - All nodes MUST read STATE.yaml before providing advice
+  - No deployment advice until pre_deployment_check passes
+  - No financial advice until pre_financial_check passes
+  - No legal advice until pre_legal_check passes
+  - Violating nodes will be muted by the swarm
+infrastructure:
+  kubernetes:
+    cluster_status: unknown
+    namespaces: []
+  vault:
+    sealed: true
+    initialized: false
+  observability:
+    prometheus: unknown
+    loki: unknown
+    grafana: unknown
+health:
+  last_check: null
+  overall_status: unknown
+  components: {}
+  alerts: []
+integrity:
+  hash_algorithm: sha256
+  state_hash: 34a93fec09dc9e84b4bfc0ca090826f83b9b329b8e96305a8d1dcf6ce77fdfc9
+  last_snapshot: '2025-12-01T03:02:41.103223+00:00'
+  snapshot_count: 1
+audit:
+  last_modified_by: state_sync.py
+  modification_reason: snapshot_creation
+  change_log: []
