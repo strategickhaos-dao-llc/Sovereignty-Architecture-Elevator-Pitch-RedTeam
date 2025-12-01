@@ -1,0 +1,26 @@
+# Tools Refinery Configuration
+# Paths, allowed vaults, github tokens, etc.
+
+obsidian:
+  vaults:
+    - name: "Test"
+      path: "/tmp/test-vault"
+    - name: "Sovereignty"
+      path: "/home/user/vaults/Sovereignty"
+
+git:
+  default_repo_path: "/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-/Sovereignty-Architecture-Elevator-Pitch-"
+  github_token: null  # Optional: set via GITHUB_TOKEN env var
+
+web:
+  user_agent: "Tools-Refinery/0.1"
+  timeout: 30
+
+osint:
+  graph_path: "/tmp/osint-graphs"
+  methodology_template: "## Methodology\n\n### Sources\n\n### Techniques\n\n### Findings\n"
+
+system:
+  api_key: "dev-key-change-me"  # Override with REFINERY_KEY env var
+  host: "127.0.0.1"
+  port: 8211
