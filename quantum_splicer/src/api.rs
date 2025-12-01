@@ -105,7 +105,7 @@ Example:
 
     /// Health check endpoint
     async fn health(State(state): State<Arc<AppState>>) -> Json<HealthResponse> {
-        let chamber_size = state.splicer.lock().unwrap().chamber_size();
+        let chamber_size = state.splicer.lock().expect("mutex poisoned").chamber_size();
         Json(HealthResponse {
             status: "healthy".to_string(),
             version: "0.1.0".to_string(),
@@ -120,7 +120,7 @@ Example:
 
     /// List all offspring in the breeding chamber
     async fn list_chamber(State(state): State<Arc<AppState>>) -> Json<Vec<BlackHoleChild>> {
-        let splicer = state.splicer.lock().unwrap();
+        let splicer = state.splicer.lock().expect("mutex poisoned");
         let children: Vec<BlackHoleChild> = splicer
             .get_all_children()
             .into_iter()
@@ -134,7 +134,7 @@ Example:
         State(state): State<Arc<AppState>>,
         Json(request): Json<SpliceRequest>,
     ) -> Result<Json<BlackHoleChild>, impl IntoResponse> {
-        let mut splicer = state.splicer.lock().unwrap();
+        let mut splicer = state.splicer.lock().expect("mutex poisoned");
 
         // Helper to create department from name
         let get_department = |name: &str| -> Option<Box<dyn SovereignTrait + Send + Sync>> {

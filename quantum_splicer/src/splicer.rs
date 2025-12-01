@@ -174,8 +174,8 @@ impl QuantumSplicer {
         parent_b: &B,
     ) -> String {
         let mut hasher = Sha256::new();
-        hasher.update(&parent_a.dna());
-        hasher.update(&parent_b.dna());
+        hasher.update(parent_a.dna());
+        hasher.update(parent_b.dna());
         hasher.update(Self::GENESIS_SALT);
         hex::encode(hasher.finalize())
     }
@@ -188,8 +188,8 @@ impl QuantumSplicer {
         entanglement: &str,
     ) -> String {
         let mut hasher = Sha512::new();
-        hasher.update(&parent_a.dna());
-        hasher.update(&parent_b.dna());
+        hasher.update(parent_a.dna());
+        hasher.update(parent_b.dna());
         hasher.update(entanglement.as_bytes());
         hasher.update(Self::GENESIS_SALT);
         hex::encode(hasher.finalize())
