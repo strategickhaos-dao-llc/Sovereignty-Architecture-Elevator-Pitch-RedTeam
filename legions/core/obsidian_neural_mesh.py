@@ -316,16 +316,18 @@ class ObsidianNeuralMesh(commands.Cog):
         except Exception as e:
             git_status = []
             changes_detected = False
+            error_msg = str(e) if len(str(e)) <= 200 else f"{str(e)[:200]}..."
             embed.add_field(
                 name="⚠️ Git Status",
-                value=f"Could not read git status: {str(e)[:100]}",
+                value=f"Could not read git status: {error_msg}",
                 inline=False
             )
         
         if changes_detected:
+            status_text = '\n'.join(git_status[:10])
             embed.add_field(
                 name="📝 Changes Detected",
-                value=f"```\n{chr(10).join(git_status[:10])}\n```" if git_status else "No changes",
+                value=f"```\n{status_text}\n```" if git_status else "No changes",
                 inline=False
             )
             
@@ -446,10 +448,10 @@ class CouncilStatus(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot: commands.Bot):
-    """Setup function for loading as a Discord.py cog."""
-    bot.add_cog(ObsidianNeuralMesh(bot))
-    bot.add_cog(CouncilStatus(bot))
+async def setup(bot: commands.Bot):
+    """Setup function for loading as a Discord.py cog (async for discord.py 2.0+)."""
+    await bot.add_cog(ObsidianNeuralMesh(bot))
+    await bot.add_cog(CouncilStatus(bot))
 
 
 async def main():
