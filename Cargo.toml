@@ -1,0 +1,23 @@
+[package]
+name = "sovereignty-genesis"
+version = "1.0.0"
+edition = "2021"
+authors = ["Strategickhaos DAO LLC"]
+description = "Genesis module for Sovereignty Architecture - The Book of Genesis for Post-Human Governance"
+license = "MIT"
+repository = "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+
+[lib]
+name = "sovereignty_genesis"
+path = "src/genesis/mod.rs"
+
+[dependencies]
+
+[dev-dependencies]
+
+[features]
+default = []
+
+[[bin]]
+name = "genesis-cli"
+path = "src/genesis/main.rs"
