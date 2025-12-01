@@ -1,0 +1,315 @@
+---
+# GitLens Aggregator Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlens-aggregator
+  namespace: ops
+  labels:
+    app: gitlens-aggregator
+    component: event-collection
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gitlens-aggregator
+  template:
+    metadata:
+      labels:
+        app: gitlens-aggregator
+        component: event-collection
+    spec:
+      containers:
+      - name: gitlens-aggregator
+        image: strategickhaos/gitlens-aggregator:latest
+        ports:
+        - containerPort: 8086
+          name: http
+        env:
+        - name: DISCORD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: discord-ops-secrets
+              key: bot-token
+        - name: GITLENS_AGGREGATOR_PORT
+          value: "8086"
+        - name: MINDOS_URL
+          value: "http://mindos-orchestrator:8090"
+        - name: PRS_CHANNEL_ID
+          valueFrom:
+            configMapKeyRef:
+              name: discord-ops-discovery
+              key: prs_channel_id
+              optional: false  # Make required to catch configuration issues early
+        volumeMounts:
+        - name: config
+          mountPath: /app/discovery.yml
+          subPath: discovery.yml
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8086
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8086
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: config
+        configMap:
+          name: discord-ops-discovery
+
+---
+# GitLens Aggregator Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlens-aggregator
+  namespace: ops
+  labels:
+    app: gitlens-aggregator
+spec:
+  selector:
+    app: gitlens-aggregator
+  ports:
+  - port: 8086
+    targetPort: 8086
+    protocol: TCP
+    name: http
+  type: ClusterIP
+
+---
+# Mind OS Orchestrator Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mindos-orchestrator
+  namespace: ops
+  labels:
+    app: mindos-orchestrator
+    component: distribution
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mindos-orchestrator
+  template:
+    metadata:
+      labels:
+        app: mindos-orchestrator
+        component: distribution
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: mindos-orchestrator
+      containers:
+      - name: mindos-orchestrator
+        image: strategickhaos/mindos-orchestrator:latest
+        ports:
+        - containerPort: 8090
+          name: http
+        env:
+        - name: MINDOS_PORT
+          value: "8090"
+        - name: NODE_ENV
+          value: "production"
+        volumeMounts:
+        - name: config
+          mountPath: /app/discovery.yml
+          subPath: discovery.yml
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8090
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8090
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: config
+        configMap:
+          name: discord-ops-discovery
+
+---
+# Mind OS Orchestrator Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mindos-orchestrator
+  namespace: ops
+  labels:
+    app: mindos-orchestrator
+spec:
+  selector:
+    app: mindos-orchestrator
+  ports:
+  - port: 8090
+    targetPort: 8090
+    protocol: TCP
+    name: http
+  type: ClusterIP
+
+---
+# ServiceAccount for Mind OS with cluster access
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mindos-orchestrator
+  namespace: ops
+
+---
+# ClusterRole for Mind OS to access LLM Generals across namespaces
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mindos-orchestrator
+rules:
+- apiGroups: [""]
+  resources: ["services", "endpoints", "pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+
+---
+# ClusterRoleBinding for Mind OS
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mindos-orchestrator
+subjects:
+- kind: ServiceAccount
+  name: mindos-orchestrator
+  namespace: ops
+roleRef:
+  kind: ClusterRole
+  name: mindos-orchestrator
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# Ingress for GitLens Aggregator
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gitlens-aggregator-ingress
+  namespace: ops
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - gitlens.strategickhaos.com
+    secretName: gitlens-aggregator-tls
+  rules:
+  - host: gitlens.strategickhaos.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gitlens-aggregator
+            port:
+              number: 8086
+
+---
+# Ingress for Mind OS Orchestrator (internal only)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mindos-orchestrator-ingress
+  namespace: ops
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mindos.internal.strategickhaos.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mindos-orchestrator
+            port:
+              number: 8090
+
+---
+# HorizontalPodAutoscaler for Mind OS
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mindos-orchestrator-hpa
+  namespace: ops
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mindos-orchestrator
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+# HorizontalPodAutoscaler for GitLens Aggregator
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: gitlens-aggregator-hpa
+  namespace: ops
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: gitlens-aggregator
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70

@@ -1,0 +1,473 @@
+---
+# Namespace for LLM Generals
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: agents
+  labels:
+    name: agents
+    app: strategickhaos-llm
+
+---
+# ConfigMap for LLM General shared configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llm-generals-config
+  namespace: agents
+data:
+  model_config.json: |
+    {
+      "default_model": "gpt-4o-mini",
+      "temperature": 0.7,
+      "max_tokens": 2048,
+      "context_window": 128000
+    }
+
+---
+# Code Review General Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-review-general
+  namespace: agents
+  labels:
+    app: llm-general
+    type: code-review
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: llm-general
+      type: code-review
+  template:
+    metadata:
+      labels:
+        app: llm-general
+        type: code-review
+    spec:
+      containers:
+      - name: code-review-general
+        image: strategickhaos/llm-general:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: GENERAL_TYPE
+          value: "code-review"
+        - name: SPECIALIZATION
+          value: "code_review,quality,best_practices"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-secrets
+              key: openai-api-key
+        - name: MODEL_NAME
+          value: "gpt-4o-mini"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+---
+# Code Review General Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-review-general
+  namespace: agents
+spec:
+  selector:
+    app: llm-general
+    type: code-review
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Architecture General Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: architecture-general
+  namespace: agents
+  labels:
+    app: llm-general
+    type: architecture
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: llm-general
+      type: architecture
+  template:
+    metadata:
+      labels:
+        app: llm-general
+        type: architecture
+    spec:
+      containers:
+      - name: architecture-general
+        image: strategickhaos/llm-general:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: GENERAL_TYPE
+          value: "architecture"
+        - name: SPECIALIZATION
+          value: "design,architecture,patterns"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-secrets
+              key: openai-api-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+---
+# Architecture General Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: architecture-general
+  namespace: agents
+spec:
+  selector:
+    app: llm-general
+    type: architecture
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+# Security General Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: security-general
+  namespace: agents
+  labels:
+    app: llm-general
+    type: security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: llm-general
+      type: security
+  template:
+    metadata:
+      labels:
+        app: llm-general
+        type: security
+    spec:
+      containers:
+      - name: security-general
+        image: strategickhaos/llm-general:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: GENERAL_TYPE
+          value: "security"
+        - name: SPECIALIZATION
+          value: "security,vulnerabilities,compliance"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-secrets
+              key: openai-api-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+---
+# Security General Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: security-general
+  namespace: agents
+spec:
+  selector:
+    app: llm-general
+    type: security
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+# Deployment General
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-general
+  namespace: agents
+  labels:
+    app: llm-general
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-general
+      type: deployment
+  template:
+    metadata:
+      labels:
+        app: llm-general
+        type: deployment
+    spec:
+      containers:
+      - name: deployment-general
+        image: strategickhaos/llm-general:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GENERAL_TYPE
+          value: "deployment"
+        - name: SPECIALIZATION
+          value: "deployment,release,cicd"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-secrets
+              key: openai-api-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+---
+# Deployment General Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment-general
+  namespace: agents
+spec:
+  selector:
+    app: llm-general
+    type: deployment
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+# Quality Assurance General Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quality-assurance-general
+  namespace: agents
+  labels:
+    app: llm-general
+    type: qa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-general
+      type: qa
+  template:
+    metadata:
+      labels:
+        app: llm-general
+        type: qa
+    spec:
+      containers:
+      - name: qa-general
+        image: strategickhaos/llm-general:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GENERAL_TYPE
+          value: "quality-assurance"
+        - name: SPECIALIZATION
+          value: "testing,qa,validation"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-secrets
+              key: openai-api-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+---
+# QA General Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: quality-assurance-general
+  namespace: agents
+spec:
+  selector:
+    app: llm-general
+    type: qa
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+# General Purpose General Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: general-purpose-general
+  namespace: agents
+  labels:
+    app: llm-general
+    type: general
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: llm-general
+      type: general
+  template:
+    metadata:
+      labels:
+        app: llm-general
+        type: general
+    spec:
+      containers:
+      - name: general-purpose
+        image: strategickhaos/llm-general:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GENERAL_TYPE
+          value: "general-purpose"
+        - name: SPECIALIZATION
+          value: "general,multipurpose"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-secrets
+              key: openai-api-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+---
+# General Purpose Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: general-purpose-general
+  namespace: agents
+spec:
+  selector:
+    app: llm-general
+    type: general
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+# HorizontalPodAutoscaler for Code Review General
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: code-review-general-hpa
+  namespace: agents
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: code-review-general
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
