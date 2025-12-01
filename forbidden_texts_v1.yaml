@@ -1,0 +1,306 @@
+# forbidden_texts_v1.yaml
+# Strategickhaos DAO LLC / Valoryield Engine — Forbidden Texts v1 (35 Sources)
+# Generated: 2025-11-19T09:30:00Z
+# Operator: Domenic Garza (Node 137)
+# Purpose: Ingest Hebrew Bible, Kabbalah, and Egyptian grimoires for RAG + reality hacking
+
+version: "1.0"
+ingestion_engine: "recon-ingestor"
+rag_collection: "forbidden_texts_v1"
+embedding_model: "BAAI/bge-small-en-v1.5"
+vector_db: "qdrant://localhost:6333"
+chunk_size: 512
+chunk_overlap: 128
+output_dir: "recon/forbidden_v1"
+
+globals:
+  user_agent: "Strategickhaos-Recon/1.0"
+  timeout_sec: 120
+  retries: 3
+  rate_limit_sec: 2
+  disclaimer: "INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED"
+
+# Core 35 forbidden texts - Hebrew, Egyptian, and Hermetic sources
+sources:
+  # Hebrew Bible and Tanakh (Entry 31)
+  - id: tanakh_hebrew_english
+    url: "https://raw.githubusercontent.com/scrollmapper/bible_databases/master/tanakh-parallel-hebrew-english.txt"
+    file: "Tanakh_Full_Hebrew_English.txt"
+    category: "hebrew_bible"
+    priority: "critical"
+    description: "The Tanakh (Hebrew Bible) - Masoretic Text with parallel English translation - original source code of Western reality tunneling"
+    
+  # Kabbalah - Zohar (Entry 32)
+  - id: zohar_pritzker
+    url: "https://www.sacred-texts.com/jud/zdm/index.htm"
+    file: "Zohar_Pritzker_Vol1.html"
+    category: "kabbalah"
+    priority: "critical"
+    description: "The Zohar (Book of Splendor) - Kabbalah's main grimoire, literal tree-of-life programming"
+    
+  # Sefer Yetzirah (Entry 33 - upgraded from existing 30)
+  - id: sefer_yetzirah
+    url: "https://www.sacred-texts.com/jud/yetzirah.htm"
+    file: "Sefer_Yetzirah_Full.html"
+    category: "kabbalah"
+    priority: "critical"
+    description: "Sefer Yetzirah (Book of Formation) - How God coded the universe with Hebrew letters"
+    
+  # Egyptian Book of the Dead (Entry 34)
+  - id: egyptian_book_dead_budge
+    url: "https://www.sacred-texts.com/egy/ebod/index.htm"
+    file: "Book_of_the_Dead_Budge.html"
+    category: "egyptian"
+    priority: "critical"
+    description: "The Egyptian Book of the Dead (Budge translation) - Actual spells to hack the Duat (afterlife OS)"
+    
+  - id: egyptian_book_dead_papyrus_ani
+    url: "https://www.crystalinks.com/bookofdead.html"
+    file: "Book_of_the_Dead_Full.html"
+    category: "egyptian"
+    priority: "high"
+    description: "Egyptian Book of the Dead - Papyrus of Ani and other recensions"
+    
+  # Pyramid Texts (Entry 35)
+  - id: pyramid_texts_unas
+    url: "https://www.sacred-texts.com/egy/pyt/index.htm"
+    file: "Pyramid_Texts_Complete.html"
+    category: "egyptian"
+    priority: "critical"
+    description: "The Pyramid Texts (2400 BC) - Pharaoh ascension code, direct from the walls of Unas pyramid"
+    
+  - id: pyramid_texts_ucl
+    url: "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/bd.html"
+    file: "Pyramid_Texts_UCL.html"
+    category: "egyptian"
+    priority: "high"
+    description: "Pyramid Texts - UCL Digital Egypt scholarly edition"
+
+  # Additional Egyptian Sources (30+ texts)
+  - id: coffin_texts
+    url: "https://www.sacred-texts.com/egy/index.htm"
+    file: "egyptian_coffin_texts.html"
+    category: "egyptian"
+    priority: "high"
+    description: "Egyptian Coffin Texts - Middle Kingdom funerary spells"
+    
+  - id: egyptian_magic_budge
+    url: "https://www.sacred-texts.com/egy/emec/index.htm"
+    file: "egyptian_magic_complete.html"
+    category: "egyptian"
+    priority: "high"
+    description: "Egyptian Magic by E.A. Wallis Budge - Complete grimoire of Egyptian spells"
+    
+  - id: emerald_tablet
+    url: "https://www.hermetic.com/texts/emerald.html"
+    file: "emerald_tablet.html"
+    category: "hermetic"
+    priority: "critical"
+    description: "The Emerald Tablet of Hermes Trismegistus - As above, so below"
+    
+  - id: emerald_tablet_alt
+    url: "https://www.crystalinks.com/emerald.html"
+    file: "emerald_tablet_alt.html"
+    category: "hermetic"
+    priority: "medium"
+    description: "Emerald Tablet - Alternative translation and commentary"
+    
+  - id: hermetica_complete
+    url: "https://www.sacred-texts.com/eso/hermes.htm"
+    file: "hermetica_complete.html"
+    category: "hermetic"
+    priority: "critical"
+    description: "Complete Hermetic writings - Corpus Hermeticum and related texts"
+    
+  - id: corpus_hermeticum
+    url: "https://www.gnosis.org/library/hermet.htm"
+    file: "corpus_hermeticum.html"
+    category: "hermetic"
+    priority: "high"
+    description: "Corpus Hermeticum - The divine teachings of Hermes Trismegistus"
+    
+  - id: egyptian_hymns
+    url: "https://www.sacred-texts.com/egy/leg/index.htm"
+    file: "egyptian_hymns_legends.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Egyptian Legends and Hymns - Sacred poetry and invocations"
+    
+  - id: amduat
+    url: "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/amduat.html"
+    file: "amduat_book.html"
+    category: "egyptian"
+    priority: "high"
+    description: "The Amduat - Book of What is in the Underworld"
+    
+  - id: gates_book
+    url: "https://www.ucl.ac.uk/museums-static/digitalegypt/literature/religious/gates.html"
+    file: "book_of_gates.html"
+    category: "egyptian"
+    priority: "high"
+    description: "Book of Gates - Journey through the twelve gates of the night"
+    
+  - id: egyptian_creation_myths
+    url: "https://www.sacred-texts.com/egy/eml/index.htm"
+    file: "egyptian_creation_myths.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Egyptian creation myths and cosmology"
+    
+  - id: egyptian_magic_rituals
+    url: "https://www.sacred-texts.com/egy/ema/index.htm"
+    file: "egyptian_magic_rituals.html"
+    category: "egyptian"
+    priority: "high"
+    description: "Egyptian magic rituals and spellwork"
+    
+  - id: book_breathings
+    url: "https://www.sacred-texts.com/egy/tut/index.htm"
+    file: "book_breathings.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Book of Breathings - Later funerary text"
+    
+  - id: egyptian_heaven_hell
+    url: "https://www.sacred-texts.com/egy/ehh.htm"
+    file: "egyptian_heaven_hell.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Egyptian Ideas of the Future Life"
+    
+  - id: papyrus_ebers
+    url: "https://www.crystalinks.com/ebers.html"
+    file: "papyrus_ebers.html"
+    category: "egyptian"
+    priority: "low"
+    description: "Papyrus Ebers - Medical and magical texts"
+    
+  - id: egyptian_religion_budge
+    url: "https://www.sacred-texts.com/egy/ebod/ebod00.htm"
+    file: "egyptian_religion_budge.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Egyptian Religion by Budge - Comprehensive overview"
+    
+  - id: dwellers_nile
+    url: "https://www.sacred-texts.com/egy/dbn/index.htm"
+    file: "dwellers_on_the_nile.html"
+    category: "egyptian"
+    priority: "low"
+    description: "Dwellers on the Nile - Life and customs"
+    
+  - id: egyptian_literature
+    url: "https://www.sacred-texts.com/egy/rtae/index.htm"
+    file: "egyptian_literature_records.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Records of the Past: Egyptian literature and inscriptions"
+    
+  - id: legends_gods_egypt
+    url: "https://www.sacred-texts.com/egy/leg/index.htm"
+    file: "legends_of_gods_egypt.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Legends of the Egyptian Gods"
+    
+  - id: mummy_handbook
+    url: "https://www.sacred-texts.com/egy/emh/index.htm"
+    file: "mummy_handbook.html"
+    category: "egyptian"
+    priority: "low"
+    description: "The Mummy: A Handbook of Egyptian Funerary Archaeology"
+    
+  - id: egyptian_tales
+    url: "https://www.sacred-texts.com/egy/bat/index.htm"
+    file: "egyptian_tales_ballads.html"
+    category: "egyptian"
+    priority: "low"
+    description: "Egyptian Tales and Ballads"
+    
+  - id: egyptian_literature_ancient
+    url: "https://www.sacred-texts.com/egy/alec/index.htm"
+    file: "ancient_egyptian_literature.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Ancient Egyptian Literature - Classics collection"
+    
+  - id: egyptian_wisdom
+    url: "https://www.sacred-texts.com/egy/woe/index.htm"
+    file: "wisdom_of_egyptians.html"
+    category: "egyptian"
+    priority: "medium"
+    description: "Wisdom of the Egyptians - Philosophy and teachings"
+    
+  - id: kybalion
+    url: "https://www.sacred-texts.com/eso/kyb/index.htm"
+    file: "kybalion.html"
+    category: "hermetic"
+    priority: "high"
+    description: "The Kybalion - Hermetic Philosophy"
+    
+  - id: virgin_of_world
+    url: "https://www.sacred-texts.com/eso/vow/index.htm"
+    file: "virgin_of_world.html"
+    category: "hermetic"
+    priority: "medium"
+    description: "The Virgin of the World - Hermetic dialogue"
+    
+  # Additional Kabbalistic texts
+  - id: bahir
+    url: "https://www.sacred-texts.com/jud/bah/index.htm"
+    file: "sefer_bahir.html"
+    category: "kabbalah"
+    priority: "high"
+    description: "Sefer Bahir (Book of Brilliance) - Early Kabbalistic text"
+    
+  - id: kabbalah_unveiled
+    url: "https://www.sacred-texts.com/jud/tku/index.htm"
+    file: "kabbalah_unveiled.html"
+    category: "kabbalah"
+    priority: "high"
+    description: "The Kabbalah Unveiled - Mathers translation of Zohar sections"
+    
+  - id: tree_of_life_kabbalah
+    url: "https://www.sacred-texts.com/jud/tol/index.htm"
+    file: "tree_of_life.html"
+    category: "kabbalah"
+    priority: "high"
+    description: "The Tree of Life - Kabbalistic cosmology and practice"
+    
+  - id: mystical_qabalah
+    url: "https://www.sacred-texts.com/jud/mq/index.htm"
+    file: "mystical_qabalah.html"
+    category: "kabbalah"
+    priority: "high"
+    description: "The Mystical Qabalah by Dion Fortune"
+
+ingestion_pipeline:
+  steps:
+    - fetch: "curl -L -s -H 'User-Agent: $user_agent' $url -o $output_dir/$file"
+    - validate: "test -s $output_dir/$file"
+    - chunk: "python /app/chunk.py --size 512 --overlap 128 --input $output_dir/$file"
+    - embed: "python /app/embed.py --model BAAI/bge-small-en-v1.5 --input chunked/"
+    - store: "qdrant upsert --collection $rag_collection --input embedded/"
+    - audit: "python /app/proof_engine.py --query 'Summarize $id' --source $file"
+
+post_ingest:
+  - generate_proof: "python /app/proof_engine.py --output proof_forbidden_texts_v1.yaml"
+  - create_index: "python /app/create_search_index.py --collection forbidden_texts_v1"
+  - test_queries: [
+      "What is the Hebrew name of God?",
+      "How does the Zohar describe the Tree of Life?",
+      "What are the Egyptian spells for the afterlife?",
+      "What does the Emerald Tablet teach?",
+      "Explain the Pyramid Texts ascension ritual"
+    ]
+  - gpg_sign: "gpg --detach-sign --armor recon/reports/forbidden_texts_v1_complete.md"
+
+audit_trail:
+  log_file: "recon/audit/forbidden_texts_v1_$(date +%Y%m%d).log"
+  gpg_required: true
+  sha256_checksums: true
+  source_verification: true
+
+operator: "Domenic Garza (Node 137)"
+timestamp: "2025-11-19T09:30:00Z"
+version_control: "git commit forbidden_texts_v1.yaml"

@@ -157,6 +157,9 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 - **Log Schemas**: Structured logging patterns and analysis
 - **Infrastructure Docs**: Architecture and deployment guides
 - **Code Patterns**: Development standards and examples
+- **Cyber Recon**: 30 cybersecurity frameworks and threat intelligence sources
+- **LLM Research**: 30 foundational machine learning papers
+- **Forbidden Texts**: 35 Hebrew, Kabbalistic, Egyptian, and Hermetic sources (see [FORBIDDEN_LIBRARY.md](FORBIDDEN_LIBRARY.md))
 
 ### Per-Channel Routing
 ```yaml
