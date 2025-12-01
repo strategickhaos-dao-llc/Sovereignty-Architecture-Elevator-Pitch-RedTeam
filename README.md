@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, sovereign infrastructure management, and a quadrant-colored board receipt system for DAO governance.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Council** - Board receipt system with quadrant-colored embeds for DAO governance
 
 ## 🚀 Quick Start
 
@@ -26,21 +27,48 @@ export PRS_CHANNEL="channel_id"
 
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
+
+# 5. Wake the sovereignty swarm
+curl -X POST http://localhost:3001/wake
 ```
 
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Council Commands**: `/council health`, `/council receipt`, `/council vote`, `/council stats`
+- **Swarm Commands**: `/swarm activity`, `/swarm wake`
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+
+### 🏛️ Board Receipt System (NEW)
+The **Board Receipt System** tracks and announces DAO governance decisions with quadrant-colored Discord embeds:
+
+| Quadrant | Color | Purpose | Emoji |
+|----------|-------|---------|-------|
+| **COUNCIL** | Purple (#9B59B6) | Governance decisions, votes, policies | 🏛️ |
+| **TREASURY** | Gold (#F1C40F) | Financial operations, yields, investments | 💰 |
+| **OPERATIONS** | Blue (#3498DB) | Technical infrastructure, deployments | ⚙️ |
+| **SWARM** | Green (#2ECC71) | Community engagement, contributions | 🐝 |
+
+```bash
+# Create a board receipt via Discord
+/council receipt quadrant:COUNCIL title:"Q4 Budget Approval" description:"Approved Q4 operating budget"
+
+# Record a council vote
+/council vote proposal:"Infrastructure Upgrade" for:5 against:1 abstain:1
+
+# Check governance statistics
+/council stats
+```
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
 - **HMAC Verification**: Cryptographic webhook validation
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
+- **Health Monitoring**: `/health`, `/ready`, `/live`, `/wake` endpoints
 
 ### 🔄 GitLens Integration
 - **VS Code Tasks**: One-click Discord notifications from GitLens
