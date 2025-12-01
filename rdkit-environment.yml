@@ -47,4 +47,4 @@ dependencies:
 
   # Optional pip packages
   - pip:
-      - mols2grid>=2.0
+      - mols2grid==2.0.0

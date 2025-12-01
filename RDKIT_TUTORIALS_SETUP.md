@@ -107,7 +107,7 @@ jupyter lab
 2. **Use pixi** - Modern alternative to conda (still experimental):
    ```bash
    pixi init
-   pixi add rdkit jupyterlab nglview
+   pixi add rdkit jupyterlab nglview py3dmol ipywidgets numpy pandas matplotlib
    pixi run jupyter lab
    ```
 
