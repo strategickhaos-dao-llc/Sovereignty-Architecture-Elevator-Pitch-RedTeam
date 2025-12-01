@@ -136,8 +136,10 @@ class PhysicsDepartment:
             agents=self.agents_active
         )
         
-        # Simulate parallel agent research
-        await asyncio.sleep(0.1)  # Placeholder for actual AI research
+        # TODO: Replace with actual AI research implementation
+        # This placeholder simulates the async research process
+        # In production, this would call OpenAI/LLM APIs for each agent
+        await asyncio.sleep(0.1)
         
         finding = ResearchFinding(
             department=self.name,

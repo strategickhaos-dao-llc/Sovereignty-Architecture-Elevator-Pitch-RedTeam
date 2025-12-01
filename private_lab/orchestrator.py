@@ -63,10 +63,16 @@ class PhysicsLabOrchestrator:
     - Auto-route: Paste symptoms for automatic routing
     """
     
-    def __init__(self, silent_mode: bool = True):
+    # Configuration defaults (can be overridden)
+    DEFAULT_MAX_INTERVENTIONS = 15
+    DEFAULT_MAX_ACTION_ITEMS = 20
+    
+    def __init__(self, silent_mode: bool = True, max_interventions: int = None, max_action_items: int = None):
         self.registry = PhysicsLabRegistry()
         self.silent_mode = silent_mode
         self.active_sessions: Dict[str, ResearchSession] = {}
+        self.max_interventions = max_interventions or self.DEFAULT_MAX_INTERVENTIONS
+        self.max_action_items = max_action_items or self.DEFAULT_MAX_ACTION_ITEMS
         
         _log_info(
             "🏛️ DOM Private Lab initialized",
@@ -265,7 +271,7 @@ class PhysicsLabOrchestrator:
             "genetic": {"cost": "high", "risk": "moderate", "timeline": "long-term"}
         }
         
-        for i, rec in enumerate(recommendations[:15]):  # Top 15 interventions
+        for i, rec in enumerate(recommendations[:self.max_interventions]):
             int_type = self._classify_intervention(rec["rec"])
             attrs = intervention_types.get(int_type, intervention_types["diagnostic"])
             
@@ -278,7 +284,7 @@ class PhysicsLabOrchestrator:
                 evidence_strength="moderate",
                 source_departments=[rec["law"]],
                 action_items=[rec["rec"]],
-                confidence_score=0.75 + (0.02 * (15 - i))
+                confidence_score=0.75 + (0.02 * (self.max_interventions - i))
             )
             interventions.append(intervention)
         
@@ -386,7 +392,7 @@ ranked by cost, risk, and timeline for optimal implementation.
         action_items = []
         for intervention in interventions:
             action_items.extend(intervention.action_items)
-        return action_items[:20]  # Top 20 action items
+        return action_items[:self.max_action_items]
     
     def _generate_monitoring_plan(self, findings: Dict[int, ResearchFinding]) -> List[str]:
         """Generate monitoring plan"""
