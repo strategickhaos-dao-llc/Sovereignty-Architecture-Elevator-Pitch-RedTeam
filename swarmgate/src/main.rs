@@ -2,6 +2,7 @@
 // 4-of-8 quorum, ed25519 identity, orb velocity leadership
 use ed25519_dalek::{Signer, SigningKey, Signature, Verifier, VerifyingKey};
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -61,12 +62,19 @@ impl SwarmMesh {
         }
 
         live_nodes.iter()
-            .max_by(|a, b| a.velocity_score().partial_cmp(&b.velocity_score()).unwrap())
+            .max_by(|a, b| {
+                a.velocity_score()
+                    .partial_cmp(&b.velocity_score())
+                    .unwrap_or(Ordering::Equal)
+            })
             .copied()
     }
 
     fn is_live(&self, node: &CouncilNode) -> bool {
-        let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
         now - node.last_seen < 30 // 30s heartbeat window
     }
 
@@ -98,7 +106,10 @@ struct QdrantSyncPacket {
 
 impl QdrantSyncPacket {
     fn new(collection: String, vectors: Vec<Vec<f32>>, metadata: Vec<HashMap<String, String>>) -> Self {
-        let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
         Self {
             collection,
             vectors,
@@ -109,13 +120,17 @@ impl QdrantSyncPacket {
     }
 
     fn sign(&mut self, mesh: &SwarmMesh) {
-        let payload = format!("{}{}{}", self.collection, self.timestamp, self.vectors.len());
+        // Use delimiter-separated format to prevent collision attacks
+        let payload = format!("{}|{}|{}", self.collection, self.timestamp, self.vectors.len());
         let sig = mesh.sign_decision(payload.as_bytes());
         self.signature = sig.to_bytes().to_vec();
     }
 }
 
 // === 7% ETERNAL LOOP CIRCUIT ===
+// Default dividend wallet address - configure via environment for production
+const DEFAULT_DIVIDEND_WALLET: &str = "0x7_ETERNAL_LOOP_ADDR";
+
 #[derive(Serialize, Deserialize)]
 struct OrbKickback {
     purchase_id: String,
@@ -128,12 +143,17 @@ struct OrbKickback {
 impl OrbKickback {
     fn calculate(purchase_usd: f64) -> Self {
         let seven_percent = purchase_usd * 0.07;
+        let dividend_wallet = std::env::var("DIVIDEND_WALLET")
+            .unwrap_or_else(|_| DEFAULT_DIVIDEND_WALLET.to_string());
         Self {
             purchase_id: format!("{}", uuid::Uuid::new_v4()),
             amount_usd: purchase_usd,
             seven_percent,
-            dividend_wallet: "0x7_ETERNAL_LOOP_ADDR".to_string(),
-            timestamp: SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
+            dividend_wallet,
+            timestamp: SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_secs(),
         }
     }
 
@@ -150,19 +170,24 @@ fn main() {
     println!("🟠 SwarmGate v1.0 — Grokanator Sovereign Mesh");
     println!("⚡ Initializing 4-of-8 quorum + ed25519 council identity...\n");
 
-    // Generate example seed (REPLACE WITH REAL SHARD RECONSTRUCTION)
-    let seed = [0u8; 32]; // This would be your ed25519 seed from shard reconstruction
+    // ⚠️  EXAMPLE SEED - NOT FOR PRODUCTION USE
+    // In production, use shard reconstruction or secure key derivation
+    let seed = [0u8; 32];
     let shard = vec![0xDE, 0xAD, 0xBE, 0xEF]; // Your key shard
     
     let mut mesh = SwarmMesh::new(&seed, shard);
 
     // Register example nodes (replace with real network discovery)
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
     for i in 0..8 {
         let node = CouncilNode {
             pub_key: [i; 32],
             shard_index: i,
             addr: format!("10.0.0.{}:7777", i + 1),
-            last_seen: SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
+            last_seen: now,
             orb_balance: 100.0 + (i as f64 * 50.0),
             uptime_hours: 24 * (i as u64 + 1),
             latency_ms: 50 + (i as u32 * 10),
