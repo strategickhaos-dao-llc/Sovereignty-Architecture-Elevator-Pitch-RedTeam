@@ -280,6 +280,15 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🔍 Model Inspection & Transparency
+
+For users running local LLM models (via Ollama or similar), we provide comprehensive guidance on verification and transparency:
+
+- **[Model Inspection Guide](MODEL_INSPECTION_GUIDE.md)** - 100 practical ways to verify what your local AI models are doing
+- Learn how to inspect model weights, verify network isolation, test behavioral boundaries
+- Understand operational safeguards and legal/ethical compliance
+- Complete transparency for enterprise-grade AI sovereignty
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
