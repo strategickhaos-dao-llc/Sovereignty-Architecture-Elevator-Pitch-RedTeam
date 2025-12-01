@@ -1,0 +1,97 @@
+name: Agents Chaos Weekly
+
+on:
+  schedule:
+    - cron: "0 16 * * 5"   # Fridays 16:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  RISK_CFG_PATH: .strategickhaos/risk_hardening.yaml
+
+jobs:
+  chaos-and-decay:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@v4.44.3
+
+      - name: Read governance settings
+        id: cfg
+        run: |
+          AUD=$(yq '.risk_hardening.ai_governance_overlays.data_gov.audit_frequency' $RISK_CFG_PATH)
+          DECAY=$(yq '.risk_hardening.ai_governance_overlays.data_gov.decay_detect' $RISK_CFG_PATH)
+          VETO=$(yq '.risk_hardening.ai_governance_overlays.ethics_check.veto_agent' $RISK_CFG_PATH)
+          CB=$(yq '.risk_hardening.ai_governance_overlays.decay_detect.circuit_breaker.enabled' $RISK_CFG_PATH)
+          THR=$(yq '.risk_hardening.ai_governance_overlays.decay_detect.circuit_breaker.threshold_resonance' $RISK_CFG_PATH)
+          FAILREF=$(yq '.risk_hardening.ai_governance_overlays.decay_detect.failure_library_ref' $RISK_CFG_PATH)
+          LOOP_SLO=$(yq '.risk_hardening.ai_governance_overlays.slo_targets.agent_loop_rate' $RISK_CFG_PATH)
+          MTC=$(yq '.risk_hardening.ai_governance_overlays.slo_targets.mtc_break_minutes' $RISK_CFG_PATH)
+          echo "AUD=$AUD" >> $GITHUB_ENV
+          echo "DECAY=$DECAY" >> $GITHUB_ENV
+          echo "VETO=$VETO" >> $GITHUB_ENV
+          echo "CB=$CB" >> $GITHUB_ENV
+          echo "THR=$THR" >> $GITHUB_ENV
+          echo "FAILREF=$FAILREF" >> $GITHUB_ENV
+          echo "LOOP_SLO=$LOOP_SLO" >> $GITHUB_ENV
+          echo "MTC=$MTC" >> $GITHUB_ENV
+
+      - name: Run chaos tests
+        run: |
+          echo "Executing chaos suite: agent_loop_stress, prompt_injection_attempts, tool_auth_revocation"
+          ./scripts/chaos/agent_loop_stress.sh || true
+          ./scripts/chaos/prompt_injection_attempts.sh || true
+          ./scripts/chaos/tool_auth_revocation.sh || true
+
+      - name: Run decay/benchmark suite
+        run: |
+          echo "Running $DECAY"
+          ./scripts/benchmarks/run_suite.sh "$DECAY" || true
+
+      - name: Compute resonance and trigger circuit breaker
+        env:
+          RES_SCRIPT: ./scripts/metrics/current_resonance_score.sh
+        run: |
+          set -e
+          RES=$($RES_SCRIPT || echo "0.0")
+          echo "Resonance score: $RES"
+          EN="${CB}"
+          TH="${THR}"
+          python3 -c "
+          import os,sys
+          res=float(os.getenv('RES','0') or '0')
+          th=float(os.getenv('TH','0.6') or '0.6')
+          en=os.getenv('EN','false').lower()=='true'
+          if en and res < th:
+              print('CIRCUIT_BREAK: resonance below threshold')
+              sys.exit(42)
+          print('OK')
+          "
+
+      - name: Open issue on circuit-break
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Circuit break triggered: resonance below threshold';
+            const body = `Resonance dropped below ${process.env.THR}. Veto agent: ${process.env.VETO}. Failure lib: ${process.env.FAILREF}. Please investigate chaos and decay test outputs.`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['incident', 'ai-governance', 'circuit-break']
+            });
+
+      - name: Enforce SLOs
+        run: |
+          LOOP=$(./scripts/metrics/agent_loop_rate.sh || echo "0.1")
+          MTC_ACTUAL=$(./scripts/metrics/mtc_break_minutes.sh || echo "5")
+          awk "BEGIN { exit !($LOOP <= ${LOOP_SLO:-0.005}) }" || (echo "Agent loop rate SLO violated" && exit 1)
+          awk "BEGIN { exit !($MTC_ACTUAL <= ${MTC:-2}) }" || (echo "MTC circuit-break SLO violated" && exit 1)

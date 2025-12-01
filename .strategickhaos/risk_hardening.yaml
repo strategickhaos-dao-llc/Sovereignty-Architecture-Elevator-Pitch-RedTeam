@@ -1,0 +1,83 @@
+risk_hardening:
+  version: 1.0
+  last_updated: "2025-11-25"
+
+  progress:
+    defensive_publication: 55   # %
+    spark_swarm: 45             # %
+    ai_governance: 60           # %
+    overall: 53                 # rough average
+
+  defensive_publication_pipeline:
+    validation_step:
+      checklist:
+        - merge_complete
+        - artifact_hash_present
+      auto_scan: "copilot_agent"          # one-click task: validate YAML completeness
+    timestamp_redundancy:
+      methods:
+        - "bitcoin_opentimestamps"
+        - "research_disclosure_or_mirror"
+    disclosure_level:
+      public: "redacted"                  # e.g., SYMBREC stripped
+      internal: "full"
+      patent_review_flag: true            # pause stamps if true
+    artifact_encryption:
+      enabled: true
+      key_type: "gpg"
+      scan: "github_secret_scanner"
+    feedback_loop:
+      usp_review: "copilot_summary"       # ensure unique selling point is explicit
+      integrate: "merge_conflict_resolution"
+    slo_targets:
+      ghost_proofs_per_week: 0
+      timestamp_failure_rate: 0.01        # <1%
+
+  spark_swarm_safety:
+    dependency_lock:
+      built_in_only: true                 # prefer Spark built-ins, avoid random deps
+      test_preview: "copilot_smoke_tests"
+    repo_auth:
+      basic: "enabled"
+      scan_threats: "dependabot_security"
+    scale_opt:
+      throttle_agents: 50                 # soft cap in CI for concurrent sessions
+      preview_cost_cap_usd: 100           # SPARK_MAX_COST_USD env guard
+    confidence_check:
+      edge_cases_test_suite: true         # run small unit tests on key views
+    failure_library:
+      bugs:
+        - "hallucination"
+        - "loop"
+        - "bad_percentage_calc"
+      auto_fix_mode: "agent_suggest_patch"
+    slo_targets:
+      preview_crash_rate: 0.02            # <2%
+      cost_p95_per_preview_usd: 20
+
+  ai_governance_overlays:
+    data_gov:
+      audit_frequency: "weekly"
+      decay_detect: "benchmark_suite_#406"
+    ethics_check:
+      veto_agent: "claude"
+      compliance_profile: "2025_regs"     # EU AI Act / internal standards
+    reg_check:
+      update_frequency: "quarterly"
+      embedded_agent: "copilot_reg_watch"
+    decay_detect:
+      circuit_breaker:
+        enabled: true
+        threshold_resonance: 0.6          # if system health < 0.6 => freeze/revert
+      failure_library_ref: "cooperative_ai_failures"
+    resource_central:
+      auto_scale: "k8s"
+      manual_override: "dao_vote_required"
+    chaos_tests:
+      simulate_failure_suite:
+        - "agent_loop_stress"
+        - "prompt_injection_attempts"
+        - "tool_auth_revocation"
+    slo_targets:
+      agent_loop_rate: 0.005              # <0.5%
+      mtc_break_minutes: 2                # mean time to circuit-break < 2 min
