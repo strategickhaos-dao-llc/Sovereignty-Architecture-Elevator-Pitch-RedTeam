@@ -88,10 +88,14 @@ kubectl apply -f bootstrap/k8s/
 - Ingress with TLS and rate limiting
 
 ### Observability Stack
-- **Prometheus** - Metrics collection from all components
+- **Grafana Cloud** - AI-powered observability with LGTM stack (Loki, Grafana, Tempo, Mimir)
+- **Prometheus** - Local metrics collection with remote write to Grafana Cloud
+- **Grafana Alloy** - Modern OpenTelemetry collector for metrics and logs
 - **Loki** - Centralized logging aggregation
-- **OpenTelemetry** - Distributed tracing
+- **Tempo** - Distributed tracing backend
 - **Alertmanager** - Alert routing to Discord channels
+
+See [Grafana Cloud Integration Guide](GRAFANA_CLOUD_INTEGRATION.md) for setup instructions.
 
 ## 🔧 Configuration
 
@@ -187,6 +191,31 @@ governance:
 ```
 
 ## 📊 Monitoring & Alerts
+
+### Grafana Cloud Integration (AI-Powered Observability)
+
+Get started with Grafana Cloud's free tier:
+- 10k series Prometheus metrics
+- 50GB logs, traces, and profiles
+- AI/ML insights and root cause analysis
+- 100+ pre-built dashboards
+
+```bash
+# 1. Configure Grafana Cloud credentials
+cp .env.example .env
+# Edit .env and add your GRAFANA_CLOUD_API_TOKEN
+
+# 2. Deploy with Grafana Alloy (recommended)
+docker-compose -f docker-compose.obs.yml up -d alloy
+
+# Or use Prometheus with remote_write
+docker-compose -f docker-compose.obs.yml up -d prometheus
+
+# 3. Access Alloy UI
+open http://localhost:12345
+```
+
+**Full setup guide**: [GRAFANA_CLOUD_INTEGRATION.md](GRAFANA_CLOUD_INTEGRATION.md)
 
 ### Key Metrics
 - Discord API response times and rate limits

@@ -101,11 +101,48 @@ services:
       - '--storage.tsdb.retention.time=15d'
       - '--web.enable-lifecycle'
       - '--web.enable-admin-api'
+    environment:
+      - GRAFANA_CLOUD_PROMETHEUS_URL=${GRAFANA_CLOUD_PROMETHEUS_URL}
+      - GRAFANA_CLOUD_PROMETHEUS_USER=${GRAFANA_CLOUD_PROMETHEUS_USER}
+      - GRAFANA_CLOUD_API_TOKEN=${GRAFANA_CLOUD_API_TOKEN}
+      - REFINORY_ENV=${REFINORY_ENV:-development}
     networks: [obs_network, recon_network]
     depends_on: [redis, vault]
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prometheus.rule=Host(`metrics.strategickhaos.local`)"
+
+  # ── Grafana Alloy - Modern OpenTelemetry Collector ────────────────────
+  alloy:
+    <<: *common
+    image: grafana/alloy:v1.5.0
+    container_name: alloy
+    ports:
+      - "12345:12345"  # Alloy UI
+      - "4317:4317"    # OTLP gRPC receiver
+      - "4318:4318"    # OTLP HTTP receiver
+    volumes:
+      - ./monitoring/alloy-config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - alloy_data:/var/lib/alloy
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy
+    environment:
+      - GRAFANA_CLOUD_API_TOKEN=${GRAFANA_CLOUD_API_TOKEN}
+      - GRAFANA_CLOUD_PROMETHEUS_URL=${GRAFANA_CLOUD_PROMETHEUS_URL}
+      - GRAFANA_CLOUD_PROMETHEUS_USER=${GRAFANA_CLOUD_PROMETHEUS_USER}
+      - GRAFANA_CLOUD_LOKI_URL=${GRAFANA_CLOUD_LOKI_URL}
+      - GRAFANA_CLOUD_LOKI_USER=${GRAFANA_CLOUD_LOKI_USER}
+      - REFINORY_ENV=${REFINORY_ENV:-development}
+    networks: [obs_network, recon_network]
+    depends_on: [redis, vault]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.alloy.rule=Host(`alloy.strategickhaos.local`)"
+      - "traefik.http.services.alloy.loadbalancer.server.port=12345"
 
   # ── Visualization & Dashboards ────────────────────────────────────────
   grafana:
@@ -262,3 +299,4 @@ volumes:
   loki_data:
   traefik_certs:
   postgres_data:
+  alloy_data:

@@ -8,6 +8,22 @@ global:
     cluster: 'strategickhaos-dev'
     environment: '${REFINORY_ENV:-development}'
 
+# Grafana Cloud Remote Write - Ship metrics to cloud for AI-powered observability
+remote_write:
+  - url: ${GRAFANA_CLOUD_PROMETHEUS_URL:-https://prometheus-prod-56-prod-us-east-2.grafana.net/api/prom/push}
+    basic_auth:
+      username: ${GRAFANA_CLOUD_PROMETHEUS_USER:-2786173}
+      password: ${GRAFANA_CLOUD_API_TOKEN}
+    queue_config:
+      capacity: 10000
+      max_shards: 50
+      max_samples_per_send: 5000
+    write_relabel_configs:
+      # Add cloud-specific labels
+      - source_labels: [__name__]
+        target_label: source
+        replacement: 'sovereignty-architecture'
+
 rule_files:
   - "alerts.yml"
 
