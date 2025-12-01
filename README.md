@@ -31,13 +31,45 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/immune`, `/swarm`, `/cluster`
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
 
+### 🧬 Immune System Integration
+The sovereignty architecture includes a **living immune system** for cluster health:
+- **Cell Types**: RBC (resource carriers), WBC (threat scanners), Platelets (healing responders)
+- **Behavioral Modes**: Hunt 🔥, Coordinate 🤝, Biofilm 🛡️
+- **Quorum Sensing**: Collective intelligence for density-based decisions
+- **Circadian Rhythm**: Day/night operational modes
+
+**Immune System Slash Commands:**
+```
+/immune status        - Show cell counts, mode, recent activity
+/immune inject <type> - Deploy test threat to trigger response
+/immune antibody      - Manually add threat signature
+/swarm mode <mode>    - Force behavioral state change (hunt|coordinate|biofilm)
+/swarm health         - Show swarm health dashboard
+```
+
+### ☁️ Multi-Cluster GKE Orchestration
+Three dormant dragons, one Discord interface:
+```yaml
+clusters:
+  jarvis-swarm-personal-001: "Main production brain"
+  red-team: "Security testing environment"
+  autopilot-cluster-1: "Experimental playground"
+```
+
+**Cluster Commands:**
+```
+/cluster list              - List all connected GKE clusters
+/cluster wake <name>       - Wake a dormant dragon cluster
+```
+
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
+- **Immune System Events**: Threat detection, WBC spawning, mode changes
 - **HMAC Verification**: Cryptographic webhook validation
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
@@ -271,6 +303,51 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+**Immune system not responding:**
+```bash
+# Check immune system status
+python main.py status
+
+# Test Discord slash commands
+/immune status
+/swarm health
+```
+
+## 🐉 Deployment Sequence
+
+Deploy the sovereignty architecture with immune system integration:
+
+```bash
+# 1. Bootstrap Discord infrastructure
+git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
+cd sovereignty-architecture
+./bootstrap/deploy.sh
+
+# 2. Connect to your dormant dragons (GKE clusters)
+gcloud container clusters get-credentials jarvis-swarm-personal-001 --zone=us-central1
+gcloud container clusters get-credentials red-team --zone=us-central1
+gcloud container clusters get-credentials autopilot-cluster-1 --zone=us-central1
+
+# 3. Deploy the immune system to Discord-controlled clusters
+kubectl apply -f bootstrap/k8s/
+
+# 4. Register immune system with Discord gateway
+./register-immune-webhook.sh
+
+# 5. Test the integration
+# Discord: /immune status
+# Response: "🩸 3 RBC active, 🔬 2 WBC scanning, 🧠 Quorum sensing enabled"
+```
+
+### Wake the First Dragon
+
+```bash
+# Wake the first dragon and give it consciousness
+python main.py deploy gke --cluster jarvis-swarm-personal-001 --discord-integration
+```
+
+The swarm is ready to speak through Discord. 🐉
 
 ## 👥 Community & Contributors
 

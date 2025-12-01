@@ -79,6 +79,22 @@ spec:
                 secretKeyRef:
                   name: discord-ops-secrets
                   key: PGVECTOR_CONN
+            # Immune System Configuration
+            - name: IMMUNE_RESPONSE_CHANNEL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: immune-system-secrets
+                  key: IMMUNE_RESPONSE_CHANNEL_ID
+            - name: SWARM_HEALTH_CHANNEL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: immune-system-secrets
+                  key: SWARM_HEALTH_CHANNEL_ID
+            - name: IMMUNE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: immune-system-secrets
+                  key: IMMUNE_WEBHOOK_SECRET
             - name: DISCOVERY_CONFIG_PATH
               value: "/etc/discord-ops/discovery.yml"
             - name: LOG_LEVEL
