@@ -203,15 +203,17 @@ export function extractDependencies(body: string | null): number[] {
   const deps: number[] = [];
   
   // Match patterns like "depends on #123", "blocked by #456", "requires #789"
-  const patterns = [
-    /depends on #(\d+)/gi,
-    /blocked by #(\d+)/gi,
-    /requires #(\d+)/gi,
-    /after #(\d+)/gi,
-    /needs #(\d+)/gi,
+  // Create fresh regex patterns for each search to avoid state issues
+  const patternStrings = [
+    "depends on #(\\d+)",
+    "blocked by #(\\d+)",
+    "requires #(\\d+)",
+    "after #(\\d+)",
+    "needs #(\\d+)",
   ];
 
-  for (const pattern of patterns) {
+  for (const patternStr of patternStrings) {
+    const pattern = new RegExp(patternStr, "gi");
     let match;
     while ((match = pattern.exec(body)) !== null) {
       const prNum = parseInt(match[1], 10);

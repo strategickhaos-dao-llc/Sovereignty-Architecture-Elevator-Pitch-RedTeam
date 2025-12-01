@@ -457,7 +457,7 @@ export function formatRoadmapEmbed(roadmap: Roadmap): {
   return {
     title: "🗺️ Priority Council Roadmap",
     description: `Generated: ${new Date(roadmap.generatedAt).toLocaleDateString()}`,
-    color: 0x3099199, // Teal
+    color: 0x309919, // Teal
     fields,
   };
 }

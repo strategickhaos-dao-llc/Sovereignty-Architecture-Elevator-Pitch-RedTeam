@@ -400,7 +400,7 @@ export async function handleThisWeekCommand(
   const embed = new EmbedBuilder()
     .setTitle("📅 This Week")
     .setDescription("PRs to work on this week")
-    .setColor(0x3099199)
+    .setColor(0x309919)
     .addFields(
       thisWeekPRs.slice(0, 10).map((pr) => ({
         name: `#${pr.prNumber} - ${pr.title}`,
