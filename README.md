@@ -170,6 +170,9 @@ ai_agents:
 
 ## 🔐 Security & Governance
 
+### Legally-Bounded Generative Systems Engineering (LB-GSE)
+This project employs the **[LB-GSE Methodology](LB_GSE_METHODOLOGY.md)**, which treats legal architecture as a primary source of requirements and as a search-space constraint for generative system design. Legal primitives from the Wyoming DAO LLC structure actively generate and prioritize software development.
+
 ### Multi-Layer Security
 - **RBAC**: Kubernetes role-based access control
 - **Secret Management**: Vault integration for sensitive data
