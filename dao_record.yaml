@@ -36,6 +36,50 @@ operations:
     founder_orcid: "0009-0005-2996-3526"
     founder_twic: "Active (TSA/DHS)"
 
+valoryield_engine:
+  description: "100 legal chain-breaking services for protecting vulnerable populations"
+  service_catalog: "legal/valoryield_services.yaml"
+  documentation: "VALORYIELD_ENGINE.md"
+  governance:
+    ethics_committee: "governance/dao_ethics_committee.yaml"
+    client_protocols: "legal/client_zero_protocols.md"
+  service_categories:
+    - category: "Pro Bono Investigations"
+      range: "1-20"
+      methodologies: ["OSINT", "Vulnerability Assessment", "Digital Forensics", "Red-Team"]
+    - category: "Legal Advocacy Support"
+      range: "21-40"
+      methodologies: ["OSINT", "Digital Forensics", "Red-Team", "Vulnerability Assessment"]
+    - category: "Cybersecurity Assistance"
+      range: "41-60"
+      methodologies: ["Vulnerability Assessment", "OSINT", "Red-Team", "Digital Forensics"]
+    - category: "Educational Initiatives"
+      range: "61-80"
+      methodologies: ["OSINT", "Digital Forensics", "Red-Team", "Vulnerability Assessment"]
+    - category: "Corporate Accountability"
+      range: "81-90"
+      methodologies: ["OSINT", "Red-Team", "Digital Forensics", "Vulnerability Assessment"]
+    - category: "DAO Governance"
+      range: "91-100"
+      methodologies: ["DAO Governance", "Vulnerability Assessment", "OSINT", "Digital Forensics"]
+  target_populations:
+    - "Domestic violence victims"
+    - "Elder abuse victims"
+    - "Trafficking survivors"
+    - "Immigrants and refugees"
+    - "Low-income families"
+    - "Whistleblowers"
+    - "Environmental justice advocates"
+    - "Civil rights activists"
+    - "At-risk youth"
+    - "Homeless populations"
+  legal_constraints:
+    - "Public data only for OSINT"
+    - "Consent required for red-team activities"
+    - "Coordinated disclosure for vulnerabilities"
+    - "No unauthorized system access"
+    - "No vigilante activities"
+
 compliance:
   legal_actions: false
   regulatory_status: "Good standing"
