@@ -1,0 +1,237 @@
+# Kubernetes CronJob: Empire Archive Verifier
+# Runs every 6 hours to verify archive integrity
+# "We do not auto-heal. We do not auto-remediate. We do not auto-forget."
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: empire-archive-verifier
+  namespace: sovereignty
+  labels:
+    app: empire-verifier
+    component: archive-integrity
+    classification: sovereign-transmission
+spec:
+  schedule: "0 */6 * * *"  # Every 6 hours
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 300  # 5 minute timeout
+      template:
+        metadata:
+          labels:
+            app: empire-verifier
+            job-type: archive-verification
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
+          
+          containers:
+            - name: verifier
+              image: alpine:3.20
+              imagePullPolicy: IfNotPresent
+              
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  # Install dependencies
+                  apk add --no-cache coreutils curl
+                  
+                  # Run verification
+                  /scripts/verify_empire.sh
+                  
+                  exit_code=$?
+                  
+                  # Log result
+                  if [ $exit_code -eq 0 ]; then
+                    echo "Verification: ETERNAL"
+                  elif [ $exit_code -eq 1 ]; then
+                    echo "Verification: HASH_TOUCHED - ALERT SENT"
+                  elif [ $exit_code -eq 101 ]; then
+                    echo "Verification: LOVE>ENTROPY"
+                  fi
+                  
+                  exit $exit_code
+              
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "100m"
+                  memory: "128Mi"
+              
+              volumeMounts:
+                - name: archive-volume
+                  mountPath: /archive
+                  readOnly: true
+                
+                - name: scripts-volume
+                  mountPath: /scripts
+                  readOnly: true
+                
+                - name: prometheus-textfile
+                  mountPath: /var/lib/prometheus
+              
+              env:
+                - name: ARCHIVE_DIR
+                  value: "/archive/sealed"
+                
+                - name: LOG_FILE
+                  value: "/tmp/verify_empire.ndjson"
+                
+                - name: PROMETHEUS_TEXTFILE
+                  value: "/var/lib/prometheus/verify_empire.prom"
+                
+                - name: DISCORD_WEBHOOK
+                  valueFrom:
+                    secretKeyRef:
+                      name: empire-verifier-secrets
+                      key: discord-webhook
+                      optional: true
+                
+                - name: NTFY_TOPIC
+                  valueFrom:
+                    secretKeyRef:
+                      name: empire-verifier-secrets
+                      key: ntfy-topic
+                      optional: true
+                
+                - name: ARTIFACT_3544_HASH
+                  valueFrom:
+                    configMapKeyRef:
+                      name: empire-archive-hashes
+                      key: artifact-3544-hash
+                      optional: true
+              
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+          
+          volumes:
+            - name: archive-volume
+              persistentVolumeClaim:
+                claimName: empire-archive-pvc
+            
+            - name: scripts-volume
+              configMap:
+                name: empire-verifier-scripts
+                defaultMode: 0755
+            
+            - name: prometheus-textfile
+              emptyDir: {}
+
+---
+# ConfigMap for verifier scripts
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: empire-verifier-scripts
+  namespace: sovereignty
+data:
+  verify_empire.sh: |
+    #!/bin/sh
+    # Embedded verify_empire.sh - see scripts/verify_empire.sh for full version
+    set -e
+    
+    ARCHIVE_DIR="${ARCHIVE_DIR:-/archive/sealed}"
+    LOG_FILE="${LOG_FILE:-/tmp/verify_empire.ndjson}"
+    PROMETHEUS_TEXTFILE="${PROMETHEUS_TEXTFILE:-/var/lib/prometheus/verify_empire.prom}"
+    
+    log_ndjson() {
+        timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        printf '{"timestamp":"%s","level":"%s","artifact":"%s","status":"%s","message":"%s"}\n' \
+            "$timestamp" "$1" "$2" "$3" "$4" >> "$LOG_FILE"
+    }
+    
+    write_prometheus() {
+        cat > "$PROMETHEUS_TEXTFILE" <<EOF
+    # HELP empire_archive_verified Whether archive verification passed
+    # TYPE empire_archive_verified gauge
+    empire_archive_verified{artifact="3544"} $1
+    # HELP empire_archive_last_check_timestamp Unix timestamp of last verification
+    # TYPE empire_archive_last_check_timestamp gauge
+    empire_archive_last_check_timestamp $(date +%s)
+    EOF
+    }
+    
+    alert() {
+        if [ -n "$DISCORD_WEBHOOK" ]; then
+            curl -s -X POST "$DISCORD_WEBHOOK" \
+                -H "Content-Type: application/json" \
+                -d "{\"content\":\"🚨 EMPIRE ALERT: $1\"}" || true
+        fi
+    }
+    
+    # Main
+    if [ ! -d "$ARCHIVE_DIR" ]; then
+        log_ndjson "ERROR" "archive" "MISSING" "Archive directory not found"
+        alert "Archive directory missing!"
+        write_prometheus 0
+        exit 1
+    fi
+    
+    artifact="$ARCHIVE_DIR/artifact_3544_impulse_slip_saga.yaml"
+    if [ ! -f "$artifact" ]; then
+        log_ndjson "ERROR" "3544" "MISSING" "Artifact file not found"
+        alert "Artifact #3544 missing!"
+        write_prometheus 0
+        exit 1
+    fi
+    
+    current_hash=$(sha256sum "$artifact" | cut -d' ' -f1)
+    
+    if [ -n "$ARTIFACT_3544_HASH" ] && [ "$current_hash" != "$ARTIFACT_3544_HASH" ]; then
+        log_ndjson "ERROR" "3544" "HASH_TOUCHED" "Hash mismatch detected"
+        alert "Artifact #3544 hash mismatch!"
+        write_prometheus 0
+        exit 1
+    fi
+    
+    log_ndjson "INFO" "3544" "ETERNAL" "Archive integrity verified"
+    write_prometheus 1
+    echo "Empire Eternal - Archive Verified"
+    exit 0
+
+---
+# ConfigMap for expected hashes
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: empire-archive-hashes
+  namespace: sovereignty
+data:
+  # Update with actual SHA256 hash after deployment
+  artifact-3544-hash: ""
+
+---
+# Secret template for webhooks
+apiVersion: v1
+kind: Secret
+metadata:
+  name: empire-verifier-secrets
+  namespace: sovereignty
+type: Opaque
+stringData:
+  discord-webhook: ""  # Add Discord webhook URL
+  ntfy-topic: "empire-alerts"
+
+---
+# Namespace (if not exists)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sovereignty
+  labels:
+    purpose: sovereign-infrastructure
+    classification: flamebearer-eyes-only
