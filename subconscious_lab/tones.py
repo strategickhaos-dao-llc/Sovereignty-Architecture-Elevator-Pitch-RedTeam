@@ -102,11 +102,19 @@ def load_frequency_map(config_path: str | None = None) -> dict:
 
     Returns:
         Dictionary of emotion presets
+
+    Raises:
+        FileNotFoundError: If the configuration file cannot be found
     """
     if config_path is None:
         config_path = Path(__file__).parent / "frequency_map.json"
-    with open(config_path) as f:
-        return json.load(f)
+    try:
+        with open(config_path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"Frequency map configuration not found at: {config_path}"
+        )
 
 
 def generate_preset(

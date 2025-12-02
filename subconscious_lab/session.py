@@ -24,9 +24,9 @@ Physical drills to combine with sessions:
 
 import json
 import os
+import shutil
 import subprocess
 import sys
-import threading
 import time
 from dataclasses import dataclass
 from datetime import datetime
@@ -69,14 +69,9 @@ def play_audio_file(filepath: str, duration_seconds: float) -> subprocess.Popen 
 
     for player_cmd in players:
         try:
-            # Check if player exists
+            # Check if player exists using cross-platform shutil.which()
             check_cmd = player_cmd[0]
-            result = subprocess.run(
-                ["which", check_cmd],
-                capture_output=True,
-                text=True
-            )
-            if result.returncode != 0:
+            if shutil.which(check_cmd) is None:
                 continue
 
             # Start player
@@ -102,10 +97,14 @@ def log_session(config: SessionConfig, notes: str = "") -> None:
     log_path = get_session_log_path()
 
     # Load existing log or create new
-    if log_path.exists():
-        with open(log_path) as f:
-            log_data = json.load(f)
-    else:
+    try:
+        if log_path.exists():
+            with open(log_path) as f:
+                log_data = json.load(f)
+        else:
+            log_data = {"sessions": []}
+    except (json.JSONDecodeError, PermissionError) as e:
+        print(f"Warning: Could not read session log: {e}")
         log_data = {"sessions": []}
 
     # Add new session entry
@@ -121,8 +120,11 @@ def log_session(config: SessionConfig, notes: str = "") -> None:
     log_data["sessions"].append(session_entry)
 
     # Save updated log
-    with open(log_path, "w") as f:
-        json.dump(log_data, f, indent=2)
+    try:
+        with open(log_path, "w") as f:
+            json.dump(log_data, f, indent=2)
+    except PermissionError as e:
+        print(f"Warning: Could not save session log: {e}")
 
 
 def show_session_history() -> None:
@@ -133,8 +135,12 @@ def show_session_history() -> None:
         print("No session history found.")
         return
 
-    with open(log_path) as f:
-        log_data = json.load(f)
+    try:
+        with open(log_path) as f:
+            log_data = json.load(f)
+    except (json.JSONDecodeError, PermissionError) as e:
+        print(f"Error reading session history: {e}")
+        return
 
     sessions = log_data.get("sessions", [])
     if not sessions:
@@ -238,8 +244,17 @@ def run_integrated_session(config: SessionConfig) -> None:
     try:
         # Load text
         if config.text_file:
-            with open(config.text_file) as f:
-                text = f.read()
+            try:
+                with open(config.text_file, encoding='utf-8') as f:
+                    text = f.read()
+            except FileNotFoundError:
+                print(f"   ⚠️  Text file not found: {config.text_file}")
+                print("   Using default text instead...")
+                text = DEFAULT_TEXT
+            except UnicodeDecodeError:
+                print(f"   ⚠️  Cannot decode text file: {config.text_file}")
+                print("   Using default text instead...")
+                text = DEFAULT_TEXT
         else:
             text = DEFAULT_TEXT
 

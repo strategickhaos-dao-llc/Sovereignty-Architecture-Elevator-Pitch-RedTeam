@@ -164,8 +164,16 @@ def rsvp_chunked(
 
 def load_text_file(filepath: str) -> str:
     """Load text from a file."""
-    with open(filepath, encoding='utf-8') as f:
-        return f.read()
+    try:
+        with open(filepath, encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Text file not found: {filepath}")
+    except UnicodeDecodeError:
+        raise UnicodeDecodeError(
+            'utf-8', b'', 0, 1,
+            f"Cannot decode file as UTF-8: {filepath}"
+        )
 
 
 def prepare_words(text: str) -> list[str]:
