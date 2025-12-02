@@ -272,6 +272,22 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📜 Legal & IP Protection
+
+Strategickhaos implements comprehensive intellectual property protection through cryptographic verification and defensive publication strategies.
+
+- **[USPTO Filing Guide](legal/USPTO_FILING_GUIDE.md)** - Provisional patent filing procedures for micro-entities
+- **[GPG Signing Workflow](docs/GPG_SIGNING_WORKFLOW.md)** - Cryptographic document signing and verification
+- **[Wyoming SF0068 Research](legal/wyoming_sf0068/WYOMING_SF0068_RESEARCH_INDEX.md)** - DAO LLC formation legal framework
+
+### Defensive Publication Pipeline
+
+All critical innovations are protected through:
+1. **GPG Signatures** - Proof of authorship via Kleopatra/GPG
+2. **Git Commit Signing** - Code provenance verification
+3. **OpenTimestamps** - Bitcoin-anchored existence proofs
+4. **Zenodo/arXiv Publication** - Public prior art establishment
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
