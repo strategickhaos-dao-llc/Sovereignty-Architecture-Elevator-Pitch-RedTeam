@@ -95,6 +95,15 @@ ai_agents:
           - type: "s3"
             bucket: "strategickhaos-observability"
             prefix: "schemas/"
+      - name: "historical-texts"
+        sources:
+          - type: "config"
+            config_file: "historical_texts_v1.yaml"
+          - type: "archive"
+            base_urls:
+              - "https://archive.org"
+              - "https://www.sacred-texts.com"
+              - "https://www.deadseascrolls.org.il"
 
 git:
   provider: "github"   # github|gitlab|bitbucket
