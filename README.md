@@ -92,6 +92,7 @@ kubectl apply -f bootstrap/k8s/
 - **Loki** - Centralized logging aggregation
 - **OpenTelemetry** - Distributed tracing
 - **Alertmanager** - Alert routing to Discord channels
+- **PsycheVille** - AI-powered self-observing infrastructure (see [PSYCHEVILLE_COMPARATIVE_ANALYSIS.md](PSYCHEVILLE_COMPARATIVE_ANALYSIS.md))
 
 ## 🔧 Configuration
 

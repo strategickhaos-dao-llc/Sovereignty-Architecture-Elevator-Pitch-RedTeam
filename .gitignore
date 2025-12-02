@@ -35,3 +35,16 @@ target/
 
 # Workspace data
 workspace/
+
+# PsycheVille logs and artifacts
+/var/log/psycheville/
+*.jsonl
+psycheville_cron.log
+psycheville.yaml.bak
+.psycheville/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

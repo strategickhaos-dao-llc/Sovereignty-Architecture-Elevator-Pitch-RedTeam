@@ -1,0 +1,116 @@
+version: '3.8'
+
+# PsycheVille: Self-Observing Infrastructure Architecture
+# Docker Compose configuration for reflection worker and scheduler
+
+services:
+  # One-time reflection worker (can be run manually)
+  psycheville-worker:
+    image: python:3.11-slim
+    container_name: psycheville-reflection-worker
+    volumes:
+      - ./psycheville_reflection_worker.py:/app/worker.py:ro
+      - ./psycheville.yaml:/app/psycheville.yaml:ro
+      - /var/log/psycheville:/var/log/psycheville:ro
+      - ${OBSIDIAN_VAULT:-~/Obsidian/PsycheVille}:/output
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=UTC
+    command: >
+      sh -c "
+        echo '🔄 Installing dependencies...' &&
+        pip install --no-cache-dir pyyaml &&
+        echo '✅ Dependencies installed' &&
+        echo '' &&
+        python -u worker.py
+      "
+    restart: "no"
+    networks:
+      - psycheville
+    labels:
+      - "com.psycheville.service=worker"
+      - "com.psycheville.type=reflection"
+  
+  # Scheduled reflection worker (runs hourly via cron)
+  psycheville-scheduler:
+    image: python:3.11-alpine
+    container_name: psycheville-scheduler
+    volumes:
+      - ./psycheville_reflection_worker.py:/app/worker.py:ro
+      - ./psycheville.yaml:/app/psycheville.yaml:ro
+      - /var/log/psycheville:/var/log/psycheville:ro
+      - ${OBSIDIAN_VAULT:-~/Obsidian/PsycheVille}:/output
+      - ./psycheville_cron.log:/var/log/cron.log
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=UTC
+      # Configurable cron schedule (default: hourly at minute 0)
+      - CRON_SCHEDULE=${CRON_SCHEDULE:-0 * * * *}
+    entrypoint: >
+      sh -c "
+        echo '🔄 Setting up PsycheVille Scheduler...' &&
+        echo '' &&
+        apk add --no-cache python3 py3-pip &&
+        pip3 install --no-cache-dir pyyaml &&
+        echo '✅ Dependencies installed' &&
+        echo '' &&
+        echo '⏰ Configuring cron schedule...' &&
+        echo \"$${CRON_SCHEDULE} cd /app && python3 worker.py >> /var/log/cron.log 2>&1\" > /etc/crontabs/root &&
+        echo \"✅ Cron schedule: $${CRON_SCHEDULE}\" &&
+        echo '' &&
+        echo '🚀 Starting cron daemon...' &&
+        crond -f -l 2
+      "
+    restart: unless-stopped
+    networks:
+      - psycheville
+    labels:
+      - "com.psycheville.service=scheduler"
+      - "com.psycheville.type=cron"
+  
+  # Optional: Log aggregator service
+  psycheville-aggregator:
+    image: python:3.11-slim
+    container_name: psycheville-log-aggregator
+    volumes:
+      - /var/log/psycheville:/logs
+    working_dir: /logs
+    command: >
+      sh -c "
+        echo '📊 PsycheVille Log Aggregator' &&
+        echo 'Monitoring /var/log/psycheville for new events...' &&
+        tail -F /logs/*.jsonl 2>/dev/null || sleep infinity
+      "
+    restart: unless-stopped
+    networks:
+      - psycheville
+    profiles:
+      - aggregator
+    labels:
+      - "com.psycheville.service=aggregator"
+      - "com.psycheville.type=monitoring"
+
+networks:
+  psycheville:
+    driver: bridge
+    name: psycheville-network
+    labels:
+      - "com.psycheville.network=true"
+
+# Volume configuration (optional for persistent data)
+volumes:
+  psycheville-logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/log/psycheville
+  
+  psycheville-output:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${OBSIDIAN_VAULT:-~/Obsidian/PsycheVille}
