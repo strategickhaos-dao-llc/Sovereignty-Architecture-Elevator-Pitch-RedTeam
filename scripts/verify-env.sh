@@ -70,7 +70,11 @@ check_file() {
 echo "📌 Required Environment Variables"
 echo "----------------------------------"
 check_required "DISCORD_BOT_TOKEN" || true
-check_required "DISCORD_GUILD_ID" || check_optional "DISCORD_GUILD_ID"
+
+echo ""
+echo "📌 Recommended Environment Variables"
+echo "------------------------------------"
+check_optional "DISCORD_GUILD_ID"
 
 echo ""
 echo "📌 Channel IDs"

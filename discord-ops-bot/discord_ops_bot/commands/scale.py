@@ -11,12 +11,17 @@ LLM Directive: Extend this to:
 """
 
 import logging
+import os
 from typing import Optional
 
 import discord
 import httpx
 
 logger = logging.getLogger(__name__)
+
+# Configuration from environment
+MAX_REPLICAS = int(os.getenv("MAX_REPLICAS", "20"))
+WARN_REPLICAS = int(os.getenv("WARN_REPLICAS", "10"))
 
 
 async def scale_command(
@@ -50,24 +55,34 @@ async def scale_command(
         )
         return embed
     
-    if replicas > 20:
+    if replicas > MAX_REPLICAS:
         embed = discord.Embed(
-            title="⚠️ High Replica Count",
-            description=f"Requested {replicas} replicas. Max recommended is 20.",
-            color=0xffa500
+            title="❌ Replica Count Exceeds Limit",
+            description=f"Requested {replicas} replicas. Maximum allowed is {MAX_REPLICAS}.",
+            color=0xff0000
         )
         embed.add_field(
             name="Note", 
-            value="Contact admin for larger scale operations", 
+            value="Contact admin to increase the limit (set MAX_REPLICAS env var)", 
             inline=False
         )
         return embed
     
+    if replicas > WARN_REPLICAS:
+        logger.warning(
+            "High replica count requested: service=%s replicas=%d (warn threshold: %d)",
+            service, replicas, WARN_REPLICAS
+        )
+    
+    # Build the main embed
     embed = discord.Embed(
         title="📈 Scaling Service",
         description=f"Scaling `{service}` to {replicas} replicas",
         color=0x17a2b8
     )
+    
+    if replicas > WARN_REPLICAS:
+        embed.description += f"\n⚠️ Note: Replica count exceeds recommended maximum ({WARN_REPLICAS})"
     
     embed.add_field(name="Service", value=service, inline=True)
     embed.add_field(name="Target Replicas", value=str(replicas), inline=True)

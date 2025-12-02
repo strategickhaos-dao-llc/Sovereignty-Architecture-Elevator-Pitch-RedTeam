@@ -72,7 +72,8 @@ async def status(interaction: discord.Interaction, service: str):
     LLM Directive: Extend this to query Kubernetes API, Prometheus,
     or other monitoring systems for real status information.
     """
-    await audit_logger.log_command(interaction, "status", {"service": service})
+    if audit_logger:
+        await audit_logger.log_command(interaction, "status", {"service": service})
     
     # TODO: Query Kubernetes + CI/CD + observability for real status
     # Example: kubectl get deployment {service} -o json
@@ -98,7 +99,8 @@ async def logs(interaction: discord.Interaction, target: str = "event-gateway", 
     LLM Directive: Extend this to query Loki API or CloudWatch Logs
     for actual log data. Implement pagination for large results.
     """
-    await audit_logger.log_command(interaction, "logs", {"target": target, "tail": tail})
+    if audit_logger:
+        await audit_logger.log_command(interaction, "logs", {"target": target, "tail": tail})
     
     # TODO: Call Loki API or other log store
     # Example: GET /loki/api/v1/query_range?query={service="{target}"}
@@ -126,7 +128,8 @@ async def deploy(interaction: discord.Interaction, env: str, ref: str = "main"):
     - ArgoCD sync
     - Kubernetes deployment rollout
     """
-    await audit_logger.log_command(interaction, "deploy", {"env": env, "ref": ref})
+    if audit_logger:
+        await audit_logger.log_command(interaction, "deploy", {"env": env, "ref": ref})
     
     # TODO: Invoke CI/CD workflow
     # Example: POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
@@ -156,7 +159,8 @@ async def scale(interaction: discord.Interaction, service: str, replicas: int):
     LLM Directive: Extend this to call Kubernetes API for actual scaling:
     PATCH /apis/apps/v1/namespaces/{ns}/deployments/{name}/scale
     """
-    await audit_logger.log_command(interaction, "scale", {"service": service, "replicas": replicas})
+    if audit_logger:
+        await audit_logger.log_command(interaction, "scale", {"service": service, "replicas": replicas})
     
     # TODO: Call Kubernetes API to scale deployment
     # Example: kubectl scale deployment/{service} --replicas={replicas}
@@ -184,7 +188,8 @@ async def ask(interaction: discord.Interaction, query: str):
     and context retrieval. Extend there to add new model providers
     or vector store integrations.
     """
-    await audit_logger.log_command(interaction, "ask", {"query": query[:100]})
+    if audit_logger:
+        await audit_logger.log_command(interaction, "ask", {"query": query[:100]})
     
     # Defer response since AI queries may take time
     await interaction.response.defer()

@@ -96,6 +96,10 @@ spec:
         - protocol: TCP
           port: 8080
     # Allow GitHub webhooks (from anywhere for webhooks)
+    # NOTE: GitHub webhooks need to come from any source. For additional security:
+    # 1. Always verify HMAC signatures in the event gateway
+    # 2. Consider restricting to GitHub's IP ranges (check https://api.github.com/meta)
+    # 3. Use a WAF or reverse proxy with rate limiting
     - from: []
       ports:
         - protocol: TCP

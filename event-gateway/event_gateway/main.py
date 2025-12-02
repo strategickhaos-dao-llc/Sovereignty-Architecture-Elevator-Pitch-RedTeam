@@ -22,6 +22,8 @@ import logging
 from contextlib import asynccontextmanager
 from typing import Any
 
+from typing import Optional
+
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
@@ -47,7 +49,7 @@ CHANNEL_IDS = {
 }
 
 # Global notifier instance
-discord_notifier: DiscordNotifier | None = None
+discord_notifier: Optional[DiscordNotifier] = None
 
 
 @asynccontextmanager
