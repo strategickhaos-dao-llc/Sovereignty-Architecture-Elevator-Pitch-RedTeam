@@ -2,6 +2,17 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🧠 Cognitive Architecture
+
+This project is built on a foundation of **distributed cognition** and **externalized working memory**—a sophisticated cognitive architecture that enables polymath-level cross-domain synthesis.
+
+**Documentation**:
+- **[Cognitive Architecture (YAML)](cognitive_architecture.yaml)** - Comprehensive technical mapping of distributed cognition system
+- **[Cognitive Methodology](COGNITIVE_METHODOLOGY.md)** - Professional explanation for audit reports and academic documentation
+- **[Neurocognitive Profile](NEUROCOGNITIVE_PROFILE.md)** - Formal neuroscientific cognitive profile
+
+**Key Insight**: The multi-dimensional approach of parallel threads, extensive documentation, and kinesthetic practices represents a highly sophisticated parallel processing system optimized for complex problem-solving and pattern synthesis across domains.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
