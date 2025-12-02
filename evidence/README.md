@@ -30,7 +30,7 @@ evidence/
 ├── README.md              # This file - claims declaration
 ├── status_snapshot.json   # Machine-readable infrastructure state
 ├── how_to_verify.md       # Step-by-step verification guide
-├── hashes.txt             # BLAKE3/SHA256 hash manifest
+├── hashes.txt             # SHA256 hash manifest
 └── anchors/
     ├── README.md          # Anchor structure documentation
     └── (your .json/.asc/.ots files)

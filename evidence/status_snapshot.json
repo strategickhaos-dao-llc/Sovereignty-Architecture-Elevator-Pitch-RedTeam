@@ -7,8 +7,10 @@
     "name": "Strategickhaos DAO LLC / Valoryield Engine",
     "legal_structure": "Limited Liability Company",
     "formation_jurisdiction": "Wyoming",
+    "domicile_state": "Texas",
     "formation_date": "2025-06-25",
-    "status": "Good standing"
+    "status": "Good standing",
+    "note": "Formed in Wyoming, domiciled in Texas per dao_record.yaml"
   },
 
   "infrastructure": {

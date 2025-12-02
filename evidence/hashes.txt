@@ -1,8 +1,8 @@
 # StrategicKhaos Evidence Hash Manifest
 # Algorithm: SHA256
-# Generated: 2025-12-02T18:24:21Z
+# Generated: 2025-12-02T18:26:43Z
 # Re-verified on every CI push via .github/workflows/verify.yaml
 
 d3e82677b924e11f0e03961fe98c0f6fedb5826cf7e6c87534b6a9d3a2e63b0b  dao_record.yaml
-0c3cf6498150c0ad3f06f2da1d37d1b6f709bf206e06d4f48d57f3b5a700857c  evidence/status_snapshot.json
+0b4cb7281748498a06de3976318c994068c137e09e31f73e34d70833883f02b2  evidence/status_snapshot.json
 f3dc81e67e92045107cde11cfc3b3763b9b7a2412f2e0998ccee84ebbf300cc6  governance/access_matrix.yaml

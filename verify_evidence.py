@@ -33,10 +33,13 @@ def get_repo_root() -> Path:
 def compute_sha256(filepath: Path) -> str:
     """Compute SHA256 hash of a file."""
     sha256_hash = hashlib.sha256()
-    with open(filepath, "rb") as f:
-        for byte_block in iter(lambda: f.read(4096), b""):
-            sha256_hash.update(byte_block)
-    return sha256_hash.hexdigest()
+    try:
+        with open(filepath, "rb") as f:
+            for byte_block in iter(lambda: f.read(4096), b""):
+                sha256_hash.update(byte_block)
+        return sha256_hash.hexdigest()
+    except (FileNotFoundError, PermissionError) as e:
+        raise IOError(f"Cannot read file {filepath}: {e}") from e
 
 
 def parse_hashes_file(hashes_path: Path) -> dict:
