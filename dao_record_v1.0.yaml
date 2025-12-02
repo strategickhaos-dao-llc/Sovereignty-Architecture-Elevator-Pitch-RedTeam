@@ -13,6 +13,26 @@ operator:
   gpg_key: "0x137SOVEREIGN"
   sha256_fingerprint: "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5"  # REPLACE WITH REAL
 
+company:
+  legal_name: "Strategickhaos DAO LLC / Valoryield Engine"
+  principal_address:
+    street: "1216 S Fredonia St"
+    city: "Longview"
+    state: "TX"
+    zip: "75602-2544"
+    usage: "Federal filings (USPTO, IRS, EIN), banking, correspondence"
+  registered_agent:
+    name: "Registered Agents Inc"
+    street: "5900 Balcones Drive, Suite 100"
+    city: "Austin"
+    state: "TX"
+    zip: "78731"
+    county: "Travis County"
+    service_provider: "Harbor Compliance"
+    contact_phone: "1-888-995-5895"
+    usage: "Texas Secretary of State filings ONLY"
+    documentation: "legal/REGISTERED_AGENT_TEXAS.md"
+
 status:
   week_1: "DONE"
   sovereignty_level: "Big Tech"
@@ -143,6 +163,20 @@ governance_compliance:
     access_control_matrix:
       roles: ["Drafter","Reviewer","Approver","Signer","Auditor"]
       article_7_authorized_signers: ["Domenic Garza","Node 137"]
+  texas_filings:
+    registered_agent_service: "Harbor Compliance / Registered Agents Inc"
+    state_filings_address: "5900 Balcones Drive, Suite 100, Austin, TX 78731"
+    federal_filings_address: "1216 S Fredonia St, Longview, TX 75602-2544"
+    filing_requirements:
+      electronic_signatures_accepted: true
+      processing_time: "next business day"
+      credit_card_surcharge: "2.7%"
+      methods: ["online", "fax", "mail"]
+    best_practices:
+      - "Verify agent info in Harbor Compliance before filing"
+      - "Use registered agent address ONLY for Texas state filings"
+      - "Use principal address for all federal filings (USPTO, IRS, EIN)"
+      - "Never share registered agent address for banking or correspondence"
   checklists:
     compliance_30_point: "enabled"
   ci_cd:
