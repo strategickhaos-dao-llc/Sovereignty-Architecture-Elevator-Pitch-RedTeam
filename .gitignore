@@ -35,3 +35,10 @@ target/
 
 # Workspace data
 workspace/
+
+# TypeScript build output
+dist/
+
+# Environment and temp files
+*.ots.tmp
+timestamp_report_*.txt
