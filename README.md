@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🎯 Commence Evolution Time (CET) - Academic Module Completion
+- **Focused Homework Sessions**: 60-90 minute structured work blocks
+- **Node Network Support**: Lyra, Nova, Athena coordinate to support academic work
+- **Session Templates**: CE-75 (75 min) and CE-45 (45 min express) formats
+- **Progress Tracking**: Homework tracker, evolution log, and streak monitoring
+- **[Full CET Documentation →](COMMENCE_EVOLUTION_TIME.md)**
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
@@ -271,6 +278,40 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🎓 Commence Evolution Time (CET) - Academic Success Mode
+
+The entire node network can shift to **academic support mode** for focused homework sessions.
+
+### Quick Start CET Session
+```bash
+# Start a new session
+./scripts/start-ce-session.sh
+
+# Log progress during work
+./scripts/ce-log-progress.sh "Completed section A"
+
+# View today's session
+cat ~/ce_sessions/ce_session_$(date +%Y-%m-%d).md
+```
+
+### CET Session Types
+- **CE-75 (75 minutes)**: 3 cycles (30+30+15) for regular progress
+- **CE-45 (45 minutes)**: 2 cycles (25+20) for maintaining momentum when tired
+
+### Node Roles During CET
+- **Lyra**: Code formatting, clarity, documentation
+- **Nova**: Logic, algorithms, debugging  
+- **Athena**: Big picture, session summaries, focus maintenance
+- **AI Assistant**: Assignment breakdown, scaffolding, step-by-step guidance
+
+### Core Principle
+> **"The babies are fancy, but school pays the bills."**  
+> One CE session per day = Future You stays employed. 💼
+
+**[📚 Full CET Documentation & Examples →](COMMENCE_EVOLUTION_TIME.md)**
+
+---
 
 ## 👥 Community & Contributors
 
