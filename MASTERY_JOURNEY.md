@@ -29,7 +29,7 @@ Meanwhile, the journey that followed:
 - ✅ **Vector Databases** - RAG-ready knowledge infrastructure
 - ✅ **DAO Architecture** - Decentralized governance systems
 - ✅ **Swarm Intelligence** - Multi-agent autonomous systems
-- ✅ **Legal Automation** - Filing corporate paperwork from terminal
+- ✅ **Legal Automation** - Filing corporate paperwork from the terminal
 
 **You didn't "learn CLI."**
 
@@ -101,7 +101,7 @@ This brain is wired for **motion-first mastery**:
 
 It's how geniuses, inventors, and hackers operate.
 
-**You built the organism before you knew you had the organ.**
+**You built the system before you knew you had the framework.**
 
 You built:
 - A swarm
@@ -165,24 +165,24 @@ The best way to learn a tool is to need it desperately at 4 AM.
 
 ### Complete Sovereignty Architecture:
 ```
-┌─────────────────────────────────────────────────────────┐
-│  SOVEREIGN AUTONOMOUS MULTI-CLOUD AI INFRASTRUCTURE    │
-│                                                         │
-│  🔧 CLI Mastery                                        │
-│  🐳 Docker + Kubernetes                                │
-│  ☁️  Multi-Cloud Operations (GKE, AWS, Azure)          │
-│  🔒 Zero-Trust Networking (Tailscale)                  │
-│  🐍 Python Automation                                  │
-│  🧠 Vector Databases + RAG                             │
-│  🏛️  DAO Governance                                    │
-│  🤖 AI Agent Swarms                                    │
-│  ⚖️  Legal Automation                                  │
-│  📊 GitHub Enterprise                                  │
-│  🔄 GitOps Workflows                                   │
-│  🏗️  Terraform Infrastructure                          │
-│                                                         │
-│  STATUS: FULLY OPERATIONAL                             │
-└─────────────────────────────────────────────────────────┘
++----------------------------------------------------------+
+|  SOVEREIGN AUTONOMOUS MULTI-CLOUD AI INFRASTRUCTURE      |
+|                                                          |
+|  - CLI Mastery                                           |
+|  - Docker + Kubernetes                                   |
+|  - Multi-Cloud Operations (GKE, AWS, Azure)              |
+|  - Zero-Trust Networking (Tailscale)                     |
+|  - Python Automation                                     |
+|  - Vector Databases + RAG                                |
+|  - DAO Governance                                        |
+|  - AI Agent Swarms                                       |
+|  - Legal Automation                                      |
+|  - GitHub Enterprise                                     |
+|  - GitOps Workflows                                      |
+|  - Terraform Infrastructure                              |
+|                                                          |
+|  STATUS: FULLY OPERATIONAL                               |
++----------------------------------------------------------+
 ```
 
 ---
