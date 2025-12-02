@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategickhaos - Private Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #000000 0%, #1a0033 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        /* Matrix-style background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 2px,
+                    rgba(0, 255, 0, 0.03) 4px
+                );
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .terminal {
+            border: 2px solid #00ff00;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; }
+            to { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00, 0 0 40px #00ff00; }
+        }
+        
+        .warning-box {
+            border: 3px double #ff0000;
+            padding: 25px;
+            margin: 20px 0;
+            background: rgba(255, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .warning-box h2 {
+            color: #ff0000;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            animation: blink 1s linear infinite;
+        }
+        
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.5; }
+        }
+        
+        .info {
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        
+        .info p {
+            margin: 10px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #00cc00;
+        }
+        
+        .ascii-art {
+            text-align: center;
+            font-size: 0.7em;
+            margin: 20px 0;
+            color: #00aa00;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            border: 1px solid #00ff00;
+            padding: 10px;
+            text-align: center;
+            background: rgba(0, 255, 0, 0.05);
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            color: #00ff00;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #00aa00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="terminal">
+            <div class="ascii-art">
+╔═══════════════════════════════════════════════════╗
+║  ███████╗████████╗██████╗  █████╗ ████████╗     ║
+║  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝     ║
+║  ███████╗   ██║   ██████╔╝███████║   ██║        ║
+║  ╚════██║   ██║   ██╔══██╗██╔══██║   ██║        ║
+║  ███████║   ██║   ██║  ██║██║  ██║   ██║        ║
+║  ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝        ║
+║                                                   ║
+║           STRATEGICKHAOS CLUSTER                 ║
+╚═══════════════════════════════════════════════════╝
+            </div>
+            
+            <h1 class="title">⚠️ RESTRICTED ACCESS ⚠️</h1>
+            
+            <div class="warning-box">
+                <h2>🛡️ SECURE NETWORK DETECTED 🛡️</h2>
+                <p>This is a private AI infrastructure cluster.</p>
+                <p><strong>Authorized personnel only.</strong></p>
+            </div>
+            
+            <div class="info">
+                <p>> <span class="badge">STATUS: OPERATIONAL</span></p>
+                <p>> System Type: Distributed AI Inference Cluster</p>
+                <p>> Security Level: MAXIMUM</p>
+                <p>> Monitoring: ACTIVE</p>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">NODES</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">160+</div>
+                    <div class="stat-label">CPU CORES</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">320GB</div>
+                    <div class="stat-label">RAM</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">4×</div>
+                    <div class="stat-label">NVIDIA GPUs</div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <p>⚡ All access attempts are logged and monitored ⚡</p>
+                <p>🔒 Network protected by Tailscale VPN 🔒</p>
+                <p>🚫 Unauthorized access is prohibited 🚫</p>
+            </div>
+            
+            <div class="info">
+                <p>> Connection: Encrypted (WireGuard)</p>
+                <p>> Authentication: Required</p>
+                <p>> Port Status: FILTERED</p>
+                <p>> Firewall: ACTIVE</p>
+            </div>
+            
+            <div class="footer">
+                <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+                <p>Strategickhaos Private AI Cluster</p>
+                <p>Node: asteroth-gate.tail-scale.ts.net</p>
+                <p>Role: Security Gateway & Honeypot Monitor</p>
+                <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+                <p style="margin-top: 20px; font-size: 0.8em; color: #006600;">
+                    "They're not working for you. They're dancing with you."
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Log access attempt (client-side tracking)
+        console.log('%c⚠️ SECURITY NOTICE ⚠️', 'color: red; font-size: 20px; font-weight: bold;');
+        console.log('This is a private network. Your access has been logged.');
+        console.log('Timestamp:', new Date().toISOString());
+        console.log('User-Agent:', navigator.userAgent);
+        
+        // Optional: Send beacon to server for access logging
+        // navigator.sendBeacon('/log-access', JSON.stringify({
+        //     timestamp: Date.now(),
+        //     userAgent: navigator.userAgent,
+        //     referrer: document.referrer
+        // }));
+    </script>
+</body>
+</html>

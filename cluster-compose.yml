@@ -1,0 +1,114 @@
+# Strategickhaos 4-Node AI Supercluster
+# Deploy this on all four machines for unified private AI infrastructure
+# Machines auto-discover each other via Tailscale MagicDNS
+
+services:
+  # Core AI Inference Engine
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+      - ./models:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_ORIGINS=*
+      - OLLAMA_MAX_LOADED_MODELS=2
+      - OLLAMA_NUM_PARALLEL=4
+    restart: unless-stopped
+    networks:
+      - strategickhaos_cluster
+
+  # Web UI for AI Interaction
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://nitro-lyra.tail-scale.ts.net:11434
+      - WEBUI_AUTH=${WEBUI_AUTH:-true}  # Enable auth by default, set to false if on trusted network
+      - WEBUI_NAME=Strategickhaos Cluster
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-strategickhaos-secret-key-change-me}
+    volumes:
+      - open-webui:/app/backend/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    networks:
+      - strategickhaos_cluster
+    depends_on:
+      - ollama
+
+  # Voice AI Service (TTS)
+  # Only deploy on nova-warrior (has screen/audio)
+  voice-ai:
+    image: ghcr.io/erew123/alltalk_tts:latest
+    container_name: voice-ai
+    ports:
+      - "7850:7850"
+    volumes:
+      - voice-ai-data:/app/data
+    environment:
+      - ALLTALK_SERVER_PORT=7850
+      - ALLTALK_SERVER_IP=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - strategickhaos_cluster
+    profiles:
+      - voice
+
+  # Honeypot Gateway (Security)
+  # Only deploy on asteroth-gate (honeypot node)
+  honeypot-gate:
+    image: nginx:alpine
+    container_name: honeypot-gate
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ./invite-html:/usr/share/nginx/html:ro
+      - ./nginx-honeypot.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+    networks:
+      - strategickhaos_cluster
+    profiles:
+      - honeypot
+
+  # Cluster Health Monitor
+  # Deploy on primary node (nitro-lyra)
+  health-monitor:
+    image: prom/prometheus:latest
+    container_name: cluster-health
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus-cluster.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
+    networks:
+      - strategickhaos_cluster
+    profiles:
+      - monitoring
+
+networks:
+  strategickhaos_cluster:
+    driver: bridge
+
+volumes:
+  ollama:
+  open-webui:
+  voice-ai-data:
+  prometheus-data:

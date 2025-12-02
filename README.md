@@ -2,11 +2,33 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🔥 NEW: 4-Node Private AI Supercluster
+
+**Transform your machines into an unstoppable private AI empire!**
+
+Turn your 4 powerful machines into a unified AI cluster with **405B parameter models**, uncensored inference, and zero cloud dependencies. Get started in under 30 minutes:
+
+- **[Quick Start Guide](CLUSTER_QUICKSTART.md)** - Deploy in 30 minutes
+- **[Full Deployment Guide](CLUSTER_DEPLOYMENT.md)** - Complete setup instructions
+- **[Fleet Specifications](FLEET_SPECIFICATIONS.md)** - Hardware details and capabilities
+
+**Cluster Features:**
+- 🚀 **160+ CPU cores, 320GB RAM, 4× NVIDIA GPUs**
+- 🔐 **Zero public ports** - Tailscale mesh networking
+- 🎯 **405B parameter models** - Run the biggest uncensored models
+- 💰 **$0/month** - No cloud bills, own your infrastructure
+- ⚡ **4-8× cloud speed** - Private, low-latency inference
+
+```bash
+# Get started now
+./scripts/setup-cluster.sh
+```
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
 - **Discord** - Command & control interface
-- **Infrastructure** - Kubernetes, observability, AI agents  
+- **Infrastructure** - Kubernetes, observability, AI agents, **4-node cluster**
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
@@ -271,6 +293,51 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🔧 Private AI Cluster Management
+
+### Cluster Commands
+
+**Setup a new node:**
+```bash
+./scripts/setup-cluster.sh
+```
+
+**Check cluster health:**
+```bash
+./scripts/cluster-health.sh overview
+```
+
+**Manage models:**
+```bash
+./scripts/manage-models.sh recommended  # Pull recommended models
+./scripts/manage-models.sh list         # List installed models
+./scripts/manage-models.sh cluster      # Check all nodes
+```
+
+**Enable auto-failover:**
+```bash
+./scripts/auto-failover.sh install
+./scripts/auto-failover.sh status
+```
+
+### Cluster Documentation
+
+- **[CLUSTER_QUICKSTART.md](CLUSTER_QUICKSTART.md)** - Get started in 30 minutes
+- **[CLUSTER_DEPLOYMENT.md](CLUSTER_DEPLOYMENT.md)** - Comprehensive deployment guide
+- **[FLEET_SPECIFICATIONS.md](FLEET_SPECIFICATIONS.md)** - Hardware specs and capabilities
+
+### Cluster Access Points
+
+Once deployed, access your cluster at:
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Open-WebUI** | http://nitro-lyra.tail-scale.ts.net:3000 | Main AI interface |
+| **Ollama API** | http://{node}.tail-scale.ts.net:11434 | Direct API access |
+| **Voice AI** | http://nova-warrior.tail-scale.ts.net:7850 | Text-to-speech |
+| **Monitoring** | http://nitro-lyra.tail-scale.ts.net:9090 | Prometheus metrics |
+| **Security Gate** | http://asteroth-gate.tail-scale.ts.net:8080 | Honeypot monitoring |
 
 ## 👥 Community & Contributors
 
