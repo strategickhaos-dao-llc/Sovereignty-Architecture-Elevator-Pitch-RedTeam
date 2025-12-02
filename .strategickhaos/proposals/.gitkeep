@@ -1,0 +1,13 @@
+# This directory stores proposal JSON files
+# Each file is named with a unique proposal_id.json
+
+# Example proposal structure:
+# {
+#   "proposal_id": "unique-id",
+#   "title": "Proposal Title",
+#   "description": "Proposal Description",
+#   "department": "legal",
+#   "created_at": "timestamp",
+#   "status": "pending",
+#   "votes": []
+# }

@@ -1,0 +1,42 @@
+# .strategickhaos/kernel/config.yml
+
+legion_os:
+  memory_backend: "git"
+  consensus_protocol: "weighted_voting"
+  departments:
+    - name: "legal"
+      agent: "claude-opus-4"
+      weight: 3
+      veto_power: true
+    - name: "technical"
+      agents: ["qwen2.5:72b", "deepseek-coder"]
+      weight: 2
+      veto_power: false
+    - name: "finance"
+      agent: "gpt-4"
+      weight: 2
+      veto_power: true
+    - name: "ethics"
+      agent: "claude-sonnet-4"
+      weight: 3
+      veto_power: true
+    - name: "operations"
+      agent: "llama3.1:70b"
+      weight: 1
+      veto_power: false
+  
+  voting_rules:
+    quorum: 3  # Minimum departments that must participate
+    threshold: 0.6  # 60% approval required
+    veto_blocks: true  # Veto power to block proposals
+    timeout: 300  # Time limit to gather votes
+  
+  integrations:
+    discord:
+      webhook: "${DISCORD_WEBHOOK_URL}"
+      channel_id: "${GOVERNANCE_CHANNEL}"
+    github:
+      repo: "Me10101-01/sovereign-vault"
+      branch: "main"
+    gitkraken:
+      ssh_key: "${GPG_KEY_PATH}"
