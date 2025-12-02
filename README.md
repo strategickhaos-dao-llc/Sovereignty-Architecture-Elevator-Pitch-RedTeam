@@ -280,6 +280,13 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏛️ Immutability & Preservation
+
+- **[Sovereign Arsenal](SOVEREIGN_ARSENAL.md)** - Permanently pinned across multiple planes of existence
+  - IPFS, Arweave, BitTorrent distribution
+  - 200+ year permanence guarantee
+  - Indestructible knowledge preservation
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
