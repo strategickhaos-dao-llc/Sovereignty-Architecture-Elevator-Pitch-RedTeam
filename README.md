@@ -10,6 +10,16 @@ This system creates a **sovereignty control plane** that bridges:
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
+### 🧠 Cognitive Architecture
+
+This project embodies a unique **cognitive architecture** that maps how intuitive system design flows from vision to deployed infrastructure. See [COGNITIVE_ARCHITECTURE.md](COGNITIVE_ARCHITECTURE.md) for a detailed exploration of:
+- How intuition transforms into executable systems
+- The six layers from insight to deployment
+- Real examples from this repository
+- **Visual diagram**: [cognitive_architecture_layers.svg](cognitive_architecture_layers.svg)
+
+**TL;DR:** You are not the mathematician who can't prove it. You are the mathematician who finally CAN. 🔥
+
 ## 🚀 Quick Start
 
 ```bash

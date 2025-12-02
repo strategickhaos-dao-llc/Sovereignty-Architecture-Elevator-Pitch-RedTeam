@@ -1,0 +1,169 @@
+digraph Cognitive_Architecture_Layers {
+    rankdir=TB;
+    bgcolor="#0d1117";
+    fontname="Helvetica";
+    fontsize=14;
+    labelloc="t";
+    label=<<font point-size="20" color="white"><b>COGNITIVE ARCHITECTURE: THE INTUITIVE MATHEMATICIAN WHO CAN PROVE IT</b></font>>;
+    
+    node [fontname="Helvetica", fontsize=11, style=filled, penwidth=2.5];
+    edge [penwidth=2, arrowsize=1.0];
+
+    // ==================== LAYER 1: INTUITION ====================
+    subgraph cluster_intuition {
+        label=<<font point-size="16" color="#FF6B9D"><b>LAYER 1: INTUITION</b><br/><font point-size="10">"Seeing entire system-shapes before you have the vocabulary"</font></font>>;
+        style=filled;
+        fillcolor="#1a0a14";
+        color="#FF6B9D";
+        penwidth=3;
+        
+        intuition_core [label=<<b>INTUITIVE INSIGHT</b><br/>Flash of vision<br/>System-shape appears whole>, 
+                        fillcolor="#FF6B9D", fontcolor="black", shape=ellipse, width=2.5, height=1.2];
+        
+        int_1 [label="Topology\nCausality", fillcolor="#FF8FB3", fontcolor="black", shape=box, style="filled,rounded"];
+        int_2 [label="Emergent\nBehavior", fillcolor="#FF8FB3", fontcolor="black", shape=box, style="filled,rounded"];
+        int_3 [label="Multi-layer\nInteractions", fillcolor="#FF8FB3", fontcolor="black", shape=box, style="filled,rounded"];
+        int_4 [label="Architectural\nConsequences", fillcolor="#FF8FB3", fontcolor="black", shape=box, style="filled,rounded"];
+        
+        intuition_core -> {int_1 int_2 int_3 int_4} [color="#FF6B9D"];
+    }
+
+    // ==================== LAYER 2: PATTERN ====================
+    subgraph cluster_pattern {
+        label=<<font point-size="16" color="#9D6BFF"><b>LAYER 2: PATTERN</b><br/><font point-size="10">"Deep pattern synthesis across domains"</font></font>>;
+        style=filled;
+        fillcolor="#0f0a1a";
+        color="#9D6BFF";
+        penwidth=3;
+        
+        pattern_core [label=<<b>PATTERN RECOGNITION</b><br/>Domain expertise<br/>Architectural patterns>, 
+                      fillcolor="#9D6BFF", fontcolor="black", shape=ellipse, width=2.5, height=1.2];
+        
+        pat_1 [label="Distributed\nSystems", fillcolor="#B38FFF", fontcolor="black", shape=box, style="filled,rounded"];
+        pat_2 [label="Multi-agent\nOrchestration", fillcolor="#B38FFF", fontcolor="black", shape=box, style="filled,rounded"];
+        pat_3 [label="Observability\nPatterns", fillcolor="#B38FFF", fontcolor="black", shape=box, style="filled,rounded"];
+        pat_4 [label="Knowledge\nGraphs", fillcolor="#B38FFF", fontcolor="black", shape=box, style="filled,rounded"];
+        pat_5 [label="Recursive\nAI Orchestration", fillcolor="#B38FFF", fontcolor="black", shape=box, style="filled,rounded"];
+        
+        pattern_core -> {pat_1 pat_2 pat_3 pat_4 pat_5} [color="#9D6BFF"];
+    }
+
+    // ==================== LAYER 3: ARCHITECTURE ====================
+    subgraph cluster_architecture {
+        label=<<font point-size="16" color="#6B9DFF"><b>LAYER 3: ARCHITECTURE</b><br/><font point-size="10">"Systems engineering and structural design"</font></font>>;
+        style=filled;
+        fillcolor="#0a0f1a";
+        color="#6B9DFF";
+        penwidth=3;
+        
+        arch_core [label=<<b>SYSTEM DESIGN</b><br/>Decomposition<br/>Component selection>, 
+                   fillcolor="#6B9DFF", fontcolor="black", shape=ellipse, width=2.5, height=1.2];
+        
+        arch_1 [label="Kubernetes\nClusters", fillcolor="#8FB3FF", fontcolor="black", shape=box, style="filled,rounded"];
+        arch_2 [label="Observability\nPipelines", fillcolor="#8FB3FF", fontcolor="black", shape=box, style="filled,rounded"];
+        arch_3 [label="AI Governance\nModels", fillcolor="#8FB3FF", fontcolor="black", shape=box, style="filled,rounded"];
+        arch_4 [label="Multi-agent\nConstellations", fillcolor="#8FB3FF", fontcolor="black", shape=box, style="filled,rounded"];
+        arch_5 [label="Sovereign\nInfrastructure", fillcolor="#8FB3FF", fontcolor="black", shape=box, style="filled,rounded"];
+        
+        arch_core -> {arch_1 arch_2 arch_3 arch_4 arch_5} [color="#6B9DFF"];
+    }
+
+    // ==================== LAYER 4: TRANSLATION ====================
+    subgraph cluster_translation {
+        label=<<font point-size="16" color="#6BFFC4"><b>LAYER 4: TRANSLATION-TO-AI</b><br/><font point-size="10">"Your army of Hardys"</font></font>>;
+        style=filled;
+        fillcolor="#0a1a14";
+        color="#6BFFC4";
+        penwidth=3;
+        
+        trans_core [label=<<b>AI TRANSLATORS</b><br/>Spec generation<br/>Code synthesis>, 
+                    fillcolor="#6BFFC4", fontcolor="black", shape=ellipse, width=2.5, height=1.2];
+        
+        trans_1 [label="Claude\n(Hardy 1)", fillcolor="#8FFFD4", fontcolor="black", shape=box, style="filled,rounded"];
+        trans_2 [label="Grok\n(Hardy 2)", fillcolor="#8FFFD4", fontcolor="black", shape=box, style="filled,rounded"];
+        trans_3 [label="GPT\n(Hardy 3)", fillcolor="#8FFFD4", fontcolor="black", shape=box, style="filled,rounded"];
+        trans_4 [label="Custom\nAgents", fillcolor="#8FFFD4", fontcolor="black", shape=box, style="filled,rounded"];
+        trans_output [label="Docker\nYAML\nPython\nKubernetes", fillcolor="#A8FFE2", fontcolor="black", shape=box, style="filled,rounded"];
+        
+        trans_core -> {trans_1 trans_2 trans_3 trans_4} [color="#6BFFC4"];
+        {trans_1 trans_2 trans_3 trans_4} -> trans_output [color="#6BFFC4"];
+    }
+
+    // ==================== LAYER 5: VALIDATION ====================
+    subgraph cluster_validation {
+        label=<<font point-size="16" color="#FFD76B"><b>LAYER 5: VALIDATION</b><br/><font point-size="10">"The proof mechanism: Your compiling universe"</font></font>>;
+        style=filled;
+        fillcolor="#1a1609";
+        color="#FFD76B";
+        penwidth=3;
+        
+        val_core [label=<<b>VALIDATION ENGINE</b><br/>Testing &amp; proving<br/>Infrastructure validation>, 
+                  fillcolor="#FFD76B", fontcolor="black", shape=ellipse, width=2.5, height=1.2];
+        
+        val_1 [label="Linting\nCode Quality", fillcolor="#FFE28F", fontcolor="black", shape=box, style="filled,rounded"];
+        val_2 [label="Building\nCompilation", fillcolor="#FFE28F", fontcolor="black", shape=box, style="filled,rounded"];
+        val_3 [label="Testing\nUnit & Integration", fillcolor="#FFE28F", fontcolor="black", shape=box, style="filled,rounded"];
+        val_4 [label="CI/CD\nPipelines", fillcolor="#FFE28F", fontcolor="black", shape=box, style="filled,rounded"];
+        val_5 [label="Security\nCodeQL Scans", fillcolor="#FFE28F", fontcolor="black", shape=box, style="filled,rounded"];
+        
+        val_core -> {val_1 val_2 val_3 val_4 val_5} [color="#FFD76B"];
+    }
+
+    // ==================== LAYER 6: EXECUTION ====================
+    subgraph cluster_execution {
+        label=<<font point-size="16" color="#FF6B6B"><b>LAYER 6: EXECUTION</b><br/><font point-size="10">"Deployed infrastructure: Living proof"</font></font>>;
+        style=filled;
+        fillcolor="#1a0909";
+        color="#FF6B6B";
+        penwidth=3;
+        
+        exec_core [label=<<b>LIVE DEPLOYMENT</b><br/>Real infrastructure<br/>Running systems>, 
+                   fillcolor="#FF6B6B", fontcolor="white", shape=ellipse, width=2.5, height=1.2];
+        
+        exec_1 [label="GitHub\nRepositories", fillcolor="#FF8F8F", fontcolor="black", shape=box, style="filled,rounded"];
+        exec_2 [label="Docker\nContainers", fillcolor="#FF8F8F", fontcolor="black", shape=box, style="filled,rounded"];
+        exec_3 [label="Kubernetes\nClusters", fillcolor="#FF8F8F", fontcolor="black", shape=box, style="filled,rounded"];
+        exec_4 [label="Monitoring\nDashboards", fillcolor="#FF8F8F", fontcolor="black", shape=box, style="filled,rounded"];
+        exec_5 [label="AI Agent\nNetworks", fillcolor="#FF8F8F", fontcolor="black", shape=box, style="filled,rounded"];
+        
+        exec_core -> {exec_1 exec_2 exec_3 exec_4 exec_5} [color="#FF6B6B"];
+    }
+
+    // ==================== FEEDBACK LOOP ====================
+    feedback [label=<<b>FEEDBACK LOOP</b><br/>Real-world behavior<br/>informs next intuition>, 
+              fillcolor="#FFD700", fontcolor="black", shape=diamond, width=2.5, height=1.5, 
+              style=filled, penwidth=3];
+
+    // ==================== MAIN FLOW ====================
+    intuition_core -> pattern_core [label="  insight shapes  ", color="#FF6B9D", fontcolor="#FF6B9D", penwidth=3];
+    pattern_core -> arch_core [label="  pattern matches  ", color="#9D6BFF", fontcolor="#9D6BFF", penwidth=3];
+    arch_core -> trans_core [label="  design specs  ", color="#6B9DFF", fontcolor="#6B9DFF", penwidth=3];
+    trans_core -> val_core [label="  generated code  ", color="#6BFFC4", fontcolor="#6BFFC4", penwidth=3];
+    val_core -> exec_core [label="  validated systems  ", color="#FFD76B", fontcolor="#FFD76B", penwidth=3];
+    exec_core -> feedback [label="  deployment  ", color="#FF6B6B", fontcolor="#FF6B6B", penwidth=3];
+    feedback -> intuition_core [label="  real behavior  ", color="#FFD700", fontcolor="#FFD700", penwidth=3, style=dashed];
+
+    // ==================== EXAMPLES ====================
+    example_1 [label=<<b>Example:</b><br/>"Departments should<br/>self-govern">, 
+               fillcolor="#2D2D2D", fontcolor="white", shape=note, style=filled];
+    example_2 [label=<<b>Result:</b><br/>Docker compose<br/>Python workers<br/>YAML manifests>, 
+               fillcolor="#2D2D2D", fontcolor="white", shape=note, style=filled];
+    example_3 [label=<<b>Proof:</b><br/>22,000+ lines of PRs<br/>Running clusters<br/>Live monitoring>, 
+               fillcolor="#2D2D2D", fontcolor="white", shape=note, style=filled];
+
+    example_1 -> intuition_core [style=dotted, color="#888888"];
+    example_2 -> trans_output [style=dotted, color="#888888"];
+    example_3 -> exec_core [style=dotted, color="#888888"];
+
+    // ==================== LAYOUT ====================
+    {rank=same; example_1}
+    {rank=same; intuition_core int_1 int_2 int_3 int_4}
+    {rank=same; pattern_core pat_1 pat_2 pat_3 pat_4 pat_5}
+    {rank=same; arch_core arch_1 arch_2 arch_3 arch_4 arch_5}
+    {rank=same; example_2}
+    {rank=same; trans_core trans_1 trans_2 trans_3 trans_4 trans_output}
+    {rank=same; val_core val_1 val_2 val_3 val_4 val_5}
+    {rank=same; exec_core exec_1 exec_2 exec_3 exec_4 exec_5}
+    {rank=same; example_3}
+    {rank=same; feedback}
+}
