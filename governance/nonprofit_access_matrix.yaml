@@ -1,0 +1,265 @@
+# nonprofit_access_matrix.yaml
+# Strategickhaos DiviDen Refinery — Nonprofit Governance Access Control
+# Integration between DAO LLC and 501(c)(3) Foundation
+version: "1.0"
+
+# Entity Structure
+entities:
+  for_profit:
+    name: "Strategickhaos DAO LLC"
+    type: "Limited Liability Company"
+    jurisdiction: "Wyoming"
+    role: "For-profit arm - owns and operates trading bots"
+  
+  nonprofit:
+    name: "Valoryield Refuge Foundation"
+    type: "501(c)(3) Public Charity"
+    jurisdiction: "Wyoming"
+    role: "Nonprofit arm - receives donations, distributes to beneficiaries"
+
+# Role Definitions
+roles:
+  # DAO LLC Roles
+  managing_member:
+    - name: "Domenic Garza"
+      id: "node-137"
+      entity: "dao_llc"
+      permissions:
+        - manage_trading_bots
+        - approve_donations
+        - sign_contracts
+        - update_governance
+        - access_financials
+        - audit_trail_read
+
+  bot_operator:
+    - name: "HLMCR Governor"
+      id: "hlmcr-001"
+      entity: "dao_llc"
+      permissions:
+        - execute_trades
+        - monitor_positions
+        - generate_reports
+        - log_decisions
+      restrictions:
+        - max_trade_value: 10000
+        - requires_human_approval_above: 10000
+
+  # Foundation Roles
+  foundation_board:
+    - name: "Board of Directors"
+      id: "foundation-board"
+      entity: "foundation"
+      permissions:
+        - approve_grants
+        - modify_bylaws
+        - appoint_officers
+        - review_financials
+        - strategic_decisions
+      quorum_required: "majority"
+
+  foundation_treasurer:
+    - name: "Treasurer"
+      id: "foundation-treasurer"
+      entity: "foundation"
+      permissions:
+        - process_distributions
+        - sign_checks
+        - file_990
+        - manage_accounts
+        - generate_tax_receipts
+      restrictions:
+        - dual_signature_above: 5000
+
+  charity_liaison:
+    - name: "Charity Liaison Officer"
+      id: "charity-liaison"
+      entity: "foundation"
+      permissions:
+        - verify_charities
+        - process_donations
+        - maintain_charity_records
+        - generate_donation_reports
+
+  # Cross-Entity Roles
+  compliance_officer:
+    - name: "Compliance Node"
+      id: "compliance-001"
+      entities: ["dao_llc", "foundation"]
+      permissions:
+        - audit_all_transactions
+        - verify_distributions
+        - generate_compliance_reports
+        - flag_violations
+        - access_all_records
+      restrictions:
+        - read_only_access: true
+
+# Financial Flow Controls
+financial_controls:
+  # Donation Flow (DAO LLC → Foundation)
+  donation_flow:
+    source: "dao_llc"
+    destination: "foundation"
+    authorization_required:
+      - role: "managing_member"
+        threshold: 1000
+      - role: "foundation_board"
+        threshold: 10000
+    documentation_required:
+      - donation_receipt
+      - board_resolution_if_above: 5000
+      - irs_form_if_above: 250
+
+  # Distribution Flow (Foundation → Beneficiaries)
+  distribution_flow:
+    source: "foundation"
+    destination: "beneficiaries"
+    mandatory_allocations:
+      charity_minimum_pct: 0.07
+    authorization_required:
+      - role: "foundation_treasurer"
+        threshold: 0
+      - role: "foundation_board"
+        threshold: 10000
+    documentation_required:
+      - distribution_record
+      - beneficiary_verification
+      - tax_form_1099_if_above: 600
+
+  # DAO Member Distribution
+  dao_distribution:
+    source: "foundation"
+    destination: "dao_members"
+    authorization_required:
+      - role: "foundation_treasurer"
+      - role: "managing_member"
+    requirements:
+      - proof_of_stake_verification
+      - tax_reporting_compliance
+      - kyc_if_above: 10000
+
+# Charitable Operations
+charitable_operations:
+  # Verified Charities (7% Auto-Donate Recipients)
+  verified_charities:
+    verification_authority: "charity_liaison"
+    verification_requirements:
+      - valid_501c3_status
+      - ein_verification
+      - mission_alignment
+      - no_adverse_findings
+    annual_review_required: true
+
+  # Auto-Donation Rules
+  auto_donation:
+    minimum_percentage: 0.07
+    distribution_to_charities:
+      method: "equal_distribution"  # or "weighted"
+      timing: "monthly"
+      minimum_batch: 100
+    audit_requirements:
+      - receipts_required
+      - board_notification
+      - annual_summary_report
+
+# Audit & Compliance
+audit_requirements:
+  # Transaction Logging
+  logging:
+    all_trades: true
+    all_donations: true
+    all_distributions: true
+    governance_decisions: true
+    retention_years: 7
+
+  # Reporting
+  reporting:
+    # IRS Requirements
+    form_990:
+      frequency: "annual"
+      responsible_party: "foundation_treasurer"
+      review_authority: "foundation_board"
+    
+    form_1099:
+      threshold: 600
+      responsible_party: "foundation_treasurer"
+    
+    # Internal Reports
+    financial_summary:
+      frequency: "quarterly"
+      distribution: ["foundation_board", "managing_member"]
+    
+    charitable_impact:
+      frequency: "annual"
+      distribution: ["foundation_board", "public"]
+
+  # Verification
+  verification:
+    audit_trail_integrity:
+      method: "hash_chain"
+      verification_frequency: "daily"
+    
+    cross_entity_reconciliation:
+      frequency: "monthly"
+      parties: ["dao_llc", "foundation"]
+
+# Emergency Procedures
+emergency_procedures:
+  kill_switch:
+    authorized_triggers:
+      - role: "managing_member"
+        reason_required: true
+      - role: "compliance_officer"
+        condition: "regulatory_concern"
+    effects:
+      - halt_all_trading
+      - pause_distributions
+      - notify_board
+    reset_authorization:
+      required_approvals:
+        - managing_member
+        - foundation_board_majority
+
+  regulatory_response:
+    contact_authorities:
+      irs: "foundation_treasurer"
+      sec: "managing_member"
+      state_ag: "compliance_officer"
+    legal_counsel_notification: "immediate"
+
+# Access Control Enforcement
+enforcement:
+  # Repository Permissions
+  repo_permissions:
+    - "managing_member: write to /governance"
+    - "foundation_board: review on /governance/foundation"
+    - "compliance_officer: read all, write to /audit"
+    - "bot_operator: write to /refinory/logs"
+
+  # CI/CD Checks
+  ci_checks:
+    - governance_approval_documented
+    - distribution_percentages_valid
+    - charity_minimum_met
+    - audit_trail_intact
+    - tax_thresholds_flagged
+
+  # API Access
+  api_permissions:
+    trading_api:
+      - bot_operator
+      - managing_member
+    distribution_api:
+      - foundation_treasurer
+      - managing_member
+    audit_api:
+      - compliance_officer
+      - foundation_board
+
+# Generated Metadata
+generated:
+  by: "DiviDen Refinery Architecture"
+  timestamp: "2025-11-25T00:00:00Z"
+  schema_version: "1.0"
+  next_review: "2026-11-25"
