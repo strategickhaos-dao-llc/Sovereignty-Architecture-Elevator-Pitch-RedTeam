@@ -1,0 +1,122 @@
+{
+  "case_study_id": "CS-001",
+  "export_timestamp": "2025-11-20T14:40:00Z",
+  "time_range": {
+    "start": "2025-11-20T14:30:00Z",
+    "end": "2025-11-20T14:36:00Z"
+  },
+  "instance": "node-137",
+  "metrics": [
+    {
+      "metric": "http_request_duration_seconds_bucket",
+      "quantile": "0.99",
+      "timestamps": [
+        "2025-11-20T14:30:00Z",
+        "2025-11-20T14:31:00Z",
+        "2025-11-20T14:32:00Z",
+        "2025-11-20T14:33:00Z",
+        "2025-11-20T14:34:00Z",
+        "2025-11-20T14:35:00Z",
+        "2025-11-20T14:36:00Z"
+      ],
+      "values_ms": [
+        120,
+        450,
+        2150,
+        1800,
+        85,
+        82,
+        78
+      ]
+    },
+    {
+      "metric": "node_network_receive_bytes_total",
+      "interface": "eth0",
+      "timestamps": [
+        "2025-11-20T14:30:00Z",
+        "2025-11-20T14:31:00Z",
+        "2025-11-20T14:32:00Z",
+        "2025-11-20T14:33:00Z",
+        "2025-11-20T14:34:00Z",
+        "2025-11-20T14:35:00Z",
+        "2025-11-20T14:36:00Z"
+      ],
+      "values_mbps": [
+        45.2,
+        38.1,
+        12.3,
+        8.5,
+        0.1,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "metric": "node_network_receive_bytes_total",
+      "interface": "wwan0",
+      "timestamps": [
+        "2025-11-20T14:30:00Z",
+        "2025-11-20T14:31:00Z",
+        "2025-11-20T14:32:00Z",
+        "2025-11-20T14:33:00Z",
+        "2025-11-20T14:34:00Z",
+        "2025-11-20T14:35:00Z",
+        "2025-11-20T14:36:00Z"
+      ],
+      "values_mbps": [
+        0.0,
+        0.0,
+        0.0,
+        0.5,
+        42.8,
+        44.1,
+        43.9
+      ]
+    },
+    {
+      "metric": "up",
+      "job": "node-exporter",
+      "timestamps": [
+        "2025-11-20T14:30:00Z",
+        "2025-11-20T14:31:00Z",
+        "2025-11-20T14:32:00Z",
+        "2025-11-20T14:33:00Z",
+        "2025-11-20T14:34:00Z",
+        "2025-11-20T14:35:00Z",
+        "2025-11-20T14:36:00Z"
+      ],
+      "values": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "name": "LatencySpike",
+      "state": "firing",
+      "fired_at": "2025-11-20T14:32:15Z",
+      "resolved_at": "2025-11-20T14:34:00Z",
+      "duration_seconds": 105,
+      "labels": {
+        "severity": "critical",
+        "instance": "node-137",
+        "team": "ops"
+      }
+    }
+  ],
+  "summary": {
+    "p99_latency_before_ms": 2150,
+    "p99_latency_after_ms": 85,
+    "mttr_minutes": 2.5,
+    "automated_remediation": true,
+    "failover_triggered": true,
+    "failover_from": "eth0/StarLink",
+    "failover_to": "wwan0/LTE"
+  }
+}
