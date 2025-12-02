@@ -1,0 +1,65 @@
+# Prometheus Configuration for Sovereignty Architecture
+# Monitors the biological/slime mold intelligence components
+#
+# Services monitored:
+# - PostgreSQL (DNA Archive / Long-term Memory)
+# - Redis (Short-term Memory / Fast Access)
+# - NATS (Synaptic Transmission / Async Messaging)
+# - Event Gateway (Neural Network)
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'sovereignty-slime-mold'
+    environment: '${SOVEREIGNTY_ENV:-development}'
+
+scrape_configs:
+  # PostgreSQL - DNA Archive / Long-term Memory
+  # Note: Requires postgres_exporter for actual metrics
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+    scrape_interval: 60s
+
+  # Redis - Short-term Memory / Fast Access
+  # Note: Requires redis_exporter for actual metrics
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 30s
+
+  # NATS - Synaptic Transmission / Async Messaging
+  # NATS provides built-in monitoring on port 8222
+  - job_name: 'nats'
+    static_configs:
+      - targets: ['nats:8222']
+    metrics_path: /varz
+    scrape_interval: 15s
+
+  # NATS JetStream metrics
+  - job_name: 'nats-jetstream'
+    static_configs:
+      - targets: ['nats:8222']
+    metrics_path: /jsz
+    scrape_interval: 30s
+
+  # NATS connections
+  - job_name: 'nats-connz'
+    static_configs:
+      - targets: ['nats:8222']
+    metrics_path: /connz
+    scrape_interval: 30s
+
+  # Event Gateway - Neural Network
+  - job_name: 'event-gateway'
+    static_configs:
+      - targets: ['event_gateway:3001']
+    metrics_path: /status
+    scrape_interval: 15s
+
+  # Prometheus Self-Monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 60s
