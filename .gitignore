@@ -35,3 +35,8 @@ target/
 
 # Workspace data
 workspace/
+
+# Generated verification reports (verify.sh output)
+verification_report.txt
+verification_report_signed.txt
+verification_report_signed.txt.sha256

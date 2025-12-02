@@ -1,0 +1,68 @@
+# Reproducibility Manifest
+# SHA256 checksums for cryptographic verification of repository integrity
+# Generated: 2025-11-25T04:12:00Z
+# Use verify.sh to validate these checksums
+# Note: PLACEHOLDER_HASH values are templates - run `verify.sh --update` to compute actual hashes
+
+manifest_version: "1.0"
+generated_at: "2025-11-25T04:12:00Z"
+hash_algorithm: "sha256"
+
+# Core configuration files
+files:
+  - path: "discovery.yml"
+    sha256: "PLACEHOLDER_HASH"
+    critical: true
+    description: "Core discovery configuration"
+    
+  - path: "ai_constitution.yaml"
+    sha256: "PLACEHOLDER_HASH"
+    critical: true
+    description: "AI governance constitution"
+    
+  - path: "dao_record.yaml"
+    sha256: "PLACEHOLDER_HASH"
+    critical: true
+    description: "DAO record configuration"
+    
+  - path: "SECURITY.md"
+    sha256: "PLACEHOLDER_HASH"
+    critical: true
+    description: "Security policy documentation"
+    
+  - path: "LICENSE"
+    sha256: "PLACEHOLDER_HASH"
+    critical: true
+    description: "Project license"
+
+# Bootstrap and deployment scripts
+scripts:
+  - path: "activate_control_plane.sh"
+    sha256: "PLACEHOLDER_HASH"
+    executable: true
+    
+  - path: "deploy-refinory.sh"
+    sha256: "PLACEHOLDER_HASH"
+    executable: true
+    
+  - path: "quick-deploy.sh"
+    sha256: "PLACEHOLDER_HASH"
+    executable: true
+
+# Verification metadata
+verification:
+  gpg_key_fingerprints:
+    # Add primary GPG key fingerprints here for auditor verification
+    # Example: "ABCD 1234 5678 90EF GHIJ KLMN OPQR STUV WXYZ 0000"
+    primary: "TO_BE_CONFIGURED"
+    signing: "TO_BE_CONFIGURED"
+    
+  hsm_guidance: |
+    For hardware-backed verification:
+    1. Ensure YubiKey FIPS or equivalent HSM is connected
+    2. GPG agent should be configured for hardware key operations
+    3. Offline master keys should remain air-gapped
+    
+  timestamp_authority: |
+    Optional: Use RFC 3161 timestamp authority for long-term proof
+    Recommended TSAs: DigiCert, GlobalSign, or internal CA
