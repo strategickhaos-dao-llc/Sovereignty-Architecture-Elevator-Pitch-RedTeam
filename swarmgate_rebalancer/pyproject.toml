@@ -62,7 +62,7 @@ select = ["E", "F", "I", "N", "W", "B", "C4", "UP"]
 ignore = ["E501"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["swarmgate_rebalancer/tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"

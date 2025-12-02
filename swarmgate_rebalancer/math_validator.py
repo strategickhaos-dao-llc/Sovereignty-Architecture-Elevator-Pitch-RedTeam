@@ -88,10 +88,6 @@ def validate_plan(
             )
 
     # 4. Recompute pre/post allocations and direction of trades
-    total_before = s.cash_usd + sum(s.positions_usd.values()) + s.paycheck_net_usd
-    # Subtract treasury transfer (leaves the system)
-    total_investable = total_before - plan.treasury_transfer_usd
-
     # Apply orders as if all execute exactly at quoted usd size
     post_positions = dict(s.positions_usd)
     cash_after = s.cash_usd + s.paycheck_net_usd - plan.treasury_transfer_usd
