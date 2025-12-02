@@ -280,12 +280,56 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
-## 📄 License & Support
+## 📄 License & Legal
 
-- **License**: MIT License - see [LICENSE](LICENSE) file
+This project is licensed under the **Strategickhaos Charitable Covenant License v1.0** (SCCL) - a novel legal framework that protects innovative AI governance while enabling beneficial research and ensuring charitable impact.
+
+### 🔓 What You CAN Do (Free Non-Commercial Use)
+
+✅ **Academic Research** - Studies, papers, and publications  
+✅ **Education** - Learn, teach, create tutorials  
+✅ **Personal Projects** - Experiment and build for learning  
+✅ **Nonprofits** - Deploy for charitable missions  
+✅ **Open Source** - Contribute improvements back  
+
+### 🔒 What Requires a Commercial License
+
+❌ Revenue-generating systems or services  
+❌ SaaS offerings or cloud services  
+❌ Corporate/proprietary product integration  
+❌ Competing products or frameworks  
+
+### 🌍 The Charitable Mission
+
+This software includes a **mandatory 7% charitable allocation mechanism** supporting:
+- Indigenous digital sovereignty initiatives
+- Open-source AI safety research
+- Climate adaptation programs
+- Digital infrastructure for underserved communities
+- Education and skills training
+
+**This mechanism is legally protected and cannot be removed or modified.**
+
+### 🛡️ Patent Rights
+
+**PATENT PENDING** - All patent rights are expressly reserved by Strategickhaos DAO LLC.
+
+### 💼 Commercial Licensing
+
+For commercial use, contact: **licensing@strategickhaos.org**
+
+**Full Details:**
+- Complete license: [LICENSE](LICENSE)
+- Quick reference: [README_LICENSE_SECTION.md](README_LICENSE_SECTION.md)
+- Deployment guide: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+- Code headers: [CODE_HEADERS.txt](CODE_HEADERS.txt)
+
+### 📞 Support & Resources
+
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
+- **Licensing**: licensing@strategickhaos.org
 
 ---
 

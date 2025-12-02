@@ -1,21 +1,423 @@
-MIT License
+STRATEGICKHAOS CHARITABLE COVENANT LICENSE v1.0
+===============================================
 
-Copyright (c) 2025 Strategickhaos
+Copyright (c) 2025 Strategickhaos DAO LLC
+All Rights Reserved
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+PATENT PENDING - All patent rights expressly reserved by Strategickhaos DAO LLC
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+---
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+PREAMBLE
+
+This License establishes a novel legal framework for software distribution that prioritizes charitable impact, ethical AI development, and sovereign digital infrastructure. The Strategickhaos Charitable Covenant License ("SCCL") is designed to prevent exploitative use while enabling beneficial research, education, and non-commercial applications.
+
+This software represents a breakthrough in AI governance architecture, sovereign infrastructure design, and the integration of charitable mechanisms into technological systems. By using this software, you acknowledge its innovative nature and agree to honor the charitable mission embedded within its design.
+
+---
+
+DEFINITIONS
+
+1. "Software" means the source code, object code, documentation, configuration files, data structures, algorithms, architectural designs, and all associated materials provided under this License.
+
+2. "Licensor" means Strategickhaos DAO LLC, a Wyoming Decentralized Autonomous Organization Limited Liability Company, registered under Wyoming Statute SF0068.
+
+3. "You" or "Licensee" means any individual, organization, corporation, or other legal entity exercising rights under this License.
+
+4. "Charitable Mechanism" means the mandatory 7% value allocation system embedded within the Software architecture, designed to ensure perpetual funding for designated charitable beneficiaries.
+
+5. "Commercial Use" means any use of the Software, in whole or in part, for the purpose of generating revenue, economic benefit, competitive advantage, or any form of monetary gain, including but not limited to:
+   - Incorporation into products or services offered for sale
+   - Use in revenue-generating infrastructure or operations
+   - Deployment in commercial cloud services or platforms
+   - Integration into proprietary software systems
+   - Use by for-profit corporations or their subsidiaries
+   - Consulting, training, or support services based on the Software
+
+6. "Non-Commercial Use" means use of the Software solely for:
+   - Academic research and education
+   - Personal learning and experimentation
+   - Nonprofit organization operations (excluding revenue-generating activities)
+   - Government research (excluding military applications)
+   - Open-source community development
+
+7. "Patent Rights" means all patents, patent applications (including provisional applications), and patent rights of any kind associated with the Software, including claims covering methods, systems, architectures, algorithms, and processes.
+
+8. "Derivative Work" means any work based upon or derived from the Software, including modifications, enhancements, translations, adaptations, or any other form in which the Software may be transformed or adapted.
+
+---
+
+GRANT OF LICENSE
+
+Subject to the terms and conditions of this License, Licensor hereby grants You a worldwide, royalty-free, non-exclusive, non-transferable license to:
+
+A. USE the Software for Non-Commercial purposes only
+B. REPRODUCE the Software solely for Non-Commercial purposes
+C. STUDY the Software's architecture, algorithms, and implementation
+D. CREATE Derivative Works solely for Non-Commercial purposes
+E. DISTRIBUTE copies of the Software, provided:
+   - This complete License is included with every copy
+   - No Commercial Use is enabled by the distribution
+   - The Charitable Mechanism remains intact and unmodified
+   - Attribution to Strategickhaos DAO LLC is clearly displayed
+
+---
+
+RESTRICTIONS AND PROHIBITIONS
+
+You SHALL NOT:
+
+1. COMMERCIAL EXPLOITATION
+   - Use the Software for any Commercial purpose without obtaining a separate commercial license from Licensor
+   - Remove, disable, modify, or circumvent the Charitable Mechanism
+   - Deploy the Software in any revenue-generating system or service
+   - Integrate the Software into proprietary or closed-source products
+   - Offer the Software as a service (SaaS) without written authorization
+
+2. PATENT CLAIMS
+   - Assert any patent claims against Licensor, the Software, or any user of the Software
+   - File patent applications covering inventions disclosed in or derived from the Software
+   - Grant patent licenses that conflict with the terms of this License
+   - Challenge the validity of Licensor's patent rights
+
+3. CHARITABLE MECHANISM INTERFERENCE
+   - Modify, remove, disable, or circumvent the 7% charitable allocation system
+   - Redirect charitable allocations to different beneficiaries
+   - Implement alternative mechanisms that reduce or eliminate charitable contributions
+   - Deploy versions of the Software that do not include the Charitable Mechanism
+
+4. UNAUTHORIZED TRANSFER
+   - Sublicense, rent, lease, loan, or transfer the Software to third parties
+   - Grant any rights not expressly provided in this License
+   - Create derivative licenses or license frameworks based on this License
+
+5. COMPETITIVE DEPLOYMENT
+   - Use the Software to develop competing systems or frameworks
+   - Reverse engineer patent-protected components for competitive advantage
+   - Extract or isolate patented algorithms for use in other systems
+
+6. MILITARY AND HARMFUL APPLICATIONS
+   - Deploy the Software for military purposes, weapons systems, or defense applications
+   - Use the Software to cause harm, discrimination, surveillance, or privacy violations
+   - Apply the Software to autonomous weapons or lethal autonomous systems
+   - Integrate the Software into systems designed to manipulate, deceive, or exploit
+
+---
+
+CHARITABLE COVENANT
+
+The Software includes a mandatory Charitable Mechanism that allocates 7% of all value flows to designated charitable beneficiaries. This mechanism is a core architectural feature and legal requirement of this License.
+
+BENEFICIARIES:
+The charitable allocations support:
+- Indigenous digital sovereignty initiatives
+- Open-source AI safety research
+- Climate adaptation and resilience programs
+- Digital infrastructure for underserved communities
+- Education and skills training in emerging technologies
+
+LEGAL REQUIREMENT:
+Any use of the Software, whether Non-Commercial or under a commercial license, MUST maintain the Charitable Mechanism in its entirety. Removal, modification, or circumvention constitutes a material breach of this License and triggers immediate termination of all rights granted herein.
+
+VERIFICATION:
+Licensor reserves the right to audit compliance with the Charitable Mechanism requirements. You agree to provide reasonable documentation demonstrating proper implementation and operation of the mechanism upon request.
+
+---
+
+PATENT RIGHTS RESERVATION
+
+ALL PATENT RIGHTS ARE EXPRESSLY RESERVED BY LICENSOR.
+
+This License does NOT grant:
+- Any patent license, express or implied
+- Any right to practice patented inventions
+- Any covenant not to sue for patent infringement
+- Any authorization to file patent applications on Licensor's inventions
+
+PATENT APPLICATIONS:
+Licensor has filed or intends to file patent applications covering:
+- The Charitable Mechanism architecture and implementation
+- AI governance and alignment frameworks
+- Sovereign infrastructure design patterns
+- Quantum-symbolic emulation methods
+- Distributed cognition architectures
+
+FUTURE PATENTS:
+This reservation extends to all future patents and patent applications filed by Licensor relating to the Software or technologies disclosed therein.
+
+PATENT LICENSING:
+Organizations interested in obtaining patent licenses should contact:
+  Strategickhaos DAO LLC
+  licensing@strategickhaos.org
+
+---
+
+ATTRIBUTION AND NOTICE REQUIREMENTS
+
+All copies of the Software, in source or binary form, must include:
+
+1. ATTRIBUTION NOTICE:
+   "Powered by Strategickhaos Sovereignty Architecture
+    Copyright (c) 2025 Strategickhaos DAO LLC
+    Licensed under the Strategickhaos Charitable Covenant License v1.0"
+
+2. LICENSE INCLUSION:
+   The complete text of this License must accompany every distribution
+
+3. MODIFICATION NOTICE:
+   Any modifications must be clearly marked with:
+   - Description of changes made
+   - Date of modification
+   - Identity of modifier
+   - Statement that changes are subject to this License
+
+4. CHARITABLE MECHANISM NOTICE:
+   Prominently display that the Software includes a mandatory 7% charitable allocation
+
+---
+
+COMMERCIAL LICENSING
+
+Organizations wishing to use the Software for Commercial purposes must obtain a separate commercial license from Licensor.
+
+COMMERCIAL LICENSE FEATURES:
+- Authorized Commercial deployment
+- Technical support and maintenance
+- Patent license grants (where applicable)
+- Priority access to updates and improvements
+- Consulting and integration assistance
+
+CONTACT FOR COMMERCIAL LICENSING:
+  Strategickhaos DAO LLC
+  Attn: Commercial Licensing Department
+  Email: licensing@strategickhaos.org
+  Web: https://strategickhaos.org/licensing
+
+PRICING:
+Commercial license pricing is structured to:
+- Support continued development
+- Fund charitable initiatives
+- Ensure sustainable operations
+- Provide accessible pricing for startups and small organizations
+
+---
+
+WARRANTY DISCLAIMER
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+
+LICENSOR DOES NOT WARRANT:
+- That the Software will be error-free or uninterrupted
+- That defects will be corrected
+- That the Software is free from harmful code
+- That the Software will meet your requirements
+- That results obtained from use will be accurate or reliable
+
+YOU ASSUME ALL RISKS ASSOCIATED WITH:
+- Use of the Software
+- Quality and performance
+- Accuracy of outputs
+- Compatibility with other systems
+- Compliance with applicable laws and regulations
+
+---
+
+LIMITATION OF LIABILITY
+
+IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY DAMAGES WHATSOEVER, INCLUDING:
+- Direct, indirect, incidental, special, or consequential damages
+- Loss of profits, revenue, data, or use
+- Business interruption or loss of business opportunity
+- Costs of procurement of substitute goods or services
+- Punitive or exemplary damages
+
+This limitation applies:
+- Whether arising in contract, tort (including negligence), strict liability, or otherwise
+- Even if Licensor has been advised of the possibility of such damages
+- To the maximum extent permitted by applicable law
+
+MAXIMUM LIABILITY:
+In jurisdictions that do not allow the exclusion or limitation of liability, Licensor's maximum aggregate liability shall not exceed $100 USD.
+
+---
+
+TERMINATION
+
+This License and all rights granted hereunder automatically terminate if You:
+
+1. BREACH CONDITIONS:
+   - Violate any term or condition of this License
+   - Use the Software for unauthorized Commercial purposes
+   - Modify or disable the Charitable Mechanism
+   - Assert patent claims against Licensor or the Software
+   - Fail to provide required attribution and notices
+
+2. PATENT LITIGATION:
+   - File any patent infringement lawsuit against Licensor
+   - Challenge the validity of Licensor's patents
+   - Assist third parties in patent litigation against Licensor
+
+3. EFFECT OF TERMINATION:
+   Upon termination:
+   - All rights granted under this License immediately cease
+   - You must cease all use of the Software
+   - You must destroy all copies in your possession or control
+   - You must delete all installed instances and Derivative Works
+   - Licensor's patent rights remain fully reserved and enforceable
+
+4. SURVIVAL:
+   The following sections survive termination:
+   - Patent Rights Reservation
+   - Warranty Disclaimer
+   - Limitation of Liability
+   - Indemnification
+   - Governing Law and Dispute Resolution
+
+---
+
+INDEMNIFICATION
+
+You agree to indemnify, defend, and hold harmless Licensor, its officers, directors, members, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising from:
+
+- Your use or misuse of the Software
+- Your violation of this License
+- Your violation of any third-party rights
+- Any Derivative Works You create or distribute
+- Your failure to maintain the Charitable Mechanism
+- Any Commercial Use without proper licensing
+
+---
+
+COMPLIANCE AND AUDIT
+
+1. RECORD KEEPING:
+   You agree to maintain accurate records of:
+   - All deployments of the Software
+   - Use cases and applications
+   - Modifications and Derivative Works
+   - Charitable Mechanism operation and allocations
+
+2. AUDIT RIGHTS:
+   Licensor reserves the right to:
+   - Audit Your use of the Software upon reasonable notice
+   - Request documentation demonstrating compliance
+   - Inspect systems and code to verify Charitable Mechanism integrity
+   - Review financial records related to Software use (for commercial licensees)
+
+3. COOPERATION:
+   You agree to cooperate fully with audit requests and provide:
+   - Access to relevant systems and documentation
+   - Technical assistance in verifying compliance
+   - Timely responses to inquiries
+   - Remediation of any identified violations
+
+---
+
+EXPORT COMPLIANCE
+
+The Software may be subject to export control laws and regulations. You agree to:
+- Comply with all applicable export and import laws
+- Not export or re-export the Software to prohibited countries or entities
+- Not use the Software for prohibited end uses
+- Obtain any required licenses or authorizations
+
+---
+
+GOVERNING LAW AND DISPUTE RESOLUTION
+
+1. GOVERNING LAW:
+   This License shall be governed by the laws of the State of Wyoming, United States, without regard to conflicts of law principles.
+
+2. JURISDICTION:
+   Any legal action or proceeding relating to this License shall be brought exclusively in the state or federal courts located in Wyoming.
+
+3. DISPUTE RESOLUTION:
+   Before initiating litigation, parties agree to:
+   - Engage in good faith negotiations for 30 days
+   - Consider mediation through a mutually agreed mediator
+   - Preserve confidentiality during dispute resolution
+
+4. ATTORNEY'S FEES:
+   In any legal proceeding to enforce this License, the prevailing party shall be entitled to recover reasonable attorney's fees and costs.
+
+---
+
+ENTIRE AGREEMENT
+
+This License constitutes the entire agreement between You and Licensor regarding the Software and supersedes all prior agreements, understandings, negotiations, and discussions, whether oral or written.
+
+MODIFICATIONS:
+This License may only be modified by:
+- Written agreement signed by both parties (for individual licensees)
+- Official updated License version published by Licensor (affecting future distributions)
+- Commercial license agreement (superseding this License for commercial use)
+
+NO WAIVER:
+Failure to enforce any provision of this License does not constitute a waiver of that provision or any other provision.
+
+SEVERABILITY:
+If any provision is found invalid or unenforceable, the remaining provisions remain in full force and effect.
+
+---
+
+CHARITABLE MISSION STATEMENT
+
+The Strategickhaos Charitable Covenant License embodies a vision of technology development that prioritizes:
+
+- EQUITY: Ensuring technological benefits reach underserved communities
+- SUSTAINABILITY: Building systems that support long-term ecological and social health
+- TRANSPARENCY: Maintaining open processes and accountable governance
+- EMPOWERMENT: Enabling individuals and communities to control their digital sovereignty
+- LOVE: Recognizing that technology serves humanity and the planet
+
+By using this Software, You join a movement toward ethical AI development and charitable technology deployment. The 7% mechanism is not merely a legal requirement—it is a commitment to ensuring that innovation benefits all of humanity, especially those most in need.
+
+---
+
+CONTACT INFORMATION
+
+For questions about this License, commercial licensing, patent rights, or charitable partnerships:
+
+  Strategickhaos DAO LLC
+  c/o Domenic Garza, Founder
+  Email: licensing@strategickhaos.org
+  Web: https://strategickhaos.org
+  Discord: https://discord.gg/strategickhaos
+
+---
+
+ACKNOWLEDGMENTS
+
+This License was crafted with input from legal experts, open-source advocates, AI researchers, and charitable organizations committed to ethical technology development.
+
+The Charitable Mechanism design draws inspiration from:
+- Indigenous governance systems emphasizing intergenerational responsibility
+- Cooperative economic models prioritizing community benefit
+- Effective altruism principles maximizing positive impact
+- Sovereign digital infrastructure movements
+
+---
+
+VERSION HISTORY
+
+v1.0 - November 22, 2025 - Initial Release
+- Established core license framework
+- Defined Charitable Mechanism requirements
+- Reserved patent rights
+- Set commercial licensing structure
+
+---
+
+LICENSE ACCEPTANCE
+
+BY USING, COPYING, MODIFYING, OR DISTRIBUTING THE SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS LICENSE, UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.
+
+IF YOU DO NOT AGREE TO THESE TERMS, YOU ARE NOT AUTHORIZED TO USE THE SOFTWARE AND MUST IMMEDIATELY CEASE ALL USE AND DELETE ALL COPIES.
+
+---
+
+END OF LICENSE
+
+Copyright (c) 2025 Strategickhaos DAO LLC
+All Rights Reserved
+Patent Pending
