@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 CONTEXT_NAME="${1:-}"
 
 if [[ -z "$CONTEXT_NAME" ]]; then
@@ -30,7 +34,13 @@ case "$CONTEXT_NAME" in
 
   homelab-k3s)
     echo ">> Setting context to homelab k3s using k8s/kubeconfig"
-    export KUBECONFIG="$(pwd)/k8s/kubeconfig"
+    KUBECONFIG_PATH="$REPO_ROOT/k8s/kubeconfig"
+    if [[ ! -f "$KUBECONFIG_PATH" ]]; then
+      echo "Error: kubeconfig not found at $KUBECONFIG_PATH"
+      echo "Please copy k8s/kubeconfig.example to k8s/kubeconfig and configure it."
+      exit 1
+    fi
+    export KUBECONFIG="$KUBECONFIG_PATH"
     kubectl config use-context homelab
     kubectl config set-context --current --namespace=legion-lab
     ;;

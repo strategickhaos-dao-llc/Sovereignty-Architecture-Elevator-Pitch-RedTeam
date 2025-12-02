@@ -5,7 +5,16 @@ NAMESPACE="${1:-legion-core}"
 
 echo ">> Deploying Legion services into namespace: $NAMESPACE"
 
-kubectl get ns "$NAMESPACE" >/dev/null 2>&1 || kubectl create namespace "$NAMESPACE"
+# Ensure namespace exists (create if missing and permitted)
+if kubectl get ns "$NAMESPACE" >/dev/null 2>&1; then
+  echo "   Namespace '$NAMESPACE' exists"
+elif kubectl create namespace "$NAMESPACE" 2>/dev/null; then
+  echo "   Created namespace '$NAMESPACE'"
+else
+  echo "Error: Namespace '$NAMESPACE' does not exist and could not be created."
+  echo "Please ensure the namespace exists or you have permission to create it."
+  exit 1
+fi
 
 # Minimal placeholder deployment: a tiny HTTP echo pod
 cat <<'EOF' | kubectl apply -n "$NAMESPACE" -f -
