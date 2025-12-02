@@ -12,6 +12,18 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### New to the Project?
+**Start with the Roadmap Framework** to organize your development velocity:
+```powershell
+# Interactive roadmap selection (A, B, or C)
+./roadmaps/START-HERE.ps1
+
+# Or read the guide first
+cat ROADMAP-GUIDE.md
+```
+📖 **[Choose Your Roadmap →](ROADMAP-GUIDE.md)** - Transform chaos into velocity
+
+### Deploy the System
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -271,6 +283,40 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🗺️ Roadmap Framework
+
+**Transform experimental velocity into unstoppable, scalable power.**
+
+This repository includes a comprehensive roadmap framework to help you organize and scale your development:
+
+### Three Progressive Paths
+
+| Roadmap | Focus | Time | Items |
+|---------|-------|------|-------|
+| **[A - Hyper-Practical](roadmaps/roadmap-a/README.md)** | Clean code, zero theory | 1 week | 30 |
+| **[B - Balanced](roadmaps/roadmap-b/README.md)** | Understanding + fixes | 4 weeks | 60 |
+| **[C - Full Map](roadmaps/roadmap-c/README.md)** | Complete scaffolding | 12 weeks | 100 |
+
+### Quick Start
+```powershell
+# Interactive selection
+./roadmaps/START-HERE.ps1
+
+# Run assessment (100 verification tests)
+./roadmaps/assessment/verify-assessment.ps1
+
+# Deploy to cluster
+./roadmaps/installers/install-to-cluster.ps1 -Roadmap A -AutoDiscover
+```
+
+📖 **[Read the Complete Roadmap Guide →](ROADMAP-GUIDE.md)**
+
+**Why use roadmaps?**
+- Scale from 5 to 500 nodes without rewrites
+- Enable heirs to continue your work
+- Pass enterprise compliance audits
+- Prevent architectural debt
 
 ## 👥 Community & Contributors
 
