@@ -175,6 +175,36 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # Invite-Only Web Application
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      WEB_PORT: 8090
+      SESSION_SECRET: ${SESSION_SECRET:-sovereignty-secret-change-in-production}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: strategickhaos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
+      REFINORY_URL: http://refinory-api:8085
+      BASE_URL: ${BASE_URL:-http://localhost:8090}
+    volumes:
+      - ./src:/app/src:ro
+      - ./public:/app/public:ro
+    ports:
+      - "8090:8090"
+    networks:
+      - strategickhaos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
   # JDK Workspace (OpenJDK 21/25 with Maven & Gradle)
   jdk-workspace:
     build:
@@ -214,4 +244,5 @@ services:
       - event-gateway
       - refinory-api
       - grafana
+      - web-app
     restart: unless-stopped
