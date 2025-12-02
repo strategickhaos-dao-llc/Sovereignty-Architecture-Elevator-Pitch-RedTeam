@@ -29,9 +29,9 @@ strategickhaos_identity_graph:
               purpose: "Sovereign AI architecture design / Legion OS development"
               status: active
 
-        - email: "<your>.com personal email"
+        - email: "[PERSONAL_EMAIL]"
           type: "personal Claude account"
-          workspace:
+          workspaces:
             - name: "Strategickhaos"
               type: "personal workspace"
               status: active
