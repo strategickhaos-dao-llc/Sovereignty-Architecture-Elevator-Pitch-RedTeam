@@ -1,0 +1,20 @@
+# Example Docker Container Manifest
+# Add your containers here - this is the source of truth
+
+version: '3.8'
+
+services:
+  example-app:
+    image: nginx:latest
+    container_name: example-app
+    ports:
+      - "8080:80"
+    environment:
+      - ENV=production
+    labels:
+      app: example
+      managed-by: container-refinery
+    restart: unless-stopped
+    
+  # Add more containers as needed
+  # Each container defined here will be enforced by the refinery
