@@ -476,6 +476,7 @@ class ContradictionResolver:
         self._hypotheses: Dict[str, Hypothesis] = {}
         self._evidence_log: List[Dict[str, Any]] = []
         self._resolution_history: List[Tuple[str, str]] = []
+        self._hypothesis_counter: int = 0
 
     def generate_hypotheses(
         self,
@@ -500,8 +501,9 @@ class ContradictionResolver:
         # In production, this would use LLM-based reasoning
 
         if any("error" in s.lower() or "fail" in s.lower() for s in symptoms):
+            self._hypothesis_counter += 1
             h = Hypothesis(
-                id=f"hyp_{len(self._hypotheses)}",
+                id=f"hyp_{self._hypothesis_counter}",
                 statement="System configuration error causing failures",
                 confidence=0.6,
                 supporting_evidence=["Error patterns detected"],
@@ -510,8 +512,9 @@ class ContradictionResolver:
             hypotheses.append(h)
 
         if any("slow" in s.lower() or "timeout" in s.lower() for s in symptoms):
+            self._hypothesis_counter += 1
             h = Hypothesis(
-                id=f"hyp_{len(self._hypotheses) + 1}",
+                id=f"hyp_{self._hypothesis_counter}",
                 statement="Resource exhaustion causing performance degradation",
                 confidence=0.5,
                 supporting_evidence=["Performance symptoms detected"],
@@ -520,8 +523,9 @@ class ContradictionResolver:
             hypotheses.append(h)
 
         if any("inconsistent" in s.lower() or "random" in s.lower() for s in symptoms):
+            self._hypothesis_counter += 1
             h = Hypothesis(
-                id=f"hyp_{len(self._hypotheses) + 2}",
+                id=f"hyp_{self._hypothesis_counter}",
                 statement="Race condition or timing-dependent behavior",
                 confidence=0.4,
                 supporting_evidence=["Non-deterministic symptoms detected"],
@@ -531,8 +535,9 @@ class ContradictionResolver:
 
         # Default hypothesis if no specific patterns match
         if not hypotheses:
+            self._hypothesis_counter += 1
             h = Hypothesis(
-                id=f"hyp_{len(self._hypotheses)}",
+                id=f"hyp_{self._hypothesis_counter}",
                 statement="Unknown condition requiring further investigation",
                 confidence=0.3,
                 supporting_evidence=symptoms,
@@ -1008,6 +1013,20 @@ class ExternalizationAdapter:
             lines.append(f"{path}:{line}:{col}: {msg}")
         return "\n".join(lines)
 
+    def _format_list(self, items: List[str]) -> str:
+        """
+        Format a list of items as markdown bullet points.
+
+        Args:
+            items: List of strings to format
+
+        Returns:
+            Formatted string with newline-separated bullet points
+        """
+        if not items:
+            return ""
+        return "\n".join(f"- {item}" for item in items)
+
     def _format_pattern_markdown(self, pattern: Pattern) -> str:
         """Format pattern as Markdown."""
         return f"""# Pattern: {pattern.name}
@@ -1029,7 +1048,7 @@ class ExternalizationAdapter:
 
 ## Related Patterns
 
-{chr(10).join(f"- {rp}" for rp in pattern.related_patterns) or "None"}
+{self._format_list(pattern.related_patterns) or "None"}
 
 ## Metadata
 
@@ -1066,26 +1085,30 @@ class ExternalizationAdapter:
 
 ## Constraints
 
-{chr(10).join(f"- {c}" for c in schema.constraints) or "None"}
+{self._format_list(schema.constraints) or "None"}
 """
 
     def _format_diagnosis_markdown(self, diagnosis: Dict[str, Any]) -> str:
         """Format diagnosis as Markdown."""
         symptoms = "\n".join(f"- {s}" for s in diagnosis.get("symptoms", []))
 
-        hypotheses = "\n".join(
-            f"""### {h.get('statement', 'Unknown')}
+        hypotheses_parts = []
+        for h in diagnosis.get("hypotheses", []):
+            supporting = self._format_list(h.get("supporting_evidence", [])) or "None"
+            contradicting = self._format_list(h.get("contradicting_evidence", [])) or "None"
+            hypotheses_parts.append(
+                f"""### {h.get('statement', 'Unknown')}
 
 **Confidence:** {h.get('confidence', 0):.2f}
 
 **Supporting Evidence:**
-{chr(10).join(f"- {e}" for e in h.get('supporting_evidence', [])) or "None"}
+{supporting}
 
 **Contradicting Evidence:**
-{chr(10).join(f"- {e}" for e in h.get('contradicting_evidence', [])) or "None"}
+{contradicting}
 """
-            for h in diagnosis.get("hypotheses", [])
-        )
+            )
+        hypotheses = "\n".join(hypotheses_parts)
 
         tests = "\n".join(f"- {t}" for t in diagnosis.get("recommended_tests", []))
 
