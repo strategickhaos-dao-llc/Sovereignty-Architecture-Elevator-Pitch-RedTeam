@@ -1,0 +1,195 @@
+# Sovereign Research Browser - Domain Whitelist Configuration
+# Version: 1.0
+# Last Updated: 2025-11-22
+# 
+# This whitelist contains 100+ legally-clean, research-friendly domains
+# from government portals, open data sources, and documentation sites
+# that explicitly allow automated access.
+
+metadata:
+  version: "1.0"
+  description: "Sovereign Research Browser Whitelist - Government and Open Data Sources"
+  last_updated: "2025-11-22T00:00:00Z"
+  total_domains: 112
+  categories:
+    - us_federal_gov
+    - international_gov
+    - open_data_orgs
+    - documentation_sites
+    - research_science
+
+allowed_domains:
+  # ========================================
+  # US Federal Government (.gov) - 50+ domains
+  # ========================================
+  - data.gov
+  - api.data.gov
+  - catalog.data.gov
+  - api.nasa.gov
+  - data.nasa.gov
+  - api.census.gov
+  - www.census.gov
+  - www.loc.gov
+  - id.loc.gov
+  - chroniclingamerica.loc.gov
+  - api.weather.gov
+  - open.nasa.gov
+  - api.fiscaldata.treasury.gov
+  - api.regulations.gov
+  - api.usaspending.gov
+  - api.gsa.gov
+  - open.gsa.gov
+  - analytics.usa.gov
+  - www.fedramp.gov
+  - api.epa.gov
+  - www.epa.gov
+  - api.bls.gov
+  - www.bls.gov
+  - api.dol.gov
+  - healthdata.gov
+  - www.fda.gov
+  - api.fcc.gov
+  - earthdata.nasa.gov
+  - www.usgs.gov
+  - earthexplorer.usgs.gov
+  - www.noaa.gov
+  - api.tidesandcurrents.noaa.gov
+  - www.energy.gov
+
+  # ========================================
+  # International Government Portals
+  # ========================================
+  - data.gov.uk
+  - www.data.gov.uk
+  - data.europa.eu
+  - opendata.europa.eu
+  - data.gov.in
+  - www.data.gov.in
+  - open.canada.ca
+  - ouvert.canada.ca
+  - dados.gov.br
+  - data.gov.au
+  - data.gouv.fr
+  - www.govdata.de
+  - datos.gob.es
+  - dati.gov.it
+  - opendata.swiss
+  - data.govt.nz
+  - www.data.go.kr
+  - data.gov.sg
+  - www.odp.gov.hk
+  - data.gov.il
+
+  # ========================================
+  # Major Open Data / Academic / Standards Organizations
+  # ========================================
+  - dataportals.org
+  - opendatainception.io
+  - www.worldbank.org
+  - data.worldbank.org
+  - data.worldpop.org
+  - data.un.org
+  - unstats.un.org
+  - data.oecd.org
+  - www.who.int
+  - www.fao.org
+  - www.imf.org
+  - data.imf.org
+  - www.wto.org
+  - stats.wto.org
+  - www.rfc-editor.org
+  - www.ietf.org
+  - schema.org
+  - www.w3.org
+  - specs.openstack.org
+  - kubernetes.io
+
+  # ========================================
+  # Documentation / Standards Sites (bot-friendly)
+  # ========================================
+  - docs.python.org
+  - developer.mozilla.org
+  - docs.oracle.com
+  - docs.microsoft.com
+  - learn.microsoft.com
+  - developer.apple.com
+  - docs.aws.amazon.com
+  - cloud.google.com
+  - debian.org
+  - ubuntu.com
+  - nginx.org
+  - httpd.apache.org
+  - postgresql.org
+  - www.mongodb.com
+  - redis.io
+  - graphql.org
+  - openapi.org
+  - spec.openapis.org
+
+  # ========================================
+  # Pure Research / Open Science
+  # ========================================
+  - arxiv.org
+  - pubmed.ncbi.nlm.nih.gov
+  - www.ncbi.nlm.nih.gov
+  - zenodo.org
+  - figshare.com
+  - osf.io
+  - datadryad.org
+  - www.pangaea.de
+  - www.re3data.org
+  - www.nature.com
+  - www.sciencedirect.com
+
+# ========================================
+# Example API Endpoints by Category
+# ========================================
+example_endpoints:
+  nasa_openapi:
+    url: "https://api.nasa.gov/openapi.yaml"
+    description: "NASA OpenAPI specification in YAML"
+    format: "yaml"
+  
+  loc_collections:
+    url: "https://www.loc.gov/collections/?fo=json"
+    description: "Library of Congress collections in JSON"
+    format: "json"
+  
+  data_gov_catalog:
+    url: "https://catalog.data.gov/api/3/action/package_search?q=climate"
+    description: "Data.gov catalog API search"
+    format: "json"
+  
+  uk_data_gov:
+    url: "https://data.gov.uk/api/3/action/package_list"
+    description: "UK data.gov.uk package list"
+    format: "json"
+  
+  eu_data_portal:
+    url: "https://data.europa.eu/api/hub/search/datasets?limit=10"
+    description: "EU data portal search API"
+    format: "json"
+  
+  worldbank_indicators:
+    url: "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json"
+    description: "World Bank population indicators"
+    format: "json"
+
+# ========================================
+# Usage Guidelines
+# ========================================
+usage_guidelines:
+  rate_limiting: "1 second minimum between requests to same domain"
+  robots_txt: "Always respect robots.txt unless explicitly disabled"
+  user_agent: "Identify as Strategickhaos-Sovereign-Browser/1.0"
+  acceptable_formats:
+    - "application/json"
+    - "application/yaml"
+    - "text/html"
+    - "application/xml"
+  legal_compliance:
+    - "All domains are public sector or standards bodies"
+    - "Programmatic access explicitly encouraged or permitted"
+    - "No authentication required"
+    - "No login walls or paywalls"
+    - "100% research-friendly and legally clean"
