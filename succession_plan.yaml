@@ -1,0 +1,662 @@
+# Succession Plan - Key Holder Management
+# Sovereignty Architecture - DAO LLC
+# Version: 1.0
+# Addresses Failure Modes: #27 (keys lost), #28 (GPG compromise)
+
+version: "1.0"
+last_updated: "2025-11-23"
+next_review: "2026-02-23"  # Quarterly review
+
+# =============================================================================
+# CRITICAL FAILURE MODES ADDRESSED
+# =============================================================================
+
+failure_modes:
+  item_27: "You die or disappear → no succession plan → keys lost, DAO frozen forever"
+  item_28: "Your GPG key gets compromised → attacker pushes malicious commit"
+
+# =============================================================================
+# MULTI-SIGNATURE WALLET CONFIGURATION (3-of-5)
+# =============================================================================
+
+multisig_wallet:
+  type: "Gnosis Safe"
+  network: "Ethereum Mainnet"
+  address: "TBD"  # Will be set after deployment
+  threshold: 3  # Signatures required
+  total_signers: 5
+  
+  signers:
+    - id: "signer_1"
+      role: "Managing Member"
+      name: "Domenic Garza"
+      email: "contact@sovereigntyarchitecture.org"
+      wallet_address: "TBD"
+      hardware_wallet: "Ledger Nano X"
+      
+      primary_key:
+        type: "Hardware Wallet"
+        device: "Ledger Nano X"
+        storage: "Personal possession"
+        last_verified: "2025-11-23"
+      
+      backup_key:
+        type: "Encrypted Seed Phrase"
+        storage: "Bank Safe Deposit Box"
+        location: "Wyoming National Bank, Cheyenne WY"
+        box_number: "TBD"
+        co_signer: "Trusted Family Member"
+      
+      succession_plan:
+        trigger: "Death, incapacity, or 90 days unreachable"
+        successor: "Designated in will"
+        successor_name: "TBD"
+        successor_contact: "TBD"
+        documentation: "Will with specific crypto asset instructions"
+        attorney_holds_copy: true
+        attorney_name: "TBD"
+        attorney_firm: "TBD"
+      
+      emergency_access:
+        dead_mans_switch: true
+        check_in_frequency: "quarterly"
+        next_check_in: "2026-02-23"
+        missed_check_ins: 0
+        alert_after_missed: 2
+    
+    - id: "signer_2"
+      role: "Technical Lead"
+      name: "TBD"
+      email: "TBD"
+      wallet_address: "TBD"
+      hardware_wallet: "Trezor Model T"
+      
+      primary_key:
+        type: "Hardware Wallet"
+        device: "Trezor Model T"
+        storage: "Personal possession"
+        last_verified: null
+      
+      backup_key:
+        type: "Encrypted Seed Phrase"
+        storage: "Attorney Vault"
+        attorney_firm: "TBD"
+        attorney_contact: "TBD"
+      
+      succession_plan:
+        trigger: "Death, incapacity, resignation, or 90 days unreachable"
+        successor: "Named in employment agreement"
+        successor_name: "TBD"
+        successor_contact: "TBD"
+        documentation: "Technical succession document"
+      
+      emergency_access:
+        dead_mans_switch: true
+        check_in_frequency: "quarterly"
+        next_check_in: null
+        missed_check_ins: 0
+        alert_after_missed: 2
+    
+    - id: "signer_3"
+      role: "Legal Counsel Representative"
+      name: "TBD"
+      firm: "TBD"
+      email: "TBD"
+      wallet_address: "TBD"
+      hardware_wallet: "Ledger Nano S Plus"
+      
+      primary_key:
+        type: "Firm-Controlled Hardware Wallet"
+        device: "Ledger Nano S Plus"
+        storage: "Law firm secure vault"
+        custodian: "Designated attorney"
+      
+      backup_key:
+        type: "Encrypted Seed Phrase"
+        storage: "Firm document management system"
+        backup_location: "Off-site firm backup"
+      
+      succession_plan:
+        trigger: "Firm dissolution, attorney departure, or 90 days unreachable"
+        successor: "Successor attorney at firm"
+        successor_name: "Per firm succession plan"
+        documentation: "Firm continuity plan"
+      
+      emergency_access:
+        dead_mans_switch: true
+        check_in_frequency: "quarterly"
+        firm_continuity_plan: true
+    
+    - id: "signer_4"
+      role: "Independent Board Member #1"
+      name: "TBD"
+      email: "TBD"
+      wallet_address: "TBD"
+      hardware_wallet: "Ledger Nano X"
+      
+      primary_key:
+        type: "Hardware Wallet"
+        device: "Ledger Nano X"
+        storage: "Personal possession"
+        last_verified: null
+      
+      backup_key:
+        type: "Encrypted Seed Phrase"
+        storage: "Personal trust"
+        trustee: "Family trust"
+        trustee_contact: "TBD"
+      
+      succession_plan:
+        trigger: "Death, incapacity, resignation, or 90 days unreachable"
+        successor: "Named in trust documents"
+        successor_name: "Per trust beneficiaries"
+        documentation: "Trust succession plan"
+      
+      emergency_access:
+        dead_mans_switch: true
+        check_in_frequency: "quarterly"
+    
+    - id: "signer_5"
+      role: "Independent Board Member #2"
+      name: "TBD"
+      email: "TBD"
+      wallet_address: "TBD"
+      hardware_wallet: "Trezor Model T"
+      
+      primary_key:
+        type: "Hardware Wallet"
+        device: "Trezor Model T"
+        storage: "Personal possession"
+        last_verified: null
+      
+      backup_key:
+        type: "Encrypted Seed Phrase"
+        storage: "Family trust with instructions"
+        trustee: "TBD"
+        trustee_contact: "TBD"
+      
+      succession_plan:
+        trigger: "Death, incapacity, resignation, or 90 days unreachable"
+        successor: "Trust beneficiaries per trust documents"
+        successor_name: "Per trust"
+        documentation: "Trust documents + crypto instructions"
+      
+      emergency_access:
+        dead_mans_switch: true
+        check_in_frequency: "quarterly"
+
+# =============================================================================
+# SUCCESSION TRIGGERS & PROCEDURES
+# =============================================================================
+
+succession_triggers:
+  automatic_triggers:
+    - type: "death"
+      verification_required: "Death certificate"
+      timeline: "Upon receipt of death certificate"
+      notification_to: ["all_signers", "attorney", "backup"]
+    
+    - type: "incapacity"
+      verification_required: "Medical determination or court order"
+      timeline: "Upon receipt of medical documentation"
+      notification_to: ["all_signers", "attorney", "backup"]
+    
+    - type: "resignation"
+      verification_required: "Written resignation notice"
+      timeline: "30 days notice period"
+      notification_to: ["all_signers", "replacement"]
+    
+    - type: "unresponsive"
+      verification_required: "90 days without response to communications"
+      timeline: "After 90 days + 2 missed quarterly check-ins"
+      notification_to: ["all_signers", "attorney", "backup"]
+    
+    - type: "key_compromise"
+      verification_required: "Security incident report"
+      timeline: "Immediate (within 24 hours)"
+      notification_to: ["all_signers", "security_team"]
+
+succession_procedure:
+  step_1_notification:
+    description: "Designated party notifies remaining key holders"
+    responsible: "Successor, attorney, or any remaining signer"
+    timeline: "Within 72 hours of trigger event"
+    method: ["email", "phone", "registered_mail"]
+    
+    notification_content:
+      - "Identity of affected key holder"
+      - "Nature of trigger event (death, incapacity, etc.)"
+      - "Supporting documentation"
+      - "Proposed successor"
+      - "Timeline for key transition"
+  
+  step_2_verification:
+    description: "Confirm succession trigger with documentation"
+    responsible: "Remaining key holders + attorney"
+    timeline: "Within 7 days of notification"
+    required_evidence:
+      death: "Death certificate + obituary"
+      incapacity: "Medical records + court order (if applicable)"
+      resignation: "Signed resignation letter"
+      unresponsive: "Communication logs showing 90+ days"
+      key_compromise: "Security incident report + forensics"
+  
+  step_3_key_revocation:
+    description: "Remove compromised/departed key holder from multisig"
+    responsible: "3 of 4 remaining signers"
+    timeline: "Within 14 days of verification"
+    technical_process:
+      - "Prepare multisig transaction to remove old signer"
+      - "Obtain 3 signatures from remaining signers"
+      - "Execute transaction on-chain"
+      - "Verify removal in multisig settings"
+      - "Document transaction hash and timestamp"
+  
+  step_4_successor_onboarding:
+    description: "Add new key holder to multisig"
+    responsible: "3 of 4 remaining signers"
+    timeline: "Within 21 days of verification"
+    technical_process:
+      - "Verify successor identity and authority"
+      - "Successor obtains hardware wallet"
+      - "Successor generates and secures seed phrase"
+      - "Successor provides wallet address"
+      - "Prepare multisig transaction to add new signer"
+      - "Obtain 3 signatures from current signers"
+      - "Execute transaction on-chain"
+      - "Test new 3-of-5 configuration"
+  
+  step_5_documentation:
+    description: "Update all records with new key holder information"
+    responsible: "Managing member + attorney"
+    timeline: "Within 30 days of succession completion"
+    updates_required:
+      - "succession_plan.yaml (this file)"
+      - "DAO operating agreement (if needed)"
+      - "Insurance policies"
+      - "Bank records"
+      - "Corporate records"
+      - "Attorney files"
+  
+  step_6_testing:
+    description: "Verify new multisig configuration works correctly"
+    responsible: "All signers"
+    timeline: "Immediately after successor added"
+    tests:
+      - "Dummy transaction requiring 3-of-5 signatures"
+      - "Verify all signers can sign independently"
+      - "Confirm time-lock functionality"
+      - "Test governance action queue and execution"
+
+# =============================================================================
+# DEAD MAN'S SWITCH MONITORING
+# =============================================================================
+
+dead_mans_switch:
+  enabled: true
+  check_in_frequency: "quarterly"  # Every 3 months
+  
+  check_in_schedule:
+    q1: "February 23"
+    q2: "May 23"
+    q3: "August 23"
+    q4: "November 23"
+  
+  check_in_methods:
+    - "Email response to automated message"
+    - "GitHub activity (commit or issue comment)"
+    - "Multisig transaction participation"
+    - "Scheduled video call attendance"
+  
+  missed_check_in_protocol:
+    first_miss:
+      action: "Send reminder email"
+      escalation_time: "7 days"
+      responsible: "Automated system"
+    
+    second_miss:
+      action: "Send urgent notification to all signers + backup contacts"
+      escalation_time: "14 days"
+      responsible: "Automated system + attorney"
+    
+    third_miss:
+      action: "Trigger succession review procedure"
+      escalation_time: "30 days"
+      responsible: "Remaining signers + attorney"
+      note: "Presumed unresponsive/incapacitated after 3 missed check-ins (9 months)"
+  
+  automation:
+    system: "GitHub Actions + Zapier + Email"
+    notification_channels:
+      - email
+      - sms
+      - slack
+      - discord
+    
+    github_actions_workflow: ".github/workflows/succession-monitoring.yml"
+    status: "pending_creation"
+
+# =============================================================================
+# GPG KEY MANAGEMENT (Item #28)
+# =============================================================================
+
+gpg_keys:
+  # NOTE: All TBD/null values must be populated before system goes live
+  # Validation system should check for populated fields before production use
+  primary_key:
+    key_id: "0x137SOVEREIGN"  # REPLACE WITH ACTUAL - must be real GPG key ID
+    fingerprint: "TBD"  # Full 40-character fingerprint - must be populated
+    owner: "Domenic Garza"
+    email: "contact@sovereigntyarchitecture.org"
+    created: "TBD"  # Key creation date - must be recorded
+    expires: "TBD"  # Recommend 2-year validity - must be set
+    
+    storage:
+      primary: "YubiKey 5 NFC"
+      backup: "Encrypted paper backup in safe deposit box"
+      revocation_certificate: "Stored separately in attorney vault"
+    
+    usage:
+      signing: true
+      encryption: true
+      authentication: true
+    
+    security_measures:
+      - "Generated on air-gapped computer"
+      - "Strong passphrase (25+ characters)"
+      - "Master key kept offline (subkeys on YubiKey)"
+      - "Regular key rotation (every 2 years)"
+      - "Signed by other key holders (web of trust)"
+  
+  key_compromise_response:
+    indicators:
+      - "Unexpected commits with your signature"
+      - "Key appears on unauthorized systems"
+      - "Unusual GPG activity in logs"
+      - "Hardware token reported lost/stolen"
+      - "Suspicious emails signed with your key"
+    
+    immediate_actions:
+      priority_1_within_1_hour:
+        - action: "Import and publish revocation certificate"
+          command: "gpg --import revocation-certificate.asc && gpg --send-keys [KEY-ID]"
+          responsible: "Key owner or designated backup"
+        
+        - action: "Notify all team members and collaborators"
+          method: ["email", "slack", "github_issue"]
+          responsible: "Key owner or security lead"
+        
+        - action: "Upload revocation to GitHub"
+          location: "GitHub GPG key settings"
+          responsible: "Key owner"
+        
+        - action: "Upload revocation to key servers"
+          servers: ["keys.openpgp.org", "pgp.mit.edu", "keyserver.ubuntu.com"]
+          responsible: "Key owner or designated backup"
+      
+      priority_2_within_24_hours:
+        - action: "Generate new GPG key"
+          requirements:
+            - "New passphrase (different from compromised key)"
+            - "New hardware token (if token was compromised)"
+            - "Air-gapped generation"
+          responsible: "Key owner"
+        
+        - action: "Audit all commits signed with compromised key"
+          method: "git log --show-signature"
+          focus: "Commits after suspected compromise time"
+          responsible: "Security team"
+        
+        - action: "Revert any malicious commits"
+          process: "git revert [commit-hash]"
+          verification: "Code review by 2+ team members"
+          responsible: "Security team"
+        
+        - action: "Update GPG key in all services"
+          services:
+            - "GitHub"
+            - "GitLab"
+            - "Package registries (npm, PyPI, etc.)"
+            - "Docker image signing"
+            - "CI/CD systems"
+          responsible: "Key owner + DevOps"
+      
+      priority_3_within_1_week:
+        - action: "Incident report"
+          contents:
+            - "Timeline of compromise"
+            - "How compromise occurred"
+            - "Impact assessment"
+            - "Commits affected"
+            - "Services affected"
+            - "Remediation actions taken"
+          distribution: ["all_team_members", "attorney", "security_team"]
+          responsible: "Security lead"
+        
+        - action: "Root cause analysis"
+          deliverable: "Written report with recommendations"
+          responsible: "Security team"
+        
+        - action: "Update security procedures"
+          based_on: "Root cause analysis findings"
+          responsible: "Security lead + Managing member"
+        
+        - action: "Team security training"
+          topics: ["GPG key security", "Compromise detection", "Response procedures"]
+          responsible: "Security lead"
+    
+    post_incident:
+      - "Review and update this succession plan"
+      - "Test key revocation and generation procedures"
+      - "Enhance monitoring for future compromises"
+      - "Consider additional hardware token requirements"
+      - "Update insurance coverage (cyber insurance)"
+
+# =============================================================================
+# BACKUP & RECOVERY PROCEDURES
+# =============================================================================
+
+backup_procedures:
+  hardware_wallets:
+    recommended_devices:
+      - "Ledger Nano X"
+      - "Ledger Nano S Plus"
+      - "Trezor Model T"
+      - "Trezor Model One"
+    
+    setup_checklist:
+      - "Purchase from official manufacturer website only"
+      - "Verify device authenticity (security seals, firmware)"
+      - "Initialize device on air-gapped computer (recommended)"
+      - "Generate seed phrase (device-generated, never online)"
+      - "Write seed phrase on paper or metal backup"
+      - "Verify seed phrase by entering it again"
+      - "Store seed phrase in secure location"
+      - "Enable PIN and passphrase protection"
+      - "Test recovery before storing significant funds"
+    
+    seed_phrase_storage:
+      primary:
+        method: "Written on paper + laminated"
+        location: "Bank safe deposit box"
+        access: "Key holder only"
+      
+      backup:
+        method: "Encrypted digital backup"
+        location: "Attorney vault"
+        access: "Attorney + key holder"
+      
+      never_do:
+        - "Store seed phrase digitally (unencrypted)"
+        - "Take photo of seed phrase"
+        - "Email seed phrase"
+        - "Store in cloud services (Dropbox, Google Drive, etc.)"
+        - "Share with anyone (even family, unless designated successor)"
+  
+  gpg_keys:
+    backup_methods:
+      primary:
+        method: "YubiKey hardware token"
+        storage: "Personal possession"
+      
+      backup:
+        method: "Encrypted paper backup (BIP39-style)"
+        storage: "Safe deposit box"
+      
+      recovery:
+        method: "Revocation certificate"
+        storage: "Attorney vault (separate location)"
+    
+    recovery_testing:
+      frequency: "annually"
+      next_test: "2026-11-23"
+      procedure:
+        - "Attempt to restore key from backup"
+        - "Verify key functionality"
+        - "Test signing and encryption"
+        - "Confirm revocation certificate works"
+      responsible: "Each key holder"
+
+# =============================================================================
+# INSURANCE & LEGAL PROTECTIONS
+# =============================================================================
+
+insurance:
+  cyber_insurance:
+    provider: "TBD"
+    coverage: "Key loss, theft, or compromise"
+    limit: "$1,000,000"
+    status: "pending"
+  
+  directors_and_officers:
+    provider: "TBD"
+    coverage: "DAO governance decisions"
+    limit: "$2,000,000"
+    status: "pending"
+  
+  key_holder_life_insurance:
+    recommended: true
+    purpose: "Fund succession transition and key recovery efforts"
+    beneficiary: "DAO LLC"
+
+legal_protections:
+  operating_agreement:
+    succession_provisions: true
+    key_holder_indemnification: true
+    dispute_resolution: "Arbitration"
+  
+  key_holder_agreements:
+    signed_by_all: false
+    includes:
+      - "Duties and responsibilities"
+      - "Key security requirements"
+      - "Succession obligations"
+      - "Indemnification"
+      - "Confidentiality"
+    status: "pending"
+
+# =============================================================================
+# EMERGENCY CONTACTS
+# =============================================================================
+
+emergency_contacts:
+  primary:
+    role: "Managing Member"
+    name: "Domenic Garza"
+    phone: "TBD"
+    email: "contact@sovereigntyarchitecture.org"
+    signal: "TBD"
+  
+  backup:
+    role: "TBD"
+    name: "TBD"
+    phone: "TBD"
+    email: "TBD"
+  
+  attorney:
+    firm: "TBD"
+    attorney: "TBD"
+    phone: "TBD"
+    email: "TBD"
+    emergency_phone: "TBD"
+  
+  security_team:
+    lead: "TBD"
+    phone: "TBD"
+    email: "TBD"
+    on_call_24_7: "TBD"
+
+# =============================================================================
+# TESTING & REVIEW SCHEDULE
+# =============================================================================
+
+testing_schedule:
+  succession_drill:
+    frequency: "annual"
+    next_test: "2026-11-23"
+    scenario: "Simulate key holder unavailability"
+    participants: ["all_signers", "attorney", "backups"]
+    success_criteria:
+      - "Succession triggered within 72 hours"
+      - "Key revocation completed within 14 days"
+      - "New key holder onboarded within 21 days"
+      - "All documentation updated"
+  
+  key_recovery_test:
+    frequency: "annual"
+    next_test: "2026-11-23"
+    scenario: "Restore keys from backup"
+    participants: ["all_key_holders"]
+    success_criteria:
+      - "Successful key restoration"
+      - "Verified functionality"
+      - "No data loss"
+  
+  dead_mans_switch_test:
+    frequency: "quarterly"
+    next_test: "2026-02-23"
+    scenario: "Missed check-in simulation"
+    participants: ["all_key_holders", "automated_system"]
+    success_criteria:
+      - "Automated notifications sent"
+      - "Escalation procedure followed"
+      - "All contacts received alerts"
+
+review_schedule:
+  quarterly_review:
+    focus:
+      - "Key holder status updates"
+      - "Contact information verification"
+      - "Dead man's switch check-ins"
+      - "Security incident review"
+    next_review: "2026-02-23"
+  
+  annual_comprehensive_review:
+    focus:
+      - "Complete succession plan review"
+      - "Attorney review of legal documents"
+      - "Update for regulatory changes"
+      - "Technology updates (new hardware wallets, etc.)"
+      - "Insurance policy review"
+    next_review: "2026-11-23"
+
+# =============================================================================
+# AUDIT LOG
+# =============================================================================
+
+audit_log:
+  - timestamp: "2025-11-23T05:31:00Z"
+    action: "succession_plan_created"
+    user: "Domenic Garza"
+    version: "1.0"
+    notes: "Initial succession plan created to address failure modes #27 and #28"
+
+# =============================================================================
+# VERSION HISTORY
+# =============================================================================
+
+version_history:
+  - version: "1.0"
+    date: "2025-11-23"
+    changes: "Initial creation"
+    author: "Domenic Garza"

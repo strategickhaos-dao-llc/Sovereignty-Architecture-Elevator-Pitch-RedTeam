@@ -1,0 +1,349 @@
+name: Patent Deadline Monitoring
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC (critical deadline monitoring)
+    - cron: '0 9 * * *'
+  workflow_dispatch:  # Allow manual triggering
+  push:
+    paths:
+      - 'patent_filing_tracker.yaml'
+      - '.github/workflows/patent-monitoring.yml'
+
+jobs:
+  monitor-deadlines:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyyaml python-dateutil
+      
+      - name: Check patent deadlines
+        id: check_deadlines
+        run: |
+          python3 << 'EOF'
+          import yaml
+          import datetime
+          import sys
+          from dateutil.relativedelta import relativedelta
+          
+          # Load patent tracker
+          with open('patent_filing_tracker.yaml', 'r') as f:
+              tracker = yaml.safe_load(f)
+          
+          def check_deadline(deadline_date, name, urgency_days):
+              if deadline_date is None:
+                  return None
+              
+              try:
+                  deadline = datetime.datetime.fromisoformat(deadline_date.replace('Z', '+00:00'))
+              except (ValueError, TypeError, AttributeError):
+                  return None
+              
+              today = datetime.datetime.now(datetime.timezone.utc)
+              days_until = (deadline - today).days
+              
+              if days_until <= urgency_days:
+                  return {
+                      'name': name,
+                      'deadline': deadline_date,
+                      'days_until': days_until,
+                      'urgent': days_until <= 7
+                  }
+              return None
+          
+          alerts = []
+          
+          # Check provisional applications
+          for prov in tracker.get('provisional_applications', []):
+              if prov.get('nonprovisional_deadline'):
+                  alert = check_deadline(
+                      prov['nonprovisional_deadline'],
+                      f"Non-provisional filing for {prov['title']}",
+                      90  # Alert 90 days before
+                  )
+                  if alert:
+                      alerts.append(alert)
+              
+              # Check individual reminders
+              for reminder in prov.get('reminders', []):
+                  if reminder.get('date') and not reminder.get('sent'):
+                      alert = check_deadline(
+                          reminder['date'],
+                          f"{reminder['type']} - {prov['title']}",
+                          7  # Alert 7 days before reminder date
+                      )
+                      if alert:
+                          alerts.append(alert)
+          
+          # Check nonprovisional deadlines
+          for nprov in tracker.get('nonprovisional_applications', []):
+              if nprov.get('office_action_response_deadline'):
+                  alert = check_deadline(
+                      nprov['office_action_response_deadline'],
+                      f"Office Action response for {nprov['id']}",
+                      30
+                  )
+                  if alert:
+                      alerts.append(alert)
+              
+              # Check maintenance fees
+              for fee in nprov.get('maintenance_fees', []):
+                  if fee.get('due_date') and fee.get('status') != 'paid':
+                      alert = check_deadline(
+                          fee['due_date'],
+                          f"{fee['type']} maintenance fee for {nprov['id']}",
+                          60
+                      )
+                      if alert:
+                          alerts.append(alert)
+          
+          # Check PCT deadline
+          pct = tracker.get('pct_application', {})
+          if pct.get('filing_deadline'):
+              alert = check_deadline(
+                  pct['filing_deadline'],
+                  "PCT application filing",
+                  90
+              )
+              if alert:
+                  alerts.append(alert)
+          
+          # Output results
+          if alerts:
+              print("::warning::Patent deadline alerts detected!")
+              for alert in alerts:
+                  urgency = "🔴 CRITICAL" if alert['urgent'] else "⚠️ WARNING"
+                  print(f"{urgency}: {alert['name']} - {alert['days_until']} days remaining (deadline: {alert['deadline']})")
+              
+              # Set output for issue creation
+              with open('patent_alerts.txt', 'w') as f:
+                  f.write(f"# Patent Deadline Alerts - {datetime.datetime.now().strftime('%Y-%m-%d')}\n\n")
+                  for alert in alerts:
+                      urgency = "🔴 CRITICAL" if alert['urgent'] else "⚠️ WARNING"
+                      f.write(f"## {urgency}: {alert['name']}\n")
+                      f.write(f"- **Days until deadline**: {alert['days_until']}\n")
+                      f.write(f"- **Deadline date**: {alert['deadline']}\n")
+                      f.write(f"- **Urgency level**: {'Critical - Immediate action required' if alert['urgent'] else 'Warning - Action needed soon'}\n\n")
+              
+              sys.exit(1)  # Exit with error to trigger notifications
+          else:
+              print("✅ All patent deadlines are current. No immediate action required.")
+              sys.exit(0)
+          EOF
+      
+      - name: Create GitHub Issue for Critical Deadlines
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const alerts = fs.readFileSync('patent_alerts.txt', 'utf8');
+            
+            // Check if an open issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['patent-deadline', 'critical'],
+              state: 'open'
+            });
+            
+            if (issues.data.length === 0) {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🔴 Patent Deadline Alert - Immediate Action Required',
+                body: alerts + '\n\n---\n\n**Action Required**: Review [patent_filing_tracker.yaml](./patent_filing_tracker.yaml) and [PATENT_PROTECTION_CHECKLIST.md](./PATENT_PROTECTION_CHECKLIST.md)\n\n**Contacts**:\n- Patent Attorney: [Contact Info]\n- Managing Member: Domenic Garza\n\n**Related Documents**:\n- [IP Strategy](./IP_STRATEGY.md)\n- [Risk Register](./RISK_REGISTER.yaml)',
+                labels: ['patent-deadline', 'critical', 'urgent'],
+                assignees: ['Strategickhaos']
+              });
+            } else {
+              // Update existing issue with new alerts
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: '## Updated Alert\n\n' + alerts
+              });
+            }
+  
+  check-repository-security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Check repository visibility
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get repository information
+          VISIBILITY=$(gh repo view --json visibility --jq .visibility)
+          
+          if [ "$VISIBILITY" = "public" ]; then
+            echo "::error::🔴 CRITICAL: Repository is PUBLIC! This may compromise patent rights."
+            echo "::error::Immediate actions required:"
+            echo "::error::1. Make repository PRIVATE immediately"
+            echo "::error::2. Document exact time window of public exposure"
+            echo "::error::3. Contact patent attorney within 24 hours"
+            echo "::error::4. Review items #5, #7, #8 in PATENT_PROTECTION_CHECKLIST.md"
+            exit 1
+          else
+            echo "✅ Repository is PRIVATE - patent rights protected"
+          fi
+      
+      - name: Check for sensitive files in git history
+        run: |
+          echo "Checking for sensitive files that should not be committed..."
+          
+          SENSITIVE_PATTERNS=(
+            "*.pem"
+            "*.key"
+            "*private*key*"
+            "*.env"
+            ".env.local"
+            "secrets.yaml"
+            "*password*"
+            "*secret*"
+            "*.pfx"
+            "*.p12"
+          )
+          
+          FOUND_SENSITIVE=false
+          
+          for pattern in "${SENSITIVE_PATTERNS[@]}"; do
+            if git log --all --full-history -- "$pattern" | grep -q "commit"; then
+              echo "⚠️ WARNING: Sensitive files matching '$pattern' found in git history"
+              FOUND_SENSITIVE=true
+            fi
+          done
+          
+          if [ "$FOUND_SENSITIVE" = true ]; then
+            echo "::warning::Sensitive files detected in git history. Consider using git-filter-repo to remove them."
+            echo "::warning::See: https://github.com/newren/git-filter-repo"
+          else
+            echo "✅ No obvious sensitive files in git history"
+          fi
+      
+      - name: Check .gitignore for model weights and sensitive files
+        run: |
+          echo "Verifying .gitignore includes critical patterns..."
+          
+          REQUIRED_PATTERNS=(
+            "*.pth"
+            "*.pt"
+            "*.ckpt"
+            "*.safetensors"
+            "*.bin"
+            "*.h5"
+            "*.pb"
+            "*.onnx"
+            "*.pem"
+            "*.key"
+            ".env"
+            "secrets.yaml"
+          )
+          
+          MISSING_PATTERNS=()
+          
+          for pattern in "${REQUIRED_PATTERNS[@]}"; do
+            if ! grep -q "$pattern" .gitignore 2>/dev/null; then
+              MISSING_PATTERNS+=("$pattern")
+            fi
+          done
+          
+          if [ ${#MISSING_PATTERNS[@]} -gt 0 ]; then
+            echo "⚠️ WARNING: .gitignore missing critical patterns:"
+            printf '%s\n' "${MISSING_PATTERNS[@]}"
+            echo "::warning::Update .gitignore to prevent accidental model weight or key commits"
+          else
+            echo "✅ .gitignore includes critical sensitive file patterns"
+          fi
+
+  weekly-status-report:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Generate weekly status report
+        run: |
+          cat << 'EOF' > weekly_patent_status.md
+          # Weekly Patent Protection Status Report
+          
+          **Generated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          ## 🎯 Status Overview
+          
+          ### Critical Actions Needed
+          - [ ] Review [PATENT_PROTECTION_CHECKLIST.md](./PATENT_PROTECTION_CHECKLIST.md)
+          - [ ] Update [patent_filing_tracker.yaml](./patent_filing_tracker.yaml) with latest dates
+          - [ ] Verify repository remains PRIVATE
+          - [ ] Check for upcoming deadlines (next 90 days)
+          
+          ### Key Metrics
+          - Repository Visibility: PRIVATE ✅
+          - Patent Applications Filed: Check tracker
+          - Upcoming Deadlines: Check tracker
+          - Security Alerts: None ✅
+          
+          ## 📋 Action Items
+          
+          1. **Immediate (This Week)**:
+             - Review any pending patent deadlines
+             - Update tracker with any new dates or status changes
+             - Verify attorney contact information is current
+          
+          2. **Short Term (This Month)**:
+             - Conduct monthly prior art search
+             - Review repository security settings
+             - Update budget tracking
+          
+          3. **Long Term (This Quarter)**:
+             - Quarterly compliance review
+             - International filing strategy review
+             - Legal team relationship maintenance
+          
+          ## 🔗 Quick Links
+          
+          - [Patent Protection Checklist](./PATENT_PROTECTION_CHECKLIST.md)
+          - [IP Strategy](./IP_STRATEGY.md)
+          - [Patent Filing Tracker](./patent_filing_tracker.yaml)
+          - [Risk Register](./RISK_REGISTER.yaml)
+          
+          ---
+          
+          **Next Report**: 7 days from now
+          EOF
+          
+          echo "✅ Weekly status report generated"
+          cat weekly_patent_status.md
+
+  notify-on-failure:
+    runs-on: ubuntu-latest
+    needs: [monitor-deadlines, check-repository-security]
+    if: failure()
+    
+    steps:
+      - name: Send critical alert notification
+        run: |
+          echo "🔴 CRITICAL PATENT ALERT TRIGGERED"
+          echo "Check the workflow logs and GitHub issues for details"
+          echo "Review patent_filing_tracker.yaml immediately"
+          echo ""
+          echo "This is an automated alert from the Patent Deadline Monitoring system"
+          echo "configured in .github/workflows/patent-monitoring.yml"

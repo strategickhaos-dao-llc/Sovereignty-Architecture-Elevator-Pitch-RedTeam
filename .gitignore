@@ -35,3 +35,74 @@ target/
 
 # Workspace data
 workspace/
+
+# =============================================================================
+# SECURITY: SENSITIVE FILES (Added for Patent & IP Protection)
+# =============================================================================
+
+# Private keys and certificates
+*.pem
+*.key
+*private*key*
+*.pfx
+*.p12
+*.crt
+*.cer
+*.der
+
+# Environment and secrets
+.env
+.env.local
+.env.production
+.env.development
+secrets.yaml
+secrets.json
+*secret*
+*password*
+
+# Model weights and training artifacts (NEVER commit before patent filing)
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+*.h5
+*.pb
+*.onnx
+*.weights
+*.model
+models/
+checkpoints/
+weights/
+
+# GPG and cryptographic keys
+*.gpg
+*.asc
+*.sig
+*.pgp
+*.gpg-key
+secring.*
+pubring.*
+
+# Wallet and blockchain keys
+*.wallet
+*.keystore
+wallet.json
+keystore/
+
+# Backup and recovery files
+*.backup
+*.bak
+*.old
+*_backup
+seed_phrase.txt
+recovery_*.txt
+
+# Attorney-client privileged documents (mark separately)
+*privileged*
+*attorney_work_product*
+
+# Personal identification and sensitive data
+*.ssn
+*.ein
+personal_info*
