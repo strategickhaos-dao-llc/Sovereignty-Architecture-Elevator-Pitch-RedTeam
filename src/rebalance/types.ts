@@ -145,8 +145,8 @@ export const TradeSchema = z.object({
   symbol: z.string(),
   account_id: z.string(),
   action: z.enum(['BUY', 'SELL']),
-  shares: z.number(),
-  approx_value_usd: z.number(),
+  shares: z.number().nonnegative(),
+  approx_value_usd: z.number().nonnegative(),
   reason: z.string(),
 });
 
