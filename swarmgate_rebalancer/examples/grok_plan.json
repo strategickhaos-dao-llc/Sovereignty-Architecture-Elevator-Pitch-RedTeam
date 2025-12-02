@@ -1,0 +1,14 @@
+{
+  "treasury_transfer_usd": 746.67,
+  "treasury_tx": "send $746.67 USDC to 0xSwarmGateTreasuryAddressHere",
+  "orders": [
+    {"symbol": "TQQQ", "usd": 842.12},
+    {"symbol": "SOL", "usd": 312.44},
+    {"symbol": "QQQ", "usd": 1500.00},
+    {"symbol": "BTC", "usd": 1800.00},
+    {"symbol": "ETH", "usd": 1200.00}
+  ],
+  "total_invested": 5654.56,
+  "new_cash_buffer": 0.00,
+  "deviation_after": 0.0031
+}

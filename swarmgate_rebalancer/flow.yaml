@@ -1,0 +1,45 @@
+# SwarmGate Portfolio Rebalancer - flow.yaml schema v1
+# This is the single source of truth for target allocations and settings
+
+version: 1
+
+portfolio:
+  # Target allocation weights (must sum to 1.0)
+  target:
+    QQQ:   0.25    # Invesco QQQ - large cap tech
+    TQQQ:  0.20    # ProShares UltraPro QQQ - 3x leveraged
+    BTC:   0.20    # Bitcoin - held on Coinbase + Swan
+    ETH:   0.15    # Ethereum
+    SOL:   0.10    # Solana
+    SWARM: 0.07    # SwarmGate treasury cut
+    CASH:  0.03    # Emergency buffer
+
+  # Current holdings - populated by your data fetch step, not by Grok
+  # Format: symbol -> current USD value
+  current: {}
+
+settings:
+  # Net paycheck amount in base currency
+  # Update only when your paycheck changes
+  paycheck_net: 10666.67    # $128k / 12
+
+  # Percentage of paycheck going to SwarmGate treasury
+  treasury_pct: 0.07        # 7% to treasury
+
+  # Only act if any asset drifts > threshold from target
+  rebalance_threshold: 0.015  # 1.5% deviation trigger
+
+  # Default to dry-run mode for safety
+  dry_run: true
+
+  # SwarmGate treasury wallet address
+  treasury_address: "0xSwarmGateTreasuryAddressHere"
+
+  # Base currency for all calculations
+  base_currency: "USD"
+
+  # Maximum slippage allowed on trades
+  max_slippage_pct: 0.01    # 1% max slippage
+
+  # Maximum single order size in USD
+  max_single_order_usd: 5000

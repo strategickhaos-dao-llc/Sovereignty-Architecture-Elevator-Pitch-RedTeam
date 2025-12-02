@@ -1,0 +1,11 @@
+{
+  "positions_usd": {
+    "QQQ": 12345.67,
+    "TQQQ": 8000.00,
+    "BTC": 9500.00,
+    "ETH": 6800.00,
+    "SOL": 4200.00
+  },
+  "cash_usd": 1500.00,
+  "paycheck_net_usd": 10666.67
+}
