@@ -2,6 +2,45 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+---
+
+## 📜 SACSE Workflow Overview
+
+> **What This Repo Does**: This repository implements a **Sovereign Autonomous Continuous Systems Engineering (SACSE)** workflow—a reproducible, auditable research pipeline that captures engineering artifacts (webpages, logs, AI outputs) as `.htm` files with GPG-signed provenance (`.htm.gpg`), processes them through LLM tools for knowledge extraction, integrates refined outputs into an operational codebase, and runs an autonomous loop that continuously validates, reconciles, and self-heals system state. The goal is to collapse lived engineering practice, scholarly publication, and autonomous governance into a single auditable loop for verifiable, operational research at scale.
+
+### ⚠️ Operational Safety Notes
+
+| Risk Area | Mitigation | Status |
+|-----------|------------|--------|
+| **Key Management** | Store GPG keys in hardware tokens or Vault; rotate annually | 🔶 Harden |
+| **Artifact Integrity** | All `.htm` files must have matching `.htm.gpg` signatures | ✅ Active |
+| **Loop Isolation** | Autonomous loops run in sandboxed containers with read-only mounts | ✅ Active |
+| **Threat Model** | Document trust boundaries, adversary capabilities, and attack surfaces | 🔶 Formalize |
+| **Verification Manifests** | Automated SHA-256 checksums for all artifacts per commit | 🔶 Add |
+| **Credential Exposure** | Use `git-secrets` pre-commit hooks; no plaintext secrets in repo | ✅ Active |
+
+### 🔄 SACSE Workflow Components
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│  Artifact       │───▶│  LLM Processing  │───▶│  Integration    │
+│  Capture        │    │  (Canvas/Grok)   │    │  (Rider/Agents) │
+│  (.htm + .gpg)  │    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                                              │
+         │         ┌──────────────────────┐            │
+         └────────▶│  Sovereign Loop      │◀───────────┘
+                   │  (_Orchestra.ps1)    │
+                   │  • Validate          │
+                   │  • Reconcile         │
+                   │  • Self-heal         │
+                   └──────────────────────┘
+```
+
+**Tools**: `scanner.py` (artifact verification), `menu.ps1` (orchestration menu), `_Orchestra.ps1` (autonomous loop)
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
