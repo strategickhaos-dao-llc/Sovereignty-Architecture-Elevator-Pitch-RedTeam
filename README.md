@@ -272,6 +272,13 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📚 Additional Resources
+
+### 🖥️ Custom OS Development
+Want to build your own operating system from scratch? Check out our comprehensive guide:
+
+- **[Custom OS Development Guide](CUSTOM_OS_DEVELOPMENT_GUIDE.md)** - 100+ real, battle-tested tools and resources for building a sovereign OS in 2025-2026. Includes toolchains, bootloaders, kernel starters, filesystems, drivers, and complete OS projects to study and fork.
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
