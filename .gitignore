@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Enterprise bootstrap generated files
+enterprise-discovery.yml
+PAT_SETUP_GUIDE.md
