@@ -17,6 +17,9 @@ on:
       - '.github/workflows/verify.yaml'
   workflow_dispatch:  # Allow manual trigger
 
+permissions:
+  contents: read
+
 jobs:
   verify-evidence:
     name: Verify Evidence Hashes
