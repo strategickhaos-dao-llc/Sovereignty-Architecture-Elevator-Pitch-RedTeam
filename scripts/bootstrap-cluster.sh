@@ -4,8 +4,8 @@ set -euo pipefail
 echo ">> Bootstrapping cluster with core Legion components"
 echo "   (Ingress, cert-manager, namespaces, etc.)"
 
-# Example namespace creation
-kubectl get ns legion-core >/dev/null 2>&1 || kubectl create namespace legion-core
+# Example namespace creation (idempotent)
+kubectl create namespace legion-core --dry-run=client -o yaml | kubectl apply -f -
 
 # Placeholder: you can add Helm installs here later
 # helm repo add jetstack https://charts.jetstack.io

@@ -5,7 +5,8 @@ NAMESPACE="${1:-legion-core}"
 
 echo ">> Deploying Legion services into namespace: $NAMESPACE"
 
-kubectl get ns "$NAMESPACE" >/dev/null 2>&1 || kubectl create namespace "$NAMESPACE"
+# Idempotent namespace creation
+kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
 
 # Minimal placeholder deployment: a tiny HTTP echo pod
 cat <<'EOF' | kubectl apply -n "$NAMESPACE" -f -

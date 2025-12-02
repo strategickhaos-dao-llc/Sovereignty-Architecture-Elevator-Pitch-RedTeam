@@ -30,6 +30,7 @@ case "$CONTEXT_NAME" in
 
   homelab-k3s)
     echo ">> Setting context to homelab k3s using k8s/kubeconfig"
+    echo ">> Note: Run this script with 'source' to persist KUBECONFIG in your shell"
     export KUBECONFIG="$(pwd)/k8s/kubeconfig"
     kubectl config use-context homelab
     kubectl config set-context --current --namespace=legion-lab
