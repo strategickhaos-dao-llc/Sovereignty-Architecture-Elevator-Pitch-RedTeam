@@ -21,6 +21,7 @@ import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Dict, List, Tuple
 
 
 # ANSI color codes for terminal output
@@ -59,7 +60,7 @@ def compute_blake3_hash(filepath: Path) -> str:
         return hasher.hexdigest()
 
 
-def load_hash_manifest(manifest_path: Path) -> dict[str, str]:
+def load_hash_manifest(manifest_path: Path) -> Dict[str, str]:
     """Load hash manifest from hashes.txt file."""
     hashes = {}
     if not manifest_path.exists():
@@ -82,7 +83,7 @@ def load_hash_manifest(manifest_path: Path) -> dict[str, str]:
     return hashes
 
 
-def save_hash_manifest(manifest_path: Path, hashes: dict[str, str]) -> None:
+def save_hash_manifest(manifest_path: Path, hashes: Dict[str, str]) -> None:
     """Save hash manifest to hashes.txt file."""
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -138,7 +139,7 @@ def save_hash_manifest(manifest_path: Path, hashes: dict[str, str]) -> None:
                 f.write("\n")
 
 
-def get_tracked_files(repo_root: Path) -> list[str]:
+def get_tracked_files(repo_root: Path) -> List[str]:
     """Get list of files to track for hash verification."""
     tracked = []
 
@@ -188,7 +189,7 @@ def get_tracked_files(repo_root: Path) -> list[str]:
     return tracked
 
 
-def verify_hashes(repo_root: Path, manifest_path: Path, verbose: bool = False) -> tuple[bool, list[str]]:
+def verify_hashes(repo_root: Path, manifest_path: Path, verbose: bool = False) -> Tuple[bool, List[str]]:
     """Verify all hashes in the manifest."""
     manifest = load_hash_manifest(manifest_path)
     errors = []
@@ -229,7 +230,7 @@ def verify_hashes(repo_root: Path, manifest_path: Path, verbose: bool = False) -
     return len(errors) == 0, errors
 
 
-def verify_cross_references(repo_root: Path, snapshot_path: Path, verbose: bool = False) -> tuple[bool, list[str]]:
+def verify_cross_references(repo_root: Path, snapshot_path: Path, verbose: bool = False) -> Tuple[bool, List[str]]:
     """Verify cross-references in status_snapshot.json."""
     errors = []
 
