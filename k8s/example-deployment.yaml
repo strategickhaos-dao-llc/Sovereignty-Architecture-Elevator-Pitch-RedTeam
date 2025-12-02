@@ -1,0 +1,20 @@
+# Example Kubernetes deployment for StrategicKhaos Operator
+# This is a placeholder - replace with your actual deployments
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: strategickhaos
+  labels:
+    name: strategickhaos
+    environment: nonprofit
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: operator-config
+  namespace: strategickhaos
+data:
+  operator.version: "v3.1"
+  mission: "Feed the world. One prompt at a time."
