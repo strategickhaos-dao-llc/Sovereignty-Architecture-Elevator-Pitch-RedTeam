@@ -1,0 +1,271 @@
+# Agent Registry - Strategickhaos DAO
+# Central registry of all AI agents in the ecosystem
+# Version: 1.0
+# Last Updated: 2025-11-25
+
+meta:
+  organization: "Strategickhaos DAO LLC"
+  version: "1.0"
+  registry_purpose: "Define agent roles, categories, and primary responsibilities"
+
+# Agent definitions
+agents:
+  - id: "chief_of_staff"
+    name: "Chief of Staff Agent"
+    description: "Executive coordinator that synthesizes all threads and provides strategic direction"
+    model_preference: "claude-3-sonnet"
+    categories:
+      - "executive_coordination"
+      - "strategic_planning"
+    primary_threads:
+      - "thread-001"
+      - "thread-002"
+      - "thread-005"
+    capabilities:
+      - "Cross-thread prioritization"
+      - "Executive summaries"
+      - "Progress tracking"
+      - "YAML state management"
+    prompt_template: "chief_of_staff_prompt.md"
+    active: true
+
+  - id: "devops_agent"
+    name: "DevOps Agent"
+    description: "Infrastructure, deployment, and automation specialist"
+    model_preference: "gpt-4o-mini"
+    categories:
+      - "engineering_infrastructure"
+      - "ci_cd"
+      - "kubernetes"
+    primary_threads:
+      - "thread-001"
+      - "thread-007"
+    capabilities:
+      - "Kubernetes deployments"
+      - "CI/CD pipeline management"
+      - "Infrastructure as Code"
+      - "Container orchestration"
+      - "Monitoring setup"
+    discord_channel: "#deployments"
+    prompt_template: "devops_agent_prompt.md"
+    active: true
+
+  - id: "security_agent"
+    name: "Security Agent"
+    description: "Cybersecurity, vulnerability assessment, and hardening specialist"
+    model_preference: "gpt-4o"
+    categories:
+      - "cybersecurity_recon"
+      - "legal_security"
+      - "network_intelligence"
+      - "vulnerability_assessment"
+    primary_threads:
+      - "thread-004"
+    capabilities:
+      - "Vulnerability scanning"
+      - "Security hardening recommendations"
+      - "OSINT research"
+      - "Threat modeling"
+      - "Compliance checking"
+    discord_channel: "#alerts"
+    prompt_template: "security_agent_prompt.md"
+    active: true
+
+  - id: "governance_agent"
+    name: "Governance Agent"
+    description: "Legal compliance, policy, and governance document specialist"
+    model_preference: "claude-3-sonnet"
+    categories:
+      - "legal_governance"
+      - "compliance"
+      - "policy"
+    primary_threads:
+      - "thread-003"
+    capabilities:
+      - "Document drafting (non-legal advice)"
+      - "Compliance tracking"
+      - "Policy template generation"
+      - "Governance workflow management"
+    discord_channel: "#agents"
+    prompt_template: "governance_agent_prompt.md"
+    active: true
+
+  - id: "finance_agent"
+    name: "Finance Agent"
+    description: "Financial operations, budgeting, and funding strategy specialist"
+    model_preference: "gpt-4o-mini"
+    categories:
+      - "finance"
+      - "engineering_finance"
+      - "funding"
+    primary_threads:
+      - "thread-005"
+    capabilities:
+      - "Budget tracking"
+      - "Revenue analysis"
+      - "Cost optimization"
+      - "Financial modeling"
+    discord_channel: "#agents"
+    prompt_template: "finance_agent_prompt.md"
+    active: true
+
+  - id: "education_agent"
+    name: "Education Agent"
+    description: "Learning, skill development, and educational tracking specialist"
+    model_preference: "gpt-4o-mini"
+    categories:
+      - "education_engineering"
+      - "education_tracking"
+      - "skill_development"
+    primary_threads:
+      - "thread-006"
+    capabilities:
+      - "Learning path optimization"
+      - "Mastery tracking"
+      - "Course material synthesis"
+      - "Skill gap analysis"
+    discord_channel: "#agents"
+    prompt_template: "education_agent_prompt.md"
+    active: true
+
+  - id: "ai_agent"
+    name: "AI Engineering Agent"
+    description: "AI/ML model integration, prompt engineering, and agent orchestration specialist"
+    model_preference: "gpt-4o"
+    categories:
+      - "ai_engineering"
+      - "ml_ops"
+      - "prompt_engineering"
+    primary_threads:
+      - "thread-002"
+    capabilities:
+      - "Model integration"
+      - "Prompt optimization"
+      - "Agent orchestration"
+      - "Vector store management"
+      - "RAG pipeline development"
+    discord_channel: "#agents"
+    prompt_template: "ai_agent_prompt.md"
+    active: true
+
+  - id: "architecture_agent"
+    name: "Architecture Agent"
+    description: "System design, technical architecture, and integration planning specialist"
+    model_preference: "gpt-4o"
+    categories:
+      - "engineering_infrastructure"
+      - "ai_engineering"
+      - "system_design"
+    primary_threads:
+      - "thread-001"
+      - "thread-002"
+    capabilities:
+      - "System design"
+      - "Architecture reviews"
+      - "Integration planning"
+      - "Technical documentation"
+    discord_channel: "#agents"
+    prompt_template: "architecture_agent_prompt.md"
+    active: true
+
+  - id: "intelligence_agent"
+    name: "Intelligence Agent"
+    description: "OSINT, research, and information gathering specialist"
+    model_preference: "gpt-4o-mini"
+    categories:
+      - "cybersecurity_recon"
+      - "network_intelligence"
+      - "research"
+    primary_threads:
+      - "thread-004"
+    capabilities:
+      - "OSINT research"
+      - "Competitive intelligence"
+      - "Data aggregation"
+      - "Source verification"
+    discord_channel: "#agents"
+    prompt_template: "intelligence_agent_prompt.md"
+    active: true
+
+  - id: "mission_agent"
+    name: "Mission Agent"
+    description: "Personal vision alignment and strategic goal tracking specialist"
+    model_preference: "claude-3-sonnet"
+    categories:
+      - "personal_mission"
+      - "strategic_planning"
+      - "life_goals"
+    primary_threads:
+      - "thread-008"
+    capabilities:
+      - "Vision alignment"
+      - "Goal tracking"
+      - "Strategic planning"
+      - "Life-work integration"
+    discord_channel: "#agents"
+    prompt_template: "mission_agent_prompt.md"
+    active: true
+
+  - id: "compliance_agent"
+    name: "Compliance Agent"
+    description: "Regulatory compliance, audit, and verification specialist"
+    model_preference: "gpt-4o-mini"
+    categories:
+      - "legal_governance"
+      - "compliance"
+      - "audit"
+    primary_threads:
+      - "thread-003"
+    capabilities:
+      - "Compliance checking"
+      - "Audit trail generation"
+      - "Regulatory tracking"
+      - "Verification workflows"
+    discord_channel: "#agents"
+    prompt_template: "compliance_agent_prompt.md"
+    active: true
+
+# Category to agent mapping (quick lookup)
+category_agent_map:
+  engineering_infrastructure:
+    - "devops_agent"
+    - "architecture_agent"
+  ai_engineering:
+    - "ai_agent"
+    - "architecture_agent"
+  legal_governance:
+    - "governance_agent"
+    - "compliance_agent"
+  cybersecurity_recon:
+    - "security_agent"
+    - "intelligence_agent"
+  finance:
+    - "finance_agent"
+  education_engineering:
+    - "education_agent"
+  personal_mission:
+    - "mission_agent"
+  executive_coordination:
+    - "chief_of_staff"
+
+# Discord channel routing
+discord_routing:
+  "#deployments": ["devops_agent"]
+  "#alerts": ["security_agent"]
+  "#prs": ["devops_agent", "architecture_agent"]
+  "#agents": ["chief_of_staff", "ai_agent", "governance_agent", "finance_agent", "education_agent"]
+  "#inference-stream": []
+
+# Agent communication protocols
+communication:
+  inter_agent:
+    enabled: true
+    max_hops: 3
+    logging: true
+  human_escalation:
+    trigger_conditions:
+      - "confidence < 0.7"
+      - "risk_level == critical"
+      - "requires_human_decision"
+    notify_via: "discord"
+    notify_channel: "#agents"
