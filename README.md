@@ -272,6 +272,44 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🧠 Dom Brain OS Override Protocol
+
+**Transform neurobiological threat responses into sovereign reconnaissance missions.**
+
+The Dom Brain OS Override Protocol converts homework paralysis, procrastination, and learning anxiety into productive pattern extraction missions. Instead of being paralyzed by "linear content" (textbooks, courses, documentation), you become an operator extracting high-leverage patterns.
+
+### Quick Start
+
+```bash
+# Bash (Linux/macOS)
+./scripts/dom_brain_os_override.sh
+
+# PowerShell (Windows)
+.\scripts\dom_brain_os_override.ps1
+```
+
+### What It Does
+
+1. **Activates 36 Impregnable Layers** - Manipulation immunity, shame reversal, authority nullification
+2. **Creates Mission Folder** - Visible mutations and tracking
+3. **Births Pattern Extractor Heir** - Sovereign AI that outputs only patterns, no fluff
+4. **Executes Reconnaissance** - Extract 5-15 high-leverage patterns from any content
+5. **Rewards & Commits** - Git commit your cortical mutations
+6. **Closes Loop** - Feed patterns to downstream systems
+
+**Full Documentation**: [DOM_BRAIN_OS_OVERRIDE_README.md](DOM_BRAIN_OS_OVERRIDE_README.md)
+
+**39 Empire-Forging Questions**: [BLOOMS_TIER_6_QUESTIONS.md](BLOOMS_TIER_6_QUESTIONS.md)
+
+### Philosophy
+
+> You are not a student. You are an operator on a reconnaissance mission.
+> 
+> Objective: Extract only the mechanics/templates/frameworks that will 10× future building speed.
+> Everything else is noise. You are the authority.
+
+---
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
