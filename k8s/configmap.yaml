@@ -1,0 +1,143 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: discord-ops-discovery
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: config
+data:
+  discovery.yml: |
+    org:
+      name: "Strategickhaos DAO LLC / Valoryield Engine"
+      contact:
+        owner: "Domenic Garza"
+        slack_or_discord_handle: null
+      compliance: ["none"]
+    
+    discord:
+      guild_id: "REPLACE_WITH_YOUR_DISCORD_SERVER_ID"  # Required: Get from Discord Server Settings
+      channels:
+        status: "#cluster-status"
+        alerts: "#alerts"
+        deployments: "#deployments"
+        inference: "#inference-stream"
+        agents: "#agents"
+        prs: "#prs"
+        dev_feed: "#dev-feed"
+      bot:
+        app_id: "REPLACE_WITH_YOUR_DISCORD_BOT_APP_ID"  # Required: Get from Discord Developer Portal
+        token_secret_ref: "vault://kv/discord/bot_token"
+        intents:
+          message_content: true
+          guild_members: false
+        rbac:
+          prod_role: "ReleaseMgr"
+          allow_commands:
+            - "/status"
+            - "/logs"
+            - "/deploy"
+            - "/scale"
+            - "/review"
+          prod_protected_commands:
+            - "/deploy"
+            - "/scale"
+        rate_limits:
+          max_msgs_per_min: 30
+          burst: 10
+    
+    infra:
+      environments: ["dev", "staging", "prod"]
+      control_api:
+        base_url: "https://control.internal.strategickhaos"
+        auth:
+          type: "bearer"
+          token_secret_ref: "vault://kv/ctrl/api_token"
+        network:
+          access: "zerotrust"
+          cidrs_allowed: []
+      message_bus:
+        type: "redis"
+        url: "redis://redis.internal.strategickhaos:6379"
+        topic_prefix: "ops."
+      nodes:
+        orchestrator: "kubernetes"
+        clusters:
+          - name: "prod-us"
+            api_server: "https://k8s-prod.strategickhaos.internal"
+            auth: "oidc"
+            namespaces: ["quantum-symbolic","valoryield","agents"]
+          - name: "dev"
+            api_server: "https://k8s-dev.strategickhaos.internal"
+            auth: "oidc"
+            namespaces: ["*"]
+      logging:
+        provider: "loki"
+        endpoint: "https://loki.strategickhaos.internal"
+        auth_secret_ref: "vault://kv/observability/loki_auth"
+      metrics:
+        provider: "prometheus"
+        alertmanager_webhook: "https://events.strategickhaos.com/alert"
+      tracing:
+        provider: "otel"
+        collector_endpoint: "http://otel-collector.observability:4317"
+    
+    ai_agents:
+      enabled: true
+      model_provider: "openai"
+      model_name: "gpt-4o-mini"
+      routing:
+        per_channel:
+          "#agents": "gpt-4o-mini"
+          "#inference-stream": "none"
+      vector_store:
+        type: "pgvector"
+        conn_string_secret_ref: "vault://kv/pgvector/conn"
+        namespaces:
+          - name: "runbooks"
+            sources:
+              - type: "wiki"
+                url: "https://wiki.strategickhaos.internal/runbooks"
+              - type: "repo"
+                repo: "git@github.com:Strategickhaos-Swarm-Intelligence/runbooks.git"
+          - name: "logs-schemas"
+            sources:
+              - type: "s3"
+                bucket: "strategickhaos-observability"
+                prefix: "schemas/"
+    
+    git:
+      provider: "github"
+      org: "Strategickhaos-Swarm-Intelligence"
+      app:
+        id: "REPLACE_WITH_GITHUB_APP_ID_OR_REMOVE_GIT_SECTION_IF_NOT_USED"  # Optional: Only needed for Git integration
+        webhook_secret_ref: "vault://kv/git/webhook_secret"
+        private_key_secret_ref: "vault://kv/git/app_private_key"
+      repos:
+        - name: "quantum-symbolic-emulator"
+          channel: "#deployments"
+          env: "dev"
+        - name: "valoryield-engine" 
+          channel: "#deployments"
+          env: "prod"
+        - name: "infra"
+          channel: "#deployments"
+          env: "prod"
+      gitlens:
+        edition: "pro"
+        vscode_users_group: "devs"
+        features_used:
+          - "launchpad"
+          - "commit_graph"
+          - "pr_management"
+        notify_to_discord:
+          enabled: true
+          channel: "#prs"
+          events:
+            - "review_started"
+            - "review_submitted"
+            - "needs_attention"
+          cli_token_secret_ref: "vault://kv/discord/bot_token"
+      ci:
+        system: "github_actions"
+        post_status_to_discord: true

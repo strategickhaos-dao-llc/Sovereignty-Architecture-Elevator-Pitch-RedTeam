@@ -1,0 +1,73 @@
+{
+  "description": "StrategicKhaos Nonprofit Model Configuration",
+  "version": "3.1",
+  "models": [
+    {
+      "name": "llama3.2:latest",
+      "description": "Meta's latest Llama model - General purpose reasoning",
+      "size": "~2GB",
+      "category": "general"
+    },
+    {
+      "name": "phi3:medium",
+      "description": "Microsoft's efficient reasoning model - Fast inference",
+      "size": "~8GB",
+      "category": "general"
+    },
+    {
+      "name": "gemma2:27b",
+      "description": "Google's advanced language model - High quality outputs",
+      "size": "~16GB",
+      "category": "general"
+    },
+    {
+      "name": "qwen2.5:32b",
+      "description": "Alibaba's powerful multilingual model - Best for non-English",
+      "size": "~19GB",
+      "category": "multilingual"
+    },
+    {
+      "name": "mistral-nemo",
+      "description": "Mistral AI's efficient model - Balanced performance",
+      "size": "~7GB",
+      "category": "general"
+    },
+    {
+      "name": "openhermes2.5",
+      "description": "Fine-tuned instruction model - Excellent at following instructions",
+      "size": "~4GB",
+      "category": "instruction"
+    },
+    {
+      "name": "dolphin-llama3.2",
+      "description": "Uncensored helpful assistant - Research and exploration",
+      "size": "~2GB",
+      "category": "research"
+    },
+    {
+      "name": "medic-llama3",
+      "description": "Medical domain specialist - Healthcare and medical queries",
+      "size": "~4GB",
+      "category": "specialized"
+    },
+    {
+      "name": "llava",
+      "description": "Vision-language multimodal model - Image understanding",
+      "size": "~5GB",
+      "category": "multimodal"
+    },
+    {
+      "name": "nomic-embed-text",
+      "description": "Text embedding model - Vector search and RAG",
+      "size": "~274MB",
+      "category": "embedding"
+    }
+  ],
+  "notes": [
+    "Total download size: ~65GB+ for all models",
+    "Models are downloaded to local Ollama cache",
+    "Individual models can be pulled with: .\\StrategicKhaos-Operator.ps1 -pull <model>",
+    "All models run 100% locally - no cloud dependencies",
+    "Customize this list by editing models_config.json"
+  ]
+}
