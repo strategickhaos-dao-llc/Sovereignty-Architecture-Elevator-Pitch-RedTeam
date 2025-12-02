@@ -1,0 +1,15 @@
+# DomBrainCalculator - Cognitive Architecture Calculator
+# Core dependencies for consolidation-driven creativity implementation
+
+# Discord integration (for bot commands)
+discord.py>=2.3.2
+py-cord>=2.4.1
+
+# Optional: Environment management
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.4
+
+# Note: The core calculator (dom_brain_calculator.py) only requires Python stdlib
+# The Discord integration (dom_brain_discord.py) requires discord.py or py-cord

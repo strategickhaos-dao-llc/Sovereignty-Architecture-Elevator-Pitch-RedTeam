@@ -199,6 +199,26 @@ services:
       retries: 5
     command: ["tail", "-f", "/dev/null"]
 
+  # DomBrain Calculator - Cognitive Architecture Calculator
+  dombrain-calculator:
+    build:
+      context: .
+      dockerfile: Dockerfile.dombrain
+    container_name: dombrain-calculator
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+    networks:
+      - strategickhaos_network
+    depends_on:
+      - discord-bot
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import dom_brain_calculator"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine

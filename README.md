@@ -30,6 +30,16 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🧠 DomBrain Calculator (`dombrain-calculator`)
+- **Cognitive Architecture**: Calculation through 100+ divergent pathways
+- **Memory Consolidation**: Prunes weak paths, strengthens strong ones
+- **Collision Detection**: Finds insights where pathways converge
+- **Discord Commands**: `/brain_calc`, `/brain_explain`, `/brain_stats`, `/brain_compare`
+- **Cross-Domain Synthesis**: Uses quantum, DNA, particle physics, neuroscience metaphors
+- **Dopamine Mechanism**: Tracks rediscovery for engagement loops
+
+See [DOM_BRAIN_CALCULATOR.md](./DOM_BRAIN_CALCULATOR.md) and [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md) for details.
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
