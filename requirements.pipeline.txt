@@ -1,0 +1,9 @@
+# Requirements for Sovereignty Architecture Data Pipeline
+
+# Core dependencies
+pyyaml>=6.0
+
+# Optional: Enhanced functionality
+# watchdog>=3.0  # More efficient file system monitoring
+# python-magic>=0.4.27  # Better file type detection
+# requests>=2.31.0  # Discord webhook integration

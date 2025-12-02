@@ -1,0 +1,202 @@
+# Lab Architecture Definition
+# Describes the complete Sovereignty Architecture data pipeline
+
+meta:
+  name: "Sovereignty Architecture Knowledge System"
+  owner: "Domenic Garza / Strategickhaos"
+  version: "1.0.0"
+  description: "Event-driven knowledge system with multi-agent plumbing"
+
+# Architecture Overview
+architecture:
+  layers:
+    - name: "Data Ingestion"
+      description: "Files from anywhere enter through rituals"
+      components:
+        - uTorrent: "Downloads (Linux ISOs, open data, public domain)"
+        - SaveAs: "Browser downloads and manual saves"
+        - SendTo: "Right-click context menu actions"
+        - GiveToOwner: "Manual file routing verbs"
+      output: "ingest/"
+      
+    - name: "Processing Pipeline"
+      description: "ETL pipeline for knowledge transformation"
+      components:
+        - ingest_daemon: "Watches ingest folder, classifies files"
+        - classifier: "Determines file type, source, topic"
+        - router: "Moves to appropriate lab/vault location"
+        - logger: "JSONL event ledger"
+      output: "vault/"
+      
+    - name: "Knowledge Store"
+      description: "Unified knowledge graph with version control"
+      components:
+        - Obsidian: "Primary knowledge vault"
+        - Git: "Truth ledger and history tracking"
+        - GitLens: "Multi-desktop synchronization"
+        - Canvas: "Visual knowledge organization"
+        - GraphView: "Network visualization"
+      output: "commits/"
+      
+    - name: "Tool Bus (MCP Server)"
+      description: "Tool interface for AI agents"
+      components:
+        - file_operations: "open_file, list_directory"
+        - obsidian_integration: "save_to_obsidian, create_canvas"
+        - git_operations: "commit, push, status"
+        - graph_management: "update_graph_view"
+      output: "tools/"
+      
+    - name: "Agent Layer"
+      description: "AI models with tool access"
+      components:
+        - Claude: "Primary agent via MCP"
+        - LocalLLMs: "Sovereign inference"
+        - Refinory: "Expert orchestration"
+      output: "transformations/"
+      
+    - name: "Coordination Layer"
+      description: "Multi-desktop synchronization and notifications"
+      components:
+        - Discord: "Notification channel and command interface"
+        - Webhooks: "Event broadcasting"
+        - Bots: "Automated announcements"
+      output: "notifications/"
+      
+    - name: "Runtime Substrate"
+      description: "Execution environment"
+      components:
+        - Docker: "Container runtime"
+        - Kubernetes: "Orchestration"
+        - Desktop: "Development workstations"
+
+# Labs (Knowledge Domains)
+labs:
+  - name: "Cyber Recon"
+    path: "vault/labs/cyber-recon"
+    topics: ["security", "reconnaissance", "intelligence"]
+    ingest_keywords: ["cyber", "security", "vuln", "cve", "threat"]
+    
+  - name: "Architecture"
+    path: "vault/labs/architecture"
+    topics: ["systems", "design", "patterns", "infrastructure"]
+    ingest_keywords: ["architecture", "design", "system", "infra", "k8s"]
+    
+  - name: "AI/ML Research"
+    path: "vault/labs/ai-ml"
+    topics: ["machine-learning", "llm", "agents", "models"]
+    ingest_keywords: ["ai", "ml", "llm", "model", "neural", "agent"]
+    
+  - name: "DevOps"
+    path: "vault/labs/devops"
+    topics: ["ci-cd", "automation", "deployment", "observability"]
+    ingest_keywords: ["deploy", "cicd", "automation", "pipeline", "docker"]
+    
+  - name: "Legal/Governance"
+    path: "vault/labs/legal"
+    topics: ["compliance", "governance", "dao", "policy"]
+    ingest_keywords: ["legal", "compliance", "dao", "govern", "policy"]
+    
+  - name: "Business/Strategy"
+    path: "vault/labs/business"
+    topics: ["strategy", "revenue", "operations", "metrics"]
+    ingest_keywords: ["business", "revenue", "strategy", "kpi", "metric"]
+
+# Data Flow
+dataflow:
+  description: "Complete event-driven pipeline"
+  stages:
+    - stage: "Ingest"
+      trigger: "File appears in ingest/"
+      action: "ingest_daemon detects new file"
+      
+    - stage: "Classify"
+      trigger: "New file detected"
+      action: "Analyze filename, extension, content metadata"
+      
+    - stage: "Route"
+      trigger: "Classification complete"
+      action: "Move to appropriate vault/lab location"
+      
+    - stage: "Index"
+      trigger: "File moved"
+      action: "Create/update Obsidian note with metadata"
+      
+    - stage: "Commit"
+      trigger: "Vault modified"
+      action: "Git commit with descriptive message"
+      
+    - stage: "Notify"
+      trigger: "Commit complete"
+      action: "Discord notification with summary"
+      
+    - stage: "Agent Process"
+      trigger: "Agent query or scheduled task"
+      action: "MCP tools read/transform/write notes"
+      
+    - stage: "Sync"
+      trigger: "Any change"
+      action: "GitLens propagates to all desktops"
+
+# Integration Points
+integrations:
+  discord:
+    events:
+      - "new_lab_created"
+      - "file_ingested"
+      - "note_updated"
+      - "graph_modified"
+    channels:
+      main: "#knowledge-feed"
+      alerts: "#alerts"
+      
+  git:
+    auto_commit: true
+    commit_message_format: "chore(ingest): {action} {filename} to {lab}"
+    
+  obsidian:
+    vault_path: "~/ObsidianVault"
+    auto_link: true
+    update_graph: true
+    
+  mcp:
+    server_url: "http://localhost:3100"
+    tools_enabled:
+      - "file_operations"
+      - "obsidian_integration"
+      - "git_operations"
+
+# Monitoring
+monitoring:
+  metrics:
+    - "files_ingested_total"
+    - "classification_accuracy"
+    - "routing_success_rate"
+    - "agent_operations_total"
+    - "sync_lag_seconds"
+    
+  logging:
+    format: "jsonl"
+    path: "logs/ingest_events.jsonl"
+    retention_days: 90
+    
+  alerts:
+    - condition: "classification_error"
+      action: "Discord notification"
+    - condition: "sync_failure"
+      action: "Discord alert + email"
+
+# Security
+security:
+  file_validation:
+    max_size_mb: 100
+    allowed_extensions: ["pdf", "md", "txt", "json", "yaml", "yml", "jpg", "png", "svg"]
+    scan_for_malware: true
+    
+  access_control:
+    vault_permissions: "user_only"
+    git_signing: true
+    
+  privacy:
+    redact_pii: true
+    no_external_api_calls: true

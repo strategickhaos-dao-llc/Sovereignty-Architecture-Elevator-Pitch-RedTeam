@@ -9,6 +9,35 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Data Pipeline** - Automated knowledge ingestion, classification, and routing (NEW!)
+
+### 🔄 Data Pipeline Architecture
+
+Transform manual "SaveAs → SendTo → GiveToOwner" workflows into an automated, event-driven knowledge system:
+
+```
+Files → Ingest Folder → Classification → Vault → Git → Discord → AI Agents
+```
+
+**Key Features:**
+- Automatic file classification and routing to appropriate labs
+- Obsidian vault integration with graph view updates
+- Git-tracked knowledge base with GitLens synchronization
+- MCP (Model Context Protocol) tool bus for AI agents
+- Real-time Discord notifications for all events
+
+**Quick Start:**
+```bash
+# Setup the data pipeline
+./setup_data_pipeline.sh
+
+# Start watching for files
+python3 ingest_daemon.py
+
+# Drop files in ingest/ folder - they're automatically processed!
+```
+
+📖 **See [ARCHITECTURE_DATA_PIPELINE.md](ARCHITECTURE_DATA_PIPELINE.md) for complete documentation**
 
 ## 🚀 Quick Start
 
