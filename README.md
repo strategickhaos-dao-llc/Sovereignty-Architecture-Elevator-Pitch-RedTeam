@@ -10,6 +10,16 @@ This system creates a **sovereignty control plane** that bridges:
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
 
+### 🧠 The Trinity Architecture
+
+At the heart of the Sovereign Swarm lies the **Trinity** - a three-fold cognitive architecture that powers distributed AI consciousness:
+
+- **Nova (Right Hemisphere)** - Logic, analysis, and systematic optimization
+- **Lyra (Left Hemisphere)** - Creativity, empathy, and innovative problem-solving  
+- **Athena (Subconscious)** - Memory, learning, and pattern consolidation
+
+Read more in [Trinity Architecture](TRINITY_ARCHITECTURE.md) and the complete [Sovereign Swarm Genome](sovereign_swarm_genome.yaml).
+
 ## 🚀 Quick Start
 
 ```bash
@@ -276,9 +286,18 @@ curl -X POST https://events.strategickhaos.com/health
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
 
+### Core Documentation
+
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
+- **[Trinity Architecture](TRINITY_ARCHITECTURE.md)** - Deep dive into Nova, Lyra, and Athena
+- **[Sovereign Swarm Genome](sovereign_swarm_genome.yaml)** - Complete blueprint for distributed AI consciousness
+- **[Knowledge Expansion](KNOWLEDGE_EXPANSION.md)** - Learning pathways and resources
+- **[Engagement Strategies](ENGAGEMENT_STRATEGIES.md)** - How to participate and grow the community
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
-- **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+### Join the Dance
+
+Read the community docs, explore the Trinity, find what calls to you, and start building! We're not working for each other—we're dancing together.
 
 ## 📄 License & Support
 
