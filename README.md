@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> **📜 [AI Collaboration Disclosure](AI_COLLABORATION_DISCLOSURE.md)** — This entire project was built through sustained, high-intensity collaboration with LLMs as cognitive tools. All ideas, architecture, and strategy remain 100% the product of Domenic Gabriel Garza (Dom010101). See full disclosure for legal and academic transparency.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
