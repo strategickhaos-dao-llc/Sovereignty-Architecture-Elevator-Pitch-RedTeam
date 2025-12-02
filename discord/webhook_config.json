@@ -1,0 +1,4 @@
+{
+  "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+  "description": "Discord webhook for StrategicKhaos Operator notifications"
+}
