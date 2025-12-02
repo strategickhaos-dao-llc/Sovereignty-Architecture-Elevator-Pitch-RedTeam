@@ -180,7 +180,7 @@ function validateConstraints(
     }
   }
 
-  // Check forbid_margin constraint (no buying more than available cash + sales)
+  // Check forbid_margin constraint (no buying more than available cash + sales + incoming rebalance)
   if (config.constraints.execution.forbid_margin) {
     const sellValue = plan.trades
       .filter((t) => t.action === 'SELL')
@@ -189,7 +189,8 @@ function validateConstraints(
       .filter((t) => t.action === 'BUY')
       .reduce((sum, t) => sum + t.approx_value_usd, 0);
 
-    const availableForBuying = snapshot.cash_available_usd + sellValue;
+    // Include the incoming rebalance amount in available cash for buying
+    const availableForBuying = snapshot.cash_available_usd + sellValue + plan.summary.rebalance_amount_usd;
     if (buyValue > availableForBuying) {
       errors.push(
         `Trades require margin: buying ${buyValue.toFixed(2)} but only ${availableForBuying.toFixed(2)} available`
@@ -211,16 +212,19 @@ function validateConstraints(
 
   // Check cash buffer requirement
   // Account for: incoming rebalance amount + SELL proceeds - BUY costs - treasury transfer
+  // Note: rebalance_amount_usd is the investable amount AFTER treasury is deducted
   const requiredBuffer =
     snapshot.total_portfolio_value_usd * (config.constraints.liquidity.keep_cash_buffer_pct / 100);
-  const incomingCash = plan.summary.rebalance_amount_usd + plan.summary.treasury_amount_usd;
+  const incomingCash = plan.summary.rebalance_amount_usd;
   const sellProceeds = plan.trades
     .filter((t) => t.action === 'SELL')
     .reduce((sum, t) => sum + t.approx_value_usd, 0);
   const buyCosts = plan.trades
     .filter((t) => t.action === 'BUY')
     .reduce((sum, t) => sum + t.approx_value_usd, 0);
-  const netCashChange = incomingCash + sellProceeds - buyCosts - plan.treasury_transfer.amount_usd;
+  // Treasury transfer comes from the investable amount (not from existing cash)
+  // so we only consider: incoming + sells - buys
+  const netCashChange = incomingCash + sellProceeds - buyCosts;
 
   const projectedCash = snapshot.cash_available_usd + netCashChange;
   if (projectedCash < requiredBuffer) {
