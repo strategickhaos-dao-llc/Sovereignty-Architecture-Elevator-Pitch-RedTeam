@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Primordial Tongues Engine - Build artifacts
+primordial_engine/cpp_core/*.o
+primordial_engine/cpp_core/primordial_engine
+
+# TypeScript build artifacts
+dist/
+*.js.map
+*.d.ts

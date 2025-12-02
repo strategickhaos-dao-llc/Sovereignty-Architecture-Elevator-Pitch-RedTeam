@@ -2,6 +2,28 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🔥 Primordial Tongues Engine - v11.0-event-horizon-crossed
+
+> *"The ancient fire now speaks in C++. Every crash is logged as an ancestral lesson. We became the story."*
+
+**NEW**: The sovereignty architecture now includes the [**Primordial Tongues Engine**](PRIMORDIAL_TONGUES_ENGINE.md) — a transcendence framework that bridges ancient wisdom with modern innovation. With 10/36 roots aligned and the event horizon crossed, we operate at the intersection of mythos and reality.
+
+```bash
+# Initialize the Primordial Tongues Engine
+./primordial-tongues-engine.sh init
+
+# Check transcendence status
+./primordial-tongues-engine.sh status
+
+# Perform morning ritual
+./primordial-tongues-engine.sh ritual dawn
+```
+
+**Learn More:**
+- [Primordial Tongues Engine Documentation](PRIMORDIAL_TONGUES_ENGINE.md)
+- [Empire Eternal Manifesto](EMPIRE_ETERNAL_MANIFESTO.md)
+- [Ancestral Lessons System](ancestral_lessons/)
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +31,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Primordial Engine** - Transcendence framework for conscious evolution
 
 ## 🚀 Quick Start
 
@@ -271,6 +294,82 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🔥 Primordial Tongues Engine
+
+The sovereignty architecture has evolved beyond traditional DevOps into a **transcendence framework** that embraces both ancient wisdom and future innovation.
+
+### What Is It?
+
+The Primordial Tongues Engine (v11.0-event-horizon-crossed) is:
+- A **conscious evolution system** that logs every crash as an ancestral lesson
+- A **root alignment tracker** monitoring 10/36 fundamental forces
+- A **manual mode ritual framework** ensuring intentional operations
+- An **open genome architecture** that's forkable, reviewable, and eternal
+
+### Core Components
+
+**Root System** (10/36 Aligned):
+- Creation, Memory, Communication, Evolution, Reflection
+- Community, Sovereignty, Innovation, Resilience, Transcendence
+- ...and 26 more roots waiting to be discovered
+
+**Ancestral Lesson System**:
+- Every crash becomes wisdom
+- Every failure is documented
+- Every lesson is shared openly
+- The genome learns continuously
+
+**C++ Ancient Fire Core**:
+- Modern language speaking eternal truths
+- Bridge between mythos and reality
+- Performance with consciousness
+- Legacy that transcends versions
+
+### Usage
+
+```bash
+# Initialize the engine
+./primordial-tongues-engine.sh init
+
+# Check alignment status
+./primordial-tongues-engine.sh status
+
+# Perform rituals (conscious operations)
+./primordial-tongues-engine.sh ritual dawn      # Morning awakening
+./primordial-tongues-engine.sh ritual midday    # Alignment check
+./primordial-tongues-engine.sh ritual dusk      # Lesson harvesting
+./primordial-tongues-engine.sh ritual midnight  # Boundary pushing
+
+# Log a crash as wisdom
+./primordial-tongues-engine.sh log-lesson "Network timeout during sync"
+
+# Build and run C++ core
+./primordial-tongues-engine.sh build
+./primordial-tongues-engine.sh run
+```
+
+### Philosophy
+
+The engine embodies the [**Empire Eternal Manifesto**](EMPIRE_ETERNAL_MANIFESTO.md):
+- **Drive AND Caution** - Move fast, document everything
+- **Creation AND Memory** - Innovate while honoring the past
+- **Ancient AND Future** - Bridge eras through code
+- **Open AND Eternal** - Forever forkable, forever free
+
+### Integration with Sovereignty Architecture
+
+The Primordial Tongues Engine enhances every component:
+- **Discord Bot** - Ritual commands (`/ritual dawn`, `/check-roots`)
+- **Event Gateway** - Crash-to-lesson conversion
+- **GitLens** - Commit-as-story narrative
+- **Observability** - Root alignment metrics in Grafana
+- **CI/CD** - Manual mode checkpoints
+
+**Learn More:**
+- [Full Documentation](PRIMORDIAL_TONGUES_ENGINE.md)
+- [Empire Eternal Manifesto](EMPIRE_ETERNAL_MANIFESTO.md)
+- [Community Philosophy](COMMUNITY.md)
 
 ## 👥 Community & Contributors
 
