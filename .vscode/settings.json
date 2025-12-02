@@ -1,0 +1,52 @@
+{
+  "gitlens.hovers.enabled": true,
+  "gitlens.blame.highlight.enabled": true,
+  "gitlens.codeLens.enabled": true,
+  "gitlens.statusBar.enabled": true,
+  "gitlens.blame.format": "${message|50?} by ${author|12-} ${agoOrDate|14-}",
+  "gitlens.currentLine.enabled": true,
+  "gitlens.currentLine.pullRequests.enabled": true,
+  
+  "gitlens.views.branches.branches.layout": "list",
+  "gitlens.views.commits.avatars": true,
+  "gitlens.views.repositories.autoRefresh": true,
+  
+  "gitlens.advanced.messages": {
+    "suppressShowKeyBindingsNotice": true
+  },
+  
+  "strategickhaos.legion.enabled": true,
+  "strategickhaos.legion.visualize": {
+    "proposals": "show as branches",
+    "votes": "show as commit annotations",
+    "consensus": "show as branch protection",
+    "departments": "show as co-authors"
+  },
+  "strategickhaos.legion.notifications": {
+    "proposalCreated": true,
+    "voteCast": true,
+    "consensusReached": true
+  },
+  "strategickhaos.legion.kernelPath": ".strategickhaos/kernel",
+  
+  "python.defaultInterpreterPath": "python3",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  
+  "files.associations": {
+    "*.yml": "yaml",
+    "*.yaml": "yaml"
+  }
+}
