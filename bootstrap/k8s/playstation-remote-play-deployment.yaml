@@ -1,0 +1,227 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: playstation-config
+  namespace: gaming-consoles
+data:
+  remote-play.conf: |
+    # PlayStation Remote Play Configuration
+    # Sovereign Gaming Infrastructure
+    
+    # Connection Settings
+    remote_play_enabled=true
+    max_connections=4
+    connection_timeout=30000
+    
+    # Console Endpoints (4 Gaming Consoles)
+    console_1_endpoint=ps5-console-1.gaming-consoles.svc.cluster.local:9987
+    console_2_endpoint=ps5-console-2.gaming-consoles.svc.cluster.local:9987
+    console_3_endpoint=ps5-console-3.gaming-consoles.svc.cluster.local:9987
+    console_4_endpoint=ps5-console-4.gaming-consoles.svc.cluster.local:9987
+    
+    # Security Settings
+    encryption_enabled=true
+    tls_version=1.3
+    auth_required=true
+    closed_loop_mode=true
+    
+    # Network Settings
+    discovery_url=remoteplay.dl.playstation.net
+    local_discovery_only=true
+    port=9987
+    
+    # Resource Limits
+    max_bitrate_mbps=50
+    resolution_max=1080p
+    frame_rate_max=60
+  
+  scholarly-resources.txt: |
+    # 36 Scholarly and Government Resources for Gaming Infrastructure
+    # Educational and Research Resources (.org, .gov, .edu)
+    
+    # Federal Government Gaming & Technology Resources (.gov)
+    1. https://www.ftc.gov/news-events/topics/consumer-privacy
+    2. https://www.nist.gov/topics/cybersecurity
+    3. https://www.cisa.gov/topics/cybersecurity-best-practices
+    4. https://www.copyright.gov/legislation/dmca.pdf
+    5. https://www.justice.gov/criminal-ccips
+    6. https://www.energy.gov/science/computing
+    7. https://www.nsf.gov/funding/programs
+    8. https://www.archives.gov/research/electronic-records
+    9. https://www.gsa.gov/technology
+    10. https://www.sec.gov/edgar
+    
+    # Educational and Research Organizations (.org, .edu)
+    11. https://www.acm.org/publications
+    12. https://www.ieee.org/publications
+    13. https://www.w3.org/standards
+    14. https://www.eff.org/issues
+    15. https://www.archive.org/details/software
+    16. https://www.mozilla.org/security
+    17. https://www.apache.org/licenses/LICENSE-2.0
+    18. https://www.kernel.org/category/releases.html
+    19. https://www.gnu.org/licenses/gpl-3.0.html
+    20. https://www.python.org/community
+    
+    # Academic Research and Standards (.org)
+    21. https://www.iso.org/standards.html
+    22. https://www.oasis-open.org/standards
+    23. https://www.unicode.org/charts
+    24. https://www.ietf.org/standards
+    25. https://www.cncf.io/projects
+    26. https://www.linuxfoundation.org/projects
+    27. https://www.opensource.org/licenses
+    28. https://creativecommons.org/licenses
+    29. https://www.opengroup.org/standards
+    30. https://www.pcisecuritystandards.org
+    
+    # Infrastructure and Cloud Standards (.org, .gov)
+    31. https://www.nist.gov/publications
+    32. https://www.cloudfoundry.org
+    33. https://www.openstack.org
+    34. https://istio.io/latest/docs
+    35. https://prometheus.io/docs
+    36. https://kubernetes.io/docs/concepts
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playstation-remote-play-gateway
+  namespace: gaming-consoles
+  labels:
+    app: playstation-remote-play
+    component: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: playstation-remote-play
+      component: gateway
+  template:
+    metadata:
+      labels:
+        app: playstation-remote-play
+        component: gateway
+    spec:
+      serviceAccountName: gaming-console-operator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: remote-play-gateway
+        image: nginx:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9987
+          name: remote-play
+          protocol: TCP
+        - containerPort: 9987
+          name: remote-play-udp
+          protocol: UDP
+        - containerPort: 8080
+          name: management
+          protocol: TCP
+        env:
+        - name: REMOTE_PLAY_ENABLED
+          value: "true"
+        - name: MAX_CONSOLES
+          value: "4"
+        - name: CLOSED_LOOP_MODE
+          value: "true"
+        volumeMounts:
+        - name: config
+          mountPath: /etc/playstation
+          readOnly: true
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+      volumes:
+      - name: config
+        configMap:
+          name: playstation-config
+      - name: nginx-conf
+        configMap:
+          name: nginx-gaming-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-gaming-config
+  namespace: gaming-consoles
+data:
+  default.conf: |
+    upstream console_pool {
+        least_conn;
+        server ps5-console-1.gaming-consoles.svc.cluster.local:9987 max_fails=3 fail_timeout=30s;
+        server ps5-console-2.gaming-consoles.svc.cluster.local:9987 max_fails=3 fail_timeout=30s;
+        server ps5-console-3.gaming-consoles.svc.cluster.local:9987 max_fails=3 fail_timeout=30s;
+        server ps5-console-4.gaming-consoles.svc.cluster.local:9987 max_fails=3 fail_timeout=30s;
+    }
+    
+    server {
+        listen 8080;
+        server_name localhost;
+        
+        location /health {
+            access_log off;
+            return 200 "healthy\n";
+            add_header Content-Type text/plain;
+        }
+        
+        location /ready {
+            access_log off;
+            return 200 "ready\n";
+            add_header Content-Type text/plain;
+        }
+        
+        location /status {
+            stub_status on;
+            access_log off;
+        }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: playstation-remote-play-gateway
+  namespace: gaming-consoles
+  labels:
+    app: playstation-remote-play
+spec:
+  type: ClusterIP
+  selector:
+    app: playstation-remote-play
+    component: gateway
+  ports:
+  - port: 9987
+    targetPort: 9987
+    protocol: TCP
+    name: remote-play-tcp
+  - port: 9987
+    targetPort: 9987
+    protocol: UDP
+    name: remote-play-udp
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: management
