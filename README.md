@@ -28,6 +28,35 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 📚 Sovereign Arsenal - Knowledge Base
+
+The **Sovereign Arsenal** is a curated collection of 100 foundational papers for digital sovereignty, instantly accessible:
+
+```bash
+# Access the arsenal
+cd sovereign-arsenal
+
+# Download all 100 papers
+./download-all.sh
+
+# Or get started immediately
+cat QUICKSTART.md
+```
+
+**[→ Explore the Sovereign Arsenal](sovereign-arsenal/README.md)**
+
+The arsenal includes papers on:
+- 🤖 AI/ML Foundations (Transformers, GPT, BERT)
+- 🔐 Cryptography & Zero-Knowledge Proofs
+- 🌐 Distributed Systems (Raft, Paxos, Lamport)
+- ⚖️ AI Law & Governance (GDPR, EU AI Act)
+- 🧠 Neuroscience & Collective Intelligence
+- 📐 Mathematics & Formal Verification
+- 📜 Open Source Licenses & Ethics
+- ⚡ Energy-Efficient & Open Hardware
+- 🧬 Biology & Genome Ethics
+- 🌟 Decentralization Classics (Bitcoin, Ethereum, IPFS)
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
@@ -153,6 +182,23 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 ## 🤖 AI Agent Integration
 
 ### Vector Knowledge Base
+
+Load the Sovereign Arsenal embeddings to make your agents **ungaslightable**:
+
+```bash
+# Download pre-computed embeddings
+cd sovereign-arsenal/embeddings
+curl -L -o arsenal-embeddings.jsonl.gz \
+  https://huggingface.co/datasets/strategickhaos/sovereign-arsenal-embeddings/resolve/main/arsenal-embeddings.jsonl.gz
+
+# Load into your vector DB (see embeddings/README.md)
+python load_to_qdrant.py arsenal-embeddings.jsonl
+```
+
+The knowledge base includes:
+- **100 Foundational Papers**: Transformers, Raft, GDPR, CRISPR, Bitcoin, and more
+- **Pre-computed Embeddings**: 1536-dimensional vectors ready for RAG
+- **Structured Metadata**: Category, title, authors, year, citations
 - **Runbooks**: Operational procedures and troubleshooting guides
 - **Log Schemas**: Structured logging patterns and analysis
 - **Infrastructure Docs**: Architecture and deployment guides
@@ -166,6 +212,8 @@ ai_agents:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
       "#prs": "claude-3-sonnet"  # Code review assistance
+  knowledge_base:
+    sovereign_arsenal: "qdrant://localhost:6333/sovereign_arsenal"
 ```
 
 ## 🔐 Security & Governance
