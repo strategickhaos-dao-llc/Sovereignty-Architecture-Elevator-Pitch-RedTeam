@@ -15,8 +15,8 @@
 4. [AI Agent Layer](#ai-agent-layer)
 5. [Portfolio Automation Components](#portfolio-automation-components)
 6. [Operator Components](#operator-components)
-7. [DNA Transcription Pipeline ↔ CI/CD Pipeline](#dna-transcription-pipeline--your-cicd-pipeline)
-8. [Slime Mold Intelligence ↔ Swarm System](#slime-mold-intelligence--your-swarm-system)
+7. [DNA Transcription Pipeline ↔ Your CI/CD Pipeline](#dna-transcription-pipeline--your-cicd-pipeline)
+8. [Slime Mold Intelligence ↔ Your Swarm System](#slime-mold-intelligence--your-swarm-system)
 9. [Key Insights](#key-insights-from-this-mapping)
 
 ---
