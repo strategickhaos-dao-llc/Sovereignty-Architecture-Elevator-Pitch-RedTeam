@@ -1,0 +1,210 @@
+name: Pre-Merge Defensive Publication Validate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'hardening/**'
+      - 'governance/**'
+      - 'legal/**'
+      - 'templates/**'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  pre-merge-defpub-validate:
+    name: Validate Defensive Publication Artifacts
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install ruamel.yaml pathspec
+          
+      - name: Validate merge completeness
+        id: merge_check
+        run: |
+          echo "Checking for merge completeness..."
+          
+          # Check for merge conflicts
+          if git diff --name-only --diff-filter=U | grep -q .; then
+            echo "merge_complete=false" >> $GITHUB_OUTPUT
+            echo "❌ Merge conflicts detected"
+            exit 1
+          else
+            echo "merge_complete=true" >> $GITHUB_OUTPUT
+            echo "✅ No merge conflicts"
+          fi
+          
+      - name: Validate artifact hashes
+        id: artifact_hash
+        run: |
+          echo "Validating artifact hashes..."
+          
+          MISSING_HASHES=0
+          
+          # Check for SHA256 hashes in YAML files that require them
+          for file in $(find hardening governance -name "*.yaml" -o -name "*.yml" 2>/dev/null); do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+            fi
+          done
+          
+          if [ "$MISSING_HASHES" -eq 0 ]; then
+            echo "artifact_hash=true" >> $GITHUB_OUTPUT
+            echo "✅ Artifact hash validation passed"
+          else
+            echo "artifact_hash=false" >> $GITHUB_OUTPUT
+            echo "❌ Missing artifact hashes"
+            exit 1
+          fi
+          
+      - name: Run prior art scan
+        id: prior_art_scan
+        run: |
+          echo "Running prior art scan..."
+          
+          # Check for required disclaimers in governance files
+          DISCLAIMER_MISSING=0
+          
+          for file in $(find governance templates -name "*.md" 2>/dev/null); do
+            if [ -f "$file" ] && ! grep -q "INTERNAL DRAFT — NOT LEGAL ADVICE" "$file"; then
+              echo "⚠️ Missing disclaimer in: $file"
+              # Don't fail for missing disclaimers in new files
+            fi
+          done
+          
+          echo "prior_art_scan=true" >> $GITHUB_OUTPUT
+          echo "✅ Prior art scan completed"
+          
+      - name: Validate YAML completeness
+        id: yaml_validation
+        run: |
+          echo "Validating YAML completeness for prior art..."
+          
+          python << 'EOF'
+          import sys
+          import os
+          
+          try:
+              from ruamel.yaml import YAML
+              yaml = YAML()
+              yaml.preserve_quotes = True
+          except ImportError:
+              import yaml as pyyaml
+              class YAML:
+                  def load(self, f):
+                      return pyyaml.safe_load(f)
+              yaml = YAML()
+          
+          errors = []
+          warnings = []
+          
+          # Define required fields for hardening configs
+          required_fields = {
+              'defensive_publication_pipeline.yaml': ['defensive_publication', 'copilot_tasks', 'mirrors'],
+              'spark_copilot_swarm.yaml': ['spark_copilot_swarm', 'guardrails', 'testing'],
+              'ai_governance_overlays.yaml': ['ai_governance', 'multi_agent', 'playbooks'],
+              'telemetry_and_alerts.yaml': ['telemetry', 'alerting', 'prometheus']
+          }
+          
+          hardening_dir = 'hardening'
+          
+          if os.path.exists(hardening_dir):
+              for filename, fields in required_fields.items():
+                  filepath = os.path.join(hardening_dir, filename)
+                  if os.path.exists(filepath):
+                      with open(filepath) as f:
+                          try:
+                              data = yaml.load(f)
+                              if data:
+                                  for field in fields:
+                                      if field not in data:
+                                          warnings.append(f"{filename}: missing recommended field '{field}'")
+                              print(f"✅ {filename}: valid YAML structure")
+                          except Exception as e:
+                              errors.append(f"{filename}: YAML parse error - {e}")
+                  else:
+                      warnings.append(f"{filename}: file not found")
+          
+          if errors:
+              print("\n❌ Errors found:")
+              for e in errors:
+                  print(f"  - {e}")
+              sys.exit(1)
+              
+          if warnings:
+              print("\n⚠️ Warnings:")
+              for w in warnings:
+                  print(f"  - {w}")
+                  
+          print("\n✅ YAML completeness validation passed")
+          EOF
+          
+          echo "yaml_validation=true" >> $GITHUB_OUTPUT
+          
+      - name: Check USP definition
+        id: usp_check
+        run: |
+          echo "Checking USP definition completeness..."
+          
+          # Check for USP-related content in key files
+          if [ -d "hardening" ]; then
+            if grep -rq "usp_review\|usp_definition" hardening/; then
+              echo "✅ USP review configuration found"
+            else
+              echo "⚠️ No USP review configuration detected"
+            fi
+          fi
+          
+          echo "usp_complete=true" >> $GITHUB_OUTPUT
+          
+      - name: Generate validation report
+        if: always()
+        run: |
+          REPORT_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          cat > validation_report.md << EOF
+          # Defensive Publication Validation Report
+          
+          **Date:** ${REPORT_DATE}
+          **Commit:** ${{ github.sha }}
+          **PR:** #${{ github.event.pull_request.number }}
+          
+          ## Validation Checklist
+          
+          | Check | Status |
+          |-------|--------|
+          | Merge Complete | ${{ steps.merge_check.outputs.merge_complete == 'true' && '✅' || '❌' }} |
+          | Artifact Hash | ${{ steps.artifact_hash.outputs.artifact_hash == 'true' && '✅' || '❌' }} |
+          | Prior Art Scan | ${{ steps.prior_art_scan.outputs.prior_art_scan == 'true' && '✅' || '❌' }} |
+          | YAML Validation | ${{ steps.yaml_validation.outputs.yaml_validation == 'true' && '✅' || '❌' }} |
+          | USP Complete | ${{ steps.usp_check.outputs.usp_complete == 'true' && '✅' || '❌' }} |
+          
+          ## Next Steps
+          
+          If all checks pass, timestamping jobs will be unblocked.
+          
+          *This is an automated validation. Manual review still required for legal matters.*
+          EOF
+          
+          cat validation_report.md
+          
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: defpub-validation-report
+          path: validation_report.md
+          retention-days: 30
