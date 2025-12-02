@@ -272,12 +272,47 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📡 Mobile Sovereignty Node
+
+The **Mobile Sovereignty Node** enables portable field deployment using USB-boot tethered development:
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  USB Boot   │────▶│  Codespaces │────▶│ Sovereignty │
+│   Device    │     │     IDE     │     │ Architecture│
+└─────────────┘     └─────────────┘     └─────────────┘
+```
+
+### Quick Setup
+
+```bash
+# 1. Create bootable USB (requires sudo)
+sudo ./scripts/usb_boot_setup.sh quick /dev/sdX
+
+# 2. Boot from USB on any legacy laptop
+
+# 3. Connect to WiFi and open Codespaces
+
+# 4. Start streaming or automation
+./stream_to_twitch.sh start
+```
+
+### Core Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `stream_to_twitch.sh` | Automated Twitch streaming with protected DAO content |
+| `scripts/usb_boot_setup.sh` | USB bootloader configuration for mobile nodes |
+
+📖 **Full Documentation**: [MOBILE_SOVEREIGNTY_NODE.md](MOBILE_SOVEREIGNTY_NODE.md)
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
 
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
+- **[Mobile Sovereignty Node](MOBILE_SOVEREIGNTY_NODE.md)** - Portable field deployment guide
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
