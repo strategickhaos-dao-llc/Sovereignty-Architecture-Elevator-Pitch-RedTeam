@@ -1,0 +1,38 @@
+{
+  "calm_focus": {
+    "type": "binaural",
+    "carrier_hz": 220,
+    "beat_hz": 10.0,
+    "description": "Focused but relaxed, good for coding/reading. High alpha / low beta range."
+  },
+  "deep_chill": {
+    "type": "binaural",
+    "carrier_hz": 200,
+    "beat_hz": 5.0,
+    "description": "Drifty, introspective, for reflection. Theta range."
+  },
+  "feral_god_mode": {
+    "type": "isochronic",
+    "carrier_hz": 400,
+    "beat_hz": 14.0,
+    "description": "High alert, fast pattern recognition. Beta-high range."
+  },
+  "pre_sleep": {
+    "type": "binaural",
+    "carrier_hz": 180,
+    "beat_hz": 3.0,
+    "description": "Wind-down, not for juggling. Delta range."
+  },
+  "flow_state": {
+    "type": "binaural",
+    "carrier_hz": 250,
+    "beat_hz": 8.0,
+    "description": "Alpha wave entrainment for creative flow."
+  },
+  "deep_learning": {
+    "type": "isochronic",
+    "carrier_hz": 300,
+    "beat_hz": 12.0,
+    "description": "SMR (sensorimotor rhythm) for memory consolidation."
+  }
+}
