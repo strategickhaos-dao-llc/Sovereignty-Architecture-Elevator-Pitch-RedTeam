@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **⚛️ Quantum Swarm** - LLM agents operating as a quantum-like processor over Obsidian vaults (see [Quantum Methodology](QUANTUM_METHODOLOGY.md))
 
 ## 🚀 Quick Start
 
@@ -149,6 +150,7 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 - **`#alerts`** - Critical system alerts, monitoring notifications
 - **`#agents`** - AI assistant interactions, automated responses
 - **`#dev-feed`** - Development activity, commit summaries
+- **`#quantum-channel`** - Quantum swarm operations and entanglement updates
 
 ## 🤖 AI Agent Integration
 
@@ -158,6 +160,26 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 - **Infrastructure Docs**: Architecture and deployment guides
 - **Code Patterns**: Development standards and examples
 
+### ⚛️ Quantum Swarm Intelligence
+
+The **Sovereign Agent Kit** provides quantum-inspired multi-agent orchestration:
+
+- **Quantum Processor**: Multiple LLM agents operating as qubits over your Obsidian vault
+- **Entanglement**: Wikilinks create correlations between agent outputs
+- **Error Correction**: Multi-agent consensus prevents hallucinations
+- **100% Sovereign**: Runs air-gapped with local models if desired
+
+```bash
+# Launch 16-agent quantum swarm
+cd sovereign-agent-kit
+./launch_quantum_swarm.sh --qubits 16 --model claude-3-opus
+
+# Check swarm status
+./quantum_status.sh
+```
+
+**📚 See [QUANTUM_METHODOLOGY.md](QUANTUM_METHODOLOGY.md) for the complete framework**
+
 ### Per-Channel Routing
 ```yaml
 ai_agents:
@@ -166,6 +188,7 @@ ai_agents:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
       "#prs": "claude-3-sonnet"  # Code review assistance
+      "#quantum-channel": "quantum-swarm"  # Quantum processor notifications
 ```
 
 ## 🔐 Security & Governance
