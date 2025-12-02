@@ -1,0 +1,443 @@
+version: '3.8'
+
+# Subject Matter Expert (SME) Services
+# Docker Compose for analyzing and processing 100 sovereign infrastructure resources
+#
+# NOTE: This configuration assumes Ollama is running on the host machine.
+# - On macOS/Windows: host.docker.internal works by default
+# - On Linux: Either run Ollama in a container OR use --network host OR
+#   replace host.docker.internal with your host's IP address
+#
+# Linux alternative: export OLLAMA_HOST=192.168.1.100:11434
+
+networks:
+  sme_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+volumes:
+  sme_data:
+  sme_cache:
+  sme_results:
+  crawler_data:
+  analysis_output:
+
+services:
+  # Web Crawler Service - Fetches content from all 100 URLs
+  web-crawler:
+    image: python:3.11-slim
+    container_name: sme-web-crawler
+    networks:
+      - sme_network
+    volumes:
+      - ./sme-resources.yaml:/app/sme-resources.yaml:ro
+      - crawler_data:/app/data
+      - ./scripts:/app/scripts:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - USER_AGENT=SovereignArchitecture-SME-Bot/1.0
+      - RATE_LIMIT=2  # requests per second
+      - TIMEOUT=30
+      - RETRY_ATTEMPTS=3
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests beautifulsoup4 && 
+        python /app/scripts/sme-crawler.py
+      "
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Content Analyzer - Ollama-based analysis of crawled content
+  sme-analyzer-kubernetes:
+    image: python:3.11-slim
+    container_name: sme-analyzer-k8s
+    networks:
+      - sme_network
+    volumes:
+      - crawler_data:/app/data:ro
+      - analysis_output:/app/output
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+      - ANALYSIS_TOPIC=kubernetes
+      - MODEL_NAME=llama3:70b
+      - BATCH_SIZE=10
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/sme-analyzer.py --topic kubernetes
+      "
+    depends_on:
+      - web-crawler
+    restart: unless-stopped
+
+  sme-analyzer-ai-ml:
+    image: python:3.11-slim
+    container_name: sme-analyzer-ai
+    networks:
+      - sme_network
+    volumes:
+      - crawler_data:/app/data:ro
+      - analysis_output:/app/output
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+      - ANALYSIS_TOPIC=ai_ml
+      - MODEL_NAME=llama3:70b
+      - BATCH_SIZE=10
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/sme-analyzer.py --topic ai_ml
+      "
+    depends_on:
+      - web-crawler
+    restart: unless-stopped
+
+  sme-analyzer-security:
+    image: python:3.11-slim
+    container_name: sme-analyzer-security
+    networks:
+      - sme_network
+    volumes:
+      - crawler_data:/app/data:ro
+      - analysis_output:/app/output
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+      - ANALYSIS_TOPIC=security
+      - MODEL_NAME=llama3:70b
+      - BATCH_SIZE=10
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/sme-analyzer.py --topic security
+      "
+    depends_on:
+      - web-crawler
+    restart: unless-stopped
+
+  sme-analyzer-networking:
+    image: python:3.11-slim
+    container_name: sme-analyzer-networking
+    networks:
+      - sme_network
+    volumes:
+      - crawler_data:/app/data:ro
+      - analysis_output:/app/output
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+      - ANALYSIS_TOPIC=networking
+      - MODEL_NAME=llama3:70b
+      - BATCH_SIZE=10
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/sme-analyzer.py --topic networking
+      "
+    depends_on:
+      - web-crawler
+    restart: unless-stopped
+
+  sme-analyzer-storage:
+    image: python:3.11-slim
+    container_name: sme-analyzer-storage
+    networks:
+      - sme_network
+    volumes:
+      - crawler_data:/app/data:ro
+      - analysis_output:/app/output
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+      - ANALYSIS_TOPIC=storage
+      - MODEL_NAME=llama3:70b
+      - BATCH_SIZE=10
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/sme-analyzer.py --topic storage
+      "
+    depends_on:
+      - web-crawler
+    restart: unless-stopped
+
+  # Evolution Path Matcher - Maps resources to evolution items
+  evolution-matcher:
+    image: python:3.11-slim
+    container_name: sme-evolution-matcher
+    networks:
+      - sme_network
+    volumes:
+      - ./sme-resources.yaml:/app/sme-resources.yaml:ro
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+      - analysis_output:/app/output
+      - sme_results:/app/results
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+      - MODEL_NAME=llama3:70b
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/evolution-matcher.py
+      "
+    depends_on:
+      - sme-analyzer-kubernetes
+      - sme-analyzer-ai-ml
+      - sme-analyzer-security
+      - sme-analyzer-networking
+      - sme-analyzer-storage
+    restart: unless-stopped
+
+  # Knowledge Graph Builder - Creates Obsidian-compatible graph
+  knowledge-graph:
+    image: python:3.11-slim
+    container_name: sme-knowledge-graph
+    networks:
+      - sme_network
+    volumes:
+      - sme_results:/app/results:ro
+      - ./obsidian:/app/obsidian
+    environment:
+      - GRAPH_FORMAT=obsidian
+      - OUTPUT_DIR=/app/obsidian
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml networkx markdown && 
+        python /app/scripts/knowledge-graph-builder.py
+      "
+    depends_on:
+      - evolution-matcher
+    restart: unless-stopped
+
+  # Discord Webhook Reporter
+  discord-reporter:
+    image: python:3.11-slim
+    container_name: sme-discord-reporter
+    networks:
+      - sme_network
+    volumes:
+      - sme_results:/app/results:ro
+      - analysis_output:/app/analysis:ro
+    environment:
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - REPORT_INTERVAL=3600  # Report every hour
+    command: >
+      bash -c "
+        pip install --no-cache-dir requests pyyaml && 
+        python /app/scripts/discord-reporter.py
+      "
+    depends_on:
+      - evolution-matcher
+    restart: unless-stopped
+
+  # Vector Database for SME Knowledge
+  sme-vectordb:
+    image: qdrant/qdrant:latest
+    container_name: sme-qdrant
+    networks:
+      - sme_network
+    volumes:
+      - sme_data:/qdrant/storage
+    ports:
+      - "6334:6333"
+    environment:
+      - QDRANT_ALLOW_RECOVERY=true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Vector Indexer - Indexes all content into Qdrant
+  vector-indexer:
+    image: python:3.11-slim
+    container_name: sme-vector-indexer
+    networks:
+      - sme_network
+    volumes:
+      - crawler_data:/app/data:ro
+      - analysis_output:/app/analysis:ro
+    environment:
+      - QDRANT_URL=http://sme-vectordb:6333
+      - OLLAMA_HOST=host.docker.internal:11434
+      - EMBEDDING_MODEL=nomic-embed-text
+      - COLLECTION_NAME=sme_knowledge
+    command: >
+      bash -c "
+        pip install --no-cache-dir qdrant-client requests pyyaml && 
+        python /app/scripts/vector-indexer.py
+      "
+    depends_on:
+      sme-vectordb:
+        condition: service_healthy
+      web-crawler:
+        condition: service_started
+    restart: unless-stopped
+
+  # RAG Query Service - Query the SME knowledge base
+  sme-rag-api:
+    image: python:3.11-slim
+    container_name: sme-rag-api
+    networks:
+      - sme_network
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./evolution-path.yaml:/app/evolution-path.yaml:ro
+      - ./sme-resources.yaml:/app/sme-resources.yaml:ro
+    environment:
+      - QDRANT_URL=http://sme-vectordb:6333
+      - OLLAMA_HOST=host.docker.internal:11434
+      - MODEL_NAME=llama3:70b
+      - EMBEDDING_MODEL=nomic-embed-text
+      - API_PORT=8090
+    command: >
+      bash -c "
+        pip install --no-cache-dir fastapi uvicorn qdrant-client requests pyyaml && 
+        python /app/scripts/sme-rag-api.py
+      "
+    depends_on:
+      sme-vectordb:
+        condition: service_healthy
+      vector-indexer:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring Dashboard
+  sme-dashboard:
+    image: grafana/grafana:latest
+    container_name: sme-dashboard
+    networks:
+      - sme_network
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./monitoring/sme-dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${SME_GRAFANA_PASSWORD:-admin}
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/sme-overview.json
+    restart: unless-stopped
+
+  # Cache Service for URL responses
+  sme-cache:
+    image: redis:7-alpine
+    container_name: sme-redis-cache
+    networks:
+      - sme_network
+    volumes:
+      - sme_cache:/data
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Scheduled Resource Updater
+  resource-updater:
+    image: python:3.11-slim
+    container_name: sme-resource-updater
+    networks:
+      - sme_network
+    volumes:
+      - ./sme-resources.yaml:/app/sme-resources.yaml:ro
+      - crawler_data:/app/data
+      - sme_cache:/app/cache
+    environment:
+      - REDIS_URL=redis://sme-cache:6379
+      - UPDATE_SCHEDULE="0 */6 * * *"  # Every 6 hours
+      - CACHE_TTL=21600  # 6 hours
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests redis schedule && 
+        python /app/scripts/resource-updater.py
+      "
+    depends_on:
+      sme-cache:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # URL Validator - Checks all URLs are reachable
+  url-validator:
+    image: python:3.11-slim
+    container_name: sme-url-validator
+    networks:
+      - sme_network
+    volumes:
+      - ./sme-resources.yaml:/app/sme-resources.yaml:ro
+      - sme_results:/app/results
+    environment:
+      - VALIDATION_INTERVAL=86400  # Daily
+      - TIMEOUT=10
+      - RETRY_ATTEMPTS=3
+    command: >
+      bash -c "
+        pip install --no-cache-dir pyyaml requests && 
+        python /app/scripts/url-validator.py
+      "
+    restart: unless-stopped
+
+  # Prometheus Metrics Exporter
+  sme-metrics:
+    image: prom/prometheus:latest
+    container_name: sme-prometheus
+    networks:
+      - sme_network
+    volumes:
+      - ./monitoring/sme-prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - sme_data:/prometheus
+    ports:
+      - "9091:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
+
+  # Log Aggregator
+  sme-logs:
+    image: grafana/loki:latest
+    container_name: sme-loki
+    networks:
+      - sme_network
+    ports:
+      - "3101:3100"
+    volumes:
+      - ./monitoring/loki-sme-config.yml:/etc/loki/local-config.yaml:ro
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+# Health check for entire stack
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+  interval: 60s
+  timeout: 10s
+  retries: 5
+  start_period: 120s
+
+# Usage:
+# docker-compose -f docker-compose-sme.yml up -d
+# docker-compose -f docker-compose-sme.yml logs -f sme-rag-api
+# docker-compose -f docker-compose-sme.yml down
+
+# Query the RAG API:
+# curl http://localhost:8090/query -d '{"question": "How do I set up k3s with Longhorn?"}'
+
+# View dashboard:
+# http://localhost:3001 (Grafana - admin/admin)
