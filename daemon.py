@@ -305,18 +305,19 @@ async def main():
     """Entry point for the daemon."""
     daemon = SovereigntyDaemon()
 
-    # Handle graceful shutdown
-    import signal
+    # Setup asyncio-compatible signal handlers
+    loop = asyncio.get_running_loop()
 
-    def signal_handler(signum, frame):
-        logger.info(f"Received signal {signum}, initiating shutdown...")
-        asyncio.create_task(daemon.shutdown())
+    def signal_handler():
+        logger.info("Received shutdown signal, initiating graceful shutdown...")
+        daemon.running = False
 
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, signal_handler)
 
     await daemon.run()
 
 
 if __name__ == '__main__':
+    import signal
     asyncio.run(main())

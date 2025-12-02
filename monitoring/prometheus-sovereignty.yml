@@ -2,10 +2,16 @@
 # Monitors the biological/slime mold intelligence components
 #
 # Services monitored:
-# - PostgreSQL (DNA Archive / Long-term Memory)
-# - Redis (Short-term Memory / Fast Access)
+# - PostgreSQL (DNA Archive / Long-term Memory) - requires postgres_exporter
+# - Redis (Short-term Memory / Fast Access) - requires redis_exporter
 # - NATS (Synaptic Transmission / Async Messaging)
 # - Event Gateway (Neural Network)
+#
+# NOTE: PostgreSQL and Redis do not expose Prometheus metrics by default.
+# To enable metrics for these services, add exporters:
+#   - postgres_exporter: https://github.com/prometheus-community/postgres_exporter
+#   - redis_exporter: https://github.com/oliver006/redis_exporter
+# The scrape configs below are placeholders for when exporters are deployed.
 
 global:
   scrape_interval: 15s
@@ -16,18 +22,20 @@ global:
 
 scrape_configs:
   # PostgreSQL - DNA Archive / Long-term Memory
-  # Note: Requires postgres_exporter for actual metrics
-  - job_name: 'postgres'
-    static_configs:
-      - targets: ['postgres:5432']
-    scrape_interval: 60s
+  # REQUIRES: postgres_exporter running on port 9187
+  # Without exporter, this job will show as down
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+  #   scrape_interval: 60s
 
   # Redis - Short-term Memory / Fast Access
-  # Note: Requires redis_exporter for actual metrics
-  - job_name: 'redis'
-    static_configs:
-      - targets: ['redis:6379']
-    scrape_interval: 30s
+  # REQUIRES: redis_exporter running on port 9121
+  # Without exporter, this job will show as down
+  # - job_name: 'redis'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+  #   scrape_interval: 30s
 
   # NATS - Synaptic Transmission / Async Messaging
   # NATS provides built-in monitoring on port 8222

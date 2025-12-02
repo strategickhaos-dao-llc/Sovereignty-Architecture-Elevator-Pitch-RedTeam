@@ -14,6 +14,7 @@
  */
 
 const http = require('http');
+const { connect } = require('nats');
 
 // Configuration from environment
 const NATS_URL = process.env.NATS_URL || 'nats://localhost:4222';
@@ -29,7 +30,6 @@ let isConnected = false;
  */
 async function connectNats() {
     try {
-        const { connect } = require('nats');
         nc = await connect({
             servers: [NATS_URL],
             reconnect: true,
