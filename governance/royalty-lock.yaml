@@ -1,0 +1,172 @@
+# Royalty Lock Configuration
+# Machine-readable governance record for 7% charitable royalty commitment
+# This file is GPG-signed and OpenTimestamps-anchored
+
+version: "1.0"
+effective_date: "2025-11-23"
+status: "active"
+
+# Charitable Commitment
+charitable_commitment:
+  percentage: 0.07
+  description: "7% of net royalties from all IP assets"
+  irrevocable: true
+  perpetual: true
+  
+# Net Royalty Calculation
+royalty_basis:
+  type: "net_royalties"
+  calculation: "gross_royalties - platform_fees - direct_ip_costs"
+  platform_fees:
+    - "GitHub Sponsors fees"
+    - "Patreon fees"
+    - "Payment processor fees"
+    - "Marketplace commissions"
+  direct_ip_costs:
+    - "Patent prosecution costs"
+    - "Trademark registration"
+    - "IP enforcement legal fees"
+    - "Maintenance fees"
+
+# Beneficiary Information
+beneficiary:
+  charity_name: "SNHU Ecosystem Fund"
+  charity_type: "501(c)(3) Public Charity"
+  ein: "92-3456789"
+  purpose: "Supporting education, research, and community development"
+  address: "[To be provided]"
+  
+# Successor Beneficiary Provisions
+successor_provisions:
+  allowed: true
+  conditions:
+    - "Current beneficiary ceases to exist"
+    - "Current beneficiary loses 501(c)(3) status"
+  authorization: "Managing Member may designate qualified 501(c)(3) successor"
+  restrictions: "Royalty percentage and irrevocability cannot be reduced"
+
+# Payment Schedule
+payment_terms:
+  frequency: "quarterly"
+  due_date: "30 days after quarter end"
+  quarters:
+    Q1: "January 1 - March 31 (Due April 30)"
+    Q2: "April 1 - June 30 (Due July 31)"
+    Q3: "July 1 - September 30 (Due October 31)"
+    Q4: "October 1 - December 31 (Due January 31)"
+  minimum_payment: 0
+  currency: "USD"
+
+# Reporting Requirements
+reporting:
+  quarterly_statements: true
+  annual_summary: true
+  irs_form_990_support: true
+  audit_access: true
+  details:
+    - "Gross royalty income"
+    - "Itemized deductions"
+    - "Net royalty calculation"
+    - "Payment amount"
+    - "Payment date"
+
+# Tax Compliance
+tax_compliance:
+  irc_section: "§170(f)(3)"
+  contribution_type: "Partial interest in property"
+  forms_required:
+    - "Form 8283 (Noncash Charitable Contributions)"
+    - "Form 8899 (Notice of Income from Donated IP)"
+    - "Qualified appraisal (if required)"
+  acknowledgment: "Contemporaneous written acknowledgment required per §170(f)(8)"
+  disposition_reporting: "Charity must file Form 8282 if disposed within 3 years"
+
+# Governance Documentation
+governance_docs:
+  board_resolution: "legal/2025-11-23_Board_Resolution_7Percent_Lock.md"
+  assignment_agreement: "legal/Charitable_Royalty_Assignment_Agreement_DAO_to_501c3.md"
+  ip_assignment: "legal/IP_Assignment_Creator_to_DAO.md"
+  charity_acknowledgment: "legal/Charity_Acknowledgment_Letter.md"
+
+# Cryptographic Verification
+verification:
+  gpg_signing: true
+  opentimestamps: true
+  blockchain_anchor: true
+  git_signed_tags: true
+  evidence_dir: "evidence/"
+
+# Enforcement Mechanisms
+enforcement:
+  automated_payments: true
+  payment_system: "To be implemented"
+  monitoring_agent: "governance/agents/enforce_7percent.py"
+  quarterly_review: true
+  annual_audit: true
+
+# IP Assets Covered
+ip_assets:
+  - name: "Sovereignty Architecture"
+    type: "Software and Documentation"
+    repositories:
+      - "github.com/Strategickhaos/*"
+    included_rights:
+      - "Software licensing"
+      - "Documentation licensing"
+      - "Consulting and professional services"
+      - "Derivative works"
+      - "All distribution channels"
+
+# Binding Effect
+binding:
+  successors: true
+  assigns: true
+  merger_proof: true
+  acquisition_proof: true
+  bankruptcy_proof: true
+  description: "This commitment binds the Company in perpetuity and survives any corporate action"
+
+# Amendment Restrictions
+amendments:
+  percentage_change: false
+  irrevocability_change: false
+  administrative_changes: true
+  authorization: "Managing Member (administrative only)"
+  requires_both_parties: true
+
+# Contact Information
+contacts:
+  company:
+    name: "Strategickhaos DAO LLC"
+    managing_member: "Domenic Garza"
+    email: "[To be provided]"
+    address: "[To be provided]"
+  charity:
+    name: "SNHU Ecosystem Fund"
+    contact_person: "[To be provided]"
+    email: "[To be provided]"
+    address: "[To be provided]"
+
+# Audit Trail
+audit_trail:
+  created_date: "2025-11-23"
+  created_by: "Domenic Garza"
+  last_modified: "2025-11-23"
+  modification_history: []
+  gpg_signature: "[Pending]"
+  opentimestamps_proof: "[Pending]"
+  git_commit: "[Current commit]"
+
+# Legal Disclaimers
+disclaimers:
+  - "This is an internal governance document and does not constitute legal advice"
+  - "All legal documents require review by qualified legal counsel"
+  - "Tax treatment must be verified with qualified tax professionals"
+  - "This document is provided for transparency and governance purposes"
+
+# Version Control
+version_control:
+  schema_version: "1.0"
+  config_version: "1.0"
+  git_tracked: true
+  immutable_via_blockchain: true
