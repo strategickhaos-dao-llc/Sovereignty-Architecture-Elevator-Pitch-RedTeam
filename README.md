@@ -2,6 +2,17 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🔥 The Origin Story
+
+This project was built from nothing—literally. From negative bank balances and beat-up laptops to sovereign AI architectures. It's proof that you don't need perfect conditions to build something extraordinary.
+
+- **[Origin Story: Sovereign Systems on Scrap Metal](ORIGIN_STORY.md)** - The authentic story of building this system with pure determination
+- **[The Broke Tinkerer's Manifesto](BROKE_TINKERER_MANIFESTO.md)** - A manifesto for every builder starting from nothing
+
+*"Your circumstances are temporary. Your determination is permanent. Build anyway."*
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
