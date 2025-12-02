@@ -1,0 +1,23 @@
+apiVersion: v2
+name: strategickhaos-swarm
+description: A Helm chart for deploying the Strategickhaos Swarm Intelligence infrastructure - AI-governed organization with Discord-native DevOps automation
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+home: https://github.com/Strategickhaos/sovereign-swarm-infra
+sources:
+  - https://github.com/Strategickhaos/sovereign-swarm-infra
+maintainers:
+  - name: Domenic Garza
+    email: domenic@strategickhaos.com
+keywords:
+  - strategickhaos
+  - swarm-intelligence
+  - discord
+  - devops
+  - ai-agents
+  - kubernetes
+  - sovereignty
+annotations:
+  category: Infrastructure
+  licenses: MIT

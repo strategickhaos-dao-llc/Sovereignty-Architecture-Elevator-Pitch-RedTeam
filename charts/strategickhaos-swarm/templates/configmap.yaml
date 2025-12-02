@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "strategickhaos-swarm.fullname" . }}-config
+  labels:
+    {{- include "strategickhaos-swarm.labels" . | nindent 4 }}
+data:
+  discovery.yaml: |
+    org:
+      name: "Strategickhaos DAO LLC / Valoryield Engine"
+      contact:
+        owner: "Domenic Garza"
+    
+    {{- if .Values.discord.enabled }}
+    discord:
+      guild_id: {{ .Values.discord.guildId | default "null" | quote }}
+      channels:
+        prs: {{ .Values.discord.channels.prs | default "#prs" | quote }}
+        deployments: {{ .Values.discord.channels.deployments | default "#deployments" | quote }}
+        alerts: {{ .Values.discord.channels.alerts | default "#alerts" | quote }}
+        agents: {{ .Values.discord.channels.agents | default "#agents" | quote }}
+    {{- end }}
+    
+    {{- if .Values.aiAgents.enabled }}
+    ai_agents:
+      model: {{ .Values.aiAgents.model | default "gpt-4o-mini" | quote }}
+      routing:
+        per_channel:
+          "#agents": {{ .Values.aiAgents.model | default "gpt-4o-mini" | quote }}
+          "#prs": "claude-3-sonnet"
+    {{- end }}
+    
+    governance:
+      approvals:
+        prod_commands_require: ["ReleaseMgr"]
+      change_management:
+        link: "https://wiki.strategickhaos.internal/change-management"
+    
+    timestamps:
+      enabled: {{ .Values.timestamps.enabled }}
+      bitcoin_anchor: {{ .Values.timestamps.bitcoinAnchor }}

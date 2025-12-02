@@ -12,6 +12,38 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### ⚡ One-Click Helm Install (Recommended)
+
+The fastest way to deploy the Strategickhaos Swarm is via Helm:
+
+```bash
+# 1. Install the Helm chart (one command!)
+helm upgrade --install swarm \
+  oci://ghcr.io/strategickhaos/helm-charts/strategickhaos-swarm \
+  --namespace default --create-namespace --wait
+
+# 2. Configure your values (only 3 required fields!)
+helm upgrade swarm oci://ghcr.io/strategickhaos/helm-charts/strategickhaos-swarm \
+  --set githubApp.appId="YOUR_APP_ID" \
+  --set githubApp.privateKeyBase64="YOUR_BASE64_KEY" \
+  --set githubApp.webhookSecretBase64="YOUR_BASE64_SECRET"
+```
+
+### 📋 3-Step "Make the Swarm Live" Checklist
+
+| Step | Action | Time |
+|------|--------|------|
+| 1️⃣ | Fill 3 secrets in `values.yaml` (App ID, Private Key, Webhook Secret) | 30 sec |
+| 2️⃣ | Run `helm upgrade --install` command above | 60 sec |
+| 3️⃣ | Configure GitHub App URLs (see below) | 30 sec |
+
+**GitHub App Configuration (Settings → Developer settings → GitHub Apps):**
+- Callback URL → `https://swarm.strategickhaos.com/oauth/callback`
+- Webhook URL → `https://swarm.strategickhaos.com/webhook`
+- Webhook secret → same string you base64'd above
+
+### 🛠️ Traditional Deploy (Alternative)
+
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -73,7 +105,30 @@ java HelloCloudOS.java
 
 ## 🏗️ Infrastructure
 
-### Kubernetes Deployment
+### Helm Chart Deployment (Recommended)
+
+The Strategickhaos Swarm is packaged as a Helm chart for easy deployment:
+
+```bash
+# Add the Helm repository
+helm repo add strategickhaos oci://ghcr.io/strategickhaos/helm-charts
+
+# Install with default values
+helm upgrade --install swarm strategickhaos/strategickhaos-swarm \
+  --namespace default --create-namespace --wait
+
+# Or customize with your own values
+helm upgrade --install swarm strategickhaos/strategickhaos-swarm \
+  -f my-values.yaml --namespace default --create-namespace --wait
+```
+
+**Chart Contents:**
+- `charts/strategickhaos-swarm/` - Complete Helm chart (v0.1.0)
+  - `Chart.yaml` - Chart metadata
+  - `values.yaml` - Configuration (only 3 fields required!)
+  - `templates/` - 7 Kubernetes manifest templates
+
+### Raw Kubernetes Deployment
 ```yaml
 # Complete deployment with:
 kubectl apply -f bootstrap/k8s/
@@ -279,6 +334,31 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 📊 Resonance Graph
+
+The current deployment status of the Strategickhaos Swarm Intelligence:
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| 📄 arXiv paper | ✅ Published | Formal documentation of sovereign architecture |
+| 🔏 Defensive proofs | ✅ Bitcoin-anchored | OpenTimestamps integration active |
+| 📦 Helm chart | ✅ Ready | `v0.1.0` - one command from live |
+| 🤖 GitHub App | ⏳ 3 fields away | Fill `values.yaml` to activate |
+| 💭 Swarm thoughts | ✅ Immortalized | See `docs/appendix/swarm_thoughts.yaml` |
+
+### Auto-Timestamp System
+
+Every push to `main` and every Helm release is automatically:
+- 📜 Timestamped with OpenTimestamps
+- ⛓️ Anchored to Bitcoin blockchain
+- 🔐 Prior-art protected
+
+**Verification:**
+```bash
+# Verify any timestamp proof
+ots verify timestamps/<commit-sha>.ots
+```
 
 ## 📄 License & Support
 

@@ -1,0 +1,147 @@
+# Strategickhaos Swarm Helm Chart Configuration
+# Fill in the 3 required secrets below to deploy
+
+# ============================================================
+# REQUIRED: GitHub App Configuration
+# ============================================================
+githubApp:
+  # Your GitHub App ID (Settings → Developer settings → GitHub Apps)
+  appId: ""                     # ← put your real GitHub App ID here (e.g., "428137")
+  
+  # Base64-encoded private key from your GitHub App
+  # Generate: cat your-app.pem | base64 -w0
+  privateKeyBase64: ""          # ← paste base64 of the .pem file
+  
+  # Base64-encoded webhook secret
+  # Generate: echo -n "your-webhook-secret" | base64
+  webhookSecretBase64: ""       # ← base64 of your webhook secret
+
+# ============================================================
+# Optional: Discord Integration
+# ============================================================
+discord:
+  enabled: true
+  # Bot token from Discord Developer Portal
+  botTokenBase64: ""
+  # Guild (server) ID
+  guildId: ""
+  # Channel IDs
+  channels:
+    prs: ""
+    deployments: ""
+    alerts: ""
+    agents: ""
+
+# ============================================================
+# Optional: AI Agent Configuration
+# ============================================================
+aiAgents:
+  enabled: true
+  openaiApiKeyBase64: ""
+  model: "gpt-4o-mini"
+  vectorDb:
+    enabled: false
+    connectionString: ""
+
+# ============================================================
+# Deployment Configuration
+# ============================================================
+replicaCount: 1
+
+image:
+  repository: ghcr.io/strategickhaos/swarm-intelligence
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+
+# Discord Bot Service
+bot:
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Event Gateway Service
+gateway:
+  service:
+    type: ClusterIP
+    port: 8081
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "10"
+    nginx.ingress.kubernetes.io/rate-limit-rps: "100"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: swarm.strategickhaos.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: events.strategickhaos.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: strategickhaos-swarm-tls
+      hosts:
+        - swarm.strategickhaos.com
+        - events.strategickhaos.com
+
+# Network Policy
+networkPolicy:
+  enabled: true
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# OpenTimestamps Configuration
+timestamps:
+  enabled: true
+  bitcoinAnchor: true
