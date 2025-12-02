@@ -42,22 +42,27 @@ mirror_single() {
     # Create temp directory
     local temp_dir
     temp_dir=$(mktemp -d)
-    trap "rm -rf $temp_dir" EXIT
+    
+    # Setup cleanup trap after temp_dir is created
+    cleanup() {
+        rm -rf "$temp_dir"
+    }
+    trap cleanup EXIT
     
     echo_info "Cloning source (bare)..."
-    git clone --bare "$source" "$temp_dir" 2>/dev/null || {
+    if ! git clone --bare "$source" "$temp_dir"; then
         echo_error "Failed to clone: $source"
         return 1
-    }
+    fi
     
     cd "$temp_dir"
     
     echo_info "Pushing to enterprise..."
-    git push --mirror "$target" 2>/dev/null || {
+    if ! git push --mirror "$target"; then
         echo_error "Failed to push to: $target"
         echo_warning "Make sure the repository exists in the target organization"
         return 1
-    }
+    fi
     
     cd - > /dev/null
     

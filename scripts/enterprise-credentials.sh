@@ -37,6 +37,10 @@ setup_git_credentials() {
     
     echo_info "Setting up Git credentials for ${ENTERPRISE_NAME}..."
     
+    # Security warning
+    echo_warning "SECURITY: Credentials will be stored in plain text at ~/.git-credentials"
+    echo_info "For enhanced security, consider: $0 gh (uses GitHub CLI)"
+    
     # Create credentials file via HERE-DOC
     cat <<EOF > ~/.git-credentials
 https://${username}:${pat}@${GIT_HOST}
@@ -50,7 +54,7 @@ EOF
     git config --global user.name "${username}"
     
     echo_success "Git credentials configured"
-    echo_info "Credentials stored in ~/.git-credentials (mode 600)"
+    echo_info "Credentials stored in ~/.git-credentials (mode 600 - owner read/write only)"
 }
 
 # Setup GitHub CLI authentication
