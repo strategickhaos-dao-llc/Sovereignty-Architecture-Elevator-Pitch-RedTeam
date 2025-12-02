@@ -140,14 +140,15 @@ function validateMath(
     );
   }
 
-  // Validate total trade value doesn't exceed rebalance amount
-  const totalTradeValue = plan.trades.reduce((sum, trade) => {
-    return trade.action === 'BUY' ? sum + trade.approx_value_usd : sum - trade.approx_value_usd;
-  }, 0);
+  // Validate total BUY trade value doesn't exceed rebalance amount
+  // (SELL trades free up cash, so we only check BUY trades against the rebalance budget)
+  const totalBuyValue = plan.trades
+    .filter((t) => t.action === 'BUY')
+    .reduce((sum, t) => sum + t.approx_value_usd, 0);
 
-  if (totalTradeValue > plan.summary.rebalance_amount_usd + tolerance) {
+  if (totalBuyValue > plan.summary.rebalance_amount_usd + tolerance) {
     errors.push(
-      `Total trade value ${totalTradeValue.toFixed(2)} exceeds rebalance amount ${plan.summary.rebalance_amount_usd.toFixed(2)}`
+      `Total BUY value ${totalBuyValue.toFixed(2)} exceeds rebalance amount ${plan.summary.rebalance_amount_usd.toFixed(2)}`
     );
   }
 
@@ -209,16 +210,17 @@ function validateConstraints(
   }
 
   // Check cash buffer requirement
+  // Account for: incoming rebalance amount + SELL proceeds - BUY costs - treasury transfer
   const requiredBuffer =
     snapshot.total_portfolio_value_usd * (config.constraints.liquidity.keep_cash_buffer_pct / 100);
-  const netCashChange =
-    plan.trades
-      .filter((t) => t.action === 'SELL')
-      .reduce((sum, t) => sum + t.approx_value_usd, 0) -
-    plan.trades
-      .filter((t) => t.action === 'BUY')
-      .reduce((sum, t) => sum + t.approx_value_usd, 0) -
-    plan.treasury_transfer.amount_usd;
+  const incomingCash = plan.summary.rebalance_amount_usd + plan.summary.treasury_amount_usd;
+  const sellProceeds = plan.trades
+    .filter((t) => t.action === 'SELL')
+    .reduce((sum, t) => sum + t.approx_value_usd, 0);
+  const buyCosts = plan.trades
+    .filter((t) => t.action === 'BUY')
+    .reduce((sum, t) => sum + t.approx_value_usd, 0);
+  const netCashChange = incomingCash + sellProceeds - buyCosts - plan.treasury_transfer.amount_usd;
 
   const projectedCash = snapshot.cash_available_usd + netCashChange;
   if (projectedCash < requiredBuffer) {

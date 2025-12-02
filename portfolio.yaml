@@ -72,7 +72,7 @@ targets:
     - symbol: "TLT"
       name: "iShares 20+ Year Treasury Bond ETF"
       bucket: "defensive"
-      target_pct_of_portfolio: 10
+      target_pct_of_portfolio: 15
       min_trade_size_usd: 50
       account_id: "brokerage-ibkr"
 
@@ -86,7 +86,7 @@ targets:
     - symbol: "SPEC1"
       name: "Speculative Basket"
       bucket: "speculative"
-      target_pct_of_portfolio: 10
+      target_pct_of_portfolio: 5
       min_trade_size_usd: 25
       account_id: "brokerage-ibkr"
 
