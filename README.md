@@ -28,6 +28,22 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 🧠 Developer Experience - Vim Sovereign
+
+**Transform your text editor into the final evolution of development tools.**
+
+Install the ultimate 2025 Neovim configuration with 30+ battle-tested plugins:
+
+```bash
+# One-liner installation (Linux/macOS/WSL)
+curl -sSL https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/tools/vim-ceremony.sh | bash
+
+# PowerShell (Windows)
+iwr -useb https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/tools/vim-ceremony.ps1 | iex
+```
+
+**📖 Full documentation:** [VIM_SOVEREIGN_SETUP.md](VIM_SOVEREIGN_SETUP.md)
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
