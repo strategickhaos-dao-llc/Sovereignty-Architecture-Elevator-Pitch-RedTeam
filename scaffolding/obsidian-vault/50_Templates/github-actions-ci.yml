@@ -1,0 +1,337 @@
+# .github/workflows/ci.yml
+# CI/CD Pipeline Template - Legends of Minds Engineering Canon v1.0
+# 
+# Implements:
+# - Canon #61-65: Deployment strategies (canary, feature flags)
+# - Canon #46-50: Observability (metrics, logging)
+# - Canon #71-75: Secure development (SAST, dependency scanning)
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Lint and Static Analysis
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linter
+        run: npm run lint
+      
+      - name: Type check
+        run: npm run type-check
+      
+      - name: Check formatting
+        run: npm run format:check
+
+  # Security Scanning
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+      
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+
+  # Unit & Integration Tests
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run unit tests
+        run: npm run test:unit
+      
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/testdb
+          REDIS_URL: redis://localhost:6379
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-${{ matrix.node-version }}
+
+  # Build Docker Image
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    needs: [lint, security, test]
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+      
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ github.sha }}
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+
+  # Deploy to Staging (Canary)
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to staging cluster
+        run: |
+          kubectl set image deployment/app \
+            app=${{ needs.build.outputs.image-tag }} \
+            --namespace=staging
+          kubectl rollout status deployment/app --namespace=staging
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_STAGING }}
+      
+      - name: Run smoke tests
+        run: npm run test:smoke
+        env:
+          BASE_URL: https://staging.example.com
+      
+      - name: Notify deployment
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            Staging deployment complete
+            Image: ${{ needs.build.outputs.image-tag }}
+            Commit: ${{ github.sha }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+  # Canary Deployment to Production
+  # NOTE: This assumes you have a canary deployment setup with traffic splitting.
+  # For Kubernetes + Istio: Use VirtualService with weighted routing
+  # For AWS: Use ALB target group weights
+  # See: https://istio.io/latest/docs/tasks/traffic-management/traffic-shifting/
+  deploy-production-canary:
+    name: Deploy to Production (Canary)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy canary (5% traffic)
+        run: |
+          # Deploy new version with canary label
+          kubectl set image deployment/app-canary \
+            app=${{ needs.build.outputs.image-tag }} \
+            --namespace=production
+          
+          # Wait for rollout
+          kubectl rollout status deployment/app-canary --namespace=production
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_PRODUCTION }}
+      
+      - name: Monitor canary metrics
+        run: |
+          # Wait 5 minutes for metrics to stabilize
+          sleep 300
+          
+          # Check error rate (with error handling)
+          ERROR_RATE=$(curl -s "http://prometheus:9090/api/v1/query?query=rate(http_requests_total{status_code=~\"5..\"}[5m])" | jq -r '.data.result[0].value[1] // "0"')
+          
+          if [ -z "$ERROR_RATE" ]; then
+            echo "Failed to fetch error rate metrics"
+            exit 1
+          fi
+          
+          # Use awk for floating point comparison (bc not always available)
+          if awk "BEGIN {exit !($ERROR_RATE > 0.01)}"; then
+            echo "Error rate too high: $ERROR_RATE"
+            exit 1
+          fi
+          
+          # Check latency (with error handling)
+          P95_LATENCY=$(curl -s "http://prometheus:9090/api/v1/query?query=histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))" | jq -r '.data.result[0].value[1] // "0"')
+          
+          if [ -z "$P95_LATENCY" ]; then
+            echo "Failed to fetch latency metrics"
+            exit 1
+          fi
+          
+          # Use awk for floating point comparison (bc not always available)
+          if awk "BEGIN {exit !($P95_LATENCY > 1.0)}"; then
+            echo "P95 latency too high: $P95_LATENCY"
+            exit 1
+          fi
+      
+      - name: Promote canary or rollback
+        if: success()
+        run: |
+          # Metrics look good, promote to 100%
+          kubectl set image deployment/app \
+            app=${{ needs.build.outputs.image-tag }} \
+            --namespace=production
+          kubectl rollout status deployment/app --namespace=production
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_PRODUCTION }}
+      
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Canary metrics failed, rolling back"
+          kubectl rollout undo deployment/app-canary --namespace=production
+          # Notify team
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+            -H 'Content-Type: application/json' \
+            -d '{"text":"🚨 Production canary failed, rolled back"}'
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_PRODUCTION }}
+      
+      - name: Create deployment event
+        if: success()
+        run: |
+          # Record deployment in observability system
+          curl -X POST https://events.example.com/deployments \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "service": "app",
+              "environment": "production",
+              "version": "${{ github.sha }}",
+              "strategy": "canary",
+              "deployed_by": "${{ github.actor }}",
+              "timestamp": "${{ github.event.head_commit.timestamp }}"
+            }'
+      
+      - name: Notify production deployment
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            ✅ Production deployment complete
+            Image: ${{ needs.build.outputs.image-tag }}
+            Strategy: Canary → Full rollout
+            Commit: ${{ github.sha }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+  # Chaos Engineering Tests (Weekly)
+  chaos-test:
+    name: Chaos Engineering
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run chaos experiments
+        run: |
+          # Kill random pods
+          kubectl delete pod -l app=test --random --namespace=staging
+          
+          # Inject network latency
+          kubectl apply -f chaos/network-latency.yaml --namespace=staging
+          
+          # Wait and observe
+          sleep 300
+          
+          # Check if system recovered
+          kubectl get pods --namespace=staging
+      
+      - name: Generate chaos report
+        run: |
+          echo "Chaos test completed"
+          # Analyze metrics during chaos
+          # Report findings
+
+# Schedule weekly chaos tests (Canon #56-60)
+# Uncomment to enable:
+# on:
+#   schedule:
+#     - cron: '0 2 * * 1'  # Every Monday at 2 AM

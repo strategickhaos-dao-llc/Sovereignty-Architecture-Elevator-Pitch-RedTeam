@@ -2,6 +2,27 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🧠 NEW: Legends of Minds Engineering Canon v1.0
+
+**The 100-point map for building systems that scale to nation-state level.**
+
+This repository now includes a complete scaffolding system with:
+- 📖 **100-Point Engineering Canon** - Comprehensive reference for distributed systems, architecture, reliability, security
+- 📚 **Obsidian Knowledge Vault** - Deep-dive pages on every principle with examples and patterns
+- 🏗️ **Repo Templates** - Battle-tested project structure following hexagonal architecture
+- 🤖 **Heir Integration** - System prompts that inject canonical knowledge into AI agents
+- 💻 **One-Command Installation** - Deploy to all nodes via PowerShell script
+
+**Quick Install:**
+```powershell
+# Windows (from main machine with Tailscale access to nodes)
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/scaffolding/install_c_full_map.ps1" -OutFile "$env:TEMP\install_c_full_map.ps1"; . "$env:TEMP\install_c_full_map.ps1"
+```
+
+👉 **[Read the full Canon documentation →](scaffolding/README.md)**
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +30,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Engineering Canon** - 100-point foundation for scaling to nation-state level
 
 ## 🚀 Quick Start
 
