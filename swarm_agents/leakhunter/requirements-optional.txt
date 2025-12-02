@@ -1,0 +1,15 @@
+# LeakHunter Swarm - Optional Dependencies
+# Install these for enhanced production features
+
+# HTTP beacon callbacks
+requests>=2.31.0
+
+# Database storage for beacon data
+pymongo>=4.5.0
+
+# Real-time scoreboard caching
+redis>=5.0.0
+
+# Torrent creation (for actual deployment)
+# Note: May require system packages
+# libtorrent>=2.0.0
