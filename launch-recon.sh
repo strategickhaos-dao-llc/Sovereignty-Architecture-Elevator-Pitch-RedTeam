@@ -30,6 +30,51 @@ banner() {
     echo -e "${NC}"
 }
 
+# Efficient health check with exponential backoff
+wait_for_services() {
+    local max_attempts=30
+    local attempt=0
+    local sleep_time=2
+    
+    log "Checking service health..."
+    
+    while [ $attempt -lt $max_attempts ]; do
+        local all_healthy=true
+        
+        # Check Qdrant
+        if ! curl -sf http://localhost:6333/healthz >/dev/null 2>&1; then
+            all_healthy=false
+        fi
+        
+        # Check Embedder
+        if ! curl -sf http://localhost:8081/health >/dev/null 2>&1; then
+            all_healthy=false
+        fi
+        
+        # Check RAG API
+        if ! curl -sf http://localhost:7000/health >/dev/null 2>&1; then
+            all_healthy=false
+        fi
+        
+        if [ "$all_healthy" = true ]; then
+            success "All services are healthy!"
+            return 0
+        fi
+        
+        attempt=$((attempt + 1))
+        log "Services not ready yet (attempt $attempt/$max_attempts), waiting ${sleep_time}s..."
+        sleep $sleep_time
+        
+        # Exponential backoff up to 8 seconds
+        if [ $sleep_time -lt 8 ]; then
+            sleep_time=$((sleep_time * 2))
+        fi
+    done
+    
+    warn "Services took longer than expected to become healthy"
+    return 1
+}
+
 # Test the RAG system with sample queries
 test_rag_system() {
     log "🧪 Testing RAG system with Strategic Khaos queries..."
@@ -62,7 +107,8 @@ test_rag_system() {
             warn "   ⚠ No contexts found for this query"
         fi
         
-        sleep 1
+        # Small delay only if needed to avoid rate limiting
+        sleep 0.5
     done
     
     success "RAG system testing completed"
@@ -169,8 +215,9 @@ main() {
             log "🏗️ Starting RECON services..."
             docker compose -f "$COMPOSE_FILE" up -d
             
-            log "⏳ Waiting for services to initialize (60 seconds)..."
-            sleep 60
+            # Efficient health check with timeout instead of fixed sleep
+            log "⏳ Waiting for services to be healthy..."
+            wait_for_services
             
             # Test the system
             test_rag_system
