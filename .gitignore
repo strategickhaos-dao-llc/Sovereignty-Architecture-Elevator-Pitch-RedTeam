@@ -35,3 +35,8 @@ target/
 
 # Workspace data
 workspace/
+
+# LeakHunter Swarm - sensitive configuration and logs
+swarm_agents/leakhunter/config.json
+swarm_agents/**/config.json
+*.leak-report.json

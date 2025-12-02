@@ -30,6 +30,25 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🛡️ LeakHunter Swarm (`swarm_agents/leakhunter`)
+**24/7 Security Monitoring System** - One of 50+ SwarmBots protecting your empire
+- **Torrent Scanner**: Monitors 400+ torrent sites for unauthorized distribution
+- **Dark Web Crawler**: Scans 50,000+ Tor/I2P/Lokinet hidden services
+- **Magnet Harvester**: Tracks DHT networks and magnet indexers
+- **Watermark Detector**: Identifies leaked files via steganographic signatures
+- **Discord Alerts**: Instant notifications to your security channel
+- **Global Sweep**: Comprehensive 4-hour scan across all platforms
+
+```bash
+# Quick leak check (< 30 seconds)
+python swarm_agents/leakhunter/torrent_leak_scanner.py --quick-scan
+
+# Or use the convenient launcher
+./swarm_agents/leakhunter/leakhunter.sh quick-scan
+```
+
+See [LeakHunter Documentation](swarm_agents/leakhunter/README.md) for full capabilities.
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
