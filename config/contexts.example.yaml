@@ -1,0 +1,24 @@
+# config/contexts.example.yaml
+
+default_context: gke-jarvis-swarm-personal
+
+contexts:
+  gke-jarvis-swarm-personal:
+    provider: gke
+    project: jarvis-swarm-personal
+    region: us-central1
+    cluster: jarvis-swarm-personal-001
+    namespace: legion-core
+
+  gke-red-team:
+    provider: gke
+    project: jarvis-swarm-personal
+    region: us-central1
+    cluster: red-team
+    namespace: legion-red
+
+  homelab-k3s:
+    provider: k3s
+    kubeconfig: ./k8s/kubeconfig
+    context: homelab
+    namespace: legion-lab

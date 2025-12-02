@@ -35,3 +35,14 @@ target/
 
 # Workspace data
 workspace/
+
+# Legion Console - Kube & configs
+k8s/kubeconfig
+config/contexts.yaml
+
+# Editor crap
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
