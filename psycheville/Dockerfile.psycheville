@@ -1,0 +1,23 @@
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir pyyaml schedule
+
+# Copy application files
+COPY psycheville.yaml /app/psycheville.yaml
+COPY reflection_worker.py /app/reflection_worker.py
+
+# Set environment variables
+ENV PSYCHEVILLE_CONFIG=/app/psycheville.yaml
+ENV PYTHONUNBUFFERED=1
+ENV TZ=UTC
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD pgrep -f reflection_worker.py || exit 1
+
+# Run the worker
+CMD ["python", "-u", "/app/reflection_worker.py"]
