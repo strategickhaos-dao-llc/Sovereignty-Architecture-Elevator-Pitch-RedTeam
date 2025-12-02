@@ -1,0 +1,83 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "GitLens: Review Started",
+            "type": "shell",
+            "command": "${workspaceFolder}/gl2discord/gl2discord.sh",
+            "args": [
+                "${env:PRS_CHANNEL}",
+                "👀 Review Started",
+                "Reviewing in ${workspaceFolderBasename}",
+                "0x6f42c1"
+            ],
+            "problemMatcher": [],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+        {
+            "label": "GitLens: Review Submitted",
+            "type": "shell",
+            "command": "${workspaceFolder}/gl2discord/gl2discord.sh",
+            "args": [
+                "${env:PRS_CHANNEL}",
+                "✅ Review Submitted",
+                "Review completed for ${workspaceFolderBasename}",
+                "0x28a745"
+            ],
+            "problemMatcher": [],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+        {
+            "label": "GitLens: Needs Attention",
+            "type": "shell",
+            "command": "${workspaceFolder}/gl2discord/gl2discord.sh",
+            "args": [
+                "${env:PRS_CHANNEL}",
+                "⚠️ Needs Attention",
+                "Attention needed in ${workspaceFolderBasename}",
+                "0xffa500"
+            ],
+            "problemMatcher": [],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+        {
+            "label": "GitLens: Custom Notification",
+            "type": "shell",
+            "command": "${workspaceFolder}/gl2discord/gl2discord.sh",
+            "args": [
+                "${env:PRS_CHANNEL}",
+                "${input:notificationTitle}",
+                "${input:notificationBody}",
+                "0x2f81f7"
+            ],
+            "problemMatcher": [],
+            "group": "none",
+            "presentation": {
+                "reveal": "silent"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "notificationTitle",
+            "description": "Notification title",
+            "type": "promptString",
+            "default": "📢 Update"
+        },
+        {
+            "id": "notificationBody",
+            "description": "Notification body",
+            "type": "promptString",
+            "default": ""
+        }
+    ]
+}
