@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2025-12-02T00:00:00Z",
+  "generator": "strategickhaos-proof/verify_evidence.py",
+  
+  "organization": {
+    "name": "Strategickhaos DAO LLC / Valoryield Engine",
+    "legal_structure": "Limited Liability Company",
+    "formation_jurisdiction": "Wyoming",
+    "formation_date": "2025-06-25",
+    "status": "Good standing"
+  },
+
+  "infrastructure": {
+    "github_org": "Strategickhaos-Swarm-Intelligence",
+    "repositories": {
+      "sovereignty-architecture": {
+        "url": "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-",
+        "default_branch": "main",
+        "visibility": "public"
+      }
+    },
+    "cloud_providers": [
+      {
+        "provider": "AWS",
+        "regions": ["us-east-1", "us-west-2"],
+        "services": ["EKS", "S3", "CloudWatch"]
+      },
+      {
+        "provider": "GCP",
+        "regions": ["us-central1"],
+        "services": ["GKE", "Cloud Storage"]
+      },
+      {
+        "provider": "Azure",
+        "regions": ["eastus"],
+        "services": ["AKS", "Blob Storage"]
+      }
+    ]
+  },
+
+  "components": {
+    "discord_ops_bot": {
+      "status": "deployed",
+      "image": "ghcr.io/strategickhaos/discord-ops-bot:latest",
+      "health_endpoint": "/health"
+    },
+    "event_gateway": {
+      "status": "deployed",
+      "image": "ghcr.io/strategickhaos/event-gateway:latest",
+      "health_endpoint": "/health"
+    },
+    "ollama": {
+      "status": "available",
+      "models": ["llama3", "codellama"]
+    },
+    "qdrant": {
+      "status": "available",
+      "collections": ["runbooks", "code-patterns"]
+    },
+    "redis": {
+      "status": "available",
+      "purpose": "session-cache"
+    }
+  },
+
+  "governance": {
+    "voting_mechanism": "On-chain DAO votes",
+    "authorized_signers": "See ../governance/article_7_authorized_signers.md",
+    "access_matrix": "See ../governance/access_matrix.yaml"
+  },
+
+  "cryptographic_anchors": {
+    "type": "OpenTimestamps",
+    "anchor_frequency": "weekly",
+    "anchor_location": "./anchors/"
+  },
+
+  "verification": {
+    "hash_algorithm": "SHA256",
+    "hash_manifest": "./hashes.txt",
+    "ci_workflow": ".github/workflows/verify.yaml"
+  },
+
+  "metadata": {
+    "last_verified": null,
+    "verification_status": "pending",
+    "notes": "Populate with actual infrastructure state after deployment"
+  }
+}
