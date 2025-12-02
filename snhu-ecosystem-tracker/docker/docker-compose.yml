@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  snhu-analyzer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: snhu-analyzer
+    ports:
+      - "8080:8080"
+    environment:
+      - GROK_API_KEY=${GROK_API_KEY}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - ANALYSIS_MODEL=grok-4-fast-reasoning
+      - BATCH_SIZE=50
+      - LOG_LEVEL=INFO
+    volumes:
+      - ../src:/app:ro
+      - analysis-results:/app/results
+    restart: unless-stopped
+    networks:
+      - snhu-network
+
+  # Optional: Mock SMTP server for testing email flows
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: snhu-mailhog
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI
+    networks:
+      - snhu-network
+
+volumes:
+  analysis-results:
+    driver: local
+
+networks:
+  snhu-network:
+    driver: bridge

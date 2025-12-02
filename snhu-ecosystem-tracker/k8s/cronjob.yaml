@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: snhu-analyzer-batch
+  namespace: default
+  labels:
+    app: analyzer
+    component: snhu-ecosystem-tracker
+spec:
+  # Run daily at 2 AM UTC
+  # Note: OUTPUT_FILE uses a static name. The application code generates timestamps automatically.
+  schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: analyzer-batch
+            component: snhu-ecosystem-tracker
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: analyzer
+            image: your-dockerhub/snhu-analyzer:latest
+            imagePullPolicy: Always
+            env:
+            - name: RUN_MODE
+              value: "batch"
+            - name: GROK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: grok-secret
+                  key: api-key
+            - name: INPUT_FILE
+              value: "/data/emails.csv"
+            - name: OUTPUT_FILE
+              value: "/data/results/analysis.csv"
+            - name: ANALYSIS_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: snhu-analyzer-config
+                  key: analysis_model
+            - name: LOG_LEVEL
+              value: "INFO"
+            volumeMounts:
+            - name: email-data
+              mountPath: /data
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "500m"
+              limits:
+                memory: "1Gi"
+                cpu: "1000m"
+          volumes:
+          - name: email-data
+            persistentVolumeClaim:
+              claimName: snhu-email-data

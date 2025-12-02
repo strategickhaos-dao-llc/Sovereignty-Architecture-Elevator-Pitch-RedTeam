@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snhu-analyzer
+  namespace: default
+  labels:
+    app: analyzer
+    component: snhu-ecosystem-tracker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: analyzer
+  template:
+    metadata:
+      labels:
+        app: analyzer
+        component: snhu-ecosystem-tracker
+    spec:
+      containers:
+      - name: analyzer
+        image: your-dockerhub/snhu-analyzer:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: GROK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: grok-secret
+              key: api-key
+        - name: DISCORD_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: grok-secret
+              key: discord-webhook
+              optional: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
