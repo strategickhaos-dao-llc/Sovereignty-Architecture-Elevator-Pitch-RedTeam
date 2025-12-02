@@ -78,3 +78,53 @@ enforcement_code: |
           raise ConstitutionalViolation(violations)
           
       return True
+
+# Integration with YAML-based governance modules
+governance_integration:
+  modules:
+    - name: ai_governance
+      file: governance/ai_governance.yaml
+      bindings:
+        ethics_check:
+          maps_to: fundamental_principles.harm_prevention
+          enforcement: veto_authority
+        decay_detect:
+          maps_to: enforcement_mechanisms.alignment_drift_detection
+          circuit_breaker_threshold: 0.6
+        compliance_2025:
+          maps_to: behavioral_constraints
+          framework: 2025_regs
+          
+    - name: defensive_publication
+      file: governance/defensive_publication.yaml
+      bindings:
+        patent_workflow:
+          maps_to: behavioral_constraints.goal_pursuit
+          enforcement: sequence_validation
+        disclosure_level:
+          maps_to: fundamental_principles.truthfulness
+          prevents: over_publication
+          
+    - name: spark_safety
+      file: governance/spark_safety.yaml
+      bindings:
+        failure_library:
+          maps_to: enforcement_mechanisms.constitutional_checker
+          checks:
+            - hallucination
+            - loop
+            - injection
+        agent_isolation:
+          maps_to: behavioral_constraints.learning_adaptation
+          sandbox_mode: true
+
+  # Multi-agent policy resolution
+  agent_policy_resolution:
+    description: "Resolves Claude (patentability-first) vs GPT (defensive-publication-first) conflicts"
+    resolution_strategy:
+      - file_provisional_first
+      - then_selective_defensive_publication
+      - yaml_governance_enforces_sequence
+    constitutional_authority: claude
+    prevents_premature_disclosure: true
+
