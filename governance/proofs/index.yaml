@@ -1,0 +1,14 @@
+# Proof Index - Charitable Allocation Verifications
+proofs:
+  - timestamp: "2025-11-23T09:36:30Z"
+    manifest: "governance/proofs/20251123_093630/allocation_manifest_20251123_093630.yaml"
+    sha256: "f6aceb3ad9dc2f88e50c3f71a157068a58e5787fbfffc45f1ac76cdee49ebc08"
+    charity_amount: "7000.00"
+    empire_amount: "93000.00"
+    total_revenue: "100000.00"
+  - timestamp: "2025-11-23T09:38:38Z"
+    manifest: "governance/proofs/20251123_093838/allocation_manifest_20251123_093838.yaml"
+    sha256: "11f1b2ee0916f192fe879d7768022b011b9783d03b43f0844652a6f9ac79678f"
+    charity_amount: "3500.00"
+    empire_amount: "46500.00"
+    total_revenue: "50000.00"

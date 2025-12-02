@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Charitable allocation generated files (keep structure, ignore generated proofs)
+governance/manifests/allocation_manifest_*.yaml
+governance/manifests/allocation_manifest_*.yaml.sha256
+governance/manifests/allocation_manifest_*.yaml.asc
+governance/manifests/allocation_manifest_*.yaml.ots
+governance/logs/verification_report_*.txt
+governance/proofs/*/
+!governance/proofs/index.yaml
