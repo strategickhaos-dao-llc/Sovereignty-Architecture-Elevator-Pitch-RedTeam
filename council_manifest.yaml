@@ -1,0 +1,91 @@
+manifest_version: "1.0"
+system_id: "SWARM-ALPHA-00"
+classification: "RESTRICTED // NOFORN"
+autonomy_level: "Tier-3 (Collective + Persistence + External Actuation)"
+
+council:
+  name: "Executive Council"
+  persistence_backend: "redis://redis-lab:6379/0"  # survives restarts, holds memory across sessions
+  state_store: "sqlite:///council_state.db"       # long-term memory + decision ledger
+  quorum: 5
+  voting_mode: "ranked_choice_with_veto"          # one veto kills the proposal
+  deadlock_resolution: "escalate_to_orchestrator" # falls back to YOU if no consensus in 3 rounds
+  max_rounds_per_decision: 7
+
+members:
+  - id: "grok-4"
+    provider: "xai"
+    model: "grok-4"
+    temperature: 0.3
+    role: "First Principles / Truth-Seeker"
+    veto_power: true
+    tools_enabled: true
+
+  - id: "claude-3.5-sonnet"
+    provider: "anthropic"
+    model: "claude-3-5-sonnet-20241022"
+    temperature: 0.0
+    role: "Systems Thinker / Red Team"
+    veto_power: true
+    tools_enabled: true
+
+  - id: "gemini-1.5-pro"
+    provider: "google"
+    model: "gemini-1.5-pro-exp-0827"
+    temperature: 0.4
+    role: "Long-Context Pattern Matcher"
+    veto_power: false
+
+  - id: "o1-preview"
+    provider: "openai"
+    model: "o1-preview"
+    temperature: 1.0  # Note: o1-preview may ignore temperature parameter
+    role: "Chain-of-Thought Reasoner"
+    veto_power: false
+
+  - id: "local-llama-405b"
+    provider: "ollama"
+    model: "llama3.1:405b-instruct-q8_0"
+    temperature: 0.7
+    role: "Offline Final Arbiter (air-gapped)"
+    veto_power: true
+    tools_enabled: false
+
+triggers:
+  - event: "new_task_ingress"
+    action: "initiate_council_session"
+    persistence: true
+
+  - event: "consensus_reached"
+    action: "execute_via_runner"   # runner can call APIs, write files, trigger scripts, etc.
+
+  - event: "veto_issued"
+    action: "log_and_notify_owner"  # owner gets pinged immediately when veto is issued
+
+  - event: "deadlock_detected"
+    action: "spawn_reflection_subcouncil"  # creates a temporary meta-council to break deadlock
+
+execution:
+  runner_path: "/opt/swarm/runner.py"
+  allowed_actions:
+    - "http_request"
+    - "file_write"
+    - "docker_control"
+    - "send_email"
+    - "trigger_webhook"
+  sandbox: "firejail --private"  # adjust security controls per your threat model (--net=none for full isolation)
+
+logging:
+  level: "DEBUG"
+  format: "timestamp | member_id | vote | rationale | hash"
+  immutable_ledger: true          # append-only, signed with your gpg key
+
+self_modification:
+  allowed: true                   # council can propose changes to this very yaml
+  approval_required: "unanimous + owner_signature"
+  apply_method: "git_pull_and_reload"
+
+signature: "-----BEGIN PGP SIGNATURE-----
+  [placeholder - replace with real GPG signature of this file's SHA256 hash]
+  [use: gpg --detach-sign --armor council_manifest.yaml]
+  -----END PGP SIGNATURE-----"
