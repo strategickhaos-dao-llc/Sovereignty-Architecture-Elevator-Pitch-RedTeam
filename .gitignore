@@ -35,3 +35,20 @@ target/
 
 # Workspace data
 workspace/
+
+# Generated output files from PowerShell Orchestra
+output/
+data/donors.json
+data/organization.json
+donor_records_hashed.json
+irs_audit_package.json
+irs_audit_package.md
+board_minutes_latest.md
+court_defense_ready.md
+compliance_ledger.json
+*.asc
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
