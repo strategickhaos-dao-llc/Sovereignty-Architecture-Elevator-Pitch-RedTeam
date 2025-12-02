@@ -1,0 +1,13 @@
+# Strategickhaos Legion Kernel Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core dependencies
+gitpython>=3.1.0      # Git operations
+PyYAML>=6.0           # Config parsing
+requests>=2.28.0      # HTTP client for webhooks
+
+# Discord bot (optional - only needed for discord_bot.py)
+discord.py>=2.0.0
+
+# Development/testing (optional)
+pytest>=7.0.0
