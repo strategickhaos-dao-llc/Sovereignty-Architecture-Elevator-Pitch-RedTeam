@@ -1,0 +1,118 @@
+# Impulse Armor — Hobbies & To-Do Map
+# This file is a human-readable snapshot of how Domenic (Dom010101) explores ideas.
+# It is NOT a legal contract. It is a personal guide and a reflection tool.
+
+meta:
+  author: "Domenic Garza (Dom010101)"
+  created: "2025-11-24"
+  purpose: >
+    Document personal interests, experiments, and to-do ideas in a structured way.
+    This is for learning, fun, and self-reflection — not a binding commitment,
+    not legal advice, and not a work contract.
+
+identity:
+  roles:
+    - "Student – BS Computer Science, BS Cybersecurity (Software Engineering concentration)"
+    - "Independent builder / tinkerer"
+    - "OSINT & security enthusiast"
+  strengths:
+    - "Fast associative thinking (idea collisions, 'particle accelerator brain')"
+    - "Hyperfocus on problems that feel meaningful"
+    - "Persistence under constraints (low resources, tight time, 'red balance' mode)"
+    - "Love for experimentation, automation, and systems thinking"
+
+hobbies:
+  - name: "Local AI & automation experiments"
+    description: >
+      Playing with local LLMs, agents, and scripting to automate workflows, analyze data,
+      and explore new architectures on consumer hardware.
+    tools:
+      - "Python"
+      - "PowerShell"
+      - "Kali Linux / WSL2"
+      - "Docker (learning)"
+    status: "ongoing"
+
+  - name: "OSINT & recon practice"
+    description: >
+      Learning to ethically gather, correlate, and analyze open-source intelligence.
+      Building small tools for network scanning, WiFi analysis, and data collection.
+    tools:
+      - "Kali Linux"
+      - "Wireshark"
+      - "Burp Suite (beginner)"
+      - "Custom Python/PowerShell scripts"
+    status: "ongoing"
+
+  - name: "Game analytics / ModernWarfareAnalytics"
+    description: >
+      Capturing gameplay and network traffic from console gaming setups,
+      experimenting with analysis pipelines, visualization, and automation.
+    tools:
+      - "Elgato Game Capture"
+      - "OBS"
+      - "Python"
+      - "Wireshark"
+    status: "research"
+
+  - name: "Rope access & industrial systems"
+    description: >
+      Understanding physical systems, safety protocols, and how real-world infrastructure
+      intersects with digital systems (ICS/OT security interest).
+    status: "professional_experience + ongoing curiosity"
+
+  - name: "Writing & documentation"
+    description: >
+      Turning complex, messy ideas into readable docs, blog posts, and (future) preprints.
+      Using writing as a way to stabilize big ideas and make them shareable.
+    formats:
+      - "Markdown"
+      - "Technical READMEs"
+      - "Long-form notes"
+    status: "ongoing"
+
+impulse_armor_guidelines:
+  # These are gentle reminders, not rules. They exist to protect energy, not to constrain it.
+  - "Use late-night inspiration, but sleep is also a resource: rest is part of the build."
+  - "Write things down before acting on huge ideas (short notes, diagrams, voice memos)."
+  - "Big legal steps (patents, contracts, filings) require a cool head and, ideally, a second pair of eyes."
+  - "Public posts (LinkedIn, X, etc.) should be clear, truthful, and kind to future-Dom."
+  - "You are allowed to have hobbies that are just for you, with zero pressure to monetize."
+  - "If you feel spun up, take a pause: drink water, stand up, breathe, then choose one tiny next step."
+
+todo_ideas:
+  short_term:
+    - "Finish and review one provisional draft with calm eyes before filing."
+    - "Polish LinkedIn headline and About section."
+    - "Write a README section summarizing current projects in plain language."
+    - "Create a simple portfolio page (GitHub Pages or Notion) linking to key repos."
+    - "Schedule a call or email with an SNHU advisor about long-term goals."
+    - "Send one email/message to someone you admire in the field (polished, not mythic)."
+
+  medium_term:
+    - "Build a stable local AI lab script (one command to spin up VMs, LLMs, tools)."
+    - "Publish a short technical blog post about one project (e.g., Kali VM manager or OSINT toolkit)."
+    - "Study basics of patent law from official USPTO resources."
+    - "Join an online security or AI community and share progress."
+    - "Prepare a resume that matches LinkedIn and highlights hands-on projects."
+
+  long_term:
+    - "Complete BS in Computer Science & Cybersecurity with strong GPA."
+    - "Pursue an internship or junior role in security engineering, DevSecOps, or AI tooling."
+    - "Explore creating a formal nonprofit or charitable initiative (with legal counsel)."
+    - "Develop a sustainable, healthy work/rest rhythm to support long-term creativity."
+
+disclaimers:
+  - >
+    This file is a personal reflection, not a contract, not a therapy plan,
+    and not legal, medical, or financial advice.
+  - >
+    Nothing in this file should be interpreted as a guarantee of future actions,
+    income, or outcomes. Plans can and will evolve.
+  - >
+    References to 'impulse', 'ADHD', 'autistic', or 'swarm' are descriptive and
+    metaphorical. They are not medical claims and do not replace professional care.
+  - >
+    Public-facing claims about legal status (e.g., patents, trademarks, DAOs,
+    non-profits) must be verified against actual filings and, where possible,
+    reviewed by qualified professionals.
