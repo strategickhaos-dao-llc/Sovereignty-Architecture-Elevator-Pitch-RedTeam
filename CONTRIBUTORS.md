@@ -64,6 +64,20 @@ Meme makers, storytellers, culture builders:
 - Community builders who foster connection
 - _[Your name here - add yourself when you contribute to culture]_
 
+## AI-Assisted Contributions
+
+Many contributors use AI tools (GitHub Copilot, ChatGPT, Claude, etc.) to enhance their work. This is **encouraged and celebrated**! 
+
+**What matters:**
+- ✅ You maintain agency - AI suggests, you decide
+- ✅ You take responsibility - Your name, your accountability
+- ✅ You contribute value - Whether AI-assisted or not
+- ✅ You're transparent - Acknowledge tools when relevant
+
+AI tools don't contribute directly, but humans using AI tools to contribute better absolutely count as contributors.
+
+**For proper AI acknowledgment guidelines, see:** [AI_COLLABORATION_FRAMEWORK.md](AI_COLLABORATION_FRAMEWORK.md)
+
 ## How To Add Yourself
 
 This isn't a gatekept list. If you've contributed in ANY way:
