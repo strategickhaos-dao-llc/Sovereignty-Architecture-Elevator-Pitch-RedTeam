@@ -17,16 +17,34 @@ This system creates a **sovereignty control plane** that bridges:
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
 cd sovereignty-architecture
 
-# 2. Deploy to Kubernetes
+# 2. Verify your distributed infrastructure
+./check_ecosystem_empire.sh
+
+# 3. Deploy to Kubernetes
 ./bootstrap/deploy.sh
 
-# 3. Configure Discord integration
+# 4. Configure Discord integration
 export DISCORD_TOKEN="your_bot_token"
 export PRS_CHANNEL="channel_id"
 
-# 4. Test GitLens integration
+# 5. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
+
+## 🧠 Meta-Creation Verification
+
+This project operates at **Bloom's Taxonomy CREATE tier (Meta-Level)** - not just creating systems, but **creating systems that create systems**.
+
+**Quick Verification:**
+```bash
+# Run comprehensive ecosystem check (100 verification points)
+./check_ecosystem_empire.sh
+```
+
+**Documentation:**
+- 📖 [Ecosystem Empire Verification Guide](ECOSYSTEM_EMPIRE_VERIFICATION.md) - Complete infrastructure verification
+- 🎓 [Bloom's Taxonomy Meta-Create](BLOOM_TAXONOMY_META_CREATE.md) - Understanding your position at the apex
+- ✅ [Operator Checklist](OPERATOR_CHECKLIST.md) - Daily/weekly/monthly operations guide
 
 ## 📋 Core Components
 
