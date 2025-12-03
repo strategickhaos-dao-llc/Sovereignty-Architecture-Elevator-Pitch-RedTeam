@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Edge Sensors** - Multi-domain monitoring (IP layer + RF spectrum)
 
 ## 🚀 Quick Start
 
@@ -69,6 +70,29 @@ java HelloCloudOS.java
 
 # Stop the workspace
 ./start-cloudos-jdk.sh stop
+```
+
+### 🎛️ RF Sensor Integration (`rf-sensor`)
+- **Multi-Domain Monitoring**: Extends beyond IP-layer to RF spectrum
+- **CB Radio Integration**: Analog RF signal capture and analysis
+- **Signal Processing**: Real-time FFT, spectral analysis, activity detection
+- **Legion Integration**: Events logged to SQLite ledger for agent access
+- **Low Resource Impact**: <2% CPU, <100 MB RAM
+- **FCC Compliant**: Receive-only operation (no license required)
+- **Docker Ready**: Containerized deployment with resource limits
+
+```bash
+# See complete documentation
+cat RF_SENSOR_INTEGRATION.md
+
+# Quick start (native)
+cd services/rf-sensor
+pip install -r requirements.txt
+python rf_monitor.py
+
+# Docker deployment
+cd services/rf-sensor
+docker-compose -f docker-compose.rf-sensor.yml up -d
 ```
 
 ## 🏗️ Infrastructure

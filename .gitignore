@@ -35,3 +35,23 @@ target/
 
 # Workspace data
 workspace/
+
+# RF Sensor artifacts
+services/rf-sensor/logs/
+services/rf-sensor/*.db
+services/rf-sensor/*.db-journal
+/var/legion/data/rf_events.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env.local
+*.env.local

@@ -1,0 +1,19 @@
+# RF Sensor Dependencies
+# Part of Sovereignty Architecture - RF Sensor Integration
+
+# Audio I/O
+pyaudio>=0.2.11
+
+# Numerical computing and signal processing
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Visualization (optional, for spectral analyzer)
+matplotlib>=3.4.0
+pyqtgraph>=0.12.0
+
+# Configuration (optional, for YAML config)
+pyyaml>=5.4.0
+
+# Additional utilities
+python-dateutil>=2.8.0
