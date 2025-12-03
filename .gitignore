@@ -35,3 +35,21 @@ target/
 
 # Workspace data
 workspace/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+*.pdf
+*.dvi
+*.ps
