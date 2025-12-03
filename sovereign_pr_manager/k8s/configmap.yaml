@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sovereignpr-config
+  namespace: sovereignpr
+  labels:
+    app: sovereignprmanager
+data:
+  config.yaml: |
+    github:
+      repo: "Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+      org: "Strategickhaos-Swarm-Intelligence"
+    
+    nats:
+      url: "nats://nats:4222"
+      subjects:
+        pr_new: "pr.new"
+        pr_review: "pr.review"
+        pr_decision: "pr.decision"
+    
+    merge_thresholds:
+      auto_merge: 0.90
+      security_veto: 0.80
+      sovereignty_minimum: 0.70
+    
+    discord:
+      channels:
+        pr_notifications: "#pr-automation"
+        human_review: "#requires-human"
+    
+    declaration:
+      path: "/declaration/README.md"
+      enforce: true
+    
+    poll_interval: 10
+    
+    ai_review:
+      enabled: true
+      parallel_reviews: 4
+      timeout_seconds: 120
