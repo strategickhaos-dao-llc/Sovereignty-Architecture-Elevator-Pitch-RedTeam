@@ -25,7 +25,7 @@ const channelIds = {
 app.post("/webhooks/github", githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
 
 // User registration API routes
-const apiSecret = env("API_SECRET", false) || "default-api-secret";
+const apiSecret = env("API_SECRET");
 const registration = registrationRoutes(apiSecret);
 app.post("/api/users/register", registration.register);
 app.get("/api/users", registration.listUsers);

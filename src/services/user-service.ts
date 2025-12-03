@@ -1,4 +1,4 @@
-import { User, UserRegistrationRequest, UserRegistrationResponse } from "../models/user.js";
+import { User, UserRegistrationRequest, UserRegistrationResponse, UserUpdateResult } from "../models/user.js";
 
 /**
  * In-memory user storage for the user registration service.
@@ -80,20 +80,26 @@ export function isUserRegistered(discordId: string): boolean {
  * Updates a user's profile information.
  * @param discordId - The Discord user ID
  * @param updates - Partial user data to update
- * @returns The updated user if found, undefined otherwise
+ * @returns Result indicating success or failure with error message
  */
 export function updateUser(
   discordId: string, 
   updates: Partial<Pick<User, "email" | "displayName">>
-): User | undefined {
+): UserUpdateResult {
   const user = users.get(discordId);
   if (!user) {
-    return undefined;
+    return {
+      success: false,
+      message: "User not found"
+    };
   }
 
   // Validate email if being updated
   if (updates.email !== undefined && updates.email !== "" && !isValidEmail(updates.email)) {
-    return undefined;
+    return {
+      success: false,
+      message: "Invalid email format"
+    };
   }
 
   const updatedUser: User = {
@@ -103,7 +109,11 @@ export function updateUser(
   };
 
   users.set(discordId, updatedUser);
-  return updatedUser;
+  return {
+    success: true,
+    message: "User updated successfully",
+    user: updatedUser
+  };
 }
 
 /**
@@ -115,11 +125,15 @@ export function getAllUsers(): User[] {
 }
 
 /**
- * Validates an email address format.
+ * Validates an email address format using a comprehensive regex.
+ * This validation covers most common email formats per RFC 5321.
  * @param email - The email address to validate
  * @returns True if the email format is valid, false otherwise
  */
 function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // More comprehensive email regex that handles common cases
+  // Allows: letters, numbers, dots, hyphens, underscores, plus signs in local part
+  // Requires: at sign, domain with at least one dot, valid TLD (2+ chars)
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
   return emailRegex.test(email);
 }

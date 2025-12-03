@@ -36,3 +36,12 @@ export interface UserRegistrationResponse {
   message: string;
   user?: User;
 }
+
+/**
+ * Result of user update operation
+ */
+export interface UserUpdateResult {
+  success: boolean;
+  message: string;
+  user?: User;
+}
