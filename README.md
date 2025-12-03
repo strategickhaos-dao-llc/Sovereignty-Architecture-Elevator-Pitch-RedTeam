@@ -71,6 +71,28 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🔐 Evidence Ledger Anchoring (`evidence-anchoring`)
+- **GPG Signatures**: Cryptographic proof of authorship
+- **OpenTimestamps**: Bitcoin blockchain timestamping for immutability
+- **YAML Schema**: Structured evidence format (v1.2.0)
+- **Court-Ready**: Legally admissible audit trails
+- **Zero Trust**: Mathematically verifiable, no third-party dependencies
+
+```bash
+# Anchor a conversation or evidence file
+python tools/anchor_ledger.py evidence/conversation_ledger.yaml
+
+# Verify existing signatures and timestamps
+python tools/anchor_ledger.py --verify evidence/conversation_ledger.yaml
+
+# Programmatic usage
+python -c "from tools.evidence_logger import EvidenceLogger; 
+logger = EvidenceLogger(); 
+logger.log_conversation('conv_001', [{'name':'Dom','role':'operator'}], 'transcript...')"
+```
+
+**[📖 Full Documentation](EVIDENCE_ANCHORING.md)** | **[Evidence Schema](evidence/schemas/conversation_evidence.v1.2.0.yaml)**
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment

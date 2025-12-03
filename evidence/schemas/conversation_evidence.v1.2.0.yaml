@@ -1,0 +1,69 @@
+# Conversation Evidence Schema v1.2.0
+# Mathematically unbreakable evidence chain with GPG signatures and OpenTimestamps
+# Strategickhaos DAO LLC - Zero trust, zero tampering, zero excuses
+
+schema_version: "1.2.0"
+schema_type: "conversation_evidence"
+
+metadata:
+  document_id: ""
+  conversation_id: ""
+  timestamp_utc: ""
+  operator: "Domenic Garza"
+  drafter: ""
+  
+conversation:
+  participants:
+    - name: ""
+      role: ""
+  context: ""
+  summary: ""
+  
+evidence:
+  # Core evidence fields
+  transcript: ""
+  attachments: []
+  related_documents: []
+  
+  # Integrity verification
+  sha256_hash: ""
+  file_size_bytes: 0
+  
+integration:
+  # OpenTimestamps anchoring - Bitcoin blockchain proof
+  opentimestamps:
+    stamp_file: ".ots"                     # Proof file (binary, git-ignored)
+    stamp_hash: ""                         # SHA256 hash that was timestamped
+    bitcoin_txid: ""                       # Optional: Bitcoin transaction ID if aggregated
+    status: "pending"                      # Status: pending|verified|failed
+    calendar_url: "https://alice.btc.calendar.opentimestamps.org"
+    created_at: ""                         # ISO 8601 timestamp when stamp was created
+    verified_at: ""                        # ISO 8601 timestamp when stamp was verified
+    
+  # GPG signature - Cryptographic proof of authorship
+  gpg_signature: ""                        # Full detached PGP signature (ASCII-armored)
+  gpg_key_id: ""                           # GPG key ID used for signing
+  gpg_fingerprint: ""                      # Full GPG key fingerprint
+  signer_email: "dom@strategickhaos.com"   # Email associated with GPG key
+  
+  # Additional verification metadata
+  signature_created_at: ""                 # ISO 8601 timestamp of signature creation
+  verification_method: "gpg+opentimestamps" # Combined verification approach
+
+# Legal attestation
+attestation:
+  sworn_declaration: |
+    I, Domenic Garza, declare under penalty of perjury that:
+    1. This record was created in the regular course of business
+    2. The timestamps reflect actual creation times
+    3. The cryptographic signatures are authentic
+    4. No alteration has been made post-signature
+  witness: ""
+  witness_date: ""
+
+# Audit trail
+audit:
+  created_by: ""
+  created_at: ""
+  last_modified: ""
+  access_log: []

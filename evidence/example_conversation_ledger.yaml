@@ -1,0 +1,77 @@
+# Example Conversation Evidence Entry
+# This is a template showing how to structure conversation evidence
+# Schema: conversation_evidence.v1.2.0
+
+schema_version: "1.2.0"
+schema_type: "conversation_evidence"
+
+metadata:
+  document_id: "evidence_example_001"
+  conversation_id: "example_001"
+  timestamp_utc: "2025-11-21T23:50:00Z"
+  operator: "Domenic Garza"
+  drafter: "Domenic Garza + AI System"
+
+conversation:
+  participants:
+    - name: "Domenic Garza"
+      role: "Operator/Owner"
+    - name: "AI Assistant"
+      role: "Technical Advisor"
+  context: "Example conversation for demonstrating evidence logging system"
+  summary: "Demonstration of cryptographic anchoring with GPG and OpenTimestamps"
+
+evidence:
+  transcript: |
+    This is an example conversation transcript.
+    
+    User: How does the evidence anchoring system work?
+    
+    Assistant: The system uses two layers of cryptographic proof:
+    1. GPG signatures prove WHO created the document (authenticity)
+    2. OpenTimestamps prove WHEN the document existed (immutability)
+    
+    Together, these create a mathematically unbreakable audit trail.
+    
+  attachments: []
+  related_documents:
+    - "evidence/schemas/conversation_evidence.v1.2.0.yaml"
+    - "tools/anchor_ledger.py"
+  sha256_hash: ""
+  file_size_bytes: 0
+
+integration:
+  opentimestamps:
+    stamp_file: ".ots"
+    stamp_hash: ""
+    bitcoin_txid: ""
+    status: "pending"
+    calendar_url: "https://alice.btc.calendar.opentimestamps.org"
+    created_at: ""
+    verified_at: ""
+  
+  gpg_signature: ""
+  gpg_key_id: ""
+  gpg_fingerprint: ""
+  signer_email: "dom@strategickhaos.com"
+  signature_created_at: ""
+  verification_method: "gpg+opentimestamps"
+
+attestation:
+  sworn_declaration: |
+    I, Domenic Garza, declare under penalty of perjury that:
+    1. This record was created in the regular course of business
+    2. The timestamps reflect actual creation times
+    3. The cryptographic signatures are authentic
+    4. No alteration has been made post-signature
+  witness: ""
+  witness_date: ""
+
+audit:
+  created_by: "Domenic Garza"
+  created_at: "2025-11-21T23:50:00Z"
+  last_modified: "2025-11-21T23:50:00Z"
+  access_log:
+    - action: "created"
+      timestamp: "2025-11-21T23:50:00Z"
+      user: "Domenic Garza"

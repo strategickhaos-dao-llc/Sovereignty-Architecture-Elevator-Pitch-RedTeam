@@ -1,0 +1,8 @@
+# Evidence Logging and Anchoring Dependencies
+# Strategickhaos DAO LLC
+
+# OpenTimestamps - Bitcoin blockchain timestamping
+opentimestamps-client>=0.7.1
+
+# YAML processing
+PyYAML>=6.0.1
