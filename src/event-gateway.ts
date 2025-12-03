@@ -1,5 +1,6 @@
 import express, { Request } from "express";
 import bodyParser from "body-parser";
+import crypto from "crypto";
 import { REST } from "discord.js";
 import { loadConfig, env } from "./config.js";
 import { githubRoutes } from "./routes/github.js";
@@ -36,11 +37,13 @@ app.post("/event", (req: RequestWithRawBody, res) => {
   const sig = req.get("X-Sig") || "";
   const hmacKey = env("EVENTS_HMAC_KEY", false);
   if (hmacKey && sig) {
-    const crypto = require("crypto");
     const expectedSig = crypto.createHmac("sha256", hmacKey).update(req.rawBody || "").digest("hex");
     if (sig !== expectedSig) {
       return res.status(401).send("Invalid signature");
     }
+  } else if (hmacKey && !sig) {
+    // HMAC key configured but no signature provided
+    return res.status(401).send("Missing signature");
   }
   // Process the event (log for now)
   console.log("Received event:", req.body);

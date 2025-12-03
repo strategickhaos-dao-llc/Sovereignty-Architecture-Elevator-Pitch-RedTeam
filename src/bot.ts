@@ -10,6 +10,21 @@ const appId = env("APP_ID", false) || cfg.discord?.bot?.app_id || "";
 const controlApi = cfg.infra.control_api;
 const controlApiToken = env("CONTROL_API_TOKEN", false);
 
+// Build headers with optional authorization
+function buildHeaders(includeAuth: boolean = true): Record<string, string> {
+  const headers: Record<string, string> = {};
+  if (includeAuth && controlApiToken) {
+    headers.Authorization = `Bearer ${controlApiToken}`;
+  }
+  return headers;
+}
+
+function buildJsonHeaders(includeAuth: boolean = true): Record<string, string> {
+  const headers = buildHeaders(includeAuth);
+  headers["Content-Type"] = "application/json";
+  return headers;
+}
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once("ready", async () => {
@@ -23,14 +38,14 @@ client.on("interactionCreate", async (i: Interaction) => {
     if (i.commandName === "status") {
       const svc = i.options.getString("service", true);
       const r = await fetch(`${controlApi.base_url}/status/${svc}`, {
-        headers: { Authorization: `Bearer ${controlApiToken}` }
+        headers: buildHeaders()
       }).then(r => r.json());
       await i.reply({ embeds: [embed(`Status: ${svc}`, `state: ${r.state}\nversion: ${r.version}`)] });
     } else if (i.commandName === "logs") {
       const svc = i.options.getString("service", true);
       const tail = i.options.getInteger("tail") || 200;
       const r = await fetch(`${controlApi.base_url}/logs/${svc}?tail=${tail}`, {
-        headers: { Authorization: `Bearer ${controlApiToken}` }
+        headers: buildHeaders()
       }).then(r => r.text());
       await i.reply({ content: "```\n" + r.slice(0, 1800) + "\n```" });
     } else if (i.commandName === "deploy") {
@@ -38,7 +53,7 @@ client.on("interactionCreate", async (i: Interaction) => {
       const tag = i.options.getString("tag", true);
       const r = await fetch(`${controlApi.base_url}/deploy`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${controlApiToken}` },
+        headers: buildJsonHeaders(),
         body: JSON.stringify({ env: envName, tag })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Deploy", `env: ${envName}\ntag: ${tag}\nresult: ${r.status}`)] });
@@ -47,7 +62,7 @@ client.on("interactionCreate", async (i: Interaction) => {
       const replicas = i.options.getInteger("replicas", true);
       const r = await fetch(`${controlApi.base_url}/scale`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${controlApiToken}` },
+        headers: buildJsonHeaders(),
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });

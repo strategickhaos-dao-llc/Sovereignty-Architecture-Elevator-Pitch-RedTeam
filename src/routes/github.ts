@@ -6,8 +6,18 @@ interface RequestWithRawBody extends Request {
   rawBody?: string;
 }
 
+// Track if we've already logged the security warning
+let securityWarningLogged = false;
+
 function sigOk(secret: string, raw: string, sig: string): boolean {
-  if (!secret) return true; // Skip verification if no secret configured
+  if (!secret) {
+    // Log warning only once to avoid log spam
+    if (!securityWarningLogged) {
+      console.warn("⚠️ SECURITY WARNING: GITHUB_WEBHOOK_SECRET not configured. Webhook signature verification is disabled. This is insecure in production!");
+      securityWarningLogged = true;
+    }
+    return true; // Skip verification if no secret configured (development mode)
+  }
   const h = crypto.createHmac("sha256", secret).update(raw).digest("hex");
   return `sha256=${h}` === sig;
 }
