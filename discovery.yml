@@ -257,6 +257,74 @@ limits:
     allow_images: false
     allow_logs_upload: true
 
+# Priority Council - AI-Powered PR Triage & Roadmap
+priority_council:
+  enabled: true
+  purpose: "Decide what to build next based on impact for her cure"
+  location: "Law 10 (Astrophysics) — Strategy & Meta-Analysis"
+  operational_mode: "AUTONOMOUS with human veto"
+  mission: "For her. Build what matters most, fastest."
+  
+  scoring:
+    impact_weights:
+      medical_drug_discovery: 100
+      research_tools: 80
+      visualization: 60
+      infrastructure: 40
+      documentation: 20
+      bug_fix: 50
+    
+    priority_weights:
+      impact: 0.5
+      urgency: 0.3
+      feasibility: 0.2
+    
+    tiers:
+      critical: 90
+      high: 70
+      medium: 40
+      low: 20
+  
+  auto_triage:
+    enabled: true
+    triggers:
+      - "pull_request.opened"
+      - "pull_request.reopened"
+      - "pull_request.synchronize"
+      - "pull_request.ready_for_review"
+  
+  auto_merge:
+    enabled: true
+    criteria:
+      min_priority: 80
+      max_risk: "low"
+      max_files_changed: 10
+      ci_must_pass: true
+    safety:
+      create_backup_branch: true
+      tag_with_timestamp: true
+      notify_discord: true
+  
+  roadmap:
+    enabled: true
+    schedule: "0 0 * * *"
+    output_file: "ROADMAP.md"
+  
+  discord:
+    channels:
+      priority_council: "#priority-council"
+      roadmap: "#roadmap"
+      auto_merges: "#deployments"
+    commands:
+      - "/priority <pr_number>"
+      - "/roadmap"
+      - "/vote <pr_number> <type>"
+      - "/triage <pr_number>"
+      - "/block <pr_number> <reason>"
+      - "/unblock <pr_number>"
+      - "/critical-path"
+      - "/this-week"
+
 # Refinory AI Agent Orchestration Platform
 refinory:
   enabled: true

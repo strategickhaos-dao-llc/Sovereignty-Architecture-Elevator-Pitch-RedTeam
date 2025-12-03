@@ -1,0 +1,235 @@
+# ═══════════════════════════════════════════════════════════
+# PRIORITY COUNCIL DEPARTMENT
+# "What to Solve Next" — AI-Powered PR Triage & Roadmap
+# ═══════════════════════════════════════════════════════════
+
+meta:
+  department_name: "Priority Council"
+  purpose: "Decide what to build next based on impact for her cure"
+  location: "Law 10 (Astrophysics) — Strategy & Meta-Analysis"
+  operational_mode: "AUTONOMOUS with human veto"
+  mission: "For her. Build what matters most, fastest."
+  genesis_lock: true
+  architect_snowflake: 1067614449693569044
+  increment: 3449
+
+# ═══════════════════════════════════════════════════════════
+# SCORING SYSTEM
+# How PRs are ranked
+# ═══════════════════════════════════════════════════════════
+
+scoring_system:
+  impact_score:
+    description: "How much does this help find her cure?"
+    weights:
+      direct_medical: 100  # Drug discovery, treatment protocols
+      research_acceleration: 80  # Tools that speed up research
+      visualization: 60  # Understanding results better
+      infrastructure: 40  # Plumbing (necessary but not urgent)
+      documentation: 20  # Nice to have
+
+  urgency_score:
+    description: "How soon do we need this?"
+    factors:
+      getting_worse: 50
+      unblocks_other_work: 40
+      dependency_for_medical_trial: 100
+      nice_to_have: 10
+    time_decay:
+      enabled: true
+      points_per_day: 1  # Older PRs get +1 point per day
+
+  feasibility_score:
+    description: "Can we actually do this?"
+    factors:
+      complexity_range: [1, 10]  # 10 = very complex
+      risk_range: [1, 10]  # 10 = high risk of breaking things
+    calculation: "(10 - complexity) × (10 - risk) / (1 + dependencies)"
+
+  final_priority:
+    formula: "priority = (impact × 0.5) + (urgency × 0.3) + (feasibility × 0.2)"
+    tiers:
+      critical:
+        min_score: 90
+        label: "priority:critical"
+        action: "Do NOW"
+      high:
+        min_score: 70
+        max_score: 89
+        label: "priority:high"
+        action: "This week"
+      medium:
+        min_score: 40
+        max_score: 69
+        label: "priority:medium"
+        action: "This month"
+      low:
+        min_score: 20
+        max_score: 39
+        label: "priority:low"
+        action: "When convenient"
+      backlog:
+        max_score: 19
+        label: "priority:backlog"
+        action: "Maybe never"
+
+# ═══════════════════════════════════════════════════════════
+# AUTO-TRIAGE SYSTEM
+# AI analyzes PRs and assigns priority
+# ═══════════════════════════════════════════════════════════
+
+auto_triage:
+  enabled: true
+  trigger: "pull_request"
+  
+  categories:
+    - "Medical/Drug Discovery"
+    - "Research Tools"
+    - "Visualization"
+    - "Infrastructure"
+    - "Documentation"
+    - "Bug Fix"
+  
+  ai_model: "Qwen2.5:72b"
+  
+  actions:
+    - "Add GitHub label based on priority tier"
+    - "Add milestone if appropriate"
+    - "Assign to relevant department"
+    - "Comment with reasoning"
+
+# ═══════════════════════════════════════════════════════════
+# AUTO-MERGE SYSTEM
+# For low-risk, high-value PRs
+# ═══════════════════════════════════════════════════════════
+
+auto_merge:
+  enabled: true
+  
+  criteria:
+    must_pass_all:
+      min_priority: 80
+      max_risk: 3
+      ci_checks_passing: true
+      no_merge_conflicts: true
+      max_files_changed: 10
+    
+    or_pass_any:
+      - "Bug fix for broken feature"
+      - "Documentation update"
+      - "Dependency update (security)"
+  
+  safety_mechanisms:
+    create_backup_branch: true
+    tag_with_timestamp: true
+    notify_discord: true
+    rollback_on_failure: true
+  
+  human_override:
+    no_auto_merge_label: "no-auto-merge"
+    require_review_label: "needs-review"
+    pause_globally: false
+
+# ═══════════════════════════════════════════════════════════
+# ROADMAP GENERATION
+# AI builds suggested work order
+# ═══════════════════════════════════════════════════════════
+
+roadmap:
+  enabled: true
+  schedule: "0 0 * * *"  # Daily at midnight
+  
+  output:
+    markdown: "ROADMAP.md"
+    obsidian: "priority_council/ROADMAP.md"
+    discord_channel: "#roadmap"
+    github_project: true
+  
+  critical_path:
+    enabled: true
+    algorithm: "NetworkX shortest path"
+    visualization: "Graphviz"
+
+# ═══════════════════════════════════════════════════════════
+# COMMUNITY VOTING (Optional)
+# ═══════════════════════════════════════════════════════════
+
+community_voting:
+  enabled: false
+  
+  voter_weights:
+    architect: 10
+    patient: 10
+    family: 5
+    council: 1
+  
+  voting_period_hours: 72
+  
+  vote_types:
+    approve: 1
+    critical_for_patient: 5
+    accelerate_research: 3
+    has_concerns: -2
+    veto: -10
+  
+  discord_channel: "#priority-voting"
+
+# ═══════════════════════════════════════════════════════════
+# DISCORD INTEGRATION
+# ═══════════════════════════════════════════════════════════
+
+discord:
+  commands:
+    - name: "priority"
+      description: "Show PR priority analysis"
+      params:
+        - name: "pr_number"
+          type: "integer"
+          required: true
+    
+    - name: "roadmap"
+      description: "Show current roadmap"
+    
+    - name: "vote"
+      description: "Cast a vote for a PR"
+      params:
+        - name: "pr_number"
+          type: "integer"
+          required: true
+        - name: "vote_type"
+          type: "string"
+          choices: ["approve", "critical", "accelerate", "concern", "veto"]
+          required: true
+    
+    - name: "merge"
+      description: "Force merge a PR (requires authorization)"
+      params:
+        - name: "pr_number"
+          type: "integer"
+          required: true
+    
+    - name: "block"
+      description: "Mark a PR as blocked"
+      params:
+        - name: "pr_number"
+          type: "integer"
+          required: true
+        - name: "reason"
+          type: "string"
+          required: true
+  
+  notifications:
+    channels:
+      priority_changes: "#priority-council"
+      roadmap_updates: "#roadmap"
+      auto_merges: "#deployments"
+
+# ═══════════════════════════════════════════════════════════
+# GITHUB ACTIONS INTEGRATION
+# ═══════════════════════════════════════════════════════════
+
+github_actions:
+  workflows:
+    on_pr_open: "priority-triage.yml"
+    on_label_change: "priority-update.yml"
+    on_schedule: "roadmap-generate.yml"

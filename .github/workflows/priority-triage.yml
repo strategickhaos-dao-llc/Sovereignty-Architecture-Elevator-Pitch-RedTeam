@@ -1,0 +1,283 @@
+name: Priority Council - PR Triage
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to analyze'
+        required: true
+        type: number
+
+env:
+  EVENTS_URL: "https://events.strategickhaos.com/priority"
+
+jobs:
+  triage:
+    name: Priority Triage
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get PR Info
+        id: pr_info
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            PR_NUMBER="${{ github.event.inputs.pr_number }}"
+          else
+            PR_NUMBER="${{ github.event.number }}"
+          fi
+          
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          
+          # Get PR details
+          PR_DATA=$(gh pr view $PR_NUMBER --json title,body,files,labels,createdAt,mergeable --repo ${{ github.repository }})
+          
+          echo "pr_title=$(echo $PR_DATA | jq -r '.title')" >> $GITHUB_OUTPUT
+          echo "pr_body_length=$(echo $PR_DATA | jq -r '.body | length')" >> $GITHUB_OUTPUT
+          echo "files_changed=$(echo $PR_DATA | jq -r '.files | length')" >> $GITHUB_OUTPUT
+          echo "created_at=$(echo $PR_DATA | jq -r '.createdAt')" >> $GITHUB_OUTPUT
+          echo "is_mergeable=$(echo $PR_DATA | jq -r '.mergeable')" >> $GITHUB_OUTPUT
+          
+          # Get labels
+          LABELS=$(echo $PR_DATA | jq -r '.labels[].name' | tr '\n' ',' | sed 's/,$//')
+          echo "labels=$LABELS" >> $GITHUB_OUTPUT
+
+      - name: Classify PR Category
+        id: classify
+        run: |
+          TITLE="${{ steps.pr_info.outputs.pr_title }}"
+          LABELS="${{ steps.pr_info.outputs.labels }}"
+          
+          # Simple keyword-based classification
+          CATEGORY="Infrastructure"
+          
+          if echo "$TITLE $LABELS" | grep -qiE "medical|drug|cure|treatment|therapy|disease|diagnosis"; then
+            CATEGORY="Medical/Drug Discovery"
+          elif echo "$TITLE $LABELS" | grep -qiE "research|analysis|data|pipeline|model|ai|ml|quantum"; then
+            CATEGORY="Research Tools"
+          elif echo "$TITLE $LABELS" | grep -qiE "visualization|dashboard|chart|graph|ui|display|mirror"; then
+            CATEGORY="Visualization"
+          elif echo "$TITLE $LABELS" | grep -qiE "fix|bug|error|issue|broken|crash"; then
+            CATEGORY="Bug Fix"
+          elif echo "$TITLE $LABELS" | grep -qiE "doc|readme|comment|typo|spelling"; then
+            CATEGORY="Documentation"
+          fi
+          
+          echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+
+      - name: Calculate Scores
+        id: scores
+        run: |
+          CATEGORY="${{ steps.classify.outputs.category }}"
+          FILES_CHANGED=${{ steps.pr_info.outputs.files_changed }}
+          
+          # Impact score based on category
+          case "$CATEGORY" in
+            "Medical/Drug Discovery") IMPACT=100 ;;
+            "Research Tools") IMPACT=80 ;;
+            "Visualization") IMPACT=60 ;;
+            "Infrastructure") IMPACT=40 ;;
+            "Documentation") IMPACT=20 ;;
+            "Bug Fix") IMPACT=50 ;;
+            *) IMPACT=30 ;;
+          esac
+          
+          # Complexity (1-10)
+          if [ $FILES_CHANGED -gt 50 ]; then COMPLEXITY=9
+          elif [ $FILES_CHANGED -gt 30 ]; then COMPLEXITY=7
+          elif [ $FILES_CHANGED -gt 15 ]; then COMPLEXITY=5
+          elif [ $FILES_CHANGED -gt 5 ]; then COMPLEXITY=3
+          else COMPLEXITY=2
+          fi
+          
+          # Risk (1-10)
+          if [ "$CATEGORY" == "Infrastructure" ]; then
+            RISK=$((COMPLEXITY + 2))
+          else
+            RISK=$COMPLEXITY
+          fi
+          [ $RISK -gt 10 ] && RISK=10
+          
+          # Feasibility: (10 - complexity) × (10 - risk) / 1
+          FEASIBILITY=$(( (10 - COMPLEXITY) * (10 - RISK) ))
+          # Normalize to 100
+          FEASIBILITY=$(( FEASIBILITY * 100 / 81 ))
+          
+          # Calculate PR age in days
+          CREATED="${{ steps.pr_info.outputs.created_at }}"
+          NOW=$(date +%s)
+          CREATED_TS=$(date -d "$CREATED" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$CREATED" +%s 2>/dev/null || echo $NOW)
+          AGE_DAYS=$(( (NOW - CREATED_TS) / 86400 ))
+          
+          # Urgency = age bonus (capped at 50) + base urgency
+          URGENCY=$((10 + AGE_DAYS))
+          [ $URGENCY -gt 100 ] && URGENCY=100
+          
+          # Final priority = impact × 0.5 + urgency × 0.3 + feasibility × 0.2
+          PRIORITY=$(( (IMPACT * 50 + URGENCY * 30 + FEASIBILITY * 20) / 100 ))
+          
+          # Determine tier
+          if [ $PRIORITY -ge 90 ]; then TIER="critical"
+          elif [ $PRIORITY -ge 70 ]; then TIER="high"
+          elif [ $PRIORITY -ge 40 ]; then TIER="medium"
+          elif [ $PRIORITY -ge 20 ]; then TIER="low"
+          else TIER="backlog"
+          fi
+          
+          echo "impact=$IMPACT" >> $GITHUB_OUTPUT
+          echo "urgency=$URGENCY" >> $GITHUB_OUTPUT
+          echo "feasibility=$FEASIBILITY" >> $GITHUB_OUTPUT
+          echo "priority=$PRIORITY" >> $GITHUB_OUTPUT
+          echo "tier=$TIER" >> $GITHUB_OUTPUT
+          echo "complexity=$COMPLEXITY" >> $GITHUB_OUTPUT
+          echo "risk=$RISK" >> $GITHUB_OUTPUT
+
+      - name: Add Priority Label
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER="${{ steps.pr_info.outputs.pr_number }}"
+          TIER="${{ steps.scores.outputs.tier }}"
+          LABEL="priority:$TIER"
+          
+          # Remove existing priority labels
+          for OLD_LABEL in priority:critical priority:high priority:medium priority:low priority:backlog; do
+            gh pr edit $PR_NUMBER --remove-label "$OLD_LABEL" --repo ${{ github.repository }} 2>/dev/null || true
+          done
+          
+          # Add new label (create if doesn't exist)
+          gh label create "$LABEL" --force --repo ${{ github.repository }} 2>/dev/null || true
+          gh pr edit $PR_NUMBER --add-label "$LABEL" --repo ${{ github.repository }}
+
+      - name: Post Analysis Comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER="${{ steps.pr_info.outputs.pr_number }}"
+          TIER="${{ steps.scores.outputs.tier }}"
+          PRIORITY="${{ steps.scores.outputs.priority }}"
+          IMPACT="${{ steps.scores.outputs.impact }}"
+          URGENCY="${{ steps.scores.outputs.urgency }}"
+          FEASIBILITY="${{ steps.scores.outputs.feasibility }}"
+          CATEGORY="${{ steps.classify.outputs.category }}"
+          FILES="${{ steps.pr_info.outputs.files_changed }}"
+          RISK="${{ steps.scores.outputs.risk }}"
+          
+          # Tier emoji
+          case "$TIER" in
+            "critical") EMOJI="🚨" ;;
+            "high") EMOJI="⚡" ;;
+            "medium") EMOJI="📊" ;;
+            "low") EMOJI="📝" ;;
+            *) EMOJI="📦" ;;
+          esac
+          
+          # Recommendation
+          case "$TIER" in
+            "critical") REC="MERGE THIS WEEK - Critical for her cure" ;;
+            "high") REC="Schedule for this week" ;;
+            "medium") REC="Plan for this month" ;;
+            "low") REC="Address when convenient" ;;
+            *) REC="Review periodically - may not be needed" ;;
+          esac
+          
+          # Risk level
+          if [ $RISK -le 3 ]; then RISK_LVL="LOW"
+          elif [ $RISK -le 6 ]; then RISK_LVL="MEDIUM"
+          else RISK_LVL="HIGH"
+          fi
+          
+          # Auto-merge eligibility
+          if [ $PRIORITY -ge 80 ] && [ $RISK -le 3 ] && [ $FILES -le 10 ]; then
+            AUTO_MERGE="✅ **Eligible for auto-merge**"
+          else
+            AUTO_MERGE="⏳ Manual review required"
+          fi
+          
+          COMMENT="## $EMOJI Priority Council Analysis
+
+| Metric | Score |
+|--------|-------|
+| **Category** | $CATEGORY |
+| **Impact** | $IMPACT/100 |
+| **Urgency** | $URGENCY/100 |
+| **Feasibility** | $FEASIBILITY/100 |
+| **Final Priority** | **$PRIORITY/100** |
+| **Tier** | $TIER |
+| **Risk** | $RISK_LVL |
+
+### 🎯 Recommendation
+$REC
+
+$AUTO_MERGE
+
+---
+*Auto-generated by Priority Council • For her. Always.*"
+          
+          # Find and update existing comment or create new
+          COMMENT_ID=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json comments --jq '.comments[] | select(.body | contains("Priority Council Analysis")) | .id' | head -1)
+          
+          if [ -n "$COMMENT_ID" ]; then
+            gh api repos/${{ github.repository }}/issues/comments/$COMMENT_ID -X PATCH -f body="$COMMENT"
+          else
+            gh pr comment $PR_NUMBER --repo ${{ github.repository }} --body "$COMMENT"
+          fi
+
+      - name: Notify Discord
+        if: always()
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+        run: |
+          PR_NUMBER="${{ steps.pr_info.outputs.pr_number }}"
+          TIER="${{ steps.scores.outputs.tier }}"
+          PRIORITY="${{ steps.scores.outputs.priority }}"
+          CATEGORY="${{ steps.classify.outputs.category }}"
+          
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg pr_number "$PR_NUMBER" \
+            --arg pr_title "${{ steps.pr_info.outputs.pr_title }}" \
+            --arg category "$CATEGORY" \
+            --arg tier "$TIER" \
+            --arg priority "$PRIORITY" \
+            --arg impact "${{ steps.scores.outputs.impact }}" \
+            --arg urgency "${{ steps.scores.outputs.urgency }}" \
+            --arg feasibility "${{ steps.scores.outputs.feasibility }}" \
+            '{
+              service: "priority_council",
+              repo: $repo,
+              pr_number: ($pr_number|tonumber),
+              pr_title: $pr_title,
+              category: $category,
+              tier: $tier,
+              priority: ($priority|tonumber),
+              impact: ($impact|tonumber),
+              urgency: ($urgency|tonumber),
+              feasibility: ($feasibility|tonumber),
+              timestamp: now
+            }')
+          
+          if [ -n "$EVENTS_HMAC_KEY" ]; then
+            sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+            
+            curl -sS -X POST "$EVENTS_URL" \
+              -H "Content-Type: application/json" \
+              -H "X-Sig: $sig" \
+              -d "$payload" || true
+          fi

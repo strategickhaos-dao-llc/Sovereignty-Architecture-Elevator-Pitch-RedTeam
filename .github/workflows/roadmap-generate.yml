@@ -1,0 +1,183 @@
+name: Priority Council - Generate Roadmap
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+  workflow_dispatch:
+
+env:
+  EVENTS_URL: "https://events.strategickhaos.com/priority"
+
+jobs:
+  generate-roadmap:
+    name: Generate Roadmap
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Collect PR Data
+        id: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Get all open PRs with their priority labels
+          echo "Collecting PR data..."
+          
+          gh pr list --state open --json number,title,labels,createdAt,additions,deletions,files --limit 100 > /tmp/prs.json
+          
+          PR_COUNT=$(jq 'length' /tmp/prs.json)
+          echo "Found $PR_COUNT open PRs"
+          echo "pr_count=$PR_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Generate Roadmap
+        id: roadmap
+        run: |
+          echo "# 🗺️ Priority Council Roadmap" > ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "**Generated:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          PR_COUNT=$(jq 'length' /tmp/prs.json)
+          
+          # Count by tier
+          CRITICAL=$(jq '[.[] | select(.labels[].name == "priority:critical")] | length' /tmp/prs.json)
+          HIGH=$(jq '[.[] | select(.labels[].name == "priority:high")] | length' /tmp/prs.json)
+          MEDIUM=$(jq '[.[] | select(.labels[].name == "priority:medium")] | length' /tmp/prs.json)
+          LOW=$(jq '[.[] | select(.labels[].name == "priority:low")] | length' /tmp/prs.json)
+          BACKLOG=$(jq '[.[] | select(.labels[].name == "priority:backlog")] | length' /tmp/prs.json)
+          UNLABELED=$((PR_COUNT - CRITICAL - HIGH - MEDIUM - LOW - BACKLOG))
+          
+          echo "## 📊 Overview" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "- **Total Open PRs:** $PR_COUNT" >> ROADMAP.md
+          echo "- **Critical:** $CRITICAL" >> ROADMAP.md
+          echo "- **High:** $HIGH" >> ROADMAP.md
+          echo "- **Medium:** $MEDIUM" >> ROADMAP.md
+          echo "- **Low:** $LOW" >> ROADMAP.md
+          echo "- **Backlog:** $BACKLOG" >> ROADMAP.md
+          echo "- **Unlabeled:** $UNLABELED" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          # Critical Path
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "## 🎯 Critical Path" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "The fastest route to the most important features:" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          jq -r '.[] | select(.labels[].name == "priority:critical") | "1. **#\(.number)** - \(.title)"' /tmp/prs.json >> ROADMAP.md || echo "No critical PRs" >> ROADMAP.md
+          
+          echo "" >> ROADMAP.md
+          
+          # This Week (Critical + High)
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "## 📅 This Week" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "PRs to focus on immediately:" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "### 🚨 Critical" >> ROADMAP.md
+          jq -r '.[] | select(.labels[].name == "priority:critical") | "- [ ] **#\(.number)** - \(.title)"' /tmp/prs.json >> ROADMAP.md || echo "- None" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "### ⚡ High" >> ROADMAP.md
+          jq -r '.[] | select(.labels[].name == "priority:high") | "- [ ] **#\(.number)** - \(.title)"' /tmp/prs.json >> ROADMAP.md || echo "- None" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          # This Month (Medium)
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "## 📆 This Month" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "### 📊 Medium Priority" >> ROADMAP.md
+          jq -r '.[] | select(.labels[].name == "priority:medium") | "- [ ] **#\(.number)** - \(.title)"' /tmp/prs.json >> ROADMAP.md || echo "- None" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          # When Convenient (Low)
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "## 📝 When Convenient" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "### Low Priority" >> ROADMAP.md
+          jq -r '.[] | select(.labels[].name == "priority:low") | "- [ ] **#\(.number)** - \(.title)"' /tmp/prs.json | head -20 >> ROADMAP.md || echo "- None" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          # Backlog
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "## 📦 Backlog" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          jq -r '.[] | select(.labels[].name == "priority:backlog") | "- **#\(.number)** - \(.title)"' /tmp/prs.json | head -20 >> ROADMAP.md || echo "- None" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          
+          # Unlabeled (need triage)
+          if [ $UNLABELED -gt 0 ]; then
+            echo "---" >> ROADMAP.md
+            echo "" >> ROADMAP.md
+            echo "## ⚠️ Needs Triage" >> ROADMAP.md
+            echo "" >> ROADMAP.md
+            echo "The following PRs have not been analyzed by Priority Council:" >> ROADMAP.md
+            echo "" >> ROADMAP.md
+            jq -r '.[] | select((.labels | map(.name) | any(test("^priority:"))) | not) | "- **#\(.number)** - \(.title)"' /tmp/prs.json | head -30 >> ROADMAP.md
+            echo "" >> ROADMAP.md
+          fi
+          
+          # Footer
+          echo "---" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "*This roadmap is auto-generated by the Priority Council.*" >> ROADMAP.md
+          echo "" >> ROADMAP.md
+          echo "*For her. Always.*" >> ROADMAP.md
+          
+          echo "roadmap_generated=true" >> $GITHUB_OUTPUT
+
+      - name: Commit Roadmap
+        run: |
+          git config user.name "Priority Council Bot"
+          git config user.email "priority-council@strategickhaos.ai"
+          
+          git add ROADMAP.md
+          
+          if git diff --cached --quiet; then
+            echo "No changes to roadmap"
+          else
+            git commit -m "📊 Update roadmap ($(date +%Y-%m-%d))"
+            git push
+          fi
+
+      - name: Notify Discord
+        if: steps.roadmap.outputs.roadmap_generated == 'true'
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+        run: |
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg pr_count "${{ steps.collect.outputs.pr_count }}" \
+            '{
+              service: "priority_council",
+              event: "roadmap_generated",
+              repo: $repo,
+              pr_count: ($pr_count|tonumber),
+              timestamp: now
+            }')
+          
+          if [ -n "$EVENTS_HMAC_KEY" ]; then
+            sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+            
+            curl -sS -X POST "$EVENTS_URL" \
+              -H "Content-Type: application/json" \
+              -H "X-Sig: $sig" \
+              -d "$payload" || true
+          fi
