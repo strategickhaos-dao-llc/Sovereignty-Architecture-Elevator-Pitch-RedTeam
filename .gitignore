@@ -39,3 +39,8 @@ workspace/
 # Strategickhaos generator outputs
 analogies.csv
 os_blueprint.json
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
