@@ -186,6 +186,32 @@ governance:
     link: "https://wiki.strategickhaos.internal/change-management"
 ```
 
+### 🎭 Department of Public-Facing Decoys & Controlled Exposure (GhostPresence)
+
+**Mission**: Maintain operational security through strategic visibility management.
+
+The GhostPresence department ensures the Strategickhaos ecosystem maintains perfect stealth while presenting a carefully curated public presence.
+
+**Key Capabilities:**
+- **Decoy Operations**: Public-facing repositories that appear as typical development projects
+- **Honeypot Deployment**: Security traps to detect reconnaissance attempts
+- **Threat Intelligence**: Monitor and analyze who shows interest in public assets
+- **OPSEC Auditing**: Verify zero exposure of private operations
+
+**Quick Start:**
+```bash
+# Initialize GhostPresence department
+./scripts/ghost-presence-ops.sh init
+
+# Deploy honeypot repository
+./scripts/ghost-presence-ops.sh honeypot leaked-ai-empire-2025
+
+# Run OPSEC audit
+./scripts/ghost-presence-ops.sh audit
+```
+
+📖 **Documentation**: See [`governance/department_ghost_presence.md`](governance/department_ghost_presence.md) for complete operational procedures and strategic framework.
+
 ## 📊 Monitoring & Alerts
 
 ### Key Metrics
