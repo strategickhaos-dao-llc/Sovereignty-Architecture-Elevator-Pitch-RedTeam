@@ -1,0 +1,349 @@
+---
+# LyraNode Custom Resource Definition
+# Kubernetes CRD for Sovereignty Architecture
+# Version: v1alpha1
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: lyranodes.lyra.io
+  labels:
+    app.kubernetes.io/name: lyra-operator
+    app.kubernetes.io/part-of: sovereignty-architecture
+  annotations:
+    description: "CRD for managing LyraNode sovereignty manifests"
+spec:
+  group: lyra.io
+  names:
+    kind: LyraNode
+    listKind: LyraNodeList
+    plural: lyranodes
+    singular: lyranode
+    shortNames:
+      - ln
+      - lyra
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - node
+                - sovereigntyLevel
+              properties:
+                node:
+                  type: object
+                  required:
+                    - id
+                    - version
+                  properties:
+                    id:
+                      type: string
+                      description: "Unique node identifier in URN format"
+                      pattern: "^urn:lyra:node:[a-zA-Z0-9_-]+:[0-9]+$"
+                    version:
+                      type: string
+                      description: "Semantic version of the node"
+                      pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$"
+                    description:
+                      type: string
+                      description: "Brief description of the node"
+                      maxLength: 512
+                operator:
+                  type: object
+                  description: "Operator identity"
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 256
+                    nodeRef:
+                      type: string
+                      pattern: "^[a-zA-Z0-9_-]+$"
+                    gpgKeyId:
+                      type: string
+                      pattern: "^0x[A-Fa-f0-9]+$"
+                    orcid:
+                      type: string
+                      pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+                sovereigntyLevel:
+                  type: string
+                  description: "Level of sovereignty achieved"
+                  enum:
+                    - none
+                    - partial
+                    - enterprise
+                    - bigtech
+                    - sovereign
+                hallucinationScore:
+                  type: number
+                  description: "AI hallucination rate (0.0 = no hallucination)"
+                  minimum: 0.0
+                  maximum: 1.0
+                cryptographicVerification:
+                  type: array
+                  description: "Cryptographic verification methods"
+                  items:
+                    type: string
+                    enum:
+                      - GPG
+                      - SHA256
+                      - SHA512
+                      - ED25519
+                      - RSA
+                      - ECDSA
+                complianceFramework:
+                  type: string
+                  description: "Compliance frameworks being followed"
+                models:
+                  type: array
+                  description: "AI/ML models deployed"
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - modelId
+                      - source
+                    properties:
+                      name:
+                        type: string
+                        maxLength: 128
+                      modelId:
+                        type: string
+                        pattern: "^[a-fA-F0-9]+$"
+                      source:
+                        type: string
+                        enum:
+                          - ollama
+                          - huggingface
+                          - openai
+                          - anthropic
+                          - local
+                          - custom
+                      pinnedVersion:
+                        type: string
+                        maxLength: 128
+                      checksum:
+                        type: string
+                        pattern: "^[a-fA-F0-9]{64}$"
+                capabilities:
+                  type: array
+                  description: "Node capabilities"
+                  items:
+                    type: string
+                    maxLength: 128
+                milestones:
+                  type: array
+                  description: "Achieved milestones"
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - achievedAt
+                    properties:
+                      name:
+                        type: string
+                        maxLength: 256
+                      achievedAt:
+                        type: string
+                        format: date-time
+                      commitRef:
+                        type: string
+                        pattern: "^[a-fA-F0-9]{7,40}$"
+                      artifactUri:
+                        type: string
+                provenance:
+                  type: object
+                  description: "Provenance information"
+                  properties:
+                    generatedBy:
+                      type: string
+                      maxLength: 256
+                    source:
+                      type: string
+                      maxLength: 512
+                    scriptVersion:
+                      type: string
+                    checksums:
+                      type: object
+                      properties:
+                        sha256:
+                          type: string
+                          pattern: "^[a-fA-F0-9]{64}$"
+                        sha512:
+                          type: string
+                          pattern: "^[a-fA-F0-9]{128}$"
+                sensitivity:
+                  type: array
+                  description: "Sensitivity classifications"
+                  items:
+                    type: object
+                    required:
+                      - path
+                      - classification
+                    properties:
+                      path:
+                        type: string
+                      classification:
+                        type: string
+                        enum:
+                          - public
+                          - internal
+                          - confidential
+                          - restricted
+                          - top_secret
+                      handling:
+                        type: string
+                        maxLength: 256
+                signature:
+                  type: object
+                  description: "Cryptographic signature"
+                  properties:
+                    method:
+                      type: string
+                      enum:
+                        - GPG
+                        - JWS
+                        - ED25519
+                        - RSA
+                        - ECDSA
+                    keyId:
+                      type: string
+                      maxLength: 128
+                    sig:
+                      type: string
+                    sigTs:
+                      type: string
+                      format: date-time
+                    algorithm:
+                      type: string
+                      maxLength: 64
+                hooks:
+                  type: array
+                  description: "Automation hooks"
+                  items:
+                    type: object
+                    required:
+                      - on
+                      - url
+                    properties:
+                      on:
+                        type: string
+                        enum:
+                          - milestone
+                          - status_change
+                          - health_check
+                          - sync
+                          - deploy
+                          - alert
+                      url:
+                        type: string
+                      secretRef:
+                        type: string
+                        pattern: "^[a-zA-Z0-9_-]+$"
+                      method:
+                        type: string
+                        enum:
+                          - POST
+                          - PUT
+                        default: POST
+            status:
+              type: object
+              description: "Current status (managed by controller)"
+              properties:
+                phase:
+                  type: string
+                  description: "Current phase of the LyraNode"
+                  enum:
+                    - Pending
+                    - Initializing
+                    - Active
+                    - Degraded
+                    - Maintenance
+                    - Retired
+                    - Failed
+                health:
+                  type: string
+                  description: "Current health status"
+                  enum:
+                    - passing
+                    - warning
+                    - critical
+                    - unknown
+                lastSeen:
+                  type: string
+                  format: date-time
+                  description: "Last heartbeat timestamp"
+                uptimeSeconds:
+                  type: integer
+                  minimum: 0
+                  description: "Uptime in seconds"
+                lastSync:
+                  type: string
+                  format: date-time
+                  description: "Last synchronization timestamp"
+                queriesProcessed:
+                  type: integer
+                  minimum: 0
+                  description: "Total queries processed"
+                signatureVerified:
+                  type: boolean
+                  description: "Whether manifest signature is verified"
+                conditions:
+                  type: array
+                  description: "Status conditions"
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - status
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                        enum:
+                          - "True"
+                          - "False"
+                          - "Unknown"
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+                      reason:
+                        type: string
+                      message:
+                        type: string
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Version
+          type: string
+          description: "Node version"
+          jsonPath: .spec.node.version
+        - name: Sovereignty
+          type: string
+          description: "Sovereignty level"
+          jsonPath: .spec.sovereigntyLevel
+        - name: Phase
+          type: string
+          description: "Current phase"
+          jsonPath: .status.phase
+        - name: Health
+          type: string
+          description: "Health status"
+          jsonPath: .status.health
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
