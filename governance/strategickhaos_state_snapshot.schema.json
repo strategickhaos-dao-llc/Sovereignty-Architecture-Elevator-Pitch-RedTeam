@@ -1,0 +1,689 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://strategickhaos.com/schemas/state_snapshot/v1.0.0",
+  "title": "Strategickhaos State Snapshot",
+  "description": "Canonical JSON Schema for Strategickhaos DAO LLC world-state: entities, repos, infrastructure, accounts, strategies, risks, anchors, snapshots, and provenance.",
+  "type": "object",
+  "required": ["version", "snapshot_id", "timestamp", "entities"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version following semantic versioning",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0"]
+    },
+    "snapshot_id": {
+      "type": "string",
+      "description": "Unique identifier for this snapshot",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of snapshot creation"
+    },
+    "previous_snapshot_id": {
+      "type": ["string", "null"],
+      "description": "Reference to the previous snapshot for chain integrity",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "entities": {
+      "type": "object",
+      "description": "Legal entities, organizations, and key personnel",
+      "additionalProperties": {
+        "$ref": "#/definitions/entity"
+      }
+    },
+    "repositories": {
+      "type": "object",
+      "description": "Git repositories under governance",
+      "additionalProperties": {
+        "$ref": "#/definitions/repository"
+      }
+    },
+    "infrastructure": {
+      "type": "object",
+      "description": "Infrastructure resources and configurations",
+      "additionalProperties": {
+        "$ref": "#/definitions/infrastructure_resource"
+      }
+    },
+    "accounts": {
+      "type": "object",
+      "description": "Financial accounts, wallets, and credentials",
+      "additionalProperties": {
+        "$ref": "#/definitions/account"
+      }
+    },
+    "strategies": {
+      "type": "object",
+      "description": "Trading strategies and operational procedures",
+      "additionalProperties": {
+        "$ref": "#/definitions/strategy"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "description": "Active risk register entries",
+      "items": {
+        "$ref": "#/definitions/risk"
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "Cryptographic anchors and timestamps for audit trail",
+      "items": {
+        "$ref": "#/definitions/anchor"
+      }
+    },
+    "facts": {
+      "type": "array",
+      "description": "Extensible facts derived from sources",
+      "items": {
+        "$ref": "#/definitions/fact"
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "description": "Governance assertions and decisions",
+      "items": {
+        "$ref": "#/definitions/assertion"
+      }
+    },
+    "provenance": {
+      "$ref": "#/definitions/provenance"
+    },
+    "checksums": {
+      "$ref": "#/definitions/checksums"
+    }
+  },
+  "definitions": {
+    "entity": {
+      "type": "object",
+      "required": ["id", "type", "name", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique entity identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["llc", "person", "ai_agent", "contractor", "partner", "vendor"],
+          "description": "Entity type classification"
+        },
+        "name": {
+          "type": "string",
+          "description": "Legal or display name"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive", "pending", "suspended", "dissolved"],
+          "description": "Current operational status"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "description": "Legal jurisdiction (e.g., 'WY', 'TX')"
+        },
+        "formation_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Entity formation or onboarding date"
+        },
+        "credentials": {
+          "type": "object",
+          "description": "Associated credentials and certifications",
+          "properties": {
+            "orcid": { "type": "string" },
+            "twic": { "type": "string" },
+            "licenses": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": { "type": "string", "format": "email" },
+            "phone": { "type": "string" },
+            "address": { "type": "string" }
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Assigned governance roles"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last verification timestamp"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional entity-specific metadata"
+        }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "required": ["id", "name", "url", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Repository identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Repository name"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Repository URL"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "archived", "deprecated", "private"],
+          "description": "Repository status"
+        },
+        "default_branch": {
+          "type": "string",
+          "default": "main"
+        },
+        "last_commit_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "last_commit_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "contributors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "ci_status": {
+          "type": "string",
+          "enum": ["passing", "failing", "pending", "unknown"]
+        },
+        "open_issues": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "open_prs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "health_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Computed repository health score"
+        },
+        "compliance": {
+          "type": "object",
+          "properties": {
+            "has_license": { "type": "boolean" },
+            "has_readme": { "type": "boolean" },
+            "has_security_policy": { "type": "boolean" },
+            "has_codeowners": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "infrastructure_resource": {
+      "type": "object",
+      "required": ["id", "type", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Resource identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["kubernetes_cluster", "vm", "database", "storage", "network", "dns", "cdn", "container_registry", "secrets_manager"],
+          "description": "Infrastructure resource type"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Cloud or service provider"
+        },
+        "region": {
+          "type": "string",
+          "description": "Deployment region"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["running", "stopped", "provisioning", "error", "unknown"]
+        },
+        "cost_monthly": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Monthly cost estimate in USD"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "endpoints": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "account": {
+      "type": "object",
+      "required": ["id", "type", "name", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Account identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["bank", "brokerage", "crypto_wallet", "exchange", "payment_processor", "service_account"],
+          "description": "Account type"
+        },
+        "name": {
+          "type": "string",
+          "description": "Account name or label"
+        },
+        "institution": {
+          "type": "string",
+          "description": "Financial institution or service provider"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive", "pending", "frozen", "closed"]
+        },
+        "balance": {
+          "type": "object",
+          "properties": {
+            "amount": { "type": "number" },
+            "currency": { "type": "string" },
+            "as_of": { "type": "string", "format": "date-time" }
+          }
+        },
+        "compliance": {
+          "type": "object",
+          "properties": {
+            "kyc_verified": { "type": "boolean" },
+            "aml_cleared": { "type": "boolean" },
+            "last_audit": { "type": "string", "format": "date" }
+          }
+        },
+        "masked_identifier": {
+          "type": "string",
+          "description": "Masked account number for reference"
+        }
+      }
+    },
+    "strategy": {
+      "type": "object",
+      "required": ["id", "name", "type", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Strategy identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Strategy name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["trading", "operational", "governance", "compliance", "security"],
+          "description": "Strategy type"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "paused", "backtesting", "retired", "pending_review"]
+        },
+        "description": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Strategy configuration parameters"
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "total_return": { "type": "number" },
+            "sharpe_ratio": { "type": "number" },
+            "max_drawdown": { "type": "number" },
+            "win_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+            "period": { "type": "string" }
+          }
+        },
+        "risk_limits": {
+          "type": "object",
+          "properties": {
+            "max_position_size": { "type": "number" },
+            "max_daily_loss": { "type": "number" },
+            "max_drawdown_threshold": { "type": "number" }
+          }
+        },
+        "audit_trail": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": { "type": "string", "format": "date-time" },
+              "action": { "type": "string" },
+              "actor": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": ["id", "category", "severity", "status", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Risk identifier"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["operational", "financial", "legal", "compliance", "security", "reputational", "strategic"],
+          "description": "Risk category"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"],
+          "description": "Risk severity level"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "mitigated", "accepted", "transferred", "closed"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Risk description"
+        },
+        "likelihood": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Probability of occurrence"
+        },
+        "impact": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Impact score if risk materializes"
+        },
+        "mitigations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": { "type": "string" },
+              "owner": { "type": "string" },
+              "due_date": { "type": "string", "format": "date" },
+              "status": { "type": "string", "enum": ["pending", "in_progress", "complete"] }
+            }
+          }
+        },
+        "identified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "identified_by": {
+          "type": "string"
+        },
+        "last_reviewed": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["id", "type", "hash", "timestamp"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Anchor identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["sha256", "sha512", "opentimestamps", "blockchain", "notarization"],
+          "description": "Anchor type"
+        },
+        "hash": {
+          "type": "string",
+          "description": "Cryptographic hash value"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Anchor creation time"
+        },
+        "target": {
+          "type": "string",
+          "description": "Reference to the anchored artifact"
+        },
+        "proof": {
+          "type": "string",
+          "description": "Proof data (e.g., OTS receipt, transaction hash)"
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether anchor has been verified"
+        },
+        "verification_details": {
+          "type": "object",
+          "properties": {
+            "verified_at": { "type": "string", "format": "date-time" },
+            "verified_by": { "type": "string" },
+            "method": { "type": "string" }
+          }
+        }
+      }
+    },
+    "fact": {
+      "type": "object",
+      "required": ["id", "type", "value", "source"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Fact identifier"
+        },
+        "type": {
+          "type": "string",
+          "description": "Fact type/category"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Entity or resource this fact pertains to"
+        },
+        "predicate": {
+          "type": "string",
+          "description": "Relationship or property name"
+        },
+        "value": {
+          "description": "Fact value (any JSON type)"
+        },
+        "source": {
+          "$ref": "#/definitions/source_reference"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence level of this fact"
+        },
+        "valid_from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid_until": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "supersedes": {
+          "type": ["string", "null"],
+          "description": "ID of fact this supersedes"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["id", "type", "statement", "decided_at", "decided_by"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Assertion identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["approval", "rejection", "policy", "exception", "delegation", "revocation"],
+          "description": "Assertion type"
+        },
+        "statement": {
+          "type": "string",
+          "description": "Human-readable assertion statement"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "decided_by": {
+          "type": "string",
+          "description": "Entity or quorum that made the decision"
+        },
+        "quorum_achieved": {
+          "type": "boolean"
+        },
+        "votes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "voter": { "type": "string" },
+              "vote": { "type": "string", "enum": ["approve", "reject", "abstain"] },
+              "timestamp": { "type": "string", "format": "date-time" },
+              "signature": { "type": "string" }
+            }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/source_reference"
+          }
+        },
+        "effective_from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "effective_until": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "superseded_by": {
+          "type": ["string", "null"],
+          "description": "ID of assertion that supersedes this one"
+        }
+      }
+    },
+    "source_reference": {
+      "type": "object",
+      "required": ["type", "reference"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["git_commit", "document", "api", "manual", "pdf", "csv", "log", "attestation"],
+          "description": "Source type"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Source reference (URL, path, hash)"
+        },
+        "hash": {
+          "type": "string",
+          "description": "Content hash for verification"
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional source metadata"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["created_at", "created_by", "sources"],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Snapshot creation timestamp"
+        },
+        "created_by": {
+          "type": "string",
+          "description": "Creator identity (human, script, or agent)"
+        },
+        "tool_version": {
+          "type": "string",
+          "description": "Version of the state_updater tool"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/source_reference"
+          },
+          "description": "List of data sources used in this snapshot"
+        },
+        "collector_runs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "collector": { "type": "string" },
+              "started_at": { "type": "string", "format": "date-time" },
+              "completed_at": { "type": "string", "format": "date-time" },
+              "records_processed": { "type": "integer" },
+              "errors": { "type": "integer" },
+              "status": { "type": "string", "enum": ["success", "partial", "failed"] }
+            }
+          }
+        },
+        "gpg_signature": {
+          "type": "string",
+          "description": "GPG signature of the snapshot"
+        }
+      }
+    },
+    "checksums": {
+      "type": "object",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of snapshot content (excluding checksums)"
+        },
+        "sha512": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{128}$",
+          "description": "SHA-512 hash of snapshot content (excluding checksums)"
+        },
+        "opentimestamps_pending": {
+          "type": "boolean",
+          "description": "Whether OpenTimestamps proof is pending"
+        },
+        "opentimestamps_proof": {
+          "type": "string",
+          "description": "Base64-encoded OpenTimestamps proof"
+        }
+      }
+    }
+  }
+}
