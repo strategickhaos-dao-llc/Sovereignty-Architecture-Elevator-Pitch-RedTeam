@@ -23,7 +23,14 @@ impl SleepTask {
         let current_minutes = current.hour() as i32 * 60 + current.minute() as i32;
         let target_minutes = target.hour() as i32 * 60 + target.minute() as i32;
 
-        let minutes_remaining = target_minutes - current_minutes;
+        // Handle midnight crossing: if target is smaller than current,
+        // it means bedtime is after midnight (e.g., target 1:00 AM, current 11:00 PM)
+        let minutes_remaining = if target_minutes < current_minutes {
+            // Add 24 hours worth of minutes for next-day bedtime
+            (24 * 60 - current_minutes) + target_minutes
+        } else {
+            target_minutes - current_minutes
+        };
 
         if minutes_remaining <= 0 {
             SleepResult {

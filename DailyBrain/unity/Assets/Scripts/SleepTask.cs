@@ -26,7 +26,18 @@ public static class SleepAlgorithm
         int currentMinutes = ctx.currentTime.Hour * 60 + ctx.currentTime.Minute;
         int targetMinutes = ctx.targetBedtimeHour * 60 + ctx.targetBedtimeMinute;
         
-        int minutesRemaining = targetMinutes - currentMinutes;
+        // Handle midnight crossing: if target is smaller than current,
+        // it means bedtime is after midnight (e.g., target 1:00 AM, current 11:00 PM)
+        int minutesRemaining;
+        if (targetMinutes < currentMinutes)
+        {
+            // Add 24 hours worth of minutes for next-day bedtime
+            minutesRemaining = (24 * 60 - currentMinutes) + targetMinutes;
+        }
+        else
+        {
+            minutesRemaining = targetMinutes - currentMinutes;
+        }
         
         if (minutesRemaining <= 0)
         {

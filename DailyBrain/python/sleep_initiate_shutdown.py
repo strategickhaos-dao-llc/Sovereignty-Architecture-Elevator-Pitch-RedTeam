@@ -28,11 +28,15 @@ class SleepTask:
         current = ctx.current_time.time()
         target = ctx.target_bedtime
         
-        # Simple comparison (doesn't handle midnight crossing)
         current_minutes = current.hour * 60 + current.minute
         target_minutes = target.hour * 60 + target.minute
         
+        # Handle midnight crossing: if target is smaller than current,
+        # it means bedtime is after midnight (e.g., target 1:00 AM, current 11:00 PM)
         minutes_remaining = target_minutes - current_minutes
+        if target_minutes < current_minutes:
+            # Add 24 hours worth of minutes for next-day bedtime
+            minutes_remaining = (24 * 60 - current_minutes) + target_minutes
         
         if minutes_remaining <= 0:
             return SleepResult(

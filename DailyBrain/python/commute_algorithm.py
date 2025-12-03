@@ -27,7 +27,7 @@ class CommuteAlgorithm:
         Stub: in real life, call Google Maps / some routing API here.
         For now, fake it based on straight-line distance.
         """
-        distance_km = self._haversine(ctx.home, ctx.work)
+        distance_km = self.calculate_distance(ctx.home, ctx.work)
 
         # naive: 40 km/h average speed
         hours = distance_km / 40.0
@@ -42,7 +42,11 @@ class CommuteAlgorithm:
             note=note
         )
 
-    def _haversine(self, a: Coordinates, b: Coordinates) -> float:
+    def calculate_distance(self, a: Coordinates, b: Coordinates) -> float:
+        """
+        Calculate great-circle distance between two coordinates using Haversine formula.
+        Returns distance in kilometers.
+        """
         from math import radians, sin, cos, asin, sqrt
 
         R = 6371.0  # km

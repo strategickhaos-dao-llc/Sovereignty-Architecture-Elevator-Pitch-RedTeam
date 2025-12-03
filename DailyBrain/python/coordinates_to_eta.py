@@ -5,7 +5,7 @@ Wraps external APIs (Google Maps, etc.) for ETA calculation.
 """
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import List, Optional
 from commute_algorithm import Coordinates, CommuteAlgorithm, CommuteContext
 
 @dataclass
@@ -43,7 +43,7 @@ class CoordinatesToETA:
         )
         
         result = self._algo.estimate_commute(ctx)
-        distance = self._algo._haversine(request.origin, request.destination)
+        distance = self._algo.calculate_distance(request.origin, request.destination)
         
         return ETAResponse(
             eta=result.eta,
@@ -52,7 +52,7 @@ class CoordinatesToETA:
             route_summary=f"Direct route ({request.mode}): {distance:.1f} km"
         )
     
-    def get_multi_stop_eta(self, stops: list[Coordinates], departure_time: datetime) -> list[ETAResponse]:
+    def get_multi_stop_eta(self, stops: List[Coordinates], departure_time: datetime) -> List[ETAResponse]:
         """
         Calculate ETAs for a route with multiple stops.
         """
