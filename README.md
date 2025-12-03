@@ -280,6 +280,13 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏛️ About Strategickhaos DAO LLC
+
+- **[Official Bio/Profile](PROFILE_BIO.md)** - Professional bios for X/Twitter, LinkedIn, and academic contexts
+- **[Bio Claims Evidence](BIO_CLAIMS_EVIDENCE.md)** - Comprehensive proof that all bio claims are legitimate and verifiable
+- **Legal Structure**: Wyoming DAO LLC (Certificate ID: 2025-001708194) | EIN: 39-2900295
+- **Mission**: AI-governed perpetual philanthropy with 7% charity lock (St. Jude, MSF, veterans)
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
