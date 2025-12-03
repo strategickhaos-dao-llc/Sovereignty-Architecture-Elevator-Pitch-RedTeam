@@ -3,7 +3,6 @@
 
 # Core HTTP/Async
 aiohttp>=3.9.0
-asyncio-nats-client>=0.11.6
 
 # GitHub Integration
 PyYAML>=6.0
