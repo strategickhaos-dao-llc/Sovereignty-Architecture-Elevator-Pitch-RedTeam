@@ -1,0 +1,114 @@
+# portfolio.yaml
+# Canonical schema for automated portfolio rebalancing
+# Used by Zapier → Grok flow for paycheck-triggered rebalancing
+# Version: 1.0.0 | Phase 1 implementation
+#
+# This file serves as the single source of truth for:
+# - Account configuration
+# - Target allocations (buckets and instruments)
+# - Position and execution constraints
+# - SwarmGate treasury rules
+
+owner:
+  id: "user-001"
+  name: "Alice"
+  base_currency: "USD"
+
+meta:
+  last_reviewed: "2025-11-30"
+  rebalance_threshold_pct: 5      # trigger if off by >5%
+  paycheck_rebalance_pct: 15      # % of paycheck routed to investing
+  swarmgate_treasury_pct: 7       # % of investable flow to treasury
+
+accounts:
+  - id: "brokerage-ibkr"
+    type: "brokerage"
+    provider: "Interactive Brokers"
+    currency: "USD"
+    allow_fractional_shares: true
+    execution_mode: "auto"        # "auto" | "manual-review"
+    tags: ["primary"]
+
+  - id: "swarmgate-treasury"
+    type: "treasury"
+    provider: "multisig"
+    currency: "USD"
+    allow_fractional_shares: false
+    execution_mode: "manual-review"
+    tags: ["treasury"]
+
+targets:
+  # High-level target allocation by bucket
+  buckets:
+    - id: "core-equity"
+      label: "Core Global Equity"
+      target_pct: 55
+    - id: "growth"
+      label: "Growth / Tech"
+      target_pct: 25
+    - id: "defensive"
+      label: "Defensive / Bonds"
+      target_pct: 15
+    - id: "speculative"
+      label: "Speculative / Bets"
+      target_pct: 5
+
+  # Instrument-level targets
+  instruments:
+    - symbol: "VTI"
+      name: "Vanguard Total Stock Market ETF"
+      bucket: "core-equity"
+      target_pct_of_portfolio: 35
+      min_trade_size_usd: 50
+      account_id: "brokerage-ibkr"
+
+    - symbol: "VXUS"
+      name: "Vanguard Total Intl Stock ETF"
+      bucket: "core-equity"
+      target_pct_of_portfolio: 20
+      min_trade_size_usd: 50
+      account_id: "brokerage-ibkr"
+
+    - symbol: "TLT"
+      name: "iShares 20+ Year Treasury Bond ETF"
+      bucket: "defensive"
+      target_pct_of_portfolio: 15
+      min_trade_size_usd: 50
+      account_id: "brokerage-ibkr"
+
+    - symbol: "QQQ"
+      name: "Invesco QQQ"
+      bucket: "growth"
+      target_pct_of_portfolio: 25
+      min_trade_size_usd: 50
+      account_id: "brokerage-ibkr"
+
+    - symbol: "SPEC1"
+      name: "Speculative Basket"
+      bucket: "speculative"
+      target_pct_of_portfolio: 5
+      min_trade_size_usd: 25
+      account_id: "brokerage-ibkr"
+
+constraints:
+  # Position-level constraints
+  position:
+    max_single_position_pct: 25      # of total portfolio
+    max_bucket_pct_over_target: 10   # buckets can't drift >10% over target
+    min_trade_usd: 20
+
+  liquidity:
+    keep_cash_buffer_pct: 3          # % of portfolio to keep as cash
+
+  execution:
+    rounding:
+      fractional_precision: 4        # decimals for fractional shares
+    forbid_shorting: true
+    forbid_margin: true
+
+swarmgate:
+  treasury_account_id: "swarmgate-treasury"
+  min_treasury_transfer_usd: 50
+  tags:
+    - "auto-tithe"
+    - "protocol-fee"
