@@ -20,7 +20,7 @@ import csv
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
@@ -59,7 +59,7 @@ class StrategickhaosGenerator:
             List of relevant analogies, or fallback to first 3 if no match.
         """
         contradiction_words = set(contradiction.lower().split())
-        scored_analogies: List[tuple[str, int]] = []
+        scored_analogies: List[Tuple[str, int]] = []
 
         for analogy in self.mappings:
             analogy_lower = analogy.lower()
@@ -195,12 +195,13 @@ class StrategickhaosGenerator:
         os_blueprint: Dict[str, str] = {}
 
         for contradiction in contradictions:
-            # Extract feature name from contradiction
-            parts = contradiction.split("vs")
-            if parts:
+            # Extract feature name from contradiction (expects "X vs Y" format)
+            parts = contradiction.split(" vs ")
+            if len(parts) >= 2:
                 feature_name = parts[0].strip().capitalize() + " Module"
             else:
-                feature_name = "Generic Module"
+                # Fallback for non-standard formats
+                feature_name = contradiction.strip().capitalize() + " Module"
 
             os_blueprint[feature_name] = self.generate_synthesis(contradiction)
 
