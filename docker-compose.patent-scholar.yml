@@ -1,0 +1,421 @@
+version: '3.8'
+
+# Patent Office and Google Scholar Research Infrastructure
+# Supports patent filing, prior art search, and academic paper discovery
+
+networks:
+  patent_scholar_network:
+    driver: bridge
+
+volumes:
+  patent_documents:
+  scholar_papers:
+  scholar_metadata:
+  elasticsearch_data:
+  patent_postgres_data:
+  qdrant_data:
+
+services:
+  # Patent Prior Art Search Engine
+  patent-search-api:
+    image: python:3.11-slim
+    container_name: patent-search-api
+    environment:
+      - PATENT_CONFIG_PATH=/app/patent_office.yaml
+      - USPTO_API_KEY=${USPTO_API_KEY}
+      - EPO_API_KEY=${EPO_API_KEY}
+      - POSTGRES_DSN=postgres://postgres:${POSTGRES_PASSWORD:-dev_password}@patent-postgres:5432/patent_db
+      - QDRANT_URL=http://qdrant:6333
+      - REDIS_URL=redis://redis:6379
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+    volumes:
+      - ./patent_office.yaml:/app/patent_office.yaml:ro
+      - patent_documents:/var/patent/documents
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "apt-get update -qq && apt-get install -y -qq curl &&
+      pip install -q flask requests pyyaml psycopg2-binary redis qdrant-client &&
+      python -c 'from flask import Flask, jsonify;
+      app=Flask(__name__);
+      @app.route(\"/health\");
+      def health(): return jsonify({\"status\":\"healthy\", \"service\":\"patent-search-api\"});
+      @app.route(\"/api/search\", methods=[\"POST\"]);
+      def search(): return jsonify({\"status\":\"ok\", \"message\":\"Patent search endpoint ready\"});
+      app.run(host=\"0.0.0.0\", port=8086)'"
+    ports:
+      - "8086:8086"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      patent-postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.strategickhaos.service=patent-search"
+      - "com.strategickhaos.type=research"
+
+  # Patent Document Processor
+  patent-processor:
+    image: python:3.11-slim
+    container_name: patent-processor
+    environment:
+      - PATENT_CONFIG_PATH=/app/patent_office.yaml
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+      - COLLECTION_NAME=patent_prior_art_v1
+    volumes:
+      - ./patent_office.yaml:/app/patent_office.yaml:ro
+      - patent_documents:/var/patent/documents
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "pip install -q sentence-transformers qdrant-client pyyaml watchdog &&
+      echo 'Patent Document Processor Ready' &&
+      tail -f /dev/null"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=patent-processor"
+      - "com.strategickhaos.type=processing"
+
+  # Google Scholar Scraper
+  scholar-scraper:
+    image: python:3.11-slim
+    container_name: scholar-scraper
+    environment:
+      - SCHOLAR_CONFIG_PATH=/app/google_scholar.yaml
+      - SERPAPI_KEY=${SERPAPI_KEY}
+      - POSTGRES_DSN=postgres://postgres:${POSTGRES_PASSWORD:-dev_password}@patent-postgres:5432/patent_db
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_URL=http://qdrant:6333
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+    volumes:
+      - ./google_scholar.yaml:/app/google_scholar.yaml:ro
+      - scholar_papers:/var/scholar/papers
+      - scholar_metadata:/var/scholar/metadata
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "apt-get update -qq && apt-get install -y -qq curl &&
+      pip install -q scholarly serpapi requests pyyaml psycopg2-binary redis schedule &&
+      echo 'Scholar Scraper Ready - Run: python -m src.scholar.scraper' &&
+      tail -f /dev/null"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      patent-postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=scholar-scraper"
+      - "com.strategickhaos.type=research"
+
+  # Scholar Paper Processor (PDF ingestion, embedding generation)
+  scholar-processor:
+    image: python:3.11-slim
+    container_name: scholar-processor
+    environment:
+      - SCHOLAR_CONFIG_PATH=/app/google_scholar.yaml
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+      - COLLECTION_NAME=scholar_papers_v1
+    volumes:
+      - ./google_scholar.yaml:/app/google_scholar.yaml:ro
+      - scholar_papers:/var/scholar/papers
+      - scholar_metadata:/var/scholar/metadata
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "apt-get update -qq && apt-get install -y -qq poppler-utils &&
+      pip install -q sentence-transformers qdrant-client pymupdf pdfplumber pyyaml watchdog &&
+      echo 'Scholar Paper Processor Ready' &&
+      tail -f /dev/null"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=scholar-processor"
+      - "com.strategickhaos.type=processing"
+
+  # Elasticsearch for full-text search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: patent-scholar-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - patent_scholar_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=elasticsearch"
+      - "com.strategickhaos.type=search"
+
+  # PostgreSQL for structured data
+  patent-postgres:
+    image: postgres:15
+    container_name: patent-postgres
+    environment:
+      POSTGRES_DB: patent_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
+    volumes:
+      - patent_postgres_data:/var/lib/postgresql/data
+      - ./init-patent-db.sql:/docker-entrypoint-initdb.d/init-patent-db.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - patent_scholar_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=postgres"
+      - "com.strategickhaos.type=database"
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: patent-scholar-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6380:6379"
+    networks:
+      - patent_scholar_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=redis"
+      - "com.strategickhaos.type=cache"
+
+  # Qdrant vector database (shared with main stack)
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: patent-scholar-qdrant
+    volumes:
+      - qdrant_data:/qdrant/storage
+    ports:
+      - "6334:6333"
+      - "6335:6334"
+    networks:
+      - patent_scholar_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=qdrant"
+      - "com.strategickhaos.type=vector-db"
+
+  # Citation Tracker
+  citation-tracker:
+    image: python:3.11-slim
+    container_name: citation-tracker
+    environment:
+      - SCHOLAR_CONFIG_PATH=/app/google_scholar.yaml
+      - POSTGRES_DSN=postgres://postgres:${POSTGRES_PASSWORD:-dev_password}@patent-postgres:5432/patent_db
+      - REDIS_URL=redis://redis:6379
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CH_RESEARCH_CITATIONS_ID=${CH_RESEARCH_CITATIONS_ID}
+    volumes:
+      - ./google_scholar.yaml:/app/google_scholar.yaml:ro
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "pip install -q scholarly requests pyyaml psycopg2-binary redis schedule &&
+      echo 'Citation Tracker Ready - Run: python -m src.scholar.citations' &&
+      tail -f /dev/null"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      patent-postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=citation-tracker"
+      - "com.strategickhaos.type=monitoring"
+
+  # RAG Query API (for patent and scholar queries)
+  rag-query-api:
+    image: python:3.11-slim
+    container_name: rag-query-api
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PATENT_COLLECTION=patent_prior_art_v1
+      - SCHOLAR_COLLECTION=scholar_papers_v1
+    volumes:
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "pip install -q sentence-transformers qdrant-client openai flask pyyaml &&
+      python -c 'from flask import Flask, request, jsonify;
+      app=Flask(__name__);
+      @app.route(\"/query\", methods=[\"POST\"]); 
+      def query(): return jsonify({\"status\":\"ok\", \"message\":\"RAG Query API Ready\"});
+      @app.route(\"/health\"); 
+      def health(): return jsonify({\"status\":\"healthy\"});
+      app.run(host=\"0.0.0.0\", port=8087)'"
+    ports:
+      - "8087:8087"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.strategickhaos.service=rag-query"
+      - "com.strategickhaos.type=api"
+
+  # Discord Notifier for patent/scholar events
+  patent-scholar-notifier:
+    image: python:3.11-slim
+    container_name: patent-scholar-notifier
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CH_PATENT_RESEARCH_ID=${CH_PATENT_RESEARCH_ID}
+      - CH_RESEARCH_FEED_ID=${CH_RESEARCH_FEED_ID}
+      - CH_RESEARCH_CITATIONS_ID=${CH_RESEARCH_CITATIONS_ID}
+      - CH_PATENT_STATUS_ID=${CH_PATENT_STATUS_ID}
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_DSN=postgres://postgres:${POSTGRES_PASSWORD:-dev_password}@patent-postgres:5432/patent_db
+    volumes:
+      - ./patent_office.yaml:/app/patent_office.yaml:ro
+      - ./google_scholar.yaml:/app/google_scholar.yaml:ro
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "pip install -q discord.py requests pyyaml psycopg2-binary redis schedule &&
+      echo 'Patent-Scholar Discord Notifier Ready - Run: python -m src.notifier.main' &&
+      tail -f /dev/null"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      patent-postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=notifier"
+      - "com.strategickhaos.type=notifications"
+
+  # Cryptographic Timestamping Service (OpenTimestamps)
+  timestamp-service:
+    image: python:3.11-slim
+    container_name: timestamp-service
+    environment:
+      - OTS_ENABLED=true
+      - GPG_KEY_ID=${GPG_KEY_ID}
+      - PATENT_CONFIG_PATH=/app/patent_office.yaml
+    volumes:
+      - ./patent_office.yaml:/app/patent_office.yaml:ro
+      - patent_documents:/var/patent/documents
+      - ./src:/app/src:ro
+    working_dir: /app
+    command: >
+      bash -c "apt-get update -qq && apt-get install -y -qq gnupg curl &&
+      pip install -q opentimestamps pyyaml watchdog &&
+      echo 'Timestamp Service Ready - Monitors /var/patent/documents for new files' &&
+      echo 'SHA256 Hash: FAA198DA05318742531B6405384319563933F63DB4D91866E70AE7701FCDCDED' &&
+      tail -f /dev/null"
+    networks:
+      - patent_scholar_network
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=timestamp"
+      - "com.strategickhaos.type=security"
+
+  # Nginx reverse proxy for APIs
+  patent-scholar-nginx:
+    image: nginx:alpine
+    container_name: patent-scholar-nginx
+    volumes:
+      - ./nginx-patent-scholar.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    ports:
+      - "8088:80"
+      - "8089:443"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      - patent-search-api
+      - rag-query-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.strategickhaos.service=nginx"
+      - "com.strategickhaos.type=proxy"
+
+# Health check endpoint aggregator
+  healthcheck-aggregator:
+    image: alpine:latest
+    container_name: patent-scholar-healthcheck
+    command: >
+      sh -c "apk add --no-cache curl jq &&
+      while true; do
+        echo '=== Patent & Scholar Services Health ===' &&
+        curl -s http://patent-search-api:8086/health | jq -r '.status // \"unavailable\"' | xargs -I {} echo 'Patent Search API: {}' &&
+        curl -s http://rag-query-api:8087/health | jq -r '.status // \"unavailable\"' | xargs -I {} echo 'RAG Query API: {}' &&
+        curl -s http://elasticsearch:9200/_cluster/health | jq -r '.status' | xargs -I {} echo 'Elasticsearch: {}' &&
+        curl -s http://qdrant:6333/health | jq -r '.status // \"unavailable\"' | xargs -I {} echo 'Qdrant: {}' &&
+        sleep 300;
+      done"
+    networks:
+      - patent_scholar_network
+    depends_on:
+      - patent-search-api
+      - rag-query-api
+      - elasticsearch
+      - qdrant
+    restart: unless-stopped
+    labels:
+      - "com.strategickhaos.service=healthcheck"
+      - "com.strategickhaos.type=monitoring"

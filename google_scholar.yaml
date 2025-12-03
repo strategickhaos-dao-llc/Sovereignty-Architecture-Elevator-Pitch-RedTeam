@@ -1,0 +1,380 @@
+# google_scholar.yaml
+# Configuration for Google Scholar and Academic Paper Management
+# Supports paper discovery, citation tracking, and research monitoring
+
+version: "1.0"
+metadata:
+  name: "Sovereignty Architecture Google Scholar Integration"
+  description: "Academic paper discovery, citation tracking, and research monitoring"
+  maintainer: "Domenic Garza (Node 137)"
+  timestamp: "2025-11-23T08:46:24Z"
+
+# Scholar search configuration
+scholar:
+  api_endpoint: "https://scholar.google.com"
+  serpapi_endpoint: "https://serpapi.com/search"
+  enabled: true
+  rate_limit: "100/day"
+  user_agent: "Mozilla/5.0 (compatible; StrategickhaosSovereigntyBot/1.0)"
+
+# Research areas and keywords
+research_areas:
+  primary:
+    - name: "AI Governance and Safety"
+      keywords:
+        - "AI governance"
+        - "AI safety"
+        - "AI alignment"
+        - "machine learning safety"
+        - "responsible AI"
+        - "AI ethics"
+        
+    - name: "Sovereignty Architecture"
+      keywords:
+        - "sovereignty architecture"
+        - "data sovereignty"
+        - "digital sovereignty"
+        - "platform sovereignty"
+        - "algorithmic sovereignty"
+        
+    - name: "Large Language Models"
+      keywords:
+        - "large language models"
+        - "LLM safety"
+        - "transformer models"
+        - "prompt engineering"
+        - "retrieval augmented generation"
+        - "RAG systems"
+        
+    - name: "Cybersecurity and Compliance"
+      keywords:
+        - "cybersecurity frameworks"
+        - "compliance automation"
+        - "security governance"
+        - "threat intelligence"
+        - "zero trust architecture"
+        
+  secondary:
+    - name: "DAO Governance"
+      keywords:
+        - "DAO governance"
+        - "decentralized governance"
+        - "blockchain governance"
+        - "token governance"
+        
+    - name: "Patent Law and IP"
+      keywords:
+        - "patent law AI"
+        - "intellectual property blockchain"
+        - "IP management systems"
+        - "patent automation"
+
+# Paper discovery workflow
+discovery:
+  search_frequency: "daily"
+  sources:
+    - name: "Google Scholar"
+      enabled: true
+      search_fields: ["title", "abstract", "author"]
+      
+    - name: "arXiv"
+      enabled: true
+      api_endpoint: "http://export.arxiv.org/api/query"
+      categories: ["cs.AI", "cs.LG", "cs.CY", "cs.SE"]
+      
+    - name: "Semantic Scholar"
+      enabled: true
+      api_endpoint: "https://api.semanticscholar.org/v1"
+      
+    - name: "PubMed"
+      enabled: false
+      api_endpoint: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+      
+    - name: "IEEE Xplore"
+      enabled: false
+      api_endpoint: "https://ieeexploreapi.ieee.org/api/v1"
+      
+  filters:
+    date_range: "last_2_years"
+    min_citations: 5
+    languages: ["en"]
+    document_types: ["article", "conference_paper", "preprint"]
+
+# Citation tracking
+citations:
+  track_own_papers: true
+  alert_on_new_citations: true
+  notification_channel: "#research-citations"
+  
+  metrics:
+    - "citation_count"
+    - "h_index"
+    - "i10_index"
+    - "citation_velocity"
+    
+  competitors:
+    enabled: true
+    institutions:
+      - "OpenAI"
+      - "Anthropic"
+      - "Google DeepMind"
+      - "Microsoft Research"
+      - "Meta AI Research"
+    notification_channel: "#research-intelligence"
+
+# Paper ingestion pipeline
+ingestion:
+  automated: true
+  workflow:
+    - name: "discovery"
+      description: "Discover new papers matching criteria"
+      frequency: "daily"
+      
+    - name: "download"
+      description: "Download paper PDFs"
+      storage: "/var/scholar/papers"
+      
+    - name: "extraction"
+      description: "Extract text and metadata"
+      tools: ["PyMuPDF", "pdfplumber", "GROBID"]
+      
+    - name: "embedding"
+      description: "Generate embeddings for semantic search"
+      model: "BAAI/bge-small-en-v1.5"
+      vector_db: "qdrant"
+      collection: "scholar_papers_v1"
+      
+    - name: "indexing"
+      description: "Index in search system"
+      search_engine: "elasticsearch"
+      
+    - name: "notification"
+      description: "Notify relevant channels"
+      channel: "#research-feed"
+
+# Research monitoring
+monitoring:
+  author_tracking:
+    enabled: true
+    authors:
+      - "Yann LeCun"
+      - "Geoffrey Hinton"
+      - "Yoshua Bengio"
+      - "Andrew Ng"
+      - "Ilya Sutskever"
+      - "Dario Amodei"
+      - "Demis Hassabis"
+    notification_channel: "#research-authors"
+    
+  institution_tracking:
+    enabled: true
+    institutions:
+      - "OpenAI"
+      - "Anthropic"
+      - "Google Research"
+      - "Microsoft Research"
+      - "Meta AI"
+      - "Stanford University"
+      - "MIT CSAIL"
+      - "UC Berkeley"
+    notification_channel: "#research-institutions"
+    
+  trending_topics:
+    enabled: true
+    detection_method: "citation_velocity"
+    threshold: "100_new_citations_per_week"
+    notification_channel: "#research-trending"
+
+# RAG integration
+rag:
+  enabled: true
+  collection_name: "scholar_papers_v1"
+  embedding_model: "BAAI/bge-small-en-v1.5"
+  vector_database: "qdrant"
+  
+  search:
+    top_k: 5
+    similarity_threshold: 0.7
+    rerank: true
+    rerank_model: "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    
+  citation_validation:
+    enabled: true
+    require_exact_quotes: false
+    hallucination_detection: true
+
+# Document management
+documents:
+  storage:
+    papers: "/var/scholar/papers"
+    metadata: "/var/scholar/metadata"
+    embeddings: "/var/scholar/embeddings"
+    backup: true
+    encryption: true
+    
+  formats:
+    - "pdf"
+    - "html"
+    - "xml"
+    - "bibtex"
+    
+  retention:
+    active_research: "indefinite"
+    archived_research: "10 years"
+    
+  deduplication:
+    enabled: true
+    method: "doi_matching"
+    fallback: "title_similarity"
+
+# Literature review automation
+literature_review:
+  enabled: true
+  
+  tasks:
+    - name: "gap_analysis"
+      description: "Identify research gaps"
+      frequency: "monthly"
+      
+    - name: "trend_analysis"
+      description: "Analyze research trends"
+      frequency: "quarterly"
+      
+    - name: "citation_network"
+      description: "Build citation networks"
+      frequency: "monthly"
+      
+    - name: "summary_generation"
+      description: "Generate literature summaries"
+      model: "gpt-4"
+      frequency: "weekly"
+
+# Integration with other systems
+integrations:
+  patent_office:
+    enabled: true
+    sync_frequency: "daily"
+    purpose: "prior_art_discovery"
+    
+  qdrant:
+    enabled: true
+    collection: "scholar_papers_v1"
+    embedding_model: "BAAI/bge-small-en-v1.5"
+    
+  postgres:
+    enabled: true
+    database: "strategickhaos"
+    tables: ["papers", "authors", "citations"]
+    
+  discord:
+    enabled: true
+    channels:
+      feed: "#research-feed"
+      citations: "#research-citations"
+      intelligence: "#research-intelligence"
+      authors: "#research-authors"
+      institutions: "#research-institutions"
+      trending: "#research-trending"
+    
+  slack:
+    enabled: false
+    channels: []
+
+# Export and reporting
+reporting:
+  weekly_summary:
+    enabled: true
+    day: "monday"
+    time: "09:00"
+    channel: "#research-summary"
+    content:
+      - "new_papers_count"
+      - "top_cited_papers"
+      - "trending_topics"
+      - "author_updates"
+      
+  monthly_report:
+    enabled: true
+    day: 1
+    time: "09:00"
+    channel: "#research-monthly"
+    content:
+      - "citation_growth"
+      - "research_gaps"
+      - "competitor_analysis"
+      - "trend_analysis"
+      
+  export_formats:
+    - "markdown"
+    - "pdf"
+    - "csv"
+    - "bibtex"
+
+# Compliance and ethics
+compliance:
+  respect_robots_txt: true
+  rate_limiting: true
+  copyright_compliance: true
+  fair_use: true
+  
+  disclaimers:
+    - "RESEARCH PURPOSES ONLY"
+    - "RESPECT COPYRIGHT AND FAIR USE"
+    - "AUTOMATED DISCOVERY SYSTEM"
+    
+  access_control:
+    roles: ["Researcher", "Reviewer", "Admin"]
+    
+  audit:
+    enabled: true
+    log_all_queries: true
+    retention: "3 years"
+
+# AI-powered features
+ai_features:
+  paper_summarization:
+    enabled: true
+    model: "gpt-4-turbo"
+    max_length: 500
+    
+  relevance_scoring:
+    enabled: true
+    model: "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    
+  question_answering:
+    enabled: true
+    model: "gpt-4-turbo"
+    rag_enabled: true
+    
+  similarity_search:
+    enabled: true
+    embedding_model: "BAAI/bge-small-en-v1.5"
+    
+  citation_recommendation:
+    enabled: true
+    method: "semantic_similarity"
+
+# Performance metrics
+metrics:
+  papers_ingested_target: "100/week"
+  response_time_target: "< 2s"
+  embedding_generation_time: "< 5s/paper"
+  search_accuracy_target: "> 0.8"
+  
+  monitoring:
+    enabled: true
+    prometheus_endpoint: "http://prometheus:9090"
+    grafana_dashboard: "google_scholar_metrics"
+
+# Sovereign Manifest Integration
+sovereign_manifest:
+  hash: "FAA198DA05318742531B6405384319563933F63DB4D91866E70AE7701FCDCDED"
+  verification:
+    - "GPG-signed"
+    - "Bitcoin-timestamped"
+    - "GitHub-sealed"
+    - "Obsidian-encrypted"
+  commands:
+    - "git verify-commit HEAD"
+    - "ots verify SOVEREIGN_MANIFEST_v1.0.md.ots"
+  status: "Empire eternal"
