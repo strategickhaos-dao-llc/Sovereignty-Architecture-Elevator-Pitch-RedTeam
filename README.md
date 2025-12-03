@@ -272,6 +272,12 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 🎯 Career & Clearance Pathways
+
+For sovereign operators seeking to expand capabilities while maintaining independence:
+
+- **[TS/SCI Clearance Roadmap](TS_SCI_CLEARANCE_ROADMAP.md)** - Comprehensive guide to obtaining security clearances while preserving sovereignty
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
