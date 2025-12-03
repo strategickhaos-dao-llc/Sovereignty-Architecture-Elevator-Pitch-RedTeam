@@ -1,6 +1,23 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, sovereign infrastructure management, and academic weapons division.**
+
+## 🎓 Academic Weapons Division — NEW!
+
+**CYBER-PSY-620: Advanced Memetic Self-Defense & Ethical Influence Engineering** is now live.
+
+A Tier-1 graduate course teaching the highest-resolution adversarial influence techniques as defensive intelligence. Students weaponize dark patterns, then neutralize them through ethical frameworks.
+
+- **Level:** Graduate / Senior Capstone
+- **Credits:** 4
+- **Framework:** Bloom's Taxonomy (Create Tier enforced)
+- **Final Project:** Public GitHub contribution to POSITIVE_PSYCHOLOGY_CODEX
+
+📚 [Full Course Outline](CYBER-PSY-620.md) | 🛡️ [Defense Codex](POSITIVE_PSYCHOLOGY_CODEX.md) | 🧬 [SWARM DNA v8.0](SWARM_DNA_v8.0.yaml) | 📖 [Program Overview](ACADEMIC_PROGRAM.md)
+
+*"We teach the black arts so well the light wins every time."*
+
+---
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +26,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Academic Division** - Graduate-level memetic self-defense training
 
 ## 🚀 Quick Start
 
@@ -271,6 +289,44 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🎓 Academic Program Details
+
+### CYBER-PSY-620: Advanced Memetic Self-Defense
+
+The Academic Weapons Division represents the evolution of the Strategickhaos ecosystem into education and defensive intelligence. This graduate-level program trains the next generation of influence defenders.
+
+#### Course Structure
+- **Bloom's Taxonomy Framework:** Progress from Remembering to Creating
+- **Ethical Foundation:** Light Triad principles (Humanism, Kantianism, Faith in Humanity)
+- **Defensive Intelligence:** Highest-resolution adversarial techniques taught for defense only
+- **Public Contribution:** All students contribute to open-source POSITIVE_PSYCHOLOGY_CODEX
+
+#### Key Deliverables
+1. **Week 4:** Annotated taxonomy of 30+ influence patterns (HiSCS/SE TTP format)
+2. **Week 8:** Red-team/blue-team live exercise in controlled Discord environment
+3. **Week 12:** Capstone thesis converting Dark Triad to Light Triad patterns
+4. **Final:** Public GitHub release passing "grandma test" + IRB-lite review
+
+#### The POSITIVE_PSYCHOLOGY_CODEX
+
+An open-source framework for ethical influence engineering featuring:
+- **Defense Patterns:** Recognition and neutralization of adversarial influence
+- **Light Variants:** Consent-based alternatives to dark patterns
+- **Case Studies:** Real-world campaign analysis (redacted)
+- **Implementation Guides:** Practical counter-strategies
+
+Read the full [POSITIVE_PSYCHOLOGY_CODEX](POSITIVE_PSYCHOLOGY_CODEX.md)
+
+#### Professional Pathways
+- Government security clearance sponsorship
+- Graduate research assistantships in defensive psychology
+- Industry partnerships with ethical technology firms
+- Elite influence-defense postings
+
+*Students demonstrating discomfort with material are fast-tracked to elite postings where ethical sensitivity becomes an operational asset.*
+
+---
 
 ## 👥 Community & Contributors
 
