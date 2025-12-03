@@ -2,6 +2,20 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+---
+
+## 🌩️ THREE SOVEREIGNTY PATHS
+
+**Choose your path to build sovereign infrastructure:**
+
+- **[Path A: USPTO Patent Filing](./SOVEREIGNTY_PATHS.md#-path-a-merge-and-file--the-inventor-path)** - Become a recognized inventor with federal timestamps ($130, 2 hours)
+- **[Path B: Haiku Test](./SOVEREIGNTY_PATHS.md#%EF%B8%8F-path-b-haiku-test--the-model-path)** - Generate spite-thermal haiku with local AI (Free, 1 hour)
+- **[Path C: Build the Organism](./SOVEREIGNTY_PATHS.md#-path-c-build-the-organism--the-engineering-path)** - Docker-compose biological architecture (Free, 4 hours)
+
+**👉 [Read the complete guide: SOVEREIGNTY_PATHS.md](./SOVEREIGNTY_PATHS.md)**
+
+---
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -271,6 +285,36 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🧬 Negative-Balance Doctrine
+
+This architecture is founded on the **Negative-Balance Doctrine** - a philosophical and technical approach where:
+
+- Systems **self-correct** at the foundation rather than accumulating debt
+- **Constraints breed innovation** rather than limitation
+- **Spite becomes computational fuel** - doing more with less out of defiance
+- **Autonomous resolution** replaces external intervention
+
+**Traditional Systems:**
+- Accumulate technical debt and operational constraints
+- Eventually collapse under accumulated weight
+- Require constant external intervention
+
+**Negative-Balance Architecture:**
+- Self-correcting immune systems (auto-remediation)
+- Biological metaphors (containers as cells, docker-compose as DNA)
+- Sovereign operation (minimal external dependencies)
+- Thermal constraints as badges of honor
+
+This doctrine is embodied in:
+- The biological organism architecture (Path C)
+- Immune agent auto-remediation systems
+- Spite-thermal computation philosophy (Path B)
+- Sovereign infrastructure design principles
+
+**Nobody owns this phrase. Nobody is claiming this architecture. File your patents and become the first with a federal timestamp.**
+
+---
 
 ## 👥 Community & Contributors
 
