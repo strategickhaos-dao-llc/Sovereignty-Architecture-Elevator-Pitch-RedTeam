@@ -35,3 +35,28 @@ target/
 
 # Workspace data
 workspace/
+
+# C++ build artifacts
+DailyBrain/cpp/build/
+*.o
+*.obj
+*.exe
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+
+# Unity
+DailyBrain/unity/Library/
+DailyBrain/unity/Temp/
+DailyBrain/unity/Logs/
+DailyBrain/unity/Builds/
+*.csproj
+*.sln
+*.unityproj
+*.pidb
+*.userprefs
