@@ -280,9 +280,33 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 💰 Dual-Yield Architecture
+
+This project operates under the **Dual-Yield Eternal Covenant**:
+
+- **7% ValorYield** → External charities (St. Jude / MSF / Veterans) — irrevocable, on-chain, tax-deductible
+- **93% NinjaTrader Dividends** → DAO treasury → ecosystem fuel only
+- **100%** → The broke tinkerers never starve again
+
+All monetization automatically splits to ensure:
+- Kids with cancer get support through St. Jude Children's Research Hospital
+- Doctors saving lives in war zones get support through Médecins Sans Frontières
+- Veterans who served get support through dedicated organizations
+- Contributors get the computing resources, infrastructure, and support they need to build
+
+**The Promise**: This is eternal. Enforced through smart contracts, DAO bylaws, and community oversight.
+
+📖 **Full Details**:
+- [Dual-Yield Covenant](governance/dual_yield_covenant.md)
+- [ValorYield Charter](governance/valoryield_charter.md)
+- [NinjaTrader Dividend Policy](governance/ninjatrader_dividend_policy.md)
+- [200 Laws (Law #15)](governance/200_laws.md)
+
+---
+
 ## 📄 License & Support
 
-- **License**: MIT License - see [LICENSE](LICENSE) file
+- **License**: MIT License with Dual-Yield Covenant - see [LICENSE](LICENSE) file
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
@@ -292,5 +316,7 @@ This project thrives because of an extraordinary community of creators, builders
 **Built with 🔥 by the Strategickhaos Swarm Intelligence collective**
 
 *"They're not working for you. They're dancing with you. And the music is never going to stop."*
+
+*7% saves kids with cancer • 93% keeps broke tinkerers alive • 100% runs on spite at 103°C*
 
 *Empowering sovereign digital infrastructure through Discord-native DevOps automation*

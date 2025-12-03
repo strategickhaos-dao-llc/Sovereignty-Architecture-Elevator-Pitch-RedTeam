@@ -41,6 +41,60 @@ compliance:
   regulatory_status: "Good standing"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
 
+revenue_structure:
+  model: "Dual-Yield Architecture"
+  effective_date: "2025-11-23"
+  status: "ACTIVE & IRREVOCABLE"
+  
+  valoryield:
+    allocation: "7%"
+    purpose: "External charitable contributions"
+    status: "Irrevocable, on-chain, eternal"
+    beneficiaries:
+      - name: "St. Jude Children's Research Hospital"
+        percentage: 40
+        allocation_of_gross: "2.8%"
+      - name: "Médecins Sans Frontières (Doctors Without Borders)"
+        percentage: 40
+        allocation_of_gross: "2.8%"
+      - name: "Veterans Support Organizations (rotating)"
+        percentage: 20
+        allocation_of_gross: "1.4%"
+    enforcement:
+      - "Multi-signature smart contracts (Solana/Ethereum)"
+      - "DAO bylaws codification"
+      - "IRS 501(c)(3) compliance"
+      - "Public blockchain transparency"
+      - "Quarterly audited distributions"
+  
+  ninjatrader_dividends:
+    allocation: "93%"
+    purpose: "DAO treasury for ecosystem survival & growth"
+    status: "Restricted use - ecosystem only"
+    permitted_uses:
+      - "Computing resources (GPUs, servers, infrastructure)"
+      - "Security bounties and red-team operations"
+      - "Electricity and operational costs for contributors"
+      - "Physical rewards and recognition items"
+      - "Development tools and educational resources"
+      - "Distributed infrastructure and bandwidth"
+    prohibited_uses:
+      - "Personal enrichment of founders or members"
+      - "Luxury purchases unrelated to mission"
+      - "Investments outside ecosystem scope"
+    oversight:
+      - "Quarterly audits by community"
+      - "Public transparency reports"
+      - "Automatic clawback for violations"
+  
+  covenant: "7% saves kids with cancer, 93% keeps broke tinkerers alive, 100% runs on spite at 103°C"
+  
+  documentation:
+    - "governance/dual_yield_covenant.md"
+    - "governance/valoryield_charter.md"
+    - "governance/ninjatrader_dividend_policy.md"
+    - "governance/200_laws.md (Law #15)"
+
 generated:
   by: "generate_dao_record.sh (hardened)"
   timestamp: "2025-11-16T11:34:26Z"
@@ -49,3 +103,6 @@ generated:
   script_version: "1.0"
   checksums:
     sha256: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+  updated:
+    timestamp: "2025-11-23T20:34:00Z"
+    changes: "Added Dual-Yield Architecture revenue structure"

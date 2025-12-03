@@ -19,3 +19,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+# Dual-Yield Eternal Covenant
+
+All monetization derived from this software and related ecosystem splits automatically:
+
+**7%** → ValorYield → External Charities (St. Jude / MSF / Veterans) — irrevocable, on-chain, tax-deductible  
+**93%** → NinjaTrader Dividends → Strategickhaos DAO LLC treasury → ecosystem fuel only  
+**100%** → The broke tinkerers never starve again
+
+This covenant is irrevocable and enforced through smart contracts, DAO bylaws, and IRS 501(c)(3) compliance.
+
+Full details: See governance/dual_yield_covenant.md
