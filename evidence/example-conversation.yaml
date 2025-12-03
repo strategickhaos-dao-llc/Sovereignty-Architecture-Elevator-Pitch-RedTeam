@@ -1,0 +1,115 @@
+# Example Evidence Entry
+# This demonstrates the conversation_evidence.v1.2.0 schema
+# with cryptographic anchoring fields
+
+schema_version: "1.2.0"
+
+metadata:
+  conversation_id: "conv-2025-11-21-001"
+  timestamp: "2025-11-21T10:00:00Z"
+  version: "1.2.0"
+  operator:
+    name: "Dom"
+    node: "137"
+    gpg_key: "Dom <dom@strategickhaos.com>"
+
+conversation:
+  participants:
+    - "Alice (Product Manager)"
+    - "Bob (Tech Lead)"
+    - "Charlie (Security Engineer)"
+  platform: "Discord"
+  channel: "#engineering-decisions"
+  thread_id: "thread-789"
+  messages:
+    - message_id: "msg-001"
+      sender: "Alice"
+      timestamp: "2025-11-21T10:00:00Z"
+      content: "We need to decide on the authentication approach for the new API"
+      attachments: []
+    - message_id: "msg-002"
+      sender: "Bob"
+      timestamp: "2025-11-21T10:01:30Z"
+      content: "I recommend OAuth 2.0 with JWT tokens"
+      attachments: []
+    - message_id: "msg-003"
+      sender: "Charlie"
+      timestamp: "2025-11-21T10:02:45Z"
+      content: "Agreed. Let's use RS256 for signing and implement refresh tokens"
+      attachments: []
+    - message_id: "msg-004"
+      sender: "Alice"
+      timestamp: "2025-11-21T10:03:00Z"
+      content: "Decision made: OAuth 2.0 with JWT (RS256) and refresh tokens. I'll create the ticket."
+      attachments: []
+
+evidence:
+  type: "decision"
+  category: "architecture"
+  tags:
+    - "authentication"
+    - "oauth"
+    - "security"
+    - "api"
+  related_ids: []
+
+integration:
+  github:
+    pr_number: 456
+    commit_sha: "abc123def456"
+    repository: "Strategickhaos/Sovereignty-Architecture"
+  jira:
+    ticket_id: "ENG-789"
+    project: "ENG"
+  
+  # Cryptographic anchoring (populated after running anchor_ledger.py)
+  gpg_signature: |
+    -----BEGIN PGP SIGNATURE-----
+    [This would be populated with the actual GPG signature]
+    after running: gpg --armor --detach-sign example-conversation.yaml
+    -----END PGP SIGNATURE-----
+  
+  opentimestamps:
+    stamp_file: "example-conversation.yaml.ots"
+    stamp_hash: "sha256=[calculated after anchoring]"
+    bitcoin_txid: null  # Populated after calendar aggregation
+    status: "pending"
+    created_at: "2025-11-21T10:05:00Z"
+    verified_at: null
+    calendar_server: "https://alice.btc.calendar.opentimestamps.org"
+
+provenance:
+  created_by: "Dom"
+  created_at: "2025-11-21T10:05:00Z"
+  last_modified: "2025-11-21T10:05:00Z"
+  modification_count: 0
+  audit_log:
+    - timestamp: "2025-11-21T10:05:00Z"
+      actor: "Dom"
+      action: "created"
+      details: "Evidence entry conv-2025-11-21-001 created from Discord conversation"
+
+verification:
+  gpg_verified: false  # Will be true after verification
+  gpg_verified_at: null
+  gpg_verified_by: null
+  ots_verified: false  # Will be true after Bitcoin confirmation
+  ots_verified_at: null
+  blockchain_confirmed: false
+  blockchain_height: null
+
+compliance:
+  retention_period: "7y"
+  retention_reason: "Business records and audit trail per company policy"
+  classification: "internal"
+  jurisdiction: "US"
+  admissible: true
+
+# To anchor this evidence entry:
+# 1. Run: python tools/anchor_ledger.py evidence/example-conversation.yaml
+# 2. This will create:
+#    - example-conversation.yaml.asc (GPG signature)
+#    - example-conversation.yaml.ots (OpenTimestamps proof)
+# 3. To verify:
+#    - GPG: gpg --verify example-conversation.yaml.asc example-conversation.yaml
+#    - OTS: ots verify example-conversation.yaml.ots

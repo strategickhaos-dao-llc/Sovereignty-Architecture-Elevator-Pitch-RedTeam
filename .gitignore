@@ -35,3 +35,18 @@ target/
 
 # Workspace data
 workspace/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# OpenTimestamps and GPG signature files
+*.ots
+*.asc
+
+# Evidence directory (contains sensitive data)
+evidence/anchored/
+evidence/examples/
