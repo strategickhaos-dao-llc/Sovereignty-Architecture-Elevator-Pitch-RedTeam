@@ -11,6 +11,7 @@ Usage:
 
 import argparse
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -29,6 +30,7 @@ class StrategickhaosOSLoader:
     def __init__(self, yaml_path: str = "strategickhaos_os_prompt_engineering.yaml"):
         self.yaml_path = Path(yaml_path)
         self.config: dict[str, Any] = {}
+        self._execution_results: dict[str, Any] | None = None
         self._load_yaml()
 
     def _load_yaml(self) -> None:
@@ -67,6 +69,9 @@ class StrategickhaosOSLoader:
 
         Returns:
             Generated prompt string with placeholders filled
+
+        Raises:
+            ValueError: If template is not found or required placeholders are missing
         """
         templates = self.get_prompt_templates()
         if template_name not in templates:
@@ -74,12 +79,26 @@ class StrategickhaosOSLoader:
 
         template = templates[template_name]
 
-        # Substitute placeholders
+        # Convert list values to comma-separated strings
+        formatted_kwargs = {}
         for key, value in kwargs.items():
-            placeholder = "{" + key + "}"
             if isinstance(value, list):
-                value = ", ".join(str(v) for v in value)
-            template = template.replace(placeholder, str(value))
+                formatted_kwargs[key] = ", ".join(str(v) for v in value)
+            else:
+                formatted_kwargs[key] = str(value)
+
+        # Find all placeholders in the template
+        placeholders = set(re.findall(r"\{(\w+)\}", template))
+
+        # Check for missing required placeholders
+        missing = placeholders - set(formatted_kwargs.keys())
+        if missing:
+            print(f"Warning: Unsubstituted placeholders in template '{template_name}': {missing}")
+
+        # Substitute placeholders
+        for key, value in formatted_kwargs.items():
+            placeholder = "{" + key + "}"
+            template = template.replace(placeholder, value)
 
         return template
 
@@ -111,13 +130,20 @@ class StrategickhaosOSLoader:
             selected_analogies=analogies,
         )
 
-    def run_execution_flow(self) -> dict[str, Any]:
+    def run_execution_flow(self, use_cache: bool = True) -> dict[str, Any]:
         """
         Execute the dialectical OS creation flow.
+
+        Args:
+            use_cache: If True, return cached results if available
 
         Returns:
             Dictionary containing generated prompts and OS blueprint
         """
+        # Return cached results if available and caching is enabled
+        if use_cache and self._execution_results is not None:
+            return self._execution_results
+
         print("\n🚀 Running Strategickhaos OS Execution Flow...")
 
         execution_flow = self.config.get("execution_flow", {})
@@ -180,6 +206,9 @@ class StrategickhaosOSLoader:
         })
 
         print("✅ Execution flow complete!")
+
+        # Cache the results
+        self._execution_results = results
         return results
 
     def export_blueprint(self, output_format: str = "markdown") -> str:
