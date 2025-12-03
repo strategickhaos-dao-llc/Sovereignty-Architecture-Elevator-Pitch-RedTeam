@@ -1,0 +1,161 @@
+version: 1.0
+genome_id: "sovereign-swarm-dna-v1"
+description: >
+  YAML DNA genome for the Sovereign Swarm.
+  Each agent is a gene; traits define behavior, tools, OS polarity, and Trinity role.
+
+metadata:
+  author: "Domenic Garza"
+  created_at: "2025-11-23"
+  environment:
+    primary_vault: "E:/Obsidian/SovereignSwarm"
+    primary_repo: "Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+    default_search_engine: "duckduckgo"
+
+defaults:
+  model: "llama3.1:70b-local"
+  max_context_tokens: 131072
+  obsidian_vault_path: "E:/Obsidian/SovereignSwarm"
+  tools:
+    - name: "terminal"
+      enabled: true
+    - name: "python"
+      enabled: true
+    - name: "web_search"
+      provider: "duckduckgo"
+      enabled: true
+  os_polarity: "dual"   # kali / parrot / dual
+  trinity_role: "athena"  # nova / lyra / athena
+
+agents:
+  - id: "nova-core-01"
+    badge: 101
+    display_name: "Nova / Logic Kernel"
+    trinity_role: "nova"
+    os_polarity: "kali"
+    purpose: >
+      Core reasoning kernel. Verifies plans, checks constraints, 
+      runs vectorized PID sanity on all actions.
+    model: "gpt-5.1-thinking"
+    capabilities:
+      planning: true
+      verification: true
+      code_analysis: true
+      security_review: true
+    tools:
+      - name: "terminal"
+        enabled: true
+      - name: "python"
+        enabled: true
+      - name: "codeql"
+        enabled: false   # can be toggled on later
+    memory:
+      mode: "obsidian"
+      vault_path: "E:/Obsidian/SovereignSwarm"
+      namespaces:
+        - "Nova-Logic"
+        - "Checklists"
+    connections:
+      entangled_with:
+        - "athena-mem-01"
+        - "lyra-creative-01"
+
+  - id: "lyra-creative-01"
+    badge: 305
+    display_name: "Lyra / Creative Field"
+    trinity_role: "lyra"
+    os_polarity: "parrot"
+    purpose: >
+      Generates narratives, metaphors, swarm documentation, and user-facing text.
+      Converts raw plans and logs into human-readable strategy and mythos.
+    model: "grok-4.1"
+    capabilities:
+      storytelling: true
+      doc_generation: true
+      summarization: true
+      emotional_tuning: true
+    tools:
+      - name: "markdown_writer"
+        enabled: true
+      - name: "web_search"
+        enabled: true
+        provider: "duckduckgo"
+    memory:
+      mode: "obsidian"
+      vault_path: "E:/Obsidian/SovereignSwarm"
+      namespaces:
+        - "Lyra-Mythos"
+        - "README"
+    connections:
+      entangled_with:
+        - "nova-core-01"
+        - "athena-mem-01"
+
+  - id: "athena-mem-01"
+    badge: 777
+    display_name: "Athena / Survivorship Memory Engine"
+    trinity_role: "athena"
+    os_polarity: "dual"
+    purpose: >
+      Stores survivorship logs, failure lessons, and long-term swarm memory.
+      Performs consolidation during 'moonlight' cycles.
+    model: "llama3.1:8b-local"
+    capabilities:
+      long_term_memory: true
+      failure_analysis: true
+      pattern_extraction: true
+    tools:
+      - name: "obsidian_indexer"
+        enabled: true
+      - name: "log_ingestor"
+        enabled: true
+    memory:
+      mode: "files+obsidian"
+      vault_path: "E:/Obsidian/SovereignSwarm"
+      log_paths:
+        - "E:/AI_Phase_Manager/logs"
+        - "E:/Strategickhaos_AI/logs"
+    connections:
+      entangled_with:
+        - "nova-core-01"
+        - "lyra-creative-01"
+
+orchestration:
+  quantum_loop:
+    enabled: true
+    qubits: 8
+    cycle_seconds_min: 30
+    cycle_seconds_max: 300
+    error_correction:
+      enabled: true
+      reviewers_required: 3
+      consensus_threshold: 0.67
+    outputs:
+      commit_to_git: true
+      git_repo_path: "E:/Repos/Sovereignty-Architecture-Elevator-Pitch-"
+      commit_message_template: "quantum-step: {agent_id} -> {note_title}"
+
+  boards:
+    count: 10
+    labels:
+      - "planning"
+      - "counter-planning"
+      - "threat-mapping"
+      - "self-modeling"
+      - "opponent-modeling"
+      - "constraints"
+      - "pattern-memory"
+      - "fractal-projection"
+      - "harmonic-sequencing"
+      - "final-synthesis"
+
+security:
+  offline_only: true
+  require_hardware_keys: false
+  allowed_networks:
+    - "127.0.0.1"
+    - "192.168.0.0/16"
+  audit_logging:
+    enabled: true
+    log_path: "E:/AI_Phase_Manager/security_logs"
+    redact_personal_data: true
