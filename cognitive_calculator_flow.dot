@@ -1,0 +1,91 @@
+digraph DomBrainCalculator_Flow {
+    rankdir=TB;
+    bgcolor="#0d1117";
+    fontname="Courier New";
+    fontsize=16;
+    node [fontname="Courier New", fontsize=12, style=filled, penwidth=2];
+    edge [color="#ff0066", penwidth=2, arrowsize=1.2];
+
+    // ==== PROBLEM INPUT ====
+    Problem [label="PROBLEM INPUT\n2 + 2 = ?", fillcolor="#ff0066", fontcolor=white, shape=box, width=3, height=1];
+
+    // ==== STEP 1: DIVERGENT THINKING ====
+    subgraph cluster_divergent {
+        label="STEP 1: DIVERGENT THINKING\n(Generate 1000 Pathways)"; 
+        color="#ff3399"; 
+        fontcolor=white; 
+        style=filled;
+        bgcolor="#1a0d1a";
+        
+        Symbolic [label="Symbolic Math\n4.000000\nConfidence: 0.95", fillcolor="#ff6600", fontcolor=white];
+        Quantum [label="Quantum Analogy\n4.000001\nConfidence: 0.75", fillcolor="#ff9900", fontcolor=black];
+        DNA [label="DNA Splicing\n3.999998\nConfidence: 0.78", fillcolor="#ffcc00", fontcolor=black];
+        Particle [label="Particle Physics\n4.000002\nConfidence: 0.82", fillcolor="#ffff00", fontcolor=black];
+        Neural [label="Neuronal Network\n4.000001\nConfidence: 0.88", fillcolor="#ccff00", fontcolor=black];
+        Chemical [label="Chemical Synthesis\n4.000000\nConfidence: 0.77", fillcolor="#99ff00", fontcolor=black];
+        Boolean [label="Boolean Logic\n4.000000\nConfidence: 0.90", fillcolor="#66ff00", fontcolor=black];
+        Statistical [label="Statistical\n4.000003\nConfidence: 0.83", fillcolor="#33ff00", fontcolor=black];
+        Geometric [label="Geometric\n4.000001\nConfidence: 0.80", fillcolor="#00ff00", fontcolor=black];
+        Numerical [label="Numerical Approx\n3.999999\nConfidence: 0.85", fillcolor="#00ff33", fontcolor=black];
+        MorePaths [label="... 90 more pathways", fillcolor="#00ff66", fontcolor=black, shape=plaintext];
+    }
+
+    // ==== STEP 2: CONSOLIDATION ====
+    subgraph cluster_consolidation {
+        label="STEP 2: MEMORY CONSOLIDATION\n(Prune Weak Paths)"; 
+        color="#00ccff"; 
+        fontcolor=white; 
+        style=filled;
+        bgcolor="#0d1a1a";
+        
+        Strong1 [label="Symbolic\n✅ Strong", fillcolor="#0066ff", fontcolor=white];
+        Strong2 [label="Boolean\n✅ Strong", fillcolor="#0099ff", fontcolor=white];
+        Strong3 [label="Neural\n✅ Strong", fillcolor="#00ccff", fontcolor=black];
+        Strong4 [label="Numerical\n✅ Strong", fillcolor="#00ffff", fontcolor=black];
+        Weak [label="60 pathways\nremain", fillcolor="#66ccff", fontcolor=black, shape=plaintext];
+        Dopamine [label="💊 DOPAMINE HIT\nNovelty Detected!", fillcolor="#ff00ff", fontcolor=white];
+    }
+
+    // ==== STEP 3: COLLISION ====
+    subgraph cluster_collision {
+        label="STEP 3: COLLISION DETECTION\n(Dendrite Sparks)"; 
+        color="#ff6600"; 
+        fontcolor=white; 
+        style=filled;
+        bgcolor="#1a1a0d";
+        
+        Collision1 [label="💥 COLLISION 1\nSymbolic × Quantum\nDifferent domains,\nsame truth!", fillcolor="#ff3300", fontcolor=white];
+        Collision2 [label="💥 COLLISION 2\nBoolean × Particle\nPattern synthesis!", fillcolor="#ff6600", fontcolor=white];
+        Collision3 [label="💥 COLLISION 3\nDNA × Chemical\nCross-domain match!", fillcolor="#ff9900", fontcolor=black];
+        MoreCollisions [label="... 9 more collisions", fillcolor="#ffcc00", fontcolor=black, shape=plaintext];
+        
+        Insight [label="✨ INSIGHTS GENERATED\n12 collision events\nNew understanding!", fillcolor="#ffff00", fontcolor=black];
+    }
+
+    // ==== STEP 4: CONSENSUS ====
+    Consensus [label="STEP 4: CONSENSUS\n(Weighted Average)", fillcolor="#00ff00", fontcolor=black, shape=box, width=3, height=1];
+    
+    // ==== FINAL ANSWER ====
+    Answer [label="💥 BOOM!\nAnswer: 4.00000137\n\nDopamine: ✅\nCollisions: 12\nInsights: Generated", fillcolor="#ff0066", fontcolor=white, shape=box, width=4, height=1.5];
+
+    // ==== CONNECTIONS ====
+    Problem -> {Symbolic Quantum DNA Particle Neural Chemical Boolean Statistical Geometric Numerical}
+    
+    {Symbolic Quantum DNA Particle Neural Chemical Boolean Statistical Geometric Numerical} -> {Strong1 Strong2 Strong3 Strong4}
+    
+    {Strong1 Strong2 Strong3 Strong4} -> Dopamine
+    Dopamine -> {Collision1 Collision2 Collision3}
+    
+    {Collision1 Collision2 Collision3} -> Insight
+    Insight -> Consensus
+    
+    Consensus -> Answer
+
+    // ==== RANKING ====
+    {rank=same; Problem}
+    {rank=same; Symbolic Quantum DNA Particle Neural Chemical Boolean Statistical Geometric Numerical}
+    {rank=same; Strong1 Strong2 Strong3 Strong4 Dopamine}
+    {rank=same; Collision1 Collision2 Collision3 Insight}
+    {rank=same; Consensus}
+    {rank=same; Answer}
+}
