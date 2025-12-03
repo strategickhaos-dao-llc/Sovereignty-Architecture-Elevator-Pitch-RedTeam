@@ -1,21 +1,60 @@
-# Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
+# Strategickhaos Sovereignty Architecture
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Wyoming DAO](https://img.shields.io/badge/Wyoming-DAO%20LLC-blue)](https://wyobiz.wyo.gov/Business/FilingSearch.aspx)
+[![GPG Signed](https://img.shields.io/badge/GPG-Signed%20Commits-green)](https://keys.openpgp.org)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-orange)]()
 
-## 🏛️ Architecture Overview
+> **Sovereign digital infrastructure enabling AI-enforced charitable distributions with cryptographic proof.**
 
-This system creates a **sovereignty control plane** that bridges:
-- **Discord** - Command & control interface
-- **Infrastructure** - Kubernetes, observability, AI agents  
-- **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
-- **AI Agents** - Intelligent assistance with vector knowledge base
+---
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Legal Foundation](#-legal-foundation)
+- [Quick Start](#-quick-start)
+- [Architecture](#️-architecture-overview)
+- [Documentation](#-documentation)
+- [Core Components](#-core-components)
+- [Infrastructure](#️-infrastructure)
+- [Security](#-security--governance)
+- [Contributing](#-contributing)
+- [License](#-license--support)
+
+---
+
+## Overview
+
+**Strategickhaos** is building a comprehensive Discord-integrated DevOps automation system featuring AI agents, GitLens integration, and sovereign infrastructure management. The project combines Wyoming DAO legal frameworks with cutting-edge technology to create transparent, verifiable charitable giving mechanisms.
+
+### Key Features
+
+- ✅ **Legal Foundation**: Wyoming DAO LLC + Public Benefit Nonprofit Corporation
+- ✅ **Cryptographic Proof**: GPG-signed commits and operations
+- ✅ **AI Integration**: Discord-native DevOps with intelligent assistants
+- ✅ **Radical Transparency**: Every claim verifiable or marked as planned
+
+---
+
+## ⚖️ Legal Foundation
+
+| Entity | Identifier | Status |
+|--------|------------|--------|
+| **Strategickhaos DAO LLC** | Wyoming Filing: 2025-001708194 | ✅ Active |
+| **ValorYield Engine Nonprofit** | EIN: 39-2923503 | ✅ Active |
+| **Registered Agent** | Harbor Compliance | ✅ Active |
+
+**Verify:** [Wyoming Business Search](https://wyobiz.wyo.gov/Business/FilingSearch.aspx) → Search "2025-001708194"
+
+---
 
 ## 🚀 Quick Start
 
 ```bash
 # 1. Clone and bootstrap
-git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
-cd sovereignty-architecture
+git clone https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
+cd Sovereignty-Architecture-Elevator-Pitch-
 
 # 2. Deploy to Kubernetes
 ./bootstrap/deploy.sh
@@ -27,6 +66,66 @@ export PRS_CHANNEL="channel_id"
 # 4. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
+
+---
+
+## 🏗️ Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    STRATEGICKHAOS ECOSYSTEM                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐       │
+│  │   Discord    │◄──►│   Event      │◄──►│   GitHub     │       │
+│  │   Bot        │    │   Gateway    │    │   Webhooks   │       │
+│  └──────────────┘    └──────────────┘    └──────────────┘       │
+│         │                   │                    │               │
+│         ▼                   ▼                    ▼               │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │              KUBERNETES CONTROL PLANE                   │     │
+│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐      │     │
+│  │  │ Discord │ │ Event   │ │ JDK     │ │ AI      │      │     │
+│  │  │ Ops Bot │ │ Gateway │ │ Workspace│ │ Agents  │      │     │
+│  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘      │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                              │                                   │
+│                              ▼                                   │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │                 OBSERVABILITY STACK                     │     │
+│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐      │     │
+│  │  │Prometheus│ │ Grafana │ │  Loki   │ │ OTEL    │      │     │
+│  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘      │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │                  LEGAL FRAMEWORK                        │     │
+│  │  • Wyoming DAO LLC (2025-001708194)                    │     │
+│  │  • ValorYield Nonprofit (EIN: 39-2923503)              │     │
+│  │  • Harbor Compliance (Registered Agent)                │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+This system creates a **sovereignty control plane** that bridges:
+- **Discord** - Command & control interface
+- **Infrastructure** - Kubernetes, observability, AI agents  
+- **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
+- **AI Agents** - Intelligent assistance with vector knowledge base
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Complete Documentation](docs/STRATEGICKHAOS_COMPLETE_DOCUMENTATION_v1.0.md) | Comprehensive 50+ page documentation |
+| [Executive Summary](docs/STRATEGICKHAOS_EXECUTIVE_SUMMARY.md) | One-page overview with key facts |
+| [Action Checklist](docs/IMMEDIATE_ACTION_CHECKLIST.md) | Priority tasks with copy-paste commands |
+| [File Manifest](docs/FILE_MANIFEST.md) | Master index of all files |
+
+---
 
 ## 📋 Core Components
 
@@ -285,7 +384,7 @@ This project thrives because of an extraordinary community of creators, builders
 - **License**: MIT License - see [LICENSE](LICENSE) file
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
-- **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
+- **Issues**: [GitHub Issues](https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/issues)
 
 ---
 
