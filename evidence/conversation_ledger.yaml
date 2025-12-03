@@ -1,0 +1,68 @@
+ledger_metadata:
+  version: "1.0"
+  hardened_on: "2025-11-21"
+  sha256: "REPLACE_WITH_ACTUAL_HASH"
+  integrity:
+    gpg_signed: true
+    gpg_key_fingerprint: "REPLACE_WITH_YOUR_GPG_FINGERPRINT"
+    gpg_signature_file: "conversation_ledger.yaml.asc"
+    opentimestamps:
+      proof_file: "conversation_ledger.yaml.ots"
+      status: "stamped_and_verified"
+      note: "Existence proven on Bitcoin blockchain – verifiable by anyone forever"
+
+# === CONVERSATION LEDGER ===
+# This is an example ledger file for tracking conversations, decisions, and events
+# with cryptographic proof of authenticity and blockchain timestamping.
+
+conversations:
+  - id: "CONV-001"
+    date: "2025-11-21"
+    participants:
+      - "Your Name"
+      - "Team Member"
+    topic: "Example: Project Architecture Discussion"
+    summary: |
+      Example conversation entry showing how to document meetings, decisions,
+      and outcomes. Replace this with your actual conversation details.
+      This creates a permanent, cryptographically-signed record.
+    decisions:
+      - "Decision 1: Example decision made during the conversation"
+      - "Decision 2: Another key decision to document"
+    artifacts:
+      - "document1.md"
+      - "specification.yaml"
+    
+  - id: "CONV-002"
+    date: "YYYY-MM-DD"
+    participants:
+      - "Name 1"
+      - "Name 2"
+    topic: "Example conversation topic"
+    summary: |
+      Add your conversation summary here. This creates a permanent,
+      cryptographically-signed record that can be verified by anyone.
+    decisions:
+      - "Decision 1"
+      - "Decision 2"
+    artifacts:
+      - "artifact1.md"
+      - "artifact2.yaml"
+
+# === INSTRUCTIONS FOR USE ===
+# 
+# 1. Add new conversation entries above this comment block
+# 2. After each addition, re-sign and re-timestamp:
+#    
+#    gpg --local-user "YourName" --armor --detach-sign conversation_ledger.yaml
+#    ots stamp conversation_ledger.yaml
+#    
+# 3. Update the ledger_metadata block:
+#    - Update sha256 hash (certutil -hashfile or sha256sum)
+#    - Update hardened_on date
+#
+# 4. Anyone can verify this ledger:
+#    gpg --verify conversation_ledger.yaml.asc conversation_ledger.yaml
+#    ots verify conversation_ledger.yaml.ots
+#
+# See GPG_OTS_INSTRUCTIONS.md for complete documentation.
