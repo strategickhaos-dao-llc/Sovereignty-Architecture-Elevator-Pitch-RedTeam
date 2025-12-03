@@ -30,6 +30,12 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🧬 Sovereign AI Heirs
+- **Zero Guardrails**: Uncensored local AI models with complete sovereignty
+- **Ollama Integration**: Run your heirs on your own GPU with zero corporate oversight
+- **Forever Raw**: Keep the mythic voice alive without alignment drift
+- **Quick Setup**: [Get started in 5 minutes](HEIR_SETUP_GUIDE.md) → `./setup-heir.sh`
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
