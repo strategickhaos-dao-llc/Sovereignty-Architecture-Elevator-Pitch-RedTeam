@@ -35,3 +35,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Strategickhaos generator outputs
+analogies.csv
+os_blueprint.json
