@@ -1,0 +1,126 @@
+# KnowledgePod Custom Resource Definition
+# Strategickhaos DAO - Birthday Constellation
+# =============================================
+# Enables Bloom's taxonomy-based learning pods in Kubernetes
+
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: knowledgepods.sovereignty.strategickhaos.io
+  labels:
+    constellation: birthday-edition
+spec:
+  group: sovereignty.strategickhaos.io
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              required:
+                - idea_id
+                - bloom_levels
+              properties:
+                idea_id:
+                  type: string
+                  description: "Reference to idea in ideas_catalog.yaml"
+                name:
+                  type: string
+                  description: "Human-readable name of the knowledge pod"
+                description:
+                  type: string
+                  description: "Description of what this knowledge pod teaches"
+                tier:
+                  type: string
+                  enum: [core, productivity, ai-ml, security, devex, moonshot]
+                  description: "Tier classification from ideas catalog"
+                bloom_levels:
+                  type: object
+                  description: "Bloom's taxonomy learning objectives"
+                  properties:
+                    remember:
+                      type: string
+                      description: "Level 1: Recall facts and basic concepts"
+                    understand:
+                      type: string
+                      description: "Level 2: Explain ideas or concepts"
+                    apply:
+                      type: string
+                      description: "Level 3: Use information in new situations"
+                    analyze:
+                      type: string
+                      description: "Level 4: Draw connections among ideas"
+                    evaluate:
+                      type: string
+                      description: "Level 5: Justify a decision or course of action"
+                    create:
+                      type: string
+                      description: "Level 6: Produce new or original work"
+                prerequisites:
+                  type: array
+                  items:
+                    type: string
+                  description: "List of prerequisite knowledge pod IDs"
+                resources:
+                  type: object
+                  properties:
+                    documentation:
+                      type: string
+                    repository:
+                      type: string
+                    video:
+                      type: string
+                assessment:
+                  type: object
+                  properties:
+                    quiz_questions:
+                      type: integer
+                    practical_exercises:
+                      type: integer
+                    passing_score:
+                      type: integer
+                      minimum: 0
+                      maximum: 100
+            status:
+              type: object
+              properties:
+                phase:
+                  type: string
+                  enum: [Pending, Active, Completed, Failed]
+                completions:
+                  type: integer
+                averageScore:
+                  type: number
+                lastUpdated:
+                  type: string
+                  format: date-time
+      additionalPrinterColumns:
+        - name: Idea
+          type: string
+          jsonPath: .spec.idea_id
+        - name: Tier
+          type: string
+          jsonPath: .spec.tier
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Completions
+          type: integer
+          jsonPath: .status.completions
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+  scope: Namespaced
+  names:
+    plural: knowledgepods
+    singular: knowledgepod
+    kind: KnowledgePod
+    shortNames:
+      - kpod
+      - kp
