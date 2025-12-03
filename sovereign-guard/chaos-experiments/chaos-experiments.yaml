@@ -1,0 +1,229 @@
+# =============================================================================
+# SovereignGuard Chaos Engineering Experiments
+# =============================================================================
+# Exposure Mitigation: #18, #28, #29 (Operational Resilience)
+# Purpose: Deliberately inject faults to verify defensive posture
+# =============================================================================
+---
+# =============================================================================
+# Pod Kill Experiment - Test service recovery
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: sovereignguard-pod-kill
+  namespace: sovereignty
+  labels:
+    experiment: "pod-resilience"
+    severity: "low"
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      chaos-testing: "enabled"
+  scheduler:
+    cron: "@weekly"
+---
+# =============================================================================
+# Network Partition Experiment - Test service mesh resilience
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: sovereignguard-network-partition
+  namespace: sovereignty
+  labels:
+    experiment: "network-resilience"
+    severity: "medium"
+spec:
+  action: partition
+  mode: all
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      app: event-gateway
+  direction: both
+  target:
+    selector:
+      namespaces:
+        - sovereignty
+      labelSelectors:
+        app: nats
+    mode: all
+  duration: "30s"
+  scheduler:
+    cron: "0 3 * * 1"  # Monday 3 AM
+---
+# =============================================================================
+# DNS Failure Experiment - Test DNS resilience
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: DNSChaos
+metadata:
+  name: sovereignguard-dns-failure
+  namespace: sovereignty
+  labels:
+    experiment: "dns-resilience"
+    severity: "medium"
+spec:
+  action: error
+  mode: all
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      chaos-testing: "enabled"
+  duration: "30s"
+  scheduler:
+    cron: "0 4 * * 2"  # Tuesday 4 AM
+---
+# =============================================================================
+# Credential Leak Simulation - Test secret detection
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: sovereignguard-credential-leak-sim
+  namespace: sovereignty
+  labels:
+    experiment: "security-detection"
+    severity: "high"
+  annotations:
+    description: "Simulates suspicious memory access patterns that might indicate credential scraping"
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      app: discord-bot
+      chaos-testing: "enabled"
+  stressors:
+    memory:
+      workers: 1
+      size: "100Mi"
+  duration: "60s"
+  scheduler:
+    cron: "0 5 * * 3"  # Wednesday 5 AM
+---
+# =============================================================================
+# Network Latency Experiment - Test timeout handling
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: sovereignguard-network-latency
+  namespace: sovereignty
+  labels:
+    experiment: "latency-resilience"
+    severity: "low"
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      app: event-gateway
+  delay:
+    latency: "500ms"
+    jitter: "100ms"
+    correlation: "50"
+  direction: both
+  target:
+    selector:
+      namespaces:
+        - sovereignty
+      labelSelectors:
+        app: vault
+    mode: all
+  duration: "2m"
+  scheduler:
+    cron: "0 3 * * 4"  # Thursday 3 AM
+---
+# =============================================================================
+# IO Chaos - Test disk failure handling
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: IOChaos
+metadata:
+  name: sovereignguard-io-latency
+  namespace: sovereignty
+  labels:
+    experiment: "io-resilience"
+    severity: "medium"
+spec:
+  action: latency
+  mode: one
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      app: vault
+      chaos-testing: "enabled"
+  volumePath: /vault/data
+  path: "*"
+  delay: "100ms"
+  percent: 50
+  duration: "30s"
+  scheduler:
+    cron: "0 4 * * 5"  # Friday 4 AM
+---
+# =============================================================================
+# Time Chaos - Test clock skew handling (Side-channel mitigation)
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: TimeChaos
+metadata:
+  name: sovereignguard-time-skew
+  namespace: sovereignty
+  labels:
+    experiment: "time-resilience"
+    severity: "medium"
+  annotations:
+    exposure: "#17 Time-Based Side Channel"
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      app: swarmgate
+      chaos-testing: "enabled"
+  timeOffset: "5m"
+  duration: "30s"
+  scheduler:
+    cron: "0 5 * * 6"  # Saturday 5 AM
+---
+# =============================================================================
+# HTTP Chaos - Test API resilience
+# =============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: HTTPChaos
+metadata:
+  name: sovereignguard-http-abort
+  namespace: sovereignty
+  labels:
+    experiment: "http-resilience"
+    severity: "low"
+spec:
+  mode: all
+  selector:
+    namespaces:
+      - sovereignty
+    labelSelectors:
+      app: event-gateway
+      chaos-testing: "enabled"
+  target: Request
+  port: 8080
+  method: POST
+  path: /webhook/*
+  abort: true
+  percent: 10
+  duration: "5m"
+  scheduler:
+    cron: "0 2 * * 0"  # Sunday 2 AM

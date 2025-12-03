@@ -1,0 +1,512 @@
+# =============================================================================
+# SovereignGuard NATS JetStream Security Event Schemas
+# =============================================================================
+# Purpose: Event-driven security orchestration via NATS JetStream
+# Integration Points: Discord Control, Vault, SwarmGate, Legion of Minds
+# =============================================================================
+
+version: "1.0.0"
+name: SovereignGuard Event Schemas
+
+# =============================================================================
+# STREAM DEFINITIONS
+# =============================================================================
+streams:
+  SECURITY_EVENTS:
+    description: "Security alerts, incidents, and audit events"
+    subjects:
+      - "security.alert.*"
+      - "security.incident.*"
+      - "security.audit.*"
+      - "security.response.*"
+    retention: "limits"
+    storage: "file"
+    max_bytes: 1073741824  # 1GB
+    max_age: "168h"        # 7 days
+    max_msgs: 100000
+    duplicates: "2m"
+    
+  CREDENTIAL_EVENTS:
+    description: "Credential lifecycle events"
+    subjects:
+      - "creds.rotation.*"
+      - "creds.access.*"
+      - "creds.expired.*"
+      - "creds.created.*"
+    retention: "limits"
+    storage: "file"
+    max_bytes: 536870912   # 512MB
+    max_age: "720h"        # 30 days
+    max_msgs: 50000
+    
+  FINANCIAL_EVENTS:
+    description: "SwarmGate financial operation events"
+    subjects:
+      - "finance.trade.*"
+      - "finance.approval.*"
+      - "finance.limit.*"
+      - "finance.emergency.*"
+    retention: "limits"
+    storage: "file"
+    max_bytes: 268435456   # 256MB
+    max_age: "2160h"       # 90 days (compliance)
+    max_msgs: 100000
+
+# =============================================================================
+# EVENT SCHEMAS
+# =============================================================================
+schemas:
+  # ===========================================================================
+  # Security Alert Schema
+  # ===========================================================================
+  security_alert:
+    subject_pattern: "security.alert.{severity}"
+    description: "Security alert triggered by detection systems"
+    schema:
+      type: object
+      required:
+        - alert_id
+        - timestamp
+        - severity
+        - exposure_id
+        - title
+        - source
+      properties:
+        alert_id:
+          type: string
+          format: uuid
+          description: "Unique alert identifier"
+        timestamp:
+          type: string
+          format: date-time
+          description: "Alert generation timestamp (ISO 8601)"
+        severity:
+          type: string
+          enum: ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]
+          description: "Alert severity level"
+        exposure_id:
+          type: integer
+          minimum: 1
+          maximum: 36
+          description: "Reference to 36-exposure taxonomy"
+        exposure_name:
+          type: string
+          description: "Human-readable exposure name"
+        title:
+          type: string
+          maxLength: 200
+          description: "Alert title"
+        description:
+          type: string
+          maxLength: 2000
+          description: "Detailed alert description"
+        source:
+          type: object
+          required:
+            - system
+            - component
+          properties:
+            system:
+              type: string
+              description: "Source system (vault, mesh, chaos, etc.)"
+            component:
+              type: string
+              description: "Specific component that triggered alert"
+            node:
+              type: string
+              description: "Node/pod that generated the alert"
+        context:
+          type: object
+          description: "Additional context data (varies by alert type)"
+        recommended_action:
+          type: string
+          description: "Suggested remediation action"
+        auto_remediated:
+          type: boolean
+          default: false
+          description: "Whether automatic remediation was attempted"
+        requires_approval:
+          type: boolean
+          default: false
+          description: "Whether human approval is required"
+    example:
+      alert_id: "550e8400-e29b-41d4-a716-446655440000"
+      timestamp: "2025-12-03T18:45:00Z"
+      severity: "CRITICAL"
+      exposure_id: 1
+      exposure_name: "Forgotten API Keys in Git History"
+      title: "API Key Detected in Commit History"
+      description: "GitHub secret scanning detected potential API key in commit abc123"
+      source:
+        system: "github"
+        component: "secret-scanning"
+        node: "github-webhook"
+      context:
+        commit_sha: "abc123def456"
+        file_path: "src/config.js"
+        secret_type: "azure_devops_pat"
+      recommended_action: "Immediate rotation of Azure DevOps PAT"
+      auto_remediated: false
+      requires_approval: true
+
+  # ===========================================================================
+  # Security Incident Schema
+  # ===========================================================================
+  security_incident:
+    subject_pattern: "security.incident.{status}"
+    description: "Security incident lifecycle events"
+    schema:
+      type: object
+      required:
+        - incident_id
+        - timestamp
+        - status
+        - severity
+        - title
+      properties:
+        incident_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: ["opened", "investigating", "contained", "resolved", "closed"]
+        severity:
+          type: string
+          enum: ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+        title:
+          type: string
+        description:
+          type: string
+        affected_exposures:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 36
+        related_alerts:
+          type: array
+          items:
+            type: string
+            format: uuid
+        assigned_to:
+          type: string
+          description: "Discord user ID or team"
+        timeline:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              action:
+                type: string
+              actor:
+                type: string
+              notes:
+                type: string
+        root_cause:
+          type: string
+        remediation_steps:
+          type: array
+          items:
+            type: string
+        lessons_learned:
+          type: string
+        postmortem_url:
+          type: string
+          format: uri
+
+  # ===========================================================================
+  # Credential Rotation Schema
+  # ===========================================================================
+  credential_rotation:
+    subject_pattern: "creds.rotation.{secret_type}"
+    description: "Credential rotation lifecycle events"
+    schema:
+      type: object
+      required:
+        - rotation_id
+        - timestamp
+        - secret_type
+        - status
+        - initiated_by
+      properties:
+        rotation_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        secret_type:
+          type: string
+          enum: ["discord", "github", "hmac", "jwt", "database", "approle", "trading", "banking", "all"]
+        status:
+          type: string
+          enum: ["initiated", "pending_approval", "approved", "in_progress", "completed", "failed", "rolled_back"]
+        initiated_by:
+          type: string
+          enum: ["scheduled", "manual", "emergency", "policy"]
+        approval:
+          type: object
+          properties:
+            required:
+              type: boolean
+            approver:
+              type: string
+            approved_at:
+              type: string
+              format: date-time
+            reason:
+              type: string
+        affected_services:
+          type: array
+          items:
+            type: string
+        old_version:
+          type: integer
+          description: "Vault KV version before rotation"
+        new_version:
+          type: integer
+          description: "Vault KV version after rotation"
+        error:
+          type: string
+          description: "Error message if rotation failed"
+
+  # ===========================================================================
+  # Credential Access Schema
+  # ===========================================================================
+  credential_access:
+    subject_pattern: "creds.access.{service}"
+    description: "Credential access audit events"
+    schema:
+      type: object
+      required:
+        - access_id
+        - timestamp
+        - service
+        - secret_path
+        - operation
+        - outcome
+      properties:
+        access_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        service:
+          type: string
+          description: "Service that accessed the credential"
+        secret_path:
+          type: string
+          description: "Vault secret path accessed"
+        operation:
+          type: string
+          enum: ["read", "write", "delete", "list"]
+        outcome:
+          type: string
+          enum: ["success", "denied", "error"]
+        client_token_accessor:
+          type: string
+          description: "Vault token accessor (not the token itself)"
+        source_ip:
+          type: string
+          format: ipv4
+        request_id:
+          type: string
+        anomaly_score:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "Anomaly detection score (100 = highly anomalous)"
+
+  # ===========================================================================
+  # Financial Trade Schema
+  # ===========================================================================
+  financial_trade:
+    subject_pattern: "finance.trade.{action}"
+    description: "SwarmGate trading operation events"
+    schema:
+      type: object
+      required:
+        - trade_id
+        - timestamp
+        - action
+        - symbol
+        - side
+        - quantity
+        - broker
+      properties:
+        trade_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        action:
+          type: string
+          enum: ["requested", "pending_approval", "approved", "denied", "executed", "cancelled", "failed"]
+        symbol:
+          type: string
+          description: "Trading symbol"
+        side:
+          type: string
+          enum: ["buy", "sell"]
+        quantity:
+          type: number
+          minimum: 0
+        price:
+          type: number
+          minimum: 0
+        amount_usd:
+          type: number
+          minimum: 0
+        broker:
+          type: string
+          enum: ["ninjatrader", "kraken", "paper"]
+        risk_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        position_limit_check:
+          type: object
+          properties:
+            current_exposure:
+              type: number
+            max_exposure:
+              type: number
+            within_limits:
+              type: boolean
+        approval:
+          type: object
+          properties:
+            required:
+              type: boolean
+            approver:
+              type: string
+            decision:
+              type: string
+              enum: ["approved", "denied", "timeout"]
+            reason:
+              type: string
+        execution:
+          type: object
+          properties:
+            executed_at:
+              type: string
+              format: date-time
+            fill_price:
+              type: number
+            fees:
+              type: number
+            order_id:
+              type: string
+
+  # ===========================================================================
+  # Security Response Schema
+  # ===========================================================================
+  security_response:
+    subject_pattern: "security.response.{response_type}"
+    description: "Human or automated responses to security events"
+    schema:
+      type: object
+      required:
+        - response_id
+        - timestamp
+        - response_type
+        - target_event_id
+        - responder
+        - action
+      properties:
+        response_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        response_type:
+          type: string
+          enum: ["approval", "denial", "acknowledgment", "escalation", "remediation", "lockdown"]
+        target_event_id:
+          type: string
+          format: uuid
+          description: "ID of the event being responded to"
+        responder:
+          type: object
+          required:
+            - type
+            - id
+          properties:
+            type:
+              type: string
+              enum: ["human", "automation", "ai"]
+            id:
+              type: string
+              description: "Discord user ID or automation name"
+            name:
+              type: string
+        action:
+          type: string
+          description: "Action taken"
+        reason:
+          type: string
+        mfa_verified:
+          type: boolean
+          default: false
+        discord_message_id:
+          type: string
+          description: "Discord message ID for audit trail"
+
+# =============================================================================
+# CONSUMER DEFINITIONS
+# =============================================================================
+consumers:
+  discord_bot:
+    stream: "SECURITY_EVENTS"
+    filter_subjects:
+      - "security.alert.CRITICAL"
+      - "security.alert.HIGH"
+      - "security.incident.*"
+    durable_name: "discord-bot-consumer"
+    ack_policy: "explicit"
+    max_deliver: 3
+    ack_wait: "30s"
+    
+  audit_logger:
+    stream: "SECURITY_EVENTS"
+    filter_subjects:
+      - "security.*"
+    durable_name: "audit-logger-consumer"
+    ack_policy: "explicit"
+    max_deliver: 5
+    ack_wait: "60s"
+    
+  credential_monitor:
+    stream: "CREDENTIAL_EVENTS"
+    filter_subjects:
+      - "creds.*"
+    durable_name: "cred-monitor-consumer"
+    ack_policy: "explicit"
+    max_deliver: 3
+    
+  financial_auditor:
+    stream: "FINANCIAL_EVENTS"
+    filter_subjects:
+      - "finance.*"
+    durable_name: "finance-auditor-consumer"
+    ack_policy: "explicit"
+    max_deliver: 5
+    ack_wait: "120s"
+    
+  legion_analyzer:
+    stream: "SECURITY_EVENTS"
+    filter_subjects:
+      - "security.alert.*"
+    durable_name: "legion-analyzer-consumer"
+    ack_policy: "explicit"
+    max_deliver: 3
+    description: "AI-powered threat analysis via Legion of Minds"

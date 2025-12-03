@@ -1,0 +1,453 @@
+# =============================================================================
+# SovereignGuard Discord Control Interface Configuration
+# =============================================================================
+# Purpose: Human-in-loop for high-severity security events
+# Exposure Mitigation: #30 (Rogue Algorithm), #25 (Trading Compromise)
+# =============================================================================
+
+name: SovereignGuard Discord Control
+version: "1.0.0"
+description: "Human-in-loop security control interface via Discord"
+
+# =============================================================================
+# DISCORD BOT CONFIGURATION
+# =============================================================================
+bot:
+  name: "SovereignGuard"
+  prefix: "/sg"
+  presence:
+    status: "online"
+    activity:
+      type: "watching"
+      name: "36 attack vectors"
+
+# =============================================================================
+# CHANNEL CONFIGURATION
+# =============================================================================
+channels:
+  security_alerts:
+    id: "${SECURITY_ALERTS_CHANNEL}"
+    purpose: "Real-time security alerts (CRITICAL, HIGH)"
+    permissions:
+      - "VIEW_CHANNEL"
+      - "SEND_MESSAGES"
+      - "EMBED_LINKS"
+      - "ATTACH_FILES"
+    alert_levels:
+      - CRITICAL
+      - HIGH
+    
+  incident_response:
+    id: "${INCIDENT_RESPONSE_CHANNEL}"
+    purpose: "Active incident coordination"
+    permissions:
+      - "VIEW_CHANNEL"
+      - "SEND_MESSAGES"
+      - "CREATE_THREADS"
+      - "MANAGE_THREADS"
+    features:
+      - incident_threads
+      - runbook_links
+      - status_updates
+    
+  approval_requests:
+    id: "${APPROVAL_REQUESTS_CHANNEL}"
+    purpose: "Human approval workflow for sensitive operations"
+    permissions:
+      - "VIEW_CHANNEL"
+      - "SEND_MESSAGES"
+      - "USE_APPLICATION_COMMANDS"
+    operations:
+      - trade_approval
+      - secret_rotation
+      - emergency_lockdown
+      - policy_changes
+    
+  audit_log:
+    id: "${AUDIT_LOG_CHANNEL}"
+    purpose: "Immutable audit trail of all security actions"
+    permissions:
+      - "VIEW_CHANNEL"
+      - "SEND_MESSAGES"
+    read_only: true
+    
+  system_status:
+    id: "${SYSTEM_STATUS_CHANNEL}"
+    purpose: "System health and metrics"
+    permissions:
+      - "VIEW_CHANNEL"
+      - "SEND_MESSAGES"
+    auto_update_interval: "5m"
+
+# =============================================================================
+# SLASH COMMANDS
+# =============================================================================
+commands:
+  status:
+    name: "/sg-status"
+    description: "Display SovereignGuard system status"
+    options: []
+    permissions: ["SECURITY_VIEWER"]
+    response_type: "ephemeral"
+    
+  approve:
+    name: "/sg-approve"
+    description: "Approve a pending security request"
+    options:
+      - name: "request_id"
+        type: "string"
+        required: true
+        description: "The request ID to approve"
+      - name: "reason"
+        type: "string"
+        required: true
+        description: "Reason for approval"
+    permissions: ["SECURITY_APPROVER"]
+    requires_mfa: true
+    
+  deny:
+    name: "/sg-deny"
+    description: "Deny a pending security request"
+    options:
+      - name: "request_id"
+        type: "string"
+        required: true
+        description: "The request ID to deny"
+      - name: "reason"
+        type: "string"
+        required: true
+        description: "Reason for denial"
+    permissions: ["SECURITY_APPROVER"]
+    
+  lockdown:
+    name: "/sg-lockdown"
+    description: "Initiate emergency system lockdown"
+    options:
+      - name: "scope"
+        type: "string"
+        required: true
+        choices:
+          - "full"
+          - "trading"
+          - "api"
+          - "network"
+        description: "Lockdown scope"
+      - name: "reason"
+        type: "string"
+        required: true
+        description: "Reason for lockdown"
+    permissions: ["SECURITY_ADMIN"]
+    requires_mfa: true
+    requires_confirmation: true
+    
+  rotate:
+    name: "/sg-rotate"
+    description: "Trigger secret rotation"
+    options:
+      - name: "secret_type"
+        type: "string"
+        required: true
+        choices:
+          - "all"
+          - "hmac"
+          - "jwt"
+          - "discord"
+          - "github"
+          - "approle"
+          - "database"
+        description: "Type of secrets to rotate"
+    permissions: ["SECURITY_ADMIN"]
+    requires_mfa: true
+    
+  investigate:
+    name: "/sg-investigate"
+    description: "Start investigation workflow for an alert"
+    options:
+      - name: "alert_id"
+        type: "string"
+        required: true
+        description: "Alert ID to investigate"
+    permissions: ["SECURITY_VIEWER"]
+    creates_thread: true
+    
+  metrics:
+    name: "/sg-metrics"
+    description: "Display security metrics dashboard"
+    options:
+      - name: "timeframe"
+        type: "string"
+        required: false
+        choices:
+          - "1h"
+          - "24h"
+          - "7d"
+          - "30d"
+        default: "24h"
+        description: "Metrics timeframe"
+    permissions: ["SECURITY_VIEWER"]
+    
+  exposures:
+    name: "/sg-exposures"
+    description: "Display current exposure status (36 vectors)"
+    options: []
+    permissions: ["SECURITY_VIEWER"]
+
+# =============================================================================
+# ROLE CONFIGURATION
+# =============================================================================
+roles:
+  SECURITY_ADMIN:
+    description: "Full security administration capabilities"
+    permissions:
+      - all_commands
+      - emergency_actions
+      - policy_changes
+    discord_role_id: "${SECURITY_ADMIN_ROLE}"
+    
+  SECURITY_APPROVER:
+    description: "Can approve/deny security requests"
+    permissions:
+      - approve_deny
+      - view_all
+      - investigate
+    discord_role_id: "${SECURITY_APPROVER_ROLE}"
+    
+  SECURITY_VIEWER:
+    description: "Read-only security visibility"
+    permissions:
+      - view_status
+      - view_metrics
+      - view_alerts
+    discord_role_id: "${SECURITY_VIEWER_ROLE}"
+
+# =============================================================================
+# ALERT CONFIGURATIONS
+# =============================================================================
+alerts:
+  severity_levels:
+    CRITICAL:
+      color: "#FF0000"  # Red
+      mention: "@everyone"
+      auto_create_incident: true
+      require_acknowledgment: true
+      timeout_minutes: 5
+      escalation:
+        - discord_dm
+        - sms
+        - phone_call
+        
+    HIGH:
+      color: "#FF9900"  # Orange
+      mention: "@Security Team"
+      auto_create_incident: false
+      require_acknowledgment: true
+      timeout_minutes: 30
+      
+    MEDIUM:
+      color: "#FFFF00"  # Yellow
+      mention: null
+      require_acknowledgment: false
+      
+    LOW:
+      color: "#00FF00"  # Green
+      mention: null
+      log_only: true
+      
+    INFO:
+      color: "#0099FF"  # Blue
+      mention: null
+      log_only: true
+
+  templates:
+    credential_leak:
+      title: "🚨 CREDENTIAL EXPOSURE DETECTED"
+      severity: "CRITICAL"
+      fields:
+        - name: "Secret Type"
+          value: "{{ secret_type }}"
+        - name: "Location"
+          value: "{{ location }}"
+        - name: "Exposure Vector"
+          value: "{{ vector_id }}: {{ vector_name }}"
+        - name: "Recommended Action"
+          value: "Immediate rotation required"
+      actions:
+        - type: "button"
+          label: "Rotate Now"
+          action: "rotate_secret"
+          style: "danger"
+        - type: "button"
+          label: "Investigate"
+          action: "create_investigation"
+          style: "primary"
+          
+    trading_anomaly:
+      title: "⚠️ TRADING ANOMALY DETECTED"
+      severity: "HIGH"
+      fields:
+        - name: "Trade Details"
+          value: "{{ trade_description }}"
+        - name: "Risk Score"
+          value: "{{ risk_score }}/100"
+        - name: "Position Size"
+          value: "${{ position_size }}"
+        - name: "Exposure"
+          value: "#25: Trading API Compromise"
+      actions:
+        - type: "button"
+          label: "Halt Trading"
+          action: "emergency_stop"
+          style: "danger"
+        - type: "button"
+          label: "Approve Trade"
+          action: "approve_trade"
+          style: "success"
+        - type: "button"
+          label: "Deny Trade"
+          action: "deny_trade"
+          style: "secondary"
+          
+    lateral_movement:
+      title: "🔴 LATERAL MOVEMENT DETECTED"
+      severity: "CRITICAL"
+      fields:
+        - name: "Source"
+          value: "{{ source_node }}"
+        - name: "Target"
+          value: "{{ target_node }}"
+        - name: "Method"
+          value: "{{ method }}"
+        - name: "Exposure"
+          value: "#{{ vector_id }}: {{ vector_name }}"
+      actions:
+        - type: "button"
+          label: "Isolate Node"
+          action: "isolate_node"
+          style: "danger"
+        - type: "button"
+          label: "Full Lockdown"
+          action: "full_lockdown"
+          style: "danger"
+
+# =============================================================================
+# APPROVAL WORKFLOW CONFIGURATION
+# =============================================================================
+approval_workflows:
+  trade_approval:
+    description: "Manual approval for trades above threshold"
+    trigger:
+      type: "trade_request"
+      conditions:
+        - field: "amount_usd"
+          operator: ">"
+          value: 25
+    approvers:
+      required: 1
+      roles:
+        - "SECURITY_ADMIN"
+        - "SECURITY_APPROVER"
+    timeout_minutes: 30
+    default_action: "deny"
+    notification:
+      channel: "approval_requests"
+      dm_approvers: true
+      
+  secret_rotation:
+    description: "Approval for manual secret rotation"
+    trigger:
+      type: "rotation_request"
+      conditions:
+        - field: "secret_type"
+          operator: "in"
+          value: ["trading", "banking"]
+    approvers:
+      required: 1
+      roles:
+        - "SECURITY_ADMIN"
+    timeout_minutes: 60
+    default_action: "deny"
+    
+  policy_change:
+    description: "Approval for security policy changes"
+    trigger:
+      type: "policy_change"
+    approvers:
+      required: 2
+      roles:
+        - "SECURITY_ADMIN"
+    timeout_minutes: 1440  # 24 hours
+    default_action: "deny"
+
+# =============================================================================
+# NATS JETSTREAM INTEGRATION
+# =============================================================================
+nats_integration:
+  url: "${NATS_URL:-nats://nats:4222}"
+  
+  subscriptions:
+    - stream: "SECURITY_EVENTS"
+      subject: "security.alert.*"
+      handler: "process_security_alert"
+      
+    - stream: "SECURITY_EVENTS"
+      subject: "security.incident.*"
+      handler: "process_incident"
+      
+    - stream: "CREDENTIAL_EVENTS"
+      subject: "creds.rotation.*"
+      handler: "process_rotation_event"
+      
+    - stream: "CREDENTIAL_EVENTS"
+      subject: "creds.access.*"
+      handler: "process_access_event"
+      
+  publications:
+    - stream: "SECURITY_EVENTS"
+      subject: "security.response.*"
+      description: "Human responses to security events"
+
+# =============================================================================
+# METRICS DASHBOARD
+# =============================================================================
+metrics_dashboard:
+  refresh_interval: "5m"
+  
+  panels:
+    exposure_status:
+      title: "36 Exposure Vectors"
+      type: "gauge"
+      query: "sovereignguard_exposures_mitigated"
+      thresholds:
+        - value: 0
+          color: "red"
+        - value: 18
+          color: "yellow"
+        - value: 30
+          color: "green"
+          
+    active_alerts:
+      title: "Active Alerts"
+      type: "stat"
+      query: "sovereignguard_alerts_active"
+      
+    mean_time_to_detect:
+      title: "MTTD"
+      type: "stat"
+      query: "sovereignguard_mttd_seconds"
+      target: 60
+      
+    mean_time_to_respond:
+      title: "MTTR"
+      type: "stat"
+      query: "sovereignguard_mttr_seconds"
+      target: 300
+      
+    vault_operations:
+      title: "Vault Operations (24h)"
+      type: "graph"
+      query: "rate(vault_core_handle_request_count[24h])"
+      
+    network_policy_denials:
+      title: "Network Policy Denials"
+      type: "graph"
+      query: "rate(networkpolicy_denials_total[1h])"
