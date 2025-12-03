@@ -117,9 +117,10 @@ core_modules:
     status: "Research Phase"
     config:
       enclave_type: "sgx"
-      position_limit_usd: 100
-      daily_loss_limit_usd: 50
-      require_human_approval_above_usd: 25
+      # Financial limits - override via environment variables for flexibility
+      position_limit_usd: "${SWARMGATE_POSITION_LIMIT:-100}"
+      daily_loss_limit_usd: "${SWARMGATE_DAILY_LOSS_LIMIT:-50}"
+      require_human_approval_above_usd: "${SWARMGATE_APPROVAL_THRESHOLD:-25}"
       emergency_stop_enabled: true
 
   # Module 4: Air-Gapped AI Inference

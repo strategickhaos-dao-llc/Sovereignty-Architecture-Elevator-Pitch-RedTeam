@@ -4,34 +4,24 @@
 # CRITICAL SECURITY: Protects financial trading credentials
 # Exposure Mitigation: #11 (Financial Arbitrage), #12 (Paycheck Interception),
 #                      #25 (Trading API Compromise), #30 (Algorithm Goes Rogue)
-# Principle: Highest security - MFA required for all financial secrets
+# Principle: Highest security for financial operations
+# NOTE: MFA/approval workflows implemented at application layer via Discord
+#       control interface since control_group requires Vault Enterprise.
 # =============================================================================
 
-# Trading API credentials (require MFA approval)
+# Trading API credentials
 path "secret/data/trading/*" {
   capabilities = ["read"]
-  # Control groups require approval from security team
-  control_group = {
-    factor "security-approval" {
-      identity {
-        group_names = ["security-team"]
-        approvals = 1
-      }
-    }
-  }
 }
 
-# Banking credentials (require MFA approval)
+# Banking credentials
 path "secret/data/banking/*" {
   capabilities = ["read"]
-  control_group = {
-    factor "security-approval" {
-      identity {
-        group_names = ["security-team"]
-        approvals = 1
-      }
-    }
-  }
+}
+
+# Position limits configuration
+path "secret/data/swarmgate/limits" {
+  capabilities = ["read"]
 }
 
 # Transaction signing (for trade verification)
@@ -41,11 +31,6 @@ path "transit/sign/swarmgate-signing" {
 
 path "transit/verify/swarmgate-signing" {
   capabilities = ["update"]
-}
-
-# Read position limits configuration
-path "secret/data/swarmgate/limits" {
-  capabilities = ["read"]
 }
 
 # Token self-management

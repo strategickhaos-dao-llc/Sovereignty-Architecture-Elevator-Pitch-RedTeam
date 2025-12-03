@@ -333,20 +333,51 @@ alerts:
 # APPROVAL WORKFLOW CONFIGURATION
 # =============================================================================
 approval_workflows:
-  trade_approval:
-    description: "Manual approval for trades above threshold"
+  # Tiered trade approval based on trade size
+  trade_approval_low:
+    description: "Auto-approve small trades (below threshold)"
+    trigger:
+      type: "trade_request"
+      conditions:
+        - field: "amount_usd"
+          operator: "<="
+          value: "${SWARMGATE_AUTO_APPROVE_LIMIT:-10}"
+    auto_approve: true
+    log_only: true
+    
+  trade_approval_medium:
+    description: "Single approver for medium trades"
     trigger:
       type: "trade_request"
       conditions:
         - field: "amount_usd"
           operator: ">"
-          value: 25
+          value: "${SWARMGATE_AUTO_APPROVE_LIMIT:-10}"
+        - field: "amount_usd"
+          operator: "<="
+          value: "${SWARMGATE_APPROVAL_THRESHOLD:-25}"
+    approvers:
+      required: 1
+      roles:
+        - "SECURITY_APPROVER"
+    timeout_minutes: 30
+    default_action: "deny"
+    notification:
+      channel: "approval_requests"
+      
+  trade_approval_high:
+    description: "Multi-approver for high-value trades"
+    trigger:
+      type: "trade_request"
+      conditions:
+        - field: "amount_usd"
+          operator: ">"
+          value: "${SWARMGATE_APPROVAL_THRESHOLD:-25}"
     approvers:
       required: 1
       roles:
         - "SECURITY_ADMIN"
-        - "SECURITY_APPROVER"
-    timeout_minutes: 30
+    timeout_minutes: 60
     default_action: "deny"
     notification:
       channel: "approval_requests"

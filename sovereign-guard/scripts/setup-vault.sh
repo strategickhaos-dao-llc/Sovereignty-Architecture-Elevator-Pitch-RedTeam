@@ -19,6 +19,7 @@ VAULT_ADDR="${VAULT_ADDR:-http://127.0.0.1:8200}"
 VAULT_DATA_DIR="${VAULT_DATA_DIR:-/var/lib/vault}"
 VAULT_CONFIG_DIR="${VAULT_CONFIG_DIR:-/etc/vault.d}"
 VAULT_LOG_DIR="${VAULT_LOG_DIR:-/var/log/vault}"
+VAULT_HOSTNAME="${VAULT_HOSTNAME:-vault.strategickhaos.local}"
 POLICIES_DIR="${SCRIPT_DIR}/../policies"
 
 # Colors for output
@@ -201,12 +202,12 @@ EOF
     mkdir -p "${VAULT_CONFIG_DIR}/tls"
     
     if [[ ! -f "${VAULT_CONFIG_DIR}/tls/vault.key" ]]; then
-        log_info "Generating TLS certificates..."
+        log_info "Generating TLS certificates for ${VAULT_HOSTNAME}..."
         openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
             -keyout "${VAULT_CONFIG_DIR}/tls/vault.key" \
             -out "${VAULT_CONFIG_DIR}/tls/vault.crt" \
-            -subj "/CN=vault.strategickhaos.local" \
-            -addext "subjectAltName=DNS:vault,DNS:vault.strategickhaos.local,IP:127.0.0.1"
+            -subj "/CN=${VAULT_HOSTNAME}" \
+            -addext "subjectAltName=DNS:vault,DNS:${VAULT_HOSTNAME},IP:127.0.0.1"
     fi
     
     chown -R vault:vault "${VAULT_CONFIG_DIR}"
@@ -582,16 +583,19 @@ EOF
     cat > "${POLICIES_DIR}/swarmgate.hcl" << 'EOF'
 # SovereignGuard SwarmGate Financial Policy
 # CRITICAL: This policy protects financial trading credentials
+# NOTE: Control groups require Vault Enterprise. For OSS, implement
+# approval workflow at application layer via Discord control interface.
 
 path "secret/data/trading/*" {
   capabilities = ["read"]
-  # Require MFA for trading secrets
-  required_parameters = ["mfa_approval"]
 }
 
 path "secret/data/banking/*" {
   capabilities = ["read"]
-  required_parameters = ["mfa_approval"]
+}
+
+path "secret/data/swarmgate/limits" {
+  capabilities = ["read"]
 }
 
 path "transit/sign/swarmgate-signing" {

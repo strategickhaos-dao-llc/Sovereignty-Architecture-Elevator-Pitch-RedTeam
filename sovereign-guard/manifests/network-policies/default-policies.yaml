@@ -193,15 +193,21 @@ spec:
         - protocol: TCP
           port: 8080
   egress:
-    # Allow trading API endpoints (NinjaTrader, Kraken)
-    # Note: IP ranges should be pinned to broker IPs in production
+    # Allow trading API endpoints
+    # PRODUCTION: Replace with specific broker IP ranges:
+    # - NinjaTrader: Configure based on your broker's IP ranges
+    # - Kraken: Configure based on api.kraken.com IP ranges
+    # For now, allowing HTTPS to external (except private ranges)
+    # TODO: Pin to specific broker FQDNs when using Cilium or similar
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
             except:
-              - 10.0.0.0/8
-              - 172.16.0.0/12
-              - 192.168.0.0/16
+              - 10.0.0.0/8       # Private Class A
+              - 172.16.0.0/12    # Private Class B
+              - 192.168.0.0/16   # Private Class C
+              - 127.0.0.0/8      # Loopback
+              - 169.254.0.0/16   # Link-local
       ports:
         - protocol: TCP
           port: 443
