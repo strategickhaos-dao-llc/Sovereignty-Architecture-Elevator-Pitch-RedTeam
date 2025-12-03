@@ -1,0 +1,12 @@
+-- Simple Hello World in StrategicKhaos
+
+print "Hello from StrategicKhaos!"
+
+let x = 40 + 2
+print x
+
+let greet = λ(name) {
+    print "Hello, " + name
+}
+
+greet("Emperor")
