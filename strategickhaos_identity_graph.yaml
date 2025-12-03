@@ -29,7 +29,7 @@ strategickhaos_identity_graph:
               purpose: "Sovereign AI architecture design / Legion OS development"
               status: active
 
-        - email: "<your>.com personal email"
+        - email: "[REDACTED_PERSONAL_EMAIL]"
           type: "personal Claude account"
           workspace:
             - name: "Strategickhaos"
@@ -144,7 +144,7 @@ strategickhaos_identity_graph:
         status: owned
         subdomains:
           - name: "swarm.strategickhaos.com"
-            status: "NXDOMAIN"
+            status: "pending_dns_setup"
             reason: "No A/AAAA/CNAME record created yet"
             next_steps:
               - "Deploy ingress or LB in GKE"
