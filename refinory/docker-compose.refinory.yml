@@ -102,7 +102,7 @@ services:
     restart: unless-stopped
 
   refinory-dashboard:
-    image: node:20-alpine
+    image: docker.io/node:20-alpine
     container_name: refinory-dashboard
     ports:
       - "3000:3000"
@@ -128,7 +128,7 @@ services:
 
   # Infrastructure Services
   postgres:
-    image: pgvector/pgvector:pg16
+    image: docker.io/pgvector/pgvector:pg16
     container_name: refinory-postgres
     environment:
       - POSTGRES_DB=refinory
@@ -151,7 +151,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:7.2-alpine
+    image: docker.io/redis:7.2-alpine
     container_name: refinory-redis
     command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
@@ -169,7 +169,7 @@ services:
     restart: unless-stopped
 
   qdrant:
-    image: qdrant/qdrant:v1.7.4
+    image: docker.io/qdrant/qdrant:v1.7.4
     container_name: refinory-qdrant
     ports:
       - "6333:6333"
@@ -185,7 +185,7 @@ services:
     restart: unless-stopped
 
   temporal:
-    image: temporalio/auto-setup:1.22
+    image: docker.io/temporalio/auto-setup:1.22
     container_name: refinory-temporal
     ports:
       - "7233:7233"
@@ -208,7 +208,7 @@ services:
 
   # Monitoring & Observability
   prometheus:
-    image: prom/prometheus:v2.48.1
+    image: docker.io/prom/prometheus:v2.48.1
     container_name: refinory-prometheus
     ports:
       - "9090:9090"
@@ -227,7 +227,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:10.2.3
+    image: docker.io/grafana/grafana:10.2.3
     container_name: refinory-grafana
     ports:
       - "3001:3000"
@@ -247,7 +247,7 @@ services:
 
   # Vector Database UI (optional)
   qdrant-web-ui:
-    image: qdrant/qdrant-web-ui:latest
+    image: docker.io/qdrant/qdrant-web-ui:latest
     container_name: refinory-qdrant-ui
     ports:
       - "3002:80"
@@ -262,7 +262,7 @@ services:
 
   # Log Aggregation
   loki:
-    image: grafana/loki:2.9.4
+    image: docker.io/grafana/loki:2.9.4
     container_name: refinory-loki
     ports:
       - "3100:3100"
@@ -274,7 +274,7 @@ services:
     restart: unless-stopped
 
   promtail:
-    image: grafana/promtail:2.9.4
+    image: docker.io/grafana/promtail:2.9.4
     container_name: refinory-promtail
     volumes:
       - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
