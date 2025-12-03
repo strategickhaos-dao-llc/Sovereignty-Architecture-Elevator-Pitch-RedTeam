@@ -280,6 +280,19 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🧠 Cognitive Development & Academic Resources
+
+**[Bloom's Taxonomy Documentation Suite](BLOOMS_TAXONOMY_INDEX.md)** - Comprehensive academic framework for understanding and demonstrating cognitive capabilities at the highest tiers (Analyze, Evaluate, Create) in Computer Science and Software Engineering.
+
+This suite includes:
+- **Academic Framework**: Core concepts and assessment criteria
+- **Portfolio Materials**: Ready for SNHU, graduate programs, or employers
+- **Professional Tools**: LinkedIn profiles, resumes, and career materials
+- **Faculty Resources**: Recommendation templates and assessment guides
+- **Research Version**: Publication-ready academic documentation
+
+Perfect for students developing portfolios, faculty writing recommendations, or anyone needing to articulate advanced cognitive capabilities in CS/SE contexts.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
