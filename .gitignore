@@ -35,3 +35,20 @@ target/
 
 # Workspace data
 workspace/
+
+# Honeypot system - sensitive data
+logs/
+honeypot_*.log
+*.log
+invite-html/*.zip
+invite-html/checksums.txt
+honeypot-keys/*.pub
+honeypot-keys/*.key
+honeypot-keys/authorized_keys
+.htpasswd
+.env.honeypot
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

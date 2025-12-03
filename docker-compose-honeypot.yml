@@ -1,0 +1,60 @@
+# Honeypot Security System - Invite-Only Access with Leak Detection
+# This compose file deploys a controlled honeypot + sanitized sandbox for OpSec
+
+networks:
+  honeypot_network:
+    driver: bridge
+
+volumes:
+  honeypot_logs:
+  nginx_logs:
+
+services:
+  # 1. Invite-only landing page + real download (nginx with basic auth + secret URL)
+  invite-gate:
+    image: nginx:alpine
+    container_name: invite-only-gate
+    ports:
+      - "8080:80"   # change to 80/443 if you put Cloudflare/Tailscale in front
+    volumes:
+      - ./invite-html:/usr/share/nginx/html:ro
+      - ./nginx-conf:/etc/nginx/conf.d:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - honeypot_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 2. Honeypot Git server (looks exactly like the real thing)
+  honeypot-git:
+    image: jkarlos/git-server-docker
+    container_name: honeypot-git
+    ports:
+      - "2222:22"
+    volumes:
+      - ./honeypot-repos:/git-server/repos
+      - ./honeypot-keys:/git-server/keys
+    environment:
+      - SSH_PORT=22
+    networks:
+      - honeypot_network
+    restart: unless-stopped
+
+  # 3. Silent logger that records every visitor + every clone
+  visitor-logger:
+    image: python:3.11-slim
+    container_name: snoop-detector
+    volumes:
+      - honeypot_logs:/logs
+      - ./logger-script:/app
+      - nginx_logs:/var/log/nginx:ro
+    command: python /app/log_watcher.py
+    networks:
+      - honeypot_network
+    restart: unless-stopped
+    depends_on:
+      - invite-gate
