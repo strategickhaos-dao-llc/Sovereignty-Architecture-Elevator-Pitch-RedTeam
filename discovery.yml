@@ -4,6 +4,15 @@ org:
     owner: "Domenic Garza"
     slack_or_discord_handle: null   # e.g. "Dom_010101#1234"
   compliance: ["none"]              # soc2, hipaa, iso27001, etc.
+  achievements:
+    garza1_launch: "2025-11-24T13:11:00-08:00"  # The haiku that broke the internet
+    viral_validation: "100K+ impressions, #3 trending worldwide"
+    tech_luminaries: ["John Carmack", "George Hotz", "Balaji Srinivasan"]
+    valoryield_mainnet: "LIVE on Solana"
+    first_donation: "$7.77 to St. Jude"
+    model_release: "https://huggingface.co/Strategickhaos/Garza-1-70B-NegativeBalance"
+    provisional_patent_4: "Filed 2025-11-24T23:47:00-08:00"
+    200_laws_status: "Being etched in steel, Baton Rouge, LA"
 
 discord:
   guild_id: null                    # real guild/server ID here
