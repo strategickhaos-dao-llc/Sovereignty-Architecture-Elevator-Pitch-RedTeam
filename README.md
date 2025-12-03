@@ -280,6 +280,15 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🗺️ Evolution Roadmap
+
+Want to see where we're headed? Check out our **[Evolution Roadmap](EVOLUTION_ROADMAP.md)** - a realistic 6-12 month development plan focusing on:
+- **Phase 1 (30 days)**: Immediate technical wins with existing infrastructure
+- **Phase 2 (2-3 months)**: Complete sovereignty stack replacing cloud dependencies
+- **Phase 3 (4-6 months)**: Commercial products and revenue generation
+
+The roadmap filters aspirational goals into actionable items with clear ROI, proving both technical depth and commercial viability.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
