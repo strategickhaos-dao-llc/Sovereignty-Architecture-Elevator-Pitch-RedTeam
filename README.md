@@ -280,6 +280,17 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 📚 Arsenal Bibliography
+
+A comprehensive research library of 100 foundational papers for sovereign AI systems:
+
+- **[Arsenal Bibliography](ARSENAL_BIBLIOGRAPHY.md)** - Full annotated bibliography
+- **Categories**: Computer Science, Cryptography, Distributed Systems, Law & Governance, Neuroscience, Mathematics, Open-Source, Hardware, Biology, and more
+- **Quick Download**: `xargs -n 1 curl -L -s -O < arsenal.txt`
+- **RAG Integration**: Use `arsenal-metadata.jsonl` for embeddings and vector databases
+
+All resources are freely accessible (no paywalls) from `.gov`, `.org`, `.edu`, arXiv, or open-access sources.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
