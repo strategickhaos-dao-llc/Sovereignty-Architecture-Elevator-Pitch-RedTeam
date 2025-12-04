@@ -1,0 +1,75 @@
+name: Email Automation Triggered by Zapier
+
+on:
+  repository_dispatch:
+    types: [send_email, process_intelligence]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Email action to perform'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - send_email
+          - process_intelligence
+          - test
+
+permissions:
+  contents: read
+
+jobs:
+  handle_email_action:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Process Email Action
+        id: process
+        run: |
+          echo "Action: ${{ github.event.action || github.event.inputs.action }}"
+          echo "Payload: ${{ toJson(github.event.client_payload) }}"
+          
+          # Log the event for auditing
+          echo "$(date -u +"%Y-%m-%dT%H:%M:%SZ") - Email action: ${{ github.event.action || github.event.inputs.action }}" >> /tmp/email_audit.log
+      
+      - name: Send Email via API
+        if: github.event.action == 'send_email' || github.event.inputs.action == 'send_email'
+        env:
+          EMAIL_SERVICE_URL: ${{ secrets.EMAIL_SERVICE_URL }}
+          EMAIL_API_KEY: ${{ secrets.EMAIL_API_KEY }}
+        run: |
+          # Send email through the deployed email service
+          if [ -n "$EMAIL_SERVICE_URL" ]; then
+            curl -X POST "${EMAIL_SERVICE_URL}/api/send" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer ${EMAIL_API_KEY}" \
+              -d '${{ toJson(github.event.client_payload) }}' \
+              --fail --silent --show-error
+          else
+            echo "Email service URL not configured - skipping send"
+          fi
+      
+      - name: Process Intelligence
+        if: github.event.action == 'process_intelligence' || github.event.inputs.action == 'process_intelligence'
+        env:
+          EMAIL_SERVICE_URL: ${{ secrets.EMAIL_SERVICE_URL }}
+          EMAIL_API_KEY: ${{ secrets.EMAIL_API_KEY }}
+        run: |
+          # Process intelligence through the email service
+          if [ -n "$EMAIL_SERVICE_URL" ]; then
+            curl -X POST "${EMAIL_SERVICE_URL}/webhook/inbound" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer ${EMAIL_API_KEY}" \
+              -d '${{ toJson(github.event.client_payload) }}' \
+              --fail --silent --show-error
+          else
+            echo "Email service URL not configured - skipping intelligence processing"
+          fi
+      
+      - name: Test Action
+        if: github.event.inputs.action == 'test'
+        run: |
+          echo "🧪 Test action executed successfully"
+          echo "Email automation workflow is operational"

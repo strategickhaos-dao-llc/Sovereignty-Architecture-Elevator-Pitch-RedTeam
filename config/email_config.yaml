@@ -1,0 +1,84 @@
+# StrategicKhaos Email Service Configuration
+# Sovereign email infrastructure settings
+
+service:
+  name: "StrategicKhaos Email Intelligence"
+  version: "1.0.0"
+  environment: "production"
+
+# Email routing rules
+routing:
+  default_handler: "standard"
+  
+  rules:
+    - pattern: "*@snhu.edu"
+      category: "academic"
+      priority: "high"
+      requires_approval: true
+      
+    - pattern: "*@github.com"
+      category: "business"
+      priority: "high"
+      requires_approval: false
+      
+    - pattern: "*@strategickhaos.net"
+      category: "internal"
+      priority: "medium"
+      requires_approval: false
+
+# Grok AI settings
+grok:
+  model: "grok-beta"
+  temperature: 0.3
+  max_tokens: 500
+  timeout_seconds: 30
+  
+  # Categories for classification
+  categories:
+    - academic
+    - business
+    - personal
+    - spam
+    - internal
+
+# SendGrid settings
+sendgrid:
+  default_from: "flamekeeper@strategickhaos.net"
+  reply_to: "garza.domenic101@gmail.com"
+  
+  templates:
+    approval_request: "d-your-template-id"
+    notification: "d-your-notification-template"
+
+# Zapier integration
+zapier:
+  timeout_seconds: 30
+  retry_count: 3
+  
+  # Event types to send to Zapier
+  events:
+    - email_received
+    - email_analyzed
+    - approval_required
+    - approval_response
+
+# Queen App integration
+queen_app:
+  endpoint: "/api/intelligence"
+  timeout_seconds: 30
+  
+  # Intelligence types to forward
+  forward_categories:
+    - academic
+    - business
+
+# Security settings
+security:
+  rate_limit:
+    requests_per_minute: 60
+    burst: 10
+  
+  allowed_origins:
+    - "https://strategickhaos.net"
+    - "https://github.com"
+    - "https://zapier.com"

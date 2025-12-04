@@ -1,0 +1,17 @@
+# StrategicKhaos Email Service Dependencies
+# Python requirements for sovereign email infrastructure
+
+# Web framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# HTTP client
+httpx>=0.25.0
+
+# Configuration
+pyyaml>=6.0.1
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
