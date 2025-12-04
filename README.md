@@ -280,6 +280,35 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## ⚖️ SwarmGate (7% Eternal Charity Engine)
+
+SwarmGate v1.0 is the **on-chain 7% charity sink** wired into the Strategickhaos sovereignty stack.
+
+- **93% → Operations (ops wallet / treasury)**
+- **7% → Irrevocable Charity Vault (MerkleDistributor)**
+
+The split is enforced by immutable smart contracts:
+
+- `CharitySplitter.sol` – Receives ETH, immediately forwards 93% to ops and 7% to the charity vault.
+- `MerkleDistributor.sol` – Holds the 7% and releases funds only to approved beneficiaries with a valid Merkle proof.
+
+Key artifacts:
+
+- **Contracts**: [`contracts/`](./contracts/)
+- **Deployment scripts**: [`scripts/deploy.js`](./scripts/deploy.js), [`scripts/generate-merkle-root.js`](./scripts/generate-merkle-root.js)
+- **Status**: [`SWARMGATE_v1.0_STATUS.yaml`](./SWARMGATE_v1.0_STATUS.yaml) – governance + hashes + roadmap
+- **Provenance**: [`PROVENANCE.md`](./PROVENANCE.md) – sealing ceremony and checksums
+
+### Why 7%?
+
+Strategickhaos and ValorYield Engine commit **7% of all routed funds** to perpetual philanthropy:
+
+- St. Jude Children's Research Hospital  
+- Médecins Sans Frontières (Doctors Without Borders)  
+- Veteran support programs  
+
+SwarmGate makes that commitment **mathematically irreversible**: once funds hit the splitter, 7% is forever locked on the path to those beneficiaries.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file

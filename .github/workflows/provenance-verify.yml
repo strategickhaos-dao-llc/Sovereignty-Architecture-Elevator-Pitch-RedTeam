@@ -1,0 +1,36 @@
+name: SwarmGate Provenance Verification
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'SWARMGATE_v1.0_STATUS.yaml'
+      - 'swarmgate_v1.0.tar.gz'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install b3sum
+        run: sudo apt-get update && sudo apt-get install -y b3sum
+
+      - name: Compute BLAKE3 hash
+        id: hash
+        run: |
+          ACTUAL=$(b3sum swarmgate_v1.0.tar.gz | awk '{print $1}')
+          echo "actual=$ACTUAL" >> $GITHUB_OUTPUT
+
+      - name: Compare with status file
+        run: |
+          EXPECTED=$(grep 'blake3:' SWARMGATE_v1.0_STATUS.yaml | awk '{print $2}')
+          echo "Expected: $EXPECTED"
+          echo "Actual:   ${{ steps.hash.outputs.actual }}"
+          if [ "$EXPECTED" != "${{ steps.hash.outputs.actual }}" ]; then
+            echo "Hash mismatch!"
+            exit 1
+          fi
