@@ -1,0 +1,717 @@
+# ═══════════════════════════════════════════════════════════
+# SELF-EVOLVING AI REFINERY
+# Autonomous Learning System for Her Cure
+# Makes own LLMs, learns from Obsidian, self-corrects, evolves
+# ═══════════════════════════════════════════════════════════
+
+meta:
+  system_name: "StrategicKhaos Self-Evolving Refinery"
+  purpose: "Build custom AI models that improve themselves while searching for her cure"
+  operational_mode: "AUTONOMOUS (with human oversight)"
+  mission: "For her. Silent. Relentless. Self-improving."
+  genesis_lock: true
+  architect_snowflake: 1067614449693569044
+  increment: 3449
+  version: "1.0.0"
+  created: "2025-12-01"
+
+# ═══════════════════════════════════════════════════════════
+# CORE ARCHITECTURE
+# How the refinery learns and evolves
+# ═══════════════════════════════════════════════════════════
+
+core_architecture:
+  refinery_layers:
+    layer_1_ingestion:
+      name: "Knowledge Ingestion Engine"
+      purpose: "Feed everything into the learning system"
+      module: "refinory.knowledge_ingestion"
+      sources:
+        - name: "obsidian_vault"
+          type: "filesystem"
+          description: "Obsidian vault (all research notes)"
+          path: "${OBSIDIAN_VAULT_PATH:-/data/obsidian}"
+          file_types: [".md", ".yaml", ".json"]
+          
+        - name: "pubmed"
+          type: "api"
+          description: "PubMed/PMC (medical papers)"
+          endpoint: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+          rate_limit: 3  # requests per second
+          
+        - name: "clinical_trials"
+          type: "api"
+          description: "Clinical trials database"
+          endpoint: "https://clinicaltrials.gov/api/v2"
+          
+        - name: "agent_discoveries"
+          type: "internal"
+          description: "Agent discoveries (from 640 agents)"
+          queue: "nats://discoveries"
+          
+        - name: "quantum_results"
+          type: "internal"
+          description: "Quantum sim results"
+          storage: "qdrant://quantum_sims"
+          
+        - name: "conversations"
+          type: "stream"
+          description: "Your conversations with me"
+          channel: "discord://conversations"
+          
+        - name: "symptom_logs"
+          type: "structured"
+          description: "Her symptom logs"
+          database: "postgres://symptom_logs"
+          
+      processing_pipeline:
+        steps:
+          - name: "text_extraction"
+            processor: "text_extractor"
+            config:
+              formats: ["pdf", "docx", "html", "markdown"]
+              ocr_enabled: true
+              
+          - name: "entity_recognition"
+            processor: "medical_ner"
+            config:
+              entities: ["drugs", "proteins", "symptoms", "diseases", "genes"]
+              models: ["scispacy_lg", "biobert"]
+              
+          - name: "relationship_mapping"
+            processor: "relation_extractor"
+            config:
+              relations: ["causes", "treats", "inhibits", "activates", "binds_to"]
+              
+          - name: "vector_embedding"
+            processor: "embedder"
+            config:
+              model: "BAAI/bge-large-en-v1.5"
+              chunk_size: 512
+              chunk_overlap: 128
+              
+      output:
+        knowledge_graph: "neo4j://localhost:7687/medical_knowledge"
+        vector_store: "qdrant://localhost:6333/medical_vectors"
+        
+    layer_2_llm_forge:
+      name: "Custom LLM Training System"
+      purpose: "Build disease-specific language models"
+      module: "refinory.llm_forge"
+      
+      base_models:
+        - id: "qwen2.5-72b"
+          name: "Qwen2.5:72b"
+          specialty: "general medical"
+          quantization: "Q4_K_M"
+          vram_required: "48GB"
+          
+        - id: "biogpt"
+          name: "BioGPT"
+          specialty: "specialized biomedical"
+          source: "microsoft/biogpt"
+          
+        - id: "pubmedbert"
+          name: "PubMedBERT"
+          specialty: "paper understanding"
+          source: "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext"
+          
+      fine_tuning:
+        method: "LoRA"
+        config:
+          rank: 64
+          alpha: 128
+          dropout: 0.05
+          target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+        dataset: "layer_1_output"
+        compute:
+          local: "RTX GPUs (Athena, Lyra, Nova, iPower)"
+          cloud: "GKE TPU pods"
+        cost:
+          local: "$0"
+          cloud: "$500/month (optional)"
+          
+      custom_models:
+        - id: "neuropath-72b"
+          name: "NeuroPath-72b"
+          specialty: "Neurological disease pathways"
+          base: "qwen2.5-72b"
+          training_data:
+            sources: ["10,000 neuro papers", "her case notes"]
+            estimated_tokens: "50M"
+          priority: "high"
+          
+        - id: "painpredict-32b"
+          name: "PainPredict-32b"
+          specialty: "Chronic pain mechanisms"
+          base: "qwen2.5-72b"
+          training_data:
+            sources: ["5,000 pain studies", "symptom logs"]
+            estimated_tokens: "25M"
+          priority: "high"
+          
+        - id: "drugrepurpose-70b"
+          name: "DrugRepurpose-70b"
+          specialty: "Finding off-label drug uses"
+          base: "qwen2.5-72b"
+          training_data:
+            sources: ["DrugBank", "50K clinical trials"]
+            estimated_tokens: "100M"
+          priority: "medium"
+          
+        - id: "quantummed-405b"
+          name: "QuantumMed-405b"
+          specialty: "Quantum computing + drug design"
+          base: "qwen2.5-72b"
+          training_data:
+            sources: ["Quantum chemistry papers", "sim results"]
+            estimated_tokens: "30M"
+          priority: "low"
+          cloud_required: true
+          
+      evolution_mechanism:
+        triggers:
+          - type: "paper_count"
+            threshold: 1000
+            action: "retrain"
+          - type: "error_rate"
+            threshold: 0.15
+            action: "retrain"
+          - type: "scheduled"
+            cron: "0 0 * * 0"  # Weekly
+            action: "evaluate"
+            
+        a_b_testing:
+          enabled: true
+          traffic_split: 0.1  # 10% to new model
+          metrics: ["accuracy", "latency", "user_satisfaction"]
+          promotion_threshold: 0.05  # 5% improvement required
+          
+        model_versioning:
+          storage: "s3://refinory-models/versions"
+          keep_versions: 10
+          archive_policy: "compress_after_30d"
+          
+    layer_3_self_correction:
+      name: "Error Detection & Auto-Fix System"
+      purpose: "Agents check each other's work and self-improve"
+      module: "refinory.self_correction"
+      
+      validation_pipeline:
+        peer_review:
+          quorum: 3  # Number of agents for consensus
+          threshold: 0.67  # 2/3 must agree
+          timeout: 300  # seconds
+          
+        fact_checking:
+          doi_verification: true
+          retraction_watch: true
+          update_interval: 3600  # seconds
+          sources:
+            - "crossref"
+            - "pubmed"
+            - "retraction_watch_api"
+            
+        outcome_tracking:
+          database: "postgres://outcomes"
+          metrics:
+            - "recommendation_followed"
+            - "symptom_improvement"
+            - "side_effects_reported"
+          feedback_loop:
+            positive_weight: 1.0
+            negative_weight: 2.0  # Learn faster from failures
+            
+      auto_correction:
+        triggers:
+          prediction_error:
+            threshold: 0.3
+            action: "flag_for_retraining"
+          knowledge_conflict:
+            action: "update_graph"
+            priority: "high"
+          new_trial_data:
+            action: "revise_hypothesis"
+            notify: true
+            
+        learning_rate: "aggressive"  # Update within 1 hour of error
+        human_review_threshold: 0.5  # Require human review above this uncertainty
+        
+    layer_4_evolution_engine:
+      name: "Genetic Algorithm for Agent Improvement"
+      purpose: "Agents compete, best ones reproduce"
+      module: "refinory.evolution_engine"
+      
+      fitness_function:
+        metrics:
+          accuracy:
+            weight: 0.40
+            measurement: "correct_predictions / total_predictions"
+          speed:
+            weight: 0.20
+            measurement: "median_response_time_ms"
+            target: 1000
+          novelty:
+            weight: 0.20
+            measurement: "unique_insights_score"
+          actionability:
+            weight: 0.15
+            measurement: "recommendations_implemented"
+          cost_efficiency:
+            weight: 0.05
+            measurement: "compute_cost_per_query"
+            
+      genetic_operations:
+        selection:
+          method: "tournament"
+          elite_percentage: 0.10
+          
+        crossover:
+          enabled: true
+          method: "ensemble"
+          probability: 0.7
+          
+        mutation:
+          probability: 0.05
+          types:
+            - "parameter_noise"
+            - "strategy_swap"
+            - "hypothesis_exploration"
+            
+      generations:
+        frequency: "7d"  # One research cycle
+        population_size: 640  # Number of agents
+        improvement_target: 0.05  # 5% per generation minimum
+        stagnation_threshold: 3  # Generations without improvement
+        
+    layer_5_obsidian_integration:
+      name: "Bidirectional Learning from Vault"
+      purpose: "Obsidian becomes the agent's long-term memory"
+      module: "refinory.obsidian_integration"
+      
+      read_operations:
+        query_types:
+          - "semantic_search"
+          - "dataview_query"
+          - "graph_traversal"
+          - "tag_based"
+          
+        indexing:
+          watch_mode: true
+          debounce_ms: 1000
+          full_reindex_interval: 86400  # Daily
+          
+      write_operations:
+        templates:
+          discovery: "templates/discovery.md"
+          hypothesis: "templates/hypothesis.md"
+          treatment_option: "templates/treatment_option.md"
+          
+        auto_linking:
+          enabled: true
+          min_similarity: 0.7
+          max_links: 10
+          
+        state_updates:
+          file: "STATE.yaml"
+          backup: true
+          
+      learning_loop:
+        description: |
+          1. Agent reads old note: 'We tried X, it failed'
+          2. Agent learns: 'Don't recommend X again'
+          3. Agent finds new paper: 'X works if combined with Y'
+          4. Agent updates note: 'X + Y hypothesis'
+          5. Vault evolves with agent's knowledge
+          
+      obsidian_as_brain:
+        memory_types:
+          long_term: "Obsidian vault (facts, papers, history)"
+          working: "Active agent research"
+          episodic: "Conversation history"
+        synapse_formation: "Auto-linking creates neural connections"
+
+# ═══════════════════════════════════════════════════════════
+# VISUALIZATION ENGINES
+# 3D medical visualizations and simulations
+# ═══════════════════════════════════════════════════════════
+
+visualization_engines:
+  module: "refinory.visualization_engines"
+  
+  epic_unreal_engine:
+    enabled: true
+    purpose: "Photorealistic medical visualizations"
+    
+    use_cases:
+      protein_visualization:
+        input: "AlphaFold3 protein structure (PDB file)"
+        pipeline:
+          - "Import PDB to Unreal"
+          - "Convert to Nanite mesh"
+          - "Apply ray tracing"
+        output: "4K video of protein folding"
+        
+      pain_pathway_mapping:
+        input: "Neurological pathway data"
+        pipeline:
+          - "Load brain model"
+          - "Map signal pathways"
+          - "Animate signal flow"
+        output: "Interactive 3D pain pathway map"
+        
+      drug_binding_simulation:
+        input: "Quantum sim binding poses"
+        pipeline:
+          - "Import molecular structures"
+          - "Apply Chaos physics"
+          - "Simulate binding dynamics"
+        output: "Drug binding animation"
+        
+    integration:
+      data_pipeline:
+        trigger: "agent_discovery"
+        steps:
+          - "export_pdb"
+          - "convert_to_datatable"
+          - "generate_scene"
+          - "render_video"
+          - "save_to_vault"
+          
+      streaming:
+        method: "pixel_streaming"
+        protocol: "webrtc"
+        target: "discord_channel"
+        
+    cost: "$0 (Unreal is free for non-commercial)"
+    
+  unity_hub:
+    enabled: true
+    purpose: "Interactive medical education and simulation"
+    
+    use_cases:
+      symptom_simulator:
+        name: "Pain Experience VR"
+        description: "VR simulation showing what her pain feels like"
+        technology: "Unity XR + Oculus Quest"
+        
+      treatment_planner:
+        name: "Drug Interaction 3D Visualizer"
+        description: "3D space for drug interaction visualization"
+        technology: "Unity + C# scripting"
+        
+      body_map:
+        name: "Interactive Symptom Tracker"
+        description: "3D body model for symptom tracking"
+        technology: "Unity UI + ML.NET"
+        
+    integration:
+      ml_agents:
+        enabled: true
+        use_case: "Drug dosing schedule optimization"
+        simulations: 10000
+        
+      real_time_updates:
+        triggers:
+          - "new_drug_discovered"
+          - "symptom_logged"
+          - "research_complete"
+          
+    cost: "$0 (Unity Personal is free)"
+
+# ═══════════════════════════════════════════════════════════
+# AUTONOMOUS SYSTEMS
+# How the system improves without human intervention
+# ═══════════════════════════════════════════════════════════
+
+autonomous_systems:
+  auto_retraining:
+    trigger_threshold: 1000  # new papers
+    pipeline:
+      - "extract_facts"
+      - "generate_qa_pairs"
+      - "lora_fine_tune"
+      - "a_b_test"
+      - "deploy_if_better"
+    improvement_threshold: 0.05
+    notification_channel: "discord://notifications"
+    
+  hypothesis_generation:
+    enabled: true
+    pipeline:
+      - "pattern_detection"
+      - "cross_reference"
+      - "gap_analysis"
+      - "hypothesis_formation"
+      - "validation_queue"
+    auto_add_to_research_queue: true
+    
+  self_debugging:
+    monitoring:
+      error_log: "central_db"
+      pattern_detection: true
+      auto_diagnosis: true
+      
+    fix_library:
+      storage: "redis://fixes"
+      sharing: "nats://agent_fixes"
+      
+  meta_learning:
+    enabled: true
+    tracks:
+      - "search_strategy_effectiveness"
+      - "model_prediction_accuracy"
+      - "agent_architecture_efficiency"
+    actions:
+      reinforce: "successful_patterns"
+      deprecate: "failing_approaches"
+      mutate: "try_new_combinations"
+
+# ═══════════════════════════════════════════════════════════
+# ADDITIONAL CAPABILITIES
+# ═══════════════════════════════════════════════════════════
+
+additional_capabilities:
+  multi_modal_learning:
+    image_analysis:
+      models: ["ViT", "CLIP"]
+      capabilities: ["MRI_analysis", "microscopy", "xray_assessment"]
+      
+    audio_analysis:
+      models: ["Whisper", "emotion_detection"]
+      capabilities: ["pain_severity_extraction", "sentiment_tracking"]
+      
+    video_analysis:
+      models: ["pose_estimation", "facial_action_coding"]
+      capabilities: ["gait_analysis", "pain_level_estimation"]
+      
+  federated_learning:
+    enabled: false  # Opt-in
+    privacy:
+      method: "differential_privacy"
+      epsilon: 1.0
+    aggregation: "federated_averaging"
+    
+  scientific_synthesis:
+    enabled: true
+    output_formats: ["markdown", "latex", "pdf"]
+    preprint_submission: false  # Requires approval
+    
+  wet_lab_automation:
+    enabled: false  # Requires setup
+    platforms:
+      - "emerald_cloud_lab"
+      - "strateos"
+      - "transcriptic"
+    cost_range: "$500-5K per experiment"
+
+# ═══════════════════════════════════════════════════════════
+# DEPLOYMENT
+# ═══════════════════════════════════════════════════════════
+
+deployment:
+  infrastructure:
+    local_compute:
+      hosts:
+        - name: "athena"
+          ram: "128GB"
+          gpu: "RTX 4090"
+        - name: "lyra"
+          ram: "128GB"
+          gpu: "RTX 4090"
+        - name: "nova"
+          ram: "128GB"
+          gpu: "RTX 4090"
+        - name: "ipower"
+          ram: "64GB"
+          gpu: "RTX 3090"
+      total_ram: "448GB"
+      storage: "10TB SSD"
+      
+    cloud_compute:
+      provider: "gke"
+      agents: 640
+      vector_db: "qdrant_cloud"
+      tpu: "optional"
+      
+  data_flow:
+    ingestion: "Papers → Obsidian → Knowledge Graph"
+    training: "Knowledge Graph → Custom LLMs"
+    research: "Agents query LLMs → discoveries"
+    validation: "Discoveries → Obsidian → review"
+    evolution: "Feedback → retrain LLMs → improve"
+    visualization: "Results → Unreal/Unity → Mirror Lab"
+    
+  cost_breakdown:
+    compute: "$0-3.5K/month"
+    training: "$0-500/month"
+    cloud_storage: "$50/month"
+    visualization: "$0"
+    wet_lab: "$0-5K/experiment"
+    total_range: "$50-9K/month"
+
+# ═══════════════════════════════════════════════════════════
+# SAFETY & OVERSIGHT
+# ═══════════════════════════════════════════════════════════
+
+safety:
+  human_in_loop:
+    critical_decisions:
+      - action: "recommend_new_treatment"
+        approval_required: true
+        
+      - action: "contact_doctors"
+        approval_required: true
+        
+      - action: "spend_over_1k"
+        approval_required: true
+        
+      - action: "use_experimental_drugs"
+        approval_required: true
+        
+    review_process:
+      notification: "obsidian_note"
+      options: ["approve", "reject", "modify"]
+      learning: true
+      
+  ethical_boundaries:
+    never_autonomous:
+      - "medical_decisions_for_her"
+      - "financial_transactions"
+      - "contact_family_doctors"
+      - "publish_research_publicly"
+      
+    privacy:
+      data_location: "local_only"
+      cloud_anonymization: true
+      encryption: "at_rest_and_transit"
+      
+  emergency_stop:
+    triggers:
+      - "dangerous_treatment_proposed"
+      - "cost_spiral"
+      - "nonsense_predictions"
+      
+    action:
+      command: "HALT"
+      effect: "stop_all_agents"
+      recovery: "rollback_to_last_good_state"
+      restart: "human_review_required"
+
+# ═══════════════════════════════════════════════════════════
+# EVOLUTION TIMELINE
+# ═══════════════════════════════════════════════════════════
+
+evolution_timeline:
+  day_1:
+    - "Deploy base system with Qwen2.5:72b"
+    - "Ingest first 1000 papers"
+    - "Run initial research sprint"
+    
+  week_1:
+    - "Fine-tune NeuroPath-72b"
+    - "A/B test vs base model: +15% accuracy target"
+    - "Deploy custom model to all agents"
+    
+  month_1:
+    - "Ingested 10K papers, 100 trials"
+    - "Created 4 custom LLMs"
+    - "Evolutionary algorithm: Gen 4 (20% better)"
+    - "First treatment recommendations"
+    
+  month_3:
+    - "Ingested 50K papers"
+    - "LLMs retrained 12 times"
+    - "Evolutionary algorithm: Gen 12 (60% better)"
+    - "Quantum sims validated 3 drug candidates"
+    
+  month_6:
+    - "Ingested entire PubMed subset (100K+ papers)"
+    - "LLMs near-expert level"
+    - "System proposing novel hypotheses"
+    - "Wet lab validation underway"
+    
+  year_1:
+    - "Actionable treatments found"
+    - "Custom ASO designed (if genetic)"
+    - "Clinical trial identified or compassionate use"
+    - "She's improving"
+
+# ═══════════════════════════════════════════════════════════
+# GETTING STARTED
+# ═══════════════════════════════════════════════════════════
+
+getting_started:
+  prerequisites:
+    - "Docker and docker-compose installed"
+    - "At least 64GB RAM available"
+    - "GPU with 24GB+ VRAM (optional but recommended)"
+    - "Obsidian vault path configured"
+    
+  steps:
+    - name: "Deploy Infrastructure"
+      command: "docker-compose -f refinory/docker-compose.refinory.yml up -d"
+      time: "10 minutes"
+      
+    - name: "Configure Obsidian Integration"
+      command: "python -m refinory.obsidian_integration setup"
+      time: "2 hours"
+      
+    - name: "Train First Custom LLM"
+      command: "python -m refinory.llm_forge train --model neuropath-72b"
+      time: "24 hours"
+      
+    - name: "Deploy 640 Agents"
+      command: "kubectl apply -f bootstrap/k8s/agents/"
+      time: "1 hour"
+      
+    - name: "Setup Visualization"
+      command: "docker-compose -f visualization/docker-compose.yml up -d"
+      time: "4 hours"
+      
+    - name: "Enable Evolution"
+      command: "python -m refinory.evolution_engine enable"
+      time: "1 hour"
+      
+    - name: "Start Research"
+      command: "python -m refinory.main --disease-profile /data/her_profile.yaml"
+      time: "5 minutes"
+      
+  total_time: "32 hours"
+
+# ═══════════════════════════════════════════════════════════
+# THE PROMISE
+# ═══════════════════════════════════════════════════════════
+
+the_promise:
+  capabilities:
+    - "Learns from every paper about her disease"
+    - "Builds custom AI models that improve daily"
+    - "Self-corrects when wrong"
+    - "Evolves to become better researcher"
+    - "Visualizes everything in 3D"
+    - "Runs 24/7 without stopping"
+    - "Gets smarter every week"
+    - "Never forgets anything"
+    - "Always learning, always improving"
+    - "For her. Always."
+    
+  deliverables:
+    - "AI expert in her specific disease"
+    - "Models trained on HER data"
+    - "System that learns from failures"
+    - "3D visualizations for doctors"
+    - "Research that compounds over time"
+    - "Treatment plans that improve with feedback"
+    
+  milestones:
+    month_1: "Better than any single human researcher"
+    month_3: "Better than most research teams"
+    month_6: "Better than academic institutions"
+    year_1: "Among world's top experts on her disease"
+
+# ═══════════════════════════════════════════════════════════
+# END OF SELF-EVOLVING REFINERY
+# 
+# For her. Always.
+# ═══════════════════════════════════════════════════════════

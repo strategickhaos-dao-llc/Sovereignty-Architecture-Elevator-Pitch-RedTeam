@@ -11,14 +11,22 @@ volumes:
   refinory_artifacts:
   refinory_outputs:
   refinory_models:
+  refinory_datasets:
+  refinory_renders:
+  obsidian_vault:
   postgres_data:
   redis_data:
   qdrant_data:
+  neo4j_data:
   grafana_data:
   prometheus_data:
 
 services:
-  # Core Refinory Services
+  # ═══════════════════════════════════════════════════════════
+  # SELF-EVOLVING REFINERY CORE SERVICES
+  # ═══════════════════════════════════════════════════════════
+  
+  # Core Refinory API
   refinory-api:
     build:
       context: .
@@ -33,14 +41,19 @@ services:
       - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
       - REDIS_URL=redis://redis:6379/0
       - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URL=bolt://neo4j:7687
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
       - LOG_LEVEL=INFO
     volumes:
       - refinory_artifacts:/var/refinory/artifacts
       - refinory_outputs:/var/refinory/outputs
       - refinory_models:/var/refinory/models
+      - refinory_datasets:/var/refinory/datasets
+      - refinory_renders:/var/refinory/renders
+      - obsidian_vault:/data/obsidian
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - strategickhaos_network
@@ -51,6 +64,8 @@ services:
         condition: service_healthy
       qdrant:
         condition: service_started
+      neo4j:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8085/health"]
       interval: 30s
@@ -59,6 +74,7 @@ services:
       start_period: 40s
     restart: unless-stopped
 
+  # Expert Orchestrator
   refinory-orchestrator:
     build:
       context: .
@@ -73,9 +89,11 @@ services:
       - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
       - REDIS_URL=redis://redis:6379/0
       - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URL=bolt://neo4j:7687
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - TEMPORAL_HOST=temporal:7233
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
       - MAX_WORKERS=4
       - MAX_CONCURRENCY=16
       - LOG_LEVEL=INFO
@@ -83,6 +101,7 @@ services:
       - refinory_artifacts:/var/refinory/artifacts
       - refinory_outputs:/var/refinory/outputs
       - refinory_models:/var/refinory/models
+      - obsidian_vault:/data/obsidian
     networks:
       - strategickhaos_network
     depends_on:
@@ -99,6 +118,213 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # LAYER 1: KNOWLEDGE INGESTION ENGINE
+  # ═══════════════════════════════════════════════════════════
+  
+  knowledge-ingestor:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinory
+      args:
+        GPU_SUPPORT: "false"
+    container_name: knowledge-ingestor
+    ports:
+      - "8082:8082"
+    environment:
+      - REFINORY_ENV=production
+      - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URL=bolt://neo4j:7687
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
+      - PUBMED_API_KEY=${PUBMED_API_KEY:-}
+      - LOG_LEVEL=INFO
+    volumes:
+      - refinory_artifacts:/var/refinory/artifacts
+      - refinory_datasets:/var/refinory/datasets
+      - obsidian_vault:/data/obsidian
+    networks:
+      - strategickhaos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      neo4j:
+        condition: service_healthy
+    command: ["python", "-m", "refinory.knowledge_ingestion"]
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # LAYER 2: LLM FORGE (Custom Model Training)
+  # ═══════════════════════════════════════════════════════════
+  
+  llm-forge:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinory
+      args:
+        GPU_SUPPORT: "${GPU_SUPPORT:-false}"
+    container_name: llm-forge
+    ports:
+      - "8083:8083"
+    environment:
+      - REFINORY_ENV=production
+      - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URL=bolt://neo4j:7687
+      - MODEL_STORAGE=/var/refinory/models
+      - DATASET_PATH=/var/refinory/datasets
+      - CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0}
+      - LOG_LEVEL=INFO
+    volumes:
+      - refinory_models:/var/refinory/models
+      - refinory_datasets:/var/refinory/datasets
+    networks:
+      - strategickhaos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    command: ["python", "-m", "refinory.llm_forge"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # LAYER 3: SELF-CORRECTION SYSTEM
+  # ═══════════════════════════════════════════════════════════
+  
+  self-correction:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinory
+    container_name: self-correction
+    ports:
+      - "8084:8084"
+    environment:
+      - REFINORY_ENV=production
+      - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_URL=http://qdrant:6333
+      - NEO4J_URL=bolt://neo4j:7687
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
+      - LEARNING_RATE=aggressive
+      - PEER_REVIEW_QUORUM=3
+      - LOG_LEVEL=INFO
+    volumes:
+      - refinory_artifacts:/var/refinory/artifacts
+      - obsidian_vault:/data/obsidian
+    networks:
+      - strategickhaos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      neo4j:
+        condition: service_healthy
+    command: ["python", "-m", "refinory.self_correction"]
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # LAYER 4: EVOLUTION ENGINE
+  # ═══════════════════════════════════════════════════════════
+  
+  evolution-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinory
+    container_name: evolution-engine
+    ports:
+      - "8086:8086"
+    environment:
+      - REFINORY_ENV=production
+      - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
+      - REDIS_URL=redis://redis:6379/0
+      - POPULATION_SIZE=640
+      - GENERATION_FREQUENCY_DAYS=7
+      - IMPROVEMENT_TARGET=0.05
+      - LOG_LEVEL=INFO
+    volumes:
+      - refinory_models:/var/refinory/models
+      - refinory_artifacts:/var/refinory/artifacts
+    networks:
+      - strategickhaos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["python", "-m", "refinory.evolution_engine"]
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # LAYER 5: OBSIDIAN INTEGRATION
+  # ═══════════════════════════════════════════════════════════
+  
+  obsidian-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinory
+    container_name: obsidian-bridge
+    ports:
+      - "8087:8087"
+    environment:
+      - REFINORY_ENV=production
+      - POSTGRES_DSN=postgresql://refinory:refinory123@postgres:5432/refinory
+      - QDRANT_URL=http://qdrant:6333
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
+      - WATCH_MODE=true
+      - DEBOUNCE_MS=1000
+      - LOG_LEVEL=INFO
+    volumes:
+      - obsidian_vault:/data/obsidian
+      - refinory_artifacts:/var/refinory/artifacts
+    networks:
+      - strategickhaos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    command: ["python", "-m", "refinory.obsidian_integration"]
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # VISUALIZATION ENGINES
+  # ═══════════════════════════════════════════════════════════
+  
+  visualization-renderer:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinory
+    container_name: visualization-renderer
+    ports:
+      - "8088:8088"
+    environment:
+      - REFINORY_ENV=production
+      - RENDER_OUTPUT_PATH=/var/refinory/renders
+      - OBSIDIAN_VAULT_PATH=/data/obsidian
+      - UNREAL_ENABLED=false
+      - UNITY_ENABLED=false
+      - LOG_LEVEL=INFO
+    volumes:
+      - refinory_renders:/var/refinory/renders
+      - obsidian_vault:/data/obsidian
+    networks:
+      - strategickhaos_network
+    command: ["python", "-m", "refinory.visualization_engines"]
     restart: unless-stopped
 
   refinory-dashboard:
@@ -126,7 +352,10 @@ services:
       start_period: 60s
     restart: unless-stopped
 
-  # Infrastructure Services
+  # ═══════════════════════════════════════════════════════════
+  # INFRASTRUCTURE SERVICES
+  # ═══════════════════════════════════════════════════════════
+
   postgres:
     image: pgvector/pgvector:pg16
     container_name: refinory-postgres
@@ -182,6 +411,31 @@ services:
       - QDRANT__SERVICE__GRPC_PORT=6334
     networks:
       - strategickhaos_network
+    restart: unless-stopped
+
+  # Neo4j for Knowledge Graph (Self-Evolving Refinery)
+  neo4j:
+    image: neo4j:5.15-community
+    container_name: refinory-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/refinory123
+      - NEO4J_PLUGINS=["apoc", "graph-data-science"]
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms_memory_heap_initial__size=1G
+      - NEO4J_dbms_memory_heap_max__size=2G
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - strategickhaos_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7474"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     restart: unless-stopped
 
   temporal:
