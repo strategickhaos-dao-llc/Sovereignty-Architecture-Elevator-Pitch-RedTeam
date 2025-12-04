@@ -1,0 +1,60 @@
+// Final demonstration of Stage 1 features
+print "=== StrategicKhaos Stage 1 Demo ===";
+print "";
+
+// 1. Basic function
+fn greet(name) {
+    print "Hello, " + name + "!";
+};
+greet("Chaos Engine");
+
+// 2. Function with return
+fn add(a, b) {
+    return a + b;
+};
+let sum = add(20, 22);
+print "20 + 22 = " + sum;
+
+// 3. Lambda expression
+let multiply = λ(x, y) {
+    return x * y;
+};
+print "6 * 7 = " + multiply(6, 7);
+
+// 4. Lambda without return (expression statement)
+let announce = λ(msg) {
+    print ">>> " + msg;
+};
+announce("Lambdas work!");
+
+// 5. Closures
+fn makeAdder(n) {
+    return λ(x) {
+        return n + x;
+    };
+};
+let add10 = makeAdder(10);
+print "add10(32) = " + add10(32);
+
+// 6. Block scoping
+let outer = "outer";
+{
+    let inner = "inner";
+    print "Inside block: " + inner;
+};
+print "Outside block: " + outer;
+
+// 7. Nested function calls
+fn triple(x) {
+    return x + x + x;
+};
+fn square_triple(x) {
+    let t = triple(x);
+    return t * t;
+};
+print "square_triple(2) = " + square_triple(2);
+
+print "";
+print "=== All features operational! ===";
+print "The knife is in the heart.";
+print "The compiler can now write code about code.";

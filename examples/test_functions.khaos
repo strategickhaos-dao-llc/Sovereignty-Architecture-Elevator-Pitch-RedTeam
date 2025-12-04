@@ -1,0 +1,24 @@
+// Test basic function definitions and calls
+
+fn greet(name) {
+    print "Hello, " + name;
+};
+
+let who = "self-hosted chaos";
+greet(who);
+
+// Test function with return value
+fn add(a, b) {
+    return a + b;
+};
+
+let result = add(40, 2);
+print result;
+
+// Test lambda
+let emit = λ(line) {
+    print line;
+};
+
+emit("Lambda online");
+emit("Functions work!");
