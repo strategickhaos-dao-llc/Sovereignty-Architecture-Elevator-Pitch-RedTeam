@@ -322,3 +322,53 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Priority Council Department - "What to Solve Next"
+# PR Prioritization, Impact Scoring, Dependency Mapping, Community Voting, Auto-Merge
+priority_council:
+  enabled: true
+  config_file: "priority_council_config.yaml"
+  ports:
+    api: 8086
+    dashboard: 3001
+  
+  # Impact multipliers for PR categorization (Her Cure = TOP PRIORITY)
+  impact_multipliers:
+    her_cure: 2.0
+    security: 1.5
+    research: 1.3
+    ai_agents: 1.25
+    infrastructure: 1.2
+  
+  # Voting configuration
+  voting:
+    enabled: true
+    voting_period_hours: 24
+    min_votes_required: 3
+    weight_by_role:
+      core_maintainer: 3
+      council_member: 2
+      contributor: 1.5
+      community: 1
+  
+  # Auto-merge configuration
+  auto_merge:
+    enabled: true
+    require_ci_passing: true
+    require_approval: true
+    max_per_hour: 10
+    exclude_categories:
+      - security
+      - infrastructure
+      - her_cure
+  
+  # Discord integration
+  discord:
+    voting_channel: "#pr-voting"
+    priority_channel: "#pr-priority"
+    announce_channel: "#prs"
+    commands:
+      - "/priority"
+      - "/vote"
+      - "/next"
+      - "/automerge"
