@@ -1,0 +1,11 @@
+[package]
+name = "strategickhaos_prime"
+version = "0.1.0"
+edition = "2024"
+description = "Strategickhaos Prime - Cosmological Genesis Lock"
+authors = ["Strategickhaos DAO"]
+license = "MIT"
+
+[dependencies]
+sha2 = "0.10"
+hex = "0.4"
