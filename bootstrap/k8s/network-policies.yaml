@@ -1,0 +1,134 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: discord-ops-bot-network-policy
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+spec:
+  podSelector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: bot
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic from within the namespace
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ops
+      ports:
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 9090
+    # Allow traffic from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Allow Discord API (HTTPS)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow internal services
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: ops
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: event-gateway-network-policy
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: gateway
+spec:
+  podSelector:
+    matchLabels:
+      app: strategickhaos-discord-ops
+      component: gateway
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic from within the namespace
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ops
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow traffic from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow GitHub webhooks (from anywhere for webhooks)
+    # NOTE: GitHub webhooks need to come from any source. For additional security:
+    # 1. Always verify HMAC signatures in the event gateway
+    # 2. Consider restricting to GitHub's IP ranges (check https://api.github.com/meta)
+    # 3. Use a WAF or reverse proxy with rate limiting
+    - from: []
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Allow Discord API (HTTPS)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow internal services
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: ops
+      ports:
+        - protocol: TCP
+          port: 8080

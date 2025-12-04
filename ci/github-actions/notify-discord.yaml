@@ -1,0 +1,125 @@
+name: Discord Notifications
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, ready_for_review, closed]
+  workflow_run:
+    workflows: ["Build, Test, and Deploy"]
+    types: [completed]
+
+env:
+  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📋 Determine notification details
+        id: details
+        run: |
+          # Set defaults
+          echo "color=0x2f81f7" >> $GITHUB_OUTPUT
+          echo "status_emoji=ℹ️" >> $GITHUB_OUTPUT
+          
+          case "${{ github.event_name }}" in
+            "push")
+              if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+                echo "title=🚀 Main Branch Updated" >> $GITHUB_OUTPUT
+                echo "color=0x28a745" >> $GITHUB_OUTPUT
+              else
+                echo "title=📝 Branch Push: ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+                echo "color=0x17a2b8" >> $GITHUB_OUTPUT
+              fi
+              echo "description=New commits pushed to ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+              ;;
+            
+            "pull_request")
+              case "${{ github.event.action }}" in
+                "opened")
+                  echo "title=🔄 New PR: #${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                  echo "color=0x6f42c1" >> $GITHUB_OUTPUT
+                  echo "description=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+                  ;;
+                "ready_for_review")
+                  echo "title=👀 PR Ready for Review: #${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                  echo "color=0x0366d6" >> $GITHUB_OUTPUT
+                  echo "description=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+                  ;;
+                "closed")
+                  if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+                    echo "title=✅ PR Merged: #${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                    echo "color=0x28a745" >> $GITHUB_OUTPUT
+                  else
+                    echo "title=❌ PR Closed: #${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                    echo "color=0x6a737d" >> $GITHUB_OUTPUT
+                  fi
+                  echo "description=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+                  ;;
+              esac
+              ;;
+            
+            "workflow_run")
+              if [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
+                echo "title=✅ Workflow Succeeded: ${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
+                echo "color=0x28a745" >> $GITHUB_OUTPUT
+                echo "status_emoji=✅" >> $GITHUB_OUTPUT
+              else
+                echo "title=❌ Workflow Failed: ${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
+                echo "color=0xff0000" >> $GITHUB_OUTPUT
+                echo "status_emoji=❌" >> $GITHUB_OUTPUT
+              fi
+              echo "description=Workflow ${{ github.event.workflow_run.conclusion }}" >> $GITHUB_OUTPUT
+              ;;
+          esac
+      
+      - name: 📡 Post to Event Gateway
+        if: env.DISCORD_WEBHOOK_URL == ''
+        run: |
+          # Post to our event gateway instead of Discord webhook
+          payload=$(jq -n \
+            --arg service "github-actions" \
+            --arg title "${{ steps.details.outputs.title }}" \
+            --arg description "${{ steps.details.outputs.description }}" \
+            --arg repo "${{ github.repository }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg actor "${{ github.actor }}" \
+            '{
+              service: $service,
+              title: $title,
+              description: $description,
+              repo: $repo,
+              sha: $sha,
+              branch: $branch,
+              actor: $actor,
+              source: "github_actions"
+            }'
+          )
+          
+          echo "Event gateway payload:"
+          echo "$payload" | jq .
+          
+          # When event gateway is deployed:
+          # curl -X POST https://events.strategickhaos.com/event \
+          #   -H "Content-Type: application/json" \
+          #   -H "X-Sig: $(echo -n "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)" \
+          #   -d "$payload"
+      
+      - name: 🔔 Post to Discord Webhook
+        if: env.DISCORD_WEBHOOK_URL != ''
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ env.DISCORD_WEBHOOK_URL }}
+          title: "${{ steps.details.outputs.status_emoji }} ${{ steps.details.outputs.title }}"
+          description: |
+            ${{ steps.details.outputs.description }}
+            
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Actor:** ${{ github.actor }}
+          color: ${{ steps.details.outputs.color }}
+          username: "Strategickhaos CI"
+          avatar_url: "https://avatars.githubusercontent.com/u/Strategickhaos"
