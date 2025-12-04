@@ -11,6 +11,8 @@ This module provides connectors for multiple financial platforms:
 
 Usage:
     python api/connectors.py
+
+Requires Python 3.8+
 """
 
 import os
@@ -23,7 +25,7 @@ import base64
 from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Optional, Type
 
 import yaml
 import requests
@@ -43,15 +45,15 @@ load_dotenv()
 class PlatformConnector(ABC):
     """Abstract base class for platform connectors."""
     
-    def __init__(self, config: dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.platform_name = config.get('platform', 'Unknown')
         self.enabled = config.get('enabled', True)
         self.api_endpoint = config.get('api_endpoint', '')
-        self.last_updated: datetime | None = None
+        self.last_updated: Optional[datetime] = None
         
     @abstractmethod
-    def fetch_balance(self) -> dict[str, Any]:
+    def fetch_balance(self) -> Dict[str, Any]:
         """Fetch the current balance from the platform."""
         pass
     
@@ -59,11 +61,11 @@ class PlatformConnector(ABC):
         self,
         method: str,
         url: str,
-        headers: dict[str, str] | None = None,
-        data: dict[str, Any] | None = None,
+        headers: Optional[Dict[str, str]] = None,
+        data: Optional[Dict[str, Any]] = None,
         max_retries: int = 3,
         backoff_factor: float = 1.5
-    ) -> requests.Response | None:
+    ) -> Optional[requests.Response]:
         """Make HTTP request with retry logic and exponential backoff."""
         for attempt in range(max_retries):
             try:
@@ -99,12 +101,12 @@ class PlatformConnector(ABC):
 class MoneyLionConnector(PlatformConnector):
     """Connector for MoneyLion robo-advisor platform."""
     
-    def __init__(self, config: dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.api_key = os.environ.get('MONEYLION_API_KEY', '')
         self.account_id = config.get('account_id', '')
         
-    def fetch_balance(self) -> dict[str, Any]:
+    def fetch_balance(self) -> Dict[str, Any]:
         """Fetch balance from MoneyLion API."""
         if not self.enabled:
             return {'status': 'disabled', 'balance': 0.0}
@@ -157,12 +159,12 @@ class MoneyLionConnector(PlatformConnector):
 class KrakenConnector(PlatformConnector):
     """Connector for Kraken Pro cryptocurrency exchange."""
     
-    def __init__(self, config: dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.api_key = os.environ.get('KRAKEN_API_KEY', '')
         self.api_secret = os.environ.get('KRAKEN_API_SECRET', '')
         
-    def _generate_signature(self, urlpath: str, data: dict[str, Any], nonce: str) -> str:
+    def _generate_signature(self, urlpath: str, data: Dict[str, Any], nonce: str) -> str:
         """Generate Kraken API signature for authenticated requests."""
         postdata = '&'.join([f"{k}={v}" for k, v in sorted(data.items())])
         encoded = (nonce + postdata).encode()
@@ -170,7 +172,7 @@ class KrakenConnector(PlatformConnector):
         signature = hmac.new(base64.b64decode(self.api_secret), message, hashlib.sha512)
         return base64.b64encode(signature.digest()).decode()
         
-    def fetch_balance(self) -> dict[str, Any]:
+    def fetch_balance(self) -> Dict[str, Any]:
         """Fetch balance from Kraken API."""
         if not self.enabled:
             return {'status': 'disabled', 'balance': 0.0}
@@ -217,7 +219,7 @@ class KrakenConnector(PlatformConnector):
             
         return self._get_mock_balance()
     
-    def _calculate_usd_value(self, balances: dict[str, str]) -> float:
+    def _calculate_usd_value(self, balances: Dict[str, str]) -> float:
         """Calculate total USD value of crypto holdings."""
         # In production, fetch current prices from Kraken ticker
         # For now, use mock prices
@@ -235,7 +237,7 @@ class KrakenConnector(PlatformConnector):
             
         return round(total, 2)
     
-    def _get_mock_balance(self) -> dict[str, Any]:
+    def _get_mock_balance(self) -> Dict[str, Any]:
         """Return mock balance data for testing."""
         self.last_updated = datetime.now()
         return {
@@ -256,11 +258,11 @@ class KrakenConnector(PlatformConnector):
 class NinjaTraderConnector(PlatformConnector):
     """Connector for NinjaTrader futures/options platform."""
     
-    def __init__(self, config: dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.api_token = os.environ.get('NINJATRADER_API_TOKEN', '')
         
-    def fetch_balance(self) -> dict[str, Any]:
+    def fetch_balance(self) -> Dict[str, Any]:
         """Fetch balance from NinjaTrader API."""
         if not self.enabled:
             return {'status': 'disabled', 'balance': 0.0}
@@ -295,7 +297,7 @@ class NinjaTraderConnector(PlatformConnector):
             
         return self._get_mock_balance()
     
-    def _get_mock_balance(self) -> dict[str, Any]:
+    def _get_mock_balance(self) -> Dict[str, Any]:
         """Return mock balance data for testing."""
         self.last_updated = datetime.now()
         return {
@@ -315,11 +317,11 @@ class NinjaTraderConnector(PlatformConnector):
 class ThreadBankConnector(PlatformConnector):
     """Connector for Thread Bank checking account."""
     
-    def __init__(self, config: dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         self.api_key = os.environ.get('THREAD_BANK_API_KEY', '')
         
-    def fetch_balance(self) -> dict[str, Any]:
+    def fetch_balance(self) -> Dict[str, Any]:
         """Fetch balance from Thread Bank API."""
         if not self.enabled:
             return {'status': 'disabled', 'balance': 0.0}
@@ -353,7 +355,7 @@ class ThreadBankConnector(PlatformConnector):
             
         return self._get_mock_balance()
     
-    def _get_mock_balance(self) -> dict[str, Any]:
+    def _get_mock_balance(self) -> Dict[str, Any]:
         """Return mock balance data for testing."""
         self.last_updated = datetime.now()
         return {
@@ -367,7 +369,7 @@ class ThreadBankConnector(PlatformConnector):
         }
 
 
-def load_account_config(config_path: str | None = None) -> dict[str, Any]:
+def load_account_config(config_path: Optional[str] = None) -> Dict[str, Any]:
     """
     Load accounts configuration from YAML file.
     
@@ -398,7 +400,7 @@ def load_account_config(config_path: str | None = None) -> dict[str, Any]:
         return {}
 
 
-def get_platform_connector(platform_key: str, config: dict[str, Any]) -> PlatformConnector | None:
+def get_platform_connector(platform_key: str, config: Dict[str, Any]) -> Optional[PlatformConnector]:
     """
     Get the appropriate connector for a platform.
     
@@ -409,7 +411,7 @@ def get_platform_connector(platform_key: str, config: dict[str, Any]) -> Platfor
     Returns:
         PlatformConnector instance or None if platform is not supported
     """
-    connectors: dict[str, type[PlatformConnector]] = {
+    connectors: Dict[str, Type[PlatformConnector]] = {
         'moneylion': MoneyLionConnector,
         'kraken': KrakenConnector,
         'ninjatrader': NinjaTraderConnector,
@@ -424,7 +426,7 @@ def get_platform_connector(platform_key: str, config: dict[str, Any]) -> Platfor
     return None
 
 
-def fetch_all_balances(config: dict[str, Any] | None = None) -> dict[str, Any]:
+def fetch_all_balances(config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     Fetch balances from all configured platforms.
     
@@ -442,7 +444,7 @@ def fetch_all_balances(config: dict[str, Any] | None = None) -> dict[str, Any]:
         return {'error': 'Configuration not loaded', 'balances': {}}
         
     accounts = config.get('accounts', {})
-    results: dict[str, Any] = {
+    results: Dict[str, Any] = {
         'treasury': config.get('treasury', {}),
         'balances': {},
         'total_balance': 0.0,
@@ -474,7 +476,7 @@ def fetch_all_balances(config: dict[str, Any] | None = None) -> dict[str, Any]:
     return results
 
 
-def calculate_total_balance(balances: dict[str, Any]) -> float:
+def calculate_total_balance(balances: Dict[str, Any]) -> float:
     """
     Calculate total balance across all platforms.
     
@@ -491,7 +493,7 @@ def calculate_total_balance(balances: dict[str, Any]) -> float:
     return round(total, 2)
 
 
-def print_balance_report(results: dict[str, Any]) -> None:
+def print_balance_report(results: Dict[str, Any]) -> None:
     """Print a formatted balance report to console."""
     print("\n" + "=" * 50)
     print("        ValorYield Treasury Balance")
