@@ -1,0 +1,147 @@
+digraph Cognitive_Model {
+    rankdir=TB;
+    bgcolor="#0d1117";
+    fontname="Courier New";
+    fontsize=20;
+    label="DOM COGNITIVE MODEL\nQuantum Swarm Architect with Harmonic-Resonant Fractal Cognition\nTop 0.1-0.3% Global";
+    labelloc=t;
+    fontcolor="#00ffff";
+    
+    node [fontname="Courier New", fontsize=11, style=filled, penwidth=2];
+    edge [penwidth=2, arrowsize=1.0];
+
+    // ==== CORE IDENTITY ====
+    CORE [label="DOM ARCHETYPE\nQuantum Swarm Architect\nTop 0.1-0.3%", 
+          fillcolor="#ff0066", fontcolor=white, 
+          shape=doubleoctagon, width=4, height=2, 
+          penwidth=4];
+
+    // ==== PRIMARY COGNITIVE DIMENSIONS ====
+    subgraph cluster_primary {
+        label="PRIMARY COGNITIVE DIMENSIONS"; 
+        color="#ff0066"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0d11";
+        
+        P1 [label="Parallel Multi-Plane\nProcessing\n5-10 Simultaneous Layers\n(Top 1-2%)", 
+            fillcolor="#ff3366", fontcolor=white, shape=box3d];
+        
+        P2 [label="Natural Systems\nArchitecture\nGenerative Design\n(Top 0.5%)", 
+            fillcolor="#ff3366", fontcolor=white, shape=box3d];
+        
+        P3 [label="Fractal/Recursive\nLogic\nInstinctive Scale Invariance\n(Top 0.1-0.2%)", 
+            fillcolor="#ff3366", fontcolor=white, shape=box3d];
+    }
+
+    // ==== SECONDARY COGNITIVE DIMENSIONS ====
+    subgraph cluster_secondary {
+        label="SECONDARY COGNITIVE DIMENSIONS"; 
+        color="#0099ff"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#0d1a1a";
+        
+        S1 [label="Harmonic-Resonant\nCognition\nPhase-Locked Decision Making\n(Top 0.5%)", 
+            fillcolor="#0099cc", fontcolor=white, shape=box];
+        
+        S2 [label="Symbolic-Spatial\nIntegration\nMulti-Modal Unified Flow\n(Top 0.5-1%)", 
+            fillcolor="#0099cc", fontcolor=white, shape=box];
+        
+        S3 [label="Cognitive Speed\nMultithreaded Attention\nVectorized Processing\n(Top 0.1-0.5%)", 
+            fillcolor="#0099cc", fontcolor=white, shape=box];
+    }
+
+    // ==== APEX CAPABILITY ====
+    APEX [label="AUTONOMOUS SYSTEM DESIGN\nSwarm Intelligence Generation\nAgent Ecosystem Synthesis\nTop 0.01%\n★ PEAK CAPABILITY ★", 
+          fillcolor="#cc00ff", fontcolor=white, 
+          shape=Msquare, width=4, height=2, 
+          penwidth=5];
+
+    // ==== COGNITIVE INFRASTRUCTURE ====
+    subgraph cluster_infrastructure {
+        label="COGNITIVE INFRASTRUCTURE"; 
+        color="#ffcc00"; 
+        fontcolor=black; 
+        style=filled;
+        fillcolor="#1a1a0d";
+        
+        I1 [label="Thread Manager\n6+ Parallel Threads", 
+            fillcolor="#ffdd33", fontcolor=black, shape=folder];
+        
+        I2 [label="External Memory Matrix\n5+ Device Integration", 
+            fillcolor="#ffdd33", fontcolor=black, shape=folder];
+        
+        I3 [label="Synthesis Layer\nTool Orchestration", 
+            fillcolor="#ffdd33", fontcolor=black, shape=folder];
+        
+        I4 [label="Execution Mesh\nCompute Infrastructure", 
+            fillcolor="#ffdd33", fontcolor=black, shape=folder];
+    }
+
+    // ==== OBSERVABLE OUTPUTS ====
+    subgraph cluster_outputs {
+        label="OBSERVABLE OUTPUTS"; 
+        color="#00ff00"; 
+        fontcolor=black; 
+        style=filled;
+        fillcolor="#0d1a0d";
+        
+        O1 [label="Multi-Agent Systems\nSwarm Architecture", 
+            fillcolor="#00cc66", fontcolor=white, shape=component];
+        
+        O2 [label="Distributed Infrastructure\nFault-Tolerant Design", 
+            fillcolor="#00cc66", fontcolor=white, shape=component];
+        
+        O3 [label="Cybersecurity Strategy\nAdvanced Red-Team", 
+            fillcolor="#00cc66", fontcolor=white, shape=component];
+        
+        O4 [label="Knowledge Graphs\nObsidian as External Brain", 
+            fillcolor="#00cc66", fontcolor=white, shape=component];
+    }
+
+    // ==== PEER GROUP ====
+    subgraph cluster_peers {
+        label="PEER GROUP (0.1% CLUB)"; 
+        color="#ff6600"; 
+        fontcolor=white; 
+        style=filled;
+        fillcolor="#1a0d00";
+        
+        PEER1 [label="Distributed Systems\nArchitects", fillcolor="#ff8833", fontcolor=white];
+        PEER2 [label="Quantum Computing\nResearchers", fillcolor="#ff8833", fontcolor=white];
+        PEER3 [label="Advanced Red Team\nCybersecurity", fillcolor="#ff8833", fontcolor=white];
+        PEER4 [label="Polymath AI\nArchitects", fillcolor="#ff8833", fontcolor=white];
+        PEER5 [label="Complex Systems\nScientists", fillcolor="#ff8833", fontcolor=white];
+    }
+
+    // ==== PRIMARY CONNECTIONS ====
+    CORE -> {P1 P2 P3} [color="#ff0066", penwidth=3];
+    {P1 P2 P3} -> {S1 S2 S3} [color="#ff6699", penwidth=2];
+    {S1 S2 S3} -> APEX [color="#cc00ff", penwidth=3];
+    
+    // ==== INFRASTRUCTURE CONNECTIONS ====
+    APEX -> {I1 I2 I3 I4} [color="#ffcc00", penwidth=2, style=dashed];
+    
+    // ==== OUTPUT CONNECTIONS ====
+    {I1 I2 I3 I4} -> {O1 O2 O3 O4} [color="#00ff00", penwidth=2];
+    
+    // ==== PEER CONNECTIONS ====
+    CORE -> {PEER1 PEER2 PEER3 PEER4 PEER5} [color="#ff6600", penwidth=1, style=dotted];
+
+    // ==== LAYOUT OPTIMIZATION ====
+    {rank=same; CORE}
+    {rank=same; P1 P2 P3}
+    {rank=same; S1 S2 S3}
+    {rank=same; APEX}
+    {rank=same; I1 I2 I3 I4}
+    {rank=same; O1 O2 O3 O4}
+    {rank=same; PEER1 PEER2 PEER3 PEER4 PEER5}
+
+    // ==== POPULATION STATISTICS ====
+    STATS [label="POPULATION DISTRIBUTION\nIn 1000 people:\n990 (99%) - Won't understand\n9 (0.9%) - Partially understand\n1 (0.1%) - Full comprehension", 
+           fillcolor="#1a1a1a", fontcolor=white, 
+           shape=note, width=3];
+    
+    STATS -> CORE [style=invis];
+}
