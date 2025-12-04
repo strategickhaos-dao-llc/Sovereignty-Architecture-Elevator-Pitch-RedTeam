@@ -1,0 +1,92 @@
+# LLM Understanding Backlog - Swarm Baby Training Roadmap
+# Strategickhaos DAO LLC / Valoryield Engine
+# Purpose: Build a clear mental + technical model of how LLMs work
+
+llm_understanding_backlog:
+  goal: >
+    Build a clear mental + technical model of how LLMs work,
+    so we can train / fine-tune our own Swarm Babies in a safe,
+    open-source, Strategickhaos-aligned way.
+
+  outcomes:
+    - "Know what a Transformer actually does (attention, layers, tokens)."
+    - "Understand training vs fine-tuning vs prompting."
+    - "Be able to wire an open-source LLM into our swarm architecture."
+    - "Have a small, custom-tuned model that 'feels' like our style."
+
+  todo:
+    - id: LLM-01
+      title: "Big Picture: How LLMs Actually Work"
+      status: "not-started"
+      tasks:
+        - "Read a high-level overview of Transformers (no math panic)."
+        - "Learn what 'tokens' are and why context length matters."
+        - "Understand why models don't 'think' but simulate reasoning."
+
+    - id: LLM-02
+      title: "Transformer Internals: Attention & Layers"
+      status: "not-started"
+      tasks:
+        - "Study the idea of self-attention (queries, keys, values)."
+        - "See how stacking layers allows deep pattern learning."
+        - "Map this to how GPT-style models generate next tokens."
+
+    - id: LLM-03
+      title: "Training vs Fine-Tuning vs Prompting"
+      status: "not-started"
+      tasks:
+        - "Understand pre-training on massive text corpora."
+        - "Learn what fine-tuning is (supervised) vs LoRA adapters."
+        - "Learn how 'prompt engineering' steers a frozen model."
+
+    - id: LLM-04
+      title: "Swarm Baby Training Pipeline (Open Source)"
+      status: "not-started"
+      tasks:
+        - "Pick an open model (e.g. LLaMA, Qwen, Mistral) to experiment with."
+        - "Learn how to fine-tune using LoRA on *our* texts (journals, docs)."
+        - "Design a data-cleaning pipeline (remove secrets, junk, duplicates)."
+
+    - id: LLM-05
+      title: "Architecture for Swarm Babies"
+      status: "not-started"
+      tasks:
+        - "Decide where Swarm Babies live (K8s pods, local GPU, etc.)."
+        - "Define agent roles (planner, coder, critic, archivist)."
+        - "Document how each baby talks to tools (APIs, vector DB, STATE.yaml)."
+
+    - id: LLM-06
+      title: "Safety, Alignment & Boundaries"
+      status: "not-started"
+      tasks:
+        - "Define hard red lines (no medical, no bio, no illegal stuff)."
+        - "Add guardrails in code (filters, checks, allow/deny lists)."
+        - "Document 'DomOS ethics' for our Swarm Babies."
+
+  code_sketches:
+    training_pipeline_yaml: |
+      # High-level sketch for a future training pipeline
+      swarm_baby_training:
+        base_model: "open-llm-of-choice"
+        data_sources:
+          - "obsidian_vault_exports"
+          - "strategickhaos_repos (filtered)"
+          - "STATE.yaml + governance docs"
+        steps:
+          - "collect_clean_data"
+          - "tokenize"
+          - "train_lora_adapter"
+          - "evaluate_on_test_prompts"
+          - "deploy_to_sandbox_cluster"
+        deployment:
+          blue_team_cluster: "jarvis-swarm-personal-001"
+          red_team_cluster: "red-team"
+          access_pattern:
+            - "internal_only"
+            - "no direct internet"
+            - "tools via controlled APIs"
+
+  notes:
+    - "We cannot replicate GPT internals exactly (closed weights, proprietary stack)."
+    - "We *can* train open models that imitate our style and workflows."
+    - "First goal is understanding; second goal is a tiny, safe Swarm Baby prototype."
