@@ -280,6 +280,23 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## ⚖️ Legal Resources
+
+The **[Legal Research Directory](legal/README.md)** contains comprehensive legal documentation:
+
+### ADHD Accommodation Framework (New - November 2025)
+Complete documentation of federal protections for ADHD accommodations in higher education:
+- **[Executive Summary](legal/ADHD_ACCOMMODATION_EXECUTIVE_SUMMARY.md)** - 60-second overview + quick start guide
+- **[Legal Framework](legal/ADHD_ACCOMMODATION_LEGAL_FRAMEWORK.md)** - 100+ legal authorities with detailed analysis
+- **[Quick Reference](legal/ADHD_ACCOMMODATION_QUICK_REFERENCE.md)** - Action templates and tactical guidance
+- **[Citations Index](legal/ADHD_LEGAL_CITATIONS_INDEX.md)** - Organized citation lookup by jurisdiction
+
+**Coverage**: Supreme Court precedents, federal statutes (Section 504, ADA), OCR resolutions, circuit court decisions, AI/assistive technology protections, anti-retaliation frameworks
+
+### Other Legal Research
+- **Cybersecurity Research** - NIST, MITRE, OWASP, CIS compliance frameworks
+- **Wyoming SF0068 (2022)** - DAO statutory authority and governance research
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
