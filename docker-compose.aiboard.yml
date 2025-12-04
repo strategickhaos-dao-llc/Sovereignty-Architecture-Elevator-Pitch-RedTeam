@@ -1,0 +1,115 @@
+services:
+  # Core AI Board Agents (FastAPI + NATS clients)
+  gpt_duck:
+    build: ./services/gpt_duck
+    environment:
+      NATS_URL: nats://nats:4222
+      ROLE: pattern_analyst
+      GOVERNANCE_SPEC: /governance/spec.yaml
+    volumes:
+      - ./governance:/governance:ro
+      - ./ideas/ideas_catalog.yaml:/ideas/ideas_catalog.yaml:ro
+    depends_on:
+      - nats
+      - opa
+    networks:
+      - skynet
+
+  claude_prime:
+    build: ./services/claude_prime
+    environment:
+      NATS_URL: nats://nats:4222
+      ROLE: verification_node
+    volumes:
+      - ./governance:/governance:ro
+    depends_on:
+      - nats
+      - opa
+    networks:
+      - skynet
+
+  claude_parallel:
+    build: ./services/claude_parallel
+    environment:
+      NATS_URL: nats://nats:4222
+      ROLE: deep_architect
+    volumes:
+      - ./governance:/governance:ro
+    depends_on:
+      - nats
+      - opa
+    networks:
+      - skynet
+
+  grok_guardian:
+    build: ./services/grok_guardian
+    environment:
+      NATS_URL: nats://nats:4222
+      ROLE: boundary_enforcer
+    volumes:
+      - ./governance:/governance:ro
+    depends_on:
+      - nats
+      - opa
+    networks:
+      - skynet
+
+  # Infra Services
+  nats:
+    image: nats:2.10
+    command: -js
+    ports:
+      - "4222:4222"
+    networks:
+      - skynet
+
+  opa:
+    image: openpolicyagent/opa:latest
+    command: run --server /policies
+    volumes:
+      - ./opa/policies:/policies
+    ports:
+      - "8181:8181"
+    networks:
+      - skynet
+
+  audit_trail:
+    build: ./services/audit_trail
+    environment:
+      NATS_URL: nats://nats:4222
+      GIT_REPO: /repo
+      DB_FILE: /data/audit.db
+    volumes:
+      - ./audit_logs:/data
+      - ./:/repo
+    depends_on:
+      - nats
+    networks:
+      - skynet
+
+  monitor_comms:
+    build: ./services/monitor_comms
+    environment:
+      NATS_URL: nats://nats:4222
+      GOOGLE_CREDENTIALS: /secrets/credentials.json
+      POLL_INTERVAL: "300"
+    volumes:
+      - ./secrets:/secrets:ro
+    depends_on:
+      - nats
+    networks:
+      - skynet
+
+  finance_enforcer:
+    build: ./services/finance_enforcer
+    environment:
+      NATS_URL: nats://nats:4222
+      SPENDING_CAP: "500"
+      STRIPE_SECRET: ${STRIPE_SECRET:-sk_test_placeholder}
+    depends_on:
+      - nats
+    networks:
+      - skynet
+
+networks:
+  skynet:

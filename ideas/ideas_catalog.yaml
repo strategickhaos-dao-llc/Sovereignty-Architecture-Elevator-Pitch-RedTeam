@@ -1,0 +1,121 @@
+# StrategicKhaos DAO Ideas Catalog
+# Version: 1.0
+# Date: November 30, 2025
+# Description: Catalog of governance ideas for AI board deliberation
+
+version: "1.0"
+last_updated: "2025-11-30"
+
+ideas:
+  - id: IDEA_001
+    title: "Self-Governing AI Board Implementation"
+    status: active
+    priority: high
+    category: governance
+    description: |
+      Implement advisory AI agents as non-voting board members under 
+      operator (human) oversight. Agents provide recommendations on 
+      governance, risk, and operations.
+    components:
+      - gpt_duck (pattern_analyst)
+      - claude_prime (verification_node)
+      - claude_parallel (deep_architect)
+      - grok_guardian (boundary_enforcer)
+    compliance:
+      - NIST AI RMF
+      - OECD Principles
+      - Wyoming AI Oversight
+      - Texas TRAIGA 2026
+    budget: 500  # USD/month cap
+    created: "2025-11-30"
+    
+  - id: IDEA_002
+    title: "Cryptographic Audit Trail System"
+    status: active
+    priority: high
+    category: security
+    description: |
+      Tamper-proof logging using Merkle trails, Sigstore/cosign 
+      signatures, and Git anchoring for all board decisions.
+    components:
+      - audit_trail service
+      - SQLite-vec embeddings
+      - Merkle root computation
+      - Git commit anchoring
+    created: "2025-11-30"
+    
+  - id: IDEA_003
+    title: "OPA Policy Guardrails"
+    status: active
+    priority: high
+    category: compliance
+    description: |
+      Open Policy Agent (OPA) with Rego policies for enforcing
+      guardrails on AI agent decisions.
+    policies:
+      - guardrails.rego
+    blocked_actions:
+      - hack
+      - attack
+      - exploit
+      - bypass
+      - unauthorized
+    created: "2025-11-30"
+    
+  - id: IDEA_004
+    title: "Financial Cap Enforcement"
+    status: active
+    priority: critical
+    category: finance
+    description: |
+      Software-enforced spending caps via Stripe webhooks.
+      Hard limit of $500/month total spending.
+    components:
+      - finance_enforcer service
+      - Stripe integration
+      - XMR optional (sanctions-screened only)
+    cap:
+      amount: 500
+      currency: USD
+      period: monthly
+    created: "2025-11-30"
+    
+  - id: IDEA_005
+    title: "Communications Monitoring"
+    status: proposed
+    priority: medium
+    category: operations
+    description: |
+      Gmail/Drive API monitoring for board-relevant communications.
+      Filtered via OPA policies.
+    components:
+      - monitor_comms service
+      - Google API integration
+      - Label-based filtering
+    poll_interval: 300  # seconds
+    created: "2025-11-30"
+
+deliberation_queue:
+  - idea_id: IDEA_001
+    submitted: "2025-11-30"
+    status: pending_review
+    requested_by: sky_commander
+    notes: |
+      First deliberation topic. Board should evaluate and provide
+      recommendations on implementation approach.
+
+governance_rules:
+  human_approval_required:
+    - spending > $100
+    - public communications
+    - legal documents
+    - external contracts
+  
+  auto_approve:
+    - internal logging
+    - health checks
+    - routine monitoring
+    
+  escalation_threshold:
+    spending_alert: 400  # USD - alert when approaching cap
+    consecutive_denials: 3  # escalate after 3 OPA denials
