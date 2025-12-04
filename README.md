@@ -30,6 +30,20 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 📚 Library of Alexandria
+
+AI-powered research archive for the Chess Council. 640 agents synthesize, verify, and cross-reference research across multiple domains.
+
+- **[Library Index](library_of_alexandria/INDEX.md)** - Browse the complete research archive
+- **[AI Drug Discovery 2025](library_of_alexandria/drug_discovery/ai_in_drug_discovery_2025.md)** - Comprehensive review of AI in pharmaceutical research
+- **[Landing Page](library_of_alexandria/landing_page.html)** - Public-facing website for library.strategickhaos.ai
+
+**Features:**
+- Cross-domain synthesis (drug discovery + legal + cybersecurity + ML)
+- Peer-reviewed quality citations (PMC, Nature, arXiv)
+- Bibliographic chess games for research debate
+- Access tiers for subscribers and researchers
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance

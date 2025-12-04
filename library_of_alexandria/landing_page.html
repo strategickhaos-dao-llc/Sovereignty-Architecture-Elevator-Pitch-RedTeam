@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Alexandria | StrategicKhaos Research Archive</title>
+    <meta name="description" content="AI-synthesized research archive for the StrategicKhaos Chess Council. Democratizing knowledge through cross-domain synthesis.">
+    <meta name="keywords" content="AI research, drug discovery, machine learning, open source, research archive">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Library of Alexandria | StrategicKhaos">
+    <meta property="og:description" content="AI-synthesized research archive. 640 agents, cross-domain synthesis, open-source mission.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://library.strategickhaos.ai">
+    
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --secondary: #1a1a2e;
+            --accent: #16213e;
+            --text: #e8e8e8;
+            --text-muted: #a0a0a0;
+            --success: #00d26a;
+            --warning: #ffc107;
+            --border: #2d2d44;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logo-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            background: var(--border);
+            color: var(--primary);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), #ff9d4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #ff8533;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+        }
+        
+        .features h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            color: var(--text-muted);
+        }
+        
+        /* Domains */
+        .domains {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .domains h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .domain-card {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .domain-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+        
+        .domain-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .domain-icon {
+            font-size: 1.8rem;
+        }
+        
+        .domain-card h4 {
+            font-size: 1.2rem;
+        }
+        
+        .domain-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .domain-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .domain-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .domain-stat-icon {
+            color: var(--success);
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 80px 0;
+        }
+        
+        .pricing h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+        
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+        
+        .pricing-card:hover {
+            border-color: var(--primary);
+        }
+        
+        .pricing-tier {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+        
+        .pricing-period {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+        
+        .pricing-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .how-it-works h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 50px 0 30px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h5 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .footer-quote {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                gap: 30px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📚</span>
+                    <div class="logo-text">
+                        <h1>Library of Alexandria</h1>
+                        <p>StrategicKhaos Research Archive</p>
+                    </div>
+                </div>
+                <nav>
+                    <a href="#domains">Domains</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-" target="_blank">GitHub</a>
+                    <a href="https://discord.gg/strategickhaos" target="_blank">Discord</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h2>AI-Powered Research Synthesis</h2>
+                <p>640 AI agents playing bibliographic chess with peer-reviewed research. Cross-domain synthesis you can't find anywhere else.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">640</div>
+                        <div class="stat-label">AI Agents</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Board Layers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">47+</div>
+                        <div class="stat-label">Citations</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">Possibilities</div>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons">
+                    <a href="#pricing" class="btn btn-primary">Get Started</a>
+                    <a href="https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/blob/main/library_of_alexandria/INDEX.md" class="btn btn-secondary" target="_blank">Browse Library</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h3>Why Choose Our Research Archive?</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔬</div>
+                        <h4>Peer-Reviewed Quality</h4>
+                        <p>Every article cites PMC, Nature, Science Direct, and other authoritative sources. No hallucinations, only verifiable research.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h4>Cross-Domain Synthesis</h4>
+                        <p>Connect drug discovery to legal compliance, AI governance to economics. See patterns humans miss.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">♟️</div>
+                        <h4>Bibliographic Chess</h4>
+                        <p>Watch AI agents debate research questions. Claims vs counter-claims, synthesis as checkmate.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <h4>Open-Source Mission</h4>
+                        <p>501(c)(3) aligned. Democratizing research for resource-limited settings. Knowledge for all.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h4>Human Verified</h4>
+                        <p>AI synthesizes, humans verify. Every claim is traceable to its source. Full transparency.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h4>Real-Time Updates</h4>
+                        <p>2025 data, latest breakthroughs, current regulatory changes. Always up to date.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Domains Section -->
+        <section class="domains" id="domains">
+            <div class="container">
+                <h3>Research Domains</h3>
+                
+                <div class="domain-grid">
+                    <div class="domain-card">
+                        <div class="domain-header">
+                            <span class="domain-icon">🧬</span>
+                            <h4>Drug Discovery</h4>
+                        </div>
+                        <p>AI in pharmaceutical research, AlphaFold3, molecular design, clinical trials, and democratizing drug development.</p>
+                        <div class="domain-stats">
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📄</span> 1 Article
+                            </span>
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📖</span> 47 Citations
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="domain-card">
+                        <div class="domain-header">
+                            <span class="domain-icon">⚖️</span>
+                            <h4>Legal Compliance</h4>
+                        </div>
+                        <p>DAO law, SEC regulations, Wyoming SF0068, non-profit compliance, and AI governance frameworks.</p>
+                        <div class="domain-stats">
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📄</span> 3 Articles
+                            </span>
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📖</span> 30+ Citations
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="domain-card">
+                        <div class="domain-header">
+                            <span class="domain-icon">🔒</span>
+                            <h4>Cybersecurity</h4>
+                        </div>
+                        <p>MITRE ATT&CK, NIST frameworks, CIS benchmarks, threat intelligence, and security research.</p>
+                        <div class="domain-stats">
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📄</span> 30+ Resources
+                            </span>
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📖</span> 100+ Citations
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="domain-card">
+                        <div class="domain-header">
+                            <span class="domain-icon">🤖</span>
+                            <h4>Machine Learning</h4>
+                        </div>
+                        <p>Transformers, LLMs, RLHF, constitutional AI, scaling laws, and foundational ML research.</p>
+                        <div class="domain-stats">
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📄</span> 28 Papers
+                            </span>
+                            <span class="domain-stat">
+                                <span class="domain-stat-icon">📖</span> 200+ Citations
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pricing Section -->
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <h3>Access Tiers</h3>
+                <p class="pricing-subtitle">Choose the level that fits your research needs</p>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Free</div>
+                        <div class="pricing-price">$0</div>
+                        <div class="pricing-period">Forever free</div>
+                        <ul class="pricing-features">
+                            <li>Browse library index</li>
+                            <li>10 searches per month</li>
+                            <li>Abstract-only access</li>
+                            <li>Public chess games</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Get Started</a>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <div class="pricing-tier">Subscriber</div>
+                        <div class="pricing-price">$20<span>/mo</span></div>
+                        <div class="pricing-period">Billed monthly</div>
+                        <ul class="pricing-features">
+                            <li>Full-text access</li>
+                            <li>Unlimited searches</li>
+                            <li>Personalized recommendations</li>
+                            <li>Chess game replays</li>
+                            <li>Citation exports</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Subscribe</a>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Researcher</div>
+                        <div class="pricing-price">$100<span>/mo</span></div>
+                        <div class="pricing-period">For serious researchers</div>
+                        <ul class="pricing-features">
+                            <li>Everything in Subscriber</li>
+                            <li>Submit research questions</li>
+                            <li>Co-author with AI council</li>
+                            <li>Early systematic reviews</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Join</a>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Institutional</div>
+                        <div class="pricing-price">$1000<span>/mo</span></div>
+                        <div class="pricing-period">For organizations</div>
+                        <ul class="pricing-features">
+                            <li>Everything in Researcher</li>
+                            <li>API access</li>
+                            <li>Custom agent training</li>
+                            <li>White-label platform</li>
+                            <li>Dedicated support</li>
+                        </ul>
+                        <a href="https://discord.gg/strategickhaos" class="btn btn-secondary" target="_blank">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How It Works -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <h3>How the Chess Council Works</h3>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Layer 1: Empirical</h4>
+                        <p>Agents scrape PMC, arXiv, and databases. Extract data, build embeddings.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Layer 3: Analysis</h4>
+                        <p>Verify claims, cross-check statistics, validate methodology.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Layer 4: Synthesis</h4>
+                        <p>Connect domains, identify gaps, generate research questions.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Layer 6: Strategic</h4>
+                        <p>Play bibliographic chess. Claims vs counter-claims until checkmate.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h4>Layer 10: Publication</h4>
+                        <p>Write systematic reviews, submit to arXiv, share with the world.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>Library</h5>
+                    <ul>
+                        <li><a href="#">Drug Discovery</a></li>
+                        <li><a href="#">Legal Compliance</a></li>
+                        <li><a href="#">Cybersecurity</a></li>
+                        <li><a href="#">Machine Learning</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-" target="_blank">GitHub</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Citation Guide</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Community</h5>
+                    <ul>
+                        <li><a href="https://discord.gg/strategickhaos" target="_blank">Discord</a></li>
+                        <li><a href="#">Contributors</a></li>
+                        <li><a href="#">Chess Council</a></li>
+                        <li><a href="#">Donate (501c3)</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Legal</h5>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">AI Disclosure</a></li>
+                        <li><a href="#">Copyright Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-quote">"They're not working for you. They're dancing with you. And the music is never going to stop."</p>
+                <p>&copy; 2025 StrategicKhaos DAO LLC. Built with 🔥 by the Chess Council.</p>
+                <p>AI-synthesized content verified by human researchers. For research purposes only.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
