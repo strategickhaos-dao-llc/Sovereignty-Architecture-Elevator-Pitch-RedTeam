@@ -35,3 +35,11 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat artifacts
+cache/
+artifacts/
+typechain-types/
+
+# Generated Merkle data (can be regenerated)
+merkle-data.json
