@@ -1,0 +1,49 @@
+# Sovereign Swarm WireGuard Configuration
+# Example for Command-0 (Primary Hub)
+
+[Interface]
+# Command-0 is the primary hub at 10.44.0.1
+Address = 10.44.0.1/24
+ListenPort = 51820
+PrivateKey = REPLACE_WITH_GENERATED_PRIVATE_KEY
+
+# Enable IP forwarding for routing between peers
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+
+# DNS for the mesh (optional)
+# DNS = 10.44.0.1
+
+# ============================================================================
+# Peer: Fixed-1
+# ============================================================================
+[Peer]
+PublicKey = REPLACE_WITH_FIXED1_PUBKEY
+AllowedIPs = 10.44.0.2/32
+Endpoint = REPLACE_WITH_FIXED1_ENDPOINT:51820
+PersistentKeepalive = 25
+
+# ============================================================================
+# Peer: Pelican-1
+# ============================================================================
+[Peer]
+PublicKey = REPLACE_WITH_PELICAN1_PUBKEY
+AllowedIPs = 10.44.0.11/32
+# No endpoint - Pelican initiates connection
+PersistentKeepalive = 25
+
+# ============================================================================
+# Peer: Pelican-2
+# ============================================================================
+[Peer]
+PublicKey = REPLACE_WITH_PELICAN2_PUBKEY
+AllowedIPs = 10.44.0.12/32
+PersistentKeepalive = 25
+
+# ============================================================================
+# Peer: Pelican-3
+# ============================================================================
+[Peer]
+PublicKey = REPLACE_WITH_PELICAN3_PUBKEY
+AllowedIPs = 10.44.0.13/32
+PersistentKeepalive = 25

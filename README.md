@@ -280,6 +280,34 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🛡️ Sovereign Swarm Infrastructure
+
+For production mesh network deployment, see the **[Sovereign Swarm](sovereign-swarm/)** directory:
+
+```bash
+# Deploy Command-0 (Primary Hub)
+cd sovereign-swarm
+sudo make bootstrap-command0
+
+# Deploy Fixed-1 (Secondary Hub)
+sudo make bootstrap-fixed1
+
+# Deploy Pelican nodes (Mobile/Field units)
+sudo PELICAN_ID=pelican1 \
+     COMMAND0_PUBKEY="<pubkey>" \
+     COMMAND0_ENDPOINT="<ip>:51820" \
+     make bootstrap-pelican
+```
+
+Features:
+- 🔐 **Ed25519 cryptography** for identity and capability tokens
+- 🌐 **WireGuard mesh** for encrypted peer-to-peer networking
+- 📦 **NATS JetStream** for distributed messaging
+- 🔄 **Syncthing** for secure file synchronization
+- ⚡ **Raspberry Pi optimized** for field deployments
+
+See [sovereign-swarm/DEPLOYMENT.md](sovereign-swarm/DEPLOYMENT.md) for the complete deployment guide.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file

@@ -1,0 +1,22 @@
+[Unit]
+Description=SwarmGate Token Enforcement Agent
+Documentation=https://github.com/Strategickhaos/sovereign-swarm
+After=network.target wg-quick@wg0.service
+
+[Service]
+Type=simple
+ExecStart=/opt/sovereign-swarm/swarm-gate.sh watch
+Restart=always
+RestartSec=5
+User=root
+StandardOutput=append:/var/log/sovereign-swarm/swarmgate.log
+StandardError=append:/var/log/sovereign-swarm/swarmgate.log
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadOnlyPaths=/opt/sovereign-swarm/ca
+
+[Install]
+WantedBy=multi-user.target
