@@ -15,6 +15,9 @@ discord:
     agents: "#agents"
     prs: "#prs"
     dev_feed: "#dev-feed"
+    # Immune System Discord Channels
+    immune_response: "#immune-response"
+    swarm_health: "#swarm-health"
   bot:
     app_id: null                    # Discord application ID
     token_secret_ref: "vault://kv/discord/bot_token"
@@ -29,9 +32,14 @@ discord:
         - "/deploy"
         - "/scale"
         - "/review"
+        - "/immune"
+        - "/swarm"
+        - "/cluster"
       prod_protected_commands:
         - "/deploy"
         - "/scale"
+        - "/immune inject"
+        - "/cluster wake"
     rate_limits:
       max_msgs_per_min: 30
       burst: 10
@@ -40,12 +48,30 @@ infra:
   environments: ["dev", "staging", "prod"]
   control_api:
     base_url: "https://control.internal.strategickhaos"   # placeholder
+    bearer_env: "CTRL_API_TOKEN"
     auth:
       type: "bearer"
       token_secret_ref: "vault://kv/ctrl/api_token"
     network:
       access: "zerotrust"         # vpn|zerotrust|public
       cidrs_allowed: []           # fill for VPN/IP allowlists
+  # GKE Multi-Cluster Orchestration - Three dormant dragons
+  gke_clusters:
+    - name: "jarvis-swarm-personal-001"
+      description: "Main production brain"
+      zone: "us-central1"
+      api_server: "https://jarvis-swarm-personal-001.us-central1.gke.io"
+      namespaces: ["swarm-immune", "production", "agents"]
+    - name: "red-team"
+      description: "Security testing environment"
+      zone: "us-central1"
+      api_server: "https://red-team.us-central1.gke.io"
+      namespaces: ["security-tests", "penetration", "chaos"]
+    - name: "autopilot-cluster-1"
+      description: "Experimental playground"
+      zone: "us-central1"
+      api_server: "https://autopilot-cluster-1.us-central1.gke.io"
+      namespaces: ["experiments", "staging", "dev"]
   message_bus:
     type: "redis"                 # redis|nats|kafka|null
     url: "redis://redis.internal.strategickhaos:6379"
@@ -322,3 +348,75 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Immune System Configuration - Living Infrastructure
+immune_system:
+  enabled: true
+  # Discord integration for immune system
+  channels:
+    immune_response: "#immune-response"
+    swarm_health: "#swarm-health"
+  # Slash commands configuration
+  slash_commands:
+    inject_threat:
+      enabled: true
+      description: "Deploy test threat to trigger immune response"
+      threat_types: ["malware", "ddos", "intrusion", "anomaly"]
+    status:
+      enabled: true
+      description: "Show cell counts, mode, recent activity"
+    antibody:
+      enabled: true
+      description: "Manually add threat signature to immune memory"
+    swarm_mode:
+      enabled: true
+      description: "Force behavioral state change"
+      modes: ["hunt", "coordinate", "biofilm"]
+  # Cell types in the immune system
+  cell_types:
+    rbc:
+      description: "Red blood cells - Resource carriers"
+      emoji: "🩸"
+      default_count: 3
+    wbc:
+      description: "White blood cells - Threat scanners"
+      emoji: "🔬"
+      default_count: 2
+    platelet:
+      description: "Platelets - Healing responders"
+      emoji: "🩹"
+      default_count: 1
+  # Behavioral modes for swarm intelligence
+  behavioral_modes:
+    - name: "hunt"
+      description: "Aggressive threat seeking"
+      emoji: "🔥"
+    - name: "coordinate"
+      description: "Collaborative defense"
+      emoji: "🤝"
+    - name: "biofilm"
+      description: "Defensive formation"
+      emoji: "🛡️"
+  # Quorum sensing configuration
+  quorum_sensing:
+    enabled: true
+    density_threshold: 10
+    propagation_delay_ms: 100
+  # Circadian rhythm
+  circadian:
+    enabled: true
+    day_mode_hours: [6, 22]  # 6 AM to 10 PM
+  # Alert thresholds
+  alert_thresholds:
+    low: 5
+    medium: 10
+    high: 20
+  # Webhook configuration
+  webhook:
+    endpoint: "/webhooks/immune"
+    events:
+      - "threat_detected"
+      - "wbc_spawned"
+      - "antibody_learned"
+      - "mode_changed"
+      - "circadian_shift"

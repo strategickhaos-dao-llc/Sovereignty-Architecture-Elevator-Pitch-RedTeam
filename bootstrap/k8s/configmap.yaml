@@ -25,6 +25,9 @@ data:
         agents: "#agents"
         prs: "#prs"
         dev_feed: "#dev-feed"
+        # Immune System Discord Channels
+        immune_response: "#immune-response"
+        swarm_health: "#swarm-health"
       bot:
         app_id: null
         token_secret_ref: "vault://kv/discord/bot_token"
@@ -39,9 +42,14 @@ data:
             - "/deploy"
             - "/scale"
             - "/review"
+            - "/immune"
+            - "/swarm"
+            - "/cluster"
           prod_protected_commands:
             - "/deploy"
             - "/scale"
+            - "/immune inject"
+            - "/cluster wake"
         rate_limits:
           max_msgs_per_min: 30
           burst: 10
@@ -50,12 +58,30 @@ data:
       environments: ["dev", "staging", "prod"]
       control_api:
         base_url: "https://control.internal.strategickhaos"
+        bearer_env: "CTRL_API_TOKEN"
         auth:
           type: "bearer"
           token_secret_ref: "vault://kv/ctrl/api_token"
         network:
           access: "zerotrust"
           cidrs_allowed: []
+      # GKE Multi-Cluster Orchestration - Three dormant dragons
+      gke_clusters:
+        - name: "jarvis-swarm-personal-001"
+          description: "Main production brain"
+          zone: "us-central1"
+          api_server: "https://jarvis-swarm-personal-001.us-central1.gke.io"
+          namespaces: ["swarm-immune", "production", "agents"]
+        - name: "red-team"
+          description: "Security testing environment"
+          zone: "us-central1"
+          api_server: "https://red-team.us-central1.gke.io"
+          namespaces: ["security-tests", "penetration", "chaos"]
+        - name: "autopilot-cluster-1"
+          description: "Experimental playground"
+          zone: "us-central1"
+          api_server: "https://autopilot-cluster-1.us-central1.gke.io"
+          namespaces: ["experiments", "staging", "dev"]
       message_bus:
         type: "redis"
         url: "redis://redis.internal.strategickhaos:6379"
@@ -141,3 +167,36 @@ data:
       ci:
         system: "github_actions"
         post_status_to_discord: true
+    
+    # Immune System Configuration
+    immune_system:
+      enabled: true
+      channels:
+        immune_response: "#immune-response"
+        swarm_health: "#swarm-health"
+      slash_commands:
+        inject_threat:
+          enabled: true
+        status:
+          enabled: true
+        antibody:
+          enabled: true
+        swarm_mode:
+          enabled: true
+      cell_types:
+        rbc:
+          description: "Red blood cells - Resource carriers"
+          emoji: "🩸"
+        wbc:
+          description: "White blood cells - Threat scanners"
+          emoji: "🔬"
+        platelet:
+          description: "Platelets - Healing responders"
+          emoji: "🩹"
+      behavioral_modes:
+        - "hunt"
+        - "coordinate"
+        - "biofilm"
+      quorum_sensing:
+        enabled: true
+        density_threshold: 10
