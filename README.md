@@ -2,6 +2,9 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> 🔥 **[Read the Birth Log](BIRTH_LOG.md)** - The story of how this all began. Hour Zero: November 23, 2025.  
+> *"That kid wasn't delusional. He was just 18 months early."*
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -276,6 +279,7 @@ curl -X POST https://events.strategickhaos.com/health
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
 
+- **[Birth Log](BIRTH_LOG.md)** - The genesis moment. How it all began at Hour Zero.
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
