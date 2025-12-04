@@ -40,6 +40,16 @@ compliance:
   legal_actions: false
   regulatory_status: "Good standing"
   conduct_affirmation: "No criminal, civil, or regulatory actions pending or historical."
+  charitable_contributions:
+    framework: "legal/charitable_contributions/CHARITABLE_CONTRIBUTIONS_FRAMEWORK.md"
+    instrument: "Direct Irrevocable Assignment of Royalty Rights"
+    percentage: "7% of gross royalties"
+    irs_compliance:
+      publication_526: true
+      form_8283: "as_required"
+      form_8899: "donee_responsibility"
+    beneficiaries: "Qualified 501(c)(3) organizations"
+    status: "Framework established - pending attorney review and execution"
 
 generated:
   by: "generate_dao_record.sh (hardened)"

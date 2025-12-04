@@ -1,0 +1,187 @@
+================================================================================
+CHARITABLE CONTRIBUTION ACKNOWLEDGMENT
+================================================================================
+
+INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+This template is for use by the receiving 501(c)(3) charity to acknowledge
+receipt of an irrevocable assignment of royalty rights per IRS requirements.
+
+--------------------------------------------------------------------------------
+CHARITY LETTERHEAD
+--------------------------------------------------------------------------------
+
+[CHARITY NAME]
+[Street Address]
+[City, State ZIP]
+[Phone Number]
+[Website]
+EIN: [XX-XXXXXXX]
+
+--------------------------------------------------------------------------------
+ACKNOWLEDGMENT LETTER
+--------------------------------------------------------------------------------
+
+Date: [DATE]
+
+Re: Acknowledgment of Charitable Contribution
+
+Dear [Donor Name],
+
+This letter acknowledges and confirms receipt of the following charitable
+contribution to [Charity Name]:
+
+--------------------------------------------------------------------------------
+DONOR INFORMATION
+--------------------------------------------------------------------------------
+
+Donor Name:      Domenic Gabriel Garza / Strategickhaos DAO LLC
+Donor EIN:       39-2923503
+Donor Address:   1216 S Fredonia St
+                 Longview, TX 75602-2544
+
+--------------------------------------------------------------------------------
+CONTRIBUTION DESCRIPTION
+--------------------------------------------------------------------------------
+
+Type of Contribution:    Irrevocable Assignment of Royalty Rights
+
+Description:             Irrevocable assignment of a [X%] share of the 7% gross
+                         royalty interest in the intellectual property listed in
+                         Exhibit A to the Assignment dated [DATE].
+
+Date of Gift:            [DATE - Assignment execution date]
+
+Date of Receipt:         [DATE - When charity received executed copy]
+
+--------------------------------------------------------------------------------
+FAIR MARKET VALUE STATEMENT
+--------------------------------------------------------------------------------
+
+Per IRS regulations, [Charity Name] does not and cannot provide a valuation of
+this noncash charitable contribution. The donor is solely responsible for
+determining and substantiating the fair market value of the contributed
+property for tax purposes.
+
+If the claimed value exceeds $5,000, a qualified appraisal by a qualified
+appraiser is required per IRS regulations.
+
+--------------------------------------------------------------------------------
+GOODS OR SERVICES PROVIDED
+--------------------------------------------------------------------------------
+
+[  ] No goods or services were provided in exchange for this contribution.
+
+[  ] The following goods or services were provided in exchange for this
+     contribution:
+
+     Description: _____________________________________________
+     
+     Fair Market Value: $_____________
+
+     Note: If goods or services were provided, the deductible amount is limited
+     to the excess of the contribution over the fair market value of goods or
+     services received.
+
+--------------------------------------------------------------------------------
+QUID PRO QUO STATEMENT
+--------------------------------------------------------------------------------
+
+[Charity Name] certifies that:
+
+[  ] This contribution was made with no expectation of a return benefit, and
+     no goods or services of more than token value were provided in exchange.
+
+[  ] OR: Goods or services as described above were provided. The deductible
+     portion of this contribution is limited to the amount by which the
+     contribution exceeds the fair market value of the goods or services
+     provided.
+
+--------------------------------------------------------------------------------
+501(c)(3) STATUS CONFIRMATION
+--------------------------------------------------------------------------------
+
+[Charity Name] confirms that it is a qualified 501(c)(3) tax-exempt
+organization under the Internal Revenue Code. Contributions to [Charity Name]
+are deductible under IRC Section 170 to the extent permitted by law.
+
+Our determination letter from the IRS is dated [DATE] and our exempt status
+has been continuously in effect since [DATE].
+
+--------------------------------------------------------------------------------
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+
+For questions regarding this acknowledgment or the contributed property:
+
+Contact Name:    [Name]
+Title:           [Title]
+Phone:           [Phone]
+Email:           [Email]
+
+For payment and reporting inquiries:
+
+Contact Name:    [Name]
+Title:           [Title]
+Phone:           [Phone]
+Email:           [Email]
+
+--------------------------------------------------------------------------------
+SIGNATURE
+--------------------------------------------------------------------------------
+
+This acknowledgment is provided in compliance with IRS substantiation
+requirements for charitable contributions.
+
+Sincerely,
+
+_______________________________________
+[Authorized Signer Name]
+
+_______________________________________
+[Title]
+
+_______________________________________
+Date
+
+[CHARITY OFFICIAL SEAL/LOGO]
+
+--------------------------------------------------------------------------------
+IRS COMPLIANCE NOTES
+--------------------------------------------------------------------------------
+
+DONOR RECORDKEEPING (per Publication 526):
+
+1. Written acknowledgment required for any single contribution of $250 or more
+
+2. Acknowledgment must include:
+   - Description of noncash property contributed
+   - Whether any goods or services were provided in exchange
+   - Description and good faith estimate of value of goods/services, if any
+
+3. Donor must obtain acknowledgment by earlier of:
+   - Date tax return is filed, or
+   - Due date (including extensions) for filing the return
+
+4. For noncash contributions over $500: File Form 8283
+
+5. For noncash contributions over $5,000: Qualified appraisal required;
+   complete Section B of Form 8283
+
+DONEE REPORTING (Form 8899):
+
+If this contributed intellectual property produces income for the charity,
+the charity may be required to file Form 8899 (Donee Information Return) to
+report that income. This may entitle the donor to additional deductions.
+
+================================================================================
+END OF TEMPLATE
+================================================================================
+
+INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+This template is provided for informational purposes only and does not
+constitute legal advice. Charities should consult with their own legal counsel
+regarding proper acknowledgment procedures.
+
+© 2025 Strategickhaos DAO LLC. Internal use only.

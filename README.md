@@ -280,6 +280,21 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 💝 Charitable Contributions Framework
+
+This project commits 7% of gross royalties to qualified 501(c)(3) charitable organizations through an irrevocable assignment structure aligned with IRS rules.
+
+- **[Charitable Contributions Framework](legal/charitable_contributions/CHARITABLE_CONTRIBUTIONS_FRAMEWORK.md)** - Overview and legal instrument selection
+- **[Execution Checklist](legal/charitable_contributions/EXECUTION_CHECKLIST.md)** - One-day execution guide
+- **[IRS Compliance Checklist](legal/charitable_contributions/templates/irs_compliance_checklist.md)** - Substantiation requirements
+
+### Templates
+- [Irrevocable Assignment Template](legal/charitable_contributions/templates/irrevocable_assignment_template.txt)
+- [Charity Acknowledgment Template](legal/charitable_contributions/templates/charity_acknowledgment_template.txt)
+- [Evidence Ledger Template](legal/charitable_contributions/templates/evidence_ledger_template.yaml)
+
+> **Note**: These documents are internal drafts only. No funds are solicited. All legal matters require review by qualified counsel.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file

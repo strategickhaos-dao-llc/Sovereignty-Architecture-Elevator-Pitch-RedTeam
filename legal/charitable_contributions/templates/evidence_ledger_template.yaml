@@ -1,0 +1,201 @@
+# evidence_ledger_template.yaml
+# Strategickhaos DAO LLC — Charitable Contribution Evidence Ledger
+# Template for cryptographically verified proof chain
+#
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+version: "1.0"
+ledger_type: "charitable_contribution_evidence"
+created_date: "2025-11-28"
+operator:
+  name: "Domenic Garza"
+  entity: "Strategickhaos DAO LLC"
+  ein: "39-2923503"
+
+# Evidence chain for irrevocable assignment
+evidence_ledger:
+  
+  # Primary assignment document
+  - doc_id: "assignment-001"
+    doc_type: "irrevocable_assignment"
+    doc_name: "Assignment_YYYY-MM-DD.pdf"
+    description: "Irrevocable Assignment of 7% Royalty Rights"
+    
+    # Document identifiers
+    sha256: "<HASH_VALUE>"
+    md5: "<HASH_VALUE>"  # Optional secondary hash
+    
+    # Cryptographic proofs
+    gpg_signature:
+      file: "Assignment_YYYY-MM-DD.pdf.asc"
+      key_id: "<GPG_KEY_ID>"
+      fingerprint: "<GPG_FINGERPRINT>"
+      timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    
+    # OpenTimestamps proof
+    ots_proof:
+      file: "Assignment_YYYY-MM-DD.pdf.ots"
+      bitcoin_block: null  # Populated after confirmation
+      timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    
+    # IPFS content identifiers
+    ipfs_cids:
+      pdf: "bafy..."
+      ots: "bafy..."
+      asc: "bafy..."
+    
+    # Execution metadata
+    execution:
+      executed_date: "YYYY-MM-DDTHH:MM:SSZ"
+      notarized: true
+      notary_state: "TX"
+      notary_commission_expires: "YYYY-MM-DD"
+    
+    # Parties
+    parties:
+      assignor: "Domenic Gabriel Garza / Strategickhaos DAO LLC"
+      beneficiaries:
+        - name: "St. Jude Children's Research Hospital"
+          ein: "35-1044585"
+          share_of_7_percent: "X%"
+        - name: "Doctors Without Borders USA"
+          ein: "13-3433452"
+          share_of_7_percent: "X%"
+
+  # Charity acknowledgment documents
+  - doc_id: "ack-stjude-001"
+    doc_type: "charity_acknowledgment"
+    doc_name: "Acknowledgment_StJude_YYYY-MM-DD.pdf"
+    description: "Written acknowledgment from St. Jude Children's Research Hospital"
+    
+    sha256: "<HASH_VALUE>"
+    gpg_signature:
+      file: "Acknowledgment_StJude_YYYY-MM-DD.pdf.asc"
+      key_id: "<GPG_KEY_ID>"
+      timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    
+    ots_proof:
+      file: "Acknowledgment_StJude_YYYY-MM-DD.pdf.ots"
+      timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    
+    ipfs_cids:
+      pdf: "bafy..."
+      ots: "bafy..."
+      asc: "bafy..."
+    
+    received_date: "YYYY-MM-DD"
+    charity_ein: "35-1044585"
+    confirms_no_goods_services: true
+
+  - doc_id: "ack-msf-001"
+    doc_type: "charity_acknowledgment"
+    doc_name: "Acknowledgment_MSF_YYYY-MM-DD.pdf"
+    description: "Written acknowledgment from Doctors Without Borders USA"
+    
+    sha256: "<HASH_VALUE>"
+    gpg_signature:
+      file: "Acknowledgment_MSF_YYYY-MM-DD.pdf.asc"
+      key_id: "<GPG_KEY_ID>"
+      timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    
+    ots_proof:
+      file: "Acknowledgment_MSF_YYYY-MM-DD.pdf.ots"
+      timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    
+    ipfs_cids:
+      pdf: "bafy..."
+    
+    received_date: "YYYY-MM-DD"
+    charity_ein: "13-3433452"
+    confirms_no_goods_services: true
+
+# IRS form tracking
+irs_forms:
+  
+  form_8283:
+    required: true  # Required if noncash contribution > $500
+    status: "pending"  # pending | filed | not_required
+    section_a_required: true  # For contributions $500-$5,000
+    section_b_required: false  # For contributions > $5,000
+    qualified_appraisal_obtained: false
+    appraiser_name: null
+    appraisal_date: null
+    filed_with_return_year: null
+    
+  form_8899:
+    description: "Donee Information Return - filed by charity if IP produces income"
+    expected_from:
+      - charity: "St. Jude Children's Research Hospital"
+        ein: "35-1044585"
+        expected_if_income_generated: true
+      - charity: "Doctors Without Borders USA"
+        ein: "13-3433452"
+        expected_if_income_generated: true
+
+# Quarterly payment tracking
+quarterly_payments:
+  - quarter: "Q1-YYYY"
+    period_start: "YYYY-01-01"
+    period_end: "YYYY-03-31"
+    gross_royalties: 0.00
+    seven_percent_amount: 0.00
+    payment_date: null
+    payments:
+      - beneficiary: "St. Jude Children's Research Hospital"
+        amount: 0.00
+        payment_method: null
+        confirmation: null
+      - beneficiary: "Doctors Without Borders USA"
+        amount: 0.00
+        payment_method: null
+        confirmation: null
+    statement_hash: null
+    ledger_entry_hash: null
+
+# Verification commands
+verification:
+  windows_powershell:
+    compute_hash: "Get-FileHash .\\<filename> -Algorithm SHA256"
+    verify_gpg: "gpg --verify <filename>.asc <filename>"
+    verify_ots: "ots verify <filename>.ots"
+  
+  linux_bash:
+    compute_hash: "sha256sum <filename>"
+    verify_gpg: "gpg --verify <filename>.asc <filename>"
+    verify_ots: "ots verify <filename>.ots"
+  
+  ipfs:
+    add_file: "ipfs add <filename>"
+    retrieve_file: "ipfs cat <cid>"
+    pin_file: "ipfs pin add <cid>"
+
+# Audit trail
+audit_log:
+  - timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    action: "ledger_created"
+    operator: "Domenic Garza"
+    hash_before: null
+    hash_after: "<HASH_VALUE>"
+    
+  - timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    action: "assignment_executed"
+    operator: "Domenic Garza"
+    details: "Irrevocable assignment signed and notarized"
+    
+  - timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    action: "delivery_completed"
+    operator: "Domenic Garza"
+    details: "Executed copies delivered to all beneficiaries"
+    
+  - timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+    action: "acknowledgment_received"
+    operator: "Domenic Garza"
+    details: "Written acknowledgment received from [charity]"
+
+# GPG signature block placeholder
+# Save detached signature as: evidence_ledger.yaml.asc
+# Command: gpg --armor --detach-sign evidence_ledger.yaml
+
+# Schema version for future compatibility
+schema_version: "1.0"
+last_updated: "YYYY-MM-DDTHH:MM:SSZ"
