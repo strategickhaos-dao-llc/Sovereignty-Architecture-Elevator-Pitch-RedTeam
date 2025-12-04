@@ -1,0 +1,8 @@
+{
+  "accounts": {
+    "SWARM": {
+      "jetstream": true,
+      "users": []
+    }
+  }
+}

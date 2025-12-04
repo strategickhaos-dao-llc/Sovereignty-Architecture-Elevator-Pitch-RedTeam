@@ -1,0 +1,34 @@
+# Grok Node Configuration
+# Sovereign Swarm AI Inference Node
+
+node:
+  id: ${SWARM_NODE_ID}
+  role: inference
+
+nats:
+  url: ${NATS_URL}
+  subjects:
+    - telemetry.grok.>
+    - cmd.grok.>
+  streams:
+    - TELEMETRY
+    - CMD
+
+matrix:
+  homeserver: ${MATRIX_HOMESERVER}
+  room_alias: "#grok:swarm.local"
+
+model:
+  path: /data/models
+  default: grok-1
+  max_context: 8192
+  batch_size: 16
+
+resources:
+  max_concurrent_requests: 4
+  request_timeout_s: 120
+  queue_size: 100
+
+logging:
+  level: info
+  format: json

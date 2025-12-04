@@ -1,0 +1,32 @@
+# Headscale configuration for Sovereign Swarm
+# Coordination server for WireGuard mesh
+
+server_url: https://swarm.local:443
+listen_addr: 0.0.0.0:8090
+metrics_listen_addr: 127.0.0.1:9090
+
+private_key_path: /var/lib/headscale/private.key
+noise:
+  private_key_path: /var/lib/headscale/noise_private.key
+
+ip_prefixes:
+  - 10.44.0.0/16
+
+derp:
+  server:
+    enabled: false
+  urls: []
+
+dns_config:
+  base_domain: swarm.local
+  magic_dns: true
+  nameservers:
+    - 10.44.0.1
+
+database:
+  type: sqlite3
+  sqlite:
+    path: /var/lib/headscale/db.sqlite
+
+log:
+  level: info
