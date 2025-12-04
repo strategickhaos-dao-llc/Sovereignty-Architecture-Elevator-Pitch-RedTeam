@@ -35,3 +35,8 @@ target/
 
 # Workspace data
 workspace/
+
+# Legal bundle artifacts (generated locally)
+legal/bundle.tar
+*.pyc
+__pycache__/
