@@ -51,9 +51,16 @@ kubectl create configmap discord-ops-discovery \
     -n ops \
     --dry-run=client -o yaml | kubectl apply -f -
 
-# 5. Restart Discord bot to pick up new commands
+# 5. Restart Discord bot to pick up new commands (if it exists)
 echo "🔄 Restarting Discord bot..."
-kubectl rollout restart deployment/discord-ops-bot -n ops 2>/dev/null || echo "   Discord bot deployment not found (may need to deploy first)"
+DISCORD_BOT_DEPLOYMENT="${DISCORD_BOT_DEPLOYMENT:-discord-ops-bot}"
+if kubectl get deployment "$DISCORD_BOT_DEPLOYMENT" -n ops &>/dev/null; then
+    kubectl rollout restart deployment/"$DISCORD_BOT_DEPLOYMENT" -n ops
+    echo "   Discord bot restarted"
+else
+    echo "   Discord bot deployment '$DISCORD_BOT_DEPLOYMENT' not found"
+    echo "   Set DISCORD_BOT_DEPLOYMENT env var if using a different name"
+fi
 
 # 6. Test deployment
 echo ""

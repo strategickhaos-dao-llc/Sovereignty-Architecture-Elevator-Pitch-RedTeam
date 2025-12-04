@@ -67,7 +67,7 @@ spec:
         fsGroup: 10001
       containers:
       - name: api
-        image: ghcr.io/strategickhaos-swarm-intelligence/valoryield-api:latest
+        image: ghcr.io/strategickhaos-swarm-intelligence/valoryield-api:v1.0.0
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
