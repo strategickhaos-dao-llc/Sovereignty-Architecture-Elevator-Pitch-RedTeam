@@ -28,6 +28,39 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 🏢 GitHub Enterprise Cloud
+
+This project is hosted under **Strategickhaos Swarm Intelligence** — a GitHub Enterprise Cloud account.
+
+**Enterprise URL:** https://github.com/enterprises/strategickhaos-swarm-intelligence
+
+### Enterprise Quick Start
+
+```bash
+# Bootstrap enterprise configuration
+./enterprise-bootstrap.sh bootstrap
+
+# Setup credentials (HERE-DOC method)
+./enterprise-bootstrap.sh credentials <USERNAME> <PAT>
+
+# Or use GitHub CLI with enterprise scopes
+./enterprise-bootstrap.sh gh-login
+
+# Mirror a repository to enterprise
+./enterprise-bootstrap.sh mirror https://github.com/user/repo.git
+```
+
+### Enterprise Capabilities
+
+- ✅ **Unlimited Organizations** — Create specialized orgs for different projects
+- ✅ **Enterprise SSO** — SAML single sign-on integration
+- ✅ **Advanced Security** — Code scanning, secret scanning, dependency review
+- ✅ **Enterprise Runners** — Self-hosted runner groups
+- ✅ **Centralized Billing** — Single invoice for all organizations
+- ✅ **Policy Enforcement** — Repository and branch protection at scale
+
+📖 **Full Setup Guide:** [ENTERPRISE_SETUP.md](ENTERPRISE_SETUP.md)
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
