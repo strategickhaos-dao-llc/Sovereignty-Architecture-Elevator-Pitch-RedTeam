@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: red-team-isolation
+  namespace: red-team
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from within red-team namespace
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: red-team
+    # Allow from quantum-chess namespace (NATS)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: quantum-chess
+  egress:
+    # Allow to blue-team for controlled attacks
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: blue-team
+    # Allow to quantum-chess namespace (NATS)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: quantum-chess
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: red-team-agent
+  namespace: red-team
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: red-team-role
+  namespace: red-team
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: red-team-binding
+  namespace: red-team
+subjects:
+  - kind: ServiceAccount
+    name: red-team-agent
+    namespace: red-team
+roleRef:
+  kind: Role
+  name: red-team-role
+  apiGroup: rbac.authorization.k8s.io

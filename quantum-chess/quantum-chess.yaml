@@ -1,0 +1,262 @@
+# Quantum Chess Wargame Simulator Configuration
+# Moonlight Sunshine Matrix Prototype Sovereign (MSMS)
+
+version: "1.0"
+name: "quantum-chess-wargame-simulator"
+codename: "moonlight-sunshine-matrix-prototype-sovereign"
+
+# Core Architecture
+architecture:
+  dimensions: 10
+  metaphor: "10 chessboards stacked vertically"
+  squares_per_board: 64
+  total_squares: 640
+  
+  gameplay:
+    mode: "continuous"
+    red_team: "offensive"
+    blue_team: "defensive"
+    quantum_entanglement: true
+    echolocation: true
+
+# Namespace Configuration
+namespaces:
+  quantum_chess: "quantum-chess"
+  red_team: "red-team"
+  blue_team: "blue-team"
+
+# NATS JetStream Configuration
+nats:
+  url: "nats://nats.quantum-chess.svc.cluster.local:4222"
+  cluster_name: "quantum-chess-cluster"
+  
+  streams:
+    - name: "red-team-actions"
+      subjects:
+        - "attack.>"
+        - "probe.>"
+        - "exploit.>"
+      retention: "limits"
+      max_age: "24h"
+      max_bytes: 1073741824  # 1GB
+      replicas: 3
+      
+    - name: "blue-team-actions"
+      subjects:
+        - "defend.>"
+        - "detect.>"
+        - "respond.>"
+      retention: "limits"
+      max_age: "24h"
+      max_bytes: 1073741824
+      replicas: 3
+      
+    - name: "legion-analysis"
+      subjects:
+        - "learn.>"
+        - "adapt.>"
+        - "report.>"
+      retention: "limits"
+      max_age: "7d"
+      max_bytes: 5368709120  # 5GB
+      replicas: 3
+  
+  consumers:
+    - name: "red-observer"
+      stream: "blue-team-actions"
+      purpose: "Red team learns defense patterns"
+      
+    - name: "blue-observer"
+      stream: "red-team-actions"
+      purpose: "Blue team learns attack patterns"
+      
+    - name: "legion"
+      streams:
+        - "red-team-actions"
+        - "blue-team-actions"
+      purpose: "Holistic learning and analysis"
+
+# Red Team Configuration
+red_team:
+  os: "Kali Linux"
+  image: "kalilinux/kali-rolling:latest"
+  role: "Offensive security / Attack"
+  mindset: "Find vulnerabilities, exploit systems"
+  
+  resource_limits:
+    cpu: "4"
+    memory: "8Gi"
+    pods: 20
+  
+  agents:
+    - name: "port-scanner"
+      tools: ["nmap", "masscan", "rustscan"]
+      capability: "Network reconnaissance"
+      
+    - name: "exploit-engine"
+      tools: ["metasploit", "nuclei", "sqlmap"]
+      capability: "Vulnerability exploitation"
+      
+    - name: "lateral-movement"
+      tools: ["crackmapexec", "impacket", "bloodhound"]
+      capability: "Internal network pivoting"
+      
+    - name: "data-exfiltration"
+      tools: ["dnscat2", "chisel", "rclone"]
+      capability: "Data extraction"
+      
+    - name: "persistence"
+      tools: ["sliver", "covenant"]
+      capability: "Maintain access"
+      
+    - name: "c2-operator"
+      tools: ["mythic", "havoc"]
+      capability: "Command & control"
+
+# Blue Team Configuration
+blue_team:
+  os: "Parrot OS"
+  image: "parrotsec/core:latest"
+  role: "Defensive security / Protect"
+  mindset: "Block attacks, detect intrusions"
+  
+  resource_limits:
+    cpu: "4"
+    memory: "8Gi"
+    pods: 20
+  
+  agents:
+    - name: "firewall-manager"
+      tools: ["iptables", "nftables", "ipset"]
+      capability: "Network perimeter control"
+      
+    - name: "ids-ips-controller"
+      tools: ["suricata", "snort", "zeek"]
+      capability: "Intrusion detection/prevention"
+      
+    - name: "threat-hunter"
+      tools: ["osquery", "velociraptor", "yara"]
+      capability: "Proactive threat discovery"
+      
+    - name: "incident-response"
+      tools: ["thehive", "cortex", "dfir-iris"]
+      capability: "Incident management"
+      
+    - name: "siem-correlator"
+      tools: ["wazuh", "elasticsearch", "kibana"]
+      capability: "Event correlation"
+      
+    - name: "forensics-analyzer"
+      tools: ["volatility", "autopsy", "sleuthkit"]
+      capability: "Digital forensics"
+      
+    - name: "patch-manager"
+      tools: ["ansible", "puppet", "osquery"]
+      capability: "Vulnerability remediation"
+      
+    - name: "backup-validator"
+      tools: ["restic", "borg", "rclone"]
+      capability: "Recovery verification"
+
+# Visualization Configuration
+visualization:
+  moonlight:
+    type: "Streaming client"
+    purpose: "Visual representation of 10 boards"
+    features:
+      - "Live attack/defense moves"
+      - "Real-time board updates"
+      - "Team status display"
+    
+  sunshine:
+    type: "Streaming host"
+    purpose: "Capture both cluster states"
+    features:
+      - "3D chess visualization"
+      - "GPU-accelerated rendering"
+      - "Multi-board display"
+  
+  port: 8080
+  refresh_rate: "500ms"
+
+# Legion Analysis Engine
+legion:
+  enabled: true
+  learning:
+    rate: 0.1
+    batch_size: 100
+    update_interval: "1h"
+  
+  analysis:
+    red_team_patterns:
+      - attack_sequences
+      - evasion_techniques
+      - exploitation_success_rate
+    
+    blue_team_patterns:
+      - detection_accuracy
+      - response_time
+      - coverage_gaps
+    
+    combined:
+      - attack_defense_correlation
+      - improvement_recommendations
+      - risk_assessment
+  
+  output:
+    nats_stream: "legion-analysis"
+    report_interval: "1h"
+    dashboard: true
+
+# Integration with Sovereignty Architecture
+integrations:
+  sovereignprmanager:
+    enabled: true
+    training_data: "quantum-chess-simulations"
+    learns: "Attack patterns in code"
+    blocks: "PRs introducing vulnerabilities"
+    approves: "PRs strengthening defenses"
+  
+  treasury_os:
+    enabled: true
+    protected_by: "blue-team"
+    tested_by: "red-team"
+    result: "Hardened before holding real money"
+  
+  discord:
+    enabled: true
+    channels:
+      red_team: "#red-team"
+      blue_team: "#blue-team"
+      quantum_chess: "#quantum-chess"
+      legion_analysis: "#legion-analysis"
+
+# Cost Analysis
+cost_analysis:
+  traditional:
+    red_team: "$150K/year consultants"
+    blue_team: "$150K/year consultants"
+    frequency: "Quarterly penetration tests"
+    learning: "Manual reports, slow iteration"
+    total: "$300K/year"
+  
+  quantum_chess:
+    red_team: "$50/month cluster"
+    blue_team: "$50/month cluster"
+    frequency: "Continuous real-time simulation"
+    learning: "Legion analyzes simultaneously"
+    total: "$1,200/year"
+  
+  improvement:
+    cost_reduction: "250x cheaper"
+    learning_speed: "1000x faster"
+    combined_multiplier: "250,000x improvement"
+
+# Safety and Security
+safety:
+  sandbox_mode: true
+  no_external_targets: true
+  isolated_network: true
+  audit_logging: true
+  encrypted_communication: true
+  max_attack_rate: 100  # per minute

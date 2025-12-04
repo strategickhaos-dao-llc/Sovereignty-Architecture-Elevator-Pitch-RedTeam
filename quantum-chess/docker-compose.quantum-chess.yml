@@ -1,0 +1,306 @@
+# Quantum Chess Wargame Simulator - Local Development
+# Docker Compose configuration for running the simulator locally
+
+version: "3.9"
+
+networks:
+  quantum-chess:
+    name: quantum-chess-network
+    driver: bridge
+
+volumes:
+  nats-data:
+  red-team-data:
+  blue-team-data:
+
+services:
+  # ═══════════════════════════════════════════════════════════════
+  # NATS JetStream - Quantum Entanglement Layer
+  # ═══════════════════════════════════════════════════════════════
+  nats:
+    image: nats:2.10-alpine
+    container_name: quantum-chess-nats
+    ports:
+      - "4222:4222"   # Client connections
+      - "8222:8222"   # HTTP monitoring
+      - "6222:6222"   # Cluster routing
+    volumes:
+      - nats-data:/data/jetstream
+    command: >
+      -js
+      -sd /data/jetstream
+      -m 8222
+      --name quantum-chess
+    networks:
+      - quantum-chess
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "quantum-chess.component=nats"
+      - "quantum-chess.purpose=entanglement"
+
+  # ═══════════════════════════════════════════════════════════════
+  # RED TEAM CLUSTER (Kali Linux)
+  # ═══════════════════════════════════════════════════════════════
+  red-team-controller:
+    image: kalilinux/kali-rolling:latest
+    container_name: red-team-controller
+    hostname: red-team-controller
+    environment:
+      - NATS_URL=nats://nats:4222
+      - TEAM=red
+      - AGENT_TYPE=controller
+    volumes:
+      - red-team-data:/data
+      - ./agents/red-team:/config:ro
+    command: >
+      bash -c "
+        echo '🔴 Red Team Controller starting...'
+        apt-get update && apt-get install -y curl python3 python3-pip 2>/dev/null
+        pip3 install nats-py --quiet 2>/dev/null
+        echo 'Red Team Controller active - coordinating attacks'
+        while true; do
+          echo '[$(date)] Red Team: Scanning for targets...'
+          sleep 60
+        done
+      "
+    depends_on:
+      - nats
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=red"
+      - "quantum-chess.component=controller"
+
+  port-scanner:
+    image: instrumentisto/nmap:latest
+    container_name: red-team-port-scanner
+    hostname: port-scanner
+    environment:
+      - NATS_URL=nats://nats:4222
+      - AGENT_TYPE=port-scanner
+      - TEAM=red
+    command: >
+      sh -c "
+        echo '🔴 Port Scanner Agent starting...'
+        while true; do
+          echo '[Port Scanner] Ready for targets'
+          sleep 30
+        done
+      "
+    depends_on:
+      - nats
+      - red-team-controller
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=red"
+      - "quantum-chess.component=port-scanner"
+
+  exploit-engine:
+    image: kalilinux/kali-rolling:latest
+    container_name: red-team-exploit-engine
+    hostname: exploit-engine
+    environment:
+      - NATS_URL=nats://nats:4222
+      - AGENT_TYPE=exploit-engine
+      - TEAM=red
+    command: >
+      bash -c "
+        echo '🔴 Exploit Engine Agent starting...'
+        while true; do
+          echo '[Exploit Engine] Ready for exploitation'
+          sleep 30
+        done
+      "
+    depends_on:
+      - nats
+      - red-team-controller
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=red"
+      - "quantum-chess.component=exploit-engine"
+
+  # ═══════════════════════════════════════════════════════════════
+  # BLUE TEAM CLUSTER (Parrot OS)
+  # ═══════════════════════════════════════════════════════════════
+  blue-team-controller:
+    image: parrotsec/core:latest
+    container_name: blue-team-controller
+    hostname: blue-team-controller
+    environment:
+      - NATS_URL=nats://nats:4222
+      - TEAM=blue
+      - AGENT_TYPE=controller
+    volumes:
+      - blue-team-data:/data
+      - ./agents/blue-team:/config:ro
+    command: >
+      bash -c "
+        echo '🔵 Blue Team Controller starting...'
+        apt-get update && apt-get install -y curl python3 python3-pip 2>/dev/null
+        pip3 install nats-py --quiet 2>/dev/null
+        echo 'Blue Team Controller active - coordinating defenses'
+        while true; do
+          echo '[$(date)] Blue Team: Monitoring for threats...'
+          sleep 60
+        done
+      "
+    depends_on:
+      - nats
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=blue"
+      - "quantum-chess.component=controller"
+
+  firewall-manager:
+    image: parrotsec/core:latest
+    container_name: blue-team-firewall-manager
+    hostname: firewall-manager
+    environment:
+      - NATS_URL=nats://nats:4222
+      - AGENT_TYPE=firewall-manager
+      - TEAM=blue
+    command: >
+      bash -c "
+        echo '🔵 Firewall Manager Agent starting...'
+        while true; do
+          echo '[Firewall Manager] Monitoring rules'
+          sleep 30
+        done
+      "
+    depends_on:
+      - nats
+      - blue-team-controller
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=blue"
+      - "quantum-chess.component=firewall-manager"
+
+  ids-controller:
+    image: parrotsec/core:latest
+    container_name: blue-team-ids-controller
+    hostname: ids-controller
+    environment:
+      - NATS_URL=nats://nats:4222
+      - AGENT_TYPE=ids-ips-controller
+      - TEAM=blue
+    command: >
+      bash -c "
+        echo '🔵 IDS/IPS Controller Agent starting...'
+        while true; do
+          echo '[IDS/IPS] Analyzing traffic'
+          sleep 30
+        done
+      "
+    depends_on:
+      - nats
+      - blue-team-controller
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=blue"
+      - "quantum-chess.component=ids-controller"
+
+  threat-hunter:
+    image: parrotsec/core:latest
+    container_name: blue-team-threat-hunter
+    hostname: threat-hunter
+    environment:
+      - NATS_URL=nats://nats:4222
+      - AGENT_TYPE=threat-hunter
+      - TEAM=blue
+    command: >
+      bash -c "
+        echo '🔵 Threat Hunter Agent starting...'
+        while true; do
+          echo '[Threat Hunter] Searching for IOCs'
+          sleep 30
+        done
+      "
+    depends_on:
+      - nats
+      - blue-team-controller
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.team=blue"
+      - "quantum-chess.component=threat-hunter"
+
+  # ═══════════════════════════════════════════════════════════════
+  # VISUALIZATION LAYER
+  # ═══════════════════════════════════════════════════════════════
+  visualization:
+    image: nginx:alpine
+    container_name: quantum-chess-viz
+    hostname: visualization
+    ports:
+      - "8080:80"
+    volumes:
+      - ./k8s/visualization/html:/usr/share/nginx/html:ro
+    depends_on:
+      - nats
+    networks:
+      - quantum-chess
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "quantum-chess.component=visualization"
+
+  # ═══════════════════════════════════════════════════════════════
+  # LEGION ANALYSIS ENGINE
+  # ═══════════════════════════════════════════════════════════════
+  legion:
+    image: python:3.11-slim
+    container_name: quantum-chess-legion
+    hostname: legion
+    environment:
+      - NATS_URL=nats://nats:4222
+      - PYTHONUNBUFFERED=1
+    command: >
+      bash -c "
+        pip install nats-py --quiet
+        echo '🟣 Legion Analysis Engine starting...'
+        while true; do
+          echo \"[Legion] Observing Red and Blue teams...\"
+          echo \"[Legion] Correlating attack/defense patterns\"
+          sleep 60
+        done
+      "
+    depends_on:
+      - nats
+      - red-team-controller
+      - blue-team-controller
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.component=legion"
+      - "quantum-chess.purpose=analysis"
+
+  # ═══════════════════════════════════════════════════════════════
+  # NATS CLI for debugging
+  # ═══════════════════════════════════════════════════════════════
+  nats-box:
+    image: natsio/nats-box:latest
+    container_name: quantum-chess-nats-box
+    hostname: nats-box
+    environment:
+      - NATS_URL=nats://nats:4222
+    command: ["tail", "-f", "/dev/null"]
+    depends_on:
+      - nats
+    networks:
+      - quantum-chess
+    labels:
+      - "quantum-chess.component=debug"
+    profiles:
+      - debug

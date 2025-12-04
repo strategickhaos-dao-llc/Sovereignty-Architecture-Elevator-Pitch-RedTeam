@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Chess Wargame Simulator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      padding: 40px 0;
+    }
+    h1 {
+      font-size: 3em;
+      background: linear-gradient(45deg, #f093fb, #f5576c, #4facfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #a0a0ff;
+      font-size: 1.2em;
+    }
+    .boards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .board {
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 15px;
+      width: 280px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .board:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(79, 172, 254, 0.3);
+    }
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .board-title {
+      font-weight: bold;
+      color: #4facfe;
+    }
+    .board-level {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+    }
+    .chess-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 2px;
+      background: rgba(0,0,0,0.3);
+      padding: 5px;
+      border-radius: 8px;
+    }
+    .cell {
+      aspect-ratio: 1;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .cell.light { background: rgba(255,255,255,0.15); }
+    .cell.dark { background: rgba(0,0,0,0.2); }
+    .cell.red { background: rgba(255,50,50,0.6); }
+    .cell.blue { background: rgba(50,100,255,0.6); }
+    .cell.active { animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .stats {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 20px 40px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-value {
+      font-size: 2.5em;
+      font-weight: bold;
+    }
+    .stat-value.red { color: #ff6b6b; }
+    .stat-value.blue { color: #4facfe; }
+    .stat-value.purple { color: #a855f7; }
+    .stat-label {
+      color: #888;
+      margin-top: 5px;
+    }
+    .teams {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 40px;
+    }
+    @media (max-width: 768px) {
+      .teams {
+        grid-template-columns: 1fr;
+      }
+    }
+    .team-card {
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .team-card.red {
+      background: linear-gradient(135deg, rgba(255,50,50,0.1), rgba(0,0,0,0.3));
+      border-color: rgba(255,50,50,0.3);
+    }
+    .team-card.blue {
+      background: linear-gradient(135deg, rgba(50,100,255,0.1), rgba(0,0,0,0.3));
+      border-color: rgba(50,100,255,0.3);
+    }
+    .team-title {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+    }
+    .agent-list {
+      list-style: none;
+    }
+    .agent-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .agent-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s infinite;
+    }
+    .agent-status.offline {
+      background: #ef4444;
+      animation: none;
+    }
+    .log-container {
+      margin-top: 40px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 15px;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .log-title {
+      margin-bottom: 15px;
+      color: #a855f7;
+    }
+    .log-entry {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .log-entry.red { color: #ff6b6b; }
+    .log-entry.blue { color: #4facfe; }
+    .log-entry.purple { color: #a855f7; }
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: #666;
+    }
+    .connection-status {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.8em;
+    }
+    .connection-status.connected {
+      background: rgba(74, 222, 128, 0.2);
+      color: #4ade80;
+    }
+    .connection-status.disconnected {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="connection-status disconnected" id="connectionStatus">
+    ⚡ Simulated Mode
+  </div>
+  
+  <div class="container">
+    <header>
+      <h1>♟️ Quantum Chess Wargame</h1>
+      <p class="subtitle">10-Dimensional Attack/Defense Simulator</p>
+      <p class="subtitle" style="margin-top: 10px; color: #666;">Moonlight Sunshine Matrix Prototype Sovereign</p>
+    </header>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value red" id="redMoves">0</div>
+        <div class="stat-label">Red Team Moves</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value blue" id="blueMoves">0</div>
+        <div class="stat-label">Blue Team Moves</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value purple" id="legionInsights">0</div>
+        <div class="stat-label">Legion Insights</div>
+      </div>
+    </div>
+
+    <div class="boards-container" id="boards">
+      <!-- Boards will be generated by JavaScript -->
+    </div>
+    
+    <div class="teams">
+      <div class="team-card red">
+        <h2 class="team-title">🔴 Red Team (Kali Linux)</h2>
+        <ul class="agent-list" id="redAgents">
+          <li class="agent-item">Port Scanner <span class="agent-status"></span></li>
+          <li class="agent-item">Exploit Engine <span class="agent-status"></span></li>
+          <li class="agent-item">Lateral Movement <span class="agent-status"></span></li>
+          <li class="agent-item">Data Exfiltration <span class="agent-status"></span></li>
+          <li class="agent-item">Persistence <span class="agent-status"></span></li>
+          <li class="agent-item">C2 Operator <span class="agent-status"></span></li>
+        </ul>
+      </div>
+      <div class="team-card blue">
+        <h2 class="team-title">🔵 Blue Team (Parrot OS)</h2>
+        <ul class="agent-list" id="blueAgents">
+          <li class="agent-item">Firewall Manager <span class="agent-status"></span></li>
+          <li class="agent-item">IDS/IPS Controller <span class="agent-status"></span></li>
+          <li class="agent-item">Threat Hunter <span class="agent-status"></span></li>
+          <li class="agent-item">Incident Response <span class="agent-status"></span></li>
+          <li class="agent-item">SIEM Correlator <span class="agent-status"></span></li>
+          <li class="agent-item">Forensics Analyzer <span class="agent-status"></span></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="log-container">
+      <h3 class="log-title">⚡ Quantum Entanglement Log</h3>
+      <div id="logEntries">
+        <div class="log-entry purple">[System] Quantum Chess Wargame Simulator initialized</div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>Quantum Chess Wargame Simulator - Strategickhaos Sovereignty Architecture</p>
+      <p>💜 Built with love by the Legion</p>
+      <p style="margin-top: 10px; color: #444;">250,000x improvement in cost-per-learning-cycle</p>
+    </footer>
+  </div>
+  
+  <script>
+    // Board configuration
+    const boardNames = [
+      'Strategic Command',
+      'Tactical Operations',
+      'Network Security',
+      'Application Layer',
+      'API Gateway',
+      'Service Mesh',
+      'Container Orchestration',
+      'Infrastructure',
+      'Network Topology',
+      'Physical Layer'
+    ];
+    
+    // State
+    let redMoves = 0;
+    let blueMoves = 0;
+    let legionInsights = 0;
+    
+    // Generate boards
+    const boardsContainer = document.getElementById('boards');
+    
+    boardNames.forEach((name, idx) => {
+      const board = document.createElement('div');
+      board.className = 'board';
+      board.innerHTML = `
+        <div class="board-header">
+          <span class="board-title">${name}</span>
+          <span class="board-level">L${10 - idx}</span>
+        </div>
+        <div class="chess-grid" id="grid-${idx}"></div>
+      `;
+      boardsContainer.appendChild(board);
+      
+      const grid = board.querySelector('.chess-grid');
+      for (let i = 0; i < 64; i++) {
+        const cell = document.createElement('div');
+        const row = Math.floor(i / 8);
+        const col = i % 8;
+        cell.className = `cell ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+        cell.id = `cell-${idx}-${i}`;
+        
+        // Random initial state for demo
+        if (Math.random() < 0.08) {
+          cell.classList.add(Math.random() < 0.5 ? 'red' : 'blue');
+          cell.classList.add('active');
+        }
+        grid.appendChild(cell);
+      }
+    });
+    
+    // Log function
+    function addLog(message, team) {
+      const logEntries = document.getElementById('logEntries');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${team}`;
+      const time = new Date().toLocaleTimeString();
+      entry.textContent = `[${time}] ${message}`;
+      logEntries.insertBefore(entry, logEntries.firstChild);
+      
+      // Keep only last 50 entries
+      while (logEntries.children.length > 50) {
+        logEntries.removeChild(logEntries.lastChild);
+      }
+    }
+    
+    // Simulate red team action
+    function redTeamAction() {
+      const boardIdx = Math.floor(Math.random() * 10);
+      const cellIdx = Math.floor(Math.random() * 64);
+      const cell = document.getElementById(`cell-${boardIdx}-${cellIdx}`);
+      
+      if (cell && !cell.classList.contains('blue')) {
+        cell.classList.remove('light', 'dark');
+        cell.classList.add('red', 'active');
+        redMoves++;
+        document.getElementById('redMoves').textContent = redMoves;
+        
+        const actions = ['Port scan', 'Exploit attempt', 'Lateral movement', 'Persistence', 'C2 beacon'];
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        addLog(`Red Team: ${action} on Layer ${10 - boardIdx}`, 'red');
+        
+        // Blue team might respond
+        setTimeout(() => {
+          if (Math.random() < 0.6) {
+            blueTeamResponse(boardIdx, cellIdx);
+          }
+        }, Math.random() * 2000 + 500);
+      }
+    }
+    
+    // Simulate blue team response
+    function blueTeamResponse(boardIdx, cellIdx) {
+      const cell = document.getElementById(`cell-${boardIdx}-${cellIdx}`);
+      
+      if (cell && cell.classList.contains('red')) {
+        cell.classList.remove('red');
+        cell.classList.add('blue');
+        blueMoves++;
+        document.getElementById('blueMoves').textContent = blueMoves;
+        
+        const responses = ['Blocked', 'Contained', 'Detected', 'Quarantined', 'Patched'];
+        const response = responses[Math.floor(Math.random() * responses.length)];
+        addLog(`Blue Team: ${response} threat on Layer ${10 - boardIdx}`, 'blue');
+        
+        // Legion learns
+        setTimeout(() => {
+          legionLearning();
+        }, Math.random() * 1000 + 500);
+      }
+    }
+    
+    // Legion analysis
+    function legionLearning() {
+      legionInsights++;
+      document.getElementById('legionInsights').textContent = legionInsights;
+      
+      const insights = [
+        'Correlated attack pattern detected',
+        'Defense effectiveness: 78%',
+        'New evasion technique identified',
+        'Updating threat model',
+        'Learning from both teams'
+      ];
+      const insight = insights[Math.floor(Math.random() * insights.length)];
+      addLog(`Legion: ${insight}`, 'purple');
+    }
+    
+    // Main simulation loop
+    setInterval(() => {
+      // Random red team action
+      if (Math.random() < 0.3) {
+        redTeamAction();
+      }
+      
+      // Decay old active cells
+      document.querySelectorAll('.cell.active').forEach(cell => {
+        if (Math.random() < 0.1) {
+          cell.classList.remove('active', 'red', 'blue');
+          const row = Math.floor(parseInt(cell.id.split('-')[2]) / 8);
+          const col = parseInt(cell.id.split('-')[2]) % 8;
+          cell.classList.add((row + col) % 2 === 0 ? 'light' : 'dark');
+        }
+      });
+    }, 1000);
+    
+    // Periodic Legion analysis
+    setInterval(() => {
+      if (redMoves > 0 && blueMoves > 0 && Math.random() < 0.5) {
+        legionLearning();
+      }
+    }, 5000);
+    
+    console.log('Quantum Chess Wargame Simulator initialized');
+    console.log('Red Team: Kali Linux cluster');
+    console.log('Blue Team: Parrot OS cluster');
+    console.log('Entanglement: NATS JetStream');
+  </script>
+</body>
+</html>

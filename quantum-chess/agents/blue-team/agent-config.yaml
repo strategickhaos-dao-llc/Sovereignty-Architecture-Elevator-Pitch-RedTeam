@@ -1,0 +1,308 @@
+# Blue Team Agent Configuration
+# Quantum Chess Wargame Simulator - Defensive Security Agents
+
+version: "1.0"
+team: "blue"
+purpose: "Automated threat detection, incident response, and system hardening"
+
+# Agent definitions
+agents:
+  firewall_manager:
+    name: "Firewall Manager"
+    description: "Network perimeter control and traffic filtering"
+    tools:
+      - iptables
+      - nftables
+      - ipset
+    capabilities:
+      - rule_management
+      - traffic_blocking
+      - geo_blocking
+      - rate_limiting
+    defenses:
+      - D3-NI    # Network Isolation
+      - D3-NTA   # Network Traffic Analysis
+    nats:
+      publish:
+        - "defend.network.block"
+        - "defend.firewall.*"
+      subscribe:
+        - "attack.network.*"
+        - "detect.scan.*"
+        - "attack.recon.*"
+    schedule:
+      interval: "1m"
+      reaction_time: "immediate"
+    auto_response:
+      - trigger: "attack.recon.portscan"
+        action: "block_source_ip"
+        duration: "30m"
+
+  ids_ips_controller:
+    name: "IDS/IPS Controller"
+    description: "Intrusion detection and prevention system management"
+    tools:
+      - suricata
+      - snort
+      - zeek
+    capabilities:
+      - signature_detection
+      - anomaly_detection
+      - protocol_analysis
+      - alert_generation
+    defenses:
+      - D3-HD    # Host-based Detection
+      - D3-NTA   # Network Traffic Analysis
+    nats:
+      publish:
+        - "detect.intrusion.*"
+        - "detect.scan.*"
+        - "detect.exploit.*"
+      subscribe:
+        - "attack.*"
+        - "probe.*"
+    schedule:
+      interval: "10s"
+      reaction_time: "immediate"
+    rules:
+      update_interval: "1h"
+      custom_rules_enabled: true
+
+  threat_hunter:
+    name: "Threat Hunter"
+    description: "Proactive threat discovery and IOC detection"
+    tools:
+      - osquery
+      - velociraptor
+      - yara
+    capabilities:
+      - ioc_hunting
+      - behavioral_analysis
+      - artifact_collection
+      - threat_intelligence
+    defenses:
+      - D3-TH    # Threat Hunting
+      - D3-FA    # File Analysis
+    nats:
+      publish:
+        - "detect.threat.*"
+        - "detect.ioc.*"
+        - "detect.behavior.*"
+      subscribe:
+        - "attack.persist.*"
+        - "attack.lateral.*"
+        - "attack.c2.*"
+    schedule:
+      interval: "15m"
+      hunt_duration: "10m"
+    hunt_queries:
+      - name: "suspicious_processes"
+        query: "SELECT * FROM processes WHERE name LIKE '%powershell%'"
+      - name: "unusual_connections"
+        query: "SELECT * FROM socket_events WHERE remote_port < 1024"
+
+  incident_response:
+    name: "Incident Response"
+    description: "Automated incident detection, containment, and remediation"
+    tools:
+      - thehive
+      - cortex
+      - dfir-iris
+    capabilities:
+      - incident_triage
+      - containment
+      - evidence_collection
+      - remediation
+    defenses:
+      - D3-IR    # Incident Response
+      - D3-FC    # Forensic Collection
+    nats:
+      publish:
+        - "respond.incident.*"
+        - "respond.contain.*"
+        - "respond.remediate.*"
+      subscribe:
+        - "detect.*"
+        - "alert.*"
+    schedule:
+      interval: "5m"
+      reaction_time: "immediate"
+    playbooks:
+      - name: "ransomware_response"
+        trigger: "detect.threat.ransomware"
+        steps:
+          - isolate_host
+          - collect_evidence
+          - notify_team
+      - name: "data_exfil_response"
+        trigger: "detect.exfil.*"
+        steps:
+          - block_egress
+          - identify_source
+          - assess_damage
+
+  siem_correlator:
+    name: "SIEM Correlator"
+    description: "Security event correlation and alerting"
+    tools:
+      - wazuh
+      - elasticsearch
+      - kibana
+    capabilities:
+      - log_aggregation
+      - event_correlation
+      - alert_generation
+      - dashboard_visualization
+    defenses:
+      - D3-LM    # Log Management
+      - D3-EA    # Event Analysis
+    nats:
+      publish:
+        - "detect.correlation.*"
+        - "alert.security.*"
+        - "report.summary.*"
+      subscribe:
+        - "attack.*"
+        - "detect.*"
+        - "defend.*"
+    schedule:
+      interval: "30s"
+      correlation_window: "5m"
+    correlation_rules:
+      - name: "brute_force_detection"
+        pattern: "5 failed_login within 1m from same source"
+        severity: "high"
+      - name: "lateral_movement_detection"
+        pattern: "port_scan followed by exploit within 5m"
+        severity: "critical"
+
+  forensics_analyzer:
+    name: "Forensics Analyzer"
+    description: "Digital forensics and evidence analysis"
+    tools:
+      - volatility
+      - autopsy
+      - sleuthkit
+    capabilities:
+      - memory_analysis
+      - disk_forensics
+      - timeline_generation
+      - artifact_extraction
+    defenses:
+      - D3-FC    # Forensic Collection
+      - D3-MA    # Malware Analysis
+    nats:
+      publish:
+        - "forensics.analysis.*"
+        - "forensics.evidence.*"
+        - "forensics.timeline.*"
+      subscribe:
+        - "respond.collect.*"
+        - "detect.malware.*"
+    schedule:
+      interval: "1h"
+      on_demand: true
+
+  patch_manager:
+    name: "Patch Manager"
+    description: "Vulnerability remediation and system hardening"
+    tools:
+      - ansible
+      - puppet
+      - osquery
+    capabilities:
+      - vulnerability_scanning
+      - patch_deployment
+      - configuration_hardening
+      - compliance_checking
+    defenses:
+      - D3-PM    # Patch Management
+      - D3-CH    # Configuration Hardening
+    nats:
+      publish:
+        - "defend.patch.*"
+        - "defend.harden.*"
+        - "status.vulnerability.*"
+      subscribe:
+        - "attack.exploit.*"
+        - "detect.vulnerability.*"
+    schedule:
+      interval: "24h"
+      emergency_patch: "immediate"
+
+  backup_validator:
+    name: "Backup Validator"
+    description: "Backup verification and recovery testing"
+    tools:
+      - restic
+      - borg
+      - rclone
+    capabilities:
+      - backup_verification
+      - restore_testing
+      - integrity_checking
+      - offsite_replication
+    defenses:
+      - D3-BR    # Backup and Recovery
+      - D3-DI    # Data Integrity
+    nats:
+      publish:
+        - "defend.backup.*"
+        - "status.backup.*"
+      subscribe:
+        - "attack.ransomware.*"
+        - "detect.data_destruction.*"
+    schedule:
+      interval: "4h"
+      full_restore_test: "weekly"
+
+# Echolocation protocol - learning from red team
+echolocation:
+  enabled: true
+  learning_rate: 0.15
+  adaptation_interval: "30m"
+  
+  observe:
+    - "attack.*"
+    - "probe.*"
+    - "exploit.*"
+  
+  adapt_to:
+    - attack_patterns
+    - evasion_techniques
+    - exploitation_methods
+  
+  feedback_loop:
+    - "If new port scanned, add to watchlist"
+    - "If new exploit attempted, update signatures"
+    - "If lateral path found, block route"
+
+# Defense posture
+defense_posture:
+  mode: "active"  # active, passive, honeypot
+  sensitivity: "high"
+  auto_contain: true
+  escalation:
+    level_1: "auto_block"
+    level_2: "isolate_host"
+    level_3: "notify_soc"
+
+# Safety constraints
+safety:
+  sandbox_mode: true
+  defensive_only: true
+  no_offensive_actions: true
+  preserve_evidence: true
+  audit_all_actions: true
+
+# Reporting
+reporting:
+  nats_stream: "blue-team-actions"
+  format: "json"
+  include:
+    - timestamp
+    - agent
+    - detection
+    - response
+    - severity
+    - d3fend_technique

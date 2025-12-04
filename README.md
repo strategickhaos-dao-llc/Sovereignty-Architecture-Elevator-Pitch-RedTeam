@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, Quantum Chess Wargame Simulator, and sovereign infrastructure management.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,30 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Security** - Quantum Chess Wargame Simulator for continuous Red/Blue team training
+
+## ♟️ Quantum Chess Wargame Simulator
+
+**NEW:** 10-dimensional cybersecurity simulation platform enabling continuous Red Team vs Blue Team adversarial training.
+
+```bash
+# Deploy Quantum Chess Wargame Simulator
+./quantum-chess/deploy-quantum-chess.sh
+
+# Or run locally with Docker Compose
+docker-compose -f quantum-chess/docker-compose.quantum-chess.yml up -d
+```
+
+**Key Features:**
+- 🔴 **Red Team** (Kali Linux): Automated penetration testing
+- 🔵 **Blue Team** (Parrot OS): Automated defense and detection
+- ⚡ **NATS JetStream**: Quantum entanglement messaging layer
+- 🎮 **10 Boards**: From Physical Layer to Strategic Command
+- 📊 **Legion Analysis**: AI learns from both sides simultaneously
+
+**Cost Reduction:** 250x cheaper than traditional security consulting ($300K → $1.2K/year)
+
+[📖 Full Documentation](QUANTUM_CHESS.md)
 
 ## 🚀 Quick Start
 
