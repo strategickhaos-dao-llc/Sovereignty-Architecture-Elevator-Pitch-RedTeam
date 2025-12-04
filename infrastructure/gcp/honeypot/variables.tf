@@ -4,7 +4,6 @@
 variable "project_id" {
   description = "GCP Project ID for honeypot deployment"
   type        = string
-  default     = "gen-lang-client-0012743775"
 }
 
 variable "region" {

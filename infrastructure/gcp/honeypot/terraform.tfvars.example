@@ -2,7 +2,7 @@
 # Copy this file to terraform.tfvars and customize for your environment
 
 # Required: Your GCP Project ID
-project_id = "gen-lang-client-0012743775"
+project_id = "your-project-id-here"
 
 # Region for resource deployment
 region = "us-central1"

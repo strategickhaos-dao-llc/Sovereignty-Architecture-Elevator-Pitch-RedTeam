@@ -41,7 +41,7 @@ resource "google_service_account" "honeypot_sra" {
 # =============================================================================
 resource "google_storage_bucket" "attack_logs" {
   name                        = "${var.logs_bucket_name}-${var.project_id}"
-  location                    = upper(var.region)
+  location                    = var.region
   project                     = var.project_id
   uniform_bucket_level_access = true
   force_destroy               = false
@@ -198,7 +198,7 @@ resource "google_compute_region_backend_service" "honeypot_backend" {
   name                  = "${var.honeypot_name}-backend"
   region                = var.region
   project               = var.project_id
-  protocol              = "HTTPS"
+  protocol              = "HTTP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   timeout_sec           = 30
 
