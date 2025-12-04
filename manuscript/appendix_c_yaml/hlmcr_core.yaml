@@ -1,0 +1,144 @@
+# HLMCR Core Protocol Schema v1.0
+# Human-in-the-Loop Multi-Model Cognitive Redundancy
+# 
+# This schema defines the core protocol structure for HLMCR operations
+# in the Strategickhaos governance framework.
+#
+# Author: Dominic L. S. Cummings
+# Date: November 2025
+
+apiVersion: hlmcr/v1
+kind: ProtocolDefinition
+metadata:
+  name: hlmcr-core
+  version: "1.0"
+  description: |
+    Core protocol definitions for Human-in-the-Loop Multi-Model 
+    Cognitive Redundancy. This schema establishes the fundamental
+    structures and execution phases for multi-model orchestration.
+  
+spec:
+  # Criticality levels determine the rigor of validation required
+  criticality_levels:
+    - name: low
+      description: "Routine tasks with reversible outcomes"
+      min_models: 1
+      verification_required: false
+      human_approval_required: false
+      max_response_time_seconds: 30
+      
+    - name: medium
+      description: "Standard governance decisions with moderate impact"
+      min_models: 2
+      verification_required: true
+      human_approval_required: false
+      max_response_time_seconds: 120
+      
+    - name: high
+      description: "Significant decisions with potential irreversible outcomes"
+      min_models: 3
+      verification_required: true
+      human_approval_required: true
+      max_response_time_seconds: 300
+      
+    - name: critical
+      description: "Major decisions with legal, financial, or reputational implications"
+      min_models: 5
+      verification_required: true
+      human_approval_required: true
+      escalation_required: true
+      max_response_time_seconds: 600
+
+  # The five phases of HLMCR execution
+  execution_phases:
+    - name: task_analysis
+      order: 1
+      description: "Human operator classifies task by domain and criticality"
+      required: true
+      outputs:
+        - task_classification
+        - criticality_level
+        - domain_tags
+        
+    - name: model_selection
+      order: 2
+      description: "Select initial model based on task-model affinity matrix"
+      required: true
+      inputs:
+        - task_classification
+        - domain_tags
+      outputs:
+        - selected_model_id
+        - affinity_score
+        
+    - name: primary_execution
+      order: 3
+      description: "Execute task on selected model, producing candidate output"
+      required: true
+      inputs:
+        - selected_model_id
+        - task_payload
+      outputs:
+        - candidate_output
+        - confidence_score
+        - token_usage
+        
+    - name: resonance_testing
+      order: 4
+      description: "Verify output across additional models per criticality requirements"
+      required: conditional  # Based on criticality level
+      inputs:
+        - candidate_output
+        - criticality_level
+      outputs:
+        - verification_outputs
+        - resonance_scores
+        - divergence_flags
+        
+    - name: coherence_arbitration
+      order: 5
+      description: "Human operator reviews, identifies divergences, synthesizes final output"
+      required: conditional  # Based on resonance results
+      inputs:
+        - all_outputs
+        - resonance_scores
+      outputs:
+        - final_output
+        - arbitration_notes
+        - confidence_level
+
+  # Task domain classifications
+  task_domains:
+    - legal_drafting
+    - financial_analysis
+    - code_generation
+    - research_synthesis
+    - strategic_planning
+    - communication_drafting
+    - technical_documentation
+    - risk_assessment
+    - partnership_evaluation
+    - regulatory_compliance
+
+  # Error handling and escalation
+  error_handling:
+    on_model_failure:
+      action: failover_to_next_affinity_model
+      max_retries: 3
+      
+    on_resonance_failure:
+      action: escalate_to_human
+      notification_channels:
+        - discord
+        - email
+        
+    on_timeout:
+      action: partial_output_with_warning
+      human_review_required: true
+
+  # Audit and compliance
+  audit_requirements:
+    log_all_decisions: true
+    retention_period_days: 2557  # 7 years for compliance (7 × 365.25)
+    sensitive_field_encryption: true
+    immutable_audit_trail: true

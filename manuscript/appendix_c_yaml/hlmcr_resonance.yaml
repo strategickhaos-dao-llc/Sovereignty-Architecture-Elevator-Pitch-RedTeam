@@ -1,0 +1,160 @@
+# HLMCR Resonance Testing Schema v1.0
+# Human-in-the-Loop Multi-Model Cognitive Redundancy
+#
+# This schema defines the resonance testing configuration for
+# cross-model validation in the HLMCR protocol.
+#
+# Author: Dominic L. S. Cummings
+# Date: November 2025
+
+apiVersion: hlmcr/v1
+kind: ResonanceConfig
+metadata:
+  name: hlmcr-resonance
+  version: "1.0"
+  description: |
+    Resonance testing configuration for validating outputs across
+    multiple models. Resonance measures agreement between independent
+    model outputs to catch errors through cognitive diversity.
+  
+spec:
+  # Resonance score thresholds (0.0 to 1.0 scale)
+  thresholds:
+    high_resonance: 0.85
+    description_high: "Strong agreement; outputs are consistent across models"
+    
+    acceptable_resonance: 0.70
+    description_acceptable: "Moderate agreement; minor divergences acceptable"
+    
+    low_resonance: 0.50
+    description_low: "Significant divergence; requires human review"
+    
+    critical_divergence: 0.30
+    description_critical: "Major disagreement; automatic escalation required"
+
+  # Escalation rules based on resonance scores
+  escalation_rules:
+    - condition: "resonance < critical_divergence"
+      action: immediate_escalation
+      priority: critical
+      notifications:
+        - discord_alert
+        - email_urgent
+      human_response_required: true
+      timeout_minutes: 15
+      
+    - condition: "resonance < low_resonance"
+      action: escalate_to_human
+      priority: high
+      notifications:
+        - discord_notification
+      human_response_required: true
+      timeout_minutes: 60
+      
+    - condition: "resonance < acceptable_resonance"
+      action: request_additional_verification
+      priority: medium
+      add_models: 1
+      max_additional_models: 2
+      
+    - condition: "resonance >= acceptable_resonance"
+      action: proceed_with_confidence
+      priority: low
+      auto_approve: false  # Human still reviews but with lower urgency
+
+  # Similarity metrics for resonance calculation
+  similarity_metrics:
+    primary:
+      - name: semantic_cosine
+        weight: 0.40
+        description: "Cosine similarity of output embeddings"
+        embedding_model: text-embedding-ada-002
+        
+      - name: factual_overlap
+        weight: 0.35
+        description: "Proportion of factual claims present in all outputs"
+        extraction_method: named_entity_and_claim_extraction
+        
+      - name: structural_alignment
+        weight: 0.25
+        description: "Similarity in output structure and organization"
+        analysis_method: section_and_heading_comparison
+        
+    secondary:
+      - name: sentiment_alignment
+        description: "Agreement on sentiment and tone"
+        use_when: communication_drafting
+        
+      - name: numerical_consistency
+        description: "Exact match on numerical values"
+        use_when: financial_analysis
+        tolerance: 0.001
+        
+      - name: legal_citation_match
+        description: "Agreement on legal references"
+        use_when: legal_drafting
+
+  # Resonance calculation formula
+  resonance_calculation:
+    method: weighted_average
+    formula: |
+      R(o_i) = sum(w_k * S_k(o_i, o_j)) for all metrics k and verification models j
+      where w_k is the weight of metric k
+      and S_k is the similarity score for metric k
+    
+    aggregation_across_models: harmonic_mean
+    justification: |
+      Harmonic mean is used because it penalizes low individual scores more 
+      heavily than arithmetic mean, making the protocol more conservative.
+
+  # Divergence analysis
+  divergence_analysis:
+    enabled: true
+    
+    divergence_types:
+      - name: factual_contradiction
+        severity: critical
+        description: "Models assert contradictory facts"
+        action: require_source_verification
+        
+      - name: reasoning_divergence
+        severity: high
+        description: "Models reach different conclusions from same premises"
+        action: request_step_by_step_breakdown
+        
+      - name: emphasis_difference
+        severity: medium
+        description: "Models agree on facts but emphasize different aspects"
+        action: note_for_human_review
+        
+      - name: stylistic_variation
+        severity: low
+        description: "Outputs differ in style but not substance"
+        action: proceed_with_primary_output
+        
+      - name: completeness_gap
+        severity: medium
+        description: "One model includes information others omit"
+        action: merge_for_comprehensive_output
+
+    root_cause_analysis:
+      enabled: true
+      track_model_specific_patterns: true
+      update_affinity_matrix: true
+
+  # Performance monitoring
+  monitoring:
+    track_metrics:
+      - resonance_scores_distribution
+      - divergence_frequency_by_type
+      - escalation_rate
+      - false_positive_rate
+      - time_to_resolution
+      
+    alerting:
+      high_escalation_rate_threshold: 0.20
+      low_resonance_trend_window_hours: 24
+      
+    reporting:
+      frequency: weekly
+      include_model_performance_comparison: true

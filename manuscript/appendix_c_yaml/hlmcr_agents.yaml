@@ -1,0 +1,379 @@
+# HLMCR Agent Pool Schema v1.0
+# Human-in-the-Loop Multi-Model Cognitive Redundancy
+#
+# This schema defines the cognitive agent pool specification and
+# task-model affinity matrices for the Strategickhaos initiative.
+#
+# Author: Dominic L. S. Cummings
+# Date: November 2025
+
+apiVersion: hlmcr/v1
+kind: AgentPool
+metadata:
+  name: strategickhaos-agents
+  version: "1.0"
+  description: |
+    Specification of the nine cognitive agents deployed in the 
+    Strategickhaos HLMCR architecture, including capabilities,
+    documented failure modes, and task affinity assignments.
+  
+spec:
+  # Pool configuration
+  pool_config:
+    min_active_agents: 5
+    max_concurrent_requests_per_agent: 3
+    health_check_interval_seconds: 30
+    failover_enabled: true
+    load_balancing_strategy: affinity_weighted
+
+  # Agent definitions
+  agents:
+    - id: agent-01
+      model: gpt-4
+      model_version: "gpt-4-0613"
+      provider: openai
+      api_endpoint: https://api.openai.com/v1/chat/completions
+      
+      capabilities:
+        primary:
+          - strategic_reasoning
+          - synthesis
+          - executive_summarization
+        secondary:
+          - creative_writing
+          - scenario_analysis
+          
+      strengths:
+        - "Excellent at high-level strategic synthesis"
+        - "Strong logical reasoning and argument construction"
+        - "Good at maintaining consistency across long outputs"
+        
+      weaknesses:
+        - overconfidence: "May express unwarranted certainty on uncertain topics"
+        - sycophancy: "Tendency to agree with user framing even when incorrect"
+        - recency_bias: "Training cutoff limits knowledge of recent events"
+        
+      parameters:
+        temperature: 0.7
+        max_tokens: 4096
+        top_p: 0.95
+        
+      cost:
+        input_per_1k_tokens: 0.03
+        output_per_1k_tokens: 0.06
+        
+    - id: agent-02
+      model: gpt-4o
+      model_version: "gpt-4o-2024-05-13"
+      provider: openai
+      api_endpoint: https://api.openai.com/v1/chat/completions
+      
+      capabilities:
+        primary:
+          - real_time_dialogue
+          - multimodal_analysis
+          - rapid_iteration
+        secondary:
+          - code_explanation
+          - data_interpretation
+          
+      strengths:
+        - "Fast response times suitable for interactive workflows"
+        - "Multimodal capabilities for image and document analysis"
+        - "Good balance of capability and cost"
+        
+      weaknesses:
+        - verbosity: "Can be overly verbose in responses"
+        - context_drift: "May lose track of context in very long conversations"
+        
+      parameters:
+        temperature: 0.5
+        max_tokens: 4096
+        
+      cost:
+        input_per_1k_tokens: 0.005
+        output_per_1k_tokens: 0.015
+        
+    - id: agent-03
+      model: claude-3-opus
+      model_version: "claude-3-opus-20240229"
+      provider: anthropic
+      api_endpoint: https://api.anthropic.com/v1/messages
+      
+      capabilities:
+        primary:
+          - long_form_analysis
+          - nuanced_reasoning
+          - ethical_analysis
+        secondary:
+          - legal_drafting
+          - research_synthesis
+          
+      strengths:
+        - "Exceptional at long-form analytical writing"
+        - "Strong at nuanced, balanced perspectives"
+        - "Good at acknowledging uncertainty appropriately"
+        
+      weaknesses:
+        - over_hedging: "May over-qualify statements, reducing clarity"
+        - refusal: "Higher refusal rate on edge cases"
+        - verbosity: "Tends toward longer responses"
+        
+      parameters:
+        temperature: 0.7
+        max_tokens: 4096
+        
+      cost:
+        input_per_1k_tokens: 0.015
+        output_per_1k_tokens: 0.075
+        
+    - id: agent-04
+      model: claude-3.5-sonnet
+      model_version: "claude-3-5-sonnet-20240620"
+      provider: anthropic
+      api_endpoint: https://api.anthropic.com/v1/messages
+      
+      capabilities:
+        primary:
+          - code_generation
+          - technical_documentation
+          - debugging
+        secondary:
+          - api_design
+          - system_architecture
+          
+      strengths:
+        - "Excellent code generation across languages"
+        - "Strong technical reasoning"
+        - "Good at structured output formats"
+        
+      weaknesses:
+        - format_rigidity: "May be overly rigid about output formats"
+        - limited_creativity: "Less creative than other Claude variants"
+        
+      parameters:
+        temperature: 0.3
+        max_tokens: 4096
+        
+      cost:
+        input_per_1k_tokens: 0.003
+        output_per_1k_tokens: 0.015
+        
+    - id: agent-05
+      model: gemini-pro
+      model_version: "gemini-1.5-pro"
+      provider: google
+      api_endpoint: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro
+      
+      capabilities:
+        primary:
+          - multimodal_reasoning
+          - long_context_analysis
+          - fact_integration
+        secondary:
+          - data_synthesis
+          - comparative_analysis
+          
+      strengths:
+        - "Large context window for document analysis"
+        - "Strong multimodal integration"
+        - "Good at synthesizing diverse sources"
+        
+      weaknesses:
+        - hallucination_rare_facts: "May hallucinate on rare or obscure facts"
+        - overconfidence_dates: "Can be wrong about specific dates"
+        
+      parameters:
+        temperature: 0.7
+        max_output_tokens: 8192
+        
+      cost:
+        input_per_1k_tokens: 0.00125
+        output_per_1k_tokens: 0.005
+        
+    - id: agent-06
+      model: gemini-ultra
+      model_version: "gemini-1.5-pro"  # Ultra access via Pro API
+      provider: google
+      api_endpoint: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro
+      
+      capabilities:
+        primary:
+          - complex_reasoning
+          - mathematical_analysis
+          - scientific_reasoning
+        secondary:
+          - multi_step_problems
+          - formal_verification
+          
+      strengths:
+        - "Strong at complex multi-step reasoning"
+        - "Good mathematical and scientific capabilities"
+        - "Handles ambiguity well"
+        
+      weaknesses:
+        - latency_sensitivity: "Can be slower on complex queries"
+        - resource_intensive: "Higher computational cost"
+        
+      parameters:
+        temperature: 0.5
+        max_output_tokens: 8192
+        
+    - id: agent-07
+      model: llama-3-70b
+      model_version: "llama-3-70b-instruct"
+      provider: meta
+      api_endpoint: ${LLAMA_API_ENDPOINT}
+      deployment: self_hosted
+      
+      capabilities:
+        primary:
+          - general_reasoning
+          - open_weight_baseline
+          - reproducibility
+        secondary:
+          - fine_tuning_base
+          - local_deployment
+          
+      strengths:
+        - "Open weights enable verification and customization"
+        - "No API dependency for core operations"
+        - "Serves as reproducible baseline"
+        
+      weaknesses:
+        - knowledge_cutoff: "Training data cutoff limits recent knowledge"
+        - capability_gaps: "Slightly lower capability than frontier proprietary models"
+        
+      parameters:
+        temperature: 0.7
+        max_tokens: 4096
+        
+      cost:
+        type: self_hosted
+        compute_per_hour: 2.50
+        
+    - id: agent-08
+      model: mistral-large
+      model_version: "mistral-large-2402"
+      provider: mistral
+      api_endpoint: https://api.mistral.ai/v1/chat/completions
+      
+      capabilities:
+        primary:
+          - european_legal_context
+          - multilingual_analysis
+          - regulatory_compliance
+        secondary:
+          - gdpr_analysis
+          - eu_law_interpretation
+          
+      strengths:
+        - "Strong European legal and regulatory knowledge"
+        - "Good multilingual capabilities"
+        - "Efficient token usage"
+        
+      weaknesses:
+        - domain_narrowness: "Less capable outside European context"
+        - limited_us_law: "Weaker on US-specific legal nuances"
+        
+      parameters:
+        temperature: 0.5
+        max_tokens: 4096
+        
+      cost:
+        input_per_1k_tokens: 0.008
+        output_per_1k_tokens: 0.024
+        
+    - id: agent-09
+      model: command-r-plus
+      model_version: "command-r-plus"
+      provider: cohere
+      api_endpoint: https://api.cohere.ai/v1/chat
+      
+      capabilities:
+        primary:
+          - rag_integration
+          - retrieval_augmented_generation
+          - citation_management
+        secondary:
+          - document_qa
+          - source_synthesis
+          
+      strengths:
+        - "Excellent RAG capabilities"
+        - "Built-in citation and grounding"
+        - "Good at document Q&A"
+        
+      weaknesses:
+        - citation_accuracy: "Citations may not always align perfectly with claims"
+        - format_constraints: "Works best with specific prompt formats"
+        
+      parameters:
+        temperature: 0.3
+        max_tokens: 4096
+        connectors: ["web-search"]
+        
+      cost:
+        input_per_1k_tokens: 0.003
+        output_per_1k_tokens: 0.015
+
+  # Task-Model Affinity Matrix
+  # Defines preferred model ordering for each task domain
+  affinity_matrix:
+    legal_drafting:
+      primary: [agent-03, agent-08, agent-01]
+      rationale: "Claude Opus for nuance, Mistral for EU context, GPT-4 for structure"
+      
+    code_generation:
+      primary: [agent-04, agent-02, agent-07]
+      rationale: "Claude Sonnet leads for code, GPT-4o for iteration, Llama for baseline"
+      
+    financial_analysis:
+      primary: [agent-01, agent-06, agent-09]
+      rationale: "GPT-4 for strategic, Gemini Ultra for numbers, Command R+ for data"
+      
+    research_synthesis:
+      primary: [agent-03, agent-05, agent-01]
+      rationale: "Claude Opus for long-form, Gemini Pro for sources, GPT-4 for synthesis"
+      
+    strategic_planning:
+      primary: [agent-01, agent-03, agent-06]
+      rationale: "GPT-4 leads strategy, Claude for nuance, Gemini for complexity"
+      
+    communication_drafting:
+      primary: [agent-02, agent-03, agent-01]
+      rationale: "GPT-4o for speed, Claude for tone, GPT-4 for structure"
+      
+    technical_documentation:
+      primary: [agent-04, agent-02, agent-05]
+      rationale: "Claude Sonnet for technical, GPT-4o for clarity, Gemini for breadth"
+      
+    risk_assessment:
+      primary: [agent-03, agent-01, agent-08]
+      rationale: "Claude for balanced view, GPT-4 for structure, Mistral for regulatory"
+      
+    partnership_evaluation:
+      primary: [agent-01, agent-03, agent-06]
+      rationale: "GPT-4 for strategy, Claude for analysis, Gemini for complexity"
+      
+    regulatory_compliance:
+      primary: [agent-08, agent-03, agent-01]
+      rationale: "Mistral for EU, Claude for analysis, GPT-4 for US context"
+
+  # Health and status tracking
+  agent_health:
+    metrics:
+      - availability_percentage
+      - average_response_time_ms
+      - error_rate
+      - resonance_contribution_score
+      
+    status_levels:
+      healthy: "availability >= 99% AND error_rate < 1%"
+      degraded: "availability >= 95% AND error_rate < 5%"
+      unhealthy: "availability < 95% OR error_rate >= 5%"
+      
+    failover_order:
+      when_primary_unhealthy: use_next_in_affinity
+      when_provider_down: use_different_provider
+      fallback_agent: agent-07  # Self-hosted Llama as ultimate fallback

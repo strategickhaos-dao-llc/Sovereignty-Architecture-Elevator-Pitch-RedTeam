@@ -280,6 +280,46 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 📚 Academic Research & Publications
+
+### The Strategickhaos Case Study (v1.0)
+
+The **manuscript/** directory contains the arXiv-ready research paper documenting the Strategickhaos initiative and the HLMCR methodology:
+
+**Title**: *The Strategickhaos Case Study: A Historic Initiative in AI-Governed Organization and the Emergence of Human-in-the-Loop Multi-Model Cognitive Redundancy (HLMCR)*
+
+**Author**: Dominic L. S. Cummings
+
+**Key Contribution**: Formalisation of Human-in-the-Loop Multi-Model Cognitive Redundancy (HLMCR), a novel protocol for cross-system validation that achieves safety through cognitive diversity across ≥9 foundation models.
+
+#### Manuscript Structure
+
+```
+manuscript/
+├── strategickhaos.tex          # Main LaTeX document (arXiv-ready)
+├── references.bib              # 36-entry bibliography
+├── submission_checklist.txt    # arXiv submission guide
+├── figures/                    # Figures directory
+└── appendix_c_yaml/           # HLMCR protocol schemas
+    ├── hlmcr_core.yaml         # Core protocol definitions
+    ├── hlmcr_resonance.yaml    # Resonance testing config
+    └── hlmcr_agents.yaml       # Agent pool specification
+```
+
+#### Compiling the Manuscript
+
+```bash
+cd manuscript
+pdflatex strategickhaos.tex
+bibtex strategickhaos
+pdflatex strategickhaos.tex
+pdflatex strategickhaos.tex
+```
+
+#### Keywords
+
+AI governance, human-in-the-loop, multi-model systems, cognitive redundancy, distributed validation, autonomous organization
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
