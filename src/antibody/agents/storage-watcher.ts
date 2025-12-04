@@ -13,6 +13,22 @@ import * as path from 'path';
 
 const execAsync = promisify(exec);
 
+// Validate path to prevent path traversal
+function sanitizePath(inputPath: string): string {
+  // Normalize and resolve to absolute path
+  const normalizedPath = path.normalize(inputPath);
+  // Ensure no path traversal attempts
+  if (normalizedPath.includes('..')) {
+    throw new Error(`Invalid path: path traversal detected in ${inputPath}`);
+  }
+  return normalizedPath;
+}
+
+// Escape special characters for shell commands
+function escapeShellArg(arg: string): string {
+  return `'${arg.replace(/'/g, "'\\''")}'`;
+}
+
 interface StorageConfig extends AntibodyConfig {
   free_space_buffer_percent: number;
   auto_archive_days: number;
@@ -168,9 +184,15 @@ export class StorageWatcher extends BaseAntibody {
     console.log(`[StorageWatcher] Archiving files older than ${older_than_days} days in ${targetPath}`);
     
     try {
+      // Sanitize target path to prevent path traversal
+      const safePath = sanitizePath(targetPath);
+      const safeOlderThanDays = Math.max(1, Math.floor(older_than_days));
+      
       // Find and optionally compress old files
       for (const pattern of patterns) {
-        const findCmd = `find ${targetPath} -name "${pattern}" -mtime +${older_than_days} -type f 2>/dev/null || true`;
+        // Sanitize pattern - only allow safe glob patterns
+        const safePattern = pattern.replace(/[^a-zA-Z0-9.*_-]/g, '');
+        const findCmd = `find ${escapeShellArg(safePath)} -name ${escapeShellArg(safePattern)} -mtime +${safeOlderThanDays} -type f 2>/dev/null || true`;
         const { stdout } = await execAsync(findCmd);
         
         const files = stdout.trim().split('\n').filter(f => f.length > 0);
@@ -182,10 +204,11 @@ export class StorageWatcher extends BaseAntibody {
           // Ensure archive directory exists
           await execAsync('mkdir -p /var/archive 2>/dev/null || true');
           
-          // Create compressed archive
+          // Create compressed archive with escaped file paths
           if (files.length > 0) {
-            const fileList = files.slice(0, 100).join(' '); // Limit to 100 files per batch
-            await execAsync(`tar -czf ${archiveName} ${fileList} 2>/dev/null || true`);
+            const safeFiles = files.slice(0, 100).map(f => escapeShellArg(sanitizePath(f)));
+            const fileList = safeFiles.join(' ');
+            await execAsync(`tar -czf ${escapeShellArg(archiveName)} ${fileList} 2>/dev/null || true`);
             
             // Remove archived files
             await execAsync(`rm -f ${fileList} 2>/dev/null || true`);

@@ -112,7 +112,7 @@ export class AntibodyCoordinator extends EventEmitter {
   private async loadConfig(configPath: string): Promise<void> {
     try {
       const content = await fs.readFile(configPath, 'utf-8');
-      const fullConfig = yaml.load(content) as Record<string, unknown>;
+      const fullConfig = yaml.load(content, { schema: yaml.JSON_SCHEMA }) as Record<string, unknown>;
       
       if (fullConfig.coordinator) {
         this.config = { ...this.config, ...fullConfig.coordinator as CoordinatorConfig };

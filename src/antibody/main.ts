@@ -39,7 +39,7 @@ async function loadConfiguration(): Promise<AntibodySystemConfig> {
     
     try {
       const content = await fs.readFile(configPath, 'utf-8');
-      const config = yaml.load(content) as AntibodySystemConfig;
+      const config = yaml.load(content, { schema: yaml.JSON_SCHEMA }) as AntibodySystemConfig;
       console.log(`[SKOS] Loaded configuration from: ${configPath}`);
       return config;
     } catch {

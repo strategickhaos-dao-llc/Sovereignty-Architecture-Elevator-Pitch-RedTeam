@@ -11,6 +11,16 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
+// Allowlist of valid peer names to prevent injection
+const VALID_PEER_PATTERN = /^[a-zA-Z0-9_-]+$/;
+
+function sanitizePeerName(peer: string): string {
+  if (!VALID_PEER_PATTERN.test(peer)) {
+    throw new Error(`Invalid peer name: ${peer}`);
+  }
+  return peer;
+}
+
 interface MeshConfig extends AntibodyConfig {
   wireguard_config_path: string;
   connectivity_timeout_ms: number;
@@ -170,9 +180,13 @@ export class MeshHealer extends BaseAntibody {
     let tunnelStatus: 'up' | 'down' | 'degraded' = 'down';
     
     try {
+      // Sanitize peer name to prevent command injection
+      const safePeer = sanitizePeerName(peer);
+      const safeTimeout = Math.ceil(timeout / 1000);
+      
       // Try to ping the peer
       const { stdout } = await execAsync(
-        `ping -c 1 -W ${Math.ceil(timeout / 1000)} ${peer}.local 2>/dev/null || echo "UNREACHABLE"`
+        `ping -c 1 -W ${safeTimeout} ${safePeer}.local 2>/dev/null || echo "UNREACHABLE"`
       );
       
       if (!stdout.includes('UNREACHABLE')) {
@@ -182,7 +196,7 @@ export class MeshHealer extends BaseAntibody {
         latency = match ? parseFloat(match[1]) : 0;
         
         // Check WireGuard handshake status
-        const wgStatus = await this.checkWireGuardHandshake(peer);
+        const wgStatus = await this.checkWireGuardHandshake(safePeer);
         tunnelStatus = wgStatus;
       }
     } catch {
