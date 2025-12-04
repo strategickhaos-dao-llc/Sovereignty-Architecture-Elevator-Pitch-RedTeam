@@ -1,0 +1,38 @@
+# Swarm Ingress Configuration
+# NOTE: This is a TEMPLATE file. Replace placeholder values before deployment.
+#
+# Required changes before deployment:
+#   - Replace 'swarm.yourdomain.com' with your actual domain
+#   - Configure DNS to point to your cluster's ingress controller IP
+#   - Ensure cert-manager is installed for TLS certificate provisioning
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: swarm-ingress
+  namespace: default
+  labels:
+    app: swarm
+    component: ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        # TODO: Replace with your actual domain
+        - swarm.yourdomain.com
+      secretName: swarm-tls
+  rules:
+    # TODO: Replace with your actual domain
+    - host: swarm.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pong-001-service
+                port:
+                  number: 80

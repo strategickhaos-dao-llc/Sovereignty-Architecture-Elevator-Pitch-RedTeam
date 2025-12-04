@@ -1,0 +1,64 @@
+# CloudBuild configuration for automated deployments from GitHub → GKE
+# This file will be activated when CI/CD automation is needed
+
+steps:
+  # Build the Docker image
+  - name: gcr.io/cloud-builders/docker
+    id: "build"
+    args:
+      - "build"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/swarm:$SHORT_SHA"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/swarm:latest"
+      - "."
+
+  # Push to Container Registry
+  - name: gcr.io/cloud-builders/docker
+    id: "push"
+    args:
+      - "push"
+      - "gcr.io/$PROJECT_ID/swarm:$SHORT_SHA"
+    waitFor:
+      - "build"
+
+  # Push latest tag
+  - name: gcr.io/cloud-builders/docker
+    id: "push-latest"
+    args:
+      - "push"
+      - "gcr.io/$PROJECT_ID/swarm:latest"
+    waitFor:
+      - "build"
+
+  # Deploy to GKE
+  - name: gcr.io/cloud-builders/kubectl
+    id: "deploy"
+    args:
+      - "set"
+      - "image"
+      - "deployment/pong-001"
+      - "pong=gcr.io/$PROJECT_ID/swarm:$SHORT_SHA"
+    env:
+      - "CLOUDSDK_COMPUTE_ZONE=$_COMPUTE_ZONE"
+      - "CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME"
+    waitFor:
+      - "push"
+
+# Images to be pushed
+images:
+  - "gcr.io/$PROJECT_ID/swarm:$SHORT_SHA"
+  - "gcr.io/$PROJECT_ID/swarm:latest"
+
+# Substitution variables (can be overridden)
+substitutions:
+  _COMPUTE_ZONE: "us-central1"
+  _CLUSTER_NAME: "jarvis-swarm-personal-001"
+
+# Build options
+options:
+  machineType: "E2_MEDIUM"
+  logging: CLOUD_LOGGING_ONLY
+
+# Build timeout
+timeout: "1200s"
