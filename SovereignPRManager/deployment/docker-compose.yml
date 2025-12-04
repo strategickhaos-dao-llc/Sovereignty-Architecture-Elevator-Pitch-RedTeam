@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  # NATS JetStream for event messaging
+  nats:
+    image: nats:2.10-alpine
+    command: ["--jetstream", "--store_dir=/data"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - nats-data:/data
+    restart: unless-stopped
+
+  # PR Monitor service
+  pr-monitor:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    command: python -m core.pr_monitor
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_REPO=${GITHUB_REPO:-Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-}
+      - NATS_URL=nats://nats:4222
+    depends_on:
+      - nats
+    restart: unless-stopped
+
+  # Legion Reviewer service
+  legion-reviewer:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    command: python -m ai_legion.legion_reviewer
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NATS_URL=nats://nats:4222
+      - CONFIDENCE_THRESHOLD=${CONFIDENCE_THRESHOLD:-0.9}
+    depends_on:
+      - nats
+    restart: unless-stopped
+
+volumes:
+  nats-data:
