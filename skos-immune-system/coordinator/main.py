@@ -145,7 +145,7 @@ class CircuitBreaker:
         """Check if circuit is open for this action."""
         if action_key in self.open_circuits:
             opened_at = self.open_circuits[action_key]
-            if (datetime.now(timezone.utc) - opened_at).seconds < self.reset_timeout:
+            if (datetime.now(timezone.utc) - opened_at).total_seconds() < self.reset_timeout:
                 return True
             else:
                 # Reset circuit
@@ -164,7 +164,7 @@ class CircuitBreaker:
         # Clean old failures (older than reset_timeout)
         self.failures[action_key] = [
             f for f in self.failures[action_key]
-            if (now - f).seconds < self.reset_timeout
+            if (now - f).total_seconds() < self.reset_timeout
         ]
         
         self.failures[action_key].append(now)
@@ -465,7 +465,7 @@ class AntibodyCoordinator:
             
             for agent_id, agent in self.agents.items():
                 if agent.last_heartbeat:
-                    delta = (now - agent.last_heartbeat).seconds
+                    delta = (now - agent.last_heartbeat).total_seconds()
                     if delta > HEARTBEAT_TIMEOUT_SECONDS:
                         if agent.status != "offline":
                             logger.warning(

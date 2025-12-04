@@ -86,9 +86,9 @@ echo -e "${YELLOW}[1/4] Infrastructure Tests${NC}"
 run_test "Docker available" "docker info"
 
 # Test containers running
-run_test "NATS container running" "$COMPOSE_CMD ps | grep -q skos-nats"
-run_test "Coordinator container running" "$COMPOSE_CMD ps | grep -q skos-coordinator"
-run_test "Thermal Sentinel container running" "$COMPOSE_CMD ps | grep -q skos-thermal-sentinel"
+run_test "NATS container running" "$COMPOSE_CMD ps --services --filter 'status=running' | grep -q nats"
+run_test "Coordinator container running" "$COMPOSE_CMD ps --services --filter 'status=running' | grep -q coordinator"
+run_test "Thermal Sentinel container running" "$COMPOSE_CMD ps --services --filter 'status=running' | grep -q thermal-sentinel"
 
 echo ""
 echo -e "${YELLOW}[2/4] NATS Tests${NC}"

@@ -307,7 +307,7 @@ class ThermalSentinelAgent:
         
         # Check cooldown
         if last_alert:
-            delta = (now - last_alert).seconds
+            delta = (now - last_alert).total_seconds()
             if delta < self.alert_cooldown_seconds:
                 return
         
@@ -468,12 +468,25 @@ class ThermalSentinelAgent:
         
         # Example: stop development containers
         try:
-            subprocess.run(
-                ["docker", "stop", "$(docker ps -q --filter 'label=essential=false')"],
-                shell=True,
+            # First get the list of non-essential containers
+            result = subprocess.run(
+                ["docker", "ps", "-q", "--filter", "label=essential=false"],
                 capture_output=True,
-                timeout=30
+                text=True,
+                timeout=10
             )
+            container_ids = result.stdout.strip()
+            
+            # Only stop if there are containers to stop
+            if container_ids:
+                subprocess.run(
+                    ["docker", "stop"] + container_ids.split(),
+                    capture_output=True,
+                    timeout=30
+                )
+                logger.info(f"Stopped non-essential containers: {container_ids}")
+            else:
+                logger.info("No non-essential containers to stop")
         except Exception as e:
             logger.warning(f"Failed to stop containers: {e}")
 
