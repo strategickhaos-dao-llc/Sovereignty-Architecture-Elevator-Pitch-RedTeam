@@ -1,6 +1,13 @@
 # access_matrix.yaml
 # Strategickhaos DAO LLC — UPL-Safe Access Control
-version: "1.0"
+# STATUS UPDATE: Entity administratively dissolved 2025-11-25
+# This document is retained for reference during refiling process
+# See legal/ENTITY_SEPARATION_PLAN.md for next steps
+version: "1.1"
+dissolution_status:
+  dissolved: true
+  dissolution_date: "2025-11-25"
+  refiling_planned: true
 roles:
   drafter:
     - name: "Domenic Garza"

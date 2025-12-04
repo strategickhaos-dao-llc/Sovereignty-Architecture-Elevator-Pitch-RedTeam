@@ -1,12 +1,35 @@
 # dao_record_v1.0.yaml
-# Strategickhaos DAO LLC / Valoryield Engine — Week 1 Sovereignty Record
-# Version: 1.0
-# Date: 2025-11-16
+# Strategickhaos DAO LLC — Week 1 Sovereignty Record
+# NOTE: ValorYield Engine is a SEPARATE nonprofit corporation (Entity ID: 2025-001708312)
+# Version: 1.1
+# Date: 2025-11-25
 # Operator: Domenic Garza (Node 137)
+# DISSOLUTION UPDATE: Strategickhaos DAO LLC administratively dissolved 2025-11-25
 
-version: "1.0"
-date: "2025-11-16"
-project: "Valoryield Engine — Sovereignty Architecture"
+version: "1.1"
+date: "2025-11-25"
+project: "Sovereignty Architecture"
+
+# ENTITY SEPARATION NOTICE
+# Strategickhaos DAO LLC - DISSOLVED (missing DAO Public Identifier)
+# ValorYield Engine - ACTIVE nonprofit (Entity ID: 2025-001708312)
+# See legal/ENTITY_SEPARATION_PLAN.md for refiling guidance
+
+entity_status:
+  strategickhaos_dao_llc:
+    status: "Administratively Dissolved"
+    dissolution_date: "2025-11-25"
+    dissolution_reason: "Failed to provide DAO Public Identifier within 30 days"
+    prior_ein: "39-2900295 (orphaned - do not use)"
+    refiling_required: true
+    refiling_notes: "Must include DAO Public Identifier (smart contract address) at formation"
+  valoryield_engine:
+    status: "Active"
+    entity_id: "2025-001708312"
+    entity_type: "Nonprofit Corporation"
+    ein_status: "Not yet obtained"
+    unaffected_by_dissolution: true
+
 operator:
   name: "Domenic Garza"
   node: "137"
