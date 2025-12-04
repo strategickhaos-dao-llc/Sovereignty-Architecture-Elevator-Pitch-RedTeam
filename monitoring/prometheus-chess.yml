@@ -1,0 +1,72 @@
+# Prometheus Configuration for Chess Council
+# Scrape metrics from game orchestrator and agents
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    system: chess-council
+    environment: development
+
+rule_files:
+  - /etc/prometheus/alerts-chess.yml
+
+scrape_configs:
+  # Game Orchestrator
+  - job_name: 'chess-orchestrator'
+    static_configs:
+      - targets: ['game-orchestrator:9090']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: component
+        replacement: orchestrator
+  
+  # Stockfish Referee
+  - job_name: 'chess-referee'
+    static_configs:
+      - targets: ['stockfish-referee:9090']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: component
+        replacement: referee
+  
+  # Chess Agents (sample agents for dev)
+  - job_name: 'chess-agents'
+    static_configs:
+      - targets:
+          - 'agent-0:9090'
+          - 'agent-1:9090'
+          - 'agent-2:9090'
+          - 'agent-3:9090'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: component
+        replacement: agent
+      - source_labels: [__address__]
+        regex: 'agent-(\d+):.*'
+        target_label: agent_id
+        replacement: '${1}'
+  
+  # Qdrant Vector DB
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant-chess:6333']
+    metrics_path: /metrics
+  
+  # PostgreSQL (via exporter if added)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-chess:5432']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: component
+        replacement: database
+  
+  # Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-chess:6379']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: component
+        replacement: cache

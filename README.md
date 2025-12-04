@@ -280,6 +280,80 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## ♟️ 10-Dimensional Chess Council
+
+The **Legions of Minds Chess Council** is an unprecedented AI research super-collider featuring **640 containerized LLM agents** playing adversarial strategy games to synthesize peer-reviewed knowledge.
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    10D CHESS COUNCIL                        │
+│              640 Agents × 10 Board Layers                   │
+├─────────────────────────────────────────────────────────────┤
+│  Layer 9: Publication    │  arXiv, patents, GitHub          │
+│  Layer 8: Validation     │  Peer review, fact-checking      │
+│  Layer 7: Linguistic     │  Paper writing, LaTeX            │
+│  Layer 6: Ethical        │  Bias audit, compliance          │
+│  Layer 5: Strategic      │  Game theory, Nash equilibrium   │
+│  Layer 4: Modeling       │  ML training, simulation         │
+│  Layer 3: Synthesis      │  Meta-analysis, cross-domain     │
+│  Layer 2: Analysis       │  Statistics, regression          │
+│  Layer 1: Preprocessing  │  Cleaning, vectorization         │
+│  Layer 0: Empirical      │  Data scraping, sensors          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Key Features
+
+- **640 LLM Agents**: Each runs in a full Parrot OS container with terminal access
+- **Circle of 5ths Tuning**: Agents mapped to 88 piano keys for harmonic collaboration
+- **Adversarial Games**: Bibliographic synthesis chess, hypothesis testing
+- **Stockfish Referee**: AI referee evaluates move quality and validity
+- **Auto-Publishing**: Winning games compile to LaTeX and submit to arXiv
+
+### Quick Start - Chess Council
+
+```bash
+# Start Chess Council with 4 sample agents
+docker-compose -f docker-compose.chess-council.yml up -d
+
+# Check agent status
+curl http://localhost:8100/info   # Agent 0 (Empirical Layer)
+curl http://localhost:8101/info   # Agent 1 (Analysis Layer)
+curl http://localhost:8102/info   # Agent 2 (Synthesis Layer)
+curl http://localhost:8103/info   # Agent 3 (Publication Layer)
+
+# Start a game via orchestrator
+curl -X POST http://localhost:8090/game \
+  -H "Content-Type: application/json" \
+  -d '{"type": "bibliographic_synthesis", "topic": "quantum_computing"}'
+```
+
+### Discord Integration
+
+```bash
+# Research commands
+!research <topic>           # Assign research to layer 4 agents
+!game <agent_a> <agent_b>   # Start chess match
+!replay <game_id>           # Show move-by-move analysis
+!publish <game_id>          # Upload to arXiv
+```
+
+### Configuration
+
+See [`chess-council.yaml`](chess-council.yaml) for full architecture specification.
+
+### Deployment
+
+```bash
+# Kubernetes (production)
+kubectl apply -f bootstrap/k8s/chess-council/
+
+# Local development
+docker-compose -f docker-compose.chess-council.yml up
+```
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file

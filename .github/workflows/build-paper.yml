@@ -1,0 +1,208 @@
+# Chess Council - Research Paper Builder
+# Compiles LaTeX papers, verifies citations, and deploys to GitHub Pages
+name: Build Research Paper
+
+on:
+  push:
+    paths:
+      - 'papers/**/*.tex'
+      - 'papers/**/*.bib'
+  workflow_dispatch:
+    inputs:
+      paper_path:
+        description: 'Path to LaTeX paper'
+        required: true
+        type: string
+      deploy:
+        description: 'Deploy to GitHub Pages'
+        required: false
+        default: true
+        type: boolean
+
+# Minimum required permissions
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+env:
+  PAPER_OUTPUT_DIR: ./output
+
+jobs:
+  build:
+    name: Build Paper
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            ${{ github.event.inputs.paper_path || 'papers/**/*.tex' }}
+          latexmk_use_lualatex: false
+          continue_on_error: true
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-bibtex-extra \
+            biber \
+            pandoc \
+            python3 \
+            python3-pip
+          
+          pip3 install \
+            bibtexparser \
+            requests \
+            pyyaml
+      
+      - name: Find paper files
+        id: find-papers
+        run: |
+          if [ -n "${{ github.event.inputs.paper_path }}" ]; then
+            echo "papers=${{ github.event.inputs.paper_path }}" >> $GITHUB_OUTPUT
+          else
+            papers=$(find papers -name "*.tex" -type f | tr '\n' ' ')
+            echo "papers=$papers" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Compile papers
+        run: |
+          mkdir -p $PAPER_OUTPUT_DIR
+          
+          for paper in ${{ steps.find-papers.outputs.papers }}; do
+            echo "Compiling: $paper"
+            dir=$(dirname "$paper")
+            name=$(basename "$paper" .tex)
+            
+            cd "$dir"
+            
+            # First pass
+            pdflatex -interaction=nonstopmode "$name.tex" || true
+            
+            # Bibliography
+            if [ -f "$name.bib" ]; then
+              biber "$name" || bibtex "$name" || true
+            fi
+            
+            # Second and third pass
+            pdflatex -interaction=nonstopmode "$name.tex" || true
+            pdflatex -interaction=nonstopmode "$name.tex" || true
+            
+            # Copy output
+            if [ -f "$name.pdf" ]; then
+              cp "$name.pdf" "$GITHUB_WORKSPACE/$PAPER_OUTPUT_DIR/"
+              echo "✓ Built: $name.pdf"
+            else
+              echo "✗ Failed: $name"
+            fi
+            
+            cd "$GITHUB_WORKSPACE"
+          done
+      
+      - name: Verify citations
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+          import json
+          from pathlib import Path
+          
+          def extract_citations(tex_file):
+              """Extract citations from a LaTeX file."""
+              citations = []
+              with open(tex_file, 'r') as f:
+                  content = f.read()
+                  # Match \cite{...}, \citep{...}, \citet{...}
+                  matches = re.findall(r'\\cite[pt]?\{([^}]+)\}', content)
+                  for match in matches:
+                      citations.extend(match.split(','))
+              return [c.strip() for c in citations]
+          
+          def verify_bib_entry(bib_file, key):
+              """Check if a citation key exists in the bib file."""
+              if not os.path.exists(bib_file):
+                  return False
+              with open(bib_file, 'r') as f:
+                  content = f.read()
+                  return re.search(rf'@\w+\{{\s*{key}\s*,', content) is not None
+          
+          # Find all papers
+          papers_dir = Path('papers')
+          if papers_dir.exists():
+              for tex_file in papers_dir.rglob('*.tex'):
+                  bib_file = tex_file.with_suffix('.bib')
+                  citations = extract_citations(tex_file)
+                  
+                  print(f"\n📄 {tex_file}")
+                  print(f"   Found {len(citations)} citations")
+                  
+                  missing = []
+                  for cite in set(citations):
+                      if not verify_bib_entry(bib_file, cite):
+                          missing.append(cite)
+                  
+                  if missing:
+                      print(f"   ⚠️  Missing: {', '.join(missing)}")
+                  else:
+                      print(f"   ✓ All citations verified")
+          EOF
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: papers
+          path: ${{ env.PAPER_OUTPUT_DIR }}/*.pdf
+          if-no-files-found: warn
+      
+      - name: Deploy to GitHub Pages
+        if: ${{ github.event.inputs.deploy != 'false' && github.ref == 'refs/heads/main' }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.PAPER_OUTPUT_DIR }}
+          destination_dir: papers
+  
+  notify:
+    name: Notify Discord
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()
+    permissions: {}  # No permissions needed for external webhook calls
+    
+    steps:
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "No Discord webhook configured"
+            exit 0
+          fi
+          
+          status="${{ needs.build.result }}"
+          color=$([[ "$status" == "success" ]] && echo "3066993" || echo "15158332")
+          
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"📄 Research Paper Build\",
+                \"description\": \"Build $status for ${{ github.repository }}\",
+                \"color\": $color,
+                \"fields\": [
+                  {\"name\": \"Branch\", \"value\": \"${{ github.ref_name }}\", \"inline\": true},
+                  {\"name\": \"Commit\", \"value\": \"${{ github.sha }}\", \"inline\": true}
+                ]
+              }]
+            }" \
+            "$DISCORD_WEBHOOK"

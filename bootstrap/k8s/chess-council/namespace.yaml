@@ -1,0 +1,23 @@
+# Chess Council Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chess-council
+  labels:
+    app: chess-council
+    system: legions-of-minds
+---
+# Resource Quotas for the namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: chess-council-quota
+  namespace: chess-council
+spec:
+  hard:
+    requests.cpu: "1280"          # 2 CPU per agent × 640
+    requests.memory: "5120Gi"     # 8 GB per agent × 640
+    limits.cpu: "2560"            # 4 CPU limit per agent × 640
+    limits.memory: "10240Gi"      # 16 GB limit per agent × 640
+    persistentvolumeclaims: "650"
+    pods: "700"

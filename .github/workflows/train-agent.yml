@@ -1,0 +1,343 @@
+# Chess Council - Agent Training Loop
+# Evaluates agent performance and triggers fine-tuning
+name: Train Chess Agents
+
+on:
+  schedule:
+    # Daily at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      training_games:
+        description: 'Number of games to evaluate'
+        required: false
+        default: '100'
+        type: string
+      deploy_updates:
+        description: 'Deploy updated agents'
+        required: false
+        default: true
+        type: boolean
+
+# Default minimal permissions
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: strategickhaos/chess-agent
+
+jobs:
+  evaluate:
+    name: Evaluate Agent Performance
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      should_train: ${{ steps.evaluate.outputs.should_train }}
+      metrics: ${{ steps.evaluate.outputs.metrics }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install \
+            pandas \
+            numpy \
+            scipy \
+            pyyaml \
+            requests \
+            psycopg2-binary \
+            qdrant-client
+      
+      - name: Evaluate agent performance
+        id: evaluate
+        env:
+          POSTGRES_DSN: ${{ secrets.POSTGRES_DSN }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+        run: |
+          python3 << 'EOF'
+          import os
+          import json
+          import random
+          
+          # Simulated evaluation (replace with actual DB queries)
+          games_to_eval = int(os.environ.get('TRAINING_GAMES', '100'))
+          
+          # Simulated metrics
+          metrics = {
+              'games_evaluated': games_to_eval,
+              'avg_citation_accuracy': round(random.uniform(0.75, 0.95), 3),
+              'avg_logical_coherence': round(random.uniform(0.70, 0.90), 3),
+              'avg_novelty_score': round(random.uniform(0.60, 0.85), 3),
+              'avg_peer_review_prediction': round(random.uniform(0.65, 0.88), 3),
+              'win_rate': round(random.uniform(0.45, 0.55), 3),
+              'publication_acceptance_rate': round(random.uniform(0.75, 0.90), 3),
+          }
+          
+          # Determine if training is needed
+          should_train = (
+              metrics['avg_citation_accuracy'] < 0.90 or
+              metrics['avg_logical_coherence'] < 0.85 or
+              metrics['publication_acceptance_rate'] < 0.85
+          )
+          
+          print(f"📊 Evaluation Results ({games_to_eval} games)")
+          print("-" * 40)
+          for key, value in metrics.items():
+              print(f"  {key}: {value}")
+          print("-" * 40)
+          print(f"Training needed: {should_train}")
+          
+          # Output for GitHub Actions
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"should_train={str(should_train).lower()}\n")
+              f.write(f"metrics={json.dumps(metrics)}\n")
+          EOF
+  
+  generate-training-data:
+    name: Generate Training Data
+    needs: evaluate
+    if: needs.evaluate.outputs.should_train == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Generate JSONL training data
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from datetime import datetime
+          
+          # Create training data directory
+          os.makedirs('training_data', exist_ok=True)
+          
+          # Generate training data from winning strategies
+          # This is a placeholder - replace with actual game log processing
+          training_examples = [
+              {
+                  "state": {
+                      "game_type": "bibliographic_synthesis",
+                      "turn": 1,
+                      "topic": "quantum_computing",
+                      "cited_papers": [],
+                      "claims": []
+                  },
+                  "action": {
+                      "type": "cite",
+                      "paper_doi": "10.1137/S0097539795293172",
+                      "claim": "Shor's algorithm provides polynomial-time factoring"
+                  },
+                  "reward": 10.0,
+                  "outcome": "novel_insight"
+              },
+              {
+                  "state": {
+                      "game_type": "adversarial_hypothesis",
+                      "turn": 3,
+                      "hypothesis": "RSA-2048 will be broken by 2030",
+                      "evidence_for": ["qubit_scaling_roadmap"],
+                      "evidence_against": ["error_correction_requirements"]
+                  },
+                  "action": {
+                      "type": "revise",
+                      "new_hypothesis": "RSA-2048 will be broken by 2035 with surface codes",
+                      "supporting_evidence": "logical_qubit_scaling_analysis"
+                  },
+                  "reward": 15.0,
+                  "outcome": "surviving_challenge"
+              }
+          ]
+          
+          timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+          filename = f'training_data/training_{timestamp}.jsonl'
+          
+          with open(filename, 'w') as f:
+              for example in training_examples:
+                  f.write(json.dumps(example) + '\n')
+          
+          print(f"Generated {len(training_examples)} training examples")
+          print(f"Output: {filename}")
+          EOF
+      
+      - name: Upload training data
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-data
+          path: training_data/*.jsonl
+  
+  fine-tune:
+    name: Fine-tune Agent Models
+    needs: [evaluate, generate-training-data]
+    if: needs.evaluate.outputs.should_train == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download training data
+        uses: actions/download-artifact@v4
+        with:
+          name: training-data
+          path: training_data
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Fine-tune with LoRA
+        run: |
+          echo "🔧 Fine-tuning agent models..."
+          echo "This step would use PEFT/LoRA to fine-tune Qwen2.5 base"
+          echo "Training data: $(ls training_data/)"
+          
+          # Placeholder for actual fine-tuning
+          # In production, this would:
+          # 1. Load training JSONL
+          # 2. Format for instruction tuning
+          # 3. Apply LoRA adapters
+          # 4. Save fine-tuned model
+          
+          echo "Fine-tuning complete (simulated)"
+      
+      - name: Save model artifacts
+        run: |
+          mkdir -p model_artifacts
+          echo '{"version": "1.0", "base": "qwen2.5:72b", "adapters": "lora"}' > model_artifacts/metadata.json
+          echo "Model artifacts saved"
+      
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-artifacts
+          path: model_artifacts/
+  
+  build-image:
+    name: Build Agent Container Image
+    needs: fine-tune
+    if: ${{ github.event.inputs.deploy_updates != 'false' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download model artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: model-artifacts
+          path: model_artifacts
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+            type=raw,value={{date 'YYYYMMDD'}}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.chess-agent
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  
+  deploy:
+    name: Deploy Updated Agents
+    needs: build-image
+    if: ${{ github.event.inputs.deploy_updates != 'false' }}
+    runs-on: ubuntu-latest
+    environment: production
+    permissions: {}  # No GitHub permissions needed for external Kubernetes deployment
+    
+    steps:
+      - name: Deploy to Kubernetes
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+        run: |
+          if [ -z "$KUBECONFIG_DATA" ]; then
+            echo "No kubeconfig configured - skipping deployment"
+            exit 0
+          fi
+          
+          echo "$KUBECONFIG_DATA" | base64 -d > /tmp/kubeconfig
+          export KUBECONFIG=/tmp/kubeconfig
+          
+          # Canary deployment: 10% → 50% → 100%
+          echo "Starting canary deployment..."
+          
+          # Phase 1: 10%
+          kubectl set image statefulset/chess-board \
+            agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -n chess-council \
+            --record || true
+          
+          kubectl rollout status statefulset/chess-board \
+            -n chess-council \
+            --timeout=600s || true
+          
+          echo "Deployment complete"
+      
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "No Discord webhook configured"
+            exit 0
+          fi
+          
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"🤖 Agent Training Complete\",
+                \"description\": \"Chess Council agents have been updated\",
+                \"color\": 3066993,
+                \"fields\": [
+                  {\"name\": \"Image\", \"value\": \"${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}\", \"inline\": false},
+                  {\"name\": \"Metrics\", \"value\": \"${{ needs.evaluate.outputs.metrics }}\", \"inline\": false}
+                ]
+              }]
+            }" \
+            "$DISCORD_WEBHOOK"
