@@ -128,7 +128,7 @@ class AntibodyCoordinator:
         # Ensure streams exist for observability if desired
         await self._ensure_stream(
             name="ANTIBODY_EVENTS",
-            subjects=["antibody.heartbeat.*", "antibody.alert.*"],
+            subjects=["antibody.heartbeat.*", "antibody.alert.*", "antibody.events.*"],
         )
         await self._ensure_stream(
             name="ANTIBODY_COMMANDS",
@@ -210,7 +210,10 @@ class AntibodyCoordinator:
         agent = "thermal-sentinel"
         actions = []
 
-        if cpu and cpu > limits["max_cpu_temp"] or gpu and gpu > limits["max_gpu_temp"]:
+        cpu_over_limit = cpu is not None and cpu > limits["max_cpu_temp"]
+        gpu_over_limit = gpu is not None and gpu > limits["max_gpu_temp"]
+        
+        if cpu_over_limit or gpu_over_limit:
             actions.append({"action": "throttle", "params": {"node": node}})
             spare = self.state.get_hot_spare_node(exclude_node=node)
             if spare:
