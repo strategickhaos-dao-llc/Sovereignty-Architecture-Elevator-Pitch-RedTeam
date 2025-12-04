@@ -41,6 +41,9 @@ interface QueenConfig {
   organizations: RoutingConfig;
 }
 
+// Check if running in production
+const isProduction = process.env.NODE_ENV === "production";
+
 // Default configuration
 const defaultConfig: QueenConfig = {
   port: Number(process.env.PORT) || 8081,
@@ -189,6 +192,12 @@ function createEmbed(
 app.post(
   "/webhook/github",
   async (req: Request & { rawBody?: string }, res: Response) => {
+    // In production, require webhook secret for security
+    if (isProduction && !config.webhookSecret) {
+      console.error("❌ GITHUB_WEBHOOK_SECRET is required in production");
+      return res.status(500).json({ error: "Server configuration error" });
+    }
+
     // Verify signature if secret is configured
     if (config.webhookSecret) {
       const signature = req.get("x-hub-signature-256") || "";
@@ -196,6 +205,8 @@ app.post(
         console.log("⚠️ Invalid webhook signature");
         return res.status(401).json({ error: "Invalid signature" });
       }
+    } else {
+      console.warn("⚠️ Webhook signature verification disabled (no secret configured)");
     }
 
     const event = req.get("x-github-event") || "unknown";
@@ -404,7 +415,12 @@ export function getApp() {
 }
 
 // Start server if this is the main module
-const isMainModule = require.main === module || process.argv[1]?.includes("queen/server");
+// Note: In ESM context, use import.meta.url for module detection
+// For CommonJS compatibility, we also check process.argv
+const moduleUrl = typeof import.meta !== 'undefined' ? import.meta.url : '';
+const isMainModule = moduleUrl.endsWith('queen/server.js') || 
+                     moduleUrl.endsWith('queen/server.ts') ||
+                     process.argv[1]?.includes("queen/server");
 if (isMainModule) {
   startQueen();
 }

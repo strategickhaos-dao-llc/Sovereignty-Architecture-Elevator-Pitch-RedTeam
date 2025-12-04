@@ -20,11 +20,18 @@ kind: Secret
 metadata:
   name: queen-secrets
   namespace: ops
+  annotations:
+    # NOTE: Replace placeholder values with actual secrets before deployment
+    # Consider using External Secrets, Sealed Secrets, or Vault for production
+    description: "Queen.js Federation Hub secrets - DO NOT commit real secrets"
 type: Opaque
 stringData:
-  GITHUB_WEBHOOK_SECRET: "your-webhook-secret-here"
-  DISCORD_WEBHOOK_GITHUB: "https://discord.com/api/webhooks/your-github-webhook"
-  DISCORD_WEBHOOK_FINANCIAL: "https://discord.com/api/webhooks/your-financial-webhook"
+  # REQUIRED: GitHub webhook secret for signature verification
+  # Generate with: openssl rand -hex 32
+  GITHUB_WEBHOOK_SECRET: "${GITHUB_WEBHOOK_SECRET}"
+  # OPTIONAL: Discord webhook URLs for notifications
+  DISCORD_WEBHOOK_GITHUB: "${DISCORD_WEBHOOK_GITHUB}"
+  DISCORD_WEBHOOK_FINANCIAL: "${DISCORD_WEBHOOK_FINANCIAL}"
 
 ---
 
