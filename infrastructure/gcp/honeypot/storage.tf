@@ -4,7 +4,7 @@
 resource "google_storage_bucket" "honeytrap_logs" {
   name                        = var.logs_bucket_name
   project                     = var.project_id
-  location                    = upper(var.region)
+  location                    = var.region
   uniform_bucket_level_access = true
 
   versioning {

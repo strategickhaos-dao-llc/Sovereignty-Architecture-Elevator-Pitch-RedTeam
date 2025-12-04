@@ -22,8 +22,8 @@ resource "google_pubsub_topic_iam_member" "honeypot_publisher" {
 }
 
 # Public access for Cloud Run honeypot (intentionally exposed)
-resource "google_cloud_run_service_iam_member" "honeypot_invoker" {
-  service  = google_cloud_run_v2_service.honeypot_sra.name
+resource "google_cloud_run_v2_service_iam_member" "honeypot_invoker" {
+  name     = google_cloud_run_v2_service.honeypot_sra.name
   location = google_cloud_run_v2_service.honeypot_sra.location
   project  = var.project_id
   role     = "roles/run.invoker"
