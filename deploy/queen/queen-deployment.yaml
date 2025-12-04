@@ -1,0 +1,173 @@
+##
+# Queen.js Federation Hub - Kubernetes Deployment
+# 
+# Central webhook coordinator for multi-org GitHub federation.
+# Deploy with: kubectl apply -f queen-deployment.yaml
+##
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ops
+  labels:
+    app: queen-hub
+    sovereignty: "100%"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: queen-secrets
+  namespace: ops
+type: Opaque
+stringData:
+  GITHUB_WEBHOOK_SECRET: "your-webhook-secret-here"
+  DISCORD_WEBHOOK_GITHUB: "https://discord.com/api/webhooks/your-github-webhook"
+  DISCORD_WEBHOOK_FINANCIAL: "https://discord.com/api/webhooks/your-financial-webhook"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: queen-config
+  namespace: ops
+data:
+  NATS_URL: "nats://nats:4222"
+  PORT: "8081"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queen-hub
+  namespace: ops
+  labels:
+    app: queen-hub
+spec:
+  replicas: 2  # High availability
+  selector:
+    matchLabels:
+      app: queen-hub
+  template:
+    metadata:
+      labels:
+        app: queen-hub
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/health"
+    spec:
+      containers:
+      - name: queen
+        image: gcr.io/gen-lang-client-0012743775/queen:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+          name: http
+        envFrom:
+        - configMapRef:
+            name: queen-config
+        - secretRef:
+            name: queen-secrets
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: queen-hub
+  namespace: ops
+  labels:
+    app: queen-hub
+spec:
+  selector:
+    app: queen-hub
+  ports:
+  - port: 80
+    targetPort: 8081
+    name: http
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: queen-hub
+  namespace: ops
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - queen.strategickhaos.com
+    secretName: queen-tls
+  rules:
+  - host: queen.strategickhaos.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: queen-hub
+            port:
+              number: 80
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: queen-hub
+  namespace: ops
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: queen-hub
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
