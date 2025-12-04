@@ -12,7 +12,19 @@ class GrokEmailProcessor:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.base_url = "https://api.x.ai/v1"
-        self.client = httpx.AsyncClient()
+        self._client: httpx.AsyncClient | None = None
+    
+    async def _get_client(self) -> httpx.AsyncClient:
+        """Get or create HTTP client with lazy initialization"""
+        if self._client is None:
+            self._client = httpx.AsyncClient()
+        return self._client
+    
+    async def close(self) -> None:
+        """Close the HTTP client to release resources"""
+        if self._client is not None:
+            await self._client.aclose()
+            self._client = None
     
     async def analyze_email(
         self, 
@@ -43,7 +55,8 @@ Respond in JSON format.
         """
         
         try:
-            response = await self.client.post(
+            client = await self._get_client()
+            response = await client.post(
                 f"{self.base_url}/chat/completions",
                 headers={
                     "Authorization": f"Bearer {self.api_key}",

@@ -10,7 +10,19 @@ from typing import Dict
 class ZapierConnector:
     def __init__(self, webhook_url: str):
         self.webhook_url = webhook_url
-        self.client = httpx.AsyncClient()
+        self._client: httpx.AsyncClient | None = None
+    
+    async def _get_client(self) -> httpx.AsyncClient:
+        """Get or create HTTP client with lazy initialization"""
+        if self._client is None:
+            self._client = httpx.AsyncClient()
+        return self._client
+    
+    async def close(self) -> None:
+        """Close the HTTP client to release resources"""
+        if self._client is not None:
+            await self._client.aclose()
+            self._client = None
     
     async def send_to_workflow(self, payload: Dict) -> bool:
         """
@@ -22,7 +34,8 @@ class ZapierConnector:
             return False
         
         try:
-            response = await self.client.post(
+            client = await self._get_client()
+            response = await client.post(
                 self.webhook_url,
                 json=payload,
                 timeout=30.0

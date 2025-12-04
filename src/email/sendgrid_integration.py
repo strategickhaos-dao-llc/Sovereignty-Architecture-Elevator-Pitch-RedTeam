@@ -10,7 +10,19 @@ class SendGridClient:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.base_url = "https://api.sendgrid.com/v3"
-        self.client = httpx.AsyncClient()
+        self._client: httpx.AsyncClient | None = None
+    
+    async def _get_client(self) -> httpx.AsyncClient:
+        """Get or create HTTP client with lazy initialization"""
+        if self._client is None:
+            self._client = httpx.AsyncClient()
+        return self._client
+    
+    async def close(self) -> None:
+        """Close the HTTP client to release resources"""
+        if self._client is not None:
+            await self._client.aclose()
+            self._client = None
     
     async def send_email(self, email) -> Optional[str]:
         """Send email via SendGrid API"""
@@ -36,7 +48,8 @@ class SendGridClient:
         }
         
         try:
-            response = await self.client.post(
+            client = await self._get_client()
+            response = await client.post(
                 f"{self.base_url}/mail/send",
                 headers={
                     "Authorization": f"Bearer {self.api_key}",

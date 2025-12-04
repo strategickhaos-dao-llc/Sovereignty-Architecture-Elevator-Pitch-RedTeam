@@ -3,6 +3,7 @@ StrategicKhaos Email Intelligence Service
 Sovereign email infrastructure with Grok AI integration
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, BackgroundTasks
 from pydantic import BaseModel
 import os
@@ -14,12 +15,24 @@ from .grok_intelligence import GrokEmailProcessor
 from .zapier_webhooks import ZapierConnector
 from .sendgrid_integration import SendGridClient
 
-app = FastAPI(title="StrategicKhaos Email Service")
-
 # Initialize components
 grok_processor = GrokEmailProcessor(api_key=os.getenv("GROK_API_KEY", ""))
 zapier = ZapierConnector(webhook_url=os.getenv("ZAPIER_WEBHOOK_URL", ""))
 sendgrid = SendGridClient(api_key=os.getenv("SENDGRID_API_KEY", ""))
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application lifecycle for proper resource cleanup"""
+    # Startup
+    yield
+    # Shutdown - close all HTTP clients
+    await grok_processor.close()
+    await zapier.close()
+    await sendgrid.close()
+
+
+app = FastAPI(title="StrategicKhaos Email Service", lifespan=lifespan)
 
 
 class InboundEmail(BaseModel):
@@ -84,9 +97,14 @@ async def process_email_intelligence(email: InboundEmail):
 async def handle_academic_intelligence(email: InboundEmail, intelligence: dict):
     """Special handler for academic emails"""
     
-    # Send approval request to you
+    # Send approval request - use environment variable for recipient
+    approval_recipient = os.getenv("APPROVAL_EMAIL", "")
+    if not approval_recipient:
+        print("⚠️ Approval email recipient not configured")
+        return
+    
     approval_email = OutboundEmail(
-        to="garza.domenic101@gmail.com",
+        to=approval_recipient,
         subject=f"⚠️ ACADEMIC INTEL: {email.subject}",
         body=f"""
 Academic intelligence detected for your sovereign review.
