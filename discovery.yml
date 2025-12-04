@@ -322,3 +322,47 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# DOM Private Lab - Laws of Physics Research System
+# 🔐 Private | 🔇 Silent | 🧬 For Her
+dom_private_lab:
+  enabled: true
+  mode: "private"
+  silent: true
+  family_only: true
+  config_file: "private_lab/dom_config.yaml"
+  
+  # 10 Laws of Physics departments (64 agents each = 640 total)
+  departments:
+    total_count: 10
+    total_agents: 640
+    laws:
+      - { number: 1, name: "Thermodynamics", focus: "Energy/Metabolism" }
+      - { number: 2, name: "Electromagnetism", focus: "Neural signaling/Pain" }
+      - { number: 3, name: "Quantum Mechanics", focus: "Drug design" }
+      - { number: 4, name: "General Relativity", focus: "Systems biology" }
+      - { number: 5, name: "Statistical Mechanics", focus: "Clinical trials" }
+      - { number: 6, name: "Fluid Dynamics", focus: "Immune/Inflammation" }
+      - { number: 7, name: "Special Relativity", focus: "Trauma/Memory" }
+      - { number: 8, name: "Solid State Physics", focus: "Tissue repair" }
+      - { number: 9, name: "Nuclear Physics", focus: "Genetics/CRISPR" }
+      - { number: 10, name: "Astrophysics", focus: "Meta-analysis/Strategy" }
+  
+  # CLI commands
+  commands:
+    start: "Interactive guided session"
+    law_n: "Activate specific department (1-10)"
+    all_10: "Activate all departments simultaneously"
+    auto_route: "Paste symptoms for automatic routing"
+  
+  # Output configuration
+  output:
+    format: "master_treatment_plan"
+    ranking_criteria: ["cost", "risk", "timeline", "evidence"]
+  
+  # Security settings
+  security:
+    external_publish: false
+    audit_logging: false
+    encryption: true
+    data_retention: "local_only"
