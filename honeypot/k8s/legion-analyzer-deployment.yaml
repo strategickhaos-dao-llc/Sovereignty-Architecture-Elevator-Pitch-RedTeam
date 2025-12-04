@@ -1,0 +1,168 @@
+# Legion Analyzer Deployment
+#
+# Deploys the Legion AI system that analyzes honeypot attacks
+# and generates defensive countermeasures.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legion-analyzer
+  namespace: red-team-honeypot
+  labels:
+    app: legion-analyzer
+    component: ai
+    team: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: legion-analyzer
+  template:
+    metadata:
+      labels:
+        app: legion-analyzer
+        component: ai
+    spec:
+      containers:
+        - name: analyzer
+          image: python:3.11-slim
+          command:
+            - python
+            - /app/honeypot_analyzer.py
+          env:
+            - name: NATS_URL
+              value: "nats://nats.automation.svc.cluster.local:4222"
+            - name: ATTACK_LOG_FILE
+              value: "/var/log/honeytrap/attacks.jsonl"
+            - name: RULES_PATH
+              value: "/etc/sovereign-pr-manager/rules/honeypot_learned.py"
+            - name: AI_PROVIDER
+              value: "anthropic"  # or "openai" or "none" for rule-based
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: POLL_INTERVAL
+              value: "5"
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ai-secrets
+                  key: ANTHROPIC_API_KEY
+                  optional: true
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ai-secrets
+                  key: OPENAI_API_KEY
+                  optional: true
+          volumeMounts:
+            - name: analyzer-code
+              mountPath: /app
+            - name: attack-logs
+              mountPath: /var/log/honeytrap
+            - name: pr-rules
+              mountPath: /etc/sovereign-pr-manager/rules
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: analyzer-code
+          configMap:
+            name: legion-analyzer-code
+        - name: attack-logs
+          persistentVolumeClaim:
+            claimName: honeytrap-logs
+        - name: pr-rules
+          persistentVolumeClaim:
+            claimName: pr-rules-volume
+---
+# PVC for shared attack logs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: honeytrap-logs
+  namespace: red-team-honeypot
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+# PVC for PR rules (shared with SovereignPRManager)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pr-rules-volume
+  namespace: red-team-honeypot
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+---
+# ConfigMap with analyzer code
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: legion-analyzer-code
+  namespace: red-team-honeypot
+  labels:
+    app: legion-analyzer
+data:
+  honeypot_analyzer.py: |
+    # This will be mounted from the legion/honeypot_analyzer.py file
+    # In production, build a proper container image with the code
+    
+    # For now, use a simple placeholder that logs messages
+    import asyncio
+    import json
+    import os
+    import logging
+    from datetime import datetime
+    
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logger = logging.getLogger('legion.honeypot')
+    
+    async def main():
+        log_file = os.environ.get('ATTACK_LOG_FILE', '/var/log/honeytrap/attacks.jsonl')
+        poll_interval = int(os.environ.get('POLL_INTERVAL', '5'))
+        last_position = 0
+        
+        logger.info("🧠 Legion Honeypot Analyzer starting...")
+        logger.info(f"Watching attack log: {log_file}")
+        
+        while True:
+            try:
+                if os.path.exists(log_file):
+                    with open(log_file, 'r') as f:
+                        f.seek(last_position)
+                        for line in f:
+                            if line.strip():
+                                attack = json.loads(line)
+                                logger.info(f"🎯 Analyzing attack: {attack.get('attack_types', [])} from {attack.get('source_ip', 'unknown')}")
+                        last_position = f.tell()
+            except Exception as e:
+                logger.error(f"Error: {e}")
+            
+            await asyncio.sleep(poll_interval)
+    
+    if __name__ == '__main__':
+        asyncio.run(main())
+---
+# Optional: Secret for AI API keys
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ai-secrets
+  namespace: red-team-honeypot
+type: Opaque
+data:
+  # Base64 encoded API keys - replace with actual values
+  # echo -n "sk-your-key" | base64
+  ANTHROPIC_API_KEY: ""
+  OPENAI_API_KEY: ""
