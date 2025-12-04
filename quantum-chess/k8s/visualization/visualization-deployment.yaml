@@ -1,0 +1,451 @@
+# Visualization Layer for Quantum Chess Wargame Simulator
+# Moonlight/Sunshine Streaming + 3D Chess Visualization
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: visualization-config
+  namespace: quantum-chess
+  labels:
+    app: quantum-chess
+    component: visualization
+data:
+  config.yaml: |
+    visualization:
+      name: quantum-chess-viz
+      type: moonlight-sunshine
+      
+      display:
+        mode: 3d
+        boards: 10
+        squares_per_board: 64
+        
+      layers:
+        - id: 1
+          name: "Physical/Bare Metal"
+          color: "#1a1a2e"
+        - id: 2
+          name: "Network Topology"
+          color: "#16213e"
+        - id: 3
+          name: "Infrastructure"
+          color: "#0f3460"
+        - id: 4
+          name: "Container Orchestration"
+          color: "#533483"
+        - id: 5
+          name: "Service Mesh"
+          color: "#e94560"
+        - id: 6
+          name: "API Gateway"
+          color: "#ff9a00"
+        - id: 7
+          name: "Application"
+          color: "#00d9ff"
+        - id: 8
+          name: "Network Security"
+          color: "#00ff88"
+        - id: 9
+          name: "Tactical Operations"
+          color: "#ffff00"
+        - id: 10
+          name: "Strategic Command"
+          color: "#ff00ff"
+      
+      teams:
+        red:
+          color: "#ff0000"
+          pieces: ["port-scanner", "exploit-engine", "lateral-movement", "data-exfil", "persistence", "c2-operator", "social-engineer", "crypto-miner"]
+        blue:
+          color: "#0000ff"
+          pieces: ["firewall-manager", "ids-ips", "threat-hunter", "incident-response", "forensics", "siem", "patch-manager", "backup-validator"]
+      
+      nats:
+        url: nats://nats.quantum-chess.svc.cluster.local:4222
+        streams:
+          - red-team-moves
+          - blue-team-moves
+          - quantum-sync
+          - legion-analysis
+---
+# Visualization Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visualization
+  namespace: quantum-chess
+  labels:
+    app: quantum-chess
+    component: visualization
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      component: visualization
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        component: visualization
+    spec:
+      containers:
+        - name: visualization
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/quantum-chess
+            - name: html
+              mountPath: /usr/share/nginx/html
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: config
+          configMap:
+            name: visualization-config
+        - name: html
+          configMap:
+            name: visualization-html
+---
+# Visualization HTML ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: visualization-html
+  namespace: quantum-chess
+  labels:
+    app: quantum-chess
+    component: visualization
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>♟️ Quantum Chess Wargame Simulator</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Courier New', monospace; 
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+                color: #e0e0e0;
+                min-height: 100vh;
+                padding: 20px;
+            }
+            .container { max-width: 1200px; margin: 0 auto; }
+            h1 { 
+                color: #e94560; 
+                text-align: center; 
+                margin-bottom: 20px;
+                text-shadow: 0 0 10px #e94560;
+            }
+            .subtitle {
+                text-align: center;
+                color: #00d9ff;
+                margin-bottom: 30px;
+            }
+            .grid { 
+                display: grid; 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 20px; 
+                margin-bottom: 30px;
+            }
+            .card { 
+                background: rgba(255,255,255,0.05); 
+                border-radius: 10px; 
+                padding: 20px;
+                border: 1px solid rgba(255,255,255,0.1);
+            }
+            .card h2 { 
+                margin-bottom: 15px; 
+                display: flex; 
+                align-items: center; 
+                gap: 10px;
+            }
+            .red { color: #ff4444; }
+            .blue { color: #4488ff; }
+            .purple { color: #aa44ff; }
+            .green { color: #44ff88; }
+            .layers {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            .layer {
+                padding: 8px 12px;
+                border-radius: 5px;
+                font-size: 12px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .agent-list { list-style: none; }
+            .agent-list li { 
+                padding: 5px 0; 
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .status { 
+                display: inline-block; 
+                width: 10px; 
+                height: 10px; 
+                border-radius: 50%; 
+                margin-right: 10px;
+            }
+            .status.active { background: #44ff88; animation: pulse 1s infinite; }
+            .status.standby { background: #ffaa00; }
+            @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+            .stats { text-align: center; margin-top: 20px; }
+            .stat { 
+                display: inline-block; 
+                margin: 0 20px; 
+                padding: 15px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+            }
+            .stat-value { font-size: 24px; font-weight: bold; }
+            .architecture {
+                background: rgba(0,0,0,0.3);
+                padding: 20px;
+                border-radius: 10px;
+                margin-top: 20px;
+                font-family: monospace;
+                font-size: 11px;
+                overflow-x: auto;
+                white-space: pre;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>♟️ QUANTUM CHESS WARGAME SIMULATOR</h1>
+            <p class="subtitle">10-Dimensional Attack/Defense Security Game</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h2 class="red">🔴 Red Team (Kali)</h2>
+                    <p>Offensive Security Agents</p>
+                    <ul class="agent-list">
+                        <li><span class="status active"></span>Port Scanner</li>
+                        <li><span class="status active"></span>Exploit Engine</li>
+                        <li><span class="status active"></span>Lateral Movement</li>
+                        <li><span class="status standby"></span>Data Exfil</li>
+                        <li><span class="status active"></span>C2 Operator</li>
+                        <li><span class="status standby"></span>Social Engineer</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h2 class="purple">⚡ Quantum Entanglement</h2>
+                    <p>NATS JetStream</p>
+                    <div class="layers">
+                        <div class="layer" style="background: rgba(233,69,96,0.2);">
+                            <span>red.></span>
+                            <span>🔴 Active</span>
+                        </div>
+                        <div class="layer" style="background: rgba(68,136,255,0.2);">
+                            <span>blue.></span>
+                            <span>🔵 Active</span>
+                        </div>
+                        <div class="layer" style="background: rgba(170,68,255,0.2);">
+                            <span>quantum.></span>
+                            <span>⚡ Syncing</span>
+                        </div>
+                        <div class="layer" style="background: rgba(68,255,136,0.2);">
+                            <span>legion.></span>
+                            <span>🧠 Learning</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2 class="blue">🔵 Blue Team (Parrot)</h2>
+                    <p>Defensive Security Agents</p>
+                    <ul class="agent-list">
+                        <li><span class="status active"></span>Firewall Manager</li>
+                        <li><span class="status active"></span>IDS/IPS Controller</li>
+                        <li><span class="status active"></span>Threat Hunter</li>
+                        <li><span class="status standby"></span>Incident Response</li>
+                        <li><span class="status active"></span>SIEM Correlator</li>
+                        <li><span class="status active"></span>Patch Manager</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="green">🎮 10-Layer Chessboards</h2>
+                <div class="layers">
+                    <div class="layer" style="background: #1a1a2e;">Layer 10: Strategic Command</div>
+                    <div class="layer" style="background: #16213e;">Layer 9: Tactical Operations</div>
+                    <div class="layer" style="background: #0f3460;">Layer 8: Network Security</div>
+                    <div class="layer" style="background: #533483;">Layer 7: Application Layer</div>
+                    <div class="layer" style="background: #e94560;">Layer 6: API Gateway</div>
+                    <div class="layer" style="background: #ff9a00;">Layer 5: Service Mesh</div>
+                    <div class="layer" style="background: #00d9ff;">Layer 4: Container Orchestration</div>
+                    <div class="layer" style="background: #00ff88;">Layer 3: Infrastructure</div>
+                    <div class="layer" style="background: #ffff00; color: #000;">Layer 2: Network Topology</div>
+                    <div class="layer" style="background: #ff00ff;">Layer 1: Physical/Bare Metal</div>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value red">$1.2K</div>
+                    <div>Annual Cost</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value green">250x</div>
+                    <div>Cost Reduction</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value blue">1000x</div>
+                    <div>Faster Learning</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value purple">250,000x</div>
+                    <div>ROI Multiplier</div>
+                </div>
+            </div>
+            
+            <div class="architecture">
+┌─────────────────────────────────────────────────────────────┐
+│           QUANTUM CHESS WARGAME SIMULATOR                     │
+│          (10-Dimensional Attack/Defense Game)                │
+└─────────────────────────────────────────────────────────────┘
+
+        Layer 10: Strategic Command
+             │
+        Layer 9: Tactical Operations
+             │
+        ...8 more layers...
+             │
+        Layer 1: Physical/Bare Metal
+             │
+┌────────────┴────────────┐
+│                         │
+▼                         ▼
+RED TEAM CLUSTER      BLUE TEAM CLUSTER
+(Kali Linux)          (Parrot OS)
+─────────────         ─────────────
+
+        ↓                     ↓
+    ┌───────────────────────────┐
+    │   QUANTUM ENTANGLEMENT    │
+    │   (NATS Message Bus)      │
+    └───────────────────────────┘
+                ↓
+        ┌───────────────┐
+        │    LEGION     │
+        │   ANALYSIS    │
+        └───────────────┘
+            </div>
+        </div>
+    </body>
+    </html>
+---
+# Visualization Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: visualization
+  namespace: quantum-chess
+  labels:
+    app: quantum-chess
+    component: visualization
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 80
+  selector:
+    app: quantum-chess
+    component: visualization
+---
+# Legion AI Analyzer Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legion-analyzer
+  namespace: quantum-chess
+  labels:
+    app: quantum-chess
+    component: legion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      component: legion
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        component: legion
+    spec:
+      containers:
+        - name: legion
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: COMPONENT
+              value: "legion"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: visualization-config
+                  key: config.yaml
+                  optional: true
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/legion
+      volumes:
+        - name: config
+          configMap:
+            name: visualization-config
+---
+# Legion Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: legion
+  namespace: quantum-chess
+  labels:
+    app: quantum-chess
+    component: legion
+spec:
+  type: ClusterIP
+  ports:
+    - name: api
+      port: 8081
+      targetPort: 8081
+  selector:
+    app: quantum-chess
+    component: legion

@@ -1,0 +1,403 @@
+# Blue Team (Parrot OS) Kubernetes Deployment
+# Defensive Security AI Agents
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: blue-team
+  labels:
+    team: blue
+    purpose: defensive-security
+    app: quantum-chess
+---
+# Blue Team ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blue-team-config
+  namespace: blue-team
+  labels:
+    team: blue
+    app: quantum-chess
+data:
+  config.yaml: |
+    team: blue
+    role: defensive
+    os: parrot-os
+    
+    nats:
+      url: nats://nats.quantum-chess.svc.cluster.local:4222
+      streams:
+        publish: blue-team-moves
+        subscribe: 
+          - red-team-moves
+          - quantum-sync
+    
+    agents:
+      firewall_manager:
+        enabled: true
+        tools: ["iptables", "nftables", "pf"]
+        mode: active
+      
+      ids_ips_controller:
+        enabled: true
+        tools: ["suricata", "snort", "zeek"]
+        mode: active
+      
+      threat_hunter:
+        enabled: true
+        tools: ["yara", "sigma", "osquery"]
+        mode: active
+      
+      incident_response:
+        enabled: true
+        tools: ["grr", "velociraptor"]
+        mode: standby
+      
+      forensics_analyzer:
+        enabled: true
+        tools: ["autopsy", "volatility", "sleuthkit"]
+        mode: standby
+      
+      siem_correlator:
+        enabled: true
+        tools: ["elasticsearch", "loki"]
+        mode: active
+      
+      patch_manager:
+        enabled: true
+        tools: ["ansible", "puppet"]
+        mode: active
+      
+      backup_validator:
+        enabled: true
+        tools: ["restic", "borg", "velero"]
+        mode: active
+    
+    layers:
+      - name: physical
+        priority: 1
+        defenses: ["network_segmentation", "vlans"]
+      - name: network
+        priority: 2
+        defenses: ["intrusion_detection", "rate_limiting"]
+      - name: infrastructure
+        priority: 3
+        defenses: ["pod_security_policies", "resource_limits"]
+      - name: orchestration
+        priority: 4
+        defenses: ["network_policies", "opa_enforcement"]
+      - name: service_mesh
+        priority: 5
+        defenses: ["mtls", "rate_limiting", "waf"]
+      - name: api_gateway
+        priority: 6
+        defenses: ["oauth", "api_keys", "input_validation"]
+      - name: application
+        priority: 7
+        defenses: ["prepared_statements", "csp", "cors"]
+      - name: network_security
+        priority: 8
+        defenses: ["signature_updates", "ml_detection"]
+      - name: tactical
+        priority: 9
+        defenses: ["awareness_training", "monitoring"]
+      - name: strategic
+        priority: 10
+        defenses: ["cyber_insurance", "incident_response"]
+---
+# Blue Team Controller Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-team-controller
+  namespace: blue-team
+  labels:
+    app: quantum-chess
+    team: blue
+    component: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: blue
+      component: controller
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: blue
+        component: controller
+    spec:
+      containers:
+        - name: controller
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: TEAM
+              value: "blue"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: ROLE
+              value: "defensive"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/blue-team
+      volumes:
+        - name: config
+          configMap:
+            name: blue-team-config
+---
+# Firewall Manager Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-agent-firewall-manager
+  namespace: blue-team
+  labels:
+    app: quantum-chess
+    team: blue
+    agent: firewall-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: blue
+      agent: firewall-manager
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: blue
+        agent: firewall-manager
+    spec:
+      containers:
+        - name: firewall-manager
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "firewall-manager"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "blue"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# IDS/IPS Controller Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-agent-ids-ips
+  namespace: blue-team
+  labels:
+    app: quantum-chess
+    team: blue
+    agent: ids-ips
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: blue
+      agent: ids-ips
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: blue
+        agent: ids-ips
+    spec:
+      containers:
+        - name: ids-ips
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "ids-ips-controller"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "blue"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+# Threat Hunter Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-agent-threat-hunter
+  namespace: blue-team
+  labels:
+    app: quantum-chess
+    team: blue
+    agent: threat-hunter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: blue
+      agent: threat-hunter
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: blue
+        agent: threat-hunter
+    spec:
+      containers:
+        - name: threat-hunter
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "threat-hunter"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "blue"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# SIEM Correlator Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-agent-siem-correlator
+  namespace: blue-team
+  labels:
+    app: quantum-chess
+    team: blue
+    agent: siem-correlator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: blue
+      agent: siem-correlator
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: blue
+        agent: siem-correlator
+    spec:
+      containers:
+        - name: siem-correlator
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "siem-correlator"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "blue"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+# Incident Response Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-agent-incident-response
+  namespace: blue-team
+  labels:
+    app: quantum-chess
+    team: blue
+    agent: incident-response
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: blue
+      agent: incident-response
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: blue
+        agent: incident-response
+    spec:
+      containers:
+        - name: incident-response
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "incident-response"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "blue"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# Blue Team Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: blue-team-network-policy
+  namespace: blue-team
+spec:
+  podSelector:
+    matchLabels:
+      team: blue
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app: quantum-chess
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              team: red
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app: quantum-chess
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              team: red

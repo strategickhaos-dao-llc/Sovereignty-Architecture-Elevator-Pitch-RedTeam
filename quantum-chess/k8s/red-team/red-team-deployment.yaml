@@ -1,0 +1,357 @@
+# Red Team (Kali Linux) Kubernetes Deployment
+# Offensive Security AI Agents
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: red-team
+  labels:
+    team: red
+    purpose: offensive-security
+    app: quantum-chess
+---
+# Red Team ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: red-team-config
+  namespace: red-team
+  labels:
+    team: red
+    app: quantum-chess
+data:
+  config.yaml: |
+    team: red
+    role: offensive
+    os: kali-linux
+    
+    nats:
+      url: nats://nats.quantum-chess.svc.cluster.local:4222
+      streams:
+        publish: red-team-moves
+        subscribe: 
+          - blue-team-moves
+          - quantum-sync
+    
+    agents:
+      port_scanner:
+        enabled: true
+        tools: ["nmap", "masscan", "rustscan"]
+        targets: ["blue-team"]
+      
+      exploit_engine:
+        enabled: true
+        tools: ["metasploit", "exploitdb", "searchsploit"]
+        mode: simulation
+      
+      lateral_movement:
+        enabled: true
+        tools: ["mimikatz", "bloodhound", "crackmapexec"]
+        mode: simulation
+      
+      data_exfil:
+        enabled: true
+        tools: ["dnscat2", "icmpsh"]
+        mode: simulation
+      
+      persistence:
+        enabled: true
+        tools: ["webshells", "backdoors"]
+        mode: simulation
+      
+      c2_operator:
+        enabled: true
+        tools: ["empire", "sliver"]
+        mode: simulation
+      
+      social_engineer:
+        enabled: true
+        tools: ["gophish", "set"]
+        mode: simulation
+      
+      crypto_miner:
+        enabled: false
+        mode: simulation
+    
+    layers:
+      - name: physical
+        priority: 1
+        attacks: ["mac_flooding", "arp_spoofing"]
+      - name: network
+        priority: 2
+        attacks: ["port_scanning", "firewall_bypass"]
+      - name: infrastructure
+        priority: 3
+        attacks: ["container_escape", "privilege_escalation"]
+      - name: orchestration
+        priority: 4
+        attacks: ["rbac_bypass", "secret_extraction"]
+      - name: service_mesh
+        priority: 5
+        attacks: ["api_fuzzing", "injection_attacks"]
+      - name: api_gateway
+        priority: 6
+        attacks: ["authentication_bypass", "idor"]
+      - name: application
+        priority: 7
+        attacks: ["sql_injection", "xss", "csrf"]
+      - name: network_security
+        priority: 8
+        attacks: ["evasion_techniques", "encoding"]
+      - name: tactical
+        priority: 9
+        attacks: ["social_engineering", "insider_threat"]
+      - name: strategic
+        priority: 10
+        attacks: ["reputational_damage", "ransomware"]
+---
+# Red Team Controller Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red-team-controller
+  namespace: red-team
+  labels:
+    app: quantum-chess
+    team: red
+    component: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: red
+      component: controller
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: red
+        component: controller
+    spec:
+      containers:
+        - name: controller
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: TEAM
+              value: "red"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: ROLE
+              value: "offensive"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/red-team
+      volumes:
+        - name: config
+          configMap:
+            name: red-team-config
+---
+# Port Scanner Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red-agent-port-scanner
+  namespace: red-team
+  labels:
+    app: quantum-chess
+    team: red
+    agent: port-scanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: red
+      agent: port-scanner
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: red
+        agent: port-scanner
+    spec:
+      containers:
+        - name: port-scanner
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "port-scanner"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "red"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# Exploit Engine Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red-agent-exploit-engine
+  namespace: red-team
+  labels:
+    app: quantum-chess
+    team: red
+    agent: exploit-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: red
+      agent: exploit-engine
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: red
+        agent: exploit-engine
+    spec:
+      containers:
+        - name: exploit-engine
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "exploit-engine"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "red"
+            - name: MODE
+              value: "simulation"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# Lateral Movement Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red-agent-lateral-movement
+  namespace: red-team
+  labels:
+    app: quantum-chess
+    team: red
+    agent: lateral-movement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: red
+      agent: lateral-movement
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: red
+        agent: lateral-movement
+    spec:
+      containers:
+        - name: lateral-movement
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "lateral-movement"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "red"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# C2 Operator Agent Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red-agent-c2-operator
+  namespace: red-team
+  labels:
+    app: quantum-chess
+    team: red
+    agent: c2-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-chess
+      team: red
+      agent: c2-operator
+  template:
+    metadata:
+      labels:
+        app: quantum-chess
+        team: red
+        agent: c2-operator
+    spec:
+      containers:
+        - name: c2-operator
+          image: alpine:latest
+          command: ["tail", "-f", "/dev/null"]
+          env:
+            - name: AGENT_TYPE
+              value: "c2-operator"
+            - name: NATS_URL
+              value: "nats://nats.quantum-chess.svc.cluster.local:4222"
+            - name: TEAM
+              value: "red"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+---
+# Red Team Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: red-team-network-policy
+  namespace: red-team
+spec:
+  podSelector:
+    matchLabels:
+      team: red
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app: quantum-chess
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              app: quantum-chess
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              team: blue
