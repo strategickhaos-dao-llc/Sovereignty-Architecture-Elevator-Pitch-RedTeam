@@ -14,6 +14,8 @@ function Dashboard() {
   
   // Configure API base URL - update for production
   const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
+  // Auth token - in production, use proper auth flow
+  const getAuthToken = () => import.meta.env.VITE_API_TOKEN || 'dev_token';
 
   useEffect(() => {
     fetchData();
@@ -24,10 +26,10 @@ function Dashboard() {
     try {
       const [portfolioRes, txRes] = await Promise.all([
         axios.get(`${API_BASE}/portfolio`, { 
-          headers: { Authorization: 'Bearer mock_token' } 
+          headers: { Authorization: `Bearer ${getAuthToken()}` } 
         }).catch(() => ({ data: { balance: 207.69, account: '2143', allocation: 'Aggressive Mix', last_updated: new Date().toISOString() }})),
         axios.get(`${API_BASE}/transactions`, { 
-          headers: { Authorization: 'Bearer mock_token' } 
+          headers: { Authorization: `Bearer ${getAuthToken()}` } 
         }).catch(() => ({ data: { transactions: [{ date: '2025-12-01', type: 'deposit', amount: 50.00, source: 'paycheck_7%' }] }}))
       ]);
       
@@ -48,7 +50,7 @@ function Dashboard() {
     setRebalanceStatus('Processing...');
     try {
       const response = await axios.post(`${API_BASE}/rebalance`, { drift: 6 }, {
-        headers: { Authorization: 'Bearer mock_token' }
+        headers: { Authorization: `Bearer ${getAuthToken()}` }
       });
       setRebalanceStatus(`✅ ${response.data.status}`);
       setTimeout(() => setRebalanceStatus(null), 5000);

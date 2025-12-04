@@ -11,8 +11,12 @@ export default function App() {
   const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(true);
   
-  // Configure API URL - update for production
-  const API_BASE = 'http://localhost:8080/api/v1';
+  // API Configuration - Configure for your deployment
+  // For local development: use your machine's IP (not localhost)
+  // For production: use your API server URL
+  // Example: 'http://192.168.1.100:8080/api/v1' or 'https://api.valoryield.example.com/api/v1'
+  const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.1:8080/api/v1';
+  const getAuthToken = () => process.env.EXPO_PUBLIC_API_TOKEN || 'dev_token';
 
   useEffect(() => {
     fetchPortfolio();
@@ -22,7 +26,7 @@ export default function App() {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE}/portfolio`, {
-        headers: { Authorization: 'Bearer mock_token' }
+        headers: { Authorization: `Bearer ${getAuthToken()}` }
       });
       setPortfolio(response.data);
     } catch (error) {
@@ -42,7 +46,7 @@ export default function App() {
   const handleRebalance = async () => {
     try {
       await axios.post(`${API_BASE}/rebalance`, { drift: 6 }, {
-        headers: { Authorization: 'Bearer mock_token' }
+        headers: { Authorization: `Bearer ${getAuthToken()}` }
       });
       alert('🔄 Rebalance triggered – Legion analyzing');
     } catch (error) {

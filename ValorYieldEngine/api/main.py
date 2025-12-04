@@ -16,12 +16,15 @@ app = FastAPI(
 )
 
 # CORS for web/mobile clients
+# In production, set ALLOWED_ORIGINS environment variable to restrict access
+# Example: ALLOWED_ORIGINS=https://valoryield.example.com,https://app.valoryield.example.com
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:8009,http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure for production
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 security = HTTPBearer(auto_error=False)  # JWT stub – add real auth later

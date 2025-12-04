@@ -11,8 +11,6 @@ import json
 import os
 from datetime import datetime
 
-# Note: nats-py must be installed: pip install nats-py
-
 
 class SwarmGateIntegration:
     """
