@@ -5,6 +5,7 @@ Built for Strategickhaos Swarm Intelligence
 """
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import List, Optional
@@ -12,6 +13,9 @@ from typing import List, Optional
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+
+# Configuration from environment
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 
 # Configure logging
 logging.basicConfig(
@@ -137,10 +141,12 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Add CORS middleware for Codespaces and cross-origin requests
+# Add CORS middleware - configure via CORS_ORIGINS environment variable
+# In development: CORS_ORIGINS="*"
+# In production: CORS_ORIGINS="https://app.example.com,https://admin.example.com"
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # TODO: Tighten in production
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -231,9 +237,6 @@ def swarmgate_deposit(
     and updates the portfolio balance accordingly.
     """
     try:
-        if amount <= 0:
-            raise HTTPException(status_code=400, detail="Amount must be positive")
-        
         # Update balance
         data_store.portfolio["balance"] += amount
         
@@ -253,8 +256,6 @@ def swarmgate_deposit(
             status="success",
             trigger="rebalance_queued"
         )
-    except HTTPException:
-        raise
     except Exception as e:
         logger.error(f"Error processing deposit: {e}")
         raise HTTPException(status_code=500, detail="Failed to process deposit")
