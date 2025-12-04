@@ -2,12 +2,22 @@
 # reflexshell_layout.py
 # REFLEXSHELL BRAIN v1 — Cognitive Environment Bootstrap
 # Strategickhaos DAO LLC — Node 137 Neural Topology Activation
+# Legions of Minds Council™ — Origin Velocity Integration
 
 import os
 import subprocess
 import time
 import json
 from pathlib import Path
+
+# Import snowflake decoder for origin velocity support
+try:
+    from reflexshell.decoder import decode_snowflake, get_origin_velocity, STRATEGICKHAOS_GENESIS
+    DECODER_AVAILABLE = True
+except ImportError:
+    DECODER_AVAILABLE = False
+    STRATEGICKHAOS_GENESIS = 1405637629248143451
+
 
 class ReflexShellBrain:
     def __init__(self):
@@ -82,12 +92,22 @@ class ReflexShellBrain:
         print("\n✅ All cognitive threads activated")
         print("🎯 Node 137 neural topology: ONLINE")
         
+        # Load origin velocity from environment
+        origin_velocity = None
+        if DECODER_AVAILABLE:
+            origin_velocity = get_origin_velocity()
+            if origin_velocity:
+                print(f"\n🔐 Origin Velocity Locked:")
+                print(f"   Genesis: {origin_velocity.get('timestamp', 'N/A')}")
+                print(f"   Nonce: {origin_velocity.get('nonce', 'N/A')}")
+        
         # Generate cognitive state file
         state = {
             'timestamp': time.time(),
             'threads_active': len(threads),
             'environment': 'sovereign',
-            'operator': 'Node 137'
+            'operator': 'Node 137',
+            'origin_velocity': origin_velocity
         }
         
         with open('cognitive_state.json', 'w') as f:
