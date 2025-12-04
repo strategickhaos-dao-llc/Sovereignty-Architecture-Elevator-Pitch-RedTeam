@@ -1,4 +1,37 @@
 {
+  "name": "Sovereign Sky Command Center",
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {}
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [51820, 3000, 8080],
+  "portsAttributes": {
+    "51820": {
+      "label": "WireGuard Mesh",
+      "protocol": "udp"
+    },
+    "3000": {
+      "label": "Khaos Bounty Dashboard"
+    },
+    "8080": {
+      "label": "NinjaTrader Dividends Feed"
+    }
+  },
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16GB",
+    "storage": "32GB"
+  },
+  "capAdd": ["NET_ADMIN", "NET_RAW"],
+  "containerEnv": {
+    "SWARM_NODE": "sky-command-center-001",
+    "KHAOS_BOUNTY_ACTIVE": "true",
+    "DIVIDENDS_ENGINE": "live"
+  },
+  "postCreateCommand": ".devcontainer/sky-uplink.sh"
 }
