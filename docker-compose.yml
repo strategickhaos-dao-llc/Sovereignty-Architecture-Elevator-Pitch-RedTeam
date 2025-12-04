@@ -10,6 +10,7 @@ volumes:
   qdrant_data:
   grafana_data:
   prometheus_data:
+  nats_data:
 
 services:
   # Core Infrastructure
@@ -45,6 +46,41 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # NATS Message Bus
+  nats:
+    image: nats:2.10-alpine
+    volumes:
+      - nats_data:/data
+    ports:
+      - "4222:4222"
+      - "8222:8222"  # HTTP monitoring
+    networks:
+      - strategickhaos_network
+    command: ["--jetstream", "--store_dir=/data"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Queen.js Webhook Receiver - Central Swarm Coordinator
+  queen:
+    build:
+      context: .
+      dockerfile: Dockerfile.queen
+    environment:
+      QUEEN_PORT: 8081
+      NATS_URL: nats://nats:4222
+      GITHUB_WEBHOOK_SECRET: ${GITHUB_WEBHOOK_SECRET}
+    ports:
+      - "8081:8081"
+    networks:
+      - strategickhaos_network
+    depends_on:
+      nats:
+        condition: service_healthy
+    restart: unless-stopped
 
   # Vector Database
   qdrant:
