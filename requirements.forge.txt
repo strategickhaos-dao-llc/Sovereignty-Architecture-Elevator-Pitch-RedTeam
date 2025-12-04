@@ -1,0 +1,2 @@
+# Strategickhaos Ingot Forge Dependencies
+pyyaml>=6.0.1

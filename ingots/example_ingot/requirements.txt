@@ -1,0 +1,4 @@
+# No external dependencies required for this example ingot
+# Add dependencies here as needed, e.g.:
+# requests>=2.28.0
+# pydantic>=2.0.0
