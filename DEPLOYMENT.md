@@ -16,6 +16,7 @@ A **Discord + Infrastructure + AI Agents Control Plane** that creates a sovereig
 
 ```
 Sovereignty-Architecture-Elevator-Pitch-/
+├── ELEVATOR_PITCH.md               # 🚀 Starlink + Verizon mesh elevator pitch
 ├── discovery.yml                   # ✨ Strategickhaos configuration
 ├── gl2discord.sh                   # 🔧 GitLens → Discord CLI tool
 ├── README.md                       # 📚 Complete documentation
