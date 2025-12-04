@@ -2,8 +2,24 @@ import fs from "fs";
 import yaml from "js-yaml";
 
 type C = {
-  discord: { bot: { token_secret_env: string }, channels: { prs: string, deployments: string, alerts: string } };
-  control_api: { base_url: string, bearer_env: string };
+  discord: { 
+    bot: { 
+      token_secret_env: string;
+      app_id?: string | null;
+    }; 
+    channels: { 
+      prs: string; 
+      deployments: string; 
+      alerts: string;
+      dev_feed?: string;
+      agents?: string;
+    };
+    notifications?: {
+      enabled: boolean;
+      default_channel: string;
+    };
+  };
+  control_api: { base_url: string; bearer_env: string };
   event_gateway: { port: number };
 };
 
