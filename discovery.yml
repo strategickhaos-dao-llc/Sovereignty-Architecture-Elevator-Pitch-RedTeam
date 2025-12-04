@@ -322,3 +322,117 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Mirror Lab - Real-Time Research Visualization Infrastructure
+# Watch 80 agents work, see molecular visualizations, quantum simulations live
+mirror_lab:
+  enabled: true
+  description: "Second lab using Moonlight/Sunshine that mirrors quantum computing research in real-time"
+  
+  # 7 visualization screens
+  screens:
+    mission_control:
+      port: 3001
+      description: "Progress bars for all 10 departments"
+      dashboard: "mission-control.json"
+    agent_grid:
+      port: 3002
+      description: "80 agents visible, click any to watch their screen"
+      agent_count: 80
+      grid_rows: 8
+      grid_cols: 10
+    molecular_viewer:
+      port: 3003
+      description: "3D proteins rotating, drugs docking"
+      engine: "molstar"
+    live_terminal:
+      port: 7681
+      description: "Agent typing commands, downloading papers"
+      engine: "ttyd"
+    progress_graphs:
+      port: 3005
+      description: "Papers analyzed, drugs found, costs estimated"
+      dashboard: "progress-graphs.json"
+    discovery_feed:
+      port: 3006
+      description: "Real-time log of breakthroughs"
+    quantum_sim:
+      port: 3007
+      description: "Actual quantum circuit solving protein structure"
+      backends: ["local", "ibm", "azure"]
+  
+  # Research departments (10 total)
+  departments:
+    - id: "literature_review"
+      name: "Literature Review"
+      icon: "📚"
+      color: "#4CAF50"
+    - id: "drug_discovery"
+      name: "Drug Discovery"
+      icon: "💊"
+      color: "#2196F3"
+    - id: "molecular_modeling"
+      name: "Molecular Modeling"
+      icon: "🧬"
+      color: "#9C27B0"
+    - id: "quantum_computing"
+      name: "Quantum Computing"
+      icon: "⚛️"
+      color: "#FF9800"
+    - id: "clinical_analysis"
+      name: "Clinical Analysis"
+      icon: "🏥"
+      color: "#F44336"
+    - id: "cost_estimation"
+      name: "Cost Estimation"
+      icon: "💰"
+      color: "#FFEB3B"
+    - id: "safety_analysis"
+      name: "Safety Analysis"
+      icon: "🛡️"
+      color: "#00BCD4"
+    - id: "regulatory_pathway"
+      name: "Regulatory Pathway"
+      icon: "📋"
+      color: "#795548"
+    - id: "data_synthesis"
+      name: "Data Synthesis"
+      icon: "📊"
+      color: "#607D8B"
+    - id: "report_generation"
+      name: "Report Generation"
+      icon: "📝"
+      color: "#E91E63"
+  
+  # Streaming configuration
+  streaming:
+    provider: "sunshine"
+    moonlight_compatible: true
+    ports:
+      https_web: 47984
+      http_web: 47989
+      config: 47990
+      rtsp: 48010
+      rtp_video: 48010
+      rtp_audio: 48011
+      rtp_control: 48012
+  
+  # Quantum computing integration
+  quantum:
+    default_backend: "local"  # local|ibm|azure
+    ibm:
+      enabled: true
+      token_secret_ref: "vault://kv/quantum/ibm_token"
+      tier: "free"  # free|pay-as-you-go
+    azure:
+      enabled: false
+      workspace_secret_ref: "vault://kv/quantum/azure_workspace"
+      resource_group_secret_ref: "vault://kv/quantum/azure_rg"
+      subscription_secret_ref: "vault://kv/quantum/azure_subscription"
+  
+  # Cost tracking
+  costs:
+    compute_budget_monthly: 3500  # USD
+    quantum_budget_monthly: 500   # USD
+    streaming_cost: 0             # Free (Moonlight/Sunshine)
+    total_max_monthly: 4000       # USD

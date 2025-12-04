@@ -1,0 +1,326 @@
+# docker-compose.mirror-lab.yml - Mirror Lab Visualization Infrastructure
+# Real-time streaming of quantum computing research using Moonlight/Sunshine
+# Watch 80 agents work, see molecular visualizations, quantum simulations live
+
+x-common: &common
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "5"
+
+networks:
+  mirror_lab_network:
+    driver: bridge
+  strategickhaos_network:
+    external: true
+    name: strategickhaos_network
+
+volumes:
+  sunshine_config:
+  obs_config:
+  agent_logs:
+  discovery_data:
+  quantum_cache:
+  molecular_data:
+
+services:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUNSHINE HOST - Remote Desktop Streaming Server (Moonlight-compatible)
+  # Streams agent terminals, quantum simulations, molecular viewers
+  # ═══════════════════════════════════════════════════════════════════════════
+  sunshine:
+    <<: *common
+    image: lscr.io/linuxserver/sunshine:latest
+    container_name: mirror-lab-sunshine
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: ${TZ:-America/Chicago}
+      SUNSHINE_USER: ${SUNSHINE_USER:-dom}
+      SUNSHINE_PASS: ${SUNSHINE_PASS:-for_her_always}
+    volumes:
+      - sunshine_config:/config
+      - /dev/dri:/dev/dri  # GPU passthrough for hardware encoding
+    ports:
+      - "47984:47984/tcp"   # HTTPS web UI
+      - "47989:47989/tcp"   # HTTP web UI  
+      - "47990:47990/tcp"   # Web config
+      - "48010:48010/tcp"   # RTSP
+      - "48010:48010/udp"   # RTP video
+      - "48011:48011/udp"   # RTP audio
+      - "48012:48012/udp"   # RTP control
+    networks:
+      - mirror_lab_network
+      - strategickhaos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:47990/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sunshine.rule=Host(`stream.mirror-lab.local`)"
+      - "traefik.http.services.sunshine.loadbalancer.server.port=47990"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # OBS STUDIO - Open Broadcaster Software for Multi-Screen Visualization
+  # Creates the 7-screen mission control layout
+  # ═══════════════════════════════════════════════════════════════════════════
+  obs-studio:
+    <<: *common
+    image: jrottenberg/obs:latest
+    container_name: mirror-lab-obs
+    environment:
+      DISPLAY: ":0"
+      PULSE_SERVER: "/run/pulse/native"
+    volumes:
+      - obs_config:/config
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./mirror-lab/obs-scenes:/root/.config/obs-studio/basic/scenes:ro
+    ports:
+      - "4455:4455"   # OBS WebSocket
+      - "4456:4456"   # Stream preview
+    networks:
+      - mirror_lab_network
+    depends_on:
+      - sunshine
+    labels:
+      - "obs.role=mission-control"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 1: MISSION CONTROL - Progress Dashboard for All 10 Departments
+  # ═══════════════════════════════════════════════════════════════════════════
+  mission-control:
+    <<: *common
+    image: grafana/grafana:11.2.0
+    container_name: mirror-lab-mission-control
+    environment:
+      GF_SERVER_HTTP_PORT: 3001
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-mission_control}
+      GF_USERS_ALLOW_SIGN_UP: false
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/mission-control.json
+      GF_INSTALL_PLUGINS: grafana-piechart-panel,yesoreyeram-infinity-datasource
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./mirror-lab/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3001:3001"
+    networks:
+      - mirror_lab_network
+      - strategickhaos_network
+    labels:
+      - "screen.number=1"
+      - "screen.name=mission-control"
+      - "traefik.enable=true"
+      - "traefik.http.routers.mission-control.rule=Host(`mission.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 2: AGENT GRID - 80 Agents Visible, Click to Watch
+  # ═══════════════════════════════════════════════════════════════════════════
+  agent-grid:
+    <<: *common
+    build:
+      context: ./mirror-lab/agent-grid
+      dockerfile: Dockerfile
+    container_name: mirror-lab-agent-grid
+    environment:
+      AGENT_COUNT: 80
+      GRID_ROWS: 8
+      GRID_COLS: 10
+      WEBSOCKET_PORT: 8090
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - agent_logs:/app/logs
+    ports:
+      - "8090:8090"   # WebSocket for live updates
+      - "3002:3000"   # Web UI
+    networks:
+      - mirror_lab_network
+      - strategickhaos_network
+    depends_on:
+      - redis
+    labels:
+      - "screen.number=2"
+      - "screen.name=agent-grid"
+      - "traefik.enable=true"
+      - "traefik.http.routers.agent-grid.rule=Host(`agents.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 3: MOLECULAR VIEWER - 3D Proteins Rotating, Drug Docking
+  # ═══════════════════════════════════════════════════════════════════════════
+  molecular-viewer:
+    <<: *common
+    image: ghcr.io/molstar/molstar:latest
+    container_name: mirror-lab-molecular-viewer
+    environment:
+      PORT: 3003
+      ENABLE_ANIMATION: true
+      DEFAULT_STRUCTURE: "/data/structures/target_protein.pdb"
+    volumes:
+      - molecular_data:/data/structures
+      - ./mirror-lab/molecular:/app/config:ro
+    ports:
+      - "3003:3003"
+    networks:
+      - mirror_lab_network
+    labels:
+      - "screen.number=3"
+      - "screen.name=molecular-viewer"
+      - "traefik.enable=true"
+      - "traefik.http.routers.molviewer.rule=Host(`molecular.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 4: LIVE TERMINAL - Agent Typing Commands, Downloading Papers
+  # ═══════════════════════════════════════════════════════════════════════════
+  live-terminal:
+    <<: *common
+    image: tsl0922/ttyd:latest
+    container_name: mirror-lab-live-terminal
+    environment:
+      TTYD_PORT: 7681
+    volumes:
+      - agent_logs:/logs:ro
+      - ./mirror-lab/terminal:/scripts:ro
+    ports:
+      - "7681:7681"
+    networks:
+      - mirror_lab_network
+      - strategickhaos_network
+    command: ["ttyd", "-p", "7681", "-R", "/bin/bash", "-c", "tail -f /logs/agent-*.log"]
+    labels:
+      - "screen.number=4"
+      - "screen.name=live-terminal"
+      - "traefik.enable=true"
+      - "traefik.http.routers.terminal.rule=Host(`terminal.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 5: PROGRESS GRAPHS - Papers Analyzed, Drugs Found, Costs
+  # ═══════════════════════════════════════════════════════════════════════════
+  progress-graphs:
+    <<: *common
+    image: grafana/grafana:11.2.0
+    container_name: mirror-lab-progress-graphs
+    environment:
+      GF_SERVER_HTTP_PORT: 3005
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-progress_graphs}
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/progress-graphs.json
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./mirror-lab/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3005:3005"
+    networks:
+      - mirror_lab_network
+      - strategickhaos_network
+    labels:
+      - "screen.number=5"
+      - "screen.name=progress-graphs"
+      - "traefik.enable=true"
+      - "traefik.http.routers.progress.rule=Host(`progress.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 6: DISCOVERY FEED - Real-time Log of Breakthroughs
+  # ═══════════════════════════════════════════════════════════════════════════
+  discovery-feed:
+    <<: *common
+    build:
+      context: ./mirror-lab/discovery-feed
+      dockerfile: Dockerfile
+    container_name: mirror-lab-discovery-feed
+    environment:
+      PORT: 3006
+      REDIS_URL: redis://redis:6379
+      PUBSUB_CHANNEL: discoveries
+    volumes:
+      - discovery_data:/app/data
+    ports:
+      - "3006:3006"
+    networks:
+      - mirror_lab_network
+      - strategickhaos_network
+    depends_on:
+      - redis
+    labels:
+      - "screen.number=6"
+      - "screen.name=discovery-feed"
+      - "traefik.enable=true"
+      - "traefik.http.routers.discoveries.rule=Host(`discoveries.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SCREEN 7: QUANTUM SIM - Actual Quantum Circuit Solving Protein Structure
+  # ═══════════════════════════════════════════════════════════════════════════
+  quantum-sim:
+    <<: *common
+    build:
+      context: ./mirror-lab/quantum-sim
+      dockerfile: Dockerfile
+    container_name: mirror-lab-quantum-sim
+    environment:
+      PORT: 3007
+      IBM_QUANTUM_TOKEN: ${IBM_QUANTUM_TOKEN:-}
+      AZURE_QUANTUM_WORKSPACE: ${AZURE_QUANTUM_WORKSPACE:-}
+      AZURE_QUANTUM_RESOURCE_GROUP: ${AZURE_QUANTUM_RESOURCE_GROUP:-}
+      AZURE_QUANTUM_SUBSCRIPTION: ${AZURE_QUANTUM_SUBSCRIPTION:-}
+      SIMULATION_MODE: ${QUANTUM_MODE:-local}  # local|ibm|azure
+    volumes:
+      - quantum_cache:/app/cache
+      - ./mirror-lab/quantum:/app/circuits:ro
+    ports:
+      - "3007:3007"
+    networks:
+      - mirror_lab_network
+    labels:
+      - "screen.number=7"
+      - "screen.name=quantum-sim"
+      - "traefik.enable=true"
+      - "traefik.http.routers.quantum.rule=Host(`quantum.mirror-lab.local`)"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SHARED SERVICES
+  # ═══════════════════════════════════════════════════════════════════════════
+  
+  # Redis for pub/sub between screens
+  redis:
+    <<: *common
+    image: redis:7-alpine
+    container_name: mirror-lab-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ./mirror-lab/redis:/data
+    ports:
+      - "6380:6379"
+    networks:
+      - mirror_lab_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Traefik reverse proxy for all screens
+  traefik:
+    <<: *common
+    image: traefik:v3.1
+    container_name: mirror-lab-traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=INFO"
+    ports:
+      - "8888:80"      # HTTP
+      - "8889:8080"    # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - mirror_lab_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.mirror-lab.local`)"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
