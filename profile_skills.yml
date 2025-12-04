@@ -1,0 +1,192 @@
+name: "Domenic Gabriel Garza"
+alias: "Strategickhaos"
+profile_version: "2025-11-25"
+focus_role: "Autonomous Systems & Governance Engineer"
+
+summary:
+  - "Designs and implements distributed cognitive systems combining AI agents, Git-based memory, and legal/DAO governance."
+  - "Applies Legally-Bounded Generative Systems Engineering (LB-GSE) to make law and governance act as first-class system components."
+  - "Builds from first principles across software, infra, cybersecurity, and legal structures, then automates composition and assurance."
+
+experience_scale:
+  beginner: 1
+  intermediate: 2
+  advanced: 3
+  expert: 4
+
+domains:
+  software_engineering:
+    level: 3
+    notes: "Strong conceptual understanding and growing implementation depth; comfortable designing modular architectures and large repo structures."
+    techniques:
+      - name: "Python scripting & automation"
+        level: 3
+        notes: "Tooling, recon, workflow orchestration, and AI bridges."
+      - name: "Modular project structuring"
+        level: 3
+        notes: "Splitting monoliths into packages (kernel, agents, legal_firewall, etc.)."
+      - name: "CLI / operator consoles"
+        level: 2
+        notes: "Interactive menus and lightweight operator UIs."
+      - name: "Type & error awareness"
+        level: 2
+        notes: "Defensive coding, logging, and thinking about failure modes."
+
+  systems_architecture:
+    level: 4
+    notes: "Systems-level thinking across layers, roles, and flows."
+    techniques:
+      - name: "Distributed cognitive architecture design"
+        level: 4
+        notes: "LLM agents + Git + infra + humans + law as an integrated system."
+      - name: "Multi-layer OS thinking"
+        level: 4
+        notes: "Legal layer, governance kernel, execution layer, evidence layer."
+      - name: "Repository-as-OS (Git = memory)"
+        level: 4
+        notes: "Commits as thoughts; PRs as decisions; logs as audit trail."
+      - name: "Assurance-case reasoning"
+        level: 3
+        notes: "Claims → arguments → evidence linking (PRs, contracts, logs)."
+
+  ai_and_llm_engineering:
+    level: 3
+    notes: "Designs LLM-driven workflows and multi-agent governance patterns."
+    techniques:
+      - name: "Multi-agent governance"
+        level: 3
+        notes: "Weighted voting, veto power, proposal lifecycle across departments."
+      - name: "Local/offline model bridging"
+        level: 3
+        notes: "Ollama/local models integrated via HTTP/Python bridges."
+      - name: "Prompt & role engineering"
+        level: 3
+        notes: "Specialized agents: risk assessor, legal parser, recon analyst."
+      - name: "LLM-assisted code gen & review"
+        level: 2
+        notes: "Bootstrapping modules then hardening via testing."
+
+  legal_and_governance_engineering:
+    level: 4
+    notes: "Treats law as a first-class system component; strong governance design."
+    techniques:
+      - name: "Wyoming DAO LLC integration"
+        level: 3
+        notes: "Operating agreements and DAO statutory design."
+      - name: "Contract-driven system design"
+        level: 4
+        notes: "Legal terms dictate software behavior and required components."
+      - name: "Legally-Bounded Generative Systems Engineering (LB-GSE)"
+        level: 4
+        notes: "Translate legal primitives into system capabilities and gap analysis."
+      - name: "Governance kernel design"
+        level: 4
+        notes: "Proposals, branches, voting, quorum, veto, execution, logging."
+
+  devops_and_infrastructure:
+    level: 2
+    notes: "Practical intuition; expanding toward production-grade infra."
+    techniques:
+      - name: "Git + GitHub workflows"
+        level: 3
+        notes: "PRs as evidence, branch strategy, signed commits."
+      - name: "GPG-signed commits & provenance"
+        level: 2
+        notes: "Understanding of commit signing and provenance."
+      - name: "Kubernetes awareness"
+        level: 2
+        notes: "Interpreting clusters and recon logs."
+      - name: "Infrastructure-as-code mindset"
+        level: 2
+        notes: "Configs and manifests treated as versioned code."
+
+  cybersecurity_and_recon:
+    level: 2
+    notes: "Actively learning with pragmatic recon experience."
+    techniques:
+      - name: "Kali Linux & recon tooling"
+        level: 2
+        notes: "VM workflows, VPN chaining, traffic analysis experiments."
+      - name: "Network recon literacy"
+        level: 2
+        notes: "Parsing recon outputs and service enumeration."
+      - name: "Failure-mode / anti-fragility analysis"
+        level: 3
+        notes: "Documented failure modes and resilience planning."
+
+  knowledge_engineering_and_ops:
+    level: 4
+    notes: "Designs living knowledge environments and operational memory."
+    techniques:
+      - name: "Obsidian vault & graph design"
+        level: 4
+        notes: "Neural-graph style vaults and concept linking."
+      - name: "Operational memory maps & agent registries"
+        level: 4
+        notes: "Mapping agent responsibilities and knowledge locations."
+      - name: "Progress YAMLs & telemetry"
+        level: 3
+        notes: "YAML-driven tracking of phases and milestones."
+      - name: "Mind-map–driven architecture"
+        level: 4
+        notes: "Cognitive maps informing repo layout and boundaries."
+
+  academic_and_research_skills:
+    level: 3
+    notes: "Solid research literacy and long-form technical writing."
+    techniques:
+      - name: "Literature review & bibliographies"
+        level: 3
+        notes: "Structured source collections on cognition and LLMs."
+      - name: "Whitepaper writing"
+        level: 3
+        notes: "Articulating theory + practice in long-form narratives."
+      - name: "Capstone & rubric mapping"
+        level: 4
+        notes: "Mapping artifacts to learning outcomes and evidence."
+
+  meta_cognition_and_learning:
+    level: 4
+    notes: "Highly deliberate practice; treats cognition as an engineered system."
+    techniques:
+      - name: "Dual-task training"
+        level: 4
+        notes: "Parallel processing exercises (juggling, mental math, etc.)."
+      - name: "Deliberate practice design"
+        level: 3
+        notes: "Structured routines for learning and recall."
+      - name: "High-bandwidth mind-mapping"
+        level: 4
+        notes: "Rapidly generating and integrating complex conceptual graphs."
+
+  communication_and_narrative:
+    level: 3
+    notes: "Strong at reframing complex systems into stories and artifacts."
+    techniques:
+      - name: "Architecture storytelling"
+        level: 3
+        notes: "Layered, metaphor-rich explanations of systems."
+      - name: "Repo-driven narrative"
+        level: 3
+        notes: "PRs and docs used as narrative episodes."
+      - name: "Human–AI collaboration framing"
+        level: 3
+        notes: "Describing co-creative workflows between humans and agents."
+
+growth_targets:
+  short_term:
+    - "Harden Python code with more tests and type hints (legal_firewall, kernel, agents)."
+    - "Increase DevOps depth: reproducible containers, CI pipelines, deployment repeatability."
+    - "Finish unit tests and run real-repo scenarios for the legal-firewall engine."
+  medium_term:
+    - "Formalize assurance-case diagrams for LB-GSE (GSN or similar)."
+    - "Deepen cybersecurity skillset for bug-bounty readiness and hardening."
+    - "Publish Distributed Cognitive Systems Engineering as a preprint or whitepaper."
+  long_term:
+    - "Operate professionally as an Autonomous Systems / Governance Engineer."
+    - "Lead design of sovereign AI/DAO infrastructure in industry or a self-run lab."
+    - "Merge academic research, industrial practice, and the Strategickhaos ecosystem into a long-lived lab."
+
+notes:
+  - "This profile is optimally suited for feeding into agent registries, onboarding docs, or a self-describing repo README."
+  - "Tell me which target format you want next: a progress-dashboard YAML for agents, a resume-style JSON/YAML for automated CVs, or a compact LinkedIn blurb."
