@@ -1,0 +1,99 @@
+{
+  "$schema": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "swarmgate_v1.0.tar.gz",
+      "digest": {
+        "blake3": "PLACEHOLDER_BLAKE3_HASH",
+        "sha256": "PLACEHOLDER_SHA256_HASH"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://strategickhaos.com/swarmgate/v1",
+      "externalParameters": {
+        "repository": "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-",
+        "ref": "refs/tags/v1.0.0"
+      },
+      "internalParameters": {
+        "timestamp_override": "2025-11-27T00:00:00Z",
+        "deterministic": true
+      }
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/actions"
+      },
+      "metadata": {
+        "invocationId": "PLACEHOLDER_INVOCATION_ID",
+        "startedOn": "2025-11-27T00:00:00Z",
+        "finishedOn": "2025-11-27T00:00:00Z"
+      }
+    }
+  },
+  "provenance": {
+    "version": "1.0",
+    "project": "Strategickhaos Sovereignty Architecture",
+    "organization": "Strategickhaos DAO LLC / Valoryield Engine",
+    "maintainer": "Domenic Garza",
+    "created": "2025-11-27T00:00:00Z",
+    "license": "MIT"
+  },
+  "distribution": {
+    "ipfs": {
+      "cid": "PLACEHOLDER_IPFS_CID",
+      "gateways": [
+        "https://ipfs.io/ipfs/PLACEHOLDER_IPFS_CID",
+        "https://dweb.link/ipfs/PLACEHOLDER_IPFS_CID",
+        "https://cloudflare-ipfs.com/ipfs/PLACEHOLDER_IPFS_CID"
+      ],
+      "pinned_providers": [
+        "pinata.cloud",
+        "web3.storage",
+        "infura.io"
+      ]
+    },
+    "arweave": {
+      "txid": "PLACEHOLDER_ARWEAVE_TXID",
+      "gateway": "https://arweave.net/PLACEHOLDER_ARWEAVE_TXID",
+      "bundlr_node": "https://node1.bundlr.network"
+    },
+    "mirrors": [
+      {
+        "url": "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/releases",
+        "type": "github"
+      },
+      {
+        "url": "ipfs://PLACEHOLDER_IPFS_CID",
+        "type": "ipfs"
+      },
+      {
+        "url": "ar://PLACEHOLDER_ARWEAVE_TXID",
+        "type": "arweave"
+      }
+    ]
+  },
+  "signing": {
+    "gpg_key_id": "0x137SOVEREIGN",
+    "gpg_fingerprint": "PLACEHOLDER_GPG_FINGERPRINT",
+    "detached_signature": "swarmgate_v1.0.tar.gz.sig",
+    "clearsign_provenance": "provenance.json.asc",
+    "timestamp": {
+      "rfc3161_tsa": "https://freetsa.org/tsr",
+      "timestamp_token": "PLACEHOLDER_TST_TOKEN"
+    },
+    "blockchain_anchor": {
+      "network": null,
+      "txid": null
+    }
+  },
+  "verification": {
+    "scripts": {
+      "posix": "scripts/verify/verify.sh",
+      "windows": "scripts/verify/verify.ps1"
+    },
+    "instructions": "VERIFICATION.md"
+  }
+}

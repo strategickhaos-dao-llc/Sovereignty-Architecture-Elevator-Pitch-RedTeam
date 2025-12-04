@@ -1,0 +1,110 @@
+# swarmgate.yaml
+# Strategickhaos Sovereignty Architecture - Swarmgate Manifest
+# This file defines the canonical content for deterministic archive generation (swarmgate_v1.0.tar.gz)
+# Version: 1.0
+# Date: 2025-11-27
+
+version: "1.0"
+name: "swarmgate"
+description: "Strategickhaos Sovereignty Architecture - Immutable release manifest for cryptographically verifiable distribution"
+
+metadata:
+  project: "Strategickhaos Sovereignty Architecture"
+  organization: "Strategickhaos DAO LLC / Valoryield Engine"
+  maintainer: "Domenic Garza"
+  created: "2025-11-27"
+  license: "MIT"
+
+archive:
+  name: "swarmgate_v1.0.tar.gz"
+  format: "tar.gz"
+  deterministic: true
+  # Files to include in the deterministic archive
+  include:
+    - "swarmgate.yaml"
+    - "discovery.yml"
+    - "dao_record_v1.0.yaml"
+    - "ai_constitution.yaml"
+    - "LICENSE"
+    - "README.md"
+    - "SECURITY.md"
+    - "COMMUNITY.md"
+    - "CONTRIBUTORS.md"
+    - "bootstrap/"
+    - "governance/"
+    - ".github/workflows/"
+    - "scripts/"
+    - "provenance/"
+  exclude:
+    - "*.log"
+    - "*.tmp"
+    - ".env"
+    - "node_modules/"
+    - ".git/"
+    - "__pycache__/"
+    - "*.pyc"
+
+build:
+  # Deterministic build settings
+  reproducible: true
+  timestamp_override: "2025-11-27T00:00:00Z"
+  # Use fixed user/group for tar
+  owner: "root"
+  group: "root"
+  # Sort files for deterministic ordering
+  sort_files: true
+  # Compression settings
+  compression:
+    algorithm: "gzip"
+    level: 9
+
+verification:
+  # BLAKE3 hash of the canonical archive
+  blake3: "PLACEHOLDER_BLAKE3_HASH"
+  # SHA256 for compatibility
+  sha256: "PLACEHOLDER_SHA256_HASH"
+  # GPG key for signing
+  gpg_key_id: "0x137SOVEREIGN"
+
+distribution:
+  # IPFS Content Identifier
+  ipfs:
+    cid: "PLACEHOLDER_IPFS_CID"
+    pinned_providers:
+      - "pinata.cloud"
+      - "web3.storage"
+      - "infura.io"
+  # Arweave Transaction ID
+  arweave:
+    txid: "PLACEHOLDER_ARWEAVE_TXID"
+    bundlr_node: "https://node1.bundlr.network"
+  # Mirror endpoints
+  mirrors:
+    - url: "https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/releases"
+      type: "github"
+    - url: "ipfs://PLACEHOLDER_IPFS_CID"
+      type: "ipfs"
+    - url: "ar://PLACEHOLDER_ARWEAVE_TXID"
+      type: "arweave"
+
+signing:
+  # Detached GPG signature
+  gpg_detached: "swarmgate_v1.0.tar.gz.sig"
+  # Clearsign provenance
+  gpg_clearsign: "provenance.json.asc"
+  # RFC3161 timestamp (optional)
+  rfc3161_tsa: "https://freetsa.org/tsr"
+  # Blockchain anchoring (optional)
+  blockchain_anchor:
+    network: "ethereum"
+    contract: null
+    txid: null
+
+custody:
+  # Key custody information
+  signing_key_location: "air-gapped HSM"
+  recovery_document: "RECOVERY.md"
+  backup_locations:
+    - "encrypted USB (location 1)"
+    - "encrypted USB (location 2)"
+    - "paper key backup (vault)"
