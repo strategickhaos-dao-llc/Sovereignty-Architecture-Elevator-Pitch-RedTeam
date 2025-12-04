@@ -1,0 +1,50 @@
+# StrategicKhaos Evidence Hash Manifest
+# Algorithm: BLAKE3 (or SHA256 fallback)
+# Format: <hash>  <relative_path_from_repo_root>
+#
+# To verify manually:
+#   cd <repo_root>
+#   blake3sum <file> | diff - <(grep <file> strategickhaos-proof/evidence/hashes.txt)
+#
+# To regenerate:
+#   python strategickhaos-proof/verify_evidence.py --regenerate
+#
+# Last updated: 2025-12-02T18:29:38Z
+# ================================================
+
+# Core Configuration Files
+# ------------------------
+
+f70e5d9d46929943ec3f730e94b823c467868334da22fd109c4c177f7c474383  ai_constitution.yaml
+d3e82677b924e11f0e03961fe98c0f6fedb5826cf7e6c87534b6a9d3a2e63b0b  dao_record.yaml
+68af69ddad45c58dc2cef59884e684e3421205c2188e2f110c7684d82b339672  dao_record_v1.0.yaml
+c664c68724beac7f1478e415dd1261da8f3956184ceec63d82a74959592e8579  discovery.yml
+
+# Governance Documents
+# --------------------
+
+f3dc81e67e92045107cde11cfc3b3763b9b7a2412f2e0998ccee84ebbf300cc6  governance/access_matrix.yaml
+002bbcf0f1b775add62430cee9b4664d64bfbf4d891b51522c8c16c42dd1747e  governance/article_7_authorized_signers.md
+
+# Source Code
+# -----------
+
+dd4e762a57edccfc7dc26b7d418a3e49d5543b8ba785dcccae55bd101372e802  src/bot.ts
+d93da5aac952a325e29393292104ded76dfff4c6ef5ac23cf9043e96fe10c12b  src/config.ts
+99a88fcc588fede7391dcd4c86329a1a8cc7b115afe7e0ab88dcafb0642d6195  src/discord.ts
+3ca62f85c659c7409c4e52cb680c47b5371acd4f15d97a295c66e6234a7a0d7b  src/event-gateway.ts
+
+# Deployment Configuration
+# ------------------------
+
+42b7583ccd5573f1cc3b3c4a00e880e094f4af9fa914ae40389cbcef6e7cc7be  Dockerfile.bot
+fe5b6a905a0494b2ed96d03e2d00c1e9a2902610044f38c26272adeb64bedd9a  Dockerfile.gateway
+ce939d22f611a82b4750088c3823ee619cd1ca86a9599bcf128d90f9f6cf8f97  docker-compose.yml
+
+# Evidence Dossier
+# ----------------
+
+2eaf70aebc4a417e97580ce9d35cfe93644723a12ec8af95d8f0bd3fed8305e9  strategickhaos-proof/evidence/README.md
+b2cae7f1cd4bef1c166a69e51000d850f602af8b9062df5ee09a24fd62fc0c61  strategickhaos-proof/evidence/how_to_verify.md
+0e58179aeb5a58634267d03d3894906320ed54c8aa103dbbf8f4cf4c335eb6a4  strategickhaos-proof/evidence/status_snapshot.json
+

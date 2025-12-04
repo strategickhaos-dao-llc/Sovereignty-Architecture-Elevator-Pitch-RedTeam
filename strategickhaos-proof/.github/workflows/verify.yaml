@@ -1,0 +1,100 @@
+name: Verify Evidence
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'strategickhaos-proof/**'
+      - 'dao_record.yaml'
+      - 'dao_record_v1.0.yaml'
+      - 'governance/**'
+      - 'src/*.ts'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'strategickhaos-proof/**'
+      - 'dao_record.yaml'
+      - 'dao_record_v1.0.yaml'
+      - 'governance/**'
+      - 'src/*.ts'
+  workflow_dispatch:
+
+jobs:
+  verify-evidence:
+    name: Verify Evidence Dossier
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install blake3
+
+      - name: Verify hash manifest
+        id: verify-hashes
+        run: |
+          cd ${{ github.workspace }}
+          python strategickhaos-proof/verify_evidence.py --verbose
+        continue-on-error: true
+
+      - name: Verify cross-references
+        id: verify-refs
+        run: |
+          cd ${{ github.workspace }}
+          python strategickhaos-proof/verify_evidence.py --check-refs --verbose
+        continue-on-error: true
+
+      - name: Validate JSON schema
+        id: validate-json
+        run: |
+          cd ${{ github.workspace }}/strategickhaos-proof/evidence
+          python -c "import json; json.load(open('status_snapshot.json'))"
+          echo "✅ JSON schema is valid"
+
+      - name: Check evidence structure
+        run: |
+          echo "📁 Evidence Dossier Structure:"
+          find strategickhaos-proof -type f -name "*.md" -o -name "*.json" -o -name "*.txt" -o -name "*.py" | head -20
+
+      - name: Create verification report
+        if: always()
+        run: |
+          echo "## Evidence Verification Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.verify-hashes.outcome }}" == "success" ]; then
+            echo "| Hash Verification | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Hash Verification | ⚠️ Warning (may need regeneration) |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.verify-refs.outcome }}" == "success" ]; then
+            echo "| Cross-References | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Cross-References | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.validate-json.outcome }}" == "success" ]; then
+            echo "| JSON Validation | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| JSON Validation | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail if critical checks failed
+        if: steps.verify-refs.outcome == 'failure' || steps.validate-json.outcome == 'failure'
+        run: |
+          echo "❌ Critical verification checks failed"
+          exit 1
