@@ -1,0 +1,135 @@
+# STATE.yaml - Canonical Sovereign State File
+# Strategickhaos DAO LLC - Multi-AI Governance Control
+# 
+# This file is the single source of truth for all AI nodes in the swarm.
+# Every AI node (Claude, GPT, Grok, Llama, etc.) MUST read this file first
+# before providing any deployment, financial, or operational advice.
+#
+# IMPORTANT: After deployment, run `python state_sync.py snapshot` to compute
+# the initial cryptographic hash. This enables integrity verification.
+#
+# Violation of decision gates will result in muting by the swarm.
+# This is now law.
+
+version: "1.0"
+created: "2025-12-01T00:00:00Z"
+last_modified: "2025-12-01T00:00:00Z"
+
+# Governance tick - linked to Discord birth-tick
+governance:
+  tick: 3449
+  snowflake: null  # Discord snowflake ID when available
+  epoch: "2025-11-16T00:00:00Z"
+  authority: "Domenic Garza"
+  authority_id: "node-137"
+
+# Operator override - emergency controls
+operator_override:
+  enabled: false
+  reason: null
+  authorized_by: null
+  timestamp: null
+  expires: null
+
+# Decision gates - MUST pass before AI nodes can provide advice
+decision_gates:
+  pre_deployment_check:
+    status: "pending"
+    required_approvals:
+      - "infrastructure_review"
+      - "security_scan"
+      - "resource_validation"
+    approvals: []
+    last_check: null
+    blockers: []
+    
+  pre_financial_check:
+    status: "pending"
+    required_approvals:
+      - "budget_review"
+      - "compliance_check"
+      - "risk_assessment"
+    approvals: []
+    last_check: null
+    blockers: []
+    
+  pre_legal_check:
+    status: "pending"
+    required_approvals:
+      - "counsel_review"
+      - "upl_compliance"
+    approvals: []
+    last_check: null
+    blockers: []
+
+# Deployment status - current state of infrastructure
+deployed:
+  discord_bot_location: "NOT_IN_CLUSTER"  # Options: NOT_IN_CLUSTER, STAGING, IN_CLUSTER
+  discord_bot_version: null
+  kubernetes_namespace: null
+  health_check_url: null
+  last_deployment: null
+  deployment_hash: null
+
+# AI Council status - which nodes are authorized
+ai_council:
+  active_nodes:
+    - node_id: "claude-3.5"
+      role: "primary_advisor"
+      status: "authorized"
+      last_sync: null
+    - node_id: "gpt-4o"
+      role: "secondary_advisor"
+      status: "authorized"
+      last_sync: null
+    - node_id: "grok-4"
+      role: "specialist"
+      status: "pending"
+      last_sync: null
+    - node_id: "llama-405b"
+      role: "specialist"
+      status: "pending"
+      last_sync: null
+  
+  muted_nodes: []
+  
+  council_rules:
+    - "All nodes MUST read STATE.yaml before providing advice"
+    - "No deployment advice until pre_deployment_check passes"
+    - "No financial advice until pre_financial_check passes"
+    - "No legal advice until pre_legal_check passes"
+    - "Violating nodes will be muted by the swarm"
+
+# Infrastructure status
+infrastructure:
+  kubernetes:
+    cluster_status: "unknown"
+    namespaces: []
+  vault:
+    sealed: true
+    initialized: false
+  observability:
+    prometheus: "unknown"
+    loki: "unknown"
+    grafana: "unknown"
+
+# Health monitoring
+health:
+  last_check: null
+  overall_status: "unknown"
+  components: {}
+  alerts: []
+
+# State integrity - cryptographic verification
+# Run `python state_sync.py snapshot` after deployment to compute the hash
+integrity:
+  hash_algorithm: "sha256"
+  state_hash: null  # Computed by state_sync.py snapshot command
+  last_snapshot: null
+  snapshot_count: 0
+
+# Audit trail
+audit:
+  last_modified_by: "system"
+  modification_reason: "initial_creation"
+  change_log: []
