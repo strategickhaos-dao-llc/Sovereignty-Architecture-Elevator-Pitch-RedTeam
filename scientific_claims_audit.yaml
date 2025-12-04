@@ -1,0 +1,136 @@
+bloom_tier: analyze
+taxonomy: "Scientific Claims Audit - Chain-Breaking Experiments"
+version: 1.0
+generated: "2025-11-29"
+description: "Audit of speculative scientific claims with solid evidence, speculative aspects, and decisive break tests"
+
+claims:
+  - id: SC1
+    name: "Evo-Devo 2.0: Phenotype = Genome UI"
+    domain: Evolutionary Biology
+    solid_evidence:
+      - "Gene regulatory networks (GRNs) - well-characterized developmental gene circuits"
+      - "Epigenetics - heritable changes without DNA sequence alterations"
+      - "Bioelectric patterning - membrane potentials guiding morphogenesis (planaria, Xenopus)"
+    speculative_claims:
+      - "Morphogenetic fields as non-local organizing fields"
+      - "Phenotype as direct user interface to genome interpretation"
+    break_test:
+      description: "Cross-species bioelectric rewiring"
+      protocol: "Program stable, heritable organ-level pattern changes via targeted ion-channel optogenetics without genome edits; track if induced phenotypes persist across regenerations and generations"
+      success_criteria: "Induced phenotype persists ≥3 generations without genetic drift"
+      failure_criteria: "Phenotype reverts within 1-2 regeneration cycles"
+    key_researchers: ["Michael Levin", "Sean Carroll", "Mary Jane West-Eberhard"]
+
+  - id: SC2
+    name: "From EES to Symbiogenesis"
+    domain: Evolutionary Biology / Microbiology
+    solid_evidence:
+      - "Microbiome-holobiont effects on host development, immunity, behavior"
+      - "Endogenous retroviruses functional in development (syncytins in placentation)"
+      - "Horizontal gene transfer (HGT) extensively documented in microbes"
+      - "Organelle origins from endosymbiotic bacteria"
+    speculative_claims:
+      - "Holobiont as formal selection unit across animals"
+      - "Engineered phage steering macroevolution as practical intervention"
+    break_test:
+      description: "Multi-generation selection with controlled microbiomes"
+      protocol: "Establish selection lines with locked microbiomes (germ-free + controlled transplant) vs native; measure divergence in host fitness traits; add engineered phage/HGT payloads; quantify fixation vs reversion when microbiome removed"
+      success_criteria: "Holobiont-mediated traits show higher fixation rates than control"
+      failure_criteria: "No significant divergence or complete reversion upon microbiome removal"
+    key_researchers: ["Eugene Rosenberg", "Ilana Zilber-Rosenberg", "Lynn Margulis"]
+
+  - id: SC3
+    name: "Cancer as Reverse Speciation"
+    domain: Oncology / Evolutionary Medicine
+    solid_evidence:
+      - "Atavistic signatures - Warburg effect, telomerase reactivation, embryonic programs"
+      - "Ecosystem engineering - tumor microenvironment modification, metabolic rewiring"
+    speculative_claims:
+      - "Full reversion to unicellular state as evolutionary pathway"
+      - "Cancer cells as evolutionary throwback vs novel adaptation"
+    break_test:
+      description: "Forced single-cell life cycles ex vivo"
+      protocol: "Culture tumor cells in obligate single-cell conditions; apply fluctuating environmental pressures; test if they evolve free-living fitness traits independent of host-like niches; compare genomic streamlining vs chaos"
+      success_criteria: "Tumor lines develop stable free-living phenotypes with genomic streamlining"
+      failure_criteria: "Genomic chaos dominates; no viable free-living adaptation"
+    key_researchers: ["Paul Davies", "Charles Lineweaver", "Anna Trigos"]
+
+  - id: SC4
+    name: "Baldwin Effect ≈ Soft Lamarck; LLM Analogy"
+    domain: Evolutionary Biology / AI
+    solid_evidence:
+      - "Genetic assimilation after plasticity (Waddington's canalization experiments)"
+      - "Cultural evolution faster than genetic in human populations"
+    speculative_claims:
+      - "Dominance of Lamarckian-like dynamics in biosphere"
+      - "Direct mapping from AI training to biology - LLM weight updates as analogy"
+    break_test:
+      description: "Longitudinal experimental evolution with plastic behaviors"
+      protocol: "Select Drosophila for learning tasks (odor conditioning); track assimilation of learned trait-supporting genotypes; quantify rate vs control lines without learning"
+      success_criteria: "Learning-selected lines show faster genetic assimilation of behavioral traits"
+      failure_criteria: "No significant rate difference between learning and control lines"
+    key_researchers: ["Mary Jane West-Eberhard", "Richard Watson", "Eörs Szathmáry"]
+
+  - id: SC5
+    name: "Mitochondrial Eve = Bottleneck, Not Origin"
+    domain: Human Evolution / Population Genetics
+    solid_evidence:
+      - "Coalescent logic - MRCA for mtDNA ≠ population origin"
+      - "Toba bottleneck debate - volcanic evidence correlates with genetic diversity patterns"
+      - "Multiple Eves per locus - different genetic markers have different MRCAs"
+    speculative_claims:
+      - "Near-extinction to <10k breeding pairs tied tightly to Toba eruption (~74 kya)"
+      - "Toba as sole/primary cause of human population bottleneck"
+    break_test:
+      description: "Ancient DNA time series analysis"
+      protocol: "Collect aDNA from Africa/Asia (100-50 kya); apply MSMC/PSMC demographic inference; use sedimentary aDNA; cross-validate with volcanic proxies (tephra layers, climate records)"
+      success_criteria: "Synchronized pan-Old-World diversity crash correlating with Toba timing"
+      failure_criteria: "No pan-regional crash, or crashes at different times across regions"
+    key_researchers: ["Svante Pääbo", "David Reich", "Stanley Ambrose"]
+
+  - id: SC6
+    name: "Consciousness as Stabilization Mechanism"
+    domain: Neuroscience / Philosophy of Mind
+    solid_evidence:
+      - "Control-theory views of model-based planning in cognitive neuroscience"
+      - "Maladaptation at extremes - psychedelics and psychosis disrupt predictive processing"
+      - "Global workspace theory - experimental support for information integration"
+    speculative_claims:
+      - "Phenomenal consciousness selected specifically as stabilizer"
+      - "Consciousness as adaptive rather than epiphenomenal"
+    break_test:
+      description: "Comparative phylogenetic modeling"
+      protocol: "Map risk-sensitive planning vs signatures of conscious access (reportability, global broadcast) across taxa; perturb with anesthetics/psychedelics; test if risk-calibration degrades predictably with fidelity"
+      success_criteria: "Strong correlation between consciousness signatures and risk-calibration; predictable degradation under perturbation"
+      failure_criteria: "No correlation or inconsistent perturbation effects"
+    key_researchers: ["Anil Seth", "Stanislas Dehaene", "Giulio Tononi"]
+
+  - id: SC7
+    name: "GOE as Catabolic Collapse"
+    domain: Geobiology / Earth History
+    solid_evidence:
+      - "Oxygen toxicity - well-documented lethality to anaerobes"
+      - "Great die-offs - fossil record consistent with mass extinction events"
+      - "Metabolic retooling - evolutionary transition to aerobic metabolism"
+    speculative_claims:
+      - "Oxygen toxicity paradigm - oxygen as catastrophic metabolic waste product"
+      - "Biosphere undoing oxygen via anthropogenic carbon - cyclical reversal hypothesis"
+    break_test:
+      description: "Geochemical modeling of oxygenation pulses"
+      protocol: "Model net primary productivity vs burial rates; track carbon cycle feedbacks during oxygenation events; correlate with mass extinction signatures; predict future trajectories"
+      success_criteria: "Models accurately retrodict GOE dynamics and extinction patterns"
+      failure_criteria: "Significant mismatches between model predictions and geological record"
+    key_researchers: ["Timothy Lyons", "Don Canfield", "Lee Kump"]
+
+metadata:
+  total_claims: 7
+  domains_covered:
+    - Evolutionary Biology
+    - Microbiology
+    - Oncology
+    - Neuroscience
+    - Population Genetics
+    - Geobiology
+  audit_methodology: "Solid/Speculative/Break-Test framework"
+  purpose: "Transform speculative science into actionable knowledge through rigorous chain-breaking experiments"
