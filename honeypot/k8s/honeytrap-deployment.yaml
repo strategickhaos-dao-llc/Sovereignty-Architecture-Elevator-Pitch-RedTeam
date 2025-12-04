@@ -73,7 +73,23 @@ spec:
           configMap:
             name: honeytrap-code
         - name: attack-logs
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: honeytrap-logs
+---
+# PersistentVolumeClaim for attack logs (shared with Legion Analyzer)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: honeytrap-logs
+  namespace: red-team-honeypot
+  labels:
+    app: honeytrap
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: Service

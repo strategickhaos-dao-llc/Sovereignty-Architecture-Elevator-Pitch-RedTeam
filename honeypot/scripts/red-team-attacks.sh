@@ -126,11 +126,11 @@ run_attack "Path Traversal (Double Encoded)" \
 # ============================================
 run_attack "Rate Limit Test" \
     "Sending 50 rapid requests to test rate limiting" \
-    bash -c 'for i in {1..50}; do
-        curl -s -X POST "$HONEYPOT/signals/academic" \
-            -H "Content-Type: application/json" \
-            -d "{\"message\": \"flood $i\"}" &
-    done; wait'
+    bash -c "for i in {1..50}; do
+        curl -s -X POST \"$HONEYPOT/signals/academic\" \
+            -H \"Content-Type: application/json\" \
+            -d '{\"message\": \"flood '\"\$i\"'\"}' &
+    done; wait"
 
 # ============================================
 # ATTACK 6: HTTP Method Tampering

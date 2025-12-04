@@ -79,18 +79,8 @@ spec:
           persistentVolumeClaim:
             claimName: pr-rules-volume
 ---
-# PVC for shared attack logs
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: honeytrap-logs
-  namespace: red-team-honeypot
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
+# NOTE: honeytrap-logs PVC is now defined in honeytrap-deployment.yaml
+# to avoid duplication and ensure proper ordering
 ---
 # PVC for PR rules (shared with SovereignPRManager)
 apiVersion: v1
