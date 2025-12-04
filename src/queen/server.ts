@@ -10,6 +10,8 @@ interface QueenConfig {
   port: number;
   natsUrl: string;
   githubWebhookSecret?: string;
+  rateLimitWindowMs?: number;
+  rateLimitMaxRequests?: number;
 }
 
 interface HealthResponse {
@@ -27,8 +29,53 @@ interface WebhookResponse {
   amount?: number;
 }
 
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
+}
+
 let nc: NatsConnection | null = null;
 const sc = StringCodec();
+
+// Simple in-memory rate limiter
+const rateLimitStore = new Map<string, RateLimitEntry>();
+
+function createRateLimiter(windowMs: number, maxRequests: number) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const ip = req.ip || req.socket.remoteAddress || "unknown";
+    const now = Date.now();
+    
+    let entry = rateLimitStore.get(ip);
+    
+    if (!entry || now > entry.resetTime) {
+      // Create new entry or reset expired one
+      entry = { count: 1, resetTime: now + windowMs };
+      rateLimitStore.set(ip, entry);
+    } else {
+      entry.count++;
+    }
+    
+    if (entry.count > maxRequests) {
+      res.status(429).json({ 
+        error: "Too many requests", 
+        retryAfter: Math.ceil((entry.resetTime - now) / 1000) 
+      });
+      return;
+    }
+    
+    next();
+  };
+}
+
+// Clean up expired entries periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateLimitStore.entries()) {
+    if (now > entry.resetTime) {
+      rateLimitStore.delete(ip);
+    }
+  }
+}, 60000); // Clean up every minute
 
 // Verify GitHub webhook signature
 function verifyGitHubSignature(secret: string, payload: string, signature: string): boolean {
@@ -52,6 +99,14 @@ async function publishToNats(subject: string, data: unknown): Promise<void> {
 
 export async function createQueenServer(config: QueenConfig): Promise<express.Application> {
   const app = express();
+
+  // Rate limiting configuration (default: 100 requests per minute per IP)
+  const windowMs = config.rateLimitWindowMs || 60000;
+  const maxRequests = config.rateLimitMaxRequests || 100;
+  const rateLimiter = createRateLimiter(windowMs, maxRequests);
+
+  // Apply rate limiting to all webhook routes
+  app.use("/webhook", rateLimiter);
 
   // Parse JSON with raw body preservation for signature verification
   app.use(express.json({
