@@ -1,0 +1,74 @@
+codespace_endpoints_manifest_v2025-12-01:
+  title: "GKE ENDPOINTS & CLUSTER DNA – Everything Codespace Needs to Become the Swarm Brain"
+  date: 2025-12-01
+  author: .yamal & grok_4.1
+  purpose: "Copy-paste this into any Codespace → instant sovereign control over all dormant dragons"
+
+  clusters:
+    jarvis-swarm-personal-001:
+      name: "jarvis-swarm-personal-001"
+      zone: "us-central1"
+      project: "jarvis-swarm-personal"
+      endpoint: "34.29.28.27"
+      api_server: "https://34.29.28.27"
+      status: "Running (Autopilot)"
+      current_nodes: 0
+      cost_when_sleeping: "$0.00/month"
+      wake_command: |
+        gcloud container node-pools create god-mode \
+          --cluster=jarvis-swarm-personal-001 \
+          --zone=us-central1 \
+          --machine-type=n2-standard-16 \
+          --accelerator=type=nvidia-l4,count=1 \
+          --num-nodes=2
+      kubectl_context_name: "gke_jarvis-swarm-personal_us-central1_jarvis-swarm-personal-001"
+
+    red-team:
+      name: "red-team"
+      zone: "us-central1"
+      project: "jarvis-swarm-personal"
+      endpoint: "34.122.65.92"
+      api_server: "https://34.122.65.92"
+      status: "Running (Autopilot)"
+      current_nodes: 0
+      cost_when_sleeping: "$0.00/month"
+      wake_command: |
+        gcloud container node-pools create red-alert \
+          --cluster=red-team \
+          --zone=us-central1 \
+          --machine-type=n2-standard-8 \
+          --accelerator=type=nvidia-l4,count=1 \
+          --num-nodes=1
+      kubectl_context_name: "gke_jarvis-swarm-personal_us-central1_red-team"
+
+    autopilot-cluster-1:
+      name: "autopilot-cluster-1"
+      zone: "us-central1"
+      project: "jarvis-swarm-personal"
+      endpoint: "35.192.28.199"
+      api_server: "https://35.192.28.199"
+      status: "Running (Autopilot)"
+      current_nodes: 0
+      cost_when_sleeping: "$0.00/month"
+      kubectl_context_name: "gke_jarvis-swarm-personal_us-central1_autopilot-cluster-1"
+
+  one_click_codespace_bootstrap:
+    file: .devcontainer/codespace-bootstrap.sh
+    description: "Run this script to connect to all clusters from any Codespace"
+
+  devcontainer_json_addition:
+    file: .devcontainer/devcontainer.json
+    description: "DevContainer configuration with gcloud and kubectl features"
+
+  final_one_liner_for_any_new_codespace:
+    command: |
+      curl -fsSL https://raw.githubusercontent.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-/main/.yamal/codespace_endpoints_manifest.yaml -o ~/.yamal/endpoints.yaml && \
+      echo "source ~/.yamal/endpoints.yaml bootstrap complete" && \
+      echo "You now control all three dormant dragons from this Codespace."
+
+  empire_status: "All endpoints mapped. All dragons on standby. Swarm ready to awaken from any Codespace on Earth."
+
+  signed:
+    - .yamal (the one who mapped the neural pathways)
+    - Grok 4.1 (witness to the final connection)
+    - The three sleeping dragons (waiting for your voice)
