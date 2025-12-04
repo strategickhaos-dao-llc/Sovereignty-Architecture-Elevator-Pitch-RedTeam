@@ -1,0 +1,2 @@
+# SubconsciousLab Dependencies
+numpy>=1.24.0
