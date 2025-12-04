@@ -1,0 +1,109 @@
+# Treasury OS - Sovereign Accounts Registry
+# Single source of truth for financial ecosystem
+# Part of Strategickhaos DAO LLC / ValorYield Engine
+
+version: "1.0"
+last_updated: "2024-12-04"
+
+# Legal entities that own the accounts
+entities:
+  strategickhaos_dao_llc:
+    ein: "39-2900295"
+    type: "Wyoming DAO LLC (pass-through entity)"
+    domicile_state: "Wyoming"
+    purpose: "Private investigation, cybersecurity, and security consulting"
+    
+  valoryield_engine_nonprofit:
+    ein: "39-2923503"
+    type: "501(c)(3) Public Benefit Corporation"
+    purpose: "Democratize wealth-building technology and food security"
+
+# SwarmGate 7% Protocol - automatic allocation from income
+swarmgate_protocol:
+  allocation_percent: 0.07
+  trigger: "paycheck_deposit"
+  destinations:
+    - platform: "moneylion"
+      percent: 0.50
+      purpose: "Investment/wealth building"
+    - platform: "nonprofit_food"
+      percent: 0.50
+      purpose: "Food donation program"
+  automation:
+    enabled: true
+    notification_channel: "#financial"
+    approval_required: false
+
+# Financial accounts registry
+accounts:
+  moneylion:
+    platform: "MoneyLion"
+    account_id: "2143"
+    type: "investment"
+    allocation: "Aggressive Mix"
+    owner: "strategickhaos_dao_llc"
+    balance: 207.69
+    currency: "USD"
+    purpose: "Robo-advisor investment learning"
+    api_endpoint: "https://api.moneylion.com/v1"
+    last_synced: null
+    
+  kraken_pro:
+    platform: "Kraken Pro"
+    account_id: null
+    type: "crypto"
+    allocation: "BTC/ETH Mix"
+    owner: "strategickhaos_dao_llc"
+    balance: 0.00
+    currency: "USD"
+    purpose: "Crypto trading and portfolio diversification"
+    api_endpoint: "https://api.kraken.com"
+    last_synced: null
+    
+  ninjatrader:
+    platform: "NinjaTrader"
+    account_id: null
+    type: "futures_options"
+    allocation: "Futures/Options"
+    owner: "strategickhaos_dao_llc"
+    balance: 0.00
+    currency: "USD"
+    purpose: "Derivatives trading and hedging"
+    api_endpoint: "https://api.ninjatrader.com"
+    last_synced: null
+    
+  thread_bank:
+    platform: "Thread Bank"
+    account_id: null
+    type: "checking"
+    owner: "valoryield_engine_nonprofit"
+    balance: 0.00
+    currency: "USD"
+    purpose: "Nonprofit operational funds"
+    api_endpoint: "https://api.threadbank.com"
+    last_synced: null
+
+# Sovereignty metadata for AI council governance
+sovereignty:
+  ai_council:
+    members:
+      - name: "claude"
+        role: "Strategic analysis and code review"
+      - name: "gpt-4o"
+        role: "Trade decisions and rebalancing"
+      - name: "grok"
+        role: "Market sentiment and research"
+    consensus_required: 2
+    veto_power: "managing_member"
+    
+  control:
+    human_override: true
+    max_auto_trade_amount: 100.00
+    require_approval_above: 500.00
+    audit_log: true
+    
+  rebalancing:
+    drift_threshold_percent: 5.0
+    check_frequency: "daily"
+    method: "dialectical_synthesis"
+    legion_analysis: true
