@@ -1,0 +1,38 @@
+{
+  "artifact": {
+    "id": "3546",
+    "name": "genesis_delivery",
+    "version": "1.0.0",
+    "type": "sovereignty_architecture"
+  },
+  "metadata": {
+    "created_at": "2025-01-01T00:00:00Z",
+    "author": "sovereignty_architecture",
+    "description": "Genesis delivery payload for sovereign architecture integration",
+    "tags": ["genesis", "delivery", "sovereignty", "webhook"]
+  },
+  "payload": {
+    "event": "genesis_delivery",
+    "action": "create",
+    "resource": {
+      "type": "artifact",
+      "id": "3546",
+      "attributes": {
+        "name": "genesis_delivery_artifact",
+        "status": "active",
+        "priority": "high"
+      }
+    }
+  },
+  "webhook": {
+    "signature_algorithm": "sha256",
+    "content_type": "application/json",
+    "timeout_seconds": 30,
+    "retry_count": 3
+  },
+  "validation": {
+    "schema_version": "1.0",
+    "checksum_algorithm": "sha256",
+    "required_headers": ["X-Hub-Signature-256", "Content-Type"]
+  }
+}
