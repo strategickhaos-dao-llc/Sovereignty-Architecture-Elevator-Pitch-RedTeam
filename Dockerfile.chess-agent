@@ -1,0 +1,59 @@
+# Dockerfile.chess-agent
+# Chess Collider Agent Container
+# Individual agent with full terminal access
+
+FROM kalilinux/kali-rolling
+
+# Update and install essential tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    vim \
+    tmux \
+    htop \
+    net-tools \
+    iputils-ping \
+    python3 \
+    python3-pip \
+    nodejs \
+    npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /agent
+
+# Install Node.js dependencies
+COPY package*.json ./
+RUN npm ci --only=production 2>/dev/null || npm install
+
+# Copy agent code
+COPY src/chess-collider/ ./src/chess-collider/
+
+# Install tsx for TypeScript execution
+RUN npm install -g tsx
+
+# Create agent user
+RUN useradd -m -s /bin/bash agent
+
+# Create work directories
+RUN mkdir -p /agent/work /agent/logs /agent/artifacts && \
+    chown -R agent:agent /agent
+
+USER agent
+
+# Environment variables (override at runtime)
+ENV LAYER_ID=1
+ENV AGENT_ROLE=pawn
+ENV COMMUNICATION_FREQ_HZ=440
+ENV OLLAMA_URL=http://ollama:11434
+
+# Expose agent communication port
+EXPOSE 8100
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8100/health || exit 1
+
+# Start agent
+CMD ["tsx", "src/chess-collider/agent.ts"]

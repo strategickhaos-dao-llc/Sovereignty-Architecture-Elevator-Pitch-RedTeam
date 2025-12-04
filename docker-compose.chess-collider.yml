@@ -1,0 +1,321 @@
+# Chess Collider Docker Compose - 10-Dimensional AI Research Super-Collider
+# Strategickhaos DAO LLC - Sovereign AI Research Collective
+# Deploy: docker-compose -f docker-compose.chess-collider.yml up -d
+
+version: '3.8'
+
+networks:
+  chess_collider_network:
+    driver: bridge
+  strategickhaos_network:
+    external: true
+
+volumes:
+  ollama_data:
+  qdrant_chess_data:
+  research_artifacts:
+  model_cache:
+  stockfish_data:
+
+services:
+  # =============================================================================
+  # CORE INFRASTRUCTURE
+  # =============================================================================
+  
+  # Local LLM Server (Ollama) - Cost-optimized at $3.5K/month
+  ollama:
+    image: ollama/ollama:latest
+    container_name: chess-collider-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+      - model_cache:/models
+    ports:
+      - "11434:11434"
+    environment:
+      OLLAMA_HOST: 0.0.0.0
+      OLLAMA_MODELS: /models
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # Vector Database for Agent Embeddings
+  qdrant-chess:
+    image: qdrant/qdrant:latest
+    container_name: chess-collider-qdrant
+    volumes:
+      - qdrant_chess_data:/qdrant/storage
+    ports:
+      - "6334:6333"
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Stockfish Chess Engine (Referee)
+  stockfish:
+    image: niklasf/stockfish:latest
+    container_name: chess-collider-stockfish
+    volumes:
+      - stockfish_data:/data
+    networks:
+      - chess_collider_network
+    healthcheck:
+      test: ["CMD", "stockfish", "quit"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # =============================================================================
+  # CHESS COLLIDER ORCHESTRATOR
+  # =============================================================================
+  
+  orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile.chess-collider
+    container_name: chess-collider-orchestrator
+    environment:
+      NODE_ENV: production
+      OLLAMA_URL: http://ollama:11434
+      QDRANT_URL: http://qdrant-chess:6333
+      STOCKFISH_HOST: stockfish
+      GROK_API_KEY: ${GROK_API_KEY:-}
+      DISCOVERY_CONFIG_PATH: /app/discovery.yml
+      CHESS_CONFIG_PATH: /app/chess_collider_config.yaml
+      ORCHESTRATOR_PORT: 8090
+      # Layer configuration
+      ACTIVE_LAYERS: ${ACTIVE_LAYERS:-1}
+      AGENTS_PER_LAYER: 64
+    volumes:
+      - ./discovery.yml:/app/discovery.yml:ro
+      - ./chess_collider_config.yaml:/app/chess_collider_config.yaml:ro
+      - ./src/chess-collider:/app/src/chess-collider:ro
+      - research_artifacts:/app/artifacts
+    ports:
+      - "8090:8090"
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    depends_on:
+      ollama:
+        condition: service_healthy
+      qdrant-chess:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # =============================================================================
+  # LAYER AGENTS (Scale based on ACTIVE_LAYERS)
+  # =============================================================================
+  
+  # Layer 1: Empirical Data Layer (64 agents)
+  layer-1-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile.chess-agent
+    container_name: chess-layer-1-coordinator
+    environment:
+      LAYER_ID: 1
+      LAYER_NAME: empirical_data
+      AGENT_ROLE: king
+      COMMUNICATION_FREQ_HZ: 440
+      OLLAMA_URL: http://ollama:11434
+      ORCHESTRATOR_URL: http://orchestrator:8090
+      QDRANT_URL: http://qdrant-chess:6333
+    networks:
+      - chess_collider_network
+    depends_on:
+      - orchestrator
+    restart: unless-stopped
+
+  layer-1-workers:
+    build:
+      context: .
+      dockerfile: Dockerfile.chess-agent
+    container_name: chess-layer-1-workers
+    environment:
+      LAYER_ID: 1
+      LAYER_NAME: empirical_data
+      AGENT_ROLE: pawn
+      WORKER_COUNT: 56
+      COMMUNICATION_FREQ_HZ: 440
+      OLLAMA_URL: http://ollama:11434
+      ORCHESTRATOR_URL: http://orchestrator:8090
+      QDRANT_URL: http://qdrant-chess:6333
+      # Data sources for scraping
+      GOOGLE_SCHOLAR_ENABLED: "true"
+      ARXIV_ENABLED: "true"
+      PUBMED_ENABLED: "true"
+    networks:
+      - chess_collider_network
+    depends_on:
+      - layer-1-coordinator
+    deploy:
+      replicas: 8  # 8 containers × ~7 workers each = 56 pawns
+    restart: unless-stopped
+
+  # Layer 2: Pattern Recognition Layer
+  layer-2-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile.chess-agent
+    container_name: chess-layer-2-coordinator
+    environment:
+      LAYER_ID: 2
+      LAYER_NAME: pattern_recognition
+      AGENT_ROLE: king
+      COMMUNICATION_FREQ_HZ: 493.88
+      OLLAMA_URL: http://ollama:11434
+      ORCHESTRATOR_URL: http://orchestrator:8090
+    networks:
+      - chess_collider_network
+    depends_on:
+      - orchestrator
+    profiles: ["full", "layer-2"]
+    restart: unless-stopped
+
+  # Layer 7: Peer Review Layer (Critical for adversarial games)
+  layer-7-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile.chess-agent
+    container_name: chess-layer-7-coordinator
+    environment:
+      LAYER_ID: 7
+      LAYER_NAME: peer_review
+      AGENT_ROLE: king
+      COMMUNICATION_FREQ_HZ: 880.00
+      OLLAMA_URL: http://ollama:11434
+      ORCHESTRATOR_URL: http://orchestrator:8090
+      STOCKFISH_HOST: stockfish
+    networks:
+      - chess_collider_network
+    depends_on:
+      - orchestrator
+      - stockfish
+    profiles: ["full", "layer-7"]
+    restart: unless-stopped
+
+  # Layer 10: Meta-Strategy Layer (Apex)
+  layer-10-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile.chess-agent
+    container_name: chess-layer-10-coordinator
+    environment:
+      LAYER_ID: 10
+      LAYER_NAME: meta_strategy
+      AGENT_ROLE: king
+      COMMUNICATION_FREQ_HZ: 1318.51
+      OLLAMA_URL: http://ollama:11434
+      ORCHESTRATOR_URL: http://orchestrator:8090
+    networks:
+      - chess_collider_network
+    depends_on:
+      - orchestrator
+    profiles: ["full", "layer-10"]
+    restart: unless-stopped
+
+  # =============================================================================
+  # BIBLIOGRAPHY & RESEARCH SERVICES
+  # =============================================================================
+  
+  bibliography-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.bibliography
+    container_name: chess-collider-bibliography
+    environment:
+      GOOGLE_SCHOLAR_RATE_LIMIT: 60
+      ARXIV_API_ENDPOINT: https://export.arxiv.org/api/query
+      SEMANTIC_SCHOLAR_API_KEY: ${SEMANTIC_SCHOLAR_API_KEY:-}
+      PUBMED_API_KEY: ${PUBMED_API_KEY:-}
+      QDRANT_URL: http://qdrant-chess:6333
+    volumes:
+      - research_artifacts:/app/artifacts
+    ports:
+      - "8091:8091"
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    depends_on:
+      qdrant-chess:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # =============================================================================
+  # MONITORING & OBSERVABILITY
+  # =============================================================================
+  
+  chess-prometheus:
+    image: prom/prometheus:latest
+    container_name: chess-collider-prometheus
+    volumes:
+      - ./monitoring/chess-prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9091:9090"
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  chess-grafana:
+    image: grafana/grafana:latest
+    container_name: chess-collider-grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    volumes:
+      - ./monitoring/grafana/chess-dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3001:3000"
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    depends_on:
+      - chess-prometheus
+    restart: unless-stopped
+
+  # =============================================================================
+  # DISCORD INTEGRATION
+  # =============================================================================
+  
+  chess-discord-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: chess-collider-discord
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      ORCHESTRATOR_URL: http://orchestrator:8090
+      CHESS_CHANNEL_ID: ${CHESS_CHANNEL_ID:-}
+      RESEARCH_CHANNEL_ID: ${RESEARCH_CHANNEL_ID:-}
+    networks:
+      - chess_collider_network
+      - strategickhaos_network
+    depends_on:
+      - orchestrator
+    restart: unless-stopped

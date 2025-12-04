@@ -322,3 +322,133 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Chess Collider - 10-Dimensional AI Research Super-Collider
+chess_collider:
+  enabled: true
+  description: "640 LLM agents (10 boards × 64 squares) for adversarial research synthesis"
+  
+  # Architecture
+  architecture:
+    total_layers: 10
+    agents_per_layer: 64
+    total_agents: 640
+    communication_protocol: "circle_of_fifths"
+    base_frequency_hz: 440
+    
+  # Layer definitions
+  layers:
+    - id: 1
+      name: "empirical_data"
+      frequency_hz: 440.00
+      role: "Data collection and scraping"
+    - id: 2
+      name: "pattern_recognition"
+      frequency_hz: 493.88
+      role: "Pattern detection and analysis"
+    - id: 3
+      name: "semantic_understanding"
+      frequency_hz: 554.37
+      role: "NLP and semantic analysis"
+    - id: 4
+      name: "logical_reasoning"
+      frequency_hz: 622.25
+      role: "Formal logic and theorem proving"
+    - id: 5
+      name: "hypothesis_generation"
+      frequency_hz: 698.46
+      role: "Novel hypothesis creation"
+    - id: 6
+      name: "experimental_design"
+      frequency_hz: 783.99
+      role: "Research methodology design"
+    - id: 7
+      name: "peer_review"
+      frequency_hz: 880.00
+      role: "Adversarial validation"
+    - id: 8
+      name: "synthesis"
+      frequency_hz: 987.77
+      role: "Knowledge integration"
+    - id: 9
+      name: "publication"
+      frequency_hz: 1108.73
+      role: "Academic writing"
+    - id: 10
+      name: "meta_strategy"
+      frequency_hz: 1318.51
+      role: "Strategic research direction"
+      
+  # Cost models
+  cost_models:
+    mvp:
+      layers: 1
+      agents: 64
+      monthly_cost_usd: 350
+    standard:
+      layers: 3
+      agents: 192
+      monthly_cost_usd: 1050
+    full_local:
+      layers: 10
+      agents: 640
+      monthly_cost_usd: 3500
+      provider: "ollama"
+    full_cloud:
+      layers: 10
+      agents: 640
+      monthly_cost_usd_min: 22000
+      monthly_cost_usd_max: 27000
+      provider: "grok"
+      
+  # Services
+  services:
+    orchestrator:
+      port: 8090
+      endpoint: "http://localhost:8090"
+    bibliography:
+      port: 8091
+      endpoint: "http://localhost:8091"
+    ollama:
+      port: 11434
+      endpoint: "http://localhost:11434"
+    qdrant:
+      port: 6334
+      endpoint: "http://localhost:6334"
+    grafana:
+      port: 3001
+      endpoint: "http://localhost:3001"
+    prometheus:
+      port: 9091
+      endpoint: "http://localhost:9091"
+      
+  # Output configuration
+  outputs:
+    systematic_reviews:
+      target_hours: 24
+      format: "markdown"
+      auto_publish: true
+    research_papers:
+      target_hours: 48
+      format: "latex"
+      auto_publish: false
+    patent_applications:
+      target_hours: 72
+      format: "uspto_xml"
+      auto_publish: false
+      
+  # Discord integration
+  discord:
+    enabled: true
+    channels:
+      status: "#chess-collider-status"
+      findings: "#research-findings"
+      games: "#game-updates"
+      papers: "#paper-reviews"
+    notify_events:
+      - "research_task_created"
+      - "finding_generated"
+      - "game_started"
+      - "game_completed"
+      - "synthesis_ready"
+      - "paper_draft_ready"

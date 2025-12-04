@@ -1,0 +1,60 @@
+# Dockerfile.chess-collider
+# Chess Collider Orchestrator Container
+# Multi-dimensional AI Research Super-Collider
+
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy TypeScript configuration and source
+COPY tsconfig.json ./
+COPY src/ ./src/
+
+# Build TypeScript
+RUN npm run build || echo "Build step - source files will be used directly"
+
+# Production stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apk add --no-cache curl
+
+# Copy built application
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/tsconfig.json ./
+
+# Install tsx for TypeScript execution
+RUN npm install -g tsx
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S collider -u 1001
+
+# Create directories
+RUN mkdir -p /app/artifacts /app/logs && \
+    chown -R collider:nodejs /app
+
+USER collider
+
+# Expose orchestrator port
+EXPOSE 8090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8090/health || exit 1
+
+# Start the orchestrator
+CMD ["tsx", "src/chess-collider/orchestrator.ts"]
