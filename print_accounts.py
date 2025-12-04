@@ -61,10 +61,12 @@ def main():
     # Display accounts with owner validation
     print("Accounts:")
     for acct in config.get("accounts", []):
-        owner = acct['owner']
+        owner = acct.get('owner', 'unknown')
+        name = acct.get('name', 'Unknown Account')
+        platform = acct.get('platform', 'Unknown')
         owner_valid = owner in valid_owners
         validity_marker = "" if owner_valid else " [INVALID OWNER]"
-        print(f"  - {acct['name']} [{acct['platform']}] owned by {owner}{validity_marker}")
+        print(f"  - {name} [{platform}] owned by {owner}{validity_marker}")
         if "notes" in acct:
             print(f"    Notes: {acct['notes']}")
 

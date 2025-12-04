@@ -32,7 +32,9 @@ except ImportError:
 
 
 # Mock data for platform balances (simulating API responses)
-# In production, these would be replaced by actual API calls
+# NOTE: These are example values only for demonstration purposes.
+# In production, these would be replaced by actual API calls.
+# Real balances will differ from these mock values.
 MOCK_BALANCES = {
     "MoneyLion": {
         "mlion-2143": Decimal("207.69"),
