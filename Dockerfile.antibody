@@ -1,0 +1,43 @@
+# SKOS Antibody System Dockerfile
+# Sovereign self-healing infrastructure agent
+
+FROM docker.io/library/node:20-alpine
+
+# Install system dependencies
+RUN apk add --no-cache \
+    curl \
+    python3 \
+    py3-pip \
+    bash \
+    procps \
+    iproute2 \
+    iputils
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY src/ ./src/
+COPY tsconfig.json ./
+
+# Build TypeScript
+RUN npm run build || true
+
+# Create data directories
+RUN mkdir -p /app/data /app/logs
+
+# Expose ports
+EXPOSE 8090 9100
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8090/health || exit 1
+
+# Default command
+CMD ["npx", "tsx", "src/antibody/main.ts"]
