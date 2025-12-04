@@ -31,10 +31,43 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/chronicle`
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+
+### 📜 Sovereign Architect's Chronicle
+A **neural logbook** system for tracking architectural journal entries, transforming brain dumps into structured design artifacts.
+
+- **Timeline View**: Entries grouped by category (chapters)
+- **Roadmap View**: Development phases from ideation to deployment
+- **Discord Integration**: `/chronicle timeline`, `/chronicle roadmap`, `/chronicle add`
+- **REST API**: Full CRUD operations at `/api/chronicle/*`
+- **Grafana Dashboard**: Visual representation of the architecture journey
+
+**Categories (Chapters):**
+| Category | Emoji | Description |
+|----------|-------|-------------|
+| Observability | 📊 | Infrastructure status, monitoring, metrics |
+| Governance | ⚖️ | Priority Council, PR triage, voting |
+| Research | 🧬 | Self-Evolving AI Refinery, agent improvements |
+| Philosophy | 🔮 | Singularity Engine, self-improvement |
+| Visualization | 🪞 | Mirror Lab, real-time dashboards |
+| Frontier | ⚛️ | Quantum Mirror Lab, speculative architecture |
+| Infrastructure | 🏗️ | Deployments, scaling, core systems |
+| Integration | 🔗 | APIs, webhooks, cross-system connections |
+| Security | 🔐 | RBAC, secrets management, audit logging |
+| Documentation | 📚 | Docs, runbooks, knowledge base |
+
+```bash
+# View the timeline
+curl http://localhost:3001/api/chronicle/timeline
+
+# Add a new entry
+curl -X POST http://localhost:3001/api/chronicle/entries \
+  -H "Content-Type: application/json" \
+  -d '{"title":"New System","category":"research","description":"Description here","author":"Dom010101"}'
+```
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
