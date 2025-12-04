@@ -1,0 +1,40 @@
+# =============================================================================
+# Matrix Synapse Homeserver Service
+# Sovereign Swarm - Federated communications (Fixed-1 primary, Command-0 fallback)
+# =============================================================================
+
+[Unit]
+Description=Matrix Synapse Homeserver (Sovereign Swarm)
+Documentation=https://element-hq.github.io/synapse/
+After=network-online.target wg-quick@wg0.service postgresql.service
+Wants=network-online.target
+Requires=wg-quick@wg0.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+ExecStartPre=/usr/local/bin/synapse_homeserver --config-path /etc/matrix-synapse/homeserver.yaml --generate-missing-configs
+ExecStart=/usr/local/bin/synapse_homeserver --config-path /etc/matrix-synapse/homeserver.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+
+# Environment
+Environment="SYNAPSE_NO_TLS=1"
+Environment="BIND_HOST=10.13.33.2"
+
+# Security hardening
+User=matrix-synapse
+Group=matrix-synapse
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/matrix-synapse /var/log/matrix-synapse /etc/matrix-synapse
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=2G
+
+[Install]
+WantedBy=multi-user.target
