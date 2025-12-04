@@ -1,0 +1,13 @@
+[package]
+name = "swarmgate"
+version = "1.0.0"
+edition = "2021"
+description = "SwarmGate v1.0 — Sovereign Mesh Orchestrator with 4-of-8 quorum, ed25519 identity, orb velocity leadership"
+authors = ["Strategickhaos DAO"]
+license = "MIT"
+
+[dependencies]
+ed25519-dalek = "2.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.6", features = ["v4"] }
