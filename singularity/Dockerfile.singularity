@@ -1,0 +1,79 @@
+# Singularity Engine - Self-Improving AI Refinery for Medical Research
+# Dockerfile for the autonomous medical research system
+
+FROM python:3.11-slim AS base
+
+ARG GPU_SUPPORT=false
+
+LABEL maintainer="Strategickhaos Swarm Intelligence <dev@strategickhaos.com>"
+LABEL org.opencontainers.image.source="https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture"
+LABEL org.opencontainers.image.description="Singularity Engine - Self-Improving AI for Medical Research"
+LABEL org.opencontainers.image.licenses="MIT"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    jq \
+    wget \
+    unzip \
+    libpq-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r singularity && useradd -r -g singularity singularity
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY singularity/requirements.singularity.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.singularity.txt
+
+# Install GPU packages if requested
+RUN if [ "$GPU_SUPPORT" = "true" ]; then \
+    pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
+    pip install --no-cache-dir flash-attn --no-build-isolation; \
+    fi
+
+# Copy application code
+COPY singularity/ ./singularity/
+
+# Create required directories
+RUN mkdir -p /var/singularity/{models,papers,visualizations,obsidian,checkpoints} && \
+    chown -R singularity:singularity /var/singularity /app
+
+# Set up environment
+ENV PYTHONPATH=/app
+ENV SINGULARITY_ENV=production
+ENV LOG_LEVEL=INFO
+ENV PYTHONUNBUFFERED=1
+
+# Health check script
+COPY --chmod=755 <<EOF /app/healthcheck.sh
+#!/bin/bash
+set -e
+curl -f http://localhost:8090/health || exit 1
+EOF
+
+# Switch to non-root user
+USER singularity
+
+# Expose ports
+# 8090 - Main API
+# 8091 - Visualization server
+# 8092 - Training monitor
+EXPOSE 8090 8091 8092
+
+# Default command
+CMD ["python", "-m", "singularity.api"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD /app/healthcheck.sh

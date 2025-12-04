@@ -1,0 +1,100 @@
+# Singularity Engine - Self-Improving AI Refinery for Medical Research
+# Core dependencies for the autonomous medical research system
+
+# FastAPI and ASGI server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.2
+pydantic-settings==2.1.0
+
+# Database and storage
+asyncpg==0.29.0
+sqlalchemy[asyncio]==2.0.23
+alembic==1.13.1
+redis==5.0.1
+
+# Vector database for semantic search
+qdrant-client==1.7.3
+sentence-transformers==2.2.2
+faiss-cpu==1.7.4
+
+# AI/ML core libraries
+openai==1.6.1
+anthropic==0.8.1
+tiktoken==0.5.2
+numpy==1.24.4
+pandas==2.1.4
+scipy==1.11.4
+
+# LoRA fine-tuning and model training
+peft==0.7.1
+transformers==4.36.2
+datasets==2.15.0
+accelerate==0.25.0
+bitsandbytes==0.41.3
+trl==0.7.4
+safetensors==0.4.1
+
+# Genetic algorithms and optimization
+deap==1.4.1
+pymoo==0.6.1.1
+
+# Research paper processing
+biopython==1.82
+pubchempy==1.0.4
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.4
+
+# Obsidian vault integration
+watchdog==3.0.0
+markdown==3.5.2
+python-frontmatter==1.1.0
+networkx==3.2.1
+
+# Visualization exports
+trimesh==4.0.5
+pygltflib==1.16.1
+pillow==10.1.0
+
+# Async and task management
+celery[redis]==5.3.4
+aiofiles==23.2.1
+tenacity==8.2.3
+
+# Structured logging
+structlog==23.2.0
+
+# HTTP clients
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Discord integration
+discord.py==2.3.2
+
+# GitHub integration
+PyGithub==2.1.1
+gitpython==3.1.40
+
+# Monitoring and observability
+prometheus-client==0.19.0
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+
+# Configuration
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Security
+cryptography==41.0.8
+PyJWT==2.8.0
+
+# Development and testing
+pytest==7.4.4
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+
+# PyTorch - CPU version by default
+# For GPU support, install separately:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+torch==2.1.2
