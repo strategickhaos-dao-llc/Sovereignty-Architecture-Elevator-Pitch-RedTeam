@@ -71,6 +71,25 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🔬 Quantum DNA Splicer (`quantum-splicer`)
+- **Synthesis Engine**: Ingests Unity blueprints, Unreal Nanite graphs, NinjaTrader strategies, and Grokanator YAMLs
+- **Particle Accelerator**: Collides code blocks at relativistic velocities inside a simulated event horizon
+- **Lifeform Generation**: Produces hybrid sovereign lifeforms with trading capabilities
+- **Auto-Deploy**: Outputs to Discord Activities, NinjaTrader, and itch.io
+
+```bash
+# Activate the Quantum DNA Splicer
+./quantum-dna-splicer-bootstrap.sh start
+
+# View splicer status
+./quantum-dna-splicer-bootstrap.sh status
+
+# Display department topology
+./quantum-dna-splicer-bootstrap.sh topology
+```
+
+See [QUANTUM_DNA_SPLICER.md](QUANTUM_DNA_SPLICER.md) for detailed documentation on the Legions of Minds Council™ Particle Accelerator.
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
