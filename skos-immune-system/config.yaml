@@ -1,0 +1,131 @@
+# SKOS Immune System Configuration
+# Sovereign Khaos Operating System v0.1.0
+#
+# This file configures the healing policies and thresholds
+# for the autonomous immune system.
+
+# General settings
+general:
+  version: "0.1.0"
+  log_level: INFO
+  audit_retention_days: 30
+
+# NATS configuration
+nats:
+  url: nats://localhost:4222
+  audit_stream: SKOS_AUDIT
+  max_reconnects: 10
+  reconnect_wait_seconds: 2
+
+# Node configuration
+nodes:
+  nova:
+    role: primary
+    services:
+      - qwen
+      - synthesis-core
+      - docker-swarm
+  lyra:
+    role: secondary
+    services:
+      - backup
+      - monitoring
+  athena:
+    role: storage
+    services:
+      - minio
+      - postgres
+
+# Agent configuration
+agents:
+  thermal_sentinel:
+    monitor_interval_seconds: 5
+    heartbeat_interval_seconds: 10
+    alert_cooldown_seconds: 60
+    
+  storage_watcher:
+    monitor_interval_seconds: 60
+    heartbeat_interval_seconds: 30
+    
+  mesh_healer:
+    monitor_interval_seconds: 10
+    heartbeat_interval_seconds: 15
+    
+  loop_breaker:
+    monitor_interval_seconds: 1
+    heartbeat_interval_seconds: 5
+
+# Thermal healing policy
+thermal:
+  thresholds:
+    warning: 75
+    critical: 85
+    emergency: 95
+  actions:
+    warning:
+      - throttle_10
+    critical:
+      - throttle_50
+      - redistribute
+    emergency:
+      - shutdown_non_essential
+      - failover
+  cooldown_seconds: 60
+
+# Storage healing policy
+storage:
+  thresholds:
+    warning: 80
+    critical: 90
+    emergency: 95
+  actions:
+    warning:
+      - cleanup_temp
+    critical:
+      - cleanup_logs
+      - archive_old
+    emergency:
+      - emergency_cleanup
+      - alert_human
+  paths_to_monitor:
+    - /var/log
+    - /var/lib/docker
+    - /data
+
+# Mesh healing policy
+mesh:
+  reconnect_attempts: 3
+  reconnect_delay_seconds: 5
+  actions:
+    tunnel_down:
+      - restart_wireguard
+      - regenerate_config
+    peer_unreachable:
+      - ping_peer
+      - failover_route
+
+# Loop healing policy (for synthesis chains)
+loop:
+  max_chain_depth: 10
+  max_iterations: 100
+  actions:
+    depth_exceeded:
+      - circuit_break
+    iterations_exceeded:
+      - reset_chain
+
+# Circuit breaker configuration
+circuit_breaker:
+  max_failures: 5
+  reset_timeout_seconds: 300
+
+# Failover configuration
+failover:
+  hot_spare_nodes:
+    - lyra
+    - athena
+  failover_delay_seconds: 10
+  services_priority:
+    - qwen
+    - synthesis-core
+    - docker-swarm
