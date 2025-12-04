@@ -1,0 +1,158 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sovereignty-comms-config
+  namespace: ops
+  labels:
+    app: sovereignty-communications
+    component: alerting
+data:
+  alert-endpoints.yml: |
+    # Sovereignty Communications Architecture - Alert Endpoints Configuration
+    # Multi-layer redundancy for critical alerts
+    
+    version: "1.0"
+    
+    endpoints:
+      - type: sms
+        provider: verizon
+        priority: 1
+        enabled: true
+        config:
+          api_endpoint: "${VERIZON_API_ENDPOINT}"
+          auth_method: "oauth2"
+          token_secret_ref: "vault://kv/comms/verizon_token"
+          retry_count: 3
+          timeout_ms: 5000
+          
+      - type: satellite 
+        provider: starlink
+        priority: 2
+        enabled: true
+        config:
+          fallback_only: true
+          trigger_on: "cellular_failure"
+          device_binding: true
+          geographic_coverage: "global"
+          
+      - type: mesh
+        provider: lora
+        priority: 3
+        enabled: true
+        config:
+          port: "/dev/ttyUSB0"
+          broadcast: true
+          region: "US"
+          modem_preset: "LONG_FAST"
+          encryption: "AES256"
+          psk_secret_ref: "vault://kv/comms/lora_psk"
+          
+      - type: vpn
+        provider: tailscale
+        priority: 4
+        enabled: true
+        config:
+          network: "sovereignty-mesh"
+          auth_key_secret_ref: "vault://kv/comms/tailscale_key"
+          exit_node: false
+          
+    failover_policy:
+      strategy: cascade
+      retry_count: 3
+      retry_delay_ms: 5000
+      channels:
+        - name: primary
+          types: [sms]
+          health_check_interval_s: 30
+        - name: secondary
+          types: [satellite, mesh]
+          health_check_interval_s: 60
+        - name: tertiary
+          types: [vpn]
+          health_check_interval_s: 120
+          
+    health_checks:
+      enabled: true
+      interval_seconds: 60
+      endpoints:
+        sms: "/health/sms"
+        satellite: "/health/satellite"
+        lora: "/health/lora"
+        vpn: "/health/vpn"
+        
+    alerting:
+      severity_routing:
+        critical:
+          channels: [sms, satellite, mesh]
+          escalation_delay_s: 60
+        warning:
+          channels: [sms, vpn]
+          escalation_delay_s: 300
+        info:
+          channels: [vpn]
+          escalation_delay_s: 0
+          
+    security:
+      encryption:
+        at_rest: true
+        in_transit: true
+      authentication:
+        sms: "oauth2"
+        satellite: "sim_binding"
+        mesh: "psk"
+        vpn: "identity_cert"
+      audit_logging: true
+      
+  lora-mesh-config.yml: |
+    # LoRa Mesh Configuration for Meshtastic
+    
+    device:
+      port: "/dev/ttyUSB0"
+      baud_rate: 115200
+      
+    network:
+      region: "US"
+      modem_preset: "LONG_FAST"
+      hop_limit: 3
+      
+    channels:
+      - name: "alerts"
+        psk: "${LORA_ALERTS_PSK}"
+        uplink_enabled: true
+        downlink_enabled: true
+        
+    nodes:
+      - id: "node-primary"
+        role: "router"
+        position:
+          latitude: 0.0
+          longitude: 0.0
+          altitude: 0
+          
+    telemetry:
+      device_metrics_interval: 900
+      environment_metrics_interval: 900
+      
+  tailscale-config.yml: |
+    # Tailscale Mesh VPN Configuration
+    
+    network:
+      name: "sovereignty-mesh"
+      domain: "tailnet.strategickhaos.com"
+      
+    acls:
+      - action: accept
+        src: ["tag:ops"]
+        dst: ["tag:alerts:*"]
+        
+    node_attributes:
+      - target: ["tag:ops"]
+        attr: ["funnel:true"]
+        
+    exit_nodes:
+      enabled: false
+      
+    dns:
+      magic_dns: true
+      search_domains:
+        - "strategickhaos.internal"
