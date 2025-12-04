@@ -1,0 +1,103 @@
+# Docker Compose configuration for AI Council Orchestrator
+# Can be integrated with existing docker-compose.yml or run standalone
+
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis-lab
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - council-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  council-orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile.council
+    container_name: council-orchestrator
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      # LLM Provider API Keys (configure in .env file)
+      - XAI_API_KEY=${XAI_API_KEY}
+      - XAI_KEY=${XAI_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ANTHROPIC_KEY=${ANTHROPIC_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_KEY=${OPENAI_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_KEY=${GOOGLE_KEY}
+      # Optional: Discord/Slack webhooks for notifications
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL:-}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+    volumes:
+      # Persist council state and ledger
+      - council_data:/opt/swarm
+      # Optional: Mount custom config
+      # - ./swarm/council_manifest.yaml:/opt/swarm/council_manifest.yaml:ro
+    networks:
+      - council-network
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo 'Council Orchestrator Starting...' &&
+        echo 'Waiting for decisions to process...' &&
+        tail -f /dev/null
+      "
+
+  # Optional: Prometheus for metrics (requires monitoring/prometheus.yml)
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: council-prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - prometheus_data:/prometheus
+  #   networks:
+  #     - council-network
+  #   restart: unless-stopped
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #     - '--storage.tsdb.path=/prometheus'
+
+  # Optional: Grafana for dashboards (requires prometheus service above)
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: council-grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   networks:
+  #     - council-network
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - prometheus
+
+networks:
+  council-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+  council_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local

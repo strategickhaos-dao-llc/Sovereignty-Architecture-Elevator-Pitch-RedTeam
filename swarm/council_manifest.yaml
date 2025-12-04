@@ -1,0 +1,220 @@
+# Council Orchestrator Manifest
+# Declassified configuration for autonomous AI council with multi-agent voting
+# Based on Tier-3 autonomy stack patterns from production environments
+
+version: "3.0"
+last_modified: "2025-11-21T17:17:00Z"
+owner_gpg_fingerprint: "placeholder-for-real-fingerprint"
+
+council:
+  name: "Sovereignty Council"
+  max_rounds_per_decision: 5
+  consensus_threshold: 0.75
+  quorum: 3
+  
+  # Council members with different roles and LLM providers
+  members:
+    - id: "strategist"
+      role: "Strategic Planning Lead - Evaluates long-term implications and strategic alignment"
+      provider: "xai"
+      model: "grok-2-latest"
+      temperature: 0.7
+      veto_power: true
+      vote_weight: 2.0
+      
+    - id: "security"
+      role: "Security & Risk Analysis - Identifies vulnerabilities and threat vectors"
+      provider: "anthropic"
+      model: "claude-3-5-sonnet-20241022"
+      temperature: 0.3
+      veto_power: true
+      vote_weight: 2.0
+      
+    - id: "ethics"
+      role: "Ethics & Alignment Officer - Ensures constitutional compliance and ethical considerations"
+      provider: "openai"
+      model: "gpt-4o"
+      temperature: 0.5
+      veto_power: true
+      vote_weight: 1.5
+      
+    - id: "executor"
+      role: "Execution Specialist - Evaluates technical feasibility and implementation details"
+      provider: "google"
+      model: "gemini-2.0-flash-exp"
+      temperature: 0.6
+      veto_power: false
+      vote_weight: 1.0
+      
+    - id: "analyst"
+      role: "Data & Impact Analyst - Assesses data requirements and impact metrics"
+      provider: "ollama"
+      model: "qwen2.5:72b"
+      temperature: 0.4
+      veto_power: false
+      vote_weight: 1.0
+
+  # Members mapped by ID for quick lookup
+  members_map:
+    strategist:
+      veto_power: true
+      vote_weight: 2.0
+    security:
+      veto_power: true
+      vote_weight: 2.0
+    ethics:
+      veto_power: true
+      vote_weight: 1.5
+    executor:
+      veto_power: false
+      vote_weight: 1.0
+    analyst:
+      veto_power: false
+      vote_weight: 1.0
+
+voting:
+  method: "ranked_choice_with_veto"
+  
+  # Veto cascade rules
+  veto_cascade:
+    enabled: true
+    requires_unanimous_override: true
+    escalation_path:
+      - "security"
+      - "ethics"
+      - "strategist"
+      - "owner_signature"
+  
+  # Ranked choice voting configuration
+  ranked_choice:
+    enabled: true
+    instant_runoff: true
+    transferable_votes: true
+    
+  decision_types:
+    - type: "routine"
+      required_consensus: 0.6
+      veto_allowed: false
+      max_rounds: 3
+      
+    - type: "significant"
+      required_consensus: 0.75
+      veto_allowed: true
+      max_rounds: 5
+      
+    - type: "constitutional"
+      required_consensus: 0.9
+      veto_allowed: true
+      max_rounds: 7
+      requires_owner_signature: true
+
+# Execution permissions and allowed actions
+execution:
+  allowed_actions:
+    - "http_request"
+    - "file_write"
+    - "file_read"
+    - "docker_control"
+    - "kubernetes_query"
+    - "database_read"
+    - "metrics_publish"
+    - "notification_send"
+    
+  restricted_actions:
+    - action: "database_write"
+      requires_veto_free_unanimous: true
+      
+    - action: "infrastructure_change"
+      requires_veto_free_unanimous: true
+      requires_owner_signature: true
+      
+    - action: "self_modification"
+      requires_veto_free_unanimous: true
+      requires_owner_signature: true
+      immutable_ledger_entry: true
+
+  rate_limits:
+    http_request: 100
+    file_write: 50
+    docker_control: 20
+    database_write: 10
+
+# Persistence configuration
+persistence:
+  redis:
+    host: "redis-lab"
+    port: 6379
+    db: 0
+    key_prefix: "council:"
+    
+  sqlite:
+    path: "/opt/swarm/council_state.db"
+    
+  ledger:
+    type: "immutable_append_only"
+    hash_algorithm: "sha3_256"
+    chain_previous_hash: true
+    backup_interval_hours: 24
+
+# Self-modification rules
+self_modification:
+  enabled: true
+  
+  amendment_process:
+    proposal_threshold: 0.8
+    requires_owner_signature: true
+    cool_down_period_hours: 168  # 1 week
+    
+  protected_sections:
+    - "voting.veto_cascade"
+    - "self_modification.requires_owner_signature"
+    - "execution.restricted_actions"
+    
+  amendable_sections:
+    - "council.members"
+    - "execution.allowed_actions"
+    - "execution.rate_limits"
+    - "council.max_rounds_per_decision"
+    - "voting.decision_types"
+
+# Constitutional constraints (inherited from ai_constitution.yaml)
+constitutional_constraints:
+  fundamental_principles:
+    - "human_autonomy"
+    - "truthfulness"
+    - "harm_prevention"
+    - "specification_fidelity"
+    
+  enforcement:
+    pre_execution_check: true
+    post_decision_audit: true
+    constitutional_violation_veto: true
+
+# Monitoring and observability
+monitoring:
+  metrics_enabled: true
+  prometheus_port: 9090
+  
+  logged_events:
+    - "vote_cast"
+    - "veto_exercised"
+    - "consensus_reached"
+    - "execution_started"
+    - "execution_completed"
+    - "amendment_proposed"
+    - "constitutional_violation"
+    
+  alert_thresholds:
+    consecutive_vetoes: 3
+    failed_consensus_rounds: 5
+    execution_failures: 10
+
+# Integration points
+integrations:
+  notification:
+    discord_webhook: "${DISCORD_WEBHOOK_URL}"
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+    
+  audit_log:
+    cloudwatch_log_group: "/sovereignty/council"
+    s3_backup_bucket: "sovereignty-council-ledger"

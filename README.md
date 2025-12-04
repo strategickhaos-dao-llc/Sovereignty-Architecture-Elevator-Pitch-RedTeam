@@ -30,6 +30,14 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🏛️ AI Council Orchestrator (`/opt/swarm/`) **NEW!**
+- **Autonomous Multi-Agent Decisions**: 5-member AI council with ranked-choice voting
+- **Immutable Ledger**: SHA3-256 chained decision tracking in SQLite
+- **Veto Cascade**: Security-critical decisions with veto power
+- **Self-Modification**: Constitutional amendments with GPG signature requirement
+- **Production-Ready**: Redis persistence, graceful degradation, real action execution
+- **📖 See [COUNCIL_ORCHESTRATOR.md](./COUNCIL_ORCHESTRATOR.md) for full documentation**
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
