@@ -1,0 +1,111 @@
+name: Test Genesis Delivery Artifact #3546
+
+on:
+  push:
+    paths:
+      - 'payloads/artifact_3546_genesis_delivery.yaml'
+      - 'payloads/artifact_3546_genesis_delivery.json'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (skip actual webhook POST)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  test-genesis-delivery:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Verify Python available
+        run: |
+          python --version
+          
+      - name: Validate payload files exist
+        run: |
+          echo "🔍 Validating artifact files..."
+          if [[ ! -f "payloads/artifact_3546_genesis_delivery.yaml" ]]; then
+            echo "❌ Missing: payloads/artifact_3546_genesis_delivery.yaml"
+            exit 1
+          fi
+          if [[ ! -f "payloads/artifact_3546_genesis_delivery.json" ]]; then
+            echo "❌ Missing: payloads/artifact_3546_genesis_delivery.json"
+            exit 1
+          fi
+          echo "✅ All artifact files present"
+          
+      - name: Generate signature
+        id: signature
+        env:
+          WEBHOOK_TEST_SECRET: ${{ secrets.WEBHOOK_TEST_SECRET }}
+        run: |
+          echo "🔐 Generating HMAC-SHA256 signature..."
+          if [[ -z "$WEBHOOK_TEST_SECRET" ]]; then
+            echo "⚠️ Warning: WEBHOOK_TEST_SECRET not set, using placeholder"
+            WEBHOOK_TEST_SECRET="placeholder_secret_for_testing"
+          fi
+          SIGNATURE=$(python tooling/generate_signature.py payloads/artifact_3546_genesis_delivery.json "$WEBHOOK_TEST_SECRET")
+          echo "signature=$SIGNATURE" >> $GITHUB_OUTPUT
+          echo "✅ Signature generated: ${SIGNATURE:0:20}..."
+          
+      - name: POST to staging webhook
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          STAGING_WEBHOOK_URL: ${{ secrets.STAGING_WEBHOOK_URL }}
+          SIGNATURE: ${{ steps.signature.outputs.signature }}
+        run: |
+          echo "🚀 Posting artifact to staging webhook..."
+          
+          if [[ -z "$STAGING_WEBHOOK_URL" ]]; then
+            echo "⚠️ STAGING_WEBHOOK_URL not configured, skipping POST"
+            echo "📋 Would have sent:"
+            echo "  URL: <not configured>"
+            echo "  Signature: $SIGNATURE"
+            echo "  Payload: $(cat payloads/artifact_3546_genesis_delivery.json | head -c 200)..."
+            exit 0
+          fi
+          
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$STAGING_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: $SIGNATURE" \
+            --data-binary @payloads/artifact_3546_genesis_delivery.json)
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "📡 Response code: $HTTP_CODE"
+          echo "📄 Response body: $BODY"
+          
+          if (( HTTP_CODE >= 200 && HTTP_CODE < 300 )); then
+            echo "✅ Genesis delivery artifact #3546 delivered successfully!"
+          else
+            echo "❌ Delivery failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
+          
+      - name: Dry run summary
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        env:
+          SIGNATURE: ${{ steps.signature.outputs.signature }}
+        run: |
+          echo "🏃 Dry run mode - no POST performed"
+          echo "📋 Curl command that would be executed:"
+          echo ""
+          echo 'curl -X POST "$STAGING_WEBHOOK_URL" \'
+          echo '  -H "Content-Type: application/json" \'
+          echo "  -H \"X-Hub-Signature-256: $SIGNATURE\" \\"
+          echo '  --data-binary @payloads/artifact_3546_genesis_delivery.json'
+          echo ""
+          echo "✅ Artifact #3546 ready for delivery"
+          echo "🏛️ Empire Eternal"
