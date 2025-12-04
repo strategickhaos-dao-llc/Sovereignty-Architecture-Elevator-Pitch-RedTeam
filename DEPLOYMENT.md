@@ -29,7 +29,8 @@ Sovereignty-Architecture-Elevator-Pitch-/
 │       └── discord-notify/
 │           └── action.yml          # 📢 Custom Discord action
 └── bootstrap/                      # 🏗️ Deployment automation
-    ├── deploy.sh                   # 🚀 One-click deployment script
+    ├── deploy.sh                   # 🚀 One-click K8s deployment script
+    ├── master-bootstrap.sh         # 🔐 Hardened mesh network bootstrap
     └── k8s/                        # ☸️ Kubernetes manifests
         ├── configmap.yaml          # 📋 Discovery configuration
         ├── secrets.yaml            # 🔐 Secret management
@@ -82,6 +83,37 @@ Sovereignty-Architecture-Elevator-Pitch-/
 - Real-time Discord notifications via event gateway
 - HMAC-verified webhook security
 - Container image security scanning
+
+### 5. **Sovereign Swarm Mesh Network**
+Deploy a hardened WireGuard + NATS mesh network across multiple nodes:
+
+```bash
+# On Command-0 (hub node, e.g., Starlink rig):
+sudo NODE_ID=command0 ./bootstrap/master-bootstrap.sh
+
+# Output will show WireGuard public key and endpoint
+# Example: WG Public Key: abc123...
+
+# On Fixed-1 (secondary node, e.g., Verizon Gateway):
+sudo NODE_ID=fixed1 \
+  C0PUB='<command0-pubkey>' \
+  C0EP='<command0-ip>:51820' \
+  ./bootstrap/master-bootstrap.sh
+
+# Test the mesh:
+wg show wg0          # View WireGuard peers
+nats sub telemetry.> # Subscribe to telemetry on one node
+nats pub telemetry.test "hello" # Publish from another
+```
+
+**Features:**
+- ✅ **PyNaCl Fix**: Explicit pip install ensures `nacl.signing` works reliably
+- ✅ **Error Handling**: Trap on ERR with automatic rollback on failure
+- ✅ **Path Validation**: Checks file existence before use
+- ✅ **Auto-Prompt**: Requests C0PUB/C0EP if not set via environment
+- ✅ **Security**: Strict umask (077), randomized PSK/JTI, audit logging
+- ✅ **Rollback**: Cleans partial installs on failure
+- ✅ **Verbose Logging**: Full audit trail to `/var/log/swarm-bootstrap.log`
 
 ## 🏛️ Architecture Highlights
 
