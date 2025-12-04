@@ -1,0 +1,153 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swarm-immune-controller
+  namespace: ops
+  labels:
+    app: swarm-immune
+    component: controller
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: swarm-immune
+      component: controller
+  template:
+    metadata:
+      labels:
+        app: swarm-immune
+        component: controller
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: swarm-immune-controller
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: controller
+          image: ghcr.io/strategickhaos-swarm-intelligence/swarm-immune-controller:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            # Vector database connection for antibody memory
+            - name: QDRANT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: swarm-immune-secrets
+                  key: QDRANT_URL
+                  optional: true
+            # Redis connection for red blood cell transport
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: swarm-immune-secrets
+                  key: REDIS_URL
+                  optional: true
+            # Controller configuration
+            - name: WATCH_NAMESPACE
+              value: ""  # Empty = watch all namespaces
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: METRICS_PORT
+              value: "9090"
+            - name: HEALTH_PORT
+              value: "8080"
+            # Leader election
+            - name: LEADER_ELECTION_ENABLED
+              value: "true"
+            - name: LEADER_ELECTION_ID
+              value: "swarm-immune-controller"
+            # Reconciliation settings
+            - name: RECONCILE_PERIOD
+              value: "30s"
+            - name: MAX_CONCURRENT_RECONCILES
+              value: "3"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: swarm-immune
+                    component: controller
+                topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: swarm-immune
+              component: controller
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swarm-immune-controller
+  namespace: ops
+  labels:
+    app: swarm-immune
+    component: controller
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+  selector:
+    app: swarm-immune
+    component: controller
