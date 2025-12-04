@@ -1,0 +1,255 @@
+# ValorYield API Kubernetes Deployment
+# Treasury OS Integration for Sovereignty Architecture
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: treasury-config
+  namespace: ops
+  labels:
+    app: valoryield-api
+    component: treasury
+data:
+  accounts.yaml: |
+    # Treasury OS Accounts Configuration
+    entities:
+      strategickhaos_dao:
+        name: "Strategickhaos DAO LLC"
+        ein: "39-2900295"
+      valoryield_engine_pbc:
+        name: "ValorYield Engine"
+        ein: "39-2923503"
+    
+    accounts:
+      primary_checking:
+        type: "checking"
+        platform: "thread_bank"
+        purpose: "Operating expenses"
+      
+      high_yield_savings:
+        type: "savings"
+        platform: "moneylion"
+        purpose: "SwarmGate 7% allocations"
+        initial_balance: 207.69
+      
+      crypto_trading:
+        type: "trading"
+        platform: "kraken"
+        purpose: "Cryptocurrency investments"
+      
+      futures_trading:
+        type: "trading"
+        platform: "ninjatrader"
+        purpose: "Futures trading"
+    
+    swarmgate:
+      allocation_percent: 0.07
+      auto_deposit: true
+      rebalance_threshold: 1000.00
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valoryield-api
+  namespace: ops
+  labels:
+    app: valoryield-api
+    component: treasury
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: valoryield-api
+  template:
+    metadata:
+      labels:
+        app: valoryield-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: valoryield-api
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: api
+          image: ghcr.io/strategickhaos-swarm-intelligence/valoryield-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: ACCOUNTS_CONFIG
+              value: /config/accounts.yaml
+            - name: PORT
+              value: "8080"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: MONEYLION_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: treasury-secrets
+                  key: moneylion-api-key
+                  optional: true
+            - name: KRAKEN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: treasury-secrets
+                  key: kraken-api-key
+                  optional: true
+            - name: KRAKEN_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: treasury-secrets
+                  key: kraken-api-secret
+                  optional: true
+            - name: NINJATRADER_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: treasury-secrets
+                  key: ninjatrader-api-token
+                  optional: true
+            - name: THREAD_BANK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: treasury-secrets
+                  key: thread-bank-api-key
+                  optional: true
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+      volumes:
+        - name: config
+          configMap:
+            name: treasury-config
+            items:
+              - key: accounts.yaml
+                path: accounts.yaml
+        - name: tmp
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: valoryield-api
+  namespace: ops
+  labels:
+    app: valoryield-api
+    component: treasury
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: valoryield-api
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: valoryield-api
+  namespace: ops
+  labels:
+    app: valoryield-api
+
+---
+# Network Policy for Treasury API
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: valoryield-api-network-policy
+  namespace: ops
+spec:
+  podSelector:
+    matchLabels:
+      app: valoryield-api
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic from Discord bot
+    - from:
+        - podSelector:
+            matchLabels:
+              app: strategickhaos-discord-ops
+              component: bot
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow traffic from event gateway
+    - from:
+        - podSelector:
+            matchLabels:
+              app: strategickhaos-discord-ops
+              component: gateway
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow Prometheus scraping
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # Allow DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+    # Allow external API calls (MoneyLion, Kraken, etc.)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
