@@ -21,12 +21,13 @@ Treasury OS is the financial backbone of the Strategickhaos Sovereignty Architec
         ├─────────────────────────────────────────┤
         │                                         │
         ▼                                         ▼
-┌─────────────────┐                    ┌─────────────────┐
-│ DAO LLC (39-29) │                    │ Nonprofit (39-29)│
-│ - MoneyLion     │                    │ - Thread Bank    │
-│ - Kraken Pro    │                    │ - Food Program   │
-│ - NinjaTrader   │                    │                  │
-└─────────────────┘                    └─────────────────┘
+┌───────────────────────┐              ┌───────────────────────┐
+│ DAO LLC               │              │ Nonprofit             │
+│ EIN: 39-2900295       │              │ EIN: 39-2923503       │
+│ - MoneyLion           │              │ - Thread Bank         │
+│ - Kraken Pro          │              │ - Food Program        │
+│ - NinjaTrader         │              │                       │
+└───────────────────────┘              └───────────────────────┘
 ```
 
 ## Core Components

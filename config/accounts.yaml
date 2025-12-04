@@ -89,10 +89,13 @@ sovereignty:
     members:
       - name: "claude"
         role: "Strategic analysis and code review"
-      - name: "gpt-4o"
+        note: "Version-agnostic; specify in deployment config"
+      - name: "gpt"
         role: "Trade decisions and rebalancing"
+        note: "Version-agnostic; specify in deployment config"
       - name: "grok"
         role: "Market sentiment and research"
+        note: "Version-agnostic; specify in deployment config"
     consensus_required: 2
     veto_power: "managing_member"
     

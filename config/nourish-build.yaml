@@ -62,27 +62,27 @@ procurement:
   item_categories:
     breakfast:
       - item: "Lucky Charms (Family Size)"
-        notes: "Magically delicious sovereignty"
+        notes: "Fortified whole grain cereal"
       - item: "Fruity Pebbles (Family Size, Gluten Free)"
-        notes: "Colorful chaos"
+        notes: "Gluten-free option for dietary restrictions"
       - item: "Cinnamon Pebbles (Family Size, Gluten Free)"
-        notes: "Sweet infrastructure"
+        notes: "Gluten-free option with cinnamon flavor"
       - item: "Sugar Cookie Cereal (Family Size)"
-        notes: "Comfort food for late-night coding"
+        notes: "Family-friendly breakfast option"
         
     fresh_produce:
       - item: "Red Apples"
-        notes: "Actual nutrition"
+        notes: "Rich in fiber and vitamin C"
       - item: "Bananas"
-        notes: "Potassium for brain function"
+        notes: "Good source of potassium"
       - item: "Oranges"
-        notes: "Vitamin C boost"
+        notes: "High in vitamin C"
         
     household:
       - item: "Glad ForceFlex Trash Bags"
-        notes: "Clean up the mess"
+        notes: "Durable household supplies"
       - item: "Hefty Mega Pack Storage Bags"
-        notes: "Organize the chaos"
+        notes: "Food storage and organization"
 
 # Distribution partners
 distribution:
