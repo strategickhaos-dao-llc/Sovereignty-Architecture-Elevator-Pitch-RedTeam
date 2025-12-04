@@ -71,6 +71,36 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 📧 Email Intelligence Service (`email-intelligence`)
+- **Webhook Receiver**: Receives webhooks from Zapier for email processing
+- **Grok API Integration**: Processes emails with X.AI's Grok for intelligent analysis
+- **Queen App Integration**: Sends processed intelligence to Queen App
+- **GKE Native**: Designed for deployment on your sovereign GKE cluster
+- **High Availability**: Runs with 2 replicas by default
+
+```bash
+# Deploy to GKE
+docker build -t gcr.io/YOUR-PROJECT-ID/email-intelligence-service:latest ./email-service
+docker push gcr.io/YOUR-PROJECT-ID/email-intelligence-service:latest
+kubectl apply -f bootstrap/k8s/email-intelligence-deployment.yaml
+
+# Get the external IP
+kubectl get service email-intelligence -n ops
+
+# Configure Zapier webhook to: http://YOUR-EXTERNAL-IP/webhook/email-intelligence
+```
+
+**Zapier Webhook Payload Format:**
+```json
+{
+  "email_from": "sender@example.com",
+  "email_subject": "Email Subject",
+  "email_body": "Email body content",
+  "ai_summary": "Zapier AI summary (optional)",
+  "approval_status": "approved/pending (optional)"
+}
+```
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
@@ -138,6 +168,11 @@ PGVECTOR_CONN=postgresql://user:pass@host:5432/db
 
 # Infrastructure
 EVENTS_HMAC_KEY=your_64_char_hmac_key
+
+# Email Intelligence Service
+GROK_API_KEY=your-grok-api-key
+QUEEN_API_KEY=your-queen-api-key
+QUEEN_API_URL=https://your-queen-app/api/intelligence
 ```
 
 ## 🎯 Discord Workflow Integration
