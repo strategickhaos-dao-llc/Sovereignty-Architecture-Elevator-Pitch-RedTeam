@@ -1,0 +1,7 @@
+# Compute Grid Jobs
+
+This directory contains active and completed compute jobs.
+
+Job status tracked here when researchers submit compute tasks.
+
+See `../README.md` for job submission process.

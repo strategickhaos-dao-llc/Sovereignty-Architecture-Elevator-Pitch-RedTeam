@@ -1,0 +1,83 @@
+# Mirror-Generals Council Proposal Template
+# Copy this template and fill in your proposal details
+
+title: "Your Proposal Title Here"
+author: "Your Node ID or Name"
+date: "2024-11-19"
+category: "research-priority"  # Options: research-priority | resource-allocation | policy | strategy | membership
+
+summary: |
+  One paragraph summary of your proposal. What are you proposing and why?
+
+problem_statement: |
+  What issue, opportunity, or question does this proposal address?
+  
+  - What's the current situation?
+  - Why does this matter?
+  - Who is affected?
+
+proposed_solution: |
+  Describe your proposed solution in detail:
+  
+  - What exactly are you proposing?
+  - How will it work?
+  - What are the key components?
+  - What alternatives did you consider?
+
+impact_analysis: |
+  Benefits if approved:
+  - List expected positive outcomes
+  - Quantify impact where possible
+  - Consider short and long-term effects
+  
+  Risks if approved:
+  - What could go wrong?
+  - How likely are the risks?
+  - How can risks be mitigated?
+  
+  Consequences if rejected:
+  - What happens if we don't do this?
+  - What opportunities are lost?
+
+resource_requirements: |
+  Compute resources:
+  - CPU/GPU time needed
+  - Storage requirements
+  - Network bandwidth
+  
+  Financial resources:
+  - Estimated costs
+  - Funding sources
+  - Budget breakdown
+  
+  Human resources:
+  - Time commitment required
+  - Expertise needed
+  - Number of contributors
+
+implementation_timeline: |
+  Phase 1: Preparation (timeframe)
+  - Task 1
+  - Task 2
+  
+  Phase 2: Execution (timeframe)
+  - Task 1
+  - Task 2
+  
+  Phase 3: Validation (timeframe)
+  - Task 1
+  - Task 2
+
+success_metrics: |
+  How will we measure if this proposal succeeded?
+  
+  - Metric 1: Target value
+  - Metric 2: Target value
+  - Metric 3: Target value
+
+additional_notes: |
+  Any other information the council should consider:
+  - Related proposals or work
+  - Precedents from other organizations
+  - Community feedback received
+  - Open questions or concerns
