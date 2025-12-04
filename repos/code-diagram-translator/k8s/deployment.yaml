@@ -1,0 +1,88 @@
+# Kubernetes Deployment for Code-to-Diagram Translator (IDEA_002)
+# StrategicKhaos DAO LLC / Valoryield Engine
+# Namespace: ns-infra
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-infra
+  labels:
+    app.kubernetes.io/part-of: strategickhaos
+    idea-id: IDEA_002
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-code-diagram
+  namespace: ns-infra
+  labels:
+    app: svc-code-diagram
+    idea-id: IDEA_002
+    app.kubernetes.io/name: code-diagram-translator
+    app.kubernetes.io/part-of: strategickhaos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-code-diagram
+  template:
+    metadata:
+      labels:
+        app: svc-code-diagram
+        idea-id: IDEA_002
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: code-diagram
+          image: strategickhaos/code-diagram-translator:dev
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: IDEA_ID
+              value: "IDEA_002"
+            - name: NAMESPACE
+              value: "ns-infra"
+            - name: OUTPUT_FORMAT
+              value: "mermaid"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: repo-volume
+              mountPath: /app/repo
+              readOnly: true
+            - name: output-volume
+              mountPath: /app/output
+      volumes:
+        - name: repo-volume
+          emptyDir: {}
+        - name: output-volume
+          emptyDir: {}
+
+---
+# NOTE: Service and ConfigMap are placeholder scaffolds for future HTTP API mode
+# The current implementation is CLI-based (Job/CronJob pattern)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: code-diagram-config
+  namespace: ns-infra
+  labels:
+    app: svc-code-diagram
+    idea-id: IDEA_002
+data:
+  OUTPUT_FORMAT: "mermaid"
