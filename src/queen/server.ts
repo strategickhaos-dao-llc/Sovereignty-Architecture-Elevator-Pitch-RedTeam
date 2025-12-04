@@ -15,6 +15,7 @@
 
 import express, { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
+import rateLimit from "express-rate-limit";
 
 interface OrganizationRouting {
   nats_prefix: string;
@@ -86,6 +87,24 @@ class MockNATSClient implements NATSClient {
 
 // Create Express app
 const app = express();
+
+// Rate limiting configuration
+// Allows 100 requests per minute per IP for webhook endpoints
+// This prevents abuse while allowing legitimate webhook traffic
+const webhookRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 100, // 100 requests per minute per IP
+  message: { error: "Too many requests, please try again later" },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  skip: (req) => {
+    // Skip rate limiting for health checks
+    return req.path === "/health";
+  },
+});
+
+// Apply rate limiting to all routes
+app.use(webhookRateLimiter);
 
 // Keep raw body for signature verification
 app.use(
