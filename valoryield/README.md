@@ -28,6 +28,17 @@ pip install -r requirements.txt
 python -m uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
+## Configuration
+
+| Environment Variable | Default | Description |
+|---------------------|---------|-------------|
+| `CORS_ORIGINS` | `*` | Comma-separated list of allowed origins. In production, set to specific domains like `https://app.example.com` |
+
+Example for production:
+```bash
+CORS_ORIGINS="https://app.valoryield.com,https://admin.valoryield.com" python -m uvicorn main:app --host 0.0.0.0 --port 8080
+```
+
 ## API Endpoints
 
 | Endpoint | Method | Description |
