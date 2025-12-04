@@ -1,0 +1,504 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Supporting Services
+# Ollama, Qdrant, PostgreSQL, Stockfish for the chess council
+# ═══════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════
+# Ollama Service - Local LLM Inference
+# GPU sharing enabled - adjust replicas based on GPU availability
+# ═══════════════════════════════════════════════════════════
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama-service
+  namespace: chess-council
+  labels:
+    app: ollama-service
+spec:
+  replicas: 1  # Reduced to 1 replica - scale based on available GPUs
+  selector:
+    matchLabels:
+      app: ollama-service
+  template:
+    metadata:
+      labels:
+        app: ollama-service
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          resources:
+            requests:
+              cpu: "8"
+              memory: "32Gi"
+              # GPU optional - remove if running on CPU-only nodes
+              # nvidia.com/gpu: "1"
+            limits:
+              cpu: "16"
+              memory: "64Gi"
+              # nvidia.com/gpu: "1"
+          ports:
+            - containerPort: 11434
+              name: api
+          volumeMounts:
+            - name: ollama-models
+              mountPath: /root/.ollama
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0:11434"
+            - name: OLLAMA_NUM_PARALLEL
+              value: "8"
+          livenessProbe:
+            httpGet:
+              path: /api/version
+              port: 11434
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/version
+              port: 11434
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: ollama-models
+          persistentVolumeClaim:
+            claimName: ollama-models-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: chess-council
+spec:
+  selector:
+    app: ollama-service
+  ports:
+    - port: 11434
+      targetPort: 11434
+      name: api
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-models-pvc
+  namespace: chess-council
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: standard
+---
+# ═══════════════════════════════════════════════════════════
+# Qdrant Vector Database - Bibliography Embeddings
+# ═══════════════════════════════════════════════════════════
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant
+  namespace: chess-council
+  labels:
+    app: qdrant
+spec:
+  serviceName: qdrant
+  replicas: 3  # Cluster mode for high availability
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: qdrant/qdrant:latest
+          resources:
+            requests:
+              cpu: "4"
+              memory: "16Gi"
+            limits:
+              cpu: "8"
+              memory: "32Gi"
+          ports:
+            - containerPort: 6333
+              name: http
+            - containerPort: 6334
+              name: grpc
+          volumeMounts:
+            - name: qdrant-storage
+              mountPath: /qdrant/storage
+          env:
+            - name: QDRANT__SERVICE__HTTP_PORT
+              value: "6333"
+            - name: QDRANT__SERVICE__GRPC_PORT
+              value: "6334"
+            - name: QDRANT__CLUSTER__ENABLED
+              value: "true"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 6333
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 6333
+            initialDelaySeconds: 10
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: qdrant-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 100Gi
+        storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant-service
+  namespace: chess-council
+spec:
+  selector:
+    app: qdrant
+  ports:
+    - port: 6333
+      targetPort: 6333
+      name: http
+    - port: 6334
+      targetPort: 6334
+      name: grpc
+  type: ClusterIP
+---
+# ═══════════════════════════════════════════════════════════
+# PostgreSQL - Game Logs and State
+# ═══════════════════════════════════════════════════════════
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: chess-council
+  labels:
+    app: postgres
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          resources:
+            requests:
+              cpu: "2"
+              memory: "8Gi"
+            limits:
+              cpu: "4"
+              memory: "16Gi"
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_DB
+              value: "chess_council"
+            - name: POSTGRES_USER
+              value: "chess_admin"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chess-council-secrets
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - chess_admin
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - chess_admin
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: init-scripts
+          configMap:
+            name: postgres-init-scripts
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 100Gi
+        storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: chess-council
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+      name: postgres
+  type: ClusterIP
+---
+# ═══════════════════════════════════════════════════════════
+# PostgreSQL Init Scripts
+# ═══════════════════════════════════════════════════════════
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: chess-council
+data:
+  01-init-schema.sql: |
+    -- Chess Council Game Database Schema
+    
+    -- Agent registry
+    CREATE TABLE agents (
+        id SERIAL PRIMARY KEY,
+        agent_id VARCHAR(100) UNIQUE NOT NULL,
+        board_layer INTEGER NOT NULL,
+        position INTEGER NOT NULL,
+        row_num INTEGER NOT NULL,
+        col_num INTEGER NOT NULL,
+        frequency_hz DECIMAL(10, 2) NOT NULL,
+        layer_name VARCHAR(100) NOT NULL,
+        specialty TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- Games table
+    CREATE TABLE games (
+        id SERIAL PRIMARY KEY,
+        game_id UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
+        game_type VARCHAR(100) NOT NULL,
+        status VARCHAR(50) DEFAULT 'in_progress',
+        started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        ended_at TIMESTAMP,
+        winner_agent_id VARCHAR(100) REFERENCES agents(agent_id),
+        final_score JSONB
+    );
+    
+    -- Game participants
+    CREATE TABLE game_participants (
+        id SERIAL PRIMARY KEY,
+        game_id UUID REFERENCES games(game_id),
+        agent_id VARCHAR(100) REFERENCES agents(agent_id),
+        role VARCHAR(50),
+        score INTEGER DEFAULT 0,
+        UNIQUE(game_id, agent_id)
+    );
+    
+    -- Game moves (citations, claims, refutations)
+    CREATE TABLE game_moves (
+        id SERIAL PRIMARY KEY,
+        game_id UUID REFERENCES games(game_id),
+        agent_id VARCHAR(100) REFERENCES agents(agent_id),
+        turn_number INTEGER NOT NULL,
+        move_type VARCHAR(50) NOT NULL,
+        action TEXT NOT NULL,
+        claim TEXT,
+        citation_doi VARCHAR(255),
+        citation_title TEXT,
+        points_earned INTEGER DEFAULT 0,
+        stockfish_score DECIMAL(5, 2),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- Generated papers
+    CREATE TABLE papers (
+        id SERIAL PRIMARY KEY,
+        paper_id UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
+        game_id UUID REFERENCES games(game_id),
+        title TEXT NOT NULL,
+        abstract TEXT,
+        content TEXT,
+        arxiv_id VARCHAR(50),
+        status VARCHAR(50) DEFAULT 'draft',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        published_at TIMESTAMP
+    );
+    
+    -- Citations used in papers
+    CREATE TABLE citations (
+        id SERIAL PRIMARY KEY,
+        paper_id UUID REFERENCES papers(paper_id),
+        doi VARCHAR(255),
+        title TEXT NOT NULL,
+        authors TEXT[],
+        year INTEGER,
+        source VARCHAR(100),
+        verified BOOLEAN DEFAULT FALSE
+    );
+    
+    -- Training data from games
+    CREATE TABLE training_data (
+        id SERIAL PRIMARY KEY,
+        game_id UUID REFERENCES games(game_id),
+        state JSONB NOT NULL,
+        action JSONB NOT NULL,
+        reward DECIMAL(10, 4) NOT NULL,
+        next_state JSONB,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- Create indexes for performance
+    CREATE INDEX idx_agents_board_layer ON agents(board_layer);
+    CREATE INDEX idx_agents_frequency ON agents(frequency_hz);
+    CREATE INDEX idx_games_status ON games(status);
+    CREATE INDEX idx_game_moves_game_id ON game_moves(game_id);
+    CREATE INDEX idx_training_data_game_id ON training_data(game_id);
+---
+# ═══════════════════════════════════════════════════════════
+# Stockfish Service - Game Referee
+# ═══════════════════════════════════════════════════════════
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stockfish-referee
+  namespace: chess-council
+  labels:
+    app: stockfish-referee
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stockfish-referee
+  template:
+    metadata:
+      labels:
+        app: stockfish-referee
+    spec:
+      containers:
+        - name: stockfish
+          image: niklasf/stockfish:16
+          resources:
+            requests:
+              cpu: "4"
+              memory: "4Gi"
+            limits:
+              cpu: "8"
+              memory: "8Gi"
+          ports:
+            - containerPort: 8080
+              name: api
+          env:
+            - name: THREADS
+              value: "4"
+            - name: HASH_MB
+              value: "2048"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stockfish-service
+  namespace: chess-council
+spec:
+  selector:
+    app: stockfish-referee
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: api
+  type: ClusterIP
+---
+# ═══════════════════════════════════════════════════════════
+# Game Orchestrator - Manages Chess Games
+# ═══════════════════════════════════════════════════════════
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-orchestrator
+  namespace: chess-council
+  labels:
+    app: game-orchestrator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: game-orchestrator
+  template:
+    metadata:
+      labels:
+        app: game-orchestrator
+    spec:
+      containers:
+        - name: orchestrator
+          image: ghcr.io/strategickhaos/chess-orchestrator:latest
+          resources:
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+          ports:
+            - containerPort: 8080
+              name: api
+            - containerPort: 9090
+              name: metrics
+          env:
+            - name: POSTGRES_HOST
+              value: "postgres-service"
+            - name: POSTGRES_DB
+              value: "chess_council"
+            - name: POSTGRES_USER
+              value: "chess_admin"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chess-council-secrets
+                  key: POSTGRES_PASSWORD
+            - name: QDRANT_URL
+              value: "http://qdrant-service:6333"
+            - name: STOCKFISH_URL
+              value: "http://stockfish-service:8080"
+            - name: OLLAMA_HOST
+              value: "http://ollama-service:11434"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: game-orchestrator-service
+  namespace: chess-council
+spec:
+  selector:
+    app: game-orchestrator
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: api
+    - port: 9090
+      targetPort: 9090
+      name: metrics
+  type: ClusterIP

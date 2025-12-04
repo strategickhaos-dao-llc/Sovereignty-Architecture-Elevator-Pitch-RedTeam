@@ -1,0 +1,205 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Board 9 StatefulSet
+# Layer: publication-dissemination
+# 64 agents (8×8 chess board positions)
+# ═══════════════════════════════════════════════════════════
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: chess-board-9
+  namespace: chess-council
+  labels:
+    app: chess-agent
+    layer: "9"
+    layer-name: publication-dissemination
+spec:
+  serviceName: chess-agents-9
+  replicas: 64
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: chess-agent
+      layer: "9"
+  template:
+    metadata:
+      labels:
+        app: chess-agent
+        layer: "9"
+        layer-name: publication-dissemination
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      terminationGracePeriodSeconds: 30
+      
+      initContainers:
+        - name: frequency-calculator
+          image: python:3.11-slim
+          command:
+            - python
+            - -c
+            - |
+              import math
+              import os
+              
+              hostname = os.environ.get('HOSTNAME', 'chess-board-9-0')
+              ordinal = int(hostname.split('-')[-1])
+              board = 9
+              row = ordinal // 8
+              col = ordinal % 8
+              
+              position = board * 64 + row * 8 + col
+              piano_key = position % 88
+              frequency = 440 * (2 ** ((piano_key - 49) / 12))
+              
+              with open('/frequency/agent_frequency', 'w') as f:
+                  f.write(f"{round(frequency, 2)}")
+              
+              print(f"Agent {hostname}: Board {board}, Row {row}, Col {col}")
+              print(f"Position: {position}, Piano Key: {piano_key}")
+              print(f"Frequency: {round(frequency, 2)} Hz")
+          volumeMounts:
+            - name: frequency-data
+              mountPath: /frequency
+      
+      containers:
+        - name: agent
+          image: ghcr.io/strategickhaos/chess-agent:latest
+          imagePullPolicy: Always
+          
+          resources:
+            requests:
+              cpu: "2"
+              memory: "8Gi"
+            limits:
+              cpu: "4"
+              memory: "16Gi"
+          
+          env:
+            - name: BOARD_LAYER
+              value: "9"
+            - name: LAYER_NAME
+              value: "publication-dissemination"
+            - name: AGENT_POSITION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: OLLAMA_HOST
+              value: "http://ollama-service:11434"
+            - name: PRIMARY_MODEL
+              value: "qwen2.5:72b"
+            - name: GROK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: chess-council-secrets
+                  key: GROK_API_KEY
+            - name: SERPAPI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: chess-council-secrets
+                  key: SERPAPI_KEY
+            - name: QDRANT_URL
+              value: "http://qdrant-service:6333"
+            - name: POSTGRES_HOST
+              value: "postgres-service"
+            - name: POSTGRES_DB
+              value: "chess_council"
+          
+          ports:
+            - containerPort: 22
+              name: ssh
+            - containerPort: 5900
+              name: vnc
+            - containerPort: 47989
+              name: sunshine
+            - containerPort: 9090
+              name: metrics
+            - containerPort: 8080
+              name: api
+          
+          volumeMounts:
+            - name: agent-workspace
+              mountPath: /workspace
+            - name: bibliography-cache
+              mountPath: /cache
+            - name: frequency-data
+              mountPath: /frequency
+              readOnly: true
+            - name: agent-config
+              mountPath: /config
+              readOnly: true
+          
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+      
+      volumes:
+        - name: bibliography-cache
+          persistentVolumeClaim:
+            claimName: shared-bibliography-pvc
+        - name: frequency-data
+          emptyDir: {}
+        - name: agent-config
+          configMap:
+            name: agent-config
+  
+  volumeClaimTemplates:
+    - metadata:
+        name: agent-workspace
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 50Gi
+        storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chess-agents-9
+  namespace: chess-council
+  labels:
+    app: chess-agent
+    layer: "9"
+spec:
+  clusterIP: None
+  selector:
+    app: chess-agent
+    layer: "9"
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+    - name: vnc
+      port: 5900
+      targetPort: 5900
+    - name: sunshine
+      port: 47989
+      targetPort: 47989
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+    - name: api
+      port: 8080
+      targetPort: 8080

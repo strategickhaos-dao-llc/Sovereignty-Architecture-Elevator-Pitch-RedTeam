@@ -1,0 +1,142 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Prometheus Configuration
+# Metrics collection for 640 LLM agents
+# ═══════════════════════════════════════════════════════════
+
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+  external_labels:
+    cluster: 'chess-council'
+    env: 'production'
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# Rule files
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  # ═══════════════════════════════════════════════════════════
+  # Chess Council Agents (640 agents across 10 boards)
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'chess-agents'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - chess-council
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        regex: chess-agent
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_label_layer]
+        target_label: board_layer
+      - source_labels: [__meta_kubernetes_pod_label_layer_name]
+        target_label: layer_name
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: agent_id
+      - source_labels: [__meta_kubernetes_pod_ip]
+        target_label: __address__
+        replacement: $1:9090
+
+  # ═══════════════════════════════════════════════════════════
+  # Game Orchestrator
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'game-orchestrator'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - chess-council
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        regex: game-orchestrator
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_ip]
+        target_label: __address__
+        replacement: $1:9090
+
+  # ═══════════════════════════════════════════════════════════
+  # Ollama LLM Service
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'ollama'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - chess-council
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        regex: ollama-service
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_ip]
+        target_label: __address__
+        replacement: $1:11434
+
+  # ═══════════════════════════════════════════════════════════
+  # Qdrant Vector Database
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'qdrant'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - chess-council
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        regex: qdrant
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_ip]
+        target_label: __address__
+        replacement: $1:6333
+
+  # ═══════════════════════════════════════════════════════════
+  # PostgreSQL
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'postgres'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - chess-council
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        regex: postgres
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_ip]
+        target_label: __address__
+        replacement: $1:9187  # postgres_exporter
+
+  # ═══════════════════════════════════════════════════════════
+  # Stockfish Referee
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'stockfish'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - chess-council
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        regex: stockfish-referee
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_ip]
+        target_label: __address__
+        replacement: $1:8080
+
+  # ═══════════════════════════════════════════════════════════
+  # Local Development (Docker Compose)
+  # ═══════════════════════════════════════════════════════════
+  - job_name: 'chess-council-local'
+    static_configs:
+      - targets:
+          - 'orchestrator:9090'
+          - 'agent-dev:9090'
+        labels:
+          env: 'local'

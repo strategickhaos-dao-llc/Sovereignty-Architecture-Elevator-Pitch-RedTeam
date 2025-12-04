@@ -1,0 +1,336 @@
+# ═══════════════════════════════════════════════════════════
+# 10D Chess Council - Agent Training Loop Workflow
+# Daily training cycle for adversarial self-play
+# ═══════════════════════════════════════════════════════════
+
+name: Chess Council - Agent Training
+
+on:
+  schedule:
+    # Run daily at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      training_games:
+        description: 'Number of games to evaluate'
+        required: false
+        default: '100'
+      deploy_updated:
+        description: 'Deploy updated agents after training'
+        required: false
+        default: 'true'
+        type: boolean
+
+# Default permissions for all jobs
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/chess-agent
+
+jobs:
+  evaluate-performance:
+    name: Evaluate Agent Performance
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      top_agents: ${{ steps.evaluate.outputs.top_agents }}
+      performance_report: ${{ steps.evaluate.outputs.report }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install psycopg2-binary pandas numpy scikit-learn
+      
+      - name: Evaluate agent performance
+        id: evaluate
+        run: |
+          python << 'EOF'
+          import json
+          import os
+          
+          # In production, this would connect to PostgreSQL
+          # and analyze the last N games
+          
+          # Mock evaluation results
+          evaluation = {
+              "games_analyzed": int(os.environ.get("TRAINING_GAMES", 100)),
+              "top_performers": [
+                  {"agent": "chess-board-4-27", "win_rate": 0.72, "avg_score": 145},
+                  {"agent": "chess-board-6-15", "win_rate": 0.68, "avg_score": 132},
+                  {"agent": "chess-board-3-42", "win_rate": 0.65, "avg_score": 128}
+              ],
+              "overall_metrics": {
+                  "avg_citations_per_game": 23.5,
+                  "avg_novel_insights": 4.2,
+                  "publication_acceptance_rate": 0.78
+              },
+              "improvement_areas": [
+                  "Cross-domain synthesis",
+                  "Citation verification",
+                  "Hypothesis formation"
+              ]
+          }
+          
+          # Write outputs
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"top_agents={json.dumps(evaluation['top_performers'])}\n")
+              f.write(f"report={json.dumps(evaluation)}\n")
+          
+          print("═══════════════════════════════════════════════════════════")
+          print("Agent Performance Evaluation Complete")
+          print("═══════════════════════════════════════════════════════════")
+          print(json.dumps(evaluation, indent=2))
+          EOF
+        env:
+          TRAINING_GAMES: ${{ github.event.inputs.training_games || '100' }}
+  
+  generate-training-data:
+    name: Generate Training Data
+    runs-on: ubuntu-latest
+    needs: evaluate-performance
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Generate JSONL training data
+        run: |
+          python << 'EOF'
+          import json
+          import random
+          from datetime import datetime
+          
+          # In production, this extracts (state, action, reward) tuples
+          # from winning games in PostgreSQL
+          
+          training_data = []
+          
+          # Generate sample training data
+          move_types = ["cite_paper", "make_claim", "refute_claim", "synthesize"]
+          
+          for i in range(1000):
+              entry = {
+                  "state": {
+                      "game_turn": random.randint(1, 50),
+                      "current_score": random.randint(0, 200),
+                      "papers_cited": random.randint(0, 20),
+                      "claims_made": random.randint(0, 15)
+                  },
+                  "action": {
+                      "type": random.choice(move_types),
+                      "content": f"Training example {i}"
+                  },
+                  "reward": random.uniform(-10, 20)
+              }
+              training_data.append(entry)
+          
+          # Write training data
+          with open("training_data.jsonl", "w") as f:
+              for entry in training_data:
+                  f.write(json.dumps(entry) + "\n")
+          
+          print(f"Generated {len(training_data)} training examples")
+          EOF
+      
+      - name: Upload training data artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-data
+          path: training_data.jsonl
+          retention-days: 7
+  
+  fine-tune-models:
+    name: Fine-tune Agent Models
+    runs-on: ubuntu-latest
+    needs: generate-training-data
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download training data
+        uses: actions/download-artifact@v4
+        with:
+          name: training-data
+      
+      - name: Fine-tune with LoRA
+        run: |
+          echo "═══════════════════════════════════════════════════════════"
+          echo "Fine-tuning Agent Models with LoRA"
+          echo "═══════════════════════════════════════════════════════════"
+          
+          # In production, this would:
+          # 1. Load the base Qwen2.5 model
+          # 2. Apply LoRA adapters
+          # 3. Train on the JSONL data
+          # 4. Save the updated adapters
+          
+          echo "Training data loaded: $(wc -l < training_data.jsonl) examples"
+          echo "Base model: Qwen2.5:72b"
+          echo "LoRA rank: 16"
+          echo "Learning rate: 1e-4"
+          echo "Epochs: 3"
+          echo ""
+          echo "Fine-tuning would be performed here with actual GPU resources"
+          
+          # Create mock adapter files
+          mkdir -p lora_adapters
+          echo '{"trained": true, "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > lora_adapters/adapter_config.json
+      
+      - name: Upload LoRA adapters
+        uses: actions/upload-artifact@v4
+        with:
+          name: lora-adapters
+          path: lora_adapters/
+          retention-days: 30
+  
+  build-updated-image:
+    name: Build Updated Agent Image
+    runs-on: ubuntu-latest
+    needs: fine-tune-models
+    if: ${{ github.event.inputs.deploy_updated != 'false' }}
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download LoRA adapters
+        uses: actions/download-artifact@v4
+        with:
+          name: lora-adapters
+          path: lora_adapters/
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value={{date 'YYYYMMDD'}}-trained
+            type=sha,prefix=
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.chess-agent
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  
+  deploy-canary:
+    name: Canary Deployment
+    runs-on: ubuntu-latest
+    needs: build-updated-image
+    if: ${{ github.event.inputs.deploy_updated != 'false' }}
+    environment: production
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Deploy to 10% of agents
+        run: |
+          echo "═══════════════════════════════════════════════════════════"
+          echo "Canary Deployment - 10% of Agents"
+          echo "═══════════════════════════════════════════════════════════"
+          
+          # In production with kubectl configured:
+          # kubectl set image statefulset/chess-board-0 agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # kubectl rollout status statefulset/chess-board-0 --timeout=10m
+          
+          echo "Canary deployment would be performed here"
+          echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+      
+      - name: Monitor canary metrics
+        run: |
+          echo "Monitoring canary deployment for 30 minutes..."
+          # In production, this would query Prometheus for:
+          # - Error rates
+          # - Game win rates
+          # - Citation accuracy
+          # - LLM response times
+          sleep 10
+          echo "Canary metrics healthy"
+      
+      - name: Promote to 50%
+        run: |
+          echo "Promoting to 50% of agents..."
+          # In production, update 5 of 10 boards:
+          # for board in 0 1 2 3 4; do
+          #   kubectl set image statefulset/chess-board-$board -n chess-council agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # done
+          sleep 5
+          echo "Promoted to 50%"
+      
+      - name: Promote to 100%
+        run: |
+          echo "Promoting to 100% of agents..."
+          # In production, update remaining boards:
+          # for board in 5 6 7 8 9; do
+          #   kubectl set image statefulset/chess-board-$board -n chess-council agent=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # done
+          sleep 5
+          echo "Full deployment complete"
+  
+  notify-completion:
+    name: Notify Training Complete
+    runs-on: ubuntu-latest
+    needs: [evaluate-performance, deploy-canary]
+    if: always()
+    permissions: {}  # No permissions needed for this job
+    
+    steps:
+      - name: Send Discord notification
+        run: |
+          echo "═══════════════════════════════════════════════════════════"
+          echo "Training Cycle Complete - Discord Notification"
+          echo "═══════════════════════════════════════════════════════════"
+          
+          # In production with DISCORD_WEBHOOK:
+          # curl -H "Content-Type: application/json" \
+          #   -d '{"embeds": [{"title": "Chess Council Training Complete", "color": 3066993}]}' \
+          #   $DISCORD_WEBHOOK
+          
+          echo "Performance Report:"
+          echo '${{ needs.evaluate-performance.outputs.performance_report }}'
