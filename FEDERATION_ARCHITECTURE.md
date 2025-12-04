@@ -139,6 +139,13 @@ const routing = {
 
 ## 🔐 Security
 
+### Rate Limiting
+
+Queen.js includes rate limiting to prevent abuse:
+- 100 requests per minute per IP address
+- Health check endpoint is excluded from rate limiting
+- Standard rate limit headers included in responses
+
 ### Webhook Signature Verification
 
 Queen.js verifies GitHub webhook signatures using HMAC-SHA256:
@@ -150,6 +157,8 @@ function verifyWebhookSignature(payload, signature, secret) {
   return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
 }
 ```
+
+**Note:** In production mode (`NODE_ENV=production`), the `GITHUB_WEBHOOK_SECRET` environment variable is required.
 
 ### Kubernetes Security Context
 
@@ -219,6 +228,8 @@ annotations:
 - [x] Docker container with security best practices
 - [x] Webhook configuration scripts
 - [x] Health check endpoint
+- [x] Rate limiting (100 req/min per IP)
+- [x] Production mode requiring webhook secrets
 - [ ] Real NATS client integration
 - [ ] Discord webhook integration
 - [ ] Prometheus metrics exporter
