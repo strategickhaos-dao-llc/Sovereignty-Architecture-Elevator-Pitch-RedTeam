@@ -1,0 +1,995 @@
+# Sovereignty Analysis Configuration
+# Version: 1.0.0
+# This configuration file defines the complete framework for reverse engineering
+# and sovereignty analysis within the Strategickhaos ecosystem.
+
+---
+version: "1.0.0"
+metadata:
+  name: "Sovereignty Analysis Framework"
+  description: "Comprehensive configuration for reverse engineering, security analysis, and sovereign software development"
+  maintainer: "Strategickhaos DAO"
+  last_updated: "2025-01-01"
+
+# =============================================================================
+# LEGAL COMPLIANCE FRAMEWORK
+# =============================================================================
+legal_compliance:
+  framework:
+    name: "Clean Room Implementation Protocol"
+    version: "1.0.0"
+    
+  attestation:
+    required: true
+    template: |
+      I, [NAME], attest that:
+      1. I have not viewed any proprietary source code
+      2. All implementations are derived from publicly available specifications
+      3. Analysis is performed only on software for which we have proper licensing
+      4. All work complies with applicable laws and regulations
+      
+  licensing:
+    permitted_analysis:
+      - "Software owned by our organization"
+      - "Open-source software with permissive licenses"
+      - "Software for which we have educational/research licenses"
+      - "Publicly available APIs and interfaces"
+      
+    prohibited_analysis:
+      - "Software without proper licensing"
+      - "Protected DRM-wrapped content"
+      - "Trade secrets obtained improperly"
+      - "Classified or restricted materials"
+      
+  jurisdictions:
+    primary: "United States"
+    secondary:
+      - "European Union (GDPR compliance)"
+      - "State of Wyoming (DAO registration)"
+      
+  exemptions:
+    security_research:
+      enabled: true
+      documentation_required: true
+      scope_limits:
+        - "Owned systems only"
+        - "Explicit authorization required for third-party"
+        
+    interoperability:
+      enabled: true
+      conditions:
+        - "Clean room implementation"
+        - "No copying of expression"
+        - "Documentation of methodology"
+
+# =============================================================================
+# DOMAIN-SPECIFIC REVERSE ENGINEERING CONFIGURATIONS
+# =============================================================================
+domain_configurations:
+  
+  # ---------------------------------------------------------------------------
+  # Particle Accelerator Control Systems
+  # ---------------------------------------------------------------------------
+  particle_accelerator:
+    enabled: true
+    description: "Framework for analyzing particle accelerator control systems"
+    
+    beam_dynamics:
+      enabled: true
+      analysis_methods:
+        - name: "transfer_matrix_extraction"
+          description: "Extract M-matrix from measured beam response"
+          tools:
+            - "elegant"
+            - "MAD-X"
+            - "custom_python_analysis"
+          parameters:
+            bpm_sampling_rate: 10000  # Hz
+            measurement_duration: 10  # seconds
+            statistical_samples: 100
+            
+        - name: "phase_space_reconstruction"
+          description: "Reconstruct phase space from BPM data"
+          algorithm: "Fourier_transform_based"
+          parameters:
+            frequency_resolution: 0.001  # fractional tune
+            window_function: "hanning"
+            
+        - name: "tune_measurement"
+          description: "Measure betatron tunes"
+          methods:
+            - "FFT_of_turn_by_turn_data"
+            - "NAFF_algorithm"
+            - "interpolated_FFT"
+            
+      simulation_frameworks:
+        - name: "elegant"
+          url: "https://ops.aps.anl.gov/elegant/"
+          license: "BSD-like"
+          
+        - name: "MAD-X"
+          url: "https://mad.web.cern.ch/"
+          license: "CERN"
+          
+        - name: "OPAL"
+          url: "https://gitlab.psi.ch/OPAL/src"
+          license: "GPL"
+          
+    rf_systems:
+      enabled: true
+      analysis_methods:
+        - name: "cavity_characterization"
+          parameters:
+            frequency_range:
+              min: 100e6   # Hz
+              max: 10e9    # Hz
+            q_factor_measurement:
+              method: "ring_down"
+              samples: 1000
+              
+        - name: "llrf_analysis"
+          components:
+            - "phase_detector"
+            - "amplitude_detector"
+            - "feedback_controller"
+            - "feedforward_compensation"
+            
+    magnet_systems:
+      enabled: true
+      analysis_methods:
+        - name: "field_mapping"
+          equipment:
+            - "rotating_coil"
+            - "hall_probe_array"
+            - "NMR_probe"
+          parameters:
+            spatial_resolution: 0.001  # meters
+            field_resolution: 1e-6    # relative
+            
+        - name: "hysteresis_measurement"
+          procedure:
+            - "degauss_sequence"
+            - "ramp_up_measurement"
+            - "ramp_down_measurement"
+            - "hysteresis_loop_extraction"
+            
+    daq_systems:
+      enabled: true
+      architecture:
+        front_end:
+          - "ADC_characterization"
+          - "trigger_logic"
+          - "timing_distribution"
+        data_pipeline:
+          - "event_building"
+          - "online_filtering"
+          - "storage_hierarchy"
+          
+  # ---------------------------------------------------------------------------
+  # Chemical Synthesizer Automation
+  # ---------------------------------------------------------------------------
+  chemical_synthesizer:
+    enabled: true
+    description: "Framework for analyzing chemical synthesis automation"
+    
+    fluid_handling:
+      enabled: true
+      pump_types:
+        syringe_pumps:
+          analysis:
+            - "volumetric_accuracy"
+            - "flow_rate_stability"
+            - "pressure_response"
+          calibration:
+            method: "gravimetric"
+            samples: 10
+            acceptance: 0.01  # 1% accuracy
+            
+        peristaltic_pumps:
+          analysis:
+            - "tube_wear_modeling"
+            - "pulsation_characterization"
+            - "self_priming_efficiency"
+            
+      valve_systems:
+        types:
+          - "solenoid"
+          - "pinch"
+          - "rotary"
+        parameters:
+          switching_time: 0.050  # seconds
+          dead_volume: 0.001    # mL
+          pressure_rating: 100   # psi
+          
+    thermal_control:
+      enabled: true
+      heating:
+        methods:
+          - "resistive"
+          - "microwave"
+          - "inductive"
+        control:
+          algorithm: "PID"
+          parameters:
+            kp: 1.0
+            ki: 0.1
+            kd: 0.01
+          tuning_method: "Ziegler_Nichols"
+          
+      cooling:
+        methods:
+          - "peltier"
+          - "circulating_fluid"
+          - "cryogenic"
+        parameters:
+          min_temperature: -80  # Celsius
+          max_cooling_rate: 10  # C/min
+          
+    reaction_monitoring:
+      enabled: true
+      spectroscopic:
+        ir:
+          range:
+            min: 400   # cm-1
+            max: 4000  # cm-1
+          resolution: 4  # cm-1
+          
+        raman:
+          excitation: 785  # nm
+          range:
+            min: 200   # cm-1
+            max: 3500  # cm-1
+            
+        uv_vis:
+          range:
+            min: 200  # nm
+            max: 800  # nm
+          resolution: 1  # nm
+          
+    safety_systems:
+      enabled: true
+      interlocks:
+        categories:
+          - name: "temperature"
+            limits:
+              warning: 80   # Celsius
+              critical: 100
+            action: "shutdown_heating"
+            
+          - name: "pressure"
+            limits:
+              warning: 80   # psi
+              critical: 100
+            action: "open_vent"
+            
+          - name: "flow"
+            limits:
+              min: 0.1  # mL/min
+              max: 100
+            action: "stop_pump"
+            
+      emergency_procedures:
+        - name: "thermal_runaway"
+          detection: "temperature_rate_of_change"
+          threshold: 10  # C/min
+          actions:
+            - "stop_heating"
+            - "start_cooling"
+            - "alert_operator"
+            
+        - name: "leak_detection"
+          sensors:
+            - "capacitive"
+            - "optical"
+          actions:
+            - "stop_flow"
+            - "close_valves"
+            - "alert_operator"
+
+  # ---------------------------------------------------------------------------
+  # DNA Code Blocks Methodology
+  # ---------------------------------------------------------------------------
+  dna_analysis:
+    enabled: true
+    description: "Framework for bioinformatics and sequence analysis"
+    
+    sequence_analysis:
+      enabled: true
+      alignment:
+        pairwise:
+          algorithms:
+            - name: "smith_waterman"
+              parameters:
+                gap_open: -10
+                gap_extend: -0.5
+                matrix: "BLOSUM62"
+                
+            - name: "needleman_wunsch"
+              parameters:
+                gap_penalty: -8
+                matrix: "BLOSUM62"
+                
+        multiple:
+          algorithms:
+            - name: "clustal_omega"
+              parameters:
+                iterations: 3
+                guide_tree: "upgma"
+                
+            - name: "mafft"
+              parameters:
+                strategy: "auto"
+                maxiterate: 1000
+                
+      assembly:
+        algorithms:
+          - name: "de_bruijn_graph"
+            parameters:
+              kmer_size: 31
+              min_coverage: 2
+              
+          - name: "overlap_layout_consensus"
+            parameters:
+              min_overlap: 40
+              error_rate: 0.01
+              
+    function_prediction:
+      enabled: true
+      methods:
+        homology:
+          - name: "blast"
+            parameters:
+              evalue: 1e-5
+              max_hits: 100
+              database: "nr"
+              
+          - name: "hmmer"
+            parameters:
+              evalue: 1e-3
+              database: "Pfam"
+              
+        structure:
+          - name: "alphafold"
+            parameters:
+              model: "monomer"
+              confidence_threshold: 70
+              
+    synthesis_planning:
+      enabled: true
+      primer_design:
+        parameters:
+          length:
+            min: 18
+            max: 25
+          tm:
+            min: 55
+            max: 65
+          gc_content:
+            min: 40
+            max: 60
+        algorithms:
+          - "primer3"
+          - "oligoanalyzer"
+          
+      codon_optimization:
+        organisms:
+          - "E_coli"
+          - "S_cerevisiae"
+          - "CHO"
+          - "HEK293"
+        constraints:
+          - "avoid_restriction_sites"
+          - "minimize_repeats"
+          - "optimize_gc_content"
+
+  # ---------------------------------------------------------------------------
+  # Neural Biology Computational Models
+  # ---------------------------------------------------------------------------
+  neural_biology:
+    enabled: true
+    description: "Framework for computational neuroscience analysis"
+    
+    neuron_models:
+      enabled: true
+      point_models:
+        - name: "integrate_and_fire"
+          parameters:
+            tau_m: 20.0     # ms, membrane time constant
+            v_reset: -70.0  # mV
+            v_threshold: -55.0
+            
+        - name: "leaky_integrate_and_fire"
+          parameters:
+            tau_m: 20.0
+            v_rest: -70.0
+            v_reset: -70.0
+            v_threshold: -55.0
+            
+        - name: "hodgkin_huxley"
+          parameters:
+            c_m: 1.0        # uF/cm^2
+            g_na: 120.0     # mS/cm^2
+            g_k: 36.0
+            g_l: 0.3
+            e_na: 50.0      # mV
+            e_k: -77.0
+            e_l: -54.4
+            
+      compartmental:
+        morphology_formats:
+          - "SWC"
+          - "NeuroML"
+          - "ASC"
+        analysis:
+          - "passive_properties"
+          - "cable_theory"
+          - "impedance_profile"
+          
+    spiking_networks:
+      enabled: true
+      topology:
+        types:
+          - name: "random"
+            parameters:
+              connection_probability: 0.1
+              
+          - name: "small_world"
+            parameters:
+              k: 4
+              beta: 0.3
+              
+          - name: "scale_free"
+            parameters:
+              m: 2
+              
+      synapse_models:
+        - name: "exponential"
+          parameters:
+            tau_syn: 5.0  # ms
+            
+        - name: "alpha"
+          parameters:
+            tau_syn: 5.0
+            
+        - name: "stdp"
+          parameters:
+            tau_plus: 20.0
+            tau_minus: 20.0
+            a_plus: 0.1
+            a_minus: 0.12
+            
+    simulation_tools:
+      - name: "NEURON"
+        url: "https://neuron.yale.edu/"
+        license: "BSD"
+        
+      - name: "Brian2"
+        url: "https://brian2.readthedocs.io/"
+        license: "CeCILL"
+        
+      - name: "NEST"
+        url: "https://www.nest-simulator.org/"
+        license: "GPL-2.0"
+
+# =============================================================================
+# WEB INTELLIGENCE CAPTURE METHODS
+# =============================================================================
+web_intelligence:
+  enabled: true
+  description: "Configuration for web application analysis"
+  
+  har_capture:
+    enabled: true
+    browsers:
+      firefox:
+        method: "developer_tools"
+        instructions:
+          - "Open Developer Tools (F12)"
+          - "Navigate to Network tab"
+          - "Enable 'Persist Logs'"
+          - "Perform user actions"
+          - "Right-click → Save All As HAR"
+        extensions:
+          - "HAR Export Trigger"
+          
+      chrome:
+        method: "developer_tools"
+        instructions:
+          - "Open DevTools (F12)"
+          - "Navigate to Network tab"
+          - "Enable 'Preserve log'"
+          - "Perform actions"
+          - "Right-click → Save all as HAR with content"
+          
+    automation:
+      selenium:
+        enabled: true
+        performance_logging: true
+        
+      playwright:
+        enabled: true
+        har_path: "./captures/"
+        
+      puppeteer:
+        enabled: true
+        performance_api: true
+        
+  analysis_methods:
+    security_headers:
+      required:
+        - "Strict-Transport-Security"
+        - "Content-Security-Policy"
+        - "X-Content-Type-Options"
+        - "X-Frame-Options"
+        - "X-XSS-Protection"
+      recommended:
+        - "Referrer-Policy"
+        - "Permissions-Policy"
+        - "Cross-Origin-Opener-Policy"
+        - "Cross-Origin-Resource-Policy"
+        
+    cookie_analysis:
+      flags:
+        - "HttpOnly"
+        - "Secure"
+        - "SameSite"
+      attributes:
+        - "Expires"
+        - "Max-Age"
+        - "Domain"
+        - "Path"
+        
+    api_analysis:
+      authentication:
+        types:
+          - "Bearer"
+          - "Basic"
+          - "API-Key"
+          - "OAuth2"
+      endpoints:
+        discovery: true
+        documentation: true
+        
+  storage:
+    local_path: "./captures"
+    vault_path: "~/obsidian/vault/analysis/web"
+    retention:
+      har_files: 90  # days
+      reports: 365   # days
+      
+# =============================================================================
+# PERFORMANCE MONITORING SCHEMAS
+# =============================================================================
+performance_monitoring:
+  enabled: true
+  description: "Performance monitoring and comparison framework"
+  
+  metrics:
+    cpu:
+      enabled: true
+      measurements:
+        - name: "user_time"
+          unit: "percent"
+          sampling_interval: 1000  # ms
+          
+        - name: "system_time"
+          unit: "percent"
+          
+        - name: "idle_time"
+          unit: "percent"
+          
+        - name: "io_wait"
+          unit: "percent"
+          
+    memory:
+      enabled: true
+      measurements:
+        - name: "heap_used"
+          unit: "bytes"
+          
+        - name: "heap_total"
+          unit: "bytes"
+          
+        - name: "rss"
+          unit: "bytes"
+          
+        - name: "external"
+          unit: "bytes"
+          
+    disk:
+      enabled: true
+      measurements:
+        - name: "read_bytes"
+          unit: "bytes"
+          
+        - name: "write_bytes"
+          unit: "bytes"
+          
+        - name: "read_ops"
+          unit: "count"
+          
+        - name: "write_ops"
+          unit: "count"
+          
+    network:
+      enabled: true
+      measurements:
+        - name: "bytes_sent"
+          unit: "bytes"
+          
+        - name: "bytes_received"
+          unit: "bytes"
+          
+        - name: "packets_sent"
+          unit: "count"
+          
+        - name: "packets_received"
+          unit: "count"
+          
+        - name: "latency"
+          unit: "milliseconds"
+          percentiles:
+            - 50
+            - 90
+            - 95
+            - 99
+            
+  comparison:
+    enabled: true
+    baseline:
+      source: "original_har"
+      metrics:
+        - "response_time"
+        - "payload_size"
+        - "request_count"
+        
+    thresholds:
+      performance_regression: 10    # percent worse
+      performance_improvement: -10  # percent better
+      size_regression: 20           # percent larger
+      
+    reporting:
+      format: "markdown"
+      output_path: "~/obsidian/vault/analysis/comparison"
+      
+# =============================================================================
+# INTEGRATION CONFIGURATIONS
+# =============================================================================
+integrations:
+  
+  # ---------------------------------------------------------------------------
+  # MCP Server Integration
+  # ---------------------------------------------------------------------------
+  mcp_server:
+    enabled: true
+    description: "Model Context Protocol server integration"
+    
+    endpoints:
+      base_url: "http://localhost:3000"
+      analysis_submission: "/api/v1/analysis"
+      knowledge_query: "/api/v1/query"
+      swarm_coordination: "/api/v1/swarm"
+      
+    authentication:
+      type: "bearer"
+      token_env: "MCP_TOKEN"
+      
+    auto_indexing:
+      enabled: true
+      paths:
+        - "./analysis/**/*.md"
+        - "./reports/**/*.md"
+        - "./*.yaml"
+        
+    swarm_access:
+      enabled: true
+      agents:
+        - "security_analyzer"
+        - "performance_monitor"
+        - "code_reviewer"
+        
+  # ---------------------------------------------------------------------------
+  # Obsidian Vault Integration
+  # ---------------------------------------------------------------------------
+  obsidian_vault:
+    enabled: true
+    description: "Obsidian knowledge management integration"
+    
+    paths:
+      vault_root: "~/obsidian/vault"
+      analysis_root: "~/obsidian/vault/analysis"
+      templates: "~/obsidian/vault/templates"
+      
+    structure:
+      directories:
+        - "analysis/security"
+        - "analysis/performance"
+        - "analysis/comparison"
+        - "analysis/methodology"
+        - "reports/daily"
+        - "reports/weekly"
+        - "reports/incident"
+        
+    templates:
+      security_report: |
+        ---
+        date: {{date}}
+        type: security_analysis
+        target: {{target}}
+        ---
+        
+        # Security Analysis Report
+        
+        ## Summary
+        
+        ## Findings
+        
+        ### Critical
+        
+        ### High
+        
+        ### Medium
+        
+        ### Low
+        
+        ## Recommendations
+        
+        ## Links
+        - [[Methodology]]
+        - [[Previous Analysis]]
+        
+      comparison_report: |
+        ---
+        date: {{date}}
+        type: comparison
+        original: {{original}}
+        sovereign: {{sovereign}}
+        ---
+        
+        # Comparison Report
+        
+        ## Performance Metrics
+        
+        ## Security Improvements
+        
+        ## Feature Parity
+        
+        ## Recommendations
+        
+    graph_relationships:
+      enabled: true
+      link_types:
+        - "methodology_to_analysis"
+        - "analysis_to_implementation"
+        - "implementation_to_testing"
+        - "testing_to_deployment"
+        
+  # ---------------------------------------------------------------------------
+  # GitLens Integration
+  # ---------------------------------------------------------------------------
+  gitlens_integration:
+    enabled: true
+    description: "GitLens change tracking integration"
+    
+    tracked_paths:
+      - "REVERSE_ENGINEERING_SOVEREIGNTY_METHODOLOGY.md"
+      - "sovereignty_analysis_config.yaml"
+      - "sovereignty-analysis.sh"
+      - "sovereignty_analyzer.py"
+      - "analysis/**"
+      - "reports/**"
+      
+    annotations:
+      - "methodology_version"
+      - "analysis_date"
+      - "author_attribution"
+      - "review_status"
+      
+    vs_code_tasks:
+      - name: "Run Security Analysis"
+        command: "./sovereignty-analysis.sh analyze"
+        
+      - name: "Compare Versions"
+        command: "./sovereignty_analyzer.py compare"
+        
+      - name: "Update Obsidian"
+        command: "./sovereignty-analysis.sh sync"
+        
+  # ---------------------------------------------------------------------------
+  # Swarm Agents Integration
+  # ---------------------------------------------------------------------------
+  swarm_agents:
+    enabled: true
+    description: "Swarm intelligence agent coordination"
+    
+    agents:
+      security_analyzer:
+        enabled: true
+        model: "gpt-4o"
+        capabilities:
+          - "vulnerability_detection"
+          - "header_analysis"
+          - "cookie_security"
+          - "injection_detection"
+        context:
+          methodology: "REVERSE_ENGINEERING_SOVEREIGNTY_METHODOLOGY.md"
+          config: "sovereignty_analysis_config.yaml"
+          
+      performance_analyst:
+        enabled: true
+        model: "gpt-4o-mini"
+        capabilities:
+          - "timing_analysis"
+          - "resource_profiling"
+          - "bottleneck_detection"
+          - "optimization_suggestions"
+          
+      code_reviewer:
+        enabled: true
+        model: "claude-3-sonnet"
+        capabilities:
+          - "clean_room_verification"
+          - "code_quality_analysis"
+          - "security_review"
+          - "documentation_check"
+          
+      compliance_checker:
+        enabled: true
+        model: "gpt-4o"
+        capabilities:
+          - "license_verification"
+          - "legal_compliance"
+          - "attestation_validation"
+          - "audit_preparation"
+          
+    coordination:
+      task_distribution: "round_robin"
+      conflict_resolution: "consensus"
+      audit_logging: true
+      
+  # ---------------------------------------------------------------------------
+  # Discord Integration
+  # ---------------------------------------------------------------------------
+  discord_integration:
+    enabled: true
+    description: "Discord notifications and audit logging"
+    
+    channels:
+      analysis_updates: "#analysis"
+      security_alerts: "#security"
+      audit_log: "#audit"
+      general: "#sovereignty"
+      
+    notifications:
+      events:
+        - name: "analysis_started"
+          channel: "analysis_updates"
+          template: "🔬 Analysis started for {{target}}"
+          
+        - name: "vulnerabilities_found"
+          channel: "security_alerts"
+          template: "⚠️ {{count}} vulnerabilities found in {{target}}"
+          priority: "high"
+          
+        - name: "comparison_complete"
+          channel: "analysis_updates"
+          template: "✅ Comparison complete: {{improvement}}% improvement"
+          
+        - name: "methodology_updated"
+          channel: "general"
+          template: "📚 Methodology updated: {{description}}"
+          
+    audit:
+      enabled: true
+      events:
+        - "analysis_execution"
+        - "configuration_change"
+        - "attestation_submission"
+        - "report_generation"
+
+# =============================================================================
+# WORKFLOW CONFIGURATIONS
+# =============================================================================
+workflows:
+  
+  full_analysis:
+    name: "Complete Sovereignty Analysis"
+    description: "End-to-end analysis workflow"
+    steps:
+      - name: "initialize"
+        command: "./sovereignty-analysis.sh init"
+        
+      - name: "capture"
+        command: "./sovereignty-analysis.sh capture {{target}}"
+        manual: true
+        instructions: "Complete manual HAR capture in browser"
+        
+      - name: "analyze_security"
+        command: "./sovereignty_analyzer.py analyze-har {{har_file}}"
+        
+      - name: "generate_report"
+        command: "./sovereignty_analyzer.py report --output {{output_path}}"
+        
+      - name: "sync_obsidian"
+        command: "./sovereignty-analysis.sh sync"
+        
+      - name: "notify"
+        command: "./sovereignty-analysis.sh notify 'Analysis complete'"
+        
+  security_scan:
+    name: "Security-Focused Analysis"
+    description: "Quick security assessment workflow"
+    steps:
+      - name: "analyze"
+        command: "./sovereignty_analyzer.py analyze-har {{har_file}} --focus security"
+        
+      - name: "report"
+        command: "./sovereignty_analyzer.py report --type security"
+        
+  comparison:
+    name: "Version Comparison"
+    description: "Compare original and sovereign implementations"
+    steps:
+      - name: "compare"
+        command: "./sovereignty_analyzer.py compare {{original}} {{sovereign}}"
+        
+      - name: "report"
+        command: "./sovereignty_analyzer.py report --type comparison"
+
+# =============================================================================
+# SECURITY CONFIGURATIONS
+# =============================================================================
+security:
+  credentials:
+    storage: "environment_variables"
+    never_log:
+      - "api_keys"
+      - "passwords"
+      - "tokens"
+      - "secrets"
+      
+  data_handling:
+    sensitive_patterns:
+      - "password"
+      - "secret"
+      - "token"
+      - "api_key"
+      - "authorization"
+      - "cookie"
+    redaction:
+      enabled: true
+      replacement: "[REDACTED]"
+      
+  audit:
+    enabled: true
+    log_path: "./logs/audit"
+    retention: 365  # days
+    events:
+      - "analysis_start"
+      - "analysis_complete"
+      - "configuration_change"
+      - "error"
+      
+# =============================================================================
+# OUTPUT CONFIGURATIONS
+# =============================================================================
+output:
+  formats:
+    - "markdown"
+    - "json"
+    - "yaml"
+    
+  paths:
+    reports: "./reports"
+    analysis: "./analysis"
+    captures: "./captures"
+    logs: "./logs"
+    
+  naming:
+    pattern: "{{type}}_{{target}}_{{timestamp}}"
+    timestamp_format: "%Y%m%d_%H%M%S"
+    
+  markdown:
+    template_path: "./templates"
+    include_metadata: true
+    include_timestamps: true
