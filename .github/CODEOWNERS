@@ -1,0 +1,39 @@
+# CODEOWNERS - Strategickhaos DAO LLC / Sovereignty Architecture
+# This file defines code ownership for automatic review assignments
+# and helps identify trusted reviewers for different parts of the codebase
+
+# Default owners for everything in the repo
+# These users will be requested for review when someone opens a PR
+* @Strategickhaos
+
+# Governance and legal documents require human review
+governance/ @Strategickhaos
+legal/ @Strategickhaos
+upl_compliance/ @Strategickhaos
+
+# Documentation can be reviewed by bots and humans
+docs/ @Strategickhaos
+*.md @Strategickhaos
+
+# CI/CD workflows - require careful review
+.github/ @Strategickhaos
+
+# Infrastructure and deployment
+docker-compose*.yml @Strategickhaos
+Dockerfile* @Strategickhaos
+
+# Source code
+src/ @Strategickhaos
+
+# Scripts and automation
+scripts/ @Strategickhaos
+hooks/ @Strategickhaos
+
+# Configuration files
+*.yaml @Strategickhaos
+*.yml @Strategickhaos
+*.json @Strategickhaos
+
+# Security-sensitive files always require owner review
+SECURITY.md @Strategickhaos
+.env* @Strategickhaos
