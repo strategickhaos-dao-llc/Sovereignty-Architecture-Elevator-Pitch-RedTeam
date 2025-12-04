@@ -1,0 +1,53 @@
+# Ingot Manifest - Metadata and configuration for this ingot module
+# See INGOT_FORGE.md for documentation on the ingot system
+
+name: example_ingot
+version: "1.0.0"
+description: |
+  A template ingot demonstrating the standard structure for
+  self-contained, modular components in the Sovereignty Architecture.
+  Use this as a starting point for creating new ingots.
+
+# Author and ownership information
+author:
+  name: Strategickhaos Swarm Intelligence
+  contact: https://discord.gg/strategickhaos
+
+# Dependencies on other ingots or external packages
+dependencies:
+  ingots: []
+  external:
+    # Example: Add npm/pip/etc packages here
+    # - name: lodash
+    #   version: "^4.17.21"
+    #   ecosystem: npm
+
+# Entry points define how this ingot integrates with the system
+entry_points:
+  # Scripts that can be invoked directly
+  cli:
+    - name: example-cli
+      script: src/cli.sh
+      description: Example CLI command
+  # Hooks that respond to system events
+  hooks:
+    - event: on_load
+      handler: src/init.sh
+      description: Initialization hook called when ingot is loaded
+
+# Tags for discovery and categorization
+tags:
+  - template
+  - example
+  - starter
+
+# Environment variables required by this ingot
+# Values should be provided via .env or environment
+environment:
+  optional:
+    - name: EXAMPLE_INGOT_DEBUG
+      description: Enable debug mode for this ingot
+      default: "false"
+
+# License for this ingot
+license: MIT

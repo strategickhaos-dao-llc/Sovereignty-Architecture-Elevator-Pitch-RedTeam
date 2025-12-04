@@ -35,3 +35,13 @@ target/
 
 # Workspace data
 workspace/
+
+# Ingot Forge
+# Per-ingot environment files (secrets)
+ingots/*/.env
+# Smelter registry (runtime state)
+.smelter_registry
+# Ingot build artifacts
+ingots/*/dist/
+ingots/*/build/
+ingots/*/.cache/
