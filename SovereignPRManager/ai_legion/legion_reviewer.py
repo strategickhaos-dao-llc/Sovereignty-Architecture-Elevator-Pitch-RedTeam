@@ -4,6 +4,10 @@ Legion Reviewer - Coordinates multiple AI agents for PR review.
 This module orchestrates parallel reviews from multiple AI systems
 and synthesizes their feedback into a unified recommendation.
 
+Note: This component is designed to be called by a NATS consumer
+that subscribes to 'pr.detected' events. The NATS subscription
+logic is implemented in a separate event handler module.
+
 Author: SovereignPRManager Legion
 """
 
