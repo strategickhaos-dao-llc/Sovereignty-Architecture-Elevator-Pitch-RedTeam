@@ -35,3 +35,30 @@ target/
 
 # Workspace data
 workspace/
+
+# ========================================
+# Sovereign Swarm - Security-sensitive files
+# ========================================
+
+# Private keys and certificates
+*.key
+*.psk
+*.jwt
+*.pem
+*.crt
+*.csr
+
+# CA state directory (contains private CA keys)
+ca/state/
+
+# Node configurations (may contain keys)
+nodes/
+
+# Build artifacts
+artifacts/
+
+# Environment files
+.env
+
+# macOS
+.DS_Store

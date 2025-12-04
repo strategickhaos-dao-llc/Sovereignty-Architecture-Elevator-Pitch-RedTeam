@@ -1,0 +1,62 @@
+name: Sovereign Swarm CI
+
+on:
+  push:
+    branches: [main, copilot/**]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-shell:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      
+      - name: Run ShellCheck on all shell scripts
+        run: |
+          find . -name "*.sh" -type f ! -path "./.git/*" ! -path "./node_modules/*" -print0 | \
+            xargs -0 -I {} shellcheck -x -S warning {}
+
+  lint-python:
+    name: Python Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install pyflakes
+        run: pip install pyflakes
+      
+      - name: Run pyflakes on Python scripts
+        run: |
+          find scripts -name "*.py" -type f -exec pyflakes {} +
+
+  generate-docs:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Make generate_docs.sh executable
+        run: chmod +x scripts/generate_docs.sh
+      
+      - name: Generate documentation
+        run: ./scripts/generate_docs.sh
+      
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/
+          retention-days: 30

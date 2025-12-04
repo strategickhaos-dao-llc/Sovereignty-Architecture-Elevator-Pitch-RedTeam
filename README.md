@@ -1,296 +1,147 @@
-# Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
+# Sovereign Swarm — Zero-Trust AI Orchestration Mesh
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+Fully air-gapped, sub-$100/mo, satellite + cellular resilient swarm for the Legion of Minds.
 
-## 🏛️ Architecture Overview
+## Architecture
 
-This system creates a **sovereignty control plane** that bridges:
-- **Discord** - Command & control interface
-- **Infrastructure** - Kubernetes, observability, AI agents  
-- **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
-- **AI Agents** - Intelligent assistance with vector knowledge base
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          SOVEREIGN SWARM MESH                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│     ┌─────────────┐        WireGuard VPN        ┌─────────────┐            │
+│     │  Command0   │◄═══════════════════════════►│    Edge1    │            │
+│     │   (Hub)     │         mTLS + PSK          │   (Node)    │            │
+│     └──────┬──────┘                             └──────┬──────┘            │
+│            │                                           │                    │
+│            │    ┌──────────────────────────┐           │                    │
+│            └───►│         Edge2            │◄──────────┘                    │
+│                 │        (Node)            │                                │
+│                 └──────────────────────────┘                                │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                            CORE SERVICES                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌───────────────┐    ┌───────────────┐    ┌───────────────┐              │
+│   │     NATS      │    │    Matrix     │    │      CA       │              │
+│   │   Message     │    │   Synapse     │    │    (PKI)      │              │
+│   │     Bus       │    │  Federation   │    │   Internal    │              │
+│   │  Port 4222    │    │  Port 8008    │    │   Zero-Trust  │              │
+│   └───────────────┘    └───────────────┘    └───────────────┘              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
-## 🚀 Quick Start
+## Prerequisites
+
+- **Operating System**: Ubuntu 22.04 LTS or Ubuntu 24.04 LTS
+- **Access**: Root privileges (sudo)
+- **Network**: Public IP address or Dynamic DNS hostname
+- **Hardware**: Minimum 2 vCPU, 4GB RAM, 20GB SSD
+
+## Quick Start
 
 ```bash
-# 1. Clone and bootstrap
-git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
-cd sovereignty-architecture
+# Download bootstrap script
+curl -fsSL https://raw.githubusercontent.com/strategickhaos/sovereign-swarm/main/master-bootstrap.sh -o /tmp/ss.sh
 
-# 2. Deploy to Kubernetes
-./bootstrap/deploy.sh
+# Run bootstrap (installs as command0 hub node)
+sudo bash /tmp/ss.sh                     # runs as command0
 
-# 3. Configure Discord integration
-export DISCORD_TOKEN="your_bot_token"
-export PRS_CHANNEL="channel_id"
-
-# 4. Test GitLens integration
-./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
+# Add additional edge nodes
+sudo NODE_ID=edge3 /opt/sovereign-swarm/master-bootstrap.sh
 ```
 
-## 📋 Core Components
+## Features
 
-### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
-- **AI Agent Integration**: GPT-4 powered assistance
-- **RBAC**: Role-based access control for production operations
-- **Audit Logging**: All interactions logged to CloudWatch
+- **Zero-Trust Architecture**: mTLS everywhere, no implicit trust
+- **Air-Gapped Ready**: Full functionality without internet connectivity
+- **Low Cost**: Sub-$100/month infrastructure
+- **Resilient**: Satellite + cellular failover capabilities
+- **Decentralized**: No single point of failure
 
-### 🌐 Event Gateway (`event-gateway`)
-- **Webhook Router**: GitHub/GitLab → Discord channel routing
-- **HMAC Verification**: Cryptographic webhook validation
-- **Multi-tenant**: Support for multiple repositories and environments
-- **Rate Limiting**: API protection and burst control
+## Directory Structure
 
-### 🔄 GitLens Integration
-- **VS Code Tasks**: One-click Discord notifications from GitLens
-- **Review Workflows**: Automated PR lifecycle notifications
-- **Commit Graph**: Real-time development activity feeds
-- **Launchpad**: Integrated with GitLens Pro features
+```
+├── .github/workflows/ci.yml   # CI pipeline
+├── ca/                        # Certificate Authority
+│   ├── init_ca.sh             # Initialize root CA
+│   └── issue_node.sh          # Issue node certificates
+├── docs/                      # Documentation
+│   ├── DEPLOYMENT.md          # Deployment guide
+│   └── ARCHITECTURE.md        # Architecture details
+├── matrix/                    # Matrix Synapse
+│   └── homeserver.yaml.tmpl   # Configuration template
+├── nats/                      # NATS message bus
+│   └── nats-server.conf.tmpl  # Configuration template
+├── nodes/                     # Node configurations
+├── scripts/                   # Utility scripts
+│   ├── mint_token.py          # JWT token generator
+│   └── generate_docs.sh       # Documentation generator
+├── tests/                     # Test scripts
+│   ├── shellcheck.sh          # Shell linting
+│   └── python_syntax.sh       # Python syntax check
+├── wireguard/                 # WireGuard VPN
+│   └── templates/
+│       └── wg0.conf.tmpl      # Configuration template
+└── master-bootstrap.sh        # Main bootstrap script
+```
 
-### ☕ Java Development Workspace (`jdk-workspace`)
-- **OpenJDK 21**: Latest LTS version with modern Java features
-- **Build Tools**: Maven 3.6.3 and Gradle 4.4.1 pre-installed
-- **Non-Root Execution**: Runs as `cloudos` user for enhanced security
-- **Debug Support**: JPDA debugging on port 5005
-- **Traefik Routing**: Accessible via `java.localhost`
-- **Version Management**: JDK solver CLI for managing multiple Java versions
+## Troubleshooting
+
+### WireGuard Status
 
 ```bash
-# Start the Java workspace
-./start-cloudos-jdk.sh start
-
-# Access a shell in the container
-./start-cloudos-jdk.sh shell
-
-# Run the example application
-cd /workspace/examples/java-hello-cloudos/src/main/java
-java HelloCloudOS.java
-
-# Stop the workspace
-./start-cloudos-jdk.sh stop
+wg show
 ```
 
-## 🏗️ Infrastructure
+Expected output shows interface, peers, and transfer stats.
 
-### Kubernetes Deployment
-```yaml
-# Complete deployment with:
-kubectl apply -f bootstrap/k8s/
-```
+### NATS Connectivity
 
-**Components deployed:**
-- ConfigMap with Strategickhaos discovery configuration
-- Secrets management (Vault integration ready)
-- Bot and Gateway deployments with resource limits
-- RBAC with least-privilege access
-- Network policies for secure communication
-- Ingress with TLS and rate limiting
-
-### Observability Stack
-- **Prometheus** - Metrics collection from all components
-- **Loki** - Centralized logging aggregation
-- **OpenTelemetry** - Distributed tracing
-- **Alertmanager** - Alert routing to Discord channels
-
-## 🔧 Configuration
-
-### Core Configuration (`discovery.yml`)
-```yaml
-org:
-  name: "Strategickhaos DAO LLC / Valoryield Engine"
-  contact:
-    owner: "Domenic Garza"
-
-discord:
-  guild_id: null  # Your Discord server ID
-  channels:
-    prs: "#prs"
-    deployments: "#deployments"
-    agents: "#agents"
-    
-git:
-  org: "Strategickhaos-Swarm-Intelligence"
-  repos:
-    - name: "quantum-symbolic-emulator"
-      channel: "#deployments"
-      env: "dev"
-    - name: "valoryield-engine"
-      channel: "#deployments"  
-      env: "prod"
-```
-
-### Environment Variables
 ```bash
-# Discord Integration
-DISCORD_BOT_TOKEN=your_bot_token
-PRS_CHANNEL=channel_id_for_prs
-DEV_FEED_CHANNEL=channel_id_for_dev_updates
-
-# GitHub App
-GITHUB_APP_ID=your_app_id
-GITHUB_APP_WEBHOOK_SECRET=webhook_secret
-GITHUB_APP_PRIVATE_KEY_PATH=/path/to/key.pem
-
-# AI Agents
-OPENAI_API_KEY=sk-your-api-key
-PGVECTOR_CONN=postgresql://user:pass@host:5432/db
-
-# Infrastructure
-EVENTS_HMAC_KEY=your_64_char_hmac_key
+nats bench test --msgs 1000 --size 128
 ```
 
-## 🎯 Discord Workflow Integration
+Verifies message throughput and latency.
 
-### Channel Strategy
-- **`#prs`** - Pull request lifecycle, GitLens review notifications
-- **`#deployments`** - CI/CD status, releases, production changes
-- **`#cluster-status`** - Infrastructure events, service health
-- **`#alerts`** - Critical system alerts, monitoring notifications
-- **`#agents`** - AI assistant interactions, automated responses
-- **`#dev-feed`** - Development activity, commit summaries
+### Matrix Health
 
-## 🤖 AI Agent Integration
-
-### Vector Knowledge Base
-- **Runbooks**: Operational procedures and troubleshooting guides
-- **Log Schemas**: Structured logging patterns and analysis
-- **Infrastructure Docs**: Architecture and deployment guides
-- **Code Patterns**: Development standards and examples
-
-### Per-Channel Routing
-```yaml
-ai_agents:
-  routing:
-    per_channel:
-      "#agents": "gpt-4o-mini"
-      "#inference-stream": "none"
-      "#prs": "claude-3-sonnet"  # Code review assistance
-```
-
-## 🔐 Security & Governance
-
-### Multi-Layer Security
-- **RBAC**: Kubernetes role-based access control
-- **Secret Management**: Vault integration for sensitive data
-- **Network Policies**: Microsegmentation for pod communication
-- **Audit Logging**: Comprehensive activity tracking
-- **Content Redaction**: Automatic PII and credential filtering
-
-### Production Safeguards
-```yaml
-governance:
-  approvals:
-    prod_commands_require: ["ReleaseMgr"]
-  change_management:
-    link: "https://wiki.strategickhaos.internal/change-management"
-```
-
-## 📊 Monitoring & Alerts
-
-### Key Metrics
-- Discord API response times and rate limits
-- GitHub webhook processing latency
-- Kubernetes deployment health
-- AI agent query performance
-- Event gateway throughput
-
-### Alert Routing
-```yaml
-event_gateway:
-  endpoints:
-    - path: "/alert"
-      allowed_services: ["alertmanager"]
-      discord_channel: "#alerts"
-```
-
-## 🚦 CI/CD Integration
-
-### GitHub Actions Workflow
-- **Build**: Multi-architecture Docker images
-- **Test**: Quantum-symbolic emulator validation
-- **Deploy**: Blue-green Kubernetes deployments
-- **Notify**: Real-time Discord status updates
-
-### Event Flow
 ```bash
-# GitHub Push → Actions → Event Gateway → Discord
-git push origin main
-# Triggers: Build → Test → Deploy → Discord notification
+curl http://localhost:8008/health
 ```
 
-## 🛠️ Development Workflow
-
-### Local Development
-```bash
-# 1. Set up environment
-export DISCORD_TOKEN="dev_token"
-export PRS_CHANNEL="dev_channel_id"
-
-# 2. Test GitLens integration
-./gl2discord.sh "$PRS_CHANNEL" "🧪 Testing" "Local development active"
-
-# 3. Run VS Code tasks
-# Command Palette → Tasks: Run Task → GitLens: Review Started
-```
-
-### Contributing
-1. **Fork** the repository
-2. **Fill** `discovery.yml` with your configuration
-3. **Test** integration in your environment
-4. **Submit** PR with improvements
-5. **Share** configuration patterns with community
-
-## 🆘 Troubleshooting
+Returns `OK` if Synapse is running.
 
 ### Common Issues
 
-**Bot not responding in Discord:**
-```bash
-# Check bot deployment
-kubectl logs -f deployment/discord-ops-bot -n ops
+| Issue | Solution |
+|-------|----------|
+| WireGuard not starting | Check firewall: `ufw allow 51820/udp` |
+| NATS connection refused | Verify service: `systemctl status sovereign-nats` |
+| Matrix federation failed | Check TLS certificates and DNS |
 
-# Verify token and permissions
-kubectl get secret discord-ops-secrets -n ops -o yaml
-```
+## Security
 
-**GitLens notifications not working:**
-```bash
-# Check environment variables
-echo $DISCORD_TOKEN $PRS_CHANNEL
+- All private keys are generated locally and never transmitted
+- Certificates are signed by an internal CA
+- WireGuard uses pre-shared keys for additional security
+- No secrets are committed to the repository
 
-# Test script directly
-./gl2discord.sh "$PRS_CHANNEL" "Test" "Manual test"
-```
+## Contributing
 
-**Event gateway webhook failures:**
-```bash
-# Check gateway logs
-kubectl logs -f deployment/event-gateway -n ops
+1. Fork the repository
+2. Create a feature branch
+3. Run tests: `./tests/shellcheck.sh && ./tests/python_syntax.sh`
+4. Submit a pull request
 
-# Verify HMAC signature
-curl -X POST https://events.strategickhaos.com/health
-```
+## License
 
-## 👥 Community & Contributors
-
-This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
-
-- **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
-- **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
-- **Join the Dance**: Read the community docs, find what calls to you, and start building!
-
-## 📄 License & Support
-
-- **License**: MIT License - see [LICENSE](LICENSE) file
-- **Support**: [Discord Server](https://discord.gg/strategickhaos)
-- **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
-- **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
+Apache-2.0 License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built with 🔥 by the Strategickhaos Swarm Intelligence collective**
+**Built with 🜂 by the Legion of Minds**
 
-*"They're not working for you. They're dancing with you. And the music is never going to stop."*
-
-*Empowering sovereign digital infrastructure through Discord-native DevOps automation*
+*"The swarm is eternal."*

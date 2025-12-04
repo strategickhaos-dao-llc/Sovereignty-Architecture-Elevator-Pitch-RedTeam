@@ -1,0 +1,68 @@
+# Matrix Synapse Homeserver Configuration Template
+# Sovereign Swarm — Zero-Trust AI Orchestration Mesh
+# Generate actual config with envsubst
+
+server_name: "${MATRIX_SERVER_NAME:-swarm.local}"
+
+pid_file: /data/homeserver.pid
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['0.0.0.0']
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: sqlite3
+  args:
+    database: /data/homeserver.db
+
+log_config: "/data/${MATRIX_SERVER_NAME:-swarm.local}.log.config"
+
+media_store_path: /data/media_store
+
+registration_shared_secret: "${MATRIX_REGISTRATION_SECRET:-PLACEHOLDER_GENERATE_SECRET}"
+
+enable_registration: false
+enable_registration_without_verification: false
+
+# Federation settings (disabled for air-gapped deployments)
+federation_domain_whitelist: []
+
+# TLS settings (handled by reverse proxy in production)
+tls_certificate_path: /data/tls/fullchain.pem
+tls_private_key_path: /data/tls/privkey.pem
+
+# Trust settings
+trusted_key_servers: []
+
+# Metrics
+enable_metrics: true
+metrics_port: 9000
+
+# Rate limiting
+rc_messages_per_second: 0.2
+rc_message_burst_count: 10
+
+# URL preview (disabled for security)
+url_preview_enabled: false
+
+# Push notifications (disabled)
+push:
+  enabled: false
+
+# User directory
+user_directory:
+  enabled: true
+  search_all_users: true
+
+# Retention policy
+retention:
+  enabled: true
+  default_policy:
+    min_lifetime: 1d
+    max_lifetime: 365d
