@@ -102,7 +102,8 @@ jobs:
               await new Promise(r => setTimeout(r, delayMs));
             }
             
-            console.log('⚠️ Timeout waiting for checks. Proceeding anyway...');
+            console.log('⚠️ Timeout waiting for checks.');
+            core.setFailed('Timeout: CI checks did not complete in time. Auto-merge aborted for safety.');
       
       - name: Auto-approve PR
         if: steps.check.outputs.trusted == 'true'
@@ -126,18 +127,36 @@ jobs:
             console.log(`🔀 Enabling auto-merge for PR #${prNumber}...`);
             
             try {
-              // Enable auto-merge with squash strategy
-              await github.rest.pulls.update({
+              // Get PR details to find the node_id for GraphQL
+              const { data: pr } = await github.rest.pulls.get({
                 owner,
                 repo,
-                pull_number: prNumber,
-                auto_merge: true
+                pull_number: prNumber
+              });
+              
+              // Enable auto-merge using GraphQL API
+              await github.graphql(`
+                mutation EnableAutoMerge($pullRequestId: ID!) {
+                  enablePullRequestAutoMerge(input: {
+                    pullRequestId: $pullRequestId,
+                    mergeMethod: SQUASH
+                  }) {
+                    pullRequest {
+                      autoMergeRequest {
+                        enabledAt
+                      }
+                    }
+                  }
+                }
+              `, {
+                pullRequestId: pr.node_id
               });
               
               console.log('✅ Auto-merge enabled');
             } catch (error) {
               // If auto-merge API not available, try direct merge
               console.log('⚠️ Auto-merge API not available, attempting direct merge...');
+              console.log('Error:', error.message);
               
               try {
                 const { data: pr } = await github.rest.pulls.get({
@@ -169,6 +188,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const prNumber = context.payload.pull_request?.number || context.payload.number;
+            const actor = context.actor;
             
             if (!prNumber) {
               console.log('No PR number found, skipping comment...');
@@ -181,7 +201,7 @@ jobs:
               'This PR was automatically approved and queued for merge by the **Sovereignty Automation** system.',
               '',
               '### Why was this auto-approved?',
-              '- 🤖 **Author:** `${{ github.actor }}` (trusted bot)',
+              `- 🤖 **Author:** \`${actor}\` (trusted bot)`,
               '- ✅ **CI Status:** All checks passed',
               '- 🔒 **Security:** Verified trusted actor',
               '',
