@@ -1,0 +1,89 @@
+# homeserver.yaml — Matrix Synapse Configuration Template
+# Sovereign Swarm v2.0
+#
+# Copy to /opt/sovereign-swarm/matrix/synapse/homeserver.yaml
+# Edit SYNAPSE_SERVER_NAME and secrets before deploying
+
+server_name: "${SYNAPSE_SERVER_NAME:-swarm.local}"
+
+pid_file: /data/homeserver.pid
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['::']
+    resources:
+      - names: [client, federation]
+        compress: false
+
+# Database (PostgreSQL recommended for production)
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: "${MATRIX_DB_PASSWORD:-synapse-secure-password}"
+    database: synapse
+    host: postgres
+    cp_min: 5
+    cp_max: 10
+
+# Logging
+log_config: "/data/log.config"
+
+# Media storage
+media_store_path: /data/media_store
+max_upload_size: 50M
+
+# Registration (disabled for security)
+enable_registration: false
+enable_registration_without_verification: false
+
+# Federation (Evolution #5: Hardened - DISABLED)
+federation_domain_whitelist: []
+# Set to false to completely disable federation
+# federation: false
+
+# Metrics for Prometheus
+enable_metrics: true
+metrics_port: 9000
+
+# Rate limiting
+rc_message:
+  per_second: 0.2
+  burst_count: 10
+
+rc_registration:
+  per_second: 0.17
+  burst_count: 3
+
+rc_login:
+  address:
+    per_second: 0.17
+    burst_count: 3
+  account:
+    per_second: 0.17
+    burst_count: 3
+  failed_attempts:
+    per_second: 0.17
+    burst_count: 3
+
+# URL previews (disabled for security)
+url_preview_enabled: false
+
+# Report statistics (disabled for privacy)
+report_stats: false
+
+# Signing key
+signing_key_path: "/data/signing.key"
+
+# Trusted key servers (empty for isolation)
+trusted_key_servers: []
+
+# Suppress key server warnings
+suppress_key_server_warning: true
+
+# Application services (mautrix-nats bridge)
+app_service_config_files:
+  - /data/mautrix-nats-registration.yaml
