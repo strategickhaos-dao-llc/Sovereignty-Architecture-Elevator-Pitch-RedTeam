@@ -1,0 +1,69 @@
+name: Verify Evidence
+
+on:
+  push:
+    paths:
+      - 'evidence/**'
+      - 'dao_record.yaml'
+      - 'governance/**'
+      - 'verify_evidence.py'
+      - '.github/workflows/verify.yaml'
+  pull_request:
+    paths:
+      - 'evidence/**'
+      - 'dao_record.yaml'
+      - 'governance/**'
+      - 'verify_evidence.py'
+      - '.github/workflows/verify.yaml'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: read
+
+jobs:
+  verify-evidence:
+    name: Verify Evidence Hashes
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Validate JSON schema
+        run: |
+          python3 verify_evidence.py --validate-json
+      
+      - name: Verify hash manifest
+        run: |
+          python3 verify_evidence.py
+      
+      - name: Display evidence summary
+        if: always()
+        run: |
+          echo "📋 Evidence Directory Contents:"
+          ls -la evidence/
+          echo ""
+          echo "📋 Hash Manifest:"
+          cat evidence/hashes.txt
+          echo ""
+          echo "📋 Status Snapshot (first 50 lines):"
+          head -50 evidence/status_snapshot.json
+
+  json-lint:
+    name: Lint JSON Files
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Validate JSON syntax
+        run: |
+          echo "Validating evidence/status_snapshot.json..."
+          python3 -m json.tool evidence/status_snapshot.json > /dev/null
+          echo "✅ JSON syntax valid"
