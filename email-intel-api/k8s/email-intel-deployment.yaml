@@ -13,10 +13,16 @@ kind: Secret
 metadata:
   name: email-intel-secrets
   namespace: sovereign-email
+  annotations:
+    description: "IMPORTANT: Replace the placeholder value below before deployment"
 type: Opaque
 stringData:
-  # Replace with your actual Grok API key
-  GROK_API_KEY: "your-grok-api-key-here"
+  # IMPORTANT: Replace this placeholder with your actual Grok API key before deploying
+  # You can also create this secret separately using:
+  # kubectl create secret generic email-intel-secrets \
+  #   --from-literal=GROK_API_KEY=your-actual-key \
+  #   -n sovereign-email
+  GROK_API_KEY: "REPLACE_WITH_YOUR_GROK_API_KEY"
 
 ---
 apiVersion: apps/v1
