@@ -1,0 +1,423 @@
+# Quantum Mirror Lab - Dashboard and Visualization Services
+
+---
+# NATS Message Bus - Agent Communication
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: nats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-mirror
+      component: nats
+  template:
+    metadata:
+      labels:
+        app: quantum-mirror
+        component: nats
+    spec:
+      serviceAccountName: quantum-mirror-sa
+      containers:
+      - name: nats
+        image: nats:2.10-alpine
+        args:
+        - "-js"
+        - "-m"
+        - "8222"
+        ports:
+        - name: client
+          containerPort: 4222
+        - name: monitoring
+          containerPort: 8222
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8222
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8222
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: quantum-mirror-lab
+spec:
+  selector:
+    app: quantum-mirror
+    component: nats
+  ports:
+  - name: client
+    port: 4222
+    targetPort: 4222
+  - name: monitoring
+    port: 8222
+    targetPort: 8222
+
+---
+# OBS WebSocket Server - Graph Visualization Backend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: obs-websocket
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: obs-websocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-mirror
+      component: obs-websocket
+  template:
+    metadata:
+      labels:
+        app: quantum-mirror
+        component: obs-websocket
+    spec:
+      serviceAccountName: quantum-mirror-sa
+      containers:
+      - name: obs-websocket
+        image: node:20-alpine
+        workingDir: /app
+        command: ["node", "obs-websocket-server.js"]
+        env:
+        - name: OBS_WEBSOCKET_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: OBS_WEBSOCKET_PORT
+        - name: NATS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: NATS_URL
+        - name: AGENT_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: AGENT_COUNT
+        ports:
+        - name: websocket
+          containerPort: 4455
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: app-source
+          mountPath: /app
+      volumes:
+      - name: app-source
+        configMap:
+          name: obs-websocket-source
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: obs-websocket
+  namespace: quantum-mirror-lab
+spec:
+  selector:
+    app: quantum-mirror
+    component: obs-websocket
+  ports:
+  - name: websocket
+    port: 4455
+    targetPort: 4455
+
+---
+# Discovery Feed WebSocket - Real-time Event Stream
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery-feed
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: discovery-feed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-mirror
+      component: discovery-feed
+  template:
+    metadata:
+      labels:
+        app: quantum-mirror
+        component: discovery-feed
+    spec:
+      serviceAccountName: quantum-mirror-sa
+      containers:
+      - name: discovery-feed
+        image: node:20-alpine
+        workingDir: /app
+        command: ["node", "discovery-feed.js"]
+        env:
+        - name: WEBSOCKET_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: DISCOVERY_FEED_PORT
+        - name: NATS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: NATS_URL
+        ports:
+        - name: websocket
+          containerPort: 8765
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: app-source
+          mountPath: /app
+      volumes:
+      - name: app-source
+        configMap:
+          name: discovery-feed-source
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discovery-feed
+  namespace: quantum-mirror-lab
+spec:
+  selector:
+    app: quantum-mirror
+    component: discovery-feed
+  ports:
+  - name: websocket
+    port: 8765
+    targetPort: 8765
+
+---
+# Mission Control Dashboard
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-mirror
+      component: dashboard
+  template:
+    metadata:
+      labels:
+        app: quantum-mirror
+        component: dashboard
+    spec:
+      serviceAccountName: quantum-mirror-sa
+      containers:
+      - name: dashboard
+        image: node:20-alpine
+        workingDir: /app
+        command: ["npm", "start"]
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: DASHBOARD_PORT
+        - name: WEBSOCKET_URL
+          value: "ws://discovery-feed:8765"
+        - name: OBS_WEBSOCKET_URL
+          value: "ws://obs-websocket:4455"
+        - name: AGENT_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: AGENT_COUNT
+        ports:
+        - name: http
+          containerPort: 3001
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: app-source
+          mountPath: /app
+      volumes:
+      - name: app-source
+        configMap:
+          name: dashboard-source
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: quantum-mirror-lab
+spec:
+  selector:
+    app: quantum-mirror
+    component: dashboard
+  ports:
+  - name: http
+    port: 3001
+    targetPort: 3001
+
+---
+# Quantum Simulation Visualizer
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantum-visualizer
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: quantum-visualizer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-mirror
+      component: quantum-visualizer
+  template:
+    metadata:
+      labels:
+        app: quantum-mirror
+        component: quantum-visualizer
+    spec:
+      serviceAccountName: quantum-mirror-sa
+      containers:
+      - name: quantum-visualizer
+        image: python:3.11-slim
+        workingDir: /app
+        command: ["python", "quantum_visualizer.py"]
+        env:
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: QUANTUM_VISUALIZER_PORT
+        - name: NATS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: NATS_URL
+        - name: IBM_QUANTUM_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: quantum-mirror-secrets
+              key: IBM_QUANTUM_TOKEN
+              optional: true
+        ports:
+        - name: http
+          containerPort: 5000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+        volumeMounts:
+        - name: app-source
+          mountPath: /app
+      volumes:
+      - name: app-source
+        configMap:
+          name: quantum-visualizer-source
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quantum-visualizer
+  namespace: quantum-mirror-lab
+spec:
+  selector:
+    app: quantum-mirror
+    component: quantum-visualizer
+  ports:
+  - name: http
+    port: 5000
+    targetPort: 5000
+
+---
+# Ingress for external access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: quantum-mirror-ingress
+  namespace: quantum-mirror-lab
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: "discovery-feed,obs-websocket"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mirror.strategickhaos.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: dashboard
+            port:
+              number: 3001
+      - path: /ws/discovery
+        pathType: Prefix
+        backend:
+          service:
+            name: discovery-feed
+            port:
+              number: 8765
+      - path: /ws/obs
+        pathType: Prefix
+        backend:
+          service:
+            name: obs-websocket
+            port:
+              number: 4455
+      - path: /quantum
+        pathType: Prefix
+        backend:
+          service:
+            name: quantum-visualizer
+            port:
+              number: 5000

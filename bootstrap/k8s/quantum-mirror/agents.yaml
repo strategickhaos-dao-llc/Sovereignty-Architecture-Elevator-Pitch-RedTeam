@@ -1,0 +1,255 @@
+# Quantum Mirror Lab - Agent Pod Template
+# Template for deploying research agents with Sunshine streaming
+# Each agent runs in a pod with both research container and Sunshine sidecar
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: quantum-mirror-agents
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: agents
+spec:
+  serviceName: agents
+  replicas: 10  # Start with 10 agents, scale up to 640
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: quantum-mirror
+      component: agent
+  template:
+    metadata:
+      labels:
+        app: quantum-mirror
+        component: agent
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      serviceAccountName: quantum-mirror-sa
+      
+      # Init container to set up virtual display
+      initContainers:
+      - name: xvfb-setup
+        image: alpine:3.18
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          mkdir -p /tmp/.X11-unix
+          chmod 1777 /tmp/.X11-unix
+        volumeMounts:
+        - name: x11-socket
+          mountPath: /tmp/.X11-unix
+          
+      containers:
+      # Main research agent container
+      - name: agent
+        image: parrotsec/security:latest
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          # Start virtual display
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99
+          
+          # Start window manager for GUI apps
+          fluxbox &
+          
+          # Run research loop
+          exec /usr/local/bin/research-loop.sh
+        env:
+        - name: DISPLAY
+          value: ":99"
+        - name: RESEARCH_TARGET
+          value: "drug_repurposing"
+        - name: AGENT_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: LAW_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['law']
+        envFrom:
+        - configMapRef:
+            name: quantum-mirror-config
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+        volumeMounts:
+        - name: x11-socket
+          mountPath: /tmp/.X11-unix
+        - name: research-data
+          mountPath: /data
+        - name: scripts
+          mountPath: /usr/local/bin
+          readOnly: true
+          
+      # Sunshine streaming sidecar
+      - name: sunshine
+        image: lizardbyte/sunshine:latest
+        env:
+        - name: DISPLAY
+          value: ":99"
+        - name: SUNSHINE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-mirror-config
+              key: SUNSHINE_PORT
+        ports:
+        - name: sunshine
+          containerPort: 47989
+          protocol: TCP
+        - name: sunshine-video
+          containerPort: 47998
+          protocol: UDP
+        - name: sunshine-audio
+          containerPort: 47999
+          protocol: UDP
+        - name: sunshine-ctrl
+          containerPort: 48000
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: x11-socket
+          mountPath: /tmp/.X11-unix
+        - name: sunshine-config
+          mountPath: /config
+          
+      # Metrics exporter sidecar
+      - name: metrics
+        image: prom/node-exporter:latest
+        ports:
+        - name: metrics
+          containerPort: 9090
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "32Mi"
+          limits:
+            cpu: "50m"
+            memory: "64Mi"
+            
+      volumes:
+      - name: x11-socket
+        emptyDir: {}
+      - name: research-data
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: scripts
+        configMap:
+          name: agent-scripts
+          defaultMode: 0755
+      - name: sunshine-config
+        configMap:
+          name: sunshine-config
+          
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: component
+                  operator: In
+                  values:
+                  - agent
+              topologyKey: kubernetes.io/hostname
+              
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "research"
+        effect: "NoSchedule"
+
+---
+# Headless service for agent discovery
+apiVersion: v1
+kind: Service
+metadata:
+  name: agents
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: agents
+spec:
+  clusterIP: None
+  selector:
+    app: quantum-mirror
+    component: agent
+  ports:
+  - name: sunshine
+    port: 47989
+    targetPort: 47989
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+
+---
+# ConfigMap for agent scripts
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-scripts
+  namespace: quantum-mirror-lab
+data:
+  research-loop.sh: |
+    #!/bin/bash
+    set -e
+    
+    echo "[$(date)] Agent ${AGENT_ID} starting research loop"
+    echo "[$(date)] Target: ${RESEARCH_TARGET}"
+    echo "[$(date)] Law: ${LAW_ID:-unknown}"
+    
+    # Main research loop
+    while true; do
+      echo "[$(date)] Agent ${AGENT_ID}: Fetching papers..."
+      sleep 10
+      
+      echo "[$(date)] Agent ${AGENT_ID}: Analyzing citations..."
+      sleep 5
+      
+      # Simulate discovery (5% chance)
+      if [ $((RANDOM % 20)) -eq 0 ]; then
+        echo "[$(date)] Agent ${AGENT_ID}: DISCOVERY - Candidate identified!"
+      fi
+      
+      sleep 60
+    done
+
+---
+# ConfigMap for Sunshine configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sunshine-config
+  namespace: quantum-mirror-lab
+data:
+  sunshine.conf: |
+    [general]
+    min_log_level = info
+    upnp = off
+    
+    [video]
+    encoder = software
+    resolution = 1920x1080
+    fps = 60
+    bitrate = 5000
+    
+    [audio]
+    enabled = false
+    
+    [input]
+    enabled = false

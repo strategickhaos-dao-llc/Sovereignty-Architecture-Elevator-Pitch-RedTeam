@@ -1,0 +1,208 @@
+# Quantum Mirror Lab - Source ConfigMaps
+# These ConfigMaps contain the application source code for deployment
+# In production, you would typically use container images instead
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: obs-websocket-source
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: source
+data:
+  obs-websocket-server.js: |
+    /**
+     * OBS WebSocket Server for Quantum Mirror Lab
+     * Provides real-time graph visualization of agent communication
+     */
+    const WebSocket = require('ws');
+    const http = require('http');
+    
+    const PORT = process.env.OBS_WEBSOCKET_PORT || 4455;
+    const AGENT_COUNT = parseInt(process.env.AGENT_COUNT, 10) || 640;
+    const LAWS_COUNT = 10;
+    const AGENTS_PER_LAW = AGENT_COUNT / LAWS_COUNT;
+    
+    const LAW_COLORS = {
+      1: '#00ff00', 2: '#00ffff', 3: '#0000ff', 4: '#9900ff', 5: '#ff00ff',
+      6: '#ff9900', 7: '#ffff00', 8: '#ff0000', 9: '#00ff99', 10: '#ffffff'
+    };
+    
+    const agents = new Map();
+    
+    for (let law = 1; law <= LAWS_COUNT; law++) {
+      for (let pos = 1; pos <= AGENTS_PER_LAW; pos++) {
+        const id = `agent-law${law}-pos${pos}`;
+        agents.set(id, {
+          id, law, position: pos, status: 'working',
+          lastActivity: Date.now(), discoveries: 0
+        });
+      }
+    }
+    
+    const server = http.createServer((req, res) => {
+      if (req.url === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'healthy', agents: agents.size }));
+        return;
+      }
+      res.writeHead(404);
+      res.end('Not Found');
+    });
+    
+    const wss = new WebSocket.Server({ server });
+    
+    function broadcast(data) {
+      const message = JSON.stringify(data);
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+    }
+    
+    wss.on('connection', (ws) => {
+      console.log('Client connected');
+      ws.on('close', () => console.log('Client disconnected'));
+    });
+    
+    server.listen(PORT, () => {
+      console.log(`OBS WebSocket Server running on port ${PORT}`);
+    });
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: discovery-feed-source
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: source
+data:
+  discovery-feed.js: |
+    /**
+     * Discovery Feed WebSocket Server for Quantum Mirror Lab
+     */
+    const WebSocket = require('ws');
+    const http = require('http');
+    
+    const PORT = process.env.WEBSOCKET_PORT || 8765;
+    const discoveryBuffer = [];
+    
+    const server = http.createServer((req, res) => {
+      if (req.url === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'healthy', discoveries: discoveryBuffer.length }));
+        return;
+      }
+      res.writeHead(404);
+      res.end('Not Found');
+    });
+    
+    const wss = new WebSocket.Server({ server });
+    
+    function broadcast(data) {
+      const message = JSON.stringify(data);
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+    }
+    
+    wss.on('connection', (ws) => {
+      console.log('Client connected to Discovery Feed');
+      ws.send(JSON.stringify({ type: 'history', discoveries: discoveryBuffer.slice(-50) }));
+      ws.on('close', () => console.log('Client disconnected'));
+    });
+    
+    server.listen(PORT, () => {
+      console.log(`Discovery Feed running on port ${PORT}`);
+    });
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-source
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: source
+data:
+  package.json: |
+    {
+      "name": "quantum-mirror-dashboard",
+      "version": "1.0.0",
+      "private": true,
+      "scripts": {
+        "start": "node server.js"
+      }
+    }
+  server.js: |
+    const http = require('http');
+    const PORT = process.env.PORT || 3001;
+    
+    const html = `<!DOCTYPE html>
+    <html>
+    <head><title>Quantum Mirror Lab</title></head>
+    <body style="background:#0a0a0f;color:#00ff00;font-family:monospace;padding:20px;">
+      <h1>🔮 QUANTUM MIRROR LAB</h1>
+      <p>Dashboard loading...</p>
+    </body>
+    </html>`;
+    
+    const server = http.createServer((req, res) => {
+      if (req.url === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'healthy' }));
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(html);
+    });
+    
+    server.listen(PORT, () => console.log(`Dashboard on port ${PORT}`));
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quantum-visualizer-source
+  namespace: quantum-mirror-lab
+  labels:
+    app: quantum-mirror
+    component: source
+data:
+  quantum_visualizer.py: |
+    """Quantum Simulation Visualizer"""
+    import os
+    import json
+    from flask import Flask, jsonify
+    
+    app = Flask(__name__)
+    PORT = int(os.environ.get('FLASK_PORT', 5000))
+    
+    state = {'energy': -100.0, 'confidence': 0.0, 'iterations': 0}
+    
+    @app.route('/health')
+    def health():
+        return jsonify({'status': 'healthy'})
+    
+    @app.route('/state')
+    def get_state():
+        return jsonify(state)
+    
+    @app.route('/step')
+    def step():
+        state['iterations'] += 1
+        state['confidence'] = min(99, state['iterations'] * 1.5)
+        return jsonify(state)
+    
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=PORT)
+  requirements.txt: |
+    flask>=2.0.0

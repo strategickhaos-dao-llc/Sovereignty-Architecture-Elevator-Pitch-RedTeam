@@ -1,0 +1,234 @@
+# Quantum Mirror Lab - Docker Compose Configuration
+# Real-time visualization of agent research using Moonlight/Sunshine streaming
+#
+# Usage:
+#   docker-compose -f docker-compose.quantum-mirror.yml up -d
+#
+# This stack provides:
+#   - Agent visualization streaming (Sunshine servers)
+#   - OBS graph visualization backend
+#   - WebSocket event feed for discoveries
+#   - Quantum simulation visualization
+
+version: '3.8'
+
+networks:
+  quantum_mirror_network:
+    driver: bridge
+  strategickhaos_network:
+    external: true
+
+volumes:
+  obs_data:
+  quantum_sim_data:
+  agent_logs:
+  discovery_feed:
+
+services:
+  # ═══════════════════════════════════════════════════════════
+  # OBS WebSocket Server - Graph Visualization Backend
+  # ═══════════════════════════════════════════════════════════
+  obs-websocket:
+    image: node:20-alpine
+    container_name: quantum-mirror-obs
+    working_dir: /app
+    volumes:
+      - ./src/quantum-mirror:/app:ro
+      - obs_data:/data
+    environment:
+      OBS_WEBSOCKET_PORT: 4455
+      NATS_URL: nats://nats:4222
+      AGENT_COUNT: 640
+      LAWS_COUNT: 10
+    ports:
+      - "4455:4455"
+    networks:
+      - quantum_mirror_network
+      - strategickhaos_network
+    command: ["node", "obs-websocket-server.js"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "node -e \"require('http').get('http://localhost:4455/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ═══════════════════════════════════════════════════════════
+  # NATS Message Bus - Agent Communication
+  # ═══════════════════════════════════════════════════════════
+  nats:
+    image: nats:2.10-alpine
+    container_name: quantum-mirror-nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"  # HTTP monitoring
+    networks:
+      - quantum_mirror_network
+      - strategickhaos_network
+    command: ["-js", "-m", "8222"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "nats-server --version || exit 0"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ═══════════════════════════════════════════════════════════
+  # Discovery Feed WebSocket - Real-time Event Stream
+  # ═══════════════════════════════════════════════════════════
+  discovery-feed:
+    image: node:20-alpine
+    container_name: quantum-mirror-discovery
+    working_dir: /app
+    volumes:
+      - ./src/quantum-mirror:/app:ro
+      - discovery_feed:/data
+    environment:
+      WEBSOCKET_PORT: 8765
+      NATS_URL: nats://nats:4222
+      LOG_LEVEL: info
+    ports:
+      - "8765:8765"
+    networks:
+      - quantum_mirror_network
+      - strategickhaos_network
+    command: ["node", "discovery-feed.js"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "node -e \"require('http').get('http://localhost:8765/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ═══════════════════════════════════════════════════════════
+  # Mission Control Dashboard - Electron/Web App
+  # ═══════════════════════════════════════════════════════════
+  dashboard:
+    image: node:20-alpine
+    container_name: quantum-mirror-dashboard
+    working_dir: /app
+    volumes:
+      - ./src/quantum-mirror/dashboard:/app:ro
+    environment:
+      PORT: 3001
+      WEBSOCKET_URL: ws://discovery-feed:8765
+      OBS_WEBSOCKET_URL: ws://obs-websocket:4455
+      AGENT_COUNT: 640
+    ports:
+      - "3001:3001"
+    networks:
+      - quantum_mirror_network
+    command: ["npm", "start"]
+    depends_on:
+      - discovery-feed
+      - obs-websocket
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # Quantum Simulation Visualizer - Qiskit Integration
+  # ═══════════════════════════════════════════════════════════
+  quantum-visualizer:
+    image: python:3.11-slim
+    container_name: quantum-mirror-qsim
+    working_dir: /app
+    volumes:
+      - ./src/quantum-mirror/quantum:/app:ro
+      - quantum_sim_data:/data
+    environment:
+      FLASK_PORT: 5000
+      NATS_URL: nats://nats:4222
+      IBM_QUANTUM_TOKEN: ${IBM_QUANTUM_TOKEN:-}
+    ports:
+      - "5000:5000"
+    networks:
+      - quantum_mirror_network
+      - strategickhaos_network
+    command: ["python", "quantum_visualizer.py"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # Agent Stream Proxy - Moonlight/Sunshine Gateway
+  # ═══════════════════════════════════════════════════════════
+  stream-proxy:
+    image: nginx:alpine
+    container_name: quantum-mirror-proxy
+    volumes:
+      - ./config/quantum-mirror/nginx-streams.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "47990:47990"  # Sunshine discovery/control
+    networks:
+      - quantum_mirror_network
+      - strategickhaos_network
+    depends_on:
+      - obs-websocket
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # Agent Simulator (Development/Demo Mode)
+  # Simulates agent activity for testing the visualization
+  # ═══════════════════════════════════════════════════════════
+  agent-simulator:
+    image: node:20-alpine
+    container_name: quantum-mirror-simulator
+    working_dir: /app
+    volumes:
+      - ./src/quantum-mirror:/app:ro
+    environment:
+      NATS_URL: nats://nats:4222
+      AGENT_COUNT: 640
+      SIMULATION_SPEED: 1.0
+      DISCOVERY_RATE: 0.05  # 5% chance per tick
+    networks:
+      - quantum_mirror_network
+    command: ["node", "agent-simulator.js"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    profiles:
+      - demo  # Only starts with: docker-compose --profile demo up
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # Molecule Viewer Proxy - PyMOL/Chimera Streaming
+  # ═══════════════════════════════════════════════════════════
+  molecule-viewer:
+    image: python:3.11-slim
+    container_name: quantum-mirror-molecule
+    working_dir: /app
+    volumes:
+      - ./src/quantum-mirror/molecule:/app:ro
+    environment:
+      PORT: 5001
+      NATS_URL: nats://nats:4222
+    ports:
+      - "5001:5001"
+    networks:
+      - quantum_mirror_network
+    command: ["python", "molecule_viewer.py"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # Log Aggregator - Collects all agent activity
+  # ═══════════════════════════════════════════════════════════
+  log-aggregator:
+    image: grafana/loki:2.9.0
+    container_name: quantum-mirror-logs
+    volumes:
+      - agent_logs:/loki
+      - ./monitoring/loki-config.yml:/etc/loki/config.yml:ro
+    ports:
+      - "3100:3100"
+    networks:
+      - quantum_mirror_network
+      - strategickhaos_network
+    command: ["-config.file=/etc/loki/config.yml"]
+    restart: unless-stopped
