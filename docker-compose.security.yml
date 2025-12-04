@@ -1,0 +1,412 @@
+version: '3.8'
+
+# Secure Networking: Caddy, Tailscale, VPN, SSL/TLS Management
+# Complete sovereign networking infrastructure
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+networks:
+  security_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+
+  # DMZ network for external-facing services
+  dmz_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+  # Connect to main network
+  strategickhaos_network:
+    external: true
+    name: strategickhaos_network
+
+volumes:
+  caddy_data:
+  caddy_config:
+  letsencrypt_data:
+  wireguard_config:
+  tailscale_data:
+  vault_data:
+  nginx_certs:
+
+services:
+  # Caddy - Modern reverse proxy with automatic HTTPS
+  caddy:
+    image: caddy:latest
+    container_name: security-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # HTTP/3
+      - "2019:2019"    # Admin API
+    volumes:
+      - ./security/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - nginx_certs:/certs
+    environment:
+      - ACME_AGREE=true
+      - CADDY_ADMIN=0.0.0.0:2019
+    networks:
+      - dmz_network
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "caddy", "validate", "--config", "/etc/caddy/Caddyfile"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.caddy-admin.rule=Host(`caddy.localhost`)"
+      - "traefik.http.services.caddy-admin.loadbalancer.server.port=2019"
+      - "security.service=reverse-proxy"
+      - "security.type=caddy"
+
+  # Nginx with SSL/TLS (Alternative to Caddy)
+  nginx-ssl:
+    image: nginx:alpine
+    container_name: security-nginx
+    ports:
+      - "8443:443"
+      - "8080:80"
+    volumes:
+      - ./security/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./security/nginx/conf.d:/etc/nginx/conf.d:ro
+      - nginx_certs:/etc/nginx/certs:ro
+      - ./security/nginx/ssl:/etc/nginx/ssl:ro
+    networks:
+      - dmz_network
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "security.service=nginx"
+      - "security.ssl=true"
+
+  # Certbot for Let's Encrypt certificates
+  certbot:
+    image: certbot/certbot:latest
+    container_name: security-certbot
+    volumes:
+      - letsencrypt_data:/etc/letsencrypt
+      - nginx_certs:/certs
+      - ./security/certbot/scripts:/scripts
+    command: certonly --standalone --preferred-challenges http --agree-tos --no-eff-email --email admin@localhost --keep-until-expiring --cert-name wildcard
+    networks:
+      - dmz_network
+    logging: *default-logging
+    labels:
+      - "security.service=certificate-management"
+
+  # Tailscale VPN for secure remote access
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: security-tailscale
+    hostname: ai-lab-node
+    environment:
+      - TS_AUTHKEY=${TAILSCALE_AUTH_KEY:-}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SOCKET=/var/run/tailscale/tailscaled.sock
+      - TS_USERSPACE=true
+      - TS_ACCEPT_DNS=true
+    volumes:
+      - tailscale_data:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    network_mode: host
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=vpn"
+      - "security.type=tailscale"
+
+  # WireGuard VPN (Alternative to Tailscale)
+  wireguard:
+    image: linuxserver/wireguard:latest
+    container_name: security-wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - SERVERURL=auto
+      - SERVERPORT=51820
+      - PEERS=10
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0
+    volumes:
+      - wireguard_config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    networks:
+      - security_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=vpn"
+      - "security.type=wireguard"
+
+  # HashiCorp Vault for secrets management
+  vault:
+    image: vault:latest
+    container_name: security-vault
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_ROOT_TOKEN:-root}
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      - VAULT_ADDR=http://0.0.0.0:8200
+    ports:
+      - "8200:8200"
+    volumes:
+      - vault_data:/vault/data
+      - ./security/vault/config:/vault/config
+      - ./security/vault/policies:/vault/policies
+    command: server -dev -dev-root-token-id=${VAULT_ROOT_TOKEN:-root}
+    networks:
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vault.rule=Host(`vault.localhost`)"
+      - "traefik.http.services.vault.loadbalancer.server.port=8200"
+      - "security.service=secrets-management"
+
+  # Fail2ban for intrusion prevention
+  fail2ban:
+    image: crazymax/fail2ban:latest
+    container_name: security-fail2ban
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - TZ=UTC
+      - F2B_LOG_TARGET=STDOUT
+      - F2B_LOG_LEVEL=INFO
+      - F2B_DB_PURGE_AGE=30d
+    volumes:
+      - ./security/fail2ban/config:/etc/fail2ban
+      - /var/log:/var/log:ro
+    networks:
+      - security_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=intrusion-prevention"
+
+  # CrowdSec - Modern intrusion prevention
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: security-crowdsec
+    environment:
+      - COLLECTIONS=crowdsecurity/nginx crowdsecurity/http-cve
+      - GID=1000
+    volumes:
+      - ./security/crowdsec/config:/etc/crowdsec
+      - ./security/crowdsec/data:/var/lib/crowdsec/data
+      - /var/log:/var/log:ro
+    networks:
+      - security_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=intrusion-prevention"
+      - "security.type=crowdsec"
+
+  # Network Firewall (iptables manager)
+  firewall:
+    image: alpine:latest
+    container_name: security-firewall
+    cap_add:
+      - NET_ADMIN
+    command: sh -c "apk add --no-cache iptables && /scripts/firewall.sh && tail -f /dev/null"
+    volumes:
+      - ./security/firewall/scripts:/scripts
+    network_mode: host
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=firewall"
+
+  # DNS Security (Pi-hole alternative)
+  adguard:
+    image: adguard/adguardhome:latest
+    container_name: security-adguard
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "3053:3000/tcp"  # Admin interface
+    volumes:
+      - ./security/adguard/work:/opt/adguardhome/work
+      - ./security/adguard/conf:/opt/adguardhome/conf
+    networks:
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adguard.rule=Host(`dns.localhost`)"
+      - "traefik.http.services.adguard.loadbalancer.server.port=3000"
+      - "security.service=dns-security"
+
+  # Security Scanner (Trivy)
+  trivy:
+    image: aquasec/trivy:latest
+    container_name: security-trivy
+    command: server --listen 0.0.0.0:8081
+    ports:
+      - "8081:8081"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./security/trivy/cache:/root/.cache
+    networks:
+      - security_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=vulnerability-scanner"
+
+  # API Gateway with rate limiting
+  kong:
+    image: kong:latest
+    container_name: security-kong
+    environment:
+      - KONG_DATABASE=off
+      - KONG_DECLARATIVE_CONFIG=/kong/kong.yml
+      - KONG_PROXY_ACCESS_LOG=/dev/stdout
+      - KONG_ADMIN_ACCESS_LOG=/dev/stdout
+      - KONG_PROXY_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_LISTEN=0.0.0.0:8001
+    ports:
+      - "8000:8000"  # Proxy
+      - "8001:8001"  # Admin API
+    volumes:
+      - ./security/kong/kong.yml:/kong/kong.yml
+    networks:
+      - dmz_network
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=api-gateway"
+
+  # OAuth2 Proxy for authentication
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:latest
+    container_name: security-oauth2-proxy
+    command:
+      - --http-address=0.0.0.0:4180
+      - --upstream=http://localhost/
+      - --email-domain=*
+      - --provider=oidc
+      - --redirect-url=http://localhost/oauth2/callback
+    ports:
+      - "4180:4180"
+    environment:
+      - OAUTH2_PROXY_CLIENT_ID=${OAUTH_CLIENT_ID:-}
+      - OAUTH2_PROXY_CLIENT_SECRET=${OAUTH_CLIENT_SECRET:-}
+      - OAUTH2_PROXY_COOKIE_SECRET=${COOKIE_SECRET:-}
+    networks:
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    labels:
+      - "security.service=authentication"
+
+  # Security Monitoring Dashboard
+  security-dashboard:
+    image: python:3.11-slim
+    container_name: security-dashboard
+    working_dir: /app
+    command: python dashboard.py
+    ports:
+      - "8300:8300"
+    volumes:
+      - ./security/dashboard:/app
+    environment:
+      - DASHBOARD_PORT=8300
+      - VAULT_URL=http://vault:8200
+      - CROWDSEC_URL=http://crowdsec:8080
+      - TRIVY_URL=http://trivy:8081
+    networks:
+      - security_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8300/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.security-dashboard.rule=Host(`security.localhost`)"
+      - "traefik.http.services.security-dashboard.loadbalancer.server.port=8300"
+      - "security.service=dashboard"
+
+# Usage Instructions:
+#
+# 1. Start security stack:
+#    docker-compose -f docker-compose.security.yml up -d
+#
+# 2. Access services:
+#    - Caddy Admin: http://localhost:2019
+#    - Vault: http://localhost:8200
+#    - AdGuard: http://localhost:3053
+#    - Security Dashboard: http://localhost:8300
+#    - Kong Admin: http://localhost:8001
+#
+# 3. Initialize Vault:
+#    docker exec -it security-vault vault operator init
+#
+# 4. Generate SSL certificate:
+#    docker exec -it security-certbot certbot certonly --standalone \
+#      -d your-domain.com --agree-tos --email your@email.com
+#
+# 5. Connect to Tailscale:
+#    docker exec -it security-tailscale tailscale up
+#
+# 6. Configure WireGuard peer:
+#    docker exec -it security-wireguard /app/show-peer 1
+#
+# 7. Scan for vulnerabilities:
+#    curl http://localhost:8081/scan \
+#      -d '{"image":"nginx:latest"}'
+#
+# 8. Check security dashboard:
+#    curl http://localhost:8300/status

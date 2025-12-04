@@ -1,0 +1,118 @@
+# Caddyfile - Automatic HTTPS Reverse Proxy Configuration
+# Sovereign AI Lab - Secure Networking
+
+{
+    # Global options
+    admin 0.0.0.0:2019
+    auto_https on
+    
+    # Email for Let's Encrypt
+    email admin@localhost
+    
+    # Use staging for testing, remove for production
+    # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+# Main AI Lab Interface
+localhost {
+    reverse_proxy ollama:11434
+    
+    header {
+        # Security headers
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+    
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+}
+
+# Voice WebUI
+voice.localhost {
+    reverse_proxy voicewing-webui:8080
+    
+    header {
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+    }
+}
+
+# Automation API
+automation.localhost {
+    reverse_proxy automation-api:8091
+    
+    # Rate limiting
+    rate_limit {
+        zone automation {
+            key {remote_host}
+            events 100
+            window 1m
+        }
+    }
+}
+
+# RAG Orchestrator
+rag.localhost {
+    reverse_proxy rag-orchestrator:8210
+    
+    # CORS for API access
+    @cors_preflight method OPTIONS
+    handle @cors_preflight {
+        header Access-Control-Allow-Origin "*"
+        header Access-Control-Allow-Methods "GET, POST, PUT, DELETE"
+        header Access-Control-Allow-Headers "Content-Type"
+        respond 204
+    }
+}
+
+# Filesystem Agents
+agents.localhost {
+    reverse_proxy agent-orchestrator:8010
+}
+
+# Security Dashboard
+security.localhost {
+    reverse_proxy security-dashboard:8300
+    
+    # Authentication required (password: admin - change in production!)
+    # Generate hash with: caddy hash-password
+    basicauth {
+        admin $2a$14$Zkx19XLiW6VYouLHR5NmfOFU0z2GTNmpkT/5qqR7hx4wHU.h1V8.W
+    }
+}
+
+# Vault UI
+vault.localhost {
+    reverse_proxy vault:8200
+    
+    # Extra security for secrets management
+    header {
+        X-Frame-Options "DENY"
+        Content-Security-Policy "default-src 'self'"
+    }
+}
+
+# Grafana Monitoring
+grafana.localhost {
+    reverse_proxy grafana:3000
+}
+
+# PrivateGPT
+privategpt.localhost {
+    reverse_proxy privategpt:8001
+}
+
+# AnythingLLM
+anything.localhost {
+    reverse_proxy anythingllm:3001
+}
+
+# Catch-all for undefined hosts
+:80, :443 {
+    respond "AI Lab - Access Denied" 403
+}

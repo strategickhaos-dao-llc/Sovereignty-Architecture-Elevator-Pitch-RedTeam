@@ -35,3 +35,94 @@ target/
 
 # Workspace data
 workspace/
+
+# AI Lab - Local directories with application code
+voice_configs/
+agents/localgpt/
+agents/file_watcher/
+agents/doc_intel/
+agents/code_analyst/
+agents/semantic_search/
+agents/file_editor/
+agents/orchestrator/
+automation/rpa/
+automation/api/
+automation/browser_agent/
+automation/screen_capture/
+automation/scraper/
+automation/playwright/
+rag-configs/privategpt/
+rag-configs/anythingllm/
+rag-configs/extreme/
+rag-configs/adversarial/
+rag-configs/ingest/
+rag-configs/orchestrator/
+security/nginx/conf.d/
+security/certbot/
+security/fail2ban/
+security/crowdsec/
+security/firewall/
+security/adguard/
+security/trivy/
+security/kong/
+security/dashboard/
+
+# Agent workspace
+agent_workspace/
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+
+# Docker volumes and data
+postgres_data/
+redis_data/
+qdrant_data/
+grafana_data/
+prometheus_data/
+minio_data/
+keycloak_data/
+synapse_data/
+whisper_models/
+voicewing_data/
+piper_models/
+ollama_voice_data/
+localgpt_data/
+autogpt_data/
+chromadb_data/
+pgvector_data/
+selenium_recordings/
+playwright_data/
+rpa_data/
+privategpt_data/
+anythingllm_data/
+weaviate_data/
+milvus_data/
+rag_documents/
+rag_embeddings/
+caddy_data/
+caddy_config/
+letsencrypt_data/
+wireguard_config/
+tailscale_data/
+vault_data/
+nginx_certs/
+
+# Ollama models (large files)
+*.gguf
+*.bin
+models/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Minimal AI Lab data
+data/chroma/
+data/ipfs/

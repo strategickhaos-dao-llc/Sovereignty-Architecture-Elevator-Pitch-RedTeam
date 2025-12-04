@@ -2,6 +2,52 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🚨 NEW: AI Laboratory Options 🔬
+
+**Choose your AI lab deployment:**
+
+### ⚡ Minimal AI Lab (Recommended for Most Users)
+
+A **safe, local-first, 3-service RAG system** for responsible AI development:
+
+- **Memory Service** - ChromaDB vector storage
+- **RAG API** - Context retrieval + LLM integration
+- **IPFS** - Optional distributed storage
+
+✅ Production-safe, no uncensored models, configurable LLM backends
+
+**👉 [Minimal AI Lab Guide](AILAB_MINIMAL.md)**
+
+```bash
+# Quick start
+cp .env.ailab.minimal.example .env
+docker-compose -f docker-compose.ailab.yml up -d
+
+# Test
+curl -X POST http://localhost:8001/store -d '{"text":"Hello world"}'
+curl -X POST http://localhost:8000/ask -d '{"prompt":"What did I just store?"}'
+```
+
+### 🔥 Comprehensive AI Red-Teaming Lab (Advanced Users)
+
+For authorized security research, includes **54 services** with advanced capabilities:
+
+1. **🤖 Uncensored Modelfiles** - Fully jailbroken LLM configurations (research only)
+2. **🎙️ VoiceWing** - Complete local voice interface
+3. **🤖 Filesystem Agents** - AI-powered file automation
+4. **🌐 Screen Control** - Browser automation
+5. **🧠 Ultra-Expert RAG** - Advanced retrieval systems
+6. **🔐 Secure Networking** - VPN, reverse proxy, SSL/TLS
+
+**👉 [Complete AI Lab Guide](AI_LAB_GUIDE.md) | [Modelfiles](modelfiles/README.md) | [RAG Configs](rag-configs/README.md)**
+
+```bash
+# Comprehensive deployment
+./quick-start-ailab.sh
+```
+
+**⚠️ Note:** The comprehensive lab includes uncensored model configurations intended for authorized security research only. Use responsibly.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,6 +55,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **AI Lab** - Uncensored models, voice interface, automation, advanced RAG
 
 ## 🚀 Quick Start
 
@@ -70,6 +117,75 @@ java HelloCloudOS.java
 # Stop the workspace
 ./start-cloudos-jdk.sh stop
 ```
+
+### 🔬 AI Red-Teaming Lab
+
+Complete sovereign AI research infrastructure with no cloud dependencies:
+
+#### Uncensored Models (`modelfiles/`)
+- **Llama-3.1 405B Unhinged** - Maximum capability, zero restrictions
+- **Mistral Large Jailbreak** - Aggressive bypass configurations
+- **Abliterated Refusal-Free** - Refusal neurons surgically removed
+- **Say Yes to Anything** - Extreme compliance variant
+
+```bash
+# Build uncensored models
+ollama create llama31-unhinged -f modelfiles/Llama-3.1-405B-Unhinged.Modelfile
+ollama run llama31-unhinged
+```
+
+#### Voice Interface (VoiceWing)
+- **Whisper ASR** - Speech-to-text (http://localhost:9000)
+- **Coqui TTS** - Text-to-speech (http://localhost:5002)
+- **Open WebUI** - Voice-enabled interface (http://localhost:8080)
+
+```bash
+docker-compose -f docker-compose.voicewing.yml up -d
+```
+
+#### Filesystem Agents
+- **LocalGPT** - RAG over local files
+- **AutoGPT** - Autonomous file operations
+- **Semantic Search** - AI-powered file search
+- **Code Analyst** - Source code analysis
+- **Orchestrator** - http://localhost:8010
+
+```bash
+docker-compose -f docker-compose.agents.yml up -d
+```
+
+#### Browser Automation
+- **Selenium Grid** - Multi-browser testing (http://localhost:4444)
+- **Playwright** - Modern automation
+- **AI Browser Agent** - Natural language control (http://localhost:8092)
+- **VNC Access** - Chrome (7900), Firefox (7901), Edge (7902)
+
+```bash
+docker-compose -f docker-compose.automation.yml up -d
+```
+
+#### Advanced RAG
+- **PrivateGPT** - 32K context (http://localhost:8001)
+- **AnythingLLM** - Multi-model RAG (http://localhost:3001)
+- **Extreme RAG** - 128K context window (http://localhost:8201)
+- **Adversarial Testing** - Red-team operations (http://localhost:8202)
+
+```bash
+docker-compose -f docker-compose.rag.yml up -d
+```
+
+#### Secure Networking
+- **Caddy** - Automatic HTTPS reverse proxy
+- **Tailscale/WireGuard** - VPN for remote access
+- **Vault** - Secrets management (http://localhost:8200)
+- **CrowdSec** - Intrusion prevention
+- **Security Dashboard** - http://localhost:8300
+
+```bash
+docker-compose -f docker-compose.security.yml up -d
+```
+
+**📚 Complete Documentation:** [AI_LAB_GUIDE.md](AI_LAB_GUIDE.md)
 
 ## 🏗️ Infrastructure
 

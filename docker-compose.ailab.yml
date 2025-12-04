@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  memory:
+    build: ./memory_service
+    container_name: ailab_memory
+    restart: unless-stopped
+    volumes:
+      - ./data/chroma:/data/chroma
+    ports:
+      - "8001:8001"
+    environment:
+      - CHROMA_PERSIST_DIR=/data/chroma
+      - CHECKPOINT_EVERY=100
+
+  rag:
+    build: ./rag_service
+    container_name: ailab_rag
+    restart: unless-stopped
+    depends_on:
+      - memory
+    ports:
+      - "8000:8000"
+    environment:
+      - MEMORY_URL=http://memory:8001
+      - LLM_API_URL=${LLM_API_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_API_TYPE=${LLM_API_TYPE:-openai}  # e.g., openai, azure, ollama
+      - DEFAULT_TOP_K=4
+
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    container_name: ailab_ipfs
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ./data/ipfs:/data/ipfs
+
+# Optional: add a reverse-proxy (traefik/nginx) later when you add TLS / auth

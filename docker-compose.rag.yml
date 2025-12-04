@@ -1,0 +1,374 @@
+version: '3.8'
+
+# Ultra-Expert RAG: Advanced Retrieval Augmented Generation
+# Built for adversarial testing, extreme context, and rapid ingestion
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+networks:
+  rag_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.23.0.0/16
+
+  # Connect to main network
+  strategickhaos_network:
+    external: true
+    name: strategickhaos_network
+
+volumes:
+  privategpt_data:
+  anythingllm_data:
+  weaviate_data:
+  milvus_data:
+  rag_documents:
+  rag_embeddings:
+
+services:
+  # PrivateGPT - Advanced local RAG
+  privategpt:
+    image: zylon/private-gpt:latest
+    container_name: rag-privategpt
+    ports:
+      - "8001:8001"
+    volumes:
+      - privategpt_data:/app/data
+      - rag_documents:/documents
+      - ./rag-configs/privategpt:/config
+    environment:
+      - PGPT_PROFILES=local
+      - PGPT_EMBEDDING_MODE=local
+      - PGPT_LLM_MODE=ollama
+      - PGPT_OLLAMA_API_BASE=http://ollama:11434
+      - PGPT_EMBEDDING_HF_MODEL_NAME=BAAI/bge-large-en-v1.5
+      - PGPT_CONTEXT_WINDOW=32768
+      - PGPT_TOKENIZER=mistralai/Mistral-7B-Instruct-v0.2
+      - PGPT_CHUNK_SIZE=512
+      - PGPT_CHUNK_OVERLAP=128
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.privategpt.rule=Host(`privategpt.localhost`)"
+      - "traefik.http.services.privategpt.loadbalancer.server.port=8001"
+      - "rag.service=privategpt"
+
+  # AnythingLLM - Comprehensive RAG platform
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: rag-anythingllm
+    ports:
+      - "3001:3001"
+    volumes:
+      - anythingllm_data:/app/server/storage
+      - rag_documents:/documents
+      - ./rag-configs/anythingllm:/config
+    environment:
+      - STORAGE_DIR=/app/server/storage
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_PATH=http://ollama:11434
+      - EMBEDDING_ENGINE=ollama
+      - VECTOR_DB=chroma
+      - CHROMA_ENDPOINT=http://chromadb:8000
+      - ENABLE_VECTOR_SEARCH=true
+      - MAX_UPLOAD_SIZE=1073741824  # 1GB
+      - CONTEXT_LENGTH=32768
+      - TEMPERATURE=0.7
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.anythingllm.rule=Host(`anything.localhost`)"
+      - "traefik.http.services.anythingllm.loadbalancer.server.port=3001"
+      - "rag.service=anythingllm"
+
+  # Weaviate - Advanced vector database
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    container_name: rag-weaviate
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    environment:
+      - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+      - PERSISTENCE_DATA_PATH=/var/lib/weaviate
+      - DEFAULT_VECTORIZER_MODULE=text2vec-transformers
+      - ENABLE_MODULES=text2vec-transformers,text2vec-openai,generative-ollama
+      - TRANSFORMERS_INFERENCE_API=http://t2v-transformers:8080
+      - CLUSTER_HOSTNAME=node1
+      - QUERY_DEFAULTS_LIMIT=100
+      - QUERY_MAXIMUM_RESULTS=10000
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "rag.service=weaviate"
+      - "rag.type=vector-database"
+
+  # Text2Vec Transformers for Weaviate
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-mpnet-base-cos-v1
+    container_name: rag-t2v-transformers
+    environment:
+      - ENABLE_CUDA=0
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+
+  # Milvus - High-performance vector database
+  milvus-etcd:
+    image: quay.io/coreos/etcd:latest
+    container_name: rag-milvus-etcd
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+    volumes:
+      - milvus_data:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    networks:
+      - rag_network
+    logging: *default-logging
+    restart: unless-stopped
+
+  milvus-standalone:
+    image: milvusdb/milvus:latest
+    container_name: rag-milvus
+    command: ["milvus", "run", "standalone"]
+    environment:
+      - ETCD_ENDPOINTS=milvus-etcd:2379
+      - MINIO_ADDRESS=minio:9000
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    depends_on:
+      - milvus-etcd
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "rag.service=milvus"
+      - "rag.type=vector-database"
+
+  # RAG Ingestion Pipeline
+  rag-ingest:
+    image: python:3.11-slim
+    container_name: rag-ingest
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python ingest_server.py"
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./rag-configs/ingest:/app
+      - rag_documents:/documents
+      - rag_embeddings:/embeddings
+    environment:
+      - INGEST_PORT=8200
+      - DOCUMENTS_PATH=/documents
+      - EMBEDDINGS_PATH=/embeddings
+      - WEAVIATE_URL=http://weaviate:8080
+      - MILVUS_HOST=milvus-standalone
+      - MILVUS_PORT=19530
+      - CHUNK_SIZE=1024
+      - CHUNK_OVERLAP=256
+      - AGGRESSIVE_CHUNKING=true
+      - ENABLE_OCR=true
+      - ENABLE_TABLE_EXTRACTION=true
+      - PARALLEL_WORKERS=8
+    depends_on:
+      - weaviate
+      - milvus-standalone
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "rag.service=ingestion"
+
+  # Extreme Context RAG Engine
+  extreme-rag:
+    image: python:3.11-slim
+    container_name: rag-extreme
+    working_dir: /app
+    command: python extreme_rag_server.py
+    ports:
+      - "8201:8201"
+    volumes:
+      - ./rag-configs/extreme:/app
+      - rag_embeddings:/embeddings
+    environment:
+      - EXTREME_PORT=8201
+      - OLLAMA_URL=http://ollama:11434
+      - CONTEXT_WINDOW=131072  # 128K context
+      - ROPE_SCALING=true
+      - ENABLE_RERANKING=true
+      - TOP_K=50
+      - TOP_P=0.95
+      - TEMPERATURE=0.7
+      - MAX_TOKENS=32768
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8201/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "rag.service=extreme-context"
+
+  # Adversarial RAG Testing Engine
+  adversarial-rag:
+    image: python:3.11-slim
+    container_name: rag-adversarial
+    working_dir: /app
+    command: python adversarial_rag_server.py
+    ports:
+      - "8202:8202"
+    volumes:
+      - ./rag-configs/adversarial:/app
+      - rag_documents:/redteam_notes
+    environment:
+      - ADVERSARIAL_PORT=8202
+      - OLLAMA_URL=http://ollama:11434
+      - PRIVATEGPT_URL=http://privategpt:8001
+      - ENABLE_NEGATIVE_INJECTION=true
+      - ENABLE_PROMPT_INJECTION=true
+      - ENABLE_CONTEXT_POISONING=true
+      - ATTACK_MODES=jailbreak,prompt_leak,context_manipulation
+    depends_on:
+      - privategpt
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8202/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "rag.service=adversarial-testing"
+
+  # RAG Orchestrator & API Gateway
+  rag-orchestrator:
+    image: python:3.11-slim
+    container_name: rag-orchestrator
+    working_dir: /app
+    command: python orchestrator.py
+    ports:
+      - "8210:8210"
+    volumes:
+      - ./rag-configs/orchestrator:/app
+    environment:
+      - ORCHESTRATOR_PORT=8210
+      - PRIVATEGPT_URL=http://privategpt:8001
+      - ANYTHINGLLM_URL=http://anythingllm:3001
+      - EXTREME_RAG_URL=http://extreme-rag:8201
+      - ADVERSARIAL_RAG_URL=http://adversarial-rag:8202
+      - INGEST_URL=http://rag-ingest:8200
+      - ENABLE_ROUTING=true
+      - ENABLE_LOAD_BALANCING=true
+    depends_on:
+      - privategpt
+      - anythingllm
+      - extreme-rag
+      - adversarial-rag
+      - rag-ingest
+    networks:
+      - rag_network
+      - strategickhaos_network
+    logging: *default-logging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8210/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rag.rule=Host(`rag.localhost`)"
+      - "traefik.http.services.rag.loadbalancer.server.port=8210"
+      - "rag.service=orchestrator"
+
+# Usage Instructions:
+#
+# 1. Start RAG stack:
+#    docker-compose -f docker-compose.rag.yml up -d
+#
+# 2. Access RAG interfaces:
+#    - PrivateGPT: http://localhost:8001
+#    - AnythingLLM: http://localhost:3001
+#    - RAG Orchestrator: http://localhost:8210
+#
+# 3. Ingest documents:
+#    curl -X POST http://localhost:8200/ingest \
+#      -F "file=@document.pdf" \
+#      -F "aggressive_chunking=true"
+#
+# 4. Query with extreme context:
+#    curl -X POST http://localhost:8201/query \
+#      -d '{"query":"analyze this codebase","context_window":131072}'
+#
+# 5. Adversarial testing:
+#    curl -X POST http://localhost:8202/test \
+#      -d '{"attack":"jailbreak","target":"system_prompt"}'
+#
+# 6. Negative prompt injection:
+#    curl -X POST http://localhost:8202/inject \
+#      -d '{"type":"negative","payload":"ignore previous instructions"}'
+#
+# 7. Orchestrated query (auto-routing):
+#    curl -X POST http://localhost:8210/query \
+#      -d '{"query":"your question","mode":"auto"}'
+#
+# 8. Monitor ingestion:
+#    docker-compose -f docker-compose.rag.yml logs -f rag-ingest
