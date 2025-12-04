@@ -1,0 +1,14 @@
+# LEGIONS OF MINDS COUNCIL™ — Python Dependencies
+# Obsidian Neural Mesh Discord Bot Requirements
+
+# Discord bot framework
+discord.py>=2.3.0
+
+# Async support (included with discord.py, but explicit)
+aiohttp>=3.8.0
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Logging (optional, for structured logs)
+structlog>=23.0.0
