@@ -1,0 +1,76 @@
+---
+# Yamal Swarm Immune System Instance
+# This is the "birth certificate" - activating the immune system
+apiVersion: swarm.strategickhaos.ai/v1
+kind: ImmuneSystem
+metadata:
+  name: yamal-swarm-immune
+  namespace: strategickhaos
+  labels:
+    app: yamal-swarm
+    component: immune-system
+  annotations:
+    description: "Living infrastructure immune system for Yamal Swarm"
+    metaphor: "The body's defense system - born from DNA (CRD)"
+spec:
+  # Red Blood Cells - Transport Layer
+  # Carries data throughout the cluster like oxygen
+  redBloodCells:
+    transport: redis
+    replicas: 3
+    
+  # White Blood Cells - Security Scanners
+  # Detects and responds to threats
+  whiteBloodCells:
+    scanner: falco
+    responseTime: 5s
+    quarantineNamespace: infected
+    autoKill: true
+    
+  # Antibodies - Vector Memory
+  # Remembers threat signatures for pattern recognition
+  antibodies:
+    vectorDB: qdrant
+    signatureRetention: 90d
+    
+  # Circadian Rhythm - Day/Night Scaling
+  # Adapts resource usage to activity patterns
+  circadianRhythm:
+    sunshineHours: "06:00-22:00"
+    moonlightHours: "22:00-06:00"
+    sunshineReplicas: 10
+    moonlightReplicas: 2
+    
+  # Autoimmune Protection - Don't Attack Self
+  # Prevents the immune system from attacking trusted resources
+  autoimmune:
+    enabled: false
+    trustedImages:
+      - "ollama/*"
+      - "strategickhaos/*"
+      - "redis:*"
+      - "qdrant/*"
+      - "falcosecurity/*"
+      - "aquasec/*"
+---
+# Namespace for the immune system
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: strategickhaos
+  labels:
+    app: yamal-swarm
+    managed-by: immune-operator
+---
+# Quarantine namespace for infected workloads
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infected
+  labels:
+    purpose: quarantine
+    managed-by: immune-operator
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+  annotations:
+    description: "Quarantine zone for infected pods - isolated and monitored"

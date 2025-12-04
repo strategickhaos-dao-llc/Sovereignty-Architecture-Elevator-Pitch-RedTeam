@@ -1,0 +1,143 @@
+---
+# ServiceAccount for the Immune Operator
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: immune-operator
+  namespace: kube-system
+  labels:
+    app: swarm-immune-operator
+    component: operator
+---
+# ClusterRole for the Immune Operator
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: immune-operator
+  labels:
+    app: swarm-immune-operator
+rules:
+  # ImmuneSystem CRD management
+  - apiGroups: ["swarm.strategickhaos.ai"]
+    resources: ["immunesystems"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["swarm.strategickhaos.ai"]
+    resources: ["immunesystems/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["swarm.strategickhaos.ai"]
+    resources: ["immunesystems/finalizers"]
+    verbs: ["update"]
+  
+  # Core resources management
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods/log", "pods/status"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Apps resources for cell management
+  - apiGroups: ["apps"]
+    resources: ["deployments", "daemonsets", "statefulsets", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "update", "patch"]
+  
+  # Autoscaling for circadian rhythm
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Network policies for quarantine
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["networkpolicies"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # RBAC for scanner service accounts
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Coordination for leader election
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+# ClusterRoleBinding for the Immune Operator
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: immune-operator
+  labels:
+    app: swarm-immune-operator
+subjects:
+  - kind: ServiceAccount
+    name: immune-operator
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: immune-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+# ServiceAccount for White Blood Cell scanners
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wbc-scanner
+  namespace: kube-system
+  labels:
+    app: swarm-immune-operator
+    component: wbc-scanner
+---
+# ClusterRole for WBC scanners (security scanning)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: wbc-scanner
+  labels:
+    app: swarm-immune-operator
+rules:
+  # Read-only access to all pods for scanning
+  - apiGroups: [""]
+    resources: ["pods", "namespaces", "nodes"]
+    verbs: ["get", "list", "watch"]
+  # Read container images
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+  # Events for alerting
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+---
+# ClusterRoleBinding for WBC scanners
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: wbc-scanner
+  labels:
+    app: swarm-immune-operator
+subjects:
+  - kind: ServiceAccount
+    name: wbc-scanner
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: wbc-scanner
+  apiGroup: rbac.authorization.k8s.io

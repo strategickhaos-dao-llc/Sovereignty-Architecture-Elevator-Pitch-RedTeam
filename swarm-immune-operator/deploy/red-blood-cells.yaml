@@ -1,0 +1,82 @@
+---
+# Red Blood Cell Deployment - Redis Transport Layer
+# Like red blood cells carrying oxygen, this transports data throughout the cluster
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rbc-redis-transport
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: red-blood
+    transport: redis
+    managed-by: immune-operator
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      cell-type: red-blood
+      transport: redis
+  template:
+    metadata:
+      labels:
+        app: swarm-immune
+        cell-type: red-blood
+        transport: redis
+        managed-by: immune-operator
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+# Redis Service for internal transport
+apiVersion: v1
+kind: Service
+metadata:
+  name: rbc-redis-transport
+  namespace: strategickhaos
+  labels:
+    app: swarm-immune
+    cell-type: red-blood
+    transport: redis
+spec:
+  selector:
+    cell-type: red-blood
+    transport: redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+      name: redis
+  type: ClusterIP
