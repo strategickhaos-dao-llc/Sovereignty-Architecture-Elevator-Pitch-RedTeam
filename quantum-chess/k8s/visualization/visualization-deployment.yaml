@@ -326,36 +326,23 @@ data:
             </div>
             
             <div class="architecture">
-┌─────────────────────────────────────────────────────────────┐
-│           QUANTUM CHESS WARGAME SIMULATOR                     │
-│          (10-Dimensional Attack/Defense Game)                │
-└─────────────────────────────────────────────────────────────┘
+    +---------------------------------------------------------------+
+    QUANTUM CHESS WARGAME SIMULATOR (10-Dimensional Security Game)
+    +---------------------------------------------------------------+
 
-        Layer 10: Strategic Command
-             │
-        Layer 9: Tactical Operations
-             │
-        ...8 more layers...
-             │
-        Layer 1: Physical/Bare Metal
-             │
-┌────────────┴────────────┐
-│                         │
-▼                         ▼
-RED TEAM CLUSTER      BLUE TEAM CLUSTER
-(Kali Linux)          (Parrot OS)
-─────────────         ─────────────
+    Layer 10: Strategic Command
+        ...
+    Layer 1: Physical/Bare Metal
 
-        ↓                     ↓
-    ┌───────────────────────────┐
-    │   QUANTUM ENTANGLEMENT    │
-    │   (NATS Message Bus)      │
-    └───────────────────────────┘
-                ↓
-        ┌───────────────┐
-        │    LEGION     │
-        │   ANALYSIS    │
-        └───────────────┘
+    +-------+                        +-------+
+     RED     [===== NATS =====]      BLUE
+     TEAM    [ Entanglement   ]      TEAM
+    +-------+                        +-------+
+
+                  +-------+
+                  LEGION
+                  AI
+                  +-------+
             </div>
         </div>
     </body>

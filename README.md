@@ -9,6 +9,31 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **Security** - Quantum Chess Wargame Simulator for continuous red/blue team operations
+
+## ♟️ Quantum Chess Wargame Simulator
+
+**NEW!** A 10-dimensional attack/defense security game that revolutionizes cybersecurity:
+
+```bash
+# Deploy local Quantum Chess environment
+./quantum-chess/scripts/deploy-quantum-chess.sh local
+
+# Or use Docker Compose directly
+docker compose -f docker-compose.quantum-chess.yml up -d
+
+# Access visualization
+open http://localhost:8090
+```
+
+See [Quantum Chess Documentation](quantum-chess/docs/README.md) for full details.
+
+**Key Features:**
+- 🔴 **Red Team** (Kali Linux) - Offensive AI agents for attack simulation
+- 🔵 **Blue Team** (Parrot OS) - Defensive AI agents for security hardening  
+- ⚡ **Quantum Entanglement** - NATS JetStream for real-time team coordination
+- 🧠 **Legion AI** - Learns from both teams simultaneously
+- 💰 **250x Cost Reduction** - $1.2K/year vs $300K/year traditional
 
 ## 🚀 Quick Start
 

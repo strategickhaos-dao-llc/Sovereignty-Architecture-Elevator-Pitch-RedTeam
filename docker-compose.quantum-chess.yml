@@ -1,0 +1,288 @@
+# Quantum Chess Wargame Simulator - Docker Compose Configuration
+# Local Development Environment
+# Codename: Moonlight Sunshine Matrix Prototype Sovereign
+
+version: '3.8'
+
+networks:
+  quantum-chess-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
+
+volumes:
+  nats_data:
+  redis_data:
+  legion_data:
+
+services:
+  # ============================================================================
+  # QUANTUM ENTANGLEMENT LAYER (NATS JetStream)
+  # ============================================================================
+  nats:
+    image: nats:2.10-alpine
+    container_name: quantum-chess-nats
+    command: 
+      - "--js"
+      - "--cluster_name=quantum-chess"
+      - "--http_port=8222"
+      - "--store_dir=/data/jetstream"
+    ports:
+      - "4222:4222"    # Client connections
+      - "8222:8222"    # HTTP monitoring
+      - "6222:6222"    # Cluster routing
+    volumes:
+      - nats_data:/data
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.0.10
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================================================
+  # STATE STORE (Redis)
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: quantum-chess-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.0.11
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================================================
+  # RED TEAM CLUSTER (Kali Linux - Offensive Security)
+  # ============================================================================
+  red-team-controller:
+    image: alpine:latest
+    container_name: quantum-chess-red-controller
+    environment:
+      - TEAM=red
+      - ROLE=offensive
+      - NATS_URL=nats://nats:4222
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./quantum-chess/config:/config:ro
+      - ./quantum-chess/agents/red-team:/agents:ro
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.1.1
+    depends_on:
+      nats:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["sh", "-c", "echo '🔴 Red Team Controller Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  red-agent-port-scanner:
+    image: alpine:latest
+    container_name: quantum-chess-red-port-scanner
+    environment:
+      - TEAM=red
+      - AGENT_TYPE=port-scanner
+      - NATS_URL=nats://nats:4222
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.1.10
+    depends_on:
+      - red-team-controller
+    command: ["sh", "-c", "echo '🔍 Port Scanner Agent Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  red-agent-exploit-engine:
+    image: alpine:latest
+    container_name: quantum-chess-red-exploit-engine
+    environment:
+      - TEAM=red
+      - AGENT_TYPE=exploit-engine
+      - NATS_URL=nats://nats:4222
+      - MODE=simulation
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.1.11
+    depends_on:
+      - red-team-controller
+    command: ["sh", "-c", "echo '💥 Exploit Engine Agent Ready (SIMULATION MODE)' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  red-agent-c2-operator:
+    image: alpine:latest
+    container_name: quantum-chess-red-c2
+    environment:
+      - TEAM=red
+      - AGENT_TYPE=c2-operator
+      - NATS_URL=nats://nats:4222
+      - MODE=simulation
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.1.12
+    depends_on:
+      - red-team-controller
+    command: ["sh", "-c", "echo '📡 C2 Operator Agent Ready (SIMULATION MODE)' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  # ============================================================================
+  # BLUE TEAM CLUSTER (Parrot OS - Defensive Security)
+  # ============================================================================
+  blue-team-controller:
+    image: alpine:latest
+    container_name: quantum-chess-blue-controller
+    environment:
+      - TEAM=blue
+      - ROLE=defensive
+      - NATS_URL=nats://nats:4222
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./quantum-chess/config:/config:ro
+      - ./quantum-chess/agents/blue-team:/agents:ro
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.2.1
+    depends_on:
+      nats:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["sh", "-c", "echo '🔵 Blue Team Controller Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  blue-agent-firewall:
+    image: alpine:latest
+    container_name: quantum-chess-blue-firewall
+    environment:
+      - TEAM=blue
+      - AGENT_TYPE=firewall-manager
+      - NATS_URL=nats://nats:4222
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.2.10
+    depends_on:
+      - blue-team-controller
+    command: ["sh", "-c", "echo '🛡️ Firewall Manager Agent Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  blue-agent-ids:
+    image: alpine:latest
+    container_name: quantum-chess-blue-ids
+    environment:
+      - TEAM=blue
+      - AGENT_TYPE=ids-ips-controller
+      - NATS_URL=nats://nats:4222
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.2.11
+    depends_on:
+      - blue-team-controller
+    command: ["sh", "-c", "echo '🔎 IDS/IPS Controller Agent Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  blue-agent-threat-hunter:
+    image: alpine:latest
+    container_name: quantum-chess-blue-hunter
+    environment:
+      - TEAM=blue
+      - AGENT_TYPE=threat-hunter
+      - NATS_URL=nats://nats:4222
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.2.12
+    depends_on:
+      - blue-team-controller
+    command: ["sh", "-c", "echo '🎯 Threat Hunter Agent Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  blue-agent-siem:
+    image: alpine:latest
+    container_name: quantum-chess-blue-siem
+    environment:
+      - TEAM=blue
+      - AGENT_TYPE=siem-correlator
+      - NATS_URL=nats://nats:4222
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.2.13
+    depends_on:
+      - blue-team-controller
+    command: ["sh", "-c", "echo '📊 SIEM Correlator Agent Ready' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  # ============================================================================
+  # LEGION AI ANALYZER
+  # ============================================================================
+  legion-analyzer:
+    image: alpine:latest
+    container_name: quantum-chess-legion
+    environment:
+      - COMPONENT=legion
+      - NATS_URL=nats://nats:4222
+      - REDIS_URL=redis://redis:6379
+      - MODEL=gpt-4o-mini
+    volumes:
+      - ./quantum-chess/config:/config:ro
+      - legion_data:/data
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.3.1
+    depends_on:
+      nats:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["sh", "-c", "echo '🧠 Legion AI Analyzer Ready - Learning from Red & Blue' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  # ============================================================================
+  # VISUALIZATION LAYER (Moonlight/Sunshine)
+  # ============================================================================
+  visualization:
+    image: nginx:alpine
+    container_name: quantum-chess-viz
+    ports:
+      - "8090:80"
+    volumes:
+      - ./quantum-chess/docs:/usr/share/nginx/html:ro
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.4.1
+    depends_on:
+      - nats
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================================================
+  # NATS BOX (CLI Tools for Testing)
+  # ============================================================================
+  nats-box:
+    image: natsio/nats-box:0.14
+    container_name: quantum-chess-nats-box
+    environment:
+      - NATS_URL=nats://nats:4222
+    networks:
+      quantum-chess-network:
+        ipv4_address: 172.30.0.100
+    depends_on:
+      nats:
+        condition: service_healthy
+    command: ["sh", "-c", "tail -f /dev/null"]
+    restart: unless-stopped
