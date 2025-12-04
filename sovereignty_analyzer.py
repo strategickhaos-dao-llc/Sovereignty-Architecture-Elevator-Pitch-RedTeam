@@ -377,7 +377,12 @@ class HARAnalyzer:
                       for h in request.get('headers', [])}
             
             if 'authorization' in headers:
-                auth_type = headers['authorization'].split()[0] if ' ' in headers['authorization'] else 'unknown'
+                auth_value = headers['authorization'].strip()
+                if auth_value:
+                    parts = auth_value.split()
+                    auth_type = parts[0] if parts else 'unknown'
+                else:
+                    auth_type = 'unknown'
                 endpoints['authentication'].append({
                     'type': auth_type,
                     'endpoint': f"{method} {path}"

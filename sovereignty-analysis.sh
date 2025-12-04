@@ -507,9 +507,11 @@ basic_comparison() {
         echo "    Sovereign: $(numfmt --to=iec $sov_size 2>/dev/null || echo $sov_size) bytes"
         
         # Calculate improvement
-        if [ "$orig_size" -gt 0 ]; then
+        if [ "$orig_size" -gt 0 ] && [ "$orig_size" -eq "$orig_size" ] 2>/dev/null; then
             local improvement=$(echo "scale=2; (($orig_size - $sov_size) / $orig_size) * 100" | bc 2>/dev/null || echo "N/A")
-            echo "    Improvement: ${improvement}%"
+            if [ "$improvement" != "N/A" ]; then
+                echo "    Improvement: ${improvement}%"
+            fi
         fi
         
         echo ""
@@ -707,18 +709,23 @@ cmd_notify() {
         return 1
     fi
     
+    # Validate webhook URL format (must be Discord webhook URL)
+    if ! echo "$webhook" | grep -qE '^https://discord(app)?\.com/api/webhooks/[0-9]+/[a-zA-Z0-9_-]+$'; then
+        error "Invalid Discord webhook URL format"
+        error "Expected format: https://discord.com/api/webhooks/{id}/{token}"
+        return 1
+    fi
+    
     info "Sending Discord notification..."
     
-    local payload=$(cat << EOF
-{
-    "content": "$message",
-    "username": "Sovereignty Analyzer",
-    "avatar_url": "https://example.com/avatar.png"
-}
-EOF
-)
+    # Escape message for JSON (basic escaping)
+    local escaped_message
+    escaped_message=$(echo "$message" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\n/\\n/g')
     
-    if curl -s -H "Content-Type: application/json" -d "$payload" "$webhook" > /dev/null; then
+    local payload
+    payload=$(printf '{"content": "%s", "username": "Sovereignty Analyzer"}' "$escaped_message")
+    
+    if curl -s --fail -H "Content-Type: application/json" -d "$payload" "$webhook" > /dev/null 2>&1; then
         info "Notification sent to Discord"
     else
         error "Failed to send Discord notification"
