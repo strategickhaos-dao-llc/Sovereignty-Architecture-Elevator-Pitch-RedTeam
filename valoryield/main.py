@@ -5,6 +5,9 @@ FastAPI backend for the ValorYield Engine with 100% sovereignty.
 Integrates with SwarmGate for automated 7% allocation deposits.
 """
 
+import os
+import threading
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -17,10 +20,16 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Enable CORS for cross-origin requests
+# CORS configuration
+# In production, restrict to specific trusted domains
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "*"  # Development default, override in production
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,8 +60,30 @@ class SwarmGateResponse(BaseModel):
     trigger: str
 
 
-# Simulated portfolio state
-PORTFOLIO = {"balance": 207.69, "account": "2143", "allocation": "Aggressive Mix"}
+# Thread-safe portfolio state
+# In production, replace with proper database (PostgreSQL, Redis, etc.)
+class PortfolioState:
+    """Thread-safe portfolio state manager."""
+
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._data = {"balance": 207.69, "account": "2143", "allocation": "Aggressive Mix"}
+
+    def get(self, key: str):
+        with self._lock:
+            return self._data.get(key)
+
+    def get_all(self) -> dict:
+        with self._lock:
+            return self._data.copy()
+
+    def update_balance(self, amount: float) -> float:
+        with self._lock:
+            self._data["balance"] += amount
+            return self._data["balance"]
+
+
+PORTFOLIO = PortfolioState()
 
 
 @app.get("/")
@@ -61,7 +92,7 @@ def root():
     return {
         "name": "ValorYield Engine",
         "status": "operational",
-        "balance": PORTFOLIO["balance"],
+        "balance": PORTFOLIO.get("balance"),
         "sovereignty": "100%",
         "version": "1.0.0",
     }
@@ -76,10 +107,11 @@ def health():
 @app.get("/api/v1/portfolio", response_model=PortfolioResponse)
 def get_portfolio():
     """Get current portfolio information."""
+    portfolio_data = PORTFOLIO.get_all()
     return {
-        "balance": PORTFOLIO["balance"],
-        "account": PORTFOLIO["account"],
-        "allocation": PORTFOLIO["allocation"],
+        "balance": portfolio_data["balance"],
+        "account": portfolio_data["account"],
+        "allocation": portfolio_data["allocation"],
         "vs_moneylion": "173% fee savings",
     }
 
@@ -92,9 +124,7 @@ def swarmgate_deposit(request: DepositRequest):
     This endpoint is called by the SwarmGate system to deposit
     funds from trading profits into the ValorYield Engine.
     """
-    global PORTFOLIO
-    new_balance = PORTFOLIO["balance"] + request.amount
-    PORTFOLIO["balance"] = new_balance
+    new_balance = PORTFOLIO.update_balance(request.amount)
 
     return {
         "deposited": request.amount,
@@ -124,7 +154,7 @@ def get_stats():
     """Get platform statistics."""
     return {
         "total_users": 1,  # Just the sovereign for now
-        "total_aum": PORTFOLIO["balance"],
+        "total_aum": PORTFOLIO.get("balance"),
         "fee_savings_vs_traditional": "173%",
         "sovereignty_level": "100%",
         "intermediaries": 0,
