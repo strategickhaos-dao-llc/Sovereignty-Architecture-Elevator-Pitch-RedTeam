@@ -35,3 +35,29 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat / Solidity
+contracts/cache/
+contracts/artifacts/
+contracts/typechain-types/
+contracts/coverage/
+contracts/coverage.json
+contracts/deployments/*.json
+!contracts/deployments/.gitkeep
+
+# Next.js / Trust Dashboard
+trust-dashboard/.next/
+trust-dashboard/out/
+trust-dashboard/node_modules/
+trust-dashboard/.env.local
+trust-dashboard/.vercel
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+build-artifacts/
+*.tar.gz
+*.ots
