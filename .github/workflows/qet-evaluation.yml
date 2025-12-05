@@ -1,0 +1,125 @@
+# Continuous Evaluation for QuantumEvoTokenizer
+# Implements improvement #35: Continuous evaluation schedule
+# Runs monthly or on tokenizer changes
+
+name: QET Continuous Evaluation
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      full_benchmark:
+        description: 'Run full benchmark suite'
+        required: false
+        default: 'false'
+        type: boolean
+  
+  # Monthly schedule (1st of each month at midnight UTC)
+  schedule:
+    - cron: '0 0 1 * *'
+  
+  # Trigger on tokenizer changes
+  push:
+    paths:
+      - 'tokenizers/**'
+      - 'benchmarks/test_tokenizer.py'
+    branches:
+      - main
+  
+  pull_request:
+    paths:
+      - 'tokenizers/**'
+      - 'benchmarks/test_tokenizer.py'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  tokenizer-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install numpy pyyaml
+          pip install tiktoken || true  # Optional baseline
+      
+      - name: Run tokenizer tests
+        id: tests
+        run: |
+          python benchmarks/test_tokenizer.py
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+      
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qet-benchmark-results
+          path: benchmarks/reports/qet_benchmark_results.json
+          retention-days: 90
+      
+      - name: Check for degradation
+        if: github.event_name == 'schedule'
+        run: |
+          # Compare with previous results if available
+          if [ -f benchmarks/reports/qet_benchmark_results.json ]; then
+            python -c "
+import json
+import sys
+
+with open('benchmarks/reports/qet_benchmark_results.json', 'r') as f:
+    results = json.load(f)
+
+failed = sum(1 for r in results if r.get('status') == 'FAIL')
+warned = sum(1 for r in results if r.get('status') == 'WARN')
+
+print(f'Tests: {len(results)} | Failed: {failed} | Warnings: {warned}')
+
+if failed > 0:
+    print('::error::Tokenizer tests failed - evolution may be required')
+    sys.exit(1)
+elif warned > 2:
+    print('::warning::Multiple tokenizer warnings - review recommended')
+"
+          fi
+      
+      - name: Create issue on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'QET Tokenizer Evolution Required';
+            const body = `## Continuous Evaluation Alert
+            
+            The monthly QET evaluation detected issues that may require tokenizer re-evolution.
+            
+            **Run ID:** ${{ github.run_id }}
+            **Triggered:** ${{ github.event_name }}
+            
+            ### Next Steps
+            1. Review the benchmark results artifact
+            2. Check if training corpora have drifted
+            3. Consider running a new evolution cycle
+            4. Update frozen vocabulary if needed
+            
+            cc @Strategickhaos
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['tokenizer', 'maintenance', 'automated']
+            });

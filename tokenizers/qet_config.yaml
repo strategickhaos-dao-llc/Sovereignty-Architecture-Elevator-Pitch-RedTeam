@@ -1,0 +1,181 @@
+# QuantumEvoTokenizer Configuration
+# Strategickhaos DAO LLC - Sovereign AI Tokenization
+# 
+# This file implements Improvement #18 (Quantum config in YAML DNA)
+# and Improvement #19 (YAML-driven experiment specs)
+
+# Top-level tokenizer configuration
+tokenizer_config:
+  # Mode: "analysis" for research/evolution, "production" for frozen vocab
+  # Improvement #1: Separate analysis and production modes
+  mode: "analysis"
+  
+  # Target vocabulary size
+  vocab_size: 50000
+  
+  # Random seed for reproducibility - Improvement #8
+  seed: 42
+  
+  # Quantum layer configuration - Improvement #18
+  quantum:
+    num_qubits: 8
+    ansatz_type: "QAOA"  # Options: QAOA, VQE, HEA
+    max_iterations: 100
+    entropy_threshold: 0.5
+    backend_type: "fake"  # Options: fake, qutip, qiskit, hardware
+    boundary_threshold: 0.5
+    use_gradient: false  # Improvement #13: analytic gradients
+    segment_size: 256    # Improvement #12: batch VQE
+    cache_solutions: true  # Improvement #16
+    circuit_depth_low_entropy: 2   # Improvement #15
+    circuit_depth_high_entropy: 8
+  
+  # Genetic Algorithm configuration - Improvements #3, #5, #9
+  ga:
+    population_size: 50
+    generations: 100
+    mutation_rate: 0.1
+    crossover_rate: 0.8
+    elite_size: 5
+    stagnation_threshold: 10  # Improvement #9: early stopping
+    catastrophic_mutation_rate: 0.3
+    byte_validity_check: true   # Improvement #3
+    ngram_guided_mutation: true  # Improvement #3
+    min_context_coverage: 0.1   # Improvement #5
+    min_occurrence_count: 2     # Improvement #5
+  
+  # Multi-objective fitness - Improvement #4
+  fitness:
+    use_pareto: true  # NSGA-II style selection
+    compression_weight: 0.3
+    sparsity_weight: 0.2
+    oov_weight: 0.25
+    perplexity_weight: 0.25
+  
+  # Hierarchical evolution - Improvement #6
+  evolution:
+    hierarchical: true
+    subword_generations: 50
+    phrase_generations: 30
+    subword_mutation_rate: 0.15
+    phrase_mutation_rate: 0.08
+  
+  # Base tokenizer compatibility - Improvement #7
+  compatibility:
+    enable_mapping: false
+    base_tokenizer: "cl100k_base"
+    mapping_cache_path: null
+  
+  # Safety and robustness - Improvements #28-31
+  safety:
+    max_tokens_per_char_ratio: 2.0  # Improvement #29
+    enable_differential_privacy: false  # Improvement #30
+    dp_noise_scale: 1.0
+    adversarial_fuzz_test: true  # Improvement #28
+    redteam_mode: false  # Improvement #31
+    injection_penalty_weight: 0.5
+  
+  # Artifact management - Improvements #22, #36
+  output_dir: "artifacts/qet"
+  enable_notarization: true
+  version_tag: "qet-v1.0.0"
+  
+  # Experiment name for DAO tracking
+  experiment_name: "qet_default_experiment"
+
+# Experiment definitions - Improvement #19
+# Each experiment is a named configuration variant
+tokenizer_experiments:
+  
+  # Base experiment: standard configuration
+  base_experiment:
+    contexts:
+      - "data/contexts/default/*.txt"
+    generations: 100
+    vocab_target: 50000
+    seed: 42
+    description: "Standard QET evolution with default parameters"
+  
+  # Fast iteration for development
+  dev_experiment:
+    contexts:
+      - "data/contexts/dev/*.txt"
+    generations: 10
+    vocab_target: 10000
+    seed: 42
+    quantum:
+      max_iterations: 20
+      cache_solutions: true
+    description: "Quick development iteration"
+  
+  # High-quality training run
+  production_training:
+    contexts:
+      - "data/contexts/production/*.txt"
+      - "data/contexts/enterprise/*.txt"
+    generations: 500
+    vocab_target: 100000
+    seed: 137  # Node 137 seed
+    fitness:
+      use_pareto: true
+      compression_weight: 0.35
+      sparsity_weight: 0.15
+      oov_weight: 0.30
+      perplexity_weight: 0.20
+    evolution:
+      hierarchical: true
+      subword_generations: 300
+      phrase_generations: 200
+    description: "Full production training run"
+  
+  # Security-focused experiment
+  security_experiment:
+    contexts:
+      - "data/contexts/security/*.txt"
+    generations: 200
+    vocab_target: 50000
+    seed: 42
+    safety:
+      max_tokens_per_char_ratio: 1.5
+      adversarial_fuzz_test: true
+      redteam_mode: true
+      injection_penalty_weight: 1.0
+    description: "Security-hardened tokenizer training"
+  
+  # Minimal quantum (classical baseline comparison)
+  classical_baseline:
+    contexts:
+      - "data/contexts/default/*.txt"
+    generations: 100
+    vocab_target: 50000
+    seed: 42
+    quantum:
+      max_iterations: 1
+      cache_solutions: false
+    description: "Classical-only baseline for comparison"
+
+# DAO integration settings - Improvement #36
+dao_integration:
+  record_experiments: true
+  notarize_artifacts: true
+  governance_approval_required: false
+  freeze_requires_vote: true
+  
+# Wazuh FIM policy reference - Improvement #23
+security_monitoring:
+  wazuh_policy: "tokenizers/wazuh_policy.yaml"
+  fim_directories:
+    - "artifacts/qet"
+    - "tokenizers/qet"
+  alert_on_unauthorized_change: true
+
+# Continuous evaluation schedule - Improvement #35
+continuous_evaluation:
+  enabled: true
+  schedule: "0 0 1 * *"  # Monthly on the 1st
+  benchmark_corpora:
+    - "data/eval/monthly_corpus.txt"
+  degradation_threshold:
+    compression: 0.05  # 5% degradation triggers alert
+    perplexity: 0.10   # 10% degradation triggers alert
+  auto_open_issue: true

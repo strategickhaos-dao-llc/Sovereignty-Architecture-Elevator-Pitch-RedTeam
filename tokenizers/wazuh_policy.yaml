@@ -1,0 +1,151 @@
+# Wazuh File Integrity Monitoring Policy for QET Artifacts
+# Implements improvement #23: Wazuh policy for tokenizer artifacts
+#
+# Deploy this configuration to your Wazuh agent's ossec.conf
+# Reference: https://documentation.wazuh.com/current/user-manual/capabilities/file-integrity/
+
+# Syscheck (FIM) configuration for tokenizer artifact monitoring
+syscheck:
+  # Enable FIM
+  disabled: "no"
+  
+  # Scan frequency (seconds) - check every hour
+  frequency: 3600
+  
+  # Real-time monitoring for immediate alerts
+  realtime: "yes"
+  
+  # Directories to monitor for QET artifacts
+  directories:
+    # Main tokenizer artifacts
+    - path: "/path/to/repo/artifacts/qet"
+      realtime: "yes"
+      check_all: "yes"
+      report_changes: "yes"
+      recursion_level: 3
+      
+    # Tokenizer source code
+    - path: "/path/to/repo/tokenizers/qet"
+      realtime: "yes"
+      check_all: "yes"
+      report_changes: "yes"
+      
+    # Configuration files
+    - path: "/path/to/repo/tokenizers/qet_config.yaml"
+      realtime: "yes"
+      check_all: "yes"
+      report_changes: "yes"
+      
+  # Files to specifically monitor
+  monitored_files:
+    # Vocabulary files - critical for supply chain security
+    - "vocab.json"
+    - "config.json"
+    - "metrics.json"
+    - "hash.txt"
+    - "version_registry.json"
+    
+  # Alert levels
+  alert_levels:
+    # New file created
+    added: 7
+    # File modified
+    modified: 10
+    # File deleted
+    deleted: 12
+
+# Custom rules for tokenizer artifact alerts
+rules:
+  # Alert on vocabulary modification
+  - id: 100100
+    level: 10
+    group: "tokenizer,supply_chain"
+    match: "vocab.json"
+    description: "QET vocabulary file was modified - potential supply chain attack"
+    
+  # Alert on config modification
+  - id: 100101
+    level: 8
+    group: "tokenizer,config_change"
+    match: "config.json|qet_config.yaml"
+    description: "QET configuration file was modified"
+    
+  # Alert on hash file modification (tampering indicator)
+  - id: 100102
+    level: 12
+    group: "tokenizer,integrity_violation"
+    match: "hash.txt"
+    description: "QET hash file modified - possible integrity violation"
+    
+  # Alert on version registry modification
+  - id: 100103
+    level: 9
+    group: "tokenizer,version_control"
+    match: "version_registry.json"
+    description: "QET version registry modified - governance event"
+    
+  # Alert on new vocabulary version
+  - id: 100104
+    level: 6
+    group: "tokenizer,new_version"
+    match: "vocab.json"
+    field: "syscheck.event"
+    value: "added"
+    description: "New QET vocabulary version created"
+    
+  # Alert on source code modification
+  - id: 100105
+    level: 8
+    group: "tokenizer,source_change"
+    match: "quantum_evo_tokenizer.py|ga_optimizer.py|quantum_backend.py"
+    description: "QET source code modified - review required"
+
+# Active response for critical violations
+active_response:
+  # Block unauthorized changes (optional - enable with caution)
+  - name: "block_vocab_change"
+    disabled: "yes"  # Enable only in high-security environments
+    command: "firewall-drop"
+    location: "local"
+    rules_id: "100102"
+    timeout: 600
+    
+  # Log detailed forensics
+  - name: "log_forensics"
+    disabled: "no"
+    command: "capture_artifact_state.sh"
+    location: "local"
+    rules_id: "100100,100102"
+
+# Integration with DAO notification
+integrations:
+  # Slack/Discord notification for governance events
+  - name: "discord_notify"
+    hook_url: "DISCORD_WEBHOOK_URL"  # Configure via environment
+    rule_id: "100100,100102,100103"
+    alert_format: "json"
+    
+  # Email to DAO signers
+  - name: "email_alert"
+    recipients: "domenic.garza@snhu.edu"
+    rule_id: "100102"
+    subject: "CRITICAL: QET Artifact Integrity Violation"
+
+---
+# Deployment Instructions:
+#
+# 1. Copy relevant sections to /var/ossec/etc/ossec.conf
+# 2. Adjust paths to match your repository location
+# 3. Configure webhook URLs in environment variables
+# 4. Restart Wazuh agent: systemctl restart wazuh-agent
+# 5. Verify FIM is active: /var/ossec/bin/agent_control -l
+#
+# Testing:
+# 1. Modify a monitored file
+# 2. Check Wazuh dashboard for alerts
+# 3. Verify active response triggers (if enabled)
+#
+# For CI/CD integration:
+# - Add Wazuh agent to CI runners
+# - Configure artifact paths relative to workspace
+# - Use rule 100104 to track new versions in pipeline
