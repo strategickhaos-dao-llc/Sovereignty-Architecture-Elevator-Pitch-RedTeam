@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  privacy_search_node:
+    image: python:3.11-slim
+    container_name: privacy_search_node
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "8001:8001"                           # change per machine if needed
+    volumes:
+      - ./privacy_search_node:/app
+      - ./logs/privacy_search:/logs
+    environment:
+      - PORT=8001
+    command: >
+      sh -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8001"

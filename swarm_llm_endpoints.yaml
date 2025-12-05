@@ -1,0 +1,42 @@
+# swarm_llm_endpoints.yaml - Swarm LLM and Privacy Search Configuration
+swarm:
+  proton_vpn_port_forward_range: "40000-50000"
+  ollama_default_port: 11434
+  search_default_port: 8001                    # new – each machine gets its own search port
+
+machines:
+  sony_asteroth:
+    hostname: "sony-asteroth"
+    local_ip: "192.168.1.50"
+    proton_vpn_ip: null
+    ollama_port: null
+    search_port: null                       # ← script will prompt for this too
+    ollama_endpoint: null                   # http://ip:ollama_port
+    search_endpoint: null                   # http://ip:search_port
+
+  nova_asus_tuf_a15:
+    hostname: "nova"
+    local_ip: "192.168.1.30"
+    proton_vpn_ip: null
+    ollama_port: null
+    search_port: null
+    ollama_endpoint: null
+    search_endpoint: null
+
+  athena_ipower:
+    hostname: "athena"
+    local_ip: "192.168.1.10"
+    proton_vpn_ip: null
+    ollama_port: null
+    search_port: null
+    ollama_endpoint: null
+    search_endpoint: null
+
+  nitro_v15:
+    hostname: "nitro"
+    local_ip: "192.168.1.40"
+    proton_vpn_ip: null
+    ollama_port: null
+    search_port: null
+    ollama_endpoint: null
+    search_endpoint: null

@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Privacy search node logs
+logs/
+*.jsonl
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
