@@ -93,6 +93,29 @@ path "auth/token/renew-self" {
 }
 ```
 
+#### JetBrains IDE Policy
+```hcl
+# /vault/policies/jetbrains.hcl
+# Read-only access to JetBrains account credentials
+path "secret/data/jetbrains/*" {
+  capabilities = ["read"]
+}
+
+path "secret/metadata/jetbrains/*" {
+  capabilities = ["list", "read"]
+}
+
+# Auth token self-renewal
+path "auth/token/renew-self" {
+  capabilities = ["update"]
+}
+
+# Token lookup (for health checks)
+path "auth/token/lookup-self" {
+  capabilities = ["read"]
+}
+```
+
 #### Admin/Operations Policy
 ```hcl
 # /vault/policies/admin.hcl
@@ -323,6 +346,17 @@ store_secrets() {
     # JWT secrets
     vault kv put secret/shared/jwt \
         secret="${JWT_SECRET:-$(openssl rand -hex 64)}"
+    
+    # JetBrains IDE credentials
+    vault kv put secret/jetbrains/account \
+        account_email="${JETBRAINS_ACCOUNT_EMAIL:-placeholder}" \
+        account_name="${JETBRAINS_ACCOUNT_NAME:-placeholder}"
+    
+    vault kv put secret/jetbrains/licenses \
+        webstorm_license_id="${JETBRAINS_WEBSTORM_LICENSE:-placeholder}" \
+        rider_license_id="${JETBRAINS_RIDER_LICENSE:-placeholder}" \
+        ai_pro_license_id="${JETBRAINS_AI_LICENSE:-placeholder}" \
+        azd_plugin_license_id="${JETBRAINS_AZD_LICENSE:-placeholder}"
     
     echo "✅ Initial secrets stored"
 }
