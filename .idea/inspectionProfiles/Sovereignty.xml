@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Strategickhaos Sovereignty" />
+    <option name="myDescription" value="Security-focused inspection profile for sovereign infrastructure development" />
+    
+    <!-- ============================================ -->
+    <!-- SECURITY INSPECTIONS (CRITICAL) -->
+    <!-- ============================================ -->
+    
+    <!-- Hardcoded Secrets -->
+    <inspection_tool class="HardcodedPassword" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="CHECK_COMMENTS" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HardcodedCredentials" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="HardcodedApiKey" enabled="true" level="ERROR" enabled_by_default="true" />
+    
+    <!-- Injection Vulnerabilities -->
+    <inspection_tool class="SqlInjection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="CommandInjection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PathTraversal" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="XSSPossibility" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="LDAPInjection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="XPathInjection" enabled="true" level="ERROR" enabled_by_default="true" />
+    
+    <!-- Cryptographic Issues -->
+    <inspection_tool class="WeakCrypto" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="InsecureRandomGenerator" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WeakHashAlgorithm" enabled="true" level="WARNING" enabled_by_default="true" />
+    
+    <!-- Unsafe API Usage -->
+    <inspection_tool class="InsecureApiCall" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="InsecureDeserialization" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="UnsafeLibraryUsage" enabled="true" level="WARNING" enabled_by_default="true" />
+    
+    <!-- Network Security -->
+    <inspection_tool class="InsecureSSLContext" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="UnverifiedCertificate" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="HttpBasicAuth" enabled="true" level="WARNING" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- TYPESCRIPT/JAVASCRIPT INSPECTIONS -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="JSUnusedLocalSymbols" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSUnresolvedVariable" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSValidateTypes" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="TypeScriptValidateTypes" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="TypeScriptUnresolvedReference" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSDeprecatedSymbols" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSUnusedAssignment" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSPotentiallyInvalidConstructorUsage" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSPotentiallyInvalidTargetOfIndexedPropertyAccess" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSAnnotator" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="ES6PreferShortImport" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- C# / .NET INSPECTIONS (RIDER) -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="UnusedVariable" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedMember.Global" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedMember.Local" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedType.Global" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedType.Local" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NotAccessedField.Global" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="NotAccessedField.Local" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AsyncVoidMethod" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PossibleNullReferenceException" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NullableWarningSuppressionIsUsed" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ConvertIfStatementToSwitchStatement" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="InconsistentNaming" enabled="true" level="WARNING" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- KUBERNETES / YAML INSPECTIONS -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="YAMLDuplicatedKeys" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="YAMLUnresolvedAlias" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="YAMLSchemaValidation" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="KubernetesSchemaValidation" enabled="true" level="ERROR" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- DOCKER INSPECTIONS -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="DockerfileUnexpectedInstruction" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DockerfileUnusedCopy" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DockerfileExternalImage" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="DockerfileHardcodedVersion" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- SHELL SCRIPT INSPECTIONS -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="ShellCheck" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ShellScriptUnusedDeclaration" enabled="true" level="WARNING" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- JSON INSPECTIONS -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="JsonStandardCompliance" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JsonSchemaCompliance" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JsonSchemaValidation" enabled="true" level="ERROR" enabled_by_default="true" />
+    
+    <!-- ============================================ -->
+    <!-- GENERAL CODE QUALITY -->
+    <!-- ============================================ -->
+    
+    <inspection_tool class="SpellCheckingInspection" enabled="true" level="TYPO" enabled_by_default="true" />
+    <inspection_tool class="GrazieInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" />
+    <inspection_tool class="RedundantSuppression" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="TodoComment" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="myTodoPatterns">
+        <list>
+          <TodoPattern>
+            <option name="myPattern" value="\btodo\b.*" />
+            <option name="myCaseSensitive" value="false" />
+          </TodoPattern>
+          <TodoPattern>
+            <option name="myPattern" value="\bfixme\b.*" />
+            <option name="myCaseSensitive" value="false" />
+          </TodoPattern>
+          <TodoPattern>
+            <option name="myPattern" value="\bsecurity\b.*" />
+            <option name="myCaseSensitive" value="false" />
+          </TodoPattern>
+          <TodoPattern>
+            <option name="myPattern" value="\bvulnerability\b.*" />
+            <option name="myCaseSensitive" value="false" />
+          </TodoPattern>
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

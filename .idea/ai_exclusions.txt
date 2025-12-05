@@ -1,0 +1,144 @@
+# JetBrains AI Exclusion Patterns for Strategickhaos Sovereignty Architecture
+#
+# These patterns prevent sensitive files from being sent to JetBrains AI services.
+# Import these patterns into: Settings → Tools → JetBrains AI → Exclusions
+#
+# Usage:
+# 1. Open WebStorm or Rider
+# 2. Navigate to Settings → Tools → JetBrains AI → Exclusions
+# 3. Add each pattern from this file
+#
+# Categories:
+# - Secrets and credentials
+# - Environment files
+# - Certificate files
+# - Cloud provider configurations
+# - Vault and key management
+# - IDE-specific sensitive data
+
+# ============================================
+# SECRETS AND CREDENTIALS
+# ============================================
+**/secrets/**
+**/*secret*
+**/*token*
+**/credentials*
+**/*password*
+**/*apikey*
+**/*api_key*
+**/*api-key*
+
+# ============================================
+# ENVIRONMENT FILES
+# ============================================
+**/.env
+**/.env.*
+**/.env.local
+**/.env.development
+**/.env.staging
+**/.env.production
+**/env.local
+**/env.development
+**/env.staging
+**/env.production
+
+# ============================================
+# CERTIFICATE AND KEY FILES
+# ============================================
+**/*.pem
+**/*.key
+**/*.pfx
+**/*.p12
+**/*.crt
+**/*.cer
+**/*.der
+**/*.p7b
+**/*.p7c
+**/*.jks
+**/*.keystore
+**/*.truststore
+
+# ============================================
+# KUBERNETES AND CONTAINER CONFIGS
+# ============================================
+**/*.kube
+**/kubeconfig*
+**/.kube/**
+**/kube.config
+**/.docker/config.json
+
+# ============================================
+# CLOUD PROVIDER CONFIGURATIONS
+# ============================================
+**/.aws/**
+**/.azure/**
+**/.gcp/**
+**/azure.json
+**/gcp-credentials.json
+**/aws-credentials
+**/.boto
+
+# ============================================
+# HASHICORP VAULT AND KEY MANAGEMENT
+# ============================================
+**/vault/**
+**/.vault-token
+**/vault-token*
+**/*vault*.hcl
+**/consul/**
+**/.consul-token
+
+# ============================================
+# IDE AND CONFIGURATION PRIVATE DATA
+# ============================================
+**/.idea/keymaps/**
+**/config/private/**
+**/.idea/httpRequests/**
+**/.idea/shelf/**
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+
+# ============================================
+# SSH AND GIT CREDENTIALS
+# ============================================
+**/.ssh/**
+**/.git-credentials
+**/.gitconfig
+**/id_rsa*
+**/id_ed25519*
+**/id_ecdsa*
+**/known_hosts
+
+# ============================================
+# PACKAGE MANAGER TOKENS
+# ============================================
+**/.npmrc
+**/.yarnrc
+**/pip.conf
+**/.pypirc
+**/nuget.config
+**/.cargo/credentials
+
+# ============================================
+# CI/CD SECRETS
+# ============================================
+**/.github/secrets/**
+**/.gitlab-ci-secrets/**
+**/azure-pipelines-secrets.yml
+**/jenkins-secrets/**
+
+# ============================================
+# DATABASE CONFIGURATIONS
+# ============================================
+**/database.yml
+**/*connection-string*
+**/*.sqlite
+**/*.db
+
+# ============================================
+# STRATEGICKHAOS SPECIFIC
+# ============================================
+**/dao_record.yaml
+**/discord-ops-secrets/**
+**/*webhook-secret*
+**/governance/private/**
