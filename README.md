@@ -186,6 +186,11 @@ governance:
     link: "https://wiki.strategickhaos.internal/change-management"
 ```
 
+### Failure Mode Analysis
+- **[Failure Modes Bibliography](FAILURE_MODES_BIBLIOGRAPHY.md)** - 100 bibliographic entries on system failure patterns
+- **[Failure Modes Tracking](strategickhaos_failure_modes.yaml)** - Operational tracking of mitigation progress
+- **Covenant**: No exploitation—lab-only mode until 80% mitigation achieved
+
 ## 📊 Monitoring & Alerts
 
 ### Key Metrics
