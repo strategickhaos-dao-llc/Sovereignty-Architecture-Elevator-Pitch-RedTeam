@@ -1,0 +1,10 @@
+# risk.yaml — FINAL
+max_drift_before_rebalance: 0.12
+tactical_sleeve_active: false
+max_single_position: 0.09
+cash_buffer_min: 0.00
+
+swarmgate:
+  tbill: 20.80      # SGOV or Webull cash sweep
+  aifuel: 10.40
+  crypto: 5.20      # 2.60 BTC / 2.60 ETH → cold storage
