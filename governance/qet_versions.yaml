@@ -1,0 +1,285 @@
+# qet_versions.yaml
+# Strategickhaos DAO LLC / Valoryield Engine — QET Version Specification
+# Quantum Entropy Tokenization (QET) Configuration for Path A Governance
+# Version: 1.0
+# Date: 2025-12-05
+# Operator: Domenic Garza (Node 137)
+
+version: "1.0"
+created: "2025-12-05"
+project: "Valoryield Engine — Rank-Based Trading Bot Refinery"
+governance_path: "A"
+
+qet_config:
+  description: "Quantum Entropy Tokenization for log compression and pattern mining"
+  purpose: "Tokenize trade logs, rank histories, and backtest data for 12-15% efficiency gains"
+  target_compression: "12%"
+  pattern_mining_enabled: true
+  backtest_optimization: true
+
+# Tier 0: Immediate Income Core (Deploy-This-Week, 80%+ Readiness)
+# Sim yields: 7.2-8.2% annualized (adjusted for 0.1% fees, 15% drawdown cap)
+tier_0_income_core:
+  deployment_window: "immediate"
+  readiness_threshold: "80%"
+  fee_adjustment: "0.1%"
+  drawdown_cap: "15%"
+  initial_sleeve: "$10k"
+  
+  strategies:
+    - name: "simple_momentum_rank"
+      id: "SMR-001"
+      version: "1.0.0"
+      readiness: 95
+      simulated_yield: 8.2
+      logic: "Rank assets by 12-mo returns, long top 20%"
+      rebalance_frequency: "monthly"
+      risk_controls:
+        position_cap: "5%"
+        drawdown_trigger: "20%"
+        action_on_trigger: "de-risk to cash"
+      qet_utility:
+        function: "tokenize rank histories"
+        pattern: "top return sequences"
+        compression_gain: "12%"
+        overfit_detection: true
+      deployment:
+        container: "docker"
+        data_sources: ["polygon", "coingecko"]
+        dependencies: ["pandas", "numpy"]
+        broker_api: "configurable"
+
+    - name: "dual_momentum_rank"
+      id: "DMR-002"
+      version: "1.0.0"
+      readiness: 90
+      simulated_yield: 7.5
+      logic: "Switch risk-on/off based on relative ranks (equities/crypto vs bonds/cash)"
+      rebalance_frequency: "weekly"
+      risk_controls:
+        regime_gate: "binary"
+        volatility_reduction: true
+      qet_utility:
+        function: "compress regime logs"
+        pattern: "switch events"
+        token_breeding: true
+      deployment:
+        container: "docker"
+        state_store: "redis"
+        integration: "SMR-001"
+
+    - name: "percentile_momentum"
+      id: "PMR-003"
+      version: "1.0.0"
+      readiness: 88
+      simulated_yield: 7.8
+      logic: "Long above 80th percentile ranks"
+      rebalance_frequency: "monthly"
+      risk_controls:
+        position_concentration: "reduced"
+        turnover: "lower"
+      qet_utility:
+        function: "tokenize percentile thresholds"
+        evolution: "custom data fits"
+        sim_speed_boost: true
+      deployment:
+        container: "variant of SMR-001"
+        config_param: "percentile=80"
+
+    - name: "vol_adjusted_momentum"
+      id: "VAM-004"
+      version: "1.0.0"
+      readiness: 85
+      simulated_yield: 7.2
+      logic: "Rank by return/vol (rolling 90-day std)"
+      rebalance_frequency: "monthly"
+      risk_controls:
+        sizing_method: "inverse-vol"
+        blowup_prevention: true
+      qet_utility:
+        function: "entropy-optimize vol chunks"
+        pattern: "high-vol rank motifs"
+        refinery_tweaks: true
+      deployment:
+        container: "SMR-001 pipeline"
+        additional_calc: "numpy vol"
+
+    - name: "cross_asset_rank"
+      id: "CAR-005"
+      version: "1.0.0"
+      readiness: 82
+      simulated_yield: 8.1
+      logic: "Unified ranks across crypto/stocks"
+      rebalance_frequency: "monthly"
+      risk_controls:
+        crypto_cap: "30%"
+        venue_stops: true
+        paper_trade_first: true
+      qet_utility:
+        function: "unify cross-asset logs"
+        pattern: "BTC vs SPY rank"
+        token_evolution: true
+      deployment:
+        container: "docker"
+        data_sources: ["coingecko", "polygon"]
+        hybrid_feed: true
+
+# Tier 1: Near-Term Add-Ons (1-3 Months, 70-80% Readiness)
+# Sim yields: 7.0-7.4% annualized
+tier_1_addons:
+  deployment_window: "1-3 months"
+  readiness_threshold: "70%"
+  deployment_condition: "after Tier 0 validation"
+  
+  strategies:
+    - name: "mean_reversion_rank"
+      id: "MRR-006"
+      version: "0.9.0"
+      readiness: 80
+      simulated_yield: 7.0
+      logic: "Short bottom 20% ranks with stops"
+      risk_controls:
+        stops: true
+        small_sleeve: true
+      qet_utility:
+        function: "tokenize reversion tails"
+        pattern_discovery: true
+      deployment:
+        addon_to: "SMR-001"
+        dependencies: ["statsmodels"]
+
+    - name: "sector_rotation_rank"
+      id: "SRR-007"
+      version: "0.9.0"
+      readiness: 78
+      simulated_yield: 7.4
+      logic: "Monthly sector ETF ranks"
+      qet_utility:
+        function: "merge sector symbols"
+        analytics: "compressed"
+      deployment:
+        method: "pandas groupby"
+        data_type: "ETF"
+
+    - name: "ema_crossover_rank"
+      id: "ECR-008"
+      version: "0.9.0"
+      readiness: 75
+      simulated_yield: 7.3
+      logic: "Rank on EMA signals"
+      qet_utility:
+        function: "optimize crossover chunks"
+      deployment:
+        timing_filter: true
+        integration: "Tier 0"
+        dependencies: ["numpy"]
+
+    - name: "rsi_rank_filter"
+      id: "RSI-009"
+      version: "0.9.0"
+      readiness: 70
+      simulated_yield: 7.1
+      logic: "Rank oversold RSI"
+      qet_utility:
+        function: "breed RSI pattern tokens"
+      deployment:
+        entry_overlay: true
+        dependencies: ["pandas"]
+
+# Tier 2: Refinery R&D (Not Deployable Yet, <70% Readiness)
+# Sim yields 7.0-8.5%, but volatile (drawdowns 25%+)
+tier_2_refinery:
+  deployment_window: "future"
+  readiness_threshold: "<70%"
+  purpose: "evo-lab breeding for static rule graduation"
+  drawdown_warning: "25%+"
+  
+  categories:
+    - name: "mean_variance_cluster"
+      strategy_range: "10-18"
+      example: "Markowitz optimizations"
+      readiness: 75
+      future_use: "allocation layers post-Tier 0"
+      
+    - name: "ml_ranks"
+      strategy_range: "19-27"
+      examples: ["Random Forests", "LSTM"]
+      readiness_range: "38-60%"
+      future_use: "mine patterns from live logs, propose static ranks"
+      bottleneck: "needs more data"
+      
+    - name: "exotics"
+      strategy_range: "28-36"
+      examples: ["GA", "Quantum", "Chaos"]
+      readiness_range: "18-45%"
+      future_use: "evolve for 7% tweaks, not live control"
+      bottleneck: "overfitting risk"
+
+# QET Evolution Configuration
+qet_evolution:
+  log_compression:
+    target: "12%"
+    method: "entropy optimization"
+  pattern_spotting:
+    enabled: true
+    data_source: "backtest logs"
+    efficiency_gain: "12-15%"
+  vocabulary_evolution:
+    enabled: true
+    data_type: "trade data"
+    example_motifs:
+      - "H100 rank spikes"
+      - "top 20% sequences"
+      - "regime switch events"
+      - "high-vol rank patterns"
+  breeding:
+    environment: "evo lab"
+    not_production: true
+
+# Simulation Parameters
+simulation_config:
+  data_source: "Polygon aggregates"
+  columns: ["timestampMillis", "open", "close"]
+  test_period: "2024-2025"
+  dependencies: ["numpy", "pandas"]
+  target_yield: "7%"
+  risk_category: "low-risk annualized"
+  max_drawdown: "20%"
+  slippage_fee: "0.1%"
+
+# Arsenal Statistics
+arsenal_stats:
+  total_strategies: 36
+  deployable_now: 9
+  deployable_percentage: 25
+  tier_0_yield_range: "7.2-8.2%"
+  tier_1_yield_range: "7.0-7.4%"
+  portfolio_sim_yield: "7.6%"
+  portfolio_drawdown: "low"
+  bottlenecks:
+    - "ML needs more data"
+    - "Exotics prone to overfit"
+
+# Freeze Configuration
+freeze_config:
+  freeze_script: "freeze_qet.sh"
+  freeze_on_production: true
+  require_governance_approval: true
+  gpg_signature_required: true
+
+# Governance Hooks
+governance:
+  approval_required: true
+  approvers: ["Domenic Garza", "Node 137"]
+  ci_checks:
+    - "yaml_syntax_valid"
+    - "readiness_thresholds_met"
+    - "risk_controls_defined"
+    - "qet_utility_specified"
+  cryptography:
+    gpg_required: true
+    sha256_required: true
+
+# === GPG SIGNATURE BLOCK (DETACHED) ===
+# Save as qet_versions.yaml.asc
+# Command: gpg --armor --detach-sign qet_versions.yaml
