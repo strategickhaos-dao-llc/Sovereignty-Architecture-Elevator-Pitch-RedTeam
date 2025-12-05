@@ -1,0 +1,148 @@
+# SwarmGate Cloud Extension Configuration
+# Cloud federation ties local manifest to cloud topology for distributed compute
+
+swarmgate_extension:
+  name: cloud-federation
+  version: "1.0.0"
+  description: "SwarmGate extension for multi-cloud terminal federation"
+
+federation:
+  enabled: true
+  mode: distributed
+  consensus: eventual
+
+  providers:
+    aws:
+      enabled: true
+      regions:
+        - us-east-1
+        - us-west-2
+      instance_types:
+        - t3.micro    # Free tier
+        - t3.small    # Burst
+      spot_enabled: true
+      max_spot_price: 0.005
+
+    gcp:
+      enabled: true
+      zones:
+        - us-central1-a
+        - us-east1-b
+      machine_types:
+        - e2-micro    # Free tier
+        - e2-small    # Burst
+      preemptible: true
+
+    azure:
+      enabled: true
+      regions:
+        - eastus
+        - westus2
+      vm_sizes:
+        - Standard_B1s  # Free tier
+        - Standard_B2s  # Burst
+      spot_enabled: true
+
+topology:
+  inventory_source: cloud_hosts.ini
+  discovery_interval: 300  # 5 minutes
+  auto_scale:
+    enabled: true
+    min_nodes: 3
+    max_nodes: 200
+    scale_up_threshold: 80  # CPU %
+    scale_down_threshold: 20
+    cooldown_seconds: 600
+
+provenance:
+  enabled: true
+  log_path: /opt/strategickhaos/uam/provenance.log
+  hash_algorithm: blake3
+  timestamp_server: opentimestamps.org
+  auto_commit: true
+  commit_interval: 3600  # 1 hour
+
+workloads:
+  pid_ranco:
+    name: PID-RANCO Backtest
+    description: Distributed PID-RANCO backtesting across shards
+    shard_strategy: equal_split
+    output_format: json
+    aggregate_method: merge
+    verify_hashes: true
+
+  taugate:
+    name: TauGate Virtual Screen
+    description: 10B compound screening distributed across nodes
+    shard_strategy: compound_chunk
+    shard_size: 100000000  # 100M compounds per shard
+    output_format: json
+    aggregate_method: top_k
+    top_k: 200
+    filters:
+      - bbb_penetrant
+      - oral_bioavailable
+      - molecular_weight_lt_500
+      - off_target_clean
+    verify_hashes: true
+
+cost_management:
+  enabled: true
+  idle_shutdown:
+    enabled: true
+    idle_threshold_minutes: 15
+    exclude_tags:
+      - production
+      - persistent
+  daily_budget_usd: 10.00
+  alert_threshold_percent: 80
+  auto_shutdown_on_budget: true
+
+health_monitoring:
+  pulse_interval: 21600  # 6 hours
+  pulse_on_boot: true
+  pulse_log: /var/log/cluster_pulse.txt
+  self_heal:
+    enabled: true
+    retry_count: 3
+    fallback_to_local: true
+    local_vm_path: /opt/strategickhaos/local_vms
+
+downstream:
+  valoryield:
+    enabled: true
+    phase: 9
+    yield_router_tune: 0.07  # 7% yield
+    artifact_path: /uam/valoryield/backtest_results
+
+  uam:
+    enabled: true
+    levels:
+      - level: 1
+        name: Operations
+        artifacts:
+          - cloud_inventory
+          - cluster_pulse
+      - level: 2
+        name: Artifacts
+        artifacts:
+          - screening_results
+          - backtest_results
+      - level: 4
+        name: Inventions
+        artifacts:
+          - top_candidates
+      - level: 6
+        name: Risk
+        artifacts:
+          - dependency_map
+      - level: 7
+        name: Search
+        artifacts:
+          - per_invention_index
+
+  st_jude_donation:
+    enabled: true
+    wallet: SwarmYieldWallet
+    percentage: 7
+    trigger: bounty_payout

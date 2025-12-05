@@ -1,0 +1,118 @@
+---
+# Cost Guard Role - Auto-shutdown idle nodes to minimize cloud costs
+# Monitors CPU usage and initiates shutdown after configured idle period
+
+- name: Create cost-guard directory
+  file:
+    path: /opt/strategickhaos/scripts
+    state: directory
+    mode: '0755'
+
+- name: Deploy cost-guard monitoring script
+  copy:
+    dest: /opt/strategickhaos/scripts/cost_guard.sh
+    content: |
+      #!/bin/bash
+      # Cost Guard - Auto-shutdown idle nodes
+      # Checks CPU usage and shuts down if idle for configured threshold
+
+      set -euo pipefail
+
+      IDLE_THRESHOLD_MINUTES=${1:-15}
+      LOG_FILE="/var/log/cost-guard.log"
+      STATE_FILE="/tmp/cost_guard_idle_count"
+      EXCLUDED_TAGS="${2:-}"
+
+      log() {
+        echo "[$(date -Iseconds)] $1" >> "$LOG_FILE"
+      }
+
+      # Check for excluded tags (production, persistent)
+      check_exclusions() {
+        if [ -f /etc/strategickhaos/node_tags ]; then
+          for tag in $EXCLUDED_TAGS; do
+            if grep -q "$tag" /etc/strategickhaos/node_tags; then
+              log "Node has excluded tag: $tag. Skipping shutdown check."
+              return 1
+            fi
+          done
+        fi
+        return 0
+      }
+
+      # Get CPU idle percentage using /proc/stat for reliability
+      get_cpu_idle() {
+        # Read /proc/stat for more reliable CPU stats across distributions
+        if [ -f /proc/stat ]; then
+          local cpu_line
+          cpu_line=$(head -1 /proc/stat)
+          local user nice system idle iowait irq softirq steal
+          read -r _ user nice system idle iowait irq softirq steal _ <<< "$cpu_line"
+          local total=$((user + nice + system + idle + iowait + irq + softirq + steal))
+          if [ "$total" -gt 0 ]; then
+            echo $((idle * 100 / total))
+            return
+          fi
+        fi
+        # Fallback to top if /proc/stat is not available
+        top -bn1 | grep -E "^(%?Cpu|CPU)" | awk '{for(i=1;i<=NF;i++) if($i~/id/) {gsub(/[^0-9.]/,"",$i-1); print int($i-1); exit}}'
+      }
+
+      # Main check
+      main() {
+        if ! check_exclusions; then
+          exit 0
+        fi
+
+        local cpu_idle
+        cpu_idle=$(get_cpu_idle)
+        local cpu_usage=$((100 - cpu_idle))
+
+        log "CPU usage: ${cpu_usage}%"
+
+        if [ "$cpu_usage" -lt 10 ]; then
+          local idle_count
+          idle_count=$(cat "$STATE_FILE" 2>/dev/null || echo 0)
+          idle_count=$((idle_count + 1))
+          echo "$idle_count" > "$STATE_FILE"
+          log "Node idle (count: $idle_count / threshold: $IDLE_THRESHOLD_MINUTES)"
+
+          if [ "$idle_count" -ge "$IDLE_THRESHOLD_MINUTES" ]; then
+            log "Idle threshold reached. Initiating shutdown..."
+
+            # Final provenance log entry
+            echo "$(date -Iseconds)|cost_guard|shutdown|idle_$idle_count" >> /opt/strategickhaos/uam/provenance.log 2>/dev/null || true
+
+            # Notify and shutdown
+            echo "Strategickhaos: Auto-shutdown after ${IDLE_THRESHOLD_MINUTES}min idle" | wall 2>/dev/null || true
+            shutdown -h +2 "Strategickhaos: auto-shutdown after idle period."
+          fi
+        else
+          echo "0" > "$STATE_FILE"
+          log "Node active, reset idle counter"
+        fi
+      }
+
+      main "$@"
+    mode: '0755'
+  when: cost_guard_enable | default(true) | bool
+
+- name: Create cost-guard log file
+  file:
+    path: /var/log/cost-guard.log
+    state: touch
+    mode: '0644'
+
+- name: Setup cost-guard cron job (every minute)
+  cron:
+    name: "strategickhaos_cost_guard"
+    minute: "*"
+    job: "/opt/strategickhaos/scripts/cost_guard.sh {{ cost_guard_idle_minutes | default(15) }} '{{ cost_guard_exclude_tags | default('production persistent') }}' >> /var/log/cost-guard.log 2>&1"
+    state: "{{ 'present' if cost_guard_enable | default(true) else 'absent' }}"
+
+- name: Stop node when tagged for shutdown
+  shell: |
+    if command -v shutdown >/dev/null 2>&1; then
+      shutdown -h +2 "Strategickhaos: manual cost-guard shutdown triggered."
+    fi
+  when: force_shutdown | default(false) | bool

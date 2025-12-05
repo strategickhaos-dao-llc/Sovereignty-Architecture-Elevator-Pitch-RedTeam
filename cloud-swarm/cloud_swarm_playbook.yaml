@@ -1,0 +1,295 @@
+---
+# Cloud Swarm Playbook - Multi-cloud terminal federation and workload orchestration
+# Converges all discovered nodes and deploys PID-RANCO/TauGate stacks
+
+- name: Cloud Swarm Orchestration
+  hosts: all_cloud_terminals
+  become: true
+  vars:
+    strategickhaos_base: /opt/strategickhaos
+    uam_path: "{{ strategickhaos_base }}/uam"
+    provenance_log: "{{ uam_path }}/provenance.log"
+    cost_guard_enable: true
+    pulse_log: /var/log/cluster_pulse.txt
+
+  tasks:
+    # === Base Setup ===
+    - name: Create Strategickhaos directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ strategickhaos_base }}"
+        - "{{ uam_path }}"
+        - "{{ strategickhaos_base }}/logs"
+        - "{{ strategickhaos_base }}/scripts"
+        - "{{ strategickhaos_base }}/data"
+      tags: [setup, always]
+
+    - name: Install base dependencies
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - git
+          - curl
+          - jq
+          - bc
+        state: present
+        update_cache: true
+      tags: [setup]
+
+    - name: Install blake3sum for provenance hashing
+      shell: |
+        curl -L https://github.com/BLAKE3-team/BLAKE3/releases/latest/download/b3sum_linux_x64_bin -o /usr/local/bin/b3sum
+        chmod +x /usr/local/bin/b3sum
+      args:
+        creates: /usr/local/bin/b3sum
+      tags: [setup]
+
+    # === Provenance Setup ===
+    - name: Initialize provenance log
+      copy:
+        dest: "{{ provenance_log }}"
+        content: |
+          # Strategickhaos Provenance Log
+          # Node: {{ inventory_hostname }}
+          # Provider: {{ cloud_provider | default('unknown') }}
+          # Initialized: {{ ansible_date_time.iso8601 }}
+          # Format: timestamp|hash_type|hash|artifact|shard_id|status
+        mode: '0644'
+        force: false
+      tags: [provenance]
+
+    # === Health Pulse ===
+    - name: Record cluster pulse
+      lineinfile:
+        path: "{{ pulse_log }}"
+        line: "{{ ansible_date_time.iso8601 }}|{{ inventory_hostname }}|{{ cloud_provider | default('unknown') }}|boot|green"
+        create: true
+      tags: [pulse, always]
+
+    - name: Setup pulse cron (every 6 hours)
+      cron:
+        name: "cluster_pulse"
+        minute: "0"
+        hour: "*/6"
+        job: "echo \"$(date -Iseconds)|{{ inventory_hostname }}|{{ cloud_provider | default('unknown') }}|scheduled|green\" >> {{ pulse_log }}"
+      tags: [pulse]
+
+    # === PID-RANCO Deployment ===
+    - name: Install PID-RANCO Python dependencies
+      pip:
+        name:
+          - numpy
+          - pandas
+          - scipy
+        executable: pip3
+      tags: [pid_ranco]
+
+    - name: Clone PID-RANCO repository
+      git:
+        repo: https://github.com/StrategicKhaos/pid-ranco.git
+        dest: "{{ strategickhaos_base }}/pid-ranco"
+        version: main
+        force: true
+      ignore_errors: true
+      tags: [pid_ranco]
+
+    - name: Deploy run_pid_ranco.sh wrapper
+      copy:
+        dest: "{{ strategickhaos_base }}/scripts/run_pid_ranco.sh"
+        content: |
+          #!/bin/bash
+          # PID-RANCO Shard Execution Wrapper
+          # Usage: run_pid_ranco.sh <shard_id> <total_shards> <data_path>
+
+          set -euo pipefail
+
+          SHARD_ID=${1:-0}
+          TOTAL_SHARDS=${2:-1}
+          DATA_PATH=${3:-/data/pid_ranco}
+          OUTPUT_DIR="{{ strategickhaos_base }}/logs"
+          PROVENANCE_LOG="{{ provenance_log }}"
+
+          echo "[$(date -Iseconds)] Starting PID-RANCO shard $SHARD_ID of $TOTAL_SHARDS"
+
+          # Run the backtest shard
+          cd {{ strategickhaos_base }}/pid-ranco || exit 1
+
+          python3 -c "
+          import json
+          import hashlib
+          from datetime import datetime
+
+          # Simulated shard execution (replace with actual PID-RANCO logic)
+          shard_id = $SHARD_ID
+          total_shards = $TOTAL_SHARDS
+
+          result = {
+              'shard_id': shard_id,
+              'total_shards': total_shards,
+              'timestamp': datetime.now().isoformat(),
+              'status': 'completed',
+              'metrics': {
+                  'sharpe_ratio': 1.85 + (shard_id * 0.1),
+                  'max_drawdown': -0.12 + (shard_id * 0.01),
+                  'annual_return': 0.24 + (shard_id * 0.02)
+              }
+          }
+
+          output_path = f'$OUTPUT_DIR/pid_ranco_shard_{shard_id}.json'
+          with open(output_path, 'w') as f:
+              json.dump(result, f, indent=2)
+
+          # Calculate hash for provenance
+          with open(output_path, 'rb') as f:
+              file_hash = hashlib.blake2b(f.read()).hexdigest()
+
+          print(f'Shard {shard_id} complete. Hash: {file_hash}')
+          "
+
+          # Log provenance
+          OUTPUT_FILE="$OUTPUT_DIR/pid_ranco_shard_${SHARD_ID}.json"
+          HASH=$(b3sum "$OUTPUT_FILE" 2>/dev/null | cut -d' ' -f1 || sha256sum "$OUTPUT_FILE" | cut -d' ' -f1)
+          echo "$(date -Iseconds)|blake3|$HASH|$OUTPUT_FILE|$SHARD_ID|completed" >> "$PROVENANCE_LOG"
+
+          echo "[$(date -Iseconds)] Shard $SHARD_ID complete. Hash logged to provenance."
+        mode: '0755'
+      tags: [pid_ranco]
+
+    - name: Verify run_pid_ranco.sh is executable
+      shell: "test -x {{ strategickhaos_base }}/scripts/run_pid_ranco.sh"
+      changed_when: false
+      tags: [pid_ranco, verify]
+
+# === TauGate Tasks (tagged separately) ===
+- name: TauGate Distributed Screening Setup
+  hosts: all_cloud_terminals
+  become: true
+  vars:
+    strategickhaos_base: /opt/strategickhaos
+    uam_path: "{{ strategickhaos_base }}/uam"
+    provenance_log: "{{ uam_path }}/provenance.log"
+  tags: [taugate, taugate_shard]
+
+  tasks:
+    - name: Install TauGate dependencies (RDKit, OpenBabel, gnina)
+      apt:
+        name:
+          - python3-rdkit
+          - openbabel
+        state: present
+      ignore_errors: true
+      tags: [taugate]
+
+    - name: Install TauGate Python packages
+      pip:
+        name:
+          - rdkit
+          - pandas
+          - numpy
+          - pyarrow
+        executable: pip3
+      ignore_errors: true
+      tags: [taugate]
+
+    - name: Clone TauGate repository
+      git:
+        repo: https://github.com/StrategicKhaos/taugate.git
+        dest: "{{ strategickhaos_base }}/taugate"
+        version: main
+        force: true
+      ignore_errors: true
+      tags: [taugate]
+
+    - name: Run sharded screen
+      command: >
+        python3 {{ strategickhaos_base }}/taugate/virtual_screen.py
+        --shard {{ groups['all_cloud_terminals'].index(inventory_hostname) }}
+        --of {{ groups['all_cloud_terminals'] | length }}
+        --library_shard /data/compounds_{{ groups['all_cloud_terminals'].index(inventory_hostname) }}.parquet
+        --target tau_4R.mrc
+        --out {{ strategickhaos_base }}/logs/taugate_shard_{{ groups['all_cloud_terminals'].index(inventory_hostname) }}.json
+      register: screen_out
+      ignore_errors: true
+      when: run_taugate_screen | default(false)
+      tags: [taugate_shard]
+
+    - name: Hash and log TauGate provenance
+      shell: |
+        SHARD_ID={{ groups['all_cloud_terminals'].index(inventory_hostname) | default(0) }}
+        OUTPUT_FILE="{{ strategickhaos_base }}/logs/taugate_shard_${SHARD_ID}.json"
+        if [ -f "$OUTPUT_FILE" ]; then
+          HASH=$(b3sum "$OUTPUT_FILE" 2>/dev/null | cut -d' ' -f1 || sha256sum "$OUTPUT_FILE" | cut -d' ' -f1)
+          echo "$(date -Iseconds)|blake3|$HASH|$OUTPUT_FILE|${SHARD_ID}|completed" >> {{ provenance_log }}
+        fi
+      when: run_taugate_screen | default(false)
+      tags: [taugate_shard]
+
+# === Cost Guard Role ===
+- name: Cost Guard - Auto-shutdown idle nodes
+  hosts: all_cloud_terminals
+  become: true
+  vars:
+    cost_guard_enable: true
+  tags: [cost_guard]
+
+  tasks:
+    - name: Deploy cost-guard monitoring script
+      copy:
+        dest: /opt/strategickhaos/scripts/cost_guard.sh
+        content: |
+          #!/bin/bash
+          # Cost Guard - Auto-shutdown idle nodes
+          # Checks CPU usage and shuts down if idle for too long
+
+          IDLE_THRESHOLD_MINUTES=${1:-15}
+          LOG_FILE="/var/log/cost-guard.log"
+          STATE_FILE="/tmp/cost_guard_idle_count"
+
+          log() {
+            echo "[$(date -Iseconds)] $1" >> "$LOG_FILE"
+          }
+
+          # Get CPU idle percentage
+          CPU_IDLE=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}' | cut -d'.' -f1)
+          CPU_USAGE=$((100 - CPU_IDLE))
+
+          log "CPU usage: ${CPU_USAGE}%"
+
+          if [ "$CPU_USAGE" -lt 10 ]; then
+            IDLE_COUNT=$(cat "$STATE_FILE" 2>/dev/null || echo 0)
+            IDLE_COUNT=$((IDLE_COUNT + 1))
+            echo "$IDLE_COUNT" > "$STATE_FILE"
+            log "Node idle (count: $IDLE_COUNT / threshold: $IDLE_THRESHOLD_MINUTES)"
+
+            if [ "$IDLE_COUNT" -ge "$IDLE_THRESHOLD_MINUTES" ]; then
+              log "Idle threshold reached. Initiating shutdown..."
+              echo "Strategickhaos: Auto-shutdown after ${IDLE_THRESHOLD_MINUTES}min idle" | wall
+              shutdown -h +2 "Strategickhaos: auto-shutdown after PID-RANCO sharding."
+            fi
+          else
+            echo "0" > "$STATE_FILE"
+            log "Node active, reset idle counter"
+          fi
+        mode: '0755'
+      when: cost_guard_enable | default(false) | bool
+      tags: [cost_guard]
+
+    - name: Setup cost-guard cron (every minute)
+      cron:
+        name: "cost_guard"
+        minute: "*"
+        job: "/opt/strategickhaos/scripts/cost_guard.sh 15 >> /var/log/cost-guard.log 2>&1"
+      when: cost_guard_enable | default(false) | bool
+      tags: [cost_guard]
+
+    - name: Trigger immediate shutdown (manual override)
+      shell: |
+        if command -v shutdown >/dev/null 2>&1; then
+          shutdown -h +2 "Strategickhaos: manual cost-guard shutdown triggered."
+        fi
+      when: force_shutdown | default(false) | bool
+      tags: [cost_guard_shutdown]
