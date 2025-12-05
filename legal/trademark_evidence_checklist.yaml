@@ -1,5 +1,5 @@
 # trademark_evidence_checklist.yaml
-# Strategickhaos DAO LLC — ITU Evidence & Specimen Preparation Kit
+# StrategicKhaos DAO LLC — ITU Evidence & Specimen Preparation Kit
 # INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
 
 version: "1.0"
@@ -13,7 +13,7 @@ evidence_checklist:
     classes: [9, 36, 42]
     required_evidence:
       - type: "GitHub organization page"
-        location: "https://github.com/Strategickhaos"
+        location: "https://github.com/StrategicKhaos"
         status: "available"
         capture_method: "Screenshot with visible URL and date"
       - type: "GitHub repos (README with name visible)"

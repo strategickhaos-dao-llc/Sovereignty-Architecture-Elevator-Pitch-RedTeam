@@ -2,7 +2,7 @@
 
 **INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED**
 
-**Strategickhaos DAO LLC — USPTO TEAS Plus Filing Reference**
+**StrategicKhaos DAO LLC — USPTO TEAS Plus Filing Reference**
 
 ---
 
@@ -105,7 +105,7 @@ Software as a service (SAAS) for dialectical synthesis, workflow generation, and
 1. **Navigate to:** [USPTO TEAS Plus](https://www.uspto.gov/trademarks/apply)
 2. **Select:** "File a trademark application"
 3. **Choose:** TEAS Plus application
-4. **Enter:** Owner information (Strategickhaos DAO LLC)
+4. **Enter:** Owner information (StrategicKhaos DAO LLC)
 5. **Mark format:** Standard characters (word mark)
 6. **Basis:** Intent-to-Use under 15 U.S.C. §1051(b)
 7. **Copy-paste:** Relevant class descriptions from above
