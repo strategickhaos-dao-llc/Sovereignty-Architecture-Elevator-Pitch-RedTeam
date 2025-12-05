@@ -280,6 +280,44 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏛️ Governance Framework
+
+This project operates under a comprehensive governance framework ensuring transparency, accountability, and risk management.
+
+### System Maturity: 51%
+
+| Component | Status | Maturity |
+|-----------|--------|----------|
+| DAO LLC Registration | ✅ Active | 100% |
+| Nonprofit Entity (ValorYield) | ✅ Active | 100% |
+| Governance Framework | ✅ Deployed | 80% |
+| Risk Corpus | ✅ Complete | 90% |
+| Board Layer | ✅ Complete | 85% |
+| Trading System (BabySolvern) | 🟡 Sim Tested | 70% |
+| Discord Integration | 🟡 Operational | 75% |
+| GPG Signing | 🟡 Partial | 60% |
+| Documentation | 🟡 In Progress | 50% |
+| Test Coverage | ⚠️ Needs Work | 30% |
+
+### Key Governance Documents
+
+- **[LAB_RULES.md](LAB_RULES.md)** - Core governance rules and five-point risk check
+- **[Operational Covenants](governance/covenants/operational_covenants.md)** - Binding operational agreements
+- **[Board Agent](governance/board/governance_board_agent.md)** - AI decision support system
+- **[Risk Corpus](governance/risks/risks_from_corpus.json)** - Threat model and risk registry
+- **[Access Matrix](governance/access_matrix.yaml)** - Role-based permissions
+
+### Legal Entities
+
+- **Strategickhaos DAO LLC** - Wyoming DAO LLC (ID: 2025-001708194)
+- **ValorYield Engine** - Public Benefit Nonprofit Corporation (EIN: 39-2923503)
+
+### Deployment Ready Projects
+
+**71% of projects are deployment-ready (10/14)**
+
+See [governance/board/strategickhaos_state_snapshot.json](governance/board/strategickhaos_state_snapshot.json) for current status.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
