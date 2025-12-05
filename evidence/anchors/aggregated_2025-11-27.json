@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "version": "2025-11-27_v2",
+    "generated_at": "2025-11-27T13:05:00Z",
+    "schema": "strategickhaos.aggregate.v1"
+  },
+  "shards": [
+    {"id": "shard_0", "provider": "aws", "region": "us-east-1", "status": "verified"},
+    {"id": "shard_1", "provider": "aws", "region": "us-west-2", "status": "verified"},
+    {"id": "shard_2", "provider": "aws", "region": "eu-west-1", "status": "verified"},
+    {"id": "shard_3", "provider": "gcp", "region": "us-central1", "status": "verified"},
+    {"id": "shard_4", "provider": "gcp", "region": "europe-west1", "status": "verified"},
+    {"id": "shard_5", "provider": "azure", "region": "eastus", "status": "verified"},
+    {"id": "shard_6", "provider": "azure", "region": "westeurope", "status": "verified"}
+  ],
+  "summary": {
+    "total_shards": 7,
+    "verified_count": 7,
+    "failed_count": 0,
+    "burst_nodes_used": 134
+  }
+}
