@@ -35,3 +35,15 @@ target/
 
 # Workspace data
 workspace/
+
+# Patent files - OpenTimestamps proof files should be committed
+# but we want to avoid accidentally committing sensitive drafts
+# Note: Final patent PDFs and receipts SHOULD be committed for proof chain
+*.ots.bak
+legal/patents/drafts/
+legal/patents/private/
+
+# Temporary patent working files
+legal/patents/**/DRAFT_*.pdf
+legal/patents/**/TEMP_*.pdf
+legal/patents/**/*_backup.pdf

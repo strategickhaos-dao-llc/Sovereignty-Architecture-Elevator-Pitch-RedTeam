@@ -280,6 +280,17 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🛡️ Intellectual Property
+
+This project includes comprehensive resources for filing provisional patent applications with the USPTO:
+
+- **[Quick Start Guide](legal/patents/QUICK_START.md)** - File your provisional patent in < 45 minutes for $75
+- **[Comprehensive Filing Guide](legal/patents/USPTO_FILING_GUIDE.md)** - Detailed USPTO filing instructions
+- **[Patent Filing Scripts](legal/patents/)** - Automated preparation and proof chain tools
+- **Micro-Entity Qualified**: 75% discount on all USPTO fees
+
+**Current Status**: Patent filing resources ready - see [legal/patents/](legal/patents/) for details.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
