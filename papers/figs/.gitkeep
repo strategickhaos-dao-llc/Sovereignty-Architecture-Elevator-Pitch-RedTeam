@@ -1,0 +1,2 @@
+# This directory contains generated benchmark figures
+# Run: python benchmarks/generate_benchmark_figures.py --demo --output-dir papers/figs/
