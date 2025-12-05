@@ -1,0 +1,26 @@
+# Hybrid Refinery - Risk Management Configuration
+# Hard Limits - Never Broken
+# Strategickhaos Empire
+
+# Rebalancing threshold - action required when drift exceeds 12%
+max_drift_before_rebalance: 0.12
+
+# Tactical sleeve activation - auto-on at $1000 equity
+tactical_sleeve_active: false
+
+# Maximum single position concentration limit - 9%
+max_single_position: 0.09
+
+# Minimum cash buffer to maintain
+cash_buffer_min: 0.00
+
+# SwarmGate allocation strategy
+# Based on $36.40 monthly contribution (7% of capital routed to SwarmGate)
+# These are DOLLAR AMOUNTS for the current monthly contribution:
+swarmgate:
+  # Treasury Bills allocation (SGOV or Webull sweep) - $20.80/month
+  tbill: 20.80
+  # AI-Fuel allocation - $10.40/month
+  aifuel: 10.40
+  # Cryptocurrency cold wallet allocation (50% BTC / 50% ETH) - $5.20/month
+  crypto: 5.20

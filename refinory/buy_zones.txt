@@ -1,0 +1,52 @@
+================================================================================
+                    HYBRID REFINERY - BUY / ADD-ON ZONES
+                         Permanent Cheat Sheet
+                       Strategickhaos Empire
+================================================================================
+
+Ticker    Strong Add      Mild Add
+------    ----------      --------
+JPM       ≤ $210          $220–225
+CB        ≤ $250          $260–270
+TD        ≤ $54           $56–58
+PG        ≤ $155          $160–165
+KO        ≤ $62           $64–66
+PEP       ≤ $160          $165–170
+CL        ≤ $92           $96–98
+NEE       ≤ $75           $80–82
+O         ≤ $56           $58–60
+VICI      ≤ $30           $31–32
+PLD       ≤ $105          $110–115
+ABBV      ≤ $165          $175–180
+JNJ       ≤ $150          $155–160
+XOM       ≤ $105          $110–115
+WEC       ≤ $85           $88–90
+
+================================================================================
+                              ZONE DEFINITIONS
+================================================================================
+
+Strong Add Zone:
+  - Price at or below the "Strong Add" threshold
+  - Ideal entry point for adding significant positions
+  - High conviction accumulation level
+
+Mild Add Zone:
+  - Price within the "Mild Add" range
+  - Good for dollar-cost averaging
+  - Moderate accumulation opportunity
+
+Above Mild Add:
+  - Wait for pullback or stick to regular monthly DCA
+  - No aggressive accumulation recommended
+
+================================================================================
+                                REMEMBER
+================================================================================
+
+* DRIP stays ON forever
+* Never sell. Ever.
+* Tactical sleeve stays OFF until equity ≥ $1,000
+* When adding lump sum → update cash in ranco_executor.py
+
+================================================================================

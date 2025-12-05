@@ -1,0 +1,71 @@
+# Hybrid Refinery - Eternal DNA Configuration
+# Strategickhaos Empire Investment Portfolio
+# Last Update: 2025-11-27
+
+account: Webull-1406063
+capital: 520.10
+drip: true
+swarmgate_monthly: 36.40
+last_update: "2025-11-27"
+
+core_positions:
+  - ticker: JPM
+    shares: 0.1555
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: CB
+    shares: 0.1238
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: TD
+    shares: 0.617
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: PG
+    shares: 0.244
+    cost_basis: 41.60
+    target_weight: 0.080
+  - ticker: KO
+    shares: 0.592
+    cost_basis: 41.60
+    target_weight: 0.080
+  - ticker: PEP
+    shares: 0.206
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: CL
+    shares: 0.305
+    cost_basis: 31.20
+    target_weight: 0.060
+  - ticker: NEE
+    shares: 0.428
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: O
+    shares: 0.676
+    cost_basis: 41.60
+    target_weight: 0.080
+  - ticker: VICI
+    shares: 1.112
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: PLD
+    shares: 0.267
+    cost_basis: 31.20
+    target_weight: 0.060
+  - ticker: ABBV
+    shares: 0.185
+    cost_basis: 36.40
+    target_weight: 0.070
+  - ticker: JNJ
+    shares: 0.255
+    cost_basis: 41.60
+    target_weight: 0.080
+  - ticker: XOM
+    shares: 0.255
+    cost_basis: 31.20
+    target_weight: 0.060
+  - ticker: WEC
+    shares: 0.387
+    cost_basis: 36.40
+    target_weight: 0.070
