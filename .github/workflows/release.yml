@@ -1,0 +1,122 @@
+# .github/workflows/release.yml
+name: SwarmGate Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'swarmgate/v*'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Install tools
+        run: |
+          cargo install b3sum
+          sudo apt-get update
+          sudo apt-get install -y gnupg tar
+          pip install PyYAML
+      
+      - name: Extract version from tag
+        id: version
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/swarmgate/v}" >> $GITHUB_OUTPUT
+      
+      - name: Create deterministic archive
+        run: |
+          tar --sort=name \
+              --owner=0 \
+              --group=0 \
+              --numeric-owner \
+              --mtime='2025-11-27 00:00:00' \
+              -czf swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz \
+              provenance/provenance.yaml
+      
+      - name: Compute BLAKE3 hash
+        id: hash
+        run: |
+          HASH=$(b3sum swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz | awk '{print $1}')
+          echo "BLAKE3=$HASH" >> $GITHUB_OUTPUT
+          echo "Archive hash: $HASH"
+      
+      - name: Generate provenance files
+        run: |
+          cat > provenance.json <<EOF
+          {
+            "name": "SwarmGate",
+            "version": "${{ steps.version.outputs.VERSION }}",
+            "release_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "artifact": {
+              "name": "swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz",
+              "blake3": "${{ steps.hash.outputs.BLAKE3 }}",
+              "format": "tar.gz"
+            },
+            "builder": {
+              "entity": "Strategickhaos DAO LLC",
+              "ci_platform": "GitHub Actions",
+              "workflow_run": "${{ github.run_id }}"
+            },
+            "source": {
+              "repository": "${{ github.repository }}",
+              "commit": "${{ github.sha }}",
+              "tag": "${{ github.ref_name }}"
+            }
+          }
+          EOF
+          
+          cat provenance.json | python3 -c 'import sys, yaml, json; print(yaml.dump(json.load(sys.stdin)))' > provenance.yaml
+      
+      - name: Import GPG key
+        if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --detach-sign --armor provenance.json
+      
+      - name: Pin to IPFS (web3.storage)
+        if: ${{ secrets.WEB3_STORAGE_TOKEN != '' }}
+        id: ipfs
+        run: |
+          npm install -g @web3-storage/w3cli
+          export W3_TOKEN="${{ secrets.WEB3_STORAGE_TOKEN }}"
+          CID=$(w3 up swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz --json | jq -r '.root."/"')
+          echo "CID=$CID" >> $GITHUB_OUTPUT
+          echo "IPFS CID: $CID"
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz
+            provenance.json
+            provenance.yaml
+          body: |
+            # SwarmGate v${{ steps.version.outputs.VERSION }}
+            
+            **BLAKE3:** `${{ steps.hash.outputs.BLAKE3 }}`
+            **IPFS:** `${{ steps.ipfs.outputs.CID }}`
+            
+            ## Verification
+            
+            ```bash
+            # Download
+            curl -LO https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz
+            
+            # Verify
+            b3sum swarmgate_v${{ steps.version.outputs.VERSION }}.tar.gz
+            # Should match: ${{ steps.hash.outputs.BLAKE3 }}
+            ```
+            
+            ## Permanent Storage
+            - **IPFS:** https://ipfs.io/ipfs/${{ steps.ipfs.outputs.CID }}
+            - **Gateway:** https://dweb.link/ipfs/${{ steps.ipfs.outputs.CID }}
+          fail_on_unmatched_files: false
