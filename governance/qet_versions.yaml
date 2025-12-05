@@ -280,6 +280,4 @@ governance:
     gpg_required: true
     sha256_required: true
 
-# === GPG SIGNATURE BLOCK (DETACHED) ===
-# Save as qet_versions.yaml.asc
-# Command: gpg --armor --detach-sign qet_versions.yaml
+

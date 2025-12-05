@@ -68,8 +68,9 @@ check_prerequisites() {
     # Check for required tools
     local missing_tools=()
     
-    if ! command -v sha256sum &> /dev/null; then
-        missing_tools+=("sha256sum")
+    # Check for SHA256 tool (sha256sum on Linux, shasum on macOS)
+    if ! command -v sha256sum &> /dev/null && ! command -v shasum &> /dev/null; then
+        missing_tools+=("sha256sum or shasum")
     fi
     
     if ! command -v date &> /dev/null; then
@@ -109,8 +110,8 @@ check_frozen_state() {
 validate_yaml() {
     log_info "Validating YAML syntax..."
     
-    # Basic YAML validation using grep for common issues
-    if grep -q $'\t' "$QET_CONFIG" 2>/dev/null; then
+    # Basic YAML validation using grep for common issues (tab detection)
+    if grep -q "	" "$QET_CONFIG" 2>/dev/null; then
         log_warn "YAML contains tabs - this may cause parsing issues"
     fi
     
@@ -145,6 +146,19 @@ validate_readiness() {
     log_success "Readiness validation passed"
 }
 
+# Cross-platform SHA256 hash function
+compute_sha256() {
+    local file="$1"
+    if command -v sha256sum &> /dev/null; then
+        sha256sum "$file" | cut -d' ' -f1
+    elif command -v shasum &> /dev/null; then
+        shasum -a 256 "$file" | cut -d' ' -f1
+    else
+        log_error "No SHA256 tool available"
+        exit 1
+    fi
+}
+
 # Generate SHA256 hashes
 generate_hashes() {
     log_info "Generating SHA256 hashes..."
@@ -152,8 +166,8 @@ generate_hashes() {
     local qet_hash
     local model_hash
     
-    qet_hash=$(sha256sum "$QET_CONFIG" | cut -d' ' -f1)
-    model_hash=$(sha256sum "$MODEL_CARD" | cut -d' ' -f1)
+    qet_hash=$(compute_sha256 "$QET_CONFIG")
+    model_hash=$(compute_sha256 "$MODEL_CARD")
     
     log_info "QET Config Hash: $qet_hash"
     log_info "Model Card Hash: $model_hash"
@@ -302,7 +316,7 @@ verify() {
     local current_hash
     
     stored_hash=$(cat "$QET_CONFIG.sha256")
-    current_hash=$(sha256sum "$QET_CONFIG" | cut -d' ' -f1)
+    current_hash=$(compute_sha256 "$QET_CONFIG")
     
     if [[ "$stored_hash" != "$current_hash" ]]; then
         log_error "INTEGRITY VIOLATION: QET config has been modified!"

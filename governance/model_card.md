@@ -364,4 +364,4 @@ services:
 
 ---
 
-*"Prototype the collider, govern the beasts, deploy the ranks for steady 7% income while the evo lab brews exotics."*
+*Built with Path A governance for transparent, risk-controlled algorithmic trading.*
