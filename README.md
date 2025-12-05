@@ -30,6 +30,27 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🧬 Sovereign Swarm Architecture (`swarm/`)
+- **DNA Genome Configuration**: YAML-based agent definitions with Trinity architecture
+- **Mind Kernel v1.0**: Orchestration engine implementing quantum loop pattern
+- **5 Configured Agents**: athena, prometheus, sentinel, oracle, scribe
+- **Trinity Roles**: Thesis (creators), Antithesis (critics), Synthesis (integrators)
+- **Quantum Loop**: Iterative refinement until convergence (default 95% threshold)
+- **Governance Protocol**: Branch naming, PR scoping, CI/CD workflow, cleanup strategies
+
+```python
+# Quick example
+from swarm import SovereignMindKernel
+
+kernel = SovereignMindKernel()
+kernel.spawn_agents()
+task = kernel.create_task("Deploy new feature")
+results = kernel.quantum_loop(task)
+print(f"Status: {task.status}, Convergence: {results['final_convergence']:.2%}")
+```
+
+See [swarm/README.md](swarm/README.md) and [SWARM_GOVERNANCE.md](SWARM_GOVERNANCE.md) for details.
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
@@ -240,6 +261,60 @@ export PRS_CHANNEL="dev_channel_id"
 3. **Test** integration in your environment
 4. **Submit** PR with improvements
 5. **Share** configuration patterns with community
+
+## 🧬 Sovereign Swarm Deep Dive
+
+### Architecture Pattern: Trinity + Quantum Loop
+
+The Sovereign Swarm implements a **Trinity Architecture** where agents collaborate through three complementary roles:
+
+1. **Thesis (Creators)** - Generate proposals and solutions
+   - `prometheus` - Infrastructure and automation
+   - `scribe` - Documentation and communication
+
+2. **Antithesis (Critics)** - Review and identify issues
+   - `sentinel` - Security auditing and vulnerability detection
+
+3. **Synthesis (Integrators)** - Make decisions and integrate
+   - `athena` - Institutional memory and pattern recognition
+   - `oracle` - Decision-making and conflict resolution
+
+### Quantum Loop Pattern
+
+Tasks iterate through the Trinity roles until convergence:
+
+```
+┌─────────────────────────────────────────┐
+│         QUANTUM LOOP ITERATION          │
+├─────────────────────────────────────────┤
+│  1. THESIS → Generate proposals         │
+│  2. ANTITHESIS → Critique proposals     │
+│  3. SYNTHESIS → Integrate & decide      │
+│  4. Check convergence (threshold: 95%)  │
+│     ├─ Converged? → Complete ✅         │
+│     └─ Not yet? → Next iteration 🔄     │
+└─────────────────────────────────────────┘
+```
+
+### Configuration
+
+Edit `config/swarm_dna.yaml` to:
+- Add/modify agents
+- Adjust convergence threshold
+- Configure security policies
+- Define orchestration rules
+
+### Usage Examples
+
+See [swarm/README.md](swarm/README.md) for complete documentation and [swarm/example_integration.py](swarm/example_integration.py) for working examples.
+
+### Governance
+
+Follow [SWARM_GOVERNANCE.md](SWARM_GOVERNANCE.md) for:
+- Branch naming conventions
+- PR scoping guidelines
+- CI/CD workflow requirements
+- CodeQL maintenance procedures
 
 ## 🆘 Troubleshooting
 
