@@ -1,0 +1,47 @@
+// StrategicKhaos Language Showcase
+// Demonstrates all Stage 0 features
+
+print "=== StrategicKhaos Showcase ===";
+
+// Variables and basic arithmetic
+let a = 10;
+let b = 5;
+print "a = 10, b = 5";
+
+// Addition
+let sum = a + b;
+print "Addition: a + b =";
+print sum;
+
+// Subtraction
+let diff = a - b;
+print "Subtraction: a - b =";
+print diff;
+
+// Multiplication
+let product = a * b;
+print "Multiplication: a * b =";
+print product;
+
+// Division
+let quotient = a / b;
+print "Division: a / b =";
+print quotient;
+
+// Complex expressions with grouping
+let complex = (a + b) * (a - b);
+print "Complex: (a + b) * (a - b) =";
+print complex;
+
+// Nested expressions
+let nested = ((a + b) / 5) * 10;
+print "Nested: ((a + b) / 5) * 10 =";
+print nested;
+
+// String literals
+print "String literals work!";
+print "The answer to life, the universe, and everything:";
+let answer = 42;
+print answer;
+
+print "=== Showcase Complete ===";

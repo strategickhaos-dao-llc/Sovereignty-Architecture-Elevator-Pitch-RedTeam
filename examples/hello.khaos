@@ -1,0 +1,3 @@
+print "Welcome to the chaos realm";
+let x = 40 + 2;
+print x;
