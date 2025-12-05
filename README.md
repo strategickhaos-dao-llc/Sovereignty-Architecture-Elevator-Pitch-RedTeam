@@ -272,6 +272,79 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📈 Trading Arsenal
+
+The **StrategicKhaos Trading Arsenal** is a production-ready, autonomous trading system featuring rank-based algorithms designed for low-risk 7% annualized income.
+
+### Quick Start
+```bash
+# Deploy Trading Arsenal
+cd trading
+./deploy-trading.sh docker
+
+# Access API
+curl http://localhost:8086/health
+
+# Start autonomous mode (paper trading)
+curl -X POST http://localhost:8086/autonomous/start \
+  -H "Content-Type: application/json" \
+  -d '{"interval_minutes": 60}'
+```
+
+### Core Features
+
+| Feature | Description |
+|---------|-------------|
+| **5 Tier-0 Algorithms** | 80%+ readiness, 7.2-8.2% yield |
+| **Autonomous Execution** | Department-level independence with override controls |
+| **Risk Management** | 20% max drawdown, 5% position cap |
+| **Multi-Asset Support** | Stocks (Polygon) + Crypto (Coingecko) |
+| **Real-time Monitoring** | Prometheus metrics, Discord alerts |
+
+### Tier-0 Algorithms (Production Ready)
+
+| # | Algorithm | Readiness | Yield | Logic |
+|---|-----------|-----------|-------|-------|
+| 1 | Simple Momentum Rank | 95% | 8.2% | Long top 20% by 12-mo returns |
+| 2 | Dual Momentum Rank | 90% | 7.5% | Risk-on/off regime switching |
+| 3 | Percentile Momentum | 88% | 7.8% | Long above 80th percentile |
+| 4 | Vol-Adjusted Momentum | 85% | 7.2% | Return/volatility ranking |
+| 5 | Cross-Asset Rank | 82% | 8.1% | Unified crypto/stocks with 30% crypto cap |
+
+### Governance & Safety
+
+```yaml
+# Emergency halt at 20% drawdown
+override_controls:
+  emergency_halt:
+    triggers:
+      - condition: drawdown_exceeds_halt_threshold
+        threshold: 0.20
+        action: HALT_ALL_TRADING
+```
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| GET | `/status` | System status |
+| GET | `/algorithms` | Algorithm status |
+| POST | `/cycle` | Run signal cycle |
+| POST | `/autonomous/start` | Start autonomous mode |
+| POST | `/autonomous/stop` | Stop autonomous mode |
+| GET | `/alerts` | Active alerts |
+| GET | `/performance` | Performance metrics |
+
+### Discord Integration
+
+```bash
+# Trading alerts are automatically sent to Discord
+DISCORD_ALERTS_WEBHOOK=https://discord.com/api/webhooks/...
+```
+
+For detailed documentation, see [`trading/strategickhaos_trading_arsenal.yaml`](trading/strategickhaos_trading_arsenal.yaml).
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.

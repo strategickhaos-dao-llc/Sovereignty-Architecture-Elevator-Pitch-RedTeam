@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trading
+  labels:
+    name: trading
+    app.kubernetes.io/part-of: strategickhaos
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trading-config
+  namespace: trading
+data:
+  TRADING_ENV: "production"
+  TRADING_API_PORT: "8086"
+  TRADING_CONFIG_PATH: "/app/trading/strategickhaos_trading_arsenal.yaml"
+  REDIS_URL: "redis://trading-redis:6379/0"
+  MAX_POSITION_PCT: "0.05"
+  MAX_DRAWDOWN: "0.20"
+  MAX_DAILY_TRADES: "50"
+  PAPER_TRADING: "true"
+  EXECUTION_ENABLED: "true"
+  AUTO_START_AUTONOMOUS: "false"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trading-secrets
+  namespace: trading
+type: Opaque
+stringData:
+  POLYGON_API_KEY: ""
+  COINGECKO_API_KEY: ""
+  BROKER_API_KEY: ""
+  BROKER_API_SECRET: ""
+  BROKER_BASE_URL: "https://paper-api.alpaca.markets"
+  DISCORD_ALERTS_WEBHOOK: ""
+  POSTGRES_PASSWORD: "trading123"
