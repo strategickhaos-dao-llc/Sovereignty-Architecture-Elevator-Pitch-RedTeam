@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ops-bot
+  namespace: ops
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-gateway
+  namespace: ops
+---
+# Example RoleBinding granting minimal permissions for read-only recon
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: recon-reader
+  namespace: ops
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "namespaces", "endpoints", "configmaps"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "daemonsets"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: recon-reader-binding
+  namespace: ops
+subjects:
+  - kind: ServiceAccount
+    name: ops-bot
+    namespace: ops
+roleRef:
+  kind: Role
+  name: recon-reader
+  apiGroup: rbac.authorization.k8s.io
