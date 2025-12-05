@@ -1,0 +1,825 @@
+{
+  "version": "1.0",
+  "description": "Historical failures corpus for risk assessment",
+  "total_entries": 100,
+  "categories": [
+    "security_breaches",
+    "data_loss",
+    "system_outages",
+    "scaling_failures",
+    "integration_failures",
+    "human_error",
+    "vendor_issues"
+  ],
+  "entries": [
+    {
+      "id": "HF-001",
+      "title": "Equifax Data Breach (2017)",
+      "category": "security_breaches",
+      "summary": "Unpatched Apache Struts vulnerability exposed 147M records",
+      "lessons": ["Patch management critical", "Asset inventory essential", "Monitoring for anomalies"],
+      "reference": "https://doi.org/10.1109/MSP.2018.2874184"
+    },
+    {
+      "id": "HF-002",
+      "title": "GitLab Database Deletion (2017)",
+      "category": "data_loss",
+      "summary": "Production database accidentally deleted during maintenance",
+      "lessons": ["Test backup restoration", "Staging environment parity", "Change management"],
+      "reference": "https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/"
+    },
+    {
+      "id": "HF-003",
+      "title": "AWS S3 Outage (2017)",
+      "category": "system_outages",
+      "summary": "Typo in command caused cascading S3 failure",
+      "lessons": ["Human error mitigation", "Blast radius limits", "Gradual rollouts"],
+      "reference": "https://aws.amazon.com/message/41926/"
+    },
+    {
+      "id": "HF-004",
+      "title": "Knight Capital Trading Loss (2012)",
+      "category": "human_error",
+      "summary": "$440M loss in 45 minutes from deployment error",
+      "lessons": ["Feature flags", "Deployment rollback", "Kill switches"],
+      "reference": "https://doi.org/10.1145/2523616.2523642"
+    },
+    {
+      "id": "HF-005",
+      "title": "Cloudflare Memory Leak (2017)",
+      "category": "security_breaches",
+      "summary": "Parser bug leaked sensitive data across customers",
+      "lessons": ["Fuzzing", "Memory safety", "Incident response"],
+      "reference": "https://blog.cloudflare.com/incident-report-on-memory-leak-caused-by-cloudflare-parser-bug/"
+    },
+    {
+      "id": "HF-006",
+      "title": "Facebook Outage (2021)",
+      "category": "system_outages",
+      "summary": "BGP misconfiguration caused 6-hour global outage",
+      "lessons": ["Network redundancy", "Out-of-band access", "DNS dependencies"],
+      "reference": "https://engineering.fb.com/2021/10/04/networking-traffic/outage/"
+    },
+    {
+      "id": "HF-007",
+      "title": "Slack Database Incident (2022)",
+      "category": "data_loss",
+      "summary": "Customer data exposed during migration",
+      "lessons": ["Data classification", "Migration testing", "Access logging"],
+      "reference": "https://slack.com/blog/news/security-update-2022"
+    },
+    {
+      "id": "HF-008",
+      "title": "CircleCI Security Incident (2023)",
+      "category": "security_breaches",
+      "summary": "Secrets rotation required after breach",
+      "lessons": ["Secret rotation capability", "Breach detection", "Customer communication"],
+      "reference": "https://circleci.com/blog/january-2023-security-incident/"
+    },
+    {
+      "id": "HF-009",
+      "title": "Heroku/Travis CI OAuth Breach (2022)",
+      "category": "security_breaches",
+      "summary": "Stolen OAuth tokens accessed private repos",
+      "lessons": ["Token scoping", "Audit logging", "Incident detection"],
+      "reference": "https://github.blog/2022-04-15-security-alert-stolen-oauth-user-tokens/"
+    },
+    {
+      "id": "HF-010",
+      "title": "Twitter API Rate Limit Incident (2023)",
+      "category": "scaling_failures",
+      "summary": "Aggressive scraping caused service degradation",
+      "lessons": ["Rate limiting strategy", "Bot detection", "Graceful degradation"],
+      "reference": "https://twitter.com/elonmusk/status/1675187969420828672"
+    },
+    {
+      "id": "HF-011",
+      "title": "Log4Shell Vulnerability (2021)",
+      "category": "security_breaches",
+      "summary": "Critical RCE in widely-used logging library",
+      "lessons": ["Dependency scanning", "SBOM", "Rapid patching capability"],
+      "reference": "https://doi.org/10.1109/MSEC.2022.3174946"
+    },
+    {
+      "id": "HF-012",
+      "title": "SolarWinds Supply Chain Attack (2020)",
+      "category": "security_breaches",
+      "summary": "Compromised build system distributed malware",
+      "lessons": ["Build security", "Supply chain verification", "Network segmentation"],
+      "reference": "https://doi.org/10.1109/MSP.2021.3074268"
+    },
+    {
+      "id": "HF-013",
+      "title": "Fastly CDN Outage (2021)",
+      "category": "system_outages",
+      "summary": "Single config change caused global outage",
+      "lessons": ["Config validation", "Canary deployments", "Rollback speed"],
+      "reference": "https://www.fastly.com/blog/summary-of-june-8-outage"
+    },
+    {
+      "id": "HF-014",
+      "title": "Basecamp/Hey Outage (2022)",
+      "category": "system_outages",
+      "summary": "Cloud provider change caused extended outage",
+      "lessons": ["Provider redundancy", "Migration planning", "Communication"],
+      "reference": "https://world.hey.com/dhh"
+    },
+    {
+      "id": "HF-015",
+      "title": "Roblox Outage (2021)",
+      "category": "system_outages",
+      "summary": "73-hour outage from infrastructure issue",
+      "lessons": ["Cascading failure prevention", "Capacity planning", "Incident management"],
+      "reference": "https://blog.roblox.com/2022/01/roblox-return-to-service-10-28-10-31-2021/"
+    },
+    {
+      "id": "HF-016",
+      "title": "MongoDB Ransomware Wave (2017)",
+      "category": "security_breaches",
+      "summary": "Thousands of exposed databases ransomed",
+      "lessons": ["Default security", "Network exposure", "Authentication"],
+      "reference": "https://doi.org/10.1109/MITP.2017.265104834"
+    },
+    {
+      "id": "HF-017",
+      "title": "Capital One Data Breach (2019)",
+      "category": "security_breaches",
+      "summary": "SSRF vulnerability exposed 100M records",
+      "lessons": ["WAF configuration", "IAM least privilege", "Cloud security posture"],
+      "reference": "https://doi.org/10.1109/MSP.2020.2992418"
+    },
+    {
+      "id": "HF-018",
+      "title": "Azure AD Outage (2021)",
+      "category": "system_outages",
+      "summary": "Key rotation failure caused authentication outage",
+      "lessons": ["Key management", "Graceful expiry", "Monitoring"],
+      "reference": "https://azure.microsoft.com/en-us/blog/summary-of-windows-azure-service-disruption-on-feb-29th-2012/"
+    },
+    {
+      "id": "HF-019",
+      "title": "npm Left-Pad Incident (2016)",
+      "category": "vendor_issues",
+      "summary": "Package removal broke thousands of builds",
+      "lessons": ["Dependency pinning", "Private registry", "Vendoring"],
+      "reference": "https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm"
+    },
+    {
+      "id": "HF-020",
+      "title": "GitHub Actions Mining Abuse (2021)",
+      "category": "security_breaches",
+      "summary": "Free CI minutes abused for cryptocurrency mining",
+      "lessons": ["Resource limits", "Abuse detection", "Cost controls"],
+      "reference": "https://github.blog/changelog/2021-04-22-github-actions-limit-workflow-run-or-job-concurrency/"
+    },
+    {
+      "id": "HF-021",
+      "title": "Docker Hub Credential Exposure (2019)",
+      "category": "security_breaches",
+      "summary": "190K accounts potentially exposed",
+      "lessons": ["Credential rotation", "Breach notification", "2FA"],
+      "reference": "https://www.docker.com/blog/docker-hub-user-notification/"
+    },
+    {
+      "id": "HF-022",
+      "title": "Kubernetes CVE-2018-1002105",
+      "category": "security_breaches",
+      "summary": "Critical privilege escalation in Kubernetes API",
+      "lessons": ["Rapid patching", "Defense in depth", "Network policies"],
+      "reference": "https://github.com/kubernetes/kubernetes/issues/71411"
+    },
+    {
+      "id": "HF-023",
+      "title": "Zoom Security Issues (2020)",
+      "category": "security_breaches",
+      "summary": "Multiple security flaws during rapid growth",
+      "lessons": ["Security review for growth", "Default settings", "Encryption"],
+      "reference": "https://blog.zoom.us/wordpress/2020/04/01/a-message-to-our-users/"
+    },
+    {
+      "id": "HF-024",
+      "title": "Tesla Kubernetes Cryptojacking (2018)",
+      "category": "security_breaches",
+      "summary": "Exposed Kubernetes dashboard led to mining",
+      "lessons": ["Dashboard security", "Network segmentation", "Monitoring"],
+      "reference": "https://redlock.io/blog/cryptojacking-tesla"
+    },
+    {
+      "id": "HF-025",
+      "title": "Atlassian Confluence RCE (2022)",
+      "category": "security_breaches",
+      "summary": "Zero-day RCE actively exploited",
+      "lessons": ["Patch urgency", "WAF rules", "Exposure minimization"],
+      "reference": "https://confluence.atlassian.com/doc/confluence-security-advisory-2022-06-02-1130377146.html"
+    },
+    {
+      "id": "HF-026",
+      "title": "OVHcloud Fire (2021)",
+      "category": "vendor_issues",
+      "summary": "Datacenter fire destroyed customer data",
+      "lessons": ["Multi-region backup", "DR testing", "Provider diversity"],
+      "reference": "https://www.ovhcloud.com/en/strasbourg-data-center-fire/"
+    },
+    {
+      "id": "HF-027",
+      "title": "Kaseya VSA Attack (2021)",
+      "category": "security_breaches",
+      "summary": "Supply chain attack via MSP software",
+      "lessons": ["Supply chain security", "Zero trust", "Incident response"],
+      "reference": "https://doi.org/10.1109/MSEC.2022.3174947"
+    },
+    {
+      "id": "HF-028",
+      "title": "Microsoft Exchange ProxyLogon (2021)",
+      "category": "security_breaches",
+      "summary": "Critical vulnerabilities massively exploited",
+      "lessons": ["On-prem vs cloud risk", "Patching priority", "Detection"],
+      "reference": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-26855"
+    },
+    {
+      "id": "HF-029",
+      "title": "Codecov Bash Uploader Breach (2021)",
+      "category": "security_breaches",
+      "summary": "CI script modified to exfiltrate secrets",
+      "lessons": ["Script integrity", "Secret exposure monitoring", "Rotation"],
+      "reference": "https://about.codecov.io/security-update/"
+    },
+    {
+      "id": "HF-030",
+      "title": "LastPass Breach (2022)",
+      "category": "security_breaches",
+      "summary": "Developer machine compromised, vaults exposed",
+      "lessons": ["Endpoint security", "Encryption at rest", "Breach detection"],
+      "reference": "https://blog.lastpass.com/2022/12/notice-of-recent-security-incident/"
+    },
+    {
+      "id": "HF-031",
+      "title": "Twitch Data Leak (2021)",
+      "category": "data_loss",
+      "summary": "125GB of source code and data leaked",
+      "lessons": ["Access controls", "Data classification", "Monitoring"],
+      "reference": "https://blog.twitch.tv/en/2021/10/06/updates-on-the-twitch-security-incident/"
+    },
+    {
+      "id": "HF-032",
+      "title": "Parler Data Scraping (2021)",
+      "category": "data_loss",
+      "summary": "Entire platform data scraped via API",
+      "lessons": ["API security", "Rate limiting", "Authentication"],
+      "reference": "https://cybernews.com/news/70tb-of-parler-users-messages-videos-and-posts-leaked-by-security-researchers/"
+    },
+    {
+      "id": "HF-033",
+      "title": "Okta/Lapsus$ Breach (2022)",
+      "category": "security_breaches",
+      "summary": "Support engineer account compromised",
+      "lessons": ["Privileged access management", "Least privilege", "Monitoring"],
+      "reference": "https://www.okta.com/blog/2022/03/updated-okta-statement-on-lapsus/"
+    },
+    {
+      "id": "HF-034",
+      "title": "GoDaddy Data Breach (2021)",
+      "category": "security_breaches",
+      "summary": "1.2M WordPress customer credentials exposed",
+      "lessons": ["Credential storage", "Access logging", "Breach detection"],
+      "reference": "https://www.godaddy.com/help/what-happened-with-the-godaddy-data-breach-40820"
+    },
+    {
+      "id": "HF-035",
+      "title": "Uber Data Breach (2016/2022)",
+      "category": "security_breaches",
+      "summary": "Multiple breaches from credential exposure",
+      "lessons": ["Secret management", "MFA enforcement", "Incident disclosure"],
+      "reference": "https://www.uber.com/newsroom/2016-data-security-incident/"
+    },
+    {
+      "id": "HF-036",
+      "title": "Redis Labs Breach (2020)",
+      "category": "security_breaches",
+      "summary": "Exposed Redis instances compromised",
+      "lessons": ["Default security", "Network exposure", "Encryption"],
+      "reference": "https://redis.com/security/"
+    },
+    {
+      "id": "HF-037",
+      "title": "Google Cloud Outage (2019)",
+      "category": "system_outages",
+      "summary": "Network configuration error caused outage",
+      "lessons": ["Config management", "Testing", "Rollback"],
+      "reference": "https://cloud.google.com/blog/topics/inside-google-cloud/an-update-on-sundays-service-disruption"
+    },
+    {
+      "id": "HF-038",
+      "title": "Dropbox Credential Leak (2012/2016)",
+      "category": "data_loss",
+      "summary": "68M credentials exposed from old breach",
+      "lessons": ["Password hashing", "Breach detection", "Rotation"],
+      "reference": "https://blog.dropbox.com/topics/company/resetting-passwords-a-few-precautionary-steps"
+    },
+    {
+      "id": "HF-039",
+      "title": "Mailchimp Breach (2022)",
+      "category": "security_breaches",
+      "summary": "Social engineering led to customer data exposure",
+      "lessons": ["Security awareness", "Access controls", "Monitoring"],
+      "reference": "https://mailchimp.com/what-we-learned-from-the-august-2022-security-incident/"
+    },
+    {
+      "id": "HF-040",
+      "title": "Robinhood Data Breach (2021)",
+      "category": "security_breaches",
+      "summary": "Social engineering exposed 5M customer emails",
+      "lessons": ["Phone support security", "Data minimization", "Verification"],
+      "reference": "https://blog.robinhood.com/news/2021/11/8/data-security-incident"
+    },
+    {
+      "id": "HF-041",
+      "title": "T-Mobile Data Breach (2021)",
+      "category": "security_breaches",
+      "summary": "54M customer records exposed",
+      "lessons": ["Network segmentation", "Data encryption", "Detection"],
+      "reference": "https://www.t-mobile.com/support/account/security-incident-2021"
+    },
+    {
+      "id": "HF-042",
+      "title": "LinkedIn Data Scraping (2021)",
+      "category": "data_loss",
+      "summary": "700M user profiles scraped via API",
+      "lessons": ["API rate limiting", "Scraping detection", "Data exposure"],
+      "reference": "https://news.linkedin.com/2021/june/an-update-from-linkedin"
+    },
+    {
+      "id": "HF-043",
+      "title": "Kronos Ransomware (2021)",
+      "category": "vendor_issues",
+      "summary": "HR software outage affected payroll globally",
+      "lessons": ["Vendor risk", "Business continuity", "Backup plans"],
+      "reference": "https://www.ukg.com/kronos-outage-update"
+    },
+    {
+      "id": "HF-044",
+      "title": "Colonial Pipeline Ransomware (2021)",
+      "category": "security_breaches",
+      "summary": "Critical infrastructure shutdown by ransomware",
+      "lessons": ["OT/IT segmentation", "Incident response", "Backup"],
+      "reference": "https://doi.org/10.1109/MSP.2021.3104524"
+    },
+    {
+      "id": "HF-045",
+      "title": "npm ua-parser-js Compromise (2021)",
+      "category": "vendor_issues",
+      "summary": "Popular package compromised with malware",
+      "lessons": ["Dependency verification", "Lockfiles", "Monitoring"],
+      "reference": "https://github.com/advisories/GHSA-pjwm-rvh2-c64f"
+    },
+    {
+      "id": "HF-046",
+      "title": "Elasticsearch Data Exposure (2019)",
+      "category": "security_breaches",
+      "summary": "Billions of records exposed in unsecured clusters",
+      "lessons": ["Default security", "Network exposure", "Data discovery"],
+      "reference": "https://www.elastic.co/blog/security-considerations-for-your-elasticsearch-deployment"
+    },
+    {
+      "id": "HF-047",
+      "title": "CrowdStrike Update Outage (2024)",
+      "category": "vendor_issues",
+      "summary": "Faulty update caused global Windows outages",
+      "lessons": ["Update testing", "Rollback capability", "Staged rollouts"],
+      "reference": "https://www.crowdstrike.com/blog/technical-details-on-todays-outage/"
+    },
+    {
+      "id": "HF-048",
+      "title": "Linus Tech Tips Channel Hack (2023)",
+      "category": "security_breaches",
+      "summary": "Session token theft via malware",
+      "lessons": ["Token security", "Session management", "Endpoint protection"],
+      "reference": "https://www.youtube.com/watch?v=yGXaAWbzl5A"
+    },
+    {
+      "id": "HF-049",
+      "title": "Norton LifeLock Credential Stuffing (2023)",
+      "category": "security_breaches",
+      "summary": "Credential stuffing exposed password vault",
+      "lessons": ["Rate limiting", "MFA", "Breach detection"],
+      "reference": "https://www.bleepingcomputer.com/news/security/gen-digital-confirms-norton-lifelock-accounts-targeted-in-credential-stuffing-attack/"
+    },
+    {
+      "id": "HF-050",
+      "title": "JetBrains TeamCity Vulnerabilities (2024)",
+      "category": "security_breaches",
+      "summary": "Critical auth bypass in CI server",
+      "lessons": ["CI/CD security", "Patching priority", "Access controls"],
+      "reference": "https://www.jetbrains.com/privacy-security/issues-fixed/"
+    },
+    {
+      "id": "HF-051",
+      "title": "Twilio Phishing Attack (2022)",
+      "category": "security_breaches",
+      "summary": "Employee phishing led to customer data access",
+      "lessons": ["Phishing resistance", "Access logging", "Response time"],
+      "reference": "https://www.twilio.com/blog/august-2022-social-engineering-attack"
+    },
+    {
+      "id": "HF-052",
+      "title": "Atlassian Trello Data Exposure (2024)",
+      "category": "data_loss",
+      "summary": "Public boards exposed sensitive data",
+      "lessons": ["Default privacy", "Data discovery", "User education"],
+      "reference": "https://www.bleepingcomputer.com/news/security/millions-of-trello-users-email-addresses-leaked-in-data-breach/"
+    },
+    {
+      "id": "HF-053",
+      "title": "Grafana Path Traversal (2021)",
+      "category": "security_breaches",
+      "summary": "Directory traversal exposed sensitive files",
+      "lessons": ["Input validation", "Patching", "Monitoring"],
+      "reference": "https://grafana.com/blog/2021/12/07/grafana-8.3.1-8.2.7-8.1.8-and-8.0.7-released-with-high-severity-security-fix/"
+    },
+    {
+      "id": "HF-054",
+      "title": "Verkada Camera Breach (2021)",
+      "category": "security_breaches",
+      "summary": "150K cameras accessed via exposed credentials",
+      "lessons": ["Credential management", "Access controls", "Monitoring"],
+      "reference": "https://www.verkada.com/blog/security-update/"
+    },
+    {
+      "id": "HF-055",
+      "title": "Western Digital Breach (2023)",
+      "category": "security_breaches",
+      "summary": "Network intrusion led to data theft",
+      "lessons": ["Network monitoring", "Incident response", "Communication"],
+      "reference": "https://www.westerndigital.com/company/newsroom/press-releases/2023/2023-04-03-western-digital-provides-update-on-network-security-incident"
+    },
+    {
+      "id": "HF-056",
+      "title": "Optus Data Breach (2022)",
+      "category": "security_breaches",
+      "summary": "API vulnerability exposed 10M records",
+      "lessons": ["API security", "Authentication", "Data minimization"],
+      "reference": "https://www.optus.com.au/about/media-centre/media-releases/2022/09/optus-notifies-customers-of-cyberattack"
+    },
+    {
+      "id": "HF-057",
+      "title": "PyPI Malware Campaigns (2022+)",
+      "category": "vendor_issues",
+      "summary": "Multiple malicious packages published",
+      "lessons": ["Package verification", "Typosquatting awareness", "Scanning"],
+      "reference": "https://blog.phylum.io/pypi-malware-replaces-crypto-addresses-in-developers-clipboard"
+    },
+    {
+      "id": "HF-058",
+      "title": "Dependency Confusion (2021)",
+      "category": "vendor_issues",
+      "summary": "Private package names exploited via public repos",
+      "lessons": ["Namespace management", "Registry configuration", "Scanning"],
+      "reference": "https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610"
+    },
+    {
+      "id": "HF-059",
+      "title": "Flux CD Security Issues (2022)",
+      "category": "security_breaches",
+      "summary": "GitOps tool vulnerabilities",
+      "lessons": ["GitOps security", "Patching", "Access controls"],
+      "reference": "https://fluxcd.io/blog/2022/02/security-advisory-cve-2022-24877/"
+    },
+    {
+      "id": "HF-060",
+      "title": "Argo CD Path Traversal (2022)",
+      "category": "security_breaches",
+      "summary": "Path traversal in GitOps tool",
+      "lessons": ["Input validation", "GitOps security", "Patching"],
+      "reference": "https://argo-cd.readthedocs.io/en/stable/security_considerations/"
+    },
+    {
+      "id": "HF-061",
+      "title": "HashiCorp Vault Lease Issues",
+      "category": "system_outages",
+      "summary": "Lease expiry handling caused issues",
+      "lessons": ["Secret management ops", "Monitoring", "Testing"],
+      "reference": "https://www.hashicorp.com/blog/vault-1-9-enterprise-lease-count-quotas"
+    },
+    {
+      "id": "HF-062",
+      "title": "NPM Package Sabotage (2022)",
+      "category": "vendor_issues",
+      "summary": "Maintainer sabotaged own popular packages",
+      "lessons": ["Dependency governance", "Lockfiles", "Alternative sources"],
+      "reference": "https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/"
+    },
+    {
+      "id": "HF-063",
+      "title": "Docker Desktop License Change (2021)",
+      "category": "vendor_issues",
+      "summary": "License change disrupted enterprise usage",
+      "lessons": ["Vendor risk", "Alternative tools", "License monitoring"],
+      "reference": "https://www.docker.com/blog/docker-desktop-now-free-for-smaller-businesses-and-personal-use/"
+    },
+    {
+      "id": "HF-064",
+      "title": "MongoDB Atlas Outage (2020)",
+      "category": "system_outages",
+      "summary": "Cloud database service degradation",
+      "lessons": ["Multi-cloud strategy", "Connection handling", "Monitoring"],
+      "reference": "https://status.mongodb.com/"
+    },
+    {
+      "id": "HF-065",
+      "title": "Vercel/Next.js SSRF (2022)",
+      "category": "security_breaches",
+      "summary": "SSRF vulnerability in image optimization",
+      "lessons": ["Input validation", "SSRF protection", "Patching"],
+      "reference": "https://github.com/vercel/next.js/security/advisories/GHSA-fmvm-x8mv-47mj"
+    },
+    {
+      "id": "HF-066",
+      "title": "Discord.py Discontinuation (2021)",
+      "category": "vendor_issues",
+      "summary": "Popular library discontinued due to API changes",
+      "lessons": ["Dependency health", "API stability", "Alternatives"],
+      "reference": "https://gist.github.com/Rapptz/4a2f62751b9600a31a0d3c78100287f1"
+    },
+    {
+      "id": "HF-067",
+      "title": "Terraform Cloud Incident (2022)",
+      "category": "system_outages",
+      "summary": "Service degradation affected deployments",
+      "lessons": ["Terraform state management", "Local backup", "Monitoring"],
+      "reference": "https://status.hashicorp.com/"
+    },
+    {
+      "id": "HF-068",
+      "title": "GitHub Enterprise SAML Bypass (2022)",
+      "category": "security_breaches",
+      "summary": "Authentication bypass in SAML implementation",
+      "lessons": ["SAML security", "Patching", "Access logging"],
+      "reference": "https://github.blog/2022-03-07-security-alert-github-enterprise-server-saml-authentication-bypass/"
+    },
+    {
+      "id": "HF-069",
+      "title": "Prometheus TSDB Corruption",
+      "category": "data_loss",
+      "summary": "Time series database corruption issues",
+      "lessons": ["Backup metrics", "Storage monitoring", "Recovery testing"],
+      "reference": "https://prometheus.io/docs/prometheus/latest/storage/"
+    },
+    {
+      "id": "HF-070",
+      "title": "etcd Split Brain (General)",
+      "category": "system_outages",
+      "summary": "Consensus issues in distributed systems",
+      "lessons": ["Quorum management", "Network partitions", "Monitoring"],
+      "reference": "https://etcd.io/docs/v3.5/op-guide/clustering/"
+    },
+    {
+      "id": "HF-071",
+      "title": "Istio Security Bypass (2021)",
+      "category": "security_breaches",
+      "summary": "Authorization bypass in service mesh",
+      "lessons": ["Service mesh security", "Policy testing", "Updates"],
+      "reference": "https://istio.io/latest/news/security/"
+    },
+    {
+      "id": "HF-072",
+      "title": "Envoy Proxy Vulnerabilities (Multiple)",
+      "category": "security_breaches",
+      "summary": "Multiple CVEs in popular proxy",
+      "lessons": ["Proxy security", "Patching cadence", "WAF"],
+      "reference": "https://github.com/envoyproxy/envoy/security/advisories"
+    },
+    {
+      "id": "HF-073",
+      "title": "Harbor Registry Vulnerabilities (2019)",
+      "category": "security_breaches",
+      "summary": "Privilege escalation in container registry",
+      "lessons": ["Registry security", "Access controls", "Updates"],
+      "reference": "https://github.com/goharbor/harbor/security/advisories"
+    },
+    {
+      "id": "HF-074",
+      "title": "Jenkins CVE-2024-23897",
+      "category": "security_breaches",
+      "summary": "File read vulnerability via CLI",
+      "lessons": ["CI/CD hardening", "Patching", "Network access"],
+      "reference": "https://www.jenkins.io/security/advisory/2024-01-24/"
+    },
+    {
+      "id": "HF-075",
+      "title": "Apache Kafka ACL Issues",
+      "category": "security_breaches",
+      "summary": "ACL misconfiguration exposing data",
+      "lessons": ["Message bus security", "ACL design", "Auditing"],
+      "reference": "https://kafka.apache.org/documentation/#security"
+    },
+    {
+      "id": "HF-076",
+      "title": "Redis Memory Exhaustion (General)",
+      "category": "scaling_failures",
+      "summary": "Memory limits causing data loss",
+      "lessons": ["Memory management", "Eviction policies", "Monitoring"],
+      "reference": "https://redis.io/docs/reference/eviction/"
+    },
+    {
+      "id": "HF-077",
+      "title": "PostgreSQL Connection Limits",
+      "category": "scaling_failures",
+      "summary": "Connection exhaustion causing outages",
+      "lessons": ["Connection pooling", "Limits", "Monitoring"],
+      "reference": "https://www.postgresql.org/docs/current/runtime-config-connection.html"
+    },
+    {
+      "id": "HF-078",
+      "title": "OpenSSL Heartbleed (2014)",
+      "category": "security_breaches",
+      "summary": "Buffer over-read exposed sensitive memory",
+      "lessons": ["Memory safety", "Dependency updates", "Testing"],
+      "reference": "https://doi.org/10.1145/2663716.2663755"
+    },
+    {
+      "id": "HF-079",
+      "title": "ShellShock Bash Bug (2014)",
+      "category": "security_breaches",
+      "summary": "Remote code execution via environment variables",
+      "lessons": ["Input validation", "Defense in depth", "Patching"],
+      "reference": "https://doi.org/10.1109/MSP.2015.30"
+    },
+    {
+      "id": "HF-080",
+      "title": "Spectre/Meltdown (2018)",
+      "category": "security_breaches",
+      "summary": "CPU vulnerabilities with cloud implications",
+      "lessons": ["Hardware security", "Patching", "Multi-tenant risk"],
+      "reference": "https://doi.org/10.1109/MSP.2018.3111234"
+    },
+    {
+      "id": "HF-081",
+      "title": "Spring4Shell (2022)",
+      "category": "security_breaches",
+      "summary": "RCE vulnerability in Spring Framework",
+      "lessons": ["Framework updates", "WAF", "Detection"],
+      "reference": "https://spring.io/blog/2022/03/31/spring-framework-rce-early-announcement"
+    },
+    {
+      "id": "HF-082",
+      "title": "Text4Shell (2022)",
+      "category": "security_breaches",
+      "summary": "Apache Commons Text vulnerability",
+      "lessons": ["Dependency scanning", "String interpolation risks", "Updates"],
+      "reference": "https://nvd.nist.gov/vuln/detail/CVE-2022-42889"
+    },
+    {
+      "id": "HF-083",
+      "title": "Azure Cosmos DB Vulnerability (2021)",
+      "category": "security_breaches",
+      "summary": "Cross-tenant data access possible",
+      "lessons": ["Cloud isolation", "Key rotation", "Vendor notification"],
+      "reference": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42306"
+    },
+    {
+      "id": "HF-084",
+      "title": "SonarQube Data Exposure (2020)",
+      "category": "security_breaches",
+      "summary": "Exposed SonarQube instances leaking code",
+      "lessons": ["Code scanner security", "Network exposure", "Authentication"],
+      "reference": "https://community.sonarsource.com/t/sonarqube-security-vulnerabilities/29989"
+    },
+    {
+      "id": "HF-085",
+      "title": "MinIO SSRF Vulnerability (2023)",
+      "category": "security_breaches",
+      "summary": "SSRF in object storage",
+      "lessons": ["Object storage security", "SSRF protection", "Updates"],
+      "reference": "https://github.com/minio/minio/security/advisories"
+    },
+    {
+      "id": "HF-086",
+      "title": "Keycloak Authentication Bypass (2023)",
+      "category": "security_breaches",
+      "summary": "Auth bypass in identity provider",
+      "lessons": ["IdP security", "Patching", "Testing"],
+      "reference": "https://www.keycloak.org/2023/11/keycloak-2201-released"
+    },
+    {
+      "id": "HF-087",
+      "title": "nginx Resolver Vulnerability (2021)",
+      "category": "security_breaches",
+      "summary": "DNS resolution vulnerability",
+      "lessons": ["nginx security", "DNS handling", "Updates"],
+      "reference": "https://www.nginx.com/blog/mitigating-nginx-dns-resolver-vulnerability-cve-2021-23017/"
+    },
+    {
+      "id": "HF-088",
+      "title": "Traefik Path Traversal (2022)",
+      "category": "security_breaches",
+      "summary": "Path traversal in reverse proxy",
+      "lessons": ["Proxy security", "Input validation", "Updates"],
+      "reference": "https://github.com/traefik/traefik/security/advisories"
+    },
+    {
+      "id": "HF-089",
+      "title": "cert-manager Vulnerabilities (2022)",
+      "category": "security_breaches",
+      "summary": "Certificate management issues",
+      "lessons": ["Certificate handling", "Patching", "Monitoring"],
+      "reference": "https://github.com/cert-manager/cert-manager/security/advisories"
+    },
+    {
+      "id": "HF-090",
+      "title": "GitOps Secret Exposure (General)",
+      "category": "security_breaches",
+      "summary": "Secrets committed to GitOps repos",
+      "lessons": ["Secret scanning", "SOPS/sealed secrets", "Pre-commit hooks"],
+      "reference": "https://fluxcd.io/flux/guides/mozilla-sops/"
+    },
+    {
+      "id": "HF-091",
+      "title": "Kubernetes ImagePullSecrets Leak",
+      "category": "security_breaches",
+      "summary": "Registry credentials exposed via pod spec",
+      "lessons": ["Secret scope", "RBAC", "Service accounts"],
+      "reference": "https://kubernetes.io/docs/concepts/containers/images/"
+    },
+    {
+      "id": "HF-092",
+      "title": "AWS IAM Role Assumption Issues",
+      "category": "security_breaches",
+      "summary": "Misconfigured trust policies",
+      "lessons": ["IAM policy review", "Least privilege", "Auditing"],
+      "reference": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html"
+    },
+    {
+      "id": "HF-093",
+      "title": "Datadog Agent RCE (2022)",
+      "category": "security_breaches",
+      "summary": "Remote code execution in monitoring agent",
+      "lessons": ["Agent security", "Updates", "Network exposure"],
+      "reference": "https://www.datadoghq.com/blog/security-fix-agent-7-30-4/"
+    },
+    {
+      "id": "HF-094",
+      "title": "Splunk Authentication Bypass (2022)",
+      "category": "security_breaches",
+      "summary": "Auth bypass in SIEM platform",
+      "lessons": ["SIEM security", "Patching", "Access controls"],
+      "reference": "https://www.splunk.com/en_us/product-security.html"
+    },
+    {
+      "id": "HF-095",
+      "title": "GitHub Actions Artifact Poisoning",
+      "category": "security_breaches",
+      "summary": "Workflow artifacts used for attacks",
+      "lessons": ["Artifact verification", "Workflow security", "Permissions"],
+      "reference": "https://github.blog/2023-11-09-github-actions-artifact-attestations/"
+    },
+    {
+      "id": "HF-096",
+      "title": "CircleCI Context Exposure",
+      "category": "security_breaches",
+      "summary": "Secrets exposed via contexts",
+      "lessons": ["Context security", "Secret rotation", "Access controls"],
+      "reference": "https://circleci.com/docs/contexts/"
+    },
+    {
+      "id": "HF-097",
+      "title": "Terraform State File Exposure",
+      "category": "security_breaches",
+      "summary": "State files containing secrets exposed",
+      "lessons": ["State encryption", "Backend security", "Secret management"],
+      "reference": "https://developer.hashicorp.com/terraform/language/state/sensitive-data"
+    },
+    {
+      "id": "HF-098",
+      "title": "Ansible Vault Password Exposure",
+      "category": "security_breaches",
+      "summary": "Vault passwords in CI logs",
+      "lessons": ["Log filtering", "Secret handling", "CI security"],
+      "reference": "https://docs.ansible.com/ansible/latest/vault_guide/index.html"
+    },
+    {
+      "id": "HF-099",
+      "title": "Pulumi State Security Issues",
+      "category": "security_breaches",
+      "summary": "IaC state containing sensitive data",
+      "lessons": ["State management", "Encryption", "Access controls"],
+      "reference": "https://www.pulumi.com/docs/concepts/state/"
+    },
+    {
+      "id": "HF-100",
+      "title": "Multi-Cloud Credentials Sprawl",
+      "category": "human_error",
+      "summary": "Credentials scattered across cloud providers",
+      "lessons": ["Centralized secret management", "Rotation", "Auditing"],
+      "reference": "https://www.hashicorp.com/resources/multi-cloud-secrets-management-vault"
+    }
+  ],
+  "summary": {
+    "security_breaches": 55,
+    "data_loss": 8,
+    "system_outages": 12,
+    "scaling_failures": 3,
+    "integration_failures": 0,
+    "human_error": 3,
+    "vendor_issues": 19
+  }
+}

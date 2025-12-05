@@ -168,6 +168,24 @@ ai_agents:
       "#prs": "claude-3-sonnet"  # Code review assistance
 ```
 
+## 📁 Repository Structure
+
+```
+Sovereignty-Architecture-Elevator-Pitch-/
+├── bootstrap/              # Deployment scripts and initial setup
+├── k8s/                   # Kubernetes configurations (via bootstrap/)
+├── src/                   # Source code
+├── scripts/               # Utility scripts
+├── monitoring/            # Observability configurations
+├── governance/            # Governance framework
+│   ├── board/            # AI board layer for decision support
+│   ├── risks/            # Risk assessment and corpus
+│   └── covenants/        # Ethical commitments (coming soon)
+├── LAB_RULES.md          # Operational status and safety rules
+├── discovery.yml         # System configuration
+└── README.md             # This file
+```
+
 ## 🔐 Security & Governance
 
 ### Multi-Layer Security
@@ -177,6 +195,22 @@ ai_agents:
 - **Audit Logging**: Comprehensive activity tracking
 - **Content Redaction**: Automatic PII and credential filtering
 
+### Governance Framework
+
+**Current Status:** Lab-only (51% maturity)
+
+See [`LAB_RULES.md`](LAB_RULES.md) for operational rules and safety guidelines.
+
+The governance framework provides:
+- **Board Layer** (`/governance/board/`) - AI-assisted decision support
+- **Risk Assessment** (`/governance/risks/`) - Historical failure corpus (100 cases) and current risk inventory
+- **Covenants** (`/governance/covenants/`) - Ethical commitments (coming soon)
+
+**Key Governance Files:**
+- `governance/board/strategickhaos_state_snapshot.json` - Complete system state
+- `governance/risks/risks_bibliography.json` - Historical failures database
+- `governance/risks/risks_from_corpus.json` - Current risk inventory
+
 ### Production Safeguards
 ```yaml
 governance:
@@ -184,6 +218,11 @@ governance:
     prod_commands_require: ["ReleaseMgr"]
   change_management:
     link: "https://wiki.strategickhaos.internal/change-management"
+  state_snapshot: "/governance/board/strategickhaos_state_snapshot.json"
+  risk_corpus: "/governance/risks/risks_bibliography.json"
+  lab_rules: "/LAB_RULES.md"
+  maturity: 51
+  status: "lab-only"
 ```
 
 ## 📊 Monitoring & Alerts
