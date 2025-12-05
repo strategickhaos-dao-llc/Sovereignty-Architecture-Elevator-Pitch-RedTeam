@@ -71,6 +71,16 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 📄 Patent Center UI (`public/`)
+- **Angular Framework**: Modern web application for patent management workflows
+- **USPTO Integration**: Components from USPTO for official patent processing
+- **Qualtrics Feedback**: Integrated website feedback mechanism
+- **Session Management**: Built-in timeout widget for security
+- **Responsive Design**: Bootstrap-based UI with Public Sans and Roboto Mono fonts
+- **Monitoring**: Instana monitoring removed as of April 24, 2025
+
+The Patent Center UI provides a specialized interface for managing patent-related workflows within the sovereign infrastructure platform. See [`public/README.md`](public/README.md) for detailed documentation.
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
