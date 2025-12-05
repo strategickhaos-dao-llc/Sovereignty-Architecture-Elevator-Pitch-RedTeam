@@ -20,7 +20,10 @@ class SovereignTokenizer:
     
     def __init__(self, model_name: str = "gpt-4"):
         # Start with GPT-4 encoding as base (similar to Grok)
-        self.encoding = tiktoken.encoding_for_model(model_name)
+        try:
+            self.encoding = tiktoken.encoding_for_model(model_name)
+        except KeyError:
+            raise ValueError(f"Unsupported model name: {model_name}. Use a valid tiktoken model name.")
         self.vocab_size = self.encoding.n_vocab
         
     def tokenize(self, text: str) -> List[int]:
@@ -38,14 +41,14 @@ class SovereignTokenizer:
     def analyze_text(self, text: str) -> Dict:
         """
         Full analysis like Grok's tokenizer console
-        Returns: tokens, characters, token IDs
+        Returns: tokens, characters, token IDs, and compression ratio (chars per token)
         """
         tokens = self.tokenize(text)
         return {
             "tokens": tokens,
             "token_count": len(tokens),
             "character_count": len(text),
-            "compression_ratio": len(text) / len(tokens) if tokens else 0,
+            "compression_ratio": len(text) / len(tokens) if tokens else 0,  # chars per token
             "vocab_coverage": len(set(tokens)) / self.vocab_size
         }
     
