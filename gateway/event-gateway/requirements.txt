@@ -1,0 +1,22 @@
+# Strategickhaos Event Gateway Dependencies
+
+# Web framework
+aiohttp>=3.8.0
+
+# YAML configuration
+pyyaml>=6.0.0
+
+# Metrics and observability
+prometheus-client>=0.17.0
+
+# Structured logging
+structlog>=23.1.0
+
+# HMAC verification
+cryptography>=41.0.0
+
+# Environment variable handling
+python-dotenv>=1.0.0
+
+# HTTP client for Discord API
+httpx>=0.25.0

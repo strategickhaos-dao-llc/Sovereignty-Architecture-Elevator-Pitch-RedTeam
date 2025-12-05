@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ops
+  labels:
+    name: ops
+    app: strategickhaos-discord-ops
+    purpose: sovereignty-control-plane
+  annotations:
+    description: "Strategickhaos Discord DevOps Control Plane namespace"
