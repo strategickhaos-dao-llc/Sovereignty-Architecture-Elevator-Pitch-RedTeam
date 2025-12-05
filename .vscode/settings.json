@@ -1,0 +1,45 @@
+{
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass"]
+        },
+        "Windows PowerShell": {
+            "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "icon": "terminal-powershell"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Command Prompt": {
+            "path": "C:\\Windows\\System32\\cmd.exe",
+            "icon": "terminal-cmd"
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "powershell.powerShellDefaultVersion": "PowerShell (x64)",
+    "powershell.powerShellAdditionalExePaths": {},
+    "powershell.startAutomatically": true,
+    "powershell.integratedConsole.showOnStartup": false,
+    "git.autoRepositoryDetection": "openEditors",
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "files.associations": {
+        "*.ps1": "powershell",
+        "*.yaml": "yaml",
+        "*.yml": "yaml"
+    },
+    "editor.formatOnSave": true,
+    "files.eol": "auto",
+    "[powershell]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-vscode.powershell"
+    },
+    "[yaml]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    }
+}
