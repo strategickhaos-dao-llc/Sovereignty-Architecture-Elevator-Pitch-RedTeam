@@ -1,5 +1,0 @@
-discord:
-  guild_id: "your_actual_discord_server_id"
-  bot:
-    app_id: "your_actual_discord_app_id"
-    
