@@ -172,6 +172,10 @@ Not a repository.
 7. **Rest when you need to** - Sustainable creation beats burnout every time.
 8. **Dance** - Because that's what this is. A dance of creation.
 
+**Connect with us:**
+- **Discord**: [Join the Legion](https://discord.gg/strategickhaos)
+- **X (Twitter)**: [@strategickhaos](https://x.com/strategickhaos)
+
 ## The Music Is Never Going To Stop
 
 So let them dance, baby.  
