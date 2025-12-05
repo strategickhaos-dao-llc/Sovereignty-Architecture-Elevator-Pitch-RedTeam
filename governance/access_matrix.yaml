@@ -40,13 +40,48 @@ roles:
         - verify_gpg
         - generate_sha256
 
+  # Department of Intellectual Property Intelligence (DIPI)
+  dipi_operator:
+    - name: "IP Operations Specialist"
+      id: "dipi-ops"
+      permissions:
+        - scan_trademarks
+        - prepare_filings
+        - document_evidence
+        - archive_pages
+        - generate_reports
+        - write_to_ip_provenance
+    - name: "DIPI Automation System"
+      id: "dipi-auto"
+      permissions:
+        - scan_trademarks
+        - generate_reports
+        - send_alerts
+        - log_monitoring
+
+  dipi_auditor:
+    - name: "DIPI Compliance Node"
+      id: "dipi-audit"
+      permissions:
+        - log_trail
+        - verify_timestamps
+        - generate_sha256
+        - verify_provenance
+
 enforcement:
   repo_permissions:
     - "drafter: write to /drafts"
     - "approver: required review on /final"
     - "signer: push to main"
+    - "dipi_operator: write to /ip_provenance"
+    - "dipi_auditor: read from /ip_provenance"
   ci_checks:
     - disclaimer_present
     - checklist_complete
     - proof_logged
     - gpg_signed
+  dipi_checks:
+    - ip_provenance_timestamp_valid
+    - sha256_hash_verified
+    - legal_disclaimer_present
+    - no_legal_conclusions
