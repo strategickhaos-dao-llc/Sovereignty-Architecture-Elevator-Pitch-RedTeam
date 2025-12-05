@@ -18,6 +18,7 @@ NOTE: This is a research prototype, not production-ready inference code.
 
 import hashlib
 import json
+import math
 import random
 import struct
 import time
@@ -287,11 +288,11 @@ class QuantumFitnessEvaluator:
         for length in lengths:
             p = length / total
             if p > 0:
-                entropy -= p * (p if p > 0 else 1)
+                entropy -= p * math.log2(p)  # Shannon entropy formula
         
-        # Normalize to 0-1 range
-        max_entropy = len(genome.tokens) * 0.1
-        return min(abs(entropy) / max(max_entropy, 1), 1.0)
+        # Normalize to 0-1 range based on maximum possible entropy
+        max_entropy = math.log2(len(genome.tokens)) if len(genome.tokens) > 1 else 1.0
+        return min(entropy / max(max_entropy, 1), 1.0)
     
     def _calculate_coverage(
         self, 

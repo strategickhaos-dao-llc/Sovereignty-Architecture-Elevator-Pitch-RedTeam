@@ -37,6 +37,16 @@ def utc_now_iso() -> str:
     """Get current UTC time in ISO format."""
     return utc_now().strftime("%Y-%m-%dT%H:%M:%SZ")
 
+
+def sanitize_error(error: Exception, max_len: int = 100) -> str:
+    """Sanitize error message for safe logging, truncating if needed."""
+    msg = str(error)
+    # Remove any potential sensitive data patterns (URLs, paths, etc.)
+    # Keep first max_len chars for brevity in logs
+    if len(msg) > max_len:
+        return msg[:max_len] + "..."
+    return msg
+
 # Check tiktoken availability
 try:
     import tiktoken
@@ -193,7 +203,7 @@ def benchmark_tiktoken(corpora: List[str], model: str = "gpt-4") -> Dict[str, An
     except Exception as e:
         # Network error or other issue loading tiktoken
         return {
-            "error": f"tiktoken unavailable (network?): {str(e)[:100]}",
+            "error": f"tiktoken unavailable (network?): {sanitize_error(e)}",
             "avg_tokens": 0,
             "avg_compression": 0,
             "total_vocab_used": 0

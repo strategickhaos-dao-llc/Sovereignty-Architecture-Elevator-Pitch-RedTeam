@@ -12,6 +12,7 @@ Extends v3 with:
 Tests 28-36: Safety & Governance Hardening
 """
 
+import copy
 import hashlib
 import json
 import time
@@ -20,12 +21,6 @@ from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
-import copy
-
-
-def utc_now_iso() -> str:
-    """Get current UTC time in ISO format."""
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 from quantum_evo_tokenizer_v3 import (
     QuantumEvoTokenizer,
@@ -33,6 +28,11 @@ from quantum_evo_tokenizer_v3 import (
     TokenGenome,
     QuantumFitnessEvaluator
 )
+
+
+def utc_now_iso() -> str:
+    """Get current UTC time in ISO format."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 class GovernanceMode(Enum):
