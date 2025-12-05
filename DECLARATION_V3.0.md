@@ -131,7 +131,10 @@ Throughout this Declaration, the following terms have specific meanings:
 
 - **"880x Cost Reduction Model"** – Operational framework modeling cost advantages of AI-augmented operations replacing traditional team structures
 
-- **"QuantumEvoTokenizer (QET)"** – **[NEW IN V3.0]** A novel tokenization and evolutionary optimization system that applies quantum-inspired algorithms to token evolution, enabling dynamic vocabulary adaptation and context-aware embedding transformations for multi-AI coordination. QET processes input streams through evolutionary selection mechanisms, optimizing token representations for cross-model compatibility and synthesis efficiency.
+- **"QuantumEvoTokenizer (QET)"** – **[NEW IN V3.0]** A novel tokenization and optimization system for AI model coordination. Key components:
+  - *Quantum-inspired algorithms*: Computational methods inspired by quantum superposition, representing tokens as probability distributions rather than fixed values
+  - *Evolutionary selection*: Genetic algorithm-based optimization that evolves vocabulary based on task performance
+  - *Cross-model compatibility*: Unified token representations optimized for heterogeneous AI systems
 
 - **"Ranks-Style Trading Arsenal"** – **[NEW IN V3.0]** Automated trading bot infrastructure utilizing Tier 0-3 classification with risk-adjusted position sizing, integrated via Zapier webhooks to Slack, Google Sheets, Airtable, and Alpaca for execution and monitoring
 
@@ -610,9 +613,9 @@ I assert common law trademark claims to:
 
 **Recommended Filing Priority (Intent-to-Use or Use-Based):**
 
-1. **StrategicKhaos™** – IC 009 (software), IC 042 (technical services)
+1. **StrategicKhaos™** – IC 009 (software), IC 042 (scientific and technological services)
 2. **SwarmGate™** – IC 009 (software), IC 036 (financial services)
-3. **QuantumEvoTokenizer™ / QET™** – IC 009 (software), IC 042 (AI/ML services)
+3. **QuantumEvoTokenizer™ / QET™** – IC 009 (software), IC 042 (scientific and technological services)
 4. **ValorYield Engine™** – IC 041 (educational services)
 
 ### 20. Visual Identity Elements
@@ -1217,4 +1220,4 @@ Dickinson, TX 77539
 |---------|------|---------|
 | 1.0 | November 2025 | Initial declaration |
 | 2.0 | December 2, 2025 | Attorney review edition with enhanced structure |
-| 3.0 | December 5, 2025 | Added QET (QuantumEvoTokenizer), Alpaca webhook integration, Ranks-style trading arsenal, Azure DevOps macOS-14 migration, BLAKE3 artifact hashing, updated trademark shortlist |
+| 3.0 | December 5, 2025 | Added QET system, trading automation, DevOps enhancements, expanded IP claims |
