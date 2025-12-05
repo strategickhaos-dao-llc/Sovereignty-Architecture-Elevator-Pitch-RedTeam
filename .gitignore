@@ -35,3 +35,17 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Immune Trust Department
+immune_trust_dept/monitoring_log.json
+immune_trust_dept/*.json
