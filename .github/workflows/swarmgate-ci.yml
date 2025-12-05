@@ -1,0 +1,36 @@
+name: SwarmGate CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'swarmgate/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'swarmgate/**'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: swarmgate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: swarmgate/package-lock.json
+      - run: npm ci
+      - run: npx hardhat compile
+      - run: npx hardhat test
+      - run: npm run generate-root
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merkle-data
+          path: swarmgate/merkle-data.json
