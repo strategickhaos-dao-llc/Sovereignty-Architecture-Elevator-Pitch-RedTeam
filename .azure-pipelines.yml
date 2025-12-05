@@ -107,7 +107,7 @@ stages:
                 npm ci --prefer-offline 2>/dev/null || npm install
                 
                 echo "Running npm audit..."
-                npm audit --audit-level=moderate || echo "##[warning]npm audit found issues"
+                npm audit --audit-level=moderate || echo "##[warning]npm audit found security vulnerabilities - review output above and run 'npm audit fix' locally if appropriate"
               fi
               
               # Check Python dependencies if requirements.txt exists
@@ -147,6 +147,8 @@ stages:
         displayName: 'Build & Test Validation'
         dependsOn: SecurityScan
         condition: succeeded()
+        # Note: NodeTool setup is intentionally duplicated as Azure DevOps
+        # requires separate tool setup per job (not shared between jobs)
         steps:
           - checkout: self
             displayName: 'Checkout Repository'
@@ -157,6 +159,7 @@ stages:
             displayName: 'Setup Node.js'
 
           - script: |
+              # Install dependencies (required separately in each job since jobs run on different agents)
               if [ -f "package.json" ]; then
                 npm ci --prefer-offline 2>/dev/null || npm install
                 npm run build 2>/dev/null || echo "No build script defined"
