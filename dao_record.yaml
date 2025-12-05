@@ -43,9 +43,10 @@ compliance:
 
 generated:
   by: "generate_dao_record.sh (hardened)"
-  timestamp: "2025-11-16T11:34:26Z"
+  timestamp: "2025-12-05T13:03:24Z"
   model: "deterministic-template-v1"
   source: "Harbor Compliance Profile + Manual Verification"
-  script_version: "1.0"
+  script_version: "1.1"
+  ip_framework: "legal/DECLARATION-2025-12-02.md"
   checksums:
-    sha256: "636b1eaed78655de528f9d260686788c51f05453c220fca6a0f0327646706dfc"
+    sha256: "9cbf35ef80c94164bb0859b88aef353114d6061c80959b9956a70a97b3c61ac7"

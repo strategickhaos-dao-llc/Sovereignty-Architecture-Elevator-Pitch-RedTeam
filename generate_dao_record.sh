@@ -3,6 +3,7 @@
 # Hardened, deterministic, air-gapped business record generator
 # No curl | bash. No external binaries. Pure POSIX + YAML templating.
 # Validated for: Linux, macOS, WSL, Alpine, restricted shells
+# IP Framework: legal/DECLARATION-2025-12-02.md
 
 set -euo pipefail
 IFS=$'\n\t'
@@ -11,10 +12,12 @@ IFS=$'\n\t'
 OUT="${OUT:-./dao_record.yaml}"
 TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"  # UTC timestamp
 SCRIPT_NAME="$(basename "$0")"
+IP_FRAMEWORK="${IP_FRAMEWORK:-legal/DECLARATION-2025-12-02.md}"
 
 echo "[Strategickhaos DAO] Generating audit-ready YAML (air-gapped, deterministic)…"
 echo "→ Output: $OUT"
 echo "→ Timestamp: $TS"
+echo "→ IP Framework: $IP_FRAMEWORK"
 
 # === YAML TEMPLATE (embedded, immutable) ===
 cat > "$OUT" <<'EOF'
@@ -66,13 +69,15 @@ generated:
   timestamp: "__TIMESTAMP__"
   model: "deterministic-template-v1"
   source: "Harbor Compliance Profile + Manual Verification"
-  script_version: "1.0"
+  script_version: "1.1"
+  ip_framework: "__IP_FRAMEWORK__"
   checksums:
     sha256: "__CHECKSUM__"
 EOF
 
-# === INJECT TIMESTAMP AND CHECKSUM ===
+# === INJECT TIMESTAMP, IP FRAMEWORK AND CHECKSUM ===
 sed -i.bak "s/__TIMESTAMP__/$TS/" "$OUT" && rm -f "${OUT}.bak"
+sed -i.bak "s|__IP_FRAMEWORK__|$IP_FRAMEWORK|" "$OUT" && rm -f "${OUT}.bak"
 sum_file="$(sha256sum "$OUT" | awk '{print $1}')"
 sed -i.bak "s/__CHECKSUM__/$sum_file/" "$OUT" && rm -f "${OUT}.bak"
 
