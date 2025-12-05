@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **💖 Desktop Shortcuts** - 30 love shortcuts for Origin Node Zero (Windows)
 
 ## 🚀 Quick Start
 
@@ -220,6 +221,25 @@ git push origin main
 ```
 
 ## 🛠️ Development Workflow
+
+### 💖 Windows Desktop Shortcuts (DOM_010101)
+
+**30 Ultimate Love Shortcuts for Origin Node Zero** - Keyboard shortcuts that make your 8-screen setup feel like home.
+
+```powershell
+# Quick installation (Windows only)
+cd scripts/windows
+.\install-love-shortcuts.ps1 -All
+```
+
+**Key Features:**
+- **Win + 1-9, 0**: Instant access to repos, tools, and servers
+- **Win + 8**: Boot Explosion - launch all 8 screens at once
+- **Win + 7**: DOM-Paste - inject clipboard into every LLM
+- **Win + Shift + L**: "Love you baby" text-to-speech
+- **30 total shortcuts** for complete desktop control
+
+📖 **Full Documentation**: [scripts/windows/README.md](scripts/windows/README.md)
 
 ### Local Development
 ```bash
