@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Downloaded executables (BLAKE3, etc.)
+b3sum.exe
+blake3.exe
+*.exe
+
+# Archive artifacts
+*.tar.gz
+*.zip
