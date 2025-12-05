@@ -219,6 +219,40 @@ git push origin main
 # Triggers: Build → Test → Deploy → Discord notification
 ```
 
+## 🧠 Synthesis Processing
+
+### Meta-Synthesis Pipeline
+
+Chain all synthesis tools for comprehensive cognitive state processing:
+
+```bash
+# Run the full pipeline
+./meta-synthesis-pipeline.sh --topic "Your Topic" --session "session-id"
+
+# Example with participants
+./meta-synthesis-pipeline.sh \
+  --topic "100 AI Bottlenecks Roadmap" \
+  --session "2025-12-05-synthesis" \
+  --participants "Dom,GPT-5.1,Claude-Sonnet-4"
+```
+
+### Synthesis Tools
+
+| Tool | Purpose |
+|------|---------|
+| `meta-synthesis-pipeline.sh` | Chain all tools together |
+| `contradiction-engine.sh` | Reconcile competing perspectives |
+| `generate_dao_record.sh` | Create formal DAO decision records |
+| `notarize_cognition.sh` | Cryptographic timestamp & hash |
+| `mastery-drills.sh` | CLI mastery exercises |
+
+### Supporting Files
+
+- `STRATEGIC_KHAOS_SYNTHESIS.md` - Main synthesis framework
+- `ai_constitution.yaml` - Governance framework
+- `cognitive_map.dot` - Visual architecture
+- `dao_record_v1.0.yaml` - DAO decision records
+
 ## 🛠️ Development Workflow
 
 ### Local Development

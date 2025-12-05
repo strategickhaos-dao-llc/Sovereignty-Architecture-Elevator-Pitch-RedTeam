@@ -225,6 +225,69 @@ vault status
 
 ---
 
+## 🔄 Meta-Synthesis Pipeline
+
+The **Meta-Synthesis Pipeline** chains all synthesis tools together for comprehensive cognitive state processing:
+
+```
+Input → Contradiction Engine → DAO Record → Notarize → Cognitive Map → Done
+```
+
+### Quick Start
+
+```bash
+# Run the full synthesis pipeline
+./meta-synthesis-pipeline.sh --topic "Your Topic" --session "session-id"
+
+# Example: Synthesize AI bottleneck analysis
+./meta-synthesis-pipeline.sh \
+  --topic "100 AI Bottlenecks Roadmap" \
+  --session "2025-12-05-bottleneck-synthesis" \
+  --participants "Dom,GPT-5.1,Claude-Sonnet-4"
+
+# With input file
+./meta-synthesis-pipeline.sh \
+  --topic "C+D Fusion Strategy" \
+  --input analysis.txt
+```
+
+### Pipeline Stages
+
+| Stage | Tool | Purpose |
+|-------|------|---------|
+| 1 | Contradiction Engine | Reconcile competing perspectives |
+| 2 | DAO Record | Formalize decision in YAML format |
+| 3 | Notarize | Cryptographic timestamp & hash |
+| 4 | Cognitive Map | Update visual architecture |
+
+### Generated Artifacts
+
+- `synthesis_output/contradictions_<session>/` - Contradiction analysis
+- `synthesis_output/dao_record_<session>.yaml` - Formal DAO decision record
+- `synthesis_output/notary_<session>/` - Cryptographic notarization
+- `synthesis_output/cognitive_update_<session>.dot` - Map fragment for integration
+- `synthesis_output/SYNTHESIS_SUMMARY_<session>.md` - Human-readable summary
+
+### Integration Examples
+
+```bash
+# Chain with GPT and Claude outputs
+./meta-synthesis-pipeline.sh \
+  --topic "100 AI Bottlenecks Roadmap" \
+  --input "GPT_bottleneck_response.txt"
+
+# Generate DAO record independently
+./generate_dao_record.sh
+
+# Run contradiction engine standalone
+./contradiction-engine.sh run
+
+# Notarize existing cognitive state
+./notarize_cognition.sh
+```
+
+---
+
 ## 🎉 Conclusion
 
 **Strategic Khaos** represents a paradigm shift in DevOps operations:
