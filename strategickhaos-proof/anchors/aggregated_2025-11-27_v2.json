@@ -1,0 +1,40 @@
+{
+  "version": "2.0",
+  "timestamp": "2025-11-27T13:05:00Z",
+  "aggregation_id": "agg_2025-11-27_v2",
+  "claims": {
+    "infrastructure": {
+      "prs_merged": ["#4", "#5", "#6", "#7", "#8", "#9"],
+      "terminals": {
+        "aws": 3,
+        "gcp": 2,
+        "azure": 2,
+        "total": 7
+      },
+      "burst_nodes": 134
+    },
+    "provenance": {
+      "schema": "JSONL@/opt/strategickhaos/uam/provenance.log.jsonl",
+      "entries_count": 1247
+    },
+    "ci_status": "green",
+    "cost_guard": "active"
+  },
+  "sources": {
+    "github_actions_runs": [
+      "https://github.com/StrategicKhaos/cloud-swarm/actions"
+    ],
+    "github_prs": [
+      "https://github.com/StrategicKhaos/cloud-swarm/pull/4",
+      "https://github.com/StrategicKhaos/cloud-swarm/pull/5",
+      "https://github.com/StrategicKhaos/cloud-swarm/pull/6",
+      "https://github.com/StrategicKhaos/cloud-swarm/pull/7",
+      "https://github.com/StrategicKhaos/cloud-swarm/pull/8",
+      "https://github.com/StrategicKhaos/cloud-swarm/pull/9"
+    ]
+  },
+  "integrity": {
+    "hash_algorithm": "blake3",
+    "self_hash_excluded": true
+  }
+}
