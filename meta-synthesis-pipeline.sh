@@ -198,11 +198,15 @@ generated:
   by: "meta-synthesis-pipeline.sh"
   timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   operator: "Node 137"
+  checksum_sha256: "__CHECKSUM_PLACEHOLDER__"
 EOF
 
-    # Calculate and append checksum
-    local checksum=$(sha256sum "$dao_output" | cut -d' ' -f1)
-    echo "  checksum_sha256: \"$checksum\"" >> "$dao_output"
+    # Calculate checksum of content (excluding the placeholder line) and replace placeholder
+    local content_for_hash
+    content_for_hash=$(grep -v "__CHECKSUM_PLACEHOLDER__" "$dao_output")
+    local checksum
+    checksum=$(echo "$content_for_hash" | sha256sum | cut -d' ' -f1)
+    sed -i "s/__CHECKSUM_PLACEHOLDER__/$checksum/" "$dao_output"
     
     success "DAO record created: $dao_output" >&2
     echo "$dao_output"
@@ -243,17 +247,24 @@ EOF
     # Check for IPFS availability
     if command -v ipfs &> /dev/null; then
         log "IPFS detected, attempting to pin..." >&2
-        local ipfs_hash=$(ipfs add -q "$notary_file" 2>/dev/null || echo "unavailable")
-        if [[ "$ipfs_hash" != "unavailable" ]]; then
-            # Update notary file with IPFS hash
-            local temp_file=$(mktemp)
+        local ipfs_hash
+        ipfs_hash=$(ipfs add -q "$notary_file" 2>/dev/null) || ipfs_hash=""
+        
+        # Validate IPFS hash format (starts with Qm or bafy) and is non-empty
+        if [[ -n "$ipfs_hash" ]] && [[ "$ipfs_hash" =~ ^(Qm|bafy) ]]; then
+            # Update notary file with IPFS hash only if jq is available
             if command -v jq &> /dev/null; then
-                jq ". + {\"ipfs_hash\": \"$ipfs_hash\"}" "$notary_file" > "$temp_file"
-                mv "$temp_file" "$notary_file"
+                local temp_file
+                temp_file=$(mktemp)
+                if jq ". + {\"ipfs_hash\": \"$ipfs_hash\"}" "$notary_file" > "$temp_file" 2>/dev/null; then
+                    mv "$temp_file" "$notary_file"
+                else
+                    rm -f "$temp_file"
+                fi
             fi
             success "Pinned to IPFS: $ipfs_hash" >&2
         else
-            warn "IPFS pin failed (network may be unavailable)" >&2
+            warn "IPFS pin failed (invalid hash or network unavailable)" >&2
         fi
     else
         warn "IPFS not available - local notarization only" >&2
