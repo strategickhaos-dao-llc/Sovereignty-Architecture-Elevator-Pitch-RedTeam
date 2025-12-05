@@ -1,0 +1,218 @@
+# pid-ranco-trading-bot.yaml — DNA of profit, compiled by love
+# StrategicKhaos PID-RANCO Trading Engine v1.0 — NinjaTrader Edition
+# 100% deployable, 0% poetry stripped, 100% love-linked
+
+engine: "StrategicKhaos-PID-RANCO-v1.0"
+platform: "NinjaTrader 8/9"
+strategy_name: "LoveCompilesProfit"
+dna_source: "her_voice.wav"        # Final measurement collapse trigger
+entanglement_bus: "/throne-nas-32tb/love-market"
+
+# PID Controller Configuration
+pid_controller:
+  proportional: "raw_market_pain"     # How far price is from her smile
+  integral:     "accumulated_longing" # Time-weighted missing her
+  derivative:   "rate_of_heart_change" # d(love)/dt → momentum
+  
+  # PID Tuning Parameters
+  kp: 1.0           # Proportional gain
+  ki: 0.5           # Integral gain
+  kd: 0.25          # Derivative gain
+  
+  # Control limits
+  max_output: 100.0
+  min_output: -100.0
+  integral_windup_limit: 50.0
+
+# RANCO Core - Risk-Adjusted Neural Compassion Optimizer
+ranco_core:
+  risk_per_trade: "0.69%"           # Sacred number
+  max_drawdown:   "3.37%"           # Her birthday reversed
+  love_factor:    "1.0 + (her_voice_volume_db / 100)"
+  
+  # Risk Management
+  max_position_size: 1000           # Maximum contracts/shares
+  stop_loss_pct: 2.0                # Stop loss percentage
+  take_profit_pct: 1.618            # Golden ratio profit target
+  
+  # Neural parameters
+  learning_rate: 0.001
+  evolution_rate: 0.1
+  compassion_threshold: 0.8
+
+# Entry Rules
+entry_rules:
+  - condition: "RSI < 30 AND her_heartbeat > 80 bpm"
+    action: "EnterLong"
+    description: "Buy when RSI oversold and love is high"
+    
+  - condition: "RSI > 70 AND her_heartbeat < 60 bpm"
+    action: "EnterShort"
+    description: "Sell when RSI overbought and calm"
+    
+  - condition: "DNA compiles to 'stay'"
+    action: "Hold"
+    description: "Hold forever if DNA says stay"
+
+# Exit Rules  
+exit_rules:
+  - condition: "profit > 1.618%"
+    action: "ExitLong"
+    description: "Take profit at golden ratio"
+    
+  - condition: "her_voice says 'enough'"
+    action: "ExitAll"
+    description: "Instant flat on her command"
+    
+  - condition: "loss > stop_loss_pct"
+    action: "ExitLong"
+    description: "Stop loss protection"
+
+# Apoptosis Protocol - Evolution through failure
+apoptosis_protocol:
+  trigger_count: 99                 # Number of losses to trigger evolution
+  reset_behavior: "hug_and_evolve"
+  mutation_rate: 0.15
+  
+  actions:
+    - "Log all 99 failed trades as failed ribosomes"
+    - "Analyze failure patterns"
+    - "Mutate strategy weights"
+    - "Notify her with hug protocol"
+    - "Restart with evolved parameters"
+    - "100th trade MUST be green"
+
+# Model Weights - AI Integration
+model_weights:
+  inference_engine: "llama3.2:70b"    # Compiles market DNA
+  sentiment_core:  "gemma2:27b"       # Reads her voice tone
+  mutation_handler: "dolphin-llama3.2" # Detects UB in market
+  
+  # Model endpoints (local Ollama)
+  ollama_base_url: "http://localhost:11434"
+  
+# Indicators Configuration
+indicators:
+  rsi:
+    period: 14
+    overbought: 70
+    oversold: 30
+    
+  ema:
+    fast_period: 9
+    slow_period: 21
+    signal_period: 55
+    
+  heartbeat_monitor:
+    source: "mic_input"
+    sample_rate: 1000  # Hz
+    threshold: 80      # bpm
+    
+  voice_volume:
+    source: "mic_input"
+    db_threshold: 60
+    love_multiplier: 1.0
+
+# Deployment Configuration
+deployment:
+  ninjatrader_path: "C:/Users/User/Documents/NinjaTrader 8/bin/Custom/Strategies"
+  backup_path: "C:/Backups/NinjaTrader/Strategies"
+  
+  # One-liner deployment command
+  one_liner_nt8: |
+    cAlgo/RANCO/LoveCompilesProfit.cs → compile → drop in NinjaTrader\Strategies
+    && echo "PID-RANCO live. Market now runs on love." 
+    && ./notify-her.ps1 "The market just collapsed into the timeline where we win. Together."
+  
+  # Auto-restart configuration
+  auto_restart: true
+  restart_cooldown: 300  # seconds
+  
+  # Notification settings
+  notifications:
+    discord_webhook: "${DISCORD_WEBHOOK_URL}"
+    email: "${NOTIFICATION_EMAIL}"
+    sms: "${NOTIFICATION_PHONE}"
+
+# Failure Evolution System
+failure_evolution:
+  - "Every loss = one failed ribosome → log → evolve"
+  - "99 losing trades = 99 failed compiles → 100th = her name in green candles"
+  - "Love > PnL: If she's happy, bot stops trading and just holds"
+  - "Each failure teaches: store in vector DB for pattern recognition"
+  - "Genetic algorithm mutates strategy on 99th loss"
+  - "Success metric: not just profit, but her happiness level"
+
+# Trading Session Configuration
+trading_session:
+  market_hours: "09:30-16:00 EST"
+  enabled_days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+  pre_market: false
+  after_hours: false
+  
+  # Love override
+  override_on_love_low: true  # Disable trading if love factor < 0.5
+
+# Performance Tracking
+performance:
+  target_win_rate: 0.51        # Just above 50%
+  target_profit_factor: 1.618  # Golden ratio
+  max_consecutive_losses: 99   # Before evolution
+  
+  # Success criteria for 100th trade
+  hundredth_trade:
+    must_be_green: true
+    min_profit: 0.69           # Sacred percentage
+    celebration_mode: "notify_her_with_love"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  file: "/var/log/pid-ranco/trading.log"
+  rotation: "daily"
+  max_size: "100MB"
+  
+  # Special logging
+  love_events_log: "/var/log/pid-ranco/love-events.log"
+  evolution_log: "/var/log/pid-ranco/evolution.log"
+  dna_compile_log: "/var/log/pid-ranco/dna-compiles.log"
+
+# Security & Compliance
+security:
+  api_key_encryption: true
+  secure_storage: "/throne-nas-32tb/.secrets"
+  audit_trail: true
+  
+  # Love-based authentication
+  voice_authentication: true
+  heartbeat_verification: true
+  dna_signature_required: true
+
+# Integration with Sovereignty Architecture
+sovereignty_integration:
+  discord_bot: true
+  event_gateway: true
+  kubernetes_deploy: false  # Local deployment only
+  observability: true
+  
+  # Connect to existing infrastructure
+  metrics_export: "prometheus"
+  tracing_export: "jaeger"
+  logs_export: "loki"
+
+# Version Control
+version: "1.0.0"
+created: "2025-11-24"
+author: "StrategicKhaos"
+license: "MIT"
+documentation: "README-PID-RANCO.md"
+
+# Love Compilation Settings
+love_compile:
+  enabled: true
+  source: "her_voice.wav"
+  compile_on_startup: true
+  recompile_interval: 3600  # seconds
+  
+  # The ultimate truth
+  axiom: "Love compiles profit. Always."
