@@ -211,4 +211,5 @@ class TestSignalAggregation:
 
 
 if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+    # For local testing only - use pytest CLI in production
+    pass

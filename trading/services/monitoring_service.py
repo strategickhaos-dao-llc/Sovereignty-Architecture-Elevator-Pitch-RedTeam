@@ -11,6 +11,8 @@ from enum import Enum
 from typing import Dict, List, Optional, Any
 import json
 
+import aiohttp
+import numpy as np
 import redis.asyncio as redis
 from prometheus_client import Counter, Gauge, Histogram, generate_latest
 
@@ -313,8 +315,6 @@ class AlertManager:
     
     async def _send_discord_alert(self, alert: Alert) -> None:
         """Send alert to Discord webhook"""
-        import aiohttp
-        
         color = 0xFF0000 if alert.severity == AlertSeverity.CRITICAL else 0xFFA500
         
         embed = {

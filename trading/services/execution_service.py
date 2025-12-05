@@ -278,6 +278,27 @@ class BrokerClient:
             if resp.status != 200:
                 raise Exception(f"Get order error: {resp.status}")
             return await resp.json()
+    
+    async def get_latest_quote(self, symbol: str) -> Optional[float]:
+        """Get latest quote for a symbol"""
+        session = await self._ensure_session()
+        try:
+            async with session.get(
+                f"{self.base_url}/v2/stocks/{symbol}/quotes/latest",
+                headers=self.headers
+            ) as resp:
+                if resp.status != 200:
+                    return None
+                data = await resp.json()
+                quote = data.get("quote", {})
+                # Use midpoint of bid/ask
+                bid = quote.get("bp", 0)
+                ask = quote.get("ap", 0)
+                if bid > 0 and ask > 0:
+                    return (bid + ask) / 2
+                return None
+        except Exception:
+            return None
 
 
 class ExecutionService:
@@ -340,8 +361,17 @@ class ExecutionService:
             # Calculate order quantity based on weight
             target_value = self.risk_guard.portfolio_value * signal.final_weight
             
-            # Get current price (simplified - would use real price)
-            current_price = 100.0  # Placeholder
+            # Get current price from broker or use position avg price as fallback
+            current_price = await self.broker.get_latest_quote(signal.symbol)
+            if current_price is None:
+                # Fallback to position avg price or skip
+                current_pos = self._positions.get(signal.symbol)
+                if current_pos and current_pos.avg_price > 0:
+                    current_price = current_pos.avg_price
+                else:
+                    logger.warning(f"No price available for {signal.symbol}, skipping")
+                    continue
+            
             quantity = target_value / current_price
             
             if quantity < 1:

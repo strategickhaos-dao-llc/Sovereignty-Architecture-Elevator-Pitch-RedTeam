@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 import signal as signal_module
 
+import pandas as pd
 import structlog
 import yaml
 from fastapi import FastAPI, HTTPException, BackgroundTasks
@@ -159,7 +160,6 @@ class TradingOrchestrator:
             )
             
             # Combine data
-            import pandas as pd
             if not equity_data.empty and not crypto_data.empty:
                 market_data = pd.concat([equity_data, crypto_data])
             elif not equity_data.empty:
