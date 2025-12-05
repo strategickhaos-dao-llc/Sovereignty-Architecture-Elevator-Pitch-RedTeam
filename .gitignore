@@ -35,3 +35,18 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Obsidian vault test data
+sovereign-agent-kit/obsidian_vault/
+obsidian_vault/
+*.md.tmp
