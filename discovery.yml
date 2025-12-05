@@ -239,10 +239,23 @@ security:
 governance:
   approvals:
     prod_commands_require: ["ReleaseMgr"]
+    signed_payload_required: true
+    dry_run_before_apply: true
   change_management:
     link: "https://wiki.strategickhaos.internal/change-management"
   data_handling:
     post_pii_to_discord: false
+  channels:
+    deployments: "#deployments"  # For deployment plans and diffs
+    alerts: "#alerts"            # For SLO breaches and auto-rollback
+    recon: "#recon"              # For recon artifacts
+  model_routing:
+    pr_reviews: "claude-3"       # Claude-3 for PR reviews
+    ops_summaries: "gpt-4o"      # GPT-4o for ops summaries
+    autonomous_merges: false     # No autonomous merges allowed
+  audit:
+    log_all_commands: true
+    alert_on_protected_command: true
 
 testing:
   sandbox_guild_id: null

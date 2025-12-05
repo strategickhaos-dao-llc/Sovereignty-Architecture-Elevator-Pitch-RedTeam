@@ -1,0 +1,207 @@
+# Least Privilege Service Accounts
+# Strategickhaos DAO LLC - Namespace-scoped SA for bot + gateway
+# Follows principle of least privilege
+
+---
+# Service Account for Discord Ops Bot
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: bot
+  annotations:
+    description: "Least-privilege SA for Discord Ops Bot"
+automountServiceAccountToken: false  # Explicitly mount only when needed
+---
+# Service Account for Event Gateway
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-gateway
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+    component: gateway
+  annotations:
+    description: "Least-privilege SA for Event Gateway"
+automountServiceAccountToken: false
+---
+# Role for Discord Ops Bot (namespace-scoped)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+rules:
+  # Read-only access to deployments for status checks
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
+  # Read-only access to pods for status and logs
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list", "watch"]
+  # Read ConfigMaps for discovery config
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get"]
+    resourceNames: ["discord-ops-discovery"]
+  # Create events for audit logging
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+---
+# RoleBinding for Discord Ops Bot
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: discord-ops-bot
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+subjects:
+  - kind: ServiceAccount
+    name: discord-ops-bot
+    namespace: ops
+roleRef:
+  kind: Role
+  name: discord-ops-bot
+  apiGroup: rbac.authorization.k8s.io
+---
+# Role for Event Gateway (namespace-scoped)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: event-gateway
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+rules:
+  # Read ConfigMaps for discovery config
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get"]
+    resourceNames: ["discord-ops-discovery"]
+  # Create events for audit logging
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+---
+# RoleBinding for Event Gateway
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: event-gateway
+  namespace: ops
+  labels:
+    app: strategickhaos-discord-ops
+subjects:
+  - kind: ServiceAccount
+    name: event-gateway
+    namespace: ops
+roleRef:
+  kind: Role
+  name: event-gateway
+  apiGroup: rbac.authorization.k8s.io
+---
+# ClusterRole for deployment operations (required for /deploy, /scale commands)
+# This is granted only to the bot and requires ReleaseMgr role in Discord
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: discord-ops-deployer
+  labels:
+    app: strategickhaos-discord-ops
+    access-level: elevated
+rules:
+  # Scale deployments (for /scale command)
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "patch", "update"]
+  # Update deployments (for /deploy command)
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  # Read namespaces for environment selection
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list"]
+---
+# ClusterRoleBinding for deployer role
+# Bound only to the bot service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: discord-ops-deployer
+  labels:
+    app: strategickhaos-discord-ops
+    access-level: elevated
+subjects:
+  - kind: ServiceAccount
+    name: discord-ops-bot
+    namespace: ops
+roleRef:
+  kind: ClusterRole
+  name: discord-ops-deployer
+  apiGroup: rbac.authorization.k8s.io
+---
+# ClusterRole for recon operations (read-only cluster-wide)
+# Required for /recon command
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: discord-ops-recon
+  labels:
+    app: strategickhaos-discord-ops
+    access-level: read-only
+rules:
+  # Read all namespaces
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list"]
+  # Read workloads
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "daemonsets", "replicasets"]
+    verbs: ["get", "list"]
+  # Read pods and services
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints", "configmaps"]
+    verbs: ["get", "list"]
+  # Read network policies
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["networkpolicies", "ingresses"]
+    verbs: ["get", "list"]
+  # Read RBAC
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+    verbs: ["get", "list"]
+  # Read service accounts
+  - apiGroups: [""]
+    resources: ["serviceaccounts"]
+    verbs: ["get", "list"]
+  # Read webhooks
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
+    verbs: ["get", "list"]
+---
+# ClusterRoleBinding for recon role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: discord-ops-recon
+  labels:
+    app: strategickhaos-discord-ops
+    access-level: read-only
+subjects:
+  - kind: ServiceAccount
+    name: discord-ops-bot
+    namespace: ops
+roleRef:
+  kind: ClusterRole
+  name: discord-ops-recon
+  apiGroup: rbac.authorization.k8s.io

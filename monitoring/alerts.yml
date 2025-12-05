@@ -171,3 +171,184 @@ groups:
         annotations:
           summary: "Container restart loop detected"
           description: "Container {{ $labels.name }} has restarted {{ $value }} times in 10 minutes."
+
+  - name: security_posture_alerts
+    rules:
+      # Config Drift Detection
+      - alert: ConfigDriftDetected
+        expr: kube_configmap_info{configmap=~".*"} unless on(configmap, namespace) kube_configmap_info offset 1h
+        for: 5m
+        labels:
+          severity: warning
+          service: kubernetes
+          category: config-drift
+        annotations:
+          summary: "Configuration drift detected"
+          description: "ConfigMap {{ $labels.configmap }} in namespace {{ $labels.namespace }} has changed. Review for unauthorized modifications."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/config-drift"
+
+      # Pod Running as Root
+      - alert: PodRunningAsRoot
+        expr: kube_pod_container_status_running{container!=""} * on(pod, namespace) group_left kube_pod_spec_volumes_persistentvolumeclaims_info unless on(pod, namespace) (kube_pod_container_info * on(pod, namespace) group_left kube_pod_spec_volumes_persistentvolumeclaims_info{security_context_run_as_non_root="true"})
+        for: 0m
+        labels:
+          severity: critical
+          service: kubernetes
+          category: security
+        annotations:
+          summary: "Pod running as root detected"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is running as root. This violates security best practices."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/pod-root"
+
+      # Alternative: Pod Running as Root (simplified)
+      - alert: PodSecurityContextMissing
+        expr: sum by (pod, namespace) (kube_pod_container_status_running{container!=""}) unless on(pod, namespace) kube_pod_annotations{annotation_security_policy="restricted"}
+        for: 5m
+        labels:
+          severity: warning
+          service: kubernetes
+          category: security
+        annotations:
+          summary: "Pod missing security context"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} may be running without proper security context."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/pod-security-context"
+
+      # Image Tag = Latest
+      - alert: ImageTagLatest
+        expr: kube_pod_container_info{image=~".*:latest"} > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: kubernetes
+          category: security
+        annotations:
+          summary: "Container using 'latest' image tag"
+          description: "Container {{ $labels.container }} in pod {{ $labels.pod }} (namespace: {{ $labels.namespace }}) is using image {{ $labels.image }} with 'latest' tag. Use specific version tags for reproducibility."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/image-tag-latest"
+
+      # Elevated RBAC Binding (cluster-admin)
+      - alert: ElevatedRBACBinding
+        expr: kube_clusterrolebinding_info{clusterrole="cluster-admin"} > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: kubernetes
+          category: rbac
+        annotations:
+          summary: "Elevated RBAC binding detected"
+          description: "ClusterRoleBinding {{ $labels.clusterrolebinding }} grants cluster-admin role. Review for least-privilege compliance."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/elevated-rbac"
+
+      # New ClusterRoleBinding Created
+      - alert: NewClusterRoleBinding
+        expr: increase(kube_clusterrolebinding_created[1h]) > 0
+        for: 0m
+        labels:
+          severity: warning
+          service: kubernetes
+          category: rbac
+        annotations:
+          summary: "New ClusterRoleBinding created"
+          description: "A new ClusterRoleBinding was created in the last hour. Verify this is an authorized change."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/new-rbac-binding"
+
+      # Privileged Container
+      - alert: PrivilegedContainer
+        expr: kube_pod_container_info{container!=""} * on(pod, namespace) group_left kube_pod_container_status_running unless on(pod, namespace, container) kube_pod_container_info{privileged="false"}
+        for: 0m
+        labels:
+          severity: critical
+          service: kubernetes
+          category: security
+        annotations:
+          summary: "Privileged container detected"
+          description: "Container {{ $labels.container }} in pod {{ $labels.pod }} (namespace: {{ $labels.namespace }}) is running in privileged mode."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/privileged-container"
+
+      # Host Network Usage
+      - alert: PodUsingHostNetwork
+        expr: kube_pod_spec_host_network{host_network="true"} > 0
+        for: 0m
+        labels:
+          severity: warning
+          service: kubernetes
+          category: security
+        annotations:
+          summary: "Pod using host network"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is using host network. This may pose security risks."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/host-network"
+
+      # Missing Network Policy
+      - alert: NamespaceMissingNetworkPolicy
+        expr: count by (namespace) (kube_namespace_labels) unless on(namespace) count by (namespace) (kube_networkpolicy_labels)
+        for: 10m
+        labels:
+          severity: warning
+          service: kubernetes
+          category: network-security
+        annotations:
+          summary: "Namespace missing network policy"
+          description: "Namespace {{ $labels.namespace }} has no network policies defined. Consider implementing default-deny policies."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/missing-netpol"
+
+      # Secret Access Anomaly
+      - alert: UnusualSecretAccess
+        expr: rate(apiserver_request_total{resource="secrets", verb=~"get|list|watch"}[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+          service: kubernetes
+          category: secrets
+        annotations:
+          summary: "Unusual secret access pattern detected"
+          description: "High rate of secret access operations detected. Current rate: {{ $value }} req/s. Investigate for potential unauthorized access."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/secret-access-anomaly"
+
+  - name: canary_rollout_alerts
+    rules:
+      # Canary Rollout Failed
+      - alert: CanaryRolloutFailed
+        expr: kube_rollout_status_phase{phase="Degraded"} > 0
+        for: 2m
+        labels:
+          severity: critical
+          service: rollout
+          category: deployment
+        annotations:
+          summary: "Canary rollout failed"
+          description: "Rollout {{ $labels.rollout }} in namespace {{ $labels.namespace }} is in Degraded state. Auto-rollback may be triggered."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/canary-failed"
+
+      # SLO Breach During Canary
+      - alert: CanarySLOBreach
+        expr: |
+          (
+            sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
+            /
+            sum(rate(http_requests_total[5m])) by (service)
+          ) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: rollout
+          category: slo
+        annotations:
+          summary: "SLO breach during canary deployment"
+          description: "Service {{ $labels.service }} error rate is {{ $value | humanizePercentage }} (threshold: 5%). Consider rollback."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/canary-slo-breach"
+
+      # P95 Latency SLO Breach
+      - alert: CanaryLatencyBreach
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (service, le)
+          ) > 2
+        for: 2m
+        labels:
+          severity: warning
+          service: rollout
+          category: slo
+        annotations:
+          summary: "P95 latency SLO breach during canary"
+          description: "Service {{ $labels.service }} P95 latency is {{ $value }}s (threshold: 2s). Monitor for degradation."
+          runbook_url: "https://docs.strategickhaos.local/runbooks/canary-latency-breach"
