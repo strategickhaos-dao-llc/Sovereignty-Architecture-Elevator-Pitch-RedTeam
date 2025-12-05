@@ -3,7 +3,6 @@ QET Configuration Module
 Implements improvements: #8 (deterministic randomness), #18 (quantum config in YAML)
 """
 
-import os
 import json
 from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Dict, Any

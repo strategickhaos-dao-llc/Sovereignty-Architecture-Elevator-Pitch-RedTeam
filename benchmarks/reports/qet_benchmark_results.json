@@ -3,7 +3,7 @@
     "test_id": 31,
     "name": "Tokenizer Evolution Stability",
     "status": "PASS",
-    "vocab_size": 496,
+    "vocab_size": 527,
     "deterministic": true
   },
   {
@@ -31,8 +31,8 @@
     "test_id": 35,
     "name": "Baseline Comparison",
     "status": "PASS",
-    "qet_compression": 5.96,
-    "vocab_size": 455
+    "qet_compression": 6.478260869565218,
+    "vocab_size": 608
   },
   {
     "test_id": 36,

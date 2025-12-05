@@ -71,28 +71,7 @@ jobs:
       
       - name: Check for degradation
         if: github.event_name == 'schedule'
-        run: |
-          # Compare with previous results if available
-          if [ -f benchmarks/reports/qet_benchmark_results.json ]; then
-            python -c "
-import json
-import sys
-
-with open('benchmarks/reports/qet_benchmark_results.json', 'r') as f:
-    results = json.load(f)
-
-failed = sum(1 for r in results if r.get('status') == 'FAIL')
-warned = sum(1 for r in results if r.get('status') == 'WARN')
-
-print(f'Tests: {len(results)} | Failed: {failed} | Warnings: {warned}')
-
-if failed > 0:
-    print('::error::Tokenizer tests failed - evolution may be required')
-    sys.exit(1)
-elif warned > 2:
-    print('::warning::Multiple tokenizer warnings - review recommended')
-"
-          fi
+        run: python scripts/check_qet_degradation.py benchmarks/reports/qet_benchmark_results.json
       
       - name: Create issue on failure
         if: failure() && github.event_name == 'schedule'

@@ -178,17 +178,29 @@ class VocabManager:
     
     def _notarize_artifact(self, artifact_dir: Path) -> None:
         """Run notarization hook if available."""
+        import shutil
+        import sys
+        
         notarize_script = Path("notarize_cognition.sh")
-        if notarize_script.exists():
-            vocab_path = artifact_dir / "vocab.json"
-            try:
-                subprocess.run(
-                    ["bash", str(notarize_script), "--artifact", str(vocab_path)],
-                    capture_output=True,
-                    timeout=30
-                )
-            except (subprocess.TimeoutExpired, FileNotFoundError):
-                pass  # Notarization is optional
+        if not notarize_script.exists():
+            return
+        
+        vocab_path = artifact_dir / "vocab.json"
+        
+        # Find bash or sh in a platform-agnostic way
+        shell = shutil.which("bash") or shutil.which("sh")
+        if shell is None:
+            # On Windows without bash, skip notarization
+            return
+        
+        try:
+            subprocess.run(
+                [shell, str(notarize_script), "--artifact", str(vocab_path)],
+                capture_output=True,
+                timeout=30
+            )
+        except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+            pass  # Notarization is optional
     
     def load_vocab(self, version: str) -> Set[bytes]:
         """Load vocabulary from saved version."""

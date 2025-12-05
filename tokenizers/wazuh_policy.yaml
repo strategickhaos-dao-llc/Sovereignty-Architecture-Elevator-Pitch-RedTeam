@@ -125,9 +125,9 @@ integrations:
     rule_id: "100100,100102,100103"
     alert_format: "json"
     
-  # Email to DAO signers
+  # Email to DAO signers (configure via environment)
   - name: "email_alert"
-    recipients: "domenic.garza@snhu.edu"
+    recipients: "${DAO_ALERT_EMAIL}"
     rule_id: "100102"
     subject: "CRITICAL: QET Artifact Integrity Violation"
 

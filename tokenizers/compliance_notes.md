@@ -130,5 +130,5 @@ This software was developed as part of the Strategickhaos DAO sovereign AI initi
 ## 8. Contact
 
 For compliance questions:
-- Email: domenic.garza@snhu.edu
+- Email: Contact DAO administration via official channels
 - DAO: Strategickhaos DAO LLC

@@ -17,6 +17,7 @@ class Individual:
     fitness_scores: Dict[str, float]
     overall_fitness: float = 0.0
     generation: int = 0
+    crowding_distance: float = 0.0  # Used for NSGA-II selection
     
     def dominates(self, other: "Individual") -> bool:
         """Check if this individual Pareto-dominates another."""
@@ -291,7 +292,7 @@ class GAOptimizer:
             else:
                 # Use crowding distance for remaining slots
                 front = self._assign_crowding_distance(front)
-                front.sort(key=lambda x: getattr(x, "crowding_distance", 0), reverse=True)
+                front.sort(key=lambda x: x.crowding_distance, reverse=True)
                 selected.extend(front[:num_parents - len(selected)])
                 break
         
@@ -304,19 +305,19 @@ class GAOptimizer:
         """Assign crowding distance for diversity preservation."""
         if len(front) <= 2:
             for ind in front:
-                ind.crowding_distance = float("inf")  # type: ignore
+                ind.crowding_distance = float("inf")
             return front
         
         for ind in front:
-            ind.crowding_distance = 0.0  # type: ignore
+            ind.crowding_distance = 0.0
         
         objectives = list(front[0].fitness_scores.keys())
         
         for obj in objectives:
             front.sort(key=lambda x: x.fitness_scores.get(obj, 0))
             
-            front[0].crowding_distance = float("inf")  # type: ignore
-            front[-1].crowding_distance = float("inf")  # type: ignore
+            front[0].crowding_distance = float("inf")
+            front[-1].crowding_distance = float("inf")
             
             obj_range = (
                 front[-1].fitness_scores.get(obj, 0) - 
@@ -330,7 +331,7 @@ class GAOptimizer:
                     front[i + 1].fitness_scores.get(obj, 0) - 
                     front[i - 1].fitness_scores.get(obj, 0)
                 ) / obj_range
-                front[i].crowding_distance += dist  # type: ignore
+                front[i].crowding_distance += dist
         
         return front
     
