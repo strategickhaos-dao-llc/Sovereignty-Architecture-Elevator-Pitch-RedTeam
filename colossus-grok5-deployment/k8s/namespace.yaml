@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: colossus-grok5
+  labels:
+    app: grok5
+    environment: production
+    artifact: "3558"
+  annotations:
+    description: "Colossus Grok-5 Training and Deployment Namespace"
+    owner: "xAI-infrastructure"

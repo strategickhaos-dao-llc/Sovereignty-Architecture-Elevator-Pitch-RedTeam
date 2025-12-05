@@ -1,0 +1,86 @@
+# k8s/hpa-energy-aware.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: grok5-trainer-hpa
+  namespace: colossus-grok5
+  labels:
+    app: grok5-trainer
+    artifact: "3558"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: grok5-trainer
+  minReplicas: 1000
+  maxReplicas: 550000
+  metrics:
+    - type: Pods
+      pods:
+        metric:
+          name: power_mw
+        target:
+          type: AverageValue
+          averageValue: "250"   # MW cap per training wave
+    - type: Pods
+      pods:
+        metric:
+          name: gpu_utilization
+        target:
+          type: AverageValue
+          averageValue: "0.80"
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 600
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+        - type: Pods
+          value: 1000
+          periodSeconds: 60
+      selectPolicy: Min
+    scaleUp:
+      stabilizationWindowSeconds: 120
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 60
+        - type: Pods
+          value: 10000
+          periodSeconds: 60
+      selectPolicy: Max
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grok5-hpa-metrics
+  namespace: colossus-grok5
+data:
+  metrics-config.yaml: |
+    metrics:
+      power_mw:
+        description: "Real-time MW draw for Colossus cluster"
+        source: prometheus
+        query: "sum(colossus_power_mw)"
+        target: 250
+        type: AverageValue
+        
+      gpu_utilization:
+        description: "Average GPU utilization across all training pods"
+        source: prometheus
+        query: "avg(nvidia_gpu_duty_cycle{namespace='colossus-grok5'})"
+        target: 0.80
+        type: AverageValue
+        
+      megapack_soc:
+        description: "Tesla Megapack state-of-charge"
+        source: prometheus
+        query: "megapack_soc"
+        min_threshold: 0.40
+        
+      checkpoint_consensus:
+        description: "Checkpoint consensus fraction across nodes"
+        source: prometheus
+        query: "checkpoint_consensus_fraction"
+        min_threshold: 0.99

@@ -1,0 +1,232 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grok5-trainer
+  namespace: colossus-grok5
+  labels:
+    app: grok5-trainer
+    component: training
+    artifact: "3558"
+spec:
+  replicas: 1000
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 5%
+  selector:
+    matchLabels:
+      app: grok5-trainer
+      component: training
+  template:
+    metadata:
+      labels:
+        app: grok5-trainer
+        component: training
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: grok5-trainer
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      tolerations:
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: grok5-trainer
+                topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: trainer
+          image: ghcr.io/xai/grok5-trainer:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+            - name: grpc
+              containerPort: 50051
+              protocol: TCP
+          env:
+            - name: POWER_MW_LIMIT
+              value: "250"
+            - name: CHECKPOINT_CONSENSUS_THRESHOLD
+              value: "0.99"
+            - name: OFFPEAK_START_HOUR
+              value: "2"
+            - name: OFFPEAK_END_HOUR
+              value: "6"
+            - name: MEGAPACK_SOC_MIN
+              value: "0.4"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: METRICS_PORT
+              value: "9090"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: training-data
+              mountPath: /data
+            - name: checkpoints
+              mountPath: /checkpoints
+            - name: config
+              mountPath: /etc/grok5
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: "64Gi"
+              cpu: "16"
+              nvidia.com/gpu: "8"
+            limits:
+              memory: "128Gi"
+              cpu: "32"
+              nvidia.com/gpu: "8"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+      volumes:
+        - name: training-data
+          persistentVolumeClaim:
+            claimName: grok5-training-data
+        - name: checkpoints
+          persistentVolumeClaim:
+            claimName: grok5-checkpoints
+        - name: config
+          configMap:
+            name: grok5-config
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grok5-trainer
+  namespace: colossus-grok5
+  labels:
+    app: grok5-trainer
+    component: training
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+    - name: grpc
+      port: 50051
+      targetPort: grpc
+      protocol: TCP
+  selector:
+    app: grok5-trainer
+    component: training
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grok5-trainer
+  namespace: colossus-grok5
+  labels:
+    app: grok5-trainer
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grok5-trainer
+  namespace: colossus-grok5
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grok5-trainer
+  namespace: colossus-grok5
+subjects:
+  - kind: ServiceAccount
+    name: grok5-trainer
+    namespace: colossus-grok5
+roleRef:
+  kind: Role
+  name: grok5-trainer
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grok5-config
+  namespace: colossus-grok5
+data:
+  config.yaml: |
+    training:
+      batch_size: 4096
+      learning_rate: 0.0001
+      warmup_steps: 1000
+      max_steps: 1000000
+      checkpoint_interval: 1000
+      
+    energy:
+      power_limit_mw: 250
+      offpeak_start: "02:00"
+      offpeak_end: "06:00"
+      megapack_soc_min: 0.4
+      
+    safety:
+      hallucination_threshold: 0.15
+      bias_threshold: 0.25
+      checkpoint_consensus_min: 0.99
+      toxicity_threshold: 0.30
+      
+    provenance:
+      batch_size: 1000
+      merkle_enabled: true
+      ots_enabled: true

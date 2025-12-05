@@ -1,0 +1,98 @@
+# Alertmanager Configuration for Colossus Grok-5
+# Routes alerts to appropriate channels
+
+global:
+  resolve_timeout: 5m
+  slack_api_url_file: '/etc/alertmanager/slack_api_url'
+
+route:
+  group_by: ['alertname', 'service', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'default'
+  routes:
+    # Critical alerts go to war room immediately
+    - match:
+        severity: critical
+      receiver: 'grok5-war-room'
+      group_wait: 0s
+      repeat_interval: 1h
+
+    # Safety gate failures get special handling
+    - match:
+        alertname: SafetyGateFailed
+      receiver: 'grok5-war-room'
+      group_wait: 0s
+
+    # Power alerts
+    - match_re:
+        alertname: 'Power.*|Megapack.*'
+      receiver: 'infrastructure-team'
+
+    # Training alerts
+    - match_re:
+        alertname: 'Checkpoint.*|Training.*|GPU.*'
+      receiver: 'ml-team'
+
+    # Provenance alerts
+    - match_re:
+        alertname: 'Provenance.*|Merkle.*|OTS.*'
+      receiver: 'data-team'
+
+receivers:
+  - name: 'default'
+    webhook_configs:
+      - url: 'http://discord-webhook:8080/alerts'
+        send_resolved: true
+
+  - name: 'grok5-war-room'
+    webhook_configs:
+      - url: 'http://discord-webhook:8080/war-room'
+        send_resolved: true
+    pagerduty_configs:
+      - service_key_file: '/etc/alertmanager/pagerduty_key'
+        severity: critical
+        description: '{{ .CommonAnnotations.summary }}'
+        details:
+          firing: '{{ template "pagerduty.default.instances" .Alerts.Firing }}'
+
+  - name: 'infrastructure-team'
+    webhook_configs:
+      - url: 'http://discord-webhook:8080/infrastructure'
+        send_resolved: true
+    email_configs:
+      - to: 'infrastructure@xai.internal'
+        send_resolved: true
+
+  - name: 'ml-team'
+    webhook_configs:
+      - url: 'http://discord-webhook:8080/ml-team'
+        send_resolved: true
+    email_configs:
+      - to: 'ml-team@xai.internal'
+        send_resolved: true
+
+  - name: 'data-team'
+    webhook_configs:
+      - url: 'http://discord-webhook:8080/data-team'
+        send_resolved: true
+    email_configs:
+      - to: 'data-team@xai.internal'
+        send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service']
+
+  - source_match:
+      alertname: 'PowerConsumptionCritical'
+    target_match:
+      alertname: 'PowerConsumptionHigh'
+    equal: ['service']
+
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
