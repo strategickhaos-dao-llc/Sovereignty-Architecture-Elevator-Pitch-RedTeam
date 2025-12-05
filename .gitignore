@@ -35,3 +35,14 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
