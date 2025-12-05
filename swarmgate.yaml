@@ -1,0 +1,237 @@
+name: swarmgate.yaml
+version: "v1.0"
+bundle_name: "swarmgate_v1.0"
+created_at: "2025-11-27T00:00:00Z"
+description: >
+  SwarmGate v1.0 — declarative ecosystem descriptor for projects, agents,
+  risk registries, provenance, and governance. Operates ENTIRELY inside the
+  LEGAL_SHIELD perimeter. Explicitly excludes medical/biotech/wet-lab work.
+
+projects:
+  - id: research_os
+    name: Research OS
+    repo: "https://github.com/strategickhaos/research-os"
+    maintainers:
+      - "team:core"
+    license: "Apache-2.0"
+    description: "Core orchestration platform for multi-agent workflows."
+    allowed_operations:
+      - "paper ingestion & summarization"
+      - "project & risk tracking"
+      - "infra orchestration"
+      - "non-bio data provenance"
+    out_of_scope:
+      - "medical advice"
+      - "wet lab protocols"
+      - "drug discovery"
+
+  - id: orchestration_core
+    name: Orchestration Core
+    repo: "https://github.com/strategickhaos/orchestration-core"
+    maintainers:
+      - "team:ops"
+
+  - id: infra_provenance
+    name: Infra & Provenance
+    repo: "https://github.com/strategickhaos/infra-provenance"
+    maintainers:
+      - "team:infra"
+
+  - id: risk_registry
+    name: Risk Registry
+    repo: "https://github.com/strategickhaos/risk-registry"
+    maintainers:
+      - "team:governance"
+
+  - id: agents_sdk
+    name: Agents SDK
+    repo: "https://github.com/strategickhaos/agents-sdk"
+    maintainers:
+      - "team:devx"
+
+agents:
+  - id: reader_agent
+    purpose: "Ingest and index papers, websites, and PDFs for research tasks."
+    capabilities:
+      - "fetch"
+      - "optical character recognition"
+      - "language detection"
+      - "metadata extraction"
+    allowed_data_types:
+      - "public literature"
+      - "internal project docs (non-medical)"
+    network_access: "egress-restricted"
+    max_privilege: "read-only-storage"
+    human_in_loop: true
+    audit_logging: true
+    constraints:
+      - "No access to datasets labelled 'medical' or 'bio'."
+      - "No execution of arbitrary code on fetched documents."
+
+  - id: summarizer_agent
+    purpose: "Generate concise summaries, structured notes, and references."
+    capabilities:
+      - "abstractive summarization"
+      - "citation extraction"
+    human_review_required: true
+    audit_logging: true
+
+  - id: planner_agent
+    purpose: "Decompose goals into milestones; propose CI/CD changes."
+    capabilities:
+      - "task orchestration"
+      - "risk scoring"
+    constraints:
+      - "Cannot deploy changes without two human approvals."
+
+  - id: infra_manager
+    purpose: "Manage infra: CI pipelines, deployment manifests."
+    capabilities:
+      - "apply terraform"
+      - "manage kubernetes"
+    max_privilege: "scoped-service-account"
+    human_in_loop: true
+    safeguards:
+      - "Destructive actions require emergency-hold override + audit trail."
+
+  - id: security_scan_agent
+    purpose: "Static analysis, dependency scanning, fuzzing orchestration."
+    capabilities:
+      - "SCA"
+      - "SAST"
+      - "compose scanning jobs"
+    audit_logging: true
+
+risk_registry:
+  - id: R-001
+    title: "Unauthorized privileged infra change"
+    severity: "high"
+    mitigations:
+      - "Require two human approvals for infra changes."
+      - "Scoped service accounts + audit logs."
+    owner: "team:ops"
+    status: "open"
+
+  - id: R-002
+    title: "Data leakage of sensitive/medical data"
+    severity: "critical"
+    mitigations:
+      - "Data classifiers on ingestion agents."
+      - "Blocklist enforcement."
+    owner: "team:security"
+    status: "open"
+
+  - id: R-003
+    title: "Malicious third-party agent/plugin"
+    severity: "medium"
+    mitigations:
+      - "Plugin signing & provenance verification."
+      - "Sandboxing and capability scoping."
+    owner: "team:devx"
+    status: "open"
+
+policies:
+  legal_shield_reference: "/legal/LEGAL_SHIELD.yaml"
+  legal_shield_bundle:
+    bundle_name: "legal_shield_v1.0"
+    created_at: "2025-11-27T00:00:00Z"
+    hash_algorithm: "blake3"
+    b3_hash: "f0e4c2f76c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b"  # Placeholder; replace with actual BLAKE3 hash after bundling
+    ipfs_cid: "bafybeihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtenxquvyku"
+    arweave_tx: "L7vR9v9q2m9vJ7kB8d5X3c9q1fG2hN4jL8pR6tW9xU1yZ3aS5dF7gH9jK2mN4"
+    chain_commit:
+      target_chain: "ethereum_l2_base"
+      contract_address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  # Live test addr example
+      tx_hash: "0x8f9c1a2b3d4e5f6789abcde1234567890f1e2d3c4b5a69788796a5b4c3d2e1f0"
+      tag: "LegalShield-v1.0"
+
+  artifact_policy:
+    - "All release bundles MUST be deterministic tar archives."
+    - "All release bundles MUST be hashed with BLAKE3 and pinned to IPFS + Arweave."
+    - "Primary metadata MUST be committed on-chain to CommitRegistry."
+
+governance:
+  decision_process: "maintainers + governance council"
+  maintainers:
+    - "team:core"
+    - "team:ops"
+  council:
+    - "team:governance"
+  voting:
+    minor_change: "single maintainer approval"
+    major_change: "two maintainer approvals + council notification"
+  emergency_hold:
+    description: "Council can freeze deployments and revoke privileges."
+    threshold: "3/5 council members"
+
+provenance:
+  deterministic_builds:
+    instructions: |
+      tar --sort=name --owner=0 --group=0 --numeric-owner -cf swarmgate_v1.0.tar .
+  hashing:
+    algorithm: "blake3"
+  ipfs:
+    cid_version: 1
+  on_chain_record:
+    registry_contract: "CommitRegistry"
+    function: "commit(bytes32 b3Hash, string ipfsCid, string tag)"
+
+ci_cd:
+  required_checks:
+    - "unit-tests"
+    - "integration-tests"
+    - "security-scans"
+    - "provenance-build"
+  gating:
+    - "Main branch protected; merges require passing checks + approvals."
+
+security:
+  secrets_handling:
+    - "Secrets in approved vaults only."
+    - "Automatic secret-scanning in CI."
+  least_privilege: true
+  logging:
+    - "All agent actions tamper-evident."
+
+data_handling:
+  prohibited:
+    - "medical"
+    - "biological experimental data"
+    - "human-genomic data"
+  encryption:
+    at_rest: true
+    in_transit: true
+
+deployment:
+  allowed_clouds:
+    - "self-hosted"
+    - "AWS"
+    - "GCP"
+  allowed_blockchains:
+    - "ethereum_l2_base"
+
+automation_skeletons:
+  - id: code_analysis
+  - id: ci_cd_hardening
+  - id: config_mgmt
+  - id: security_scanning
+  - id: data_provenance
+
+interfaces:
+  agent_api:
+    endpoint: "/api/v1/agents"
+    auth: "token-based + mTLS"
+
+contacts:
+  security: "security@strategickhaos.xyz"
+  governance: "governance@strategickhaos.xyz"
+  infra: "infra@strategickhaos.xyz"
+
+changelog:
+  - version: "v1.0"
+    date: "2025-11-27"
+    notes: "Initial locked specification. Fully shielded by LEGAL_SHIELD v1.0."
+
+notes: >
+  This file is the single source of truth for the SwarmGate ecosystem.
+  All future changes require the full provenance + on-chain commit process.
