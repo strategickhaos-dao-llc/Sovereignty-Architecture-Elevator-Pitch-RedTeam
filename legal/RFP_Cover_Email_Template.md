@@ -1,5 +1,7 @@
 # RFP Cover Email Template
 
+> **Note:** This is a template document. Replace placeholders marked with `[brackets]` with your actual contact information before sending.
+
 Use this template when sending the RFP to law firms. Customize the recipient name and attach the RFP document along with any supporting materials (e.g., Declaration of Technical Architecture v3.1).
 
 ---

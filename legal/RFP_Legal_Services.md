@@ -1,5 +1,7 @@
 # Request for Proposal (RFP): Legal Services for IP Protection, Tax Compliance, and FinTech/DAO Governance
 
+> **Note:** This is a template document. Replace placeholders marked with `[brackets]` with your actual contact information before sending.
+
 **Date:** December 5, 2025
 
 **Issued by:**  
