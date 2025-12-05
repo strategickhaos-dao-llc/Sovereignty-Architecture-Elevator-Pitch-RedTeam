@@ -1,0 +1,35 @@
+provenance:
+  version: "v1.1-cloud-federation"
+  created: "2025-11-27T00:00:00Z"
+  notes: "Cloud terminals extension for Trinity/ValorYield/PID-RANCO integration"
+
+cloud_terminals:
+  enabled: true
+  discovery: file:cloud_terminals.json
+  providers:
+    - name: aws
+      regions: [us-east-1, us-west-2]
+      node_types: [t3.micro]
+      tasks: [compute_shards, trading_runs]
+    - name: gcp
+      zones: [us-central1-a]
+      machine_types: [e2-micro]
+      tasks: [analysis, creative]
+    - name: azure
+      resource_groups: [strategickhaos-rg]
+      vm_sizes: [Standard_B1ls]
+      tasks: [provenance_pins, audits]
+  orchestration:
+    tool: ansible
+    playbook: cloud_swarm_playbook.yaml
+    inventory: cloud_hosts.ini
+    self_heal: true
+  security:
+    encryption: gpg_aes256
+    access: ssh_key_from_vault
+  integration:
+    uam_level: 1.0_projects
+    trinity_mapping:
+      lyra: creative_bursts
+      nova: execution
+      athena: analysis

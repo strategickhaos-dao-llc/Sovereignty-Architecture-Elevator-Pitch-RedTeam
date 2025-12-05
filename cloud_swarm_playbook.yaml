@@ -1,0 +1,101 @@
+# Ansible playbook: cloud_swarm_playbook.yaml
+# Prepares Ubuntu-based nodes for PID-RANCO sharded runs.
+---
+- name: Configure cloud terminals for PID-RANCO sharded runs
+  hosts: all_cloud_terminals
+  become: true
+  gather_facts: true
+  vars:
+    repo_url: "https://github.com/StrategicKhaos/sovereign-vault.git"
+    dest: "/opt/strategickhaos"
+    repo_branch: "main"
+    pid_script: "/opt/strategickhaos/trading_engine_dossier_v1.0/pid_ranco_backtest.py"
+    logs_dir: "/opt/strategickhaos/logs"
+    uam_dir: "/opt/strategickhaos/uam"
+  tasks:
+    - name: Ensure apt cache present (Debian/Ubuntu)
+      ansible.builtin.apt:
+        update_cache: true
+      when: ansible_os_family == "Debian"
+
+    - name: Install system packages (Debian)
+      ansible.builtin.apt:
+        name:
+          - python3
+          - python3-venv
+          - python3-pip
+          - git
+          - coreutils
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Try installing b3sum (may not exist in apt)
+      ansible.builtin.apt:
+        name: b3sum
+        state: present
+      failed_when: false
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure blake3 python package is present (fallback)
+      ansible.builtin.pip:
+        name: blake3
+        executable: pip3
+
+    - name: Create base dirs
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - "{{ dest }}"
+        - "{{ logs_dir }}"
+        - "{{ uam_dir }}"
+
+    - name: Clone or update repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ dest }}"
+        version: "{{ repo_branch }}"
+        force: true
+        update: true
+
+    - name: Ensure pid script exists
+      ansible.builtin.stat:
+        path: "{{ pid_script }}"
+      register: pid_stat
+
+    - name: Fail if PID-RANCO script missing
+      ansible.builtin.fail:
+        msg: "PID-RANCO script {{ pid_script }} not found on {{ inventory_hostname }}. Update pid_script var or sync repo."
+      when: not pid_stat.stat.exists
+
+    - name: Create a local wrapper for runs (to be invoked by launcher)
+      ansible.builtin.copy:
+        dest: "{{ dest }}/run_pid_ranco.sh"
+        mode: "0755"
+        content: |
+          #!/bin/bash
+          set -euo pipefail
+          SHARD=${1:-0}
+          TOTAL=${2:-1}
+          HOSTNAME=$(hostname -f 2>/dev/null || hostname)
+          OUT="{{ logs_dir }}/pid_ranco_${HOSTNAME}_shard_${SHARD}_of_${TOTAL}.json"
+          mkdir -p "$(dirname "$OUT")"
+          python3 "{{ pid_script }}" --shard ${SHARD} --of ${TOTAL} --out ${OUT}
+          # compute blake3 hash (prefer b3sum if available)
+          if command -v b3sum >/dev/null 2>&1; then
+            b3sum "${OUT}" >> "{{ uam_dir }}/provenance.log"
+          else
+            python3 -c "
+          from blake3 import blake3
+          import sys
+          p = sys.argv[1]
+          uam = sys.argv[2]
+          with open(p, 'rb') as fh:
+              h = blake3(fh.read()).hexdigest()
+          with open(uam + '/provenance.log', 'a') as f:
+              f.write(h + '  ' + p + '\n')
+          " "${OUT}" "{{ uam_dir }}"
+          fi
