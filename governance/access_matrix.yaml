@@ -1,16 +1,42 @@
 # access_matrix.yaml
 # Strategickhaos DAO LLC — UPL-Safe Access Control
-version: "1.0"
+version: "2.0"
+
+# Classification levels (ordered from lowest to highest)
+classification_levels:
+  - name: unclassified
+    rank: 0
+    description: "Public information"
+  - name: internal
+    rank: 1
+    description: "Internal use only"
+  - name: confidential
+    rank: 2
+    description: "Confidential business information"
+  - name: secret
+    rank: 3
+    description: "Sensitive proprietary data"
+  - name: top_secret
+    rank: 4
+    description: "Critical intellectual property"
+
 roles:
   drafter:
     - name: "Domenic Garza"
       id: "node-137"
+      clearance_level: confidential
+      groups:
+        - drafters
+        - core-team
       permissions:
         - draft_internal
         - use_templates
         - query_rag
     - name: "AI SME Nodes"
       id: "grok-4, claude-3.5, llama3"
+      clearance_level: internal
+      groups:
+        - ai-agents
       permissions:
         - assist_draft
         - rag_query
@@ -19,6 +45,10 @@ roles:
   approver:
     - name: "WY-Licensed Attorney"
       id: "counsel-01"
+      clearance_level: secret
+      groups:
+        - legal
+        - approvers
       permissions:
         - review_draft
         - approve_document
@@ -27,6 +57,10 @@ roles:
   signer:
     - name: "Domenic Garza"
       id: "managing-member"
+      clearance_level: top_secret
+      groups:
+        - executive
+        - signers
       permissions:
         - sign_document
         - submit_filing
@@ -35,10 +69,61 @@ roles:
   auditor:
     - name: "Compliance Node"
       id: "audit-bot"
+      clearance_level: top_secret
+      groups:
+        - compliance
+        - auditors
       permissions:
         - log_trail
         - verify_gpg
         - generate_sha256
+        - view_all_audit_logs
+
+# Group-based access controls
+groups:
+  core-team:
+    default_clearance: internal
+    can_access:
+      - unclassified
+      - internal
+  
+  legal:
+    default_clearance: secret
+    can_access:
+      - unclassified
+      - internal
+      - confidential
+      - secret
+  
+  executive:
+    default_clearance: top_secret
+    can_access:
+      - unclassified
+      - internal
+      - confidential
+      - secret
+      - top_secret
+  
+  ai-agents:
+    default_clearance: internal
+    can_access:
+      - unclassified
+      - internal
+    restrictions:
+      - no_external_calls
+      - log_all_access
+  
+  auditors:
+    default_clearance: top_secret
+    can_access:
+      - unclassified
+      - internal
+      - confidential
+      - secret
+      - top_secret
+    special_permissions:
+      - read_only_access
+      - view_redacted_metadata
 
 enforcement:
   repo_permissions:
@@ -50,3 +135,81 @@ enforcement:
     - checklist_complete
     - proof_logged
     - gpg_signed
+    - classification_valid
+  
+  # Classification enforcement rules
+  classification_rules:
+    - name: "Require classification on artifacts"
+      target: architecture_artifacts
+      required: true
+      default: unclassified
+    
+    - name: "Validate clearance before access"
+      action: check_clearance
+      enforce: true
+    
+    - name: "Log all classified access"
+      target: classified_artifacts
+      action: audit_log
+      enforce: true
+    
+    - name: "Redact on partial access"
+      action: apply_redaction
+      fields:
+        - internal_notes
+        - source_details
+        - raw_data
+
+# Policy definitions for the policy engine
+policies:
+  - policy_id: "clearance-check"
+    name: "Clearance Level Check"
+    description: "Deny access if user clearance is below artifact classification"
+    effect: deny
+    conditions:
+      - attribute: "clearance_insufficient"
+        operator: "eq"
+        value: true
+    priority: 100
+
+  - policy_id: "group-access"
+    name: "Group-Based Access"
+    description: "Allow access if user is in allowed groups"
+    effect: allow
+    conditions:
+      - attribute: "has_clearance"
+        operator: "eq"
+        value: true
+      - attribute: "has_group_access"
+        operator: "eq"
+        value: true
+    priority: 50
+
+  - policy_id: "unclassified-access"
+    name: "Unclassified Access"
+    description: "Allow access to unclassified artifacts for all authenticated users"
+    effect: allow
+    conditions:
+      - attribute: "artifact.classification"
+        operator: "eq"
+        value: "unclassified"
+    priority: 10
+
+# Audit configuration
+audit:
+  enabled: true
+  retention_days: 365
+  log_events:
+    - access_granted
+    - access_denied
+    - access_partial
+    - classification_changed
+    - clearance_verified
+    - redaction_applied
+  sensitive_events:
+    - access_denied
+    - classification_changed
+  alert_on:
+    - multiple_denied_attempts
+    - classification_downgrade
+    - bulk_access_patterns
