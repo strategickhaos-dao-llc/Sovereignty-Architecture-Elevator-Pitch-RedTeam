@@ -25,13 +25,45 @@ interface ChannelIds {
   prs: string;
 }
 
+// Patterns to redact from error messages for security
+const SENSITIVE_PATTERNS = [
+  /api[_-]?key\s*[:=]\s*\S+/gi,
+  /password\s*[:=]\s*\S+/gi,
+  /token\s*[:=]\s*\S+/gi,
+  /Bearer\s+[A-Za-z0-9._-]+/g,
+  /secret\s*[:=]\s*\S+/gi,
+  /\/home\/[^\/]+/g,  // Redact home directory paths
+  /\/var\/[^\s]+/g,   // Redact var paths
+];
+
+function sanitizeError(error: string): string {
+  let sanitized = error;
+  for (const pattern of SENSITIVE_PATTERNS) {
+    sanitized = sanitized.replace(pattern, "[REDACTED]");
+  }
+  return sanitized.substring(0, 500);
+}
+
 function verifySignature(secret: string, raw: string, sig: string): boolean {
+  if (!secret) {
+    console.warn("HMAC secret not configured - signature verification disabled");
+    return true; // Allow in development, but log warning
+  }
   if (!sig) return false;
+  
+  // Support both raw hex and prefixed signatures (e.g., 'sha256=...')
+  const sigValue = sig.startsWith("sha256=") ? sig.substring(7) : sig;
   const computed = crypto.createHmac("sha256", secret).update(raw).digest("hex");
-  return crypto.timingSafeEqual(
-    Buffer.from(computed),
-    Buffer.from(sig)
-  );
+  
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(computed, 'hex'),
+      Buffer.from(sigValue, 'hex')
+    );
+  } catch {
+    // If buffers have different lengths or invalid hex, return false
+    return false;
+  }
 }
 
 function getStatusEmoji(event: string): string {
@@ -85,7 +117,9 @@ export function azurePipelineRoutes(rest: REST, channelIds: ChannelIds, secret: 
     }
     
     if (error) {
-      fields.push({ name: "Error", value: `\`\`\`${error.substring(0, 500)}\`\`\``, inline: false });
+      // Sanitize error message before displaying
+      const sanitizedError = sanitizeError(error);
+      fields.push({ name: "Error", value: `\`\`\`${sanitizedError}\`\`\``, inline: false });
     }
     
     const embed: Record<string, unknown> = {

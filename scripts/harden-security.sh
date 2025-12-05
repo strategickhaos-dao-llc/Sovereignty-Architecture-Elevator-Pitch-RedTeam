@@ -11,8 +11,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # Configuration
-MAX_RETRY_ATTEMPTS=3
-RBAC_PROPAGATION_WAIT=30
+RBAC_PROPAGATION_WAIT="${RBAC_PROPAGATION_WAIT:-30}"
 
 echo_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 echo_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }

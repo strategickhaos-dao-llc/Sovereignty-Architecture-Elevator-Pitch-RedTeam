@@ -8,6 +8,25 @@ const appId = env("APP_ID", false) || cfg.discord?.bot?.app_id || "";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+// Patterns to redact from error messages for security
+const SENSITIVE_PATTERNS = [
+  /api[_-]?key\s*[:=]\s*\S+/gi,
+  /password\s*[:=]\s*\S+/gi,
+  /token\s*[:=]\s*\S+/gi,
+  /Bearer\s+[A-Za-z0-9._-]+/g,
+  /secret\s*[:=]\s*\S+/gi,
+  /\/home\/[^\/\s]+/g,
+  /\/var\/[^\s]+/g,
+];
+
+function sanitizeErrorMessage(error: string): string {
+  let sanitized = error;
+  for (const pattern of SENSITIVE_PATTERNS) {
+    sanitized = sanitized.replace(pattern, "[REDACTED]");
+  }
+  return sanitized.substring(0, 500);
+}
+
 // AI diagnosis prompts for common pipeline failures
 const diagnosisKnowledgeBase: Record<string, { causes: string[]; fixes: string[] }> = {
   "harden-security": {
@@ -173,7 +192,8 @@ Check #deployments for status updates.
       await i.editReply({ embeds: [warningEmbed("Pipeline Retry", retryResponse)] });
     }
   } catch (e: any) {
-    const errorResponse = e.message || "Unknown error occurred";
+    const rawError = e.message || "Unknown error occurred";
+    const errorResponse = sanitizeErrorMessage(rawError);
     if (i.deferred) {
       await i.editReply({ embeds: [errorEmbed("Error", errorResponse)] });
     } else {

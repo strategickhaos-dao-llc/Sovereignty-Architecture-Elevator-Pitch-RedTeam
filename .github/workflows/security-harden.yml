@@ -71,7 +71,7 @@ jobs:
         id: harden
         run: |
           echo "Running security hardening with mode: ${{ github.event.inputs.run_mode || 'all' }}"
-          ./scripts/harden-security.sh ${{ github.event.inputs.run_mode || 'report' }}
+          ./scripts/harden-security.sh ${{ github.event.inputs.run_mode || 'all' }}
         continue-on-error: true
         
       - name: 📊 Generate Security Report
