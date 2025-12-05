@@ -1,0 +1,4 @@
+# Hybrid Refinery Python Dependencies
+yfinance>=0.2.31
+pandas>=2.0.0
+PyYAML>=6.0.1
