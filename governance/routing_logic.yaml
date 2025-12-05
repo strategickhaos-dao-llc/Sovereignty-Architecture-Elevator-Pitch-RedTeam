@@ -1,0 +1,255 @@
+# routing_logic.yaml
+# Strategickhaos DAO LLC — Autonomy Spine Layer 5: PURPOSE
+# 7% Charity Engine - Calculation and Distribution Logic
+version: "1.0"
+created: "2025-11-28"
+updated: "2025-11-28"
+
+# Purpose: Ensure 7% always flows to charity, even if founder pivots
+# This logic survives attention gaps and founder role changes
+
+metadata:
+  layer: "Layer 5: PURPOSE (7% Mission)"
+  autonomy_function: "System fulfills mission without manual intervention"
+  dependencies:
+    - "covenant.yaml"
+    - "charity_manifest.yaml"
+    - "dao_record.yaml"
+
+# Core Commitment
+commitment:
+  name: "7% Charity Commitment"
+  description: "7% of net revenue is irrevocably committed to charitable causes"
+  percentage: 7.0
+  basis: "net_revenue"
+  frequency: "monthly"
+  immutable: true
+  effective_date: "2025-11-28"
+
+# Revenue Detection
+revenue_detection:
+  sources:
+    - name: "consulting_services"
+      type: "service_revenue"
+      detection_method: "invoice_tracking"
+      accounts: ["primary_business_account"]
+      
+    - name: "software_licensing"
+      type: "license_revenue"
+      detection_method: "payment_processor_webhook"
+      accounts: ["stripe_account", "paypal_account"]
+      
+    - name: "training_services"
+      type: "education_revenue"
+      detection_method: "platform_reporting"
+      accounts: ["training_platform_account"]
+      
+    - name: "partnership_revenue"
+      type: "referral_revenue"
+      detection_method: "partner_reporting"
+      accounts: ["partner_settlement_account"]
+
+  exclusions:
+    - type: "investment_returns"
+      reason: "Capital gains treated separately"
+    - type: "loans_received"
+      reason: "Not revenue"
+    - type: "refunds_issued"
+      reason: "Reduces gross revenue"
+    - type: "pass_through_expenses"
+      reason: "Not earned revenue"
+
+# Calculation Logic
+calculation:
+  formula: |
+    net_revenue = gross_revenue - allowable_deductions
+    charity_amount = net_revenue * 0.07
+    
+  allowable_deductions:
+    - "direct_cost_of_services"
+    - "platform_fees"
+    - "payment_processing_fees"
+    - "refunds"
+    - "chargebacks"
+    
+  not_deductible:
+    items:
+      - "operating_expenses"
+      - "salaries"
+      - "marketing"
+      - "administrative_costs"
+    reason: "7% calculated before operating costs to ensure commitment"
+
+  timing:
+    calculation_date: "last_day_of_month"
+    distribution_date: "5th_of_following_month"
+    grace_period: "5_business_days"
+
+  minimum_threshold:
+    amount: 10.00
+    currency: "USD"
+    action_below_threshold: "accumulate_to_next_period"
+
+# Distribution Logic
+distribution:
+  method: "proportional"
+  
+  allocation_rules:
+    - category: "primary_beneficiaries"
+      percentage: 70
+      description: "Main charitable causes aligned with mission"
+      
+    - category: "emergency_fund"
+      percentage: 20
+      description: "Reserve for disaster relief and urgent needs"
+      
+    - category: "community_choice"
+      percentage: 10
+      description: "Community-nominated beneficiaries"
+
+  selection_criteria:
+    required:
+      - "501c3_status_or_equivalent"
+      - "transparent_financials"
+      - "mission_alignment"
+    preferred:
+      - "direct_impact_programs"
+      - "low_administrative_overhead"
+      - "local_community_benefit"
+
+  rotation:
+    frequency: "quarterly"
+    method: "governance_board_review"
+    notification: "30_days_advance_notice"
+
+# Transfer Verification
+verification:
+  pre_transfer:
+    - "verify_recipient_status"
+    - "confirm_banking_details"
+    - "check_sanctions_list"
+    - "validate_calculation"
+    
+  post_transfer:
+    - "confirm_receipt"
+    - "log_transaction"
+    - "update_distribution_tracker"
+    - "generate_proof_of_transfer"
+
+  audit_trail:
+    required_fields:
+      - transaction_id
+      - date
+      - amount
+      - recipient
+      - calculation_details
+      - verification_hash
+      - approver
+    retention: "7_years"
+    format: "JSON with cryptographic signature"
+
+# Automation
+automation:
+  enabled: true
+  
+  triggers:
+    - event: "monthly_close"
+      action: "calculate_charity_amount"
+      
+    - event: "calculation_complete"
+      action: "notify_governance_board"
+      
+    - event: "approval_received"
+      action: "initiate_transfer"
+      
+    - event: "transfer_complete"
+      action: "log_and_verify"
+
+  notifications:
+    - recipient: "managing_member"
+      events: ["calculation_complete", "transfer_initiated", "transfer_complete"]
+      
+    - recipient: "governance_board"
+      events: ["monthly_report", "quarterly_review"]
+      
+    - recipient: "public_ledger"
+      events: ["transfer_complete"]
+
+  failsafes:
+    - condition: "transfer_failure"
+      action: "retry_with_escalation"
+      max_retries: 3
+      escalation: "manual_intervention_required"
+      
+    - condition: "calculation_error"
+      action: "halt_and_notify"
+      notification: ["managing_member", "auditor"]
+      
+    - condition: "recipient_status_invalid"
+      action: "redirect_to_emergency_fund"
+      notification: ["governance_board"]
+
+# Reporting
+reporting:
+  monthly:
+    - "calculation_summary"
+    - "distribution_breakdown"
+    - "transfer_confirmations"
+    
+  quarterly:
+    - "cumulative_impact_report"
+    - "beneficiary_updates"
+    - "governance_review_notes"
+    
+  annual:
+    - "full_audit_report"
+    - "501c3_donation_receipts"
+    - "public_transparency_report"
+
+  public_disclosure:
+    enabled: true
+    delay: "30_days"
+    format: "public_ledger_entry"
+    location: "distribution_tracker.json"
+
+# Governance
+governance:
+  approval_authority:
+    routine_distributions: "managing_member"
+    beneficiary_changes: "governance_board"
+    formula_modifications: "unanimous_board_plus_legal"
+    
+  appeals:
+    process: "governance_board_review"
+    timeline: "30_days_response"
+    
+  auditing:
+    internal: "quarterly"
+    external: "annual"
+    auditor_requirements: "CPA_or_equivalent"
+
+# Emergency Provisions
+emergency:
+  suspension_conditions:
+    - "legal_prohibition"
+    - "entity_insolvency"
+    - "force_majeure"
+    
+  suspension_process:
+    authority: "governance_board_unanimous"
+    documentation: "written_justification_required"
+    duration: "maximum_90_days_renewable"
+    restoration: "automatic_upon_condition_resolution"
+    
+  accumulated_obligations:
+    treatment: "preserved_and_distributed_upon_resumption"
+    interest: "none_applies"
+    priority: "first_distributions_after_resumption"
+
+# Verification Signature
+signature:
+  signer: "Domenic Garza"
+  role: "Managing Member"
+  date: "2025-11-28"
+  gpg_fingerprint: "TBD - To be signed"
+  commitment: "This routing logic represents a binding commitment to the 7% charity mission"

@@ -1,0 +1,300 @@
+# charity_manifest.yaml
+# Strategickhaos DAO LLC — Autonomy Spine Layer 5: PURPOSE
+# Beneficiary Registry with Verification
+version: "1.0"
+created: "2025-11-28"
+updated: "2025-11-28"
+
+# Purpose: Maintain registry of verified charitable beneficiaries
+# System can distribute 7% without manual beneficiary selection
+
+metadata:
+  layer: "Layer 5: PURPOSE (7% Mission)"
+  autonomy_function: "Beneficiary selection survives attention gaps"
+  dependencies:
+    - "routing_logic.yaml"
+    - "covenant.yaml"
+
+# Registry Configuration
+registry:
+  verification_required: true
+  minimum_beneficiaries: 3
+  maximum_beneficiaries: 10
+  review_frequency: "quarterly"
+  
+# Beneficiary Categories
+categories:
+  primary:
+    description: "Core mission-aligned charitable causes"
+    allocation_percentage: 70
+    
+  emergency:
+    description: "Disaster relief and urgent humanitarian needs"
+    allocation_percentage: 20
+    
+  community:
+    description: "Community-nominated beneficiaries"
+    allocation_percentage: 10
+
+# Verified Beneficiaries
+beneficiaries:
+  # Primary Category
+  - id: "beneficiary-001"
+    name: "Electronic Frontier Foundation"
+    category: "primary"
+    status: "active"
+    mission_alignment: "Digital rights, privacy, and freedom"
+    
+    verification:
+      type: "501c3"
+      ein: "04-3091431"
+      verified_date: "2025-11-28"
+      verification_source: "IRS Tax Exempt Organization Search"
+      next_verification: "2026-11-28"
+      
+    distribution:
+      method: "bank_transfer"
+      account_verified: false  # Pending setup
+      allocation_weight: 3
+      
+    contact:
+      organization: "Electronic Frontier Foundation"
+      website: "https://www.eff.org"
+      donation_page: "https://www.eff.org/donate"
+      
+    notes: "Protects digital civil liberties, aligned with sovereignty mission"
+
+  - id: "beneficiary-002"
+    name: "Internet Archive"
+    category: "primary"
+    status: "active"
+    mission_alignment: "Universal access to knowledge, digital preservation"
+    
+    verification:
+      type: "501c3"
+      ein: "94-3242767"
+      verified_date: "2025-11-28"
+      verification_source: "IRS Tax Exempt Organization Search"
+      next_verification: "2026-11-28"
+      
+    distribution:
+      method: "bank_transfer"
+      account_verified: false  # Pending setup
+      allocation_weight: 2
+      
+    contact:
+      organization: "Internet Archive"
+      website: "https://archive.org"
+      donation_page: "https://archive.org/donate"
+      
+    notes: "Preserves digital knowledge, supports open access"
+
+  - id: "beneficiary-003"
+    name: "Free Software Foundation"
+    category: "primary"
+    status: "active"
+    mission_alignment: "Software freedom, user rights"
+    
+    verification:
+      type: "501c3"
+      ein: "04-2888848"
+      verified_date: "2025-11-28"
+      verification_source: "IRS Tax Exempt Organization Search"
+      next_verification: "2026-11-28"
+      
+    distribution:
+      method: "bank_transfer"
+      account_verified: false  # Pending setup
+      allocation_weight: 2
+      
+    contact:
+      organization: "Free Software Foundation"
+      website: "https://www.fsf.org"
+      donation_page: "https://my.fsf.org/donate"
+      
+    notes: "Promotes software freedom, aligned with open source values"
+
+  # Emergency Category
+  - id: "beneficiary-004"
+    name: "Direct Relief"
+    category: "emergency"
+    status: "active"
+    mission_alignment: "Emergency humanitarian response"
+    
+    verification:
+      type: "501c3"
+      ein: "95-1831116"
+      verified_date: "2025-11-28"
+      verification_source: "IRS Tax Exempt Organization Search"
+      next_verification: "2026-11-28"
+      
+    distribution:
+      method: "bank_transfer"
+      account_verified: false  # Pending setup
+      allocation_weight: 2
+      
+    contact:
+      organization: "Direct Relief"
+      website: "https://www.directrelief.org"
+      donation_page: "https://www.directrelief.org/donate"
+      
+    notes: "A+ rated charity for disaster and emergency response"
+
+  - id: "beneficiary-005"
+    name: "GlobalGiving Foundation"
+    category: "emergency"
+    status: "active"
+    mission_alignment: "Community-driven disaster response"
+    
+    verification:
+      type: "501c3"
+      ein: "52-2308293"
+      verified_date: "2025-11-28"
+      verification_source: "IRS Tax Exempt Organization Search"
+      next_verification: "2026-11-28"
+      
+    distribution:
+      method: "bank_transfer"
+      account_verified: false  # Pending setup
+      allocation_weight: 1
+      
+    contact:
+      organization: "GlobalGiving Foundation"
+      website: "https://www.globalgiving.org"
+      donation_page: "https://www.globalgiving.org/donate"
+      
+    notes: "Funds vetted grassroots projects worldwide"
+
+  # Community Category - Placeholder for community nominations
+  - id: "beneficiary-006"
+    name: "Community Choice - Slot 1"
+    category: "community"
+    status: "pending_nomination"
+    mission_alignment: "To be determined by community"
+    
+    verification:
+      type: "pending"
+      ein: null
+      verified_date: null
+      verification_source: null
+      next_verification: null
+      
+    distribution:
+      method: "pending"
+      account_verified: false
+      allocation_weight: 1
+      
+    contact:
+      organization: null
+      website: null
+      donation_page: null
+      
+    notes: "Reserved for community-nominated beneficiary via governance process"
+
+# Nomination Process
+nomination:
+  community_slots: 1
+  nomination_period: "quarterly"
+  
+  requirements:
+    - "501c3 status or international equivalent"
+    - "Transparent financial reporting"
+    - "Mission alignment with Strategickhaos values"
+    - "Good standing with regulatory bodies"
+    
+  process:
+    - step: 1
+      action: "Community member submits nomination"
+      deadline: "First 2 weeks of quarter"
+      
+    - step: 2
+      action: "Governance board verifies eligibility"
+      deadline: "Week 3"
+      
+    - step: 3
+      action: "Community vote on eligible nominees"
+      deadline: "Week 4"
+      
+    - step: 4
+      action: "Selected beneficiary added to manifest"
+      deadline: "First day of next quarter"
+
+  voting:
+    method: "ranked_choice"
+    quorum: "10% of active community members"
+    tie_breaker: "governance_board_decision"
+
+# Verification Protocol
+verification_protocol:
+  annual_requirements:
+    - "Confirm 501c3 status active"
+    - "Review latest Form 990"
+    - "Check charity rating services"
+    - "Verify no sanctions or legal issues"
+    
+  rating_sources:
+    - name: "Charity Navigator"
+      url: "https://www.charitynavigator.org"
+      minimum_rating: "3_stars"
+      
+    - name: "GuideStar"
+      url: "https://www.guidestar.org"
+      minimum_rating: "silver_seal"
+      
+    - name: "BBB Wise Giving Alliance"
+      url: "https://give.org"
+      minimum_rating: "meets_standards"
+
+  disqualification_triggers:
+    - "Loss of tax-exempt status"
+    - "Fraud or financial misconduct findings"
+    - "Sanctions list appearance"
+    - "Mission drift away from alignment"
+    - "Failure to provide verification documents"
+
+  removal_process:
+    authority: "governance_board"
+    notice: "30_days"
+    appeal: "allowed_within_15_days"
+    replacement: "next_eligible_from_waitlist"
+
+# Waitlist
+waitlist:
+  description: "Vetted organizations ready to replace inactive beneficiaries"
+  
+  organizations:
+    - name: "Mozilla Foundation"
+      category: "primary"
+      ein: "20-0097189"
+      reason: "Open internet advocacy"
+      
+    - name: "Wikimedia Foundation"
+      category: "primary"
+      ein: "20-0049703"
+      reason: "Free knowledge access"
+      
+    - name: "Doctors Without Borders USA"
+      category: "emergency"
+      ein: "13-3433452"
+      reason: "Global emergency medical care"
+
+# Distribution History
+distribution_history:
+  log_location: "distribution_tracker.json"
+  
+  fields:
+    - date
+    - beneficiary_id
+    - amount
+    - transaction_id
+    - verification_hash
+    
+  retention: "permanent"
+
+# Signature
+signature:
+  signer: "Domenic Garza"
+  role: "Managing Member"
+  date: "2025-11-28"
+  gpg_fingerprint: "TBD - To be signed"
+  commitment: "These beneficiaries are verified and authorized to receive 7% distributions"
