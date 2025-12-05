@@ -21,8 +21,9 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python backend frameworks
-RUN pip3 install --no-cache-dir --break-system-packages \
+# Install Python backend frameworks using virtual environment
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --no-cache-dir \
     flask \
     django \
     fastapi \
@@ -30,6 +31,8 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     sqlalchemy \
     psycopg2-binary \
     python-dotenv
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Install global Node.js packages for frontend
 RUN npm install -g \

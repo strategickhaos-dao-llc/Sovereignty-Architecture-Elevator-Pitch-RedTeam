@@ -39,14 +39,17 @@ RUN apt-get update && apt-get install -y \
     vim \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python security libraries
-RUN pip3 install --no-cache-dir --break-system-packages \
+# Install Python security libraries using virtual environment
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --no-cache-dir \
     scapy \
     requests \
     cryptography \
     pycryptodome \
     python-nmap \
     impacket
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Create workspace
 WORKDIR /workspace

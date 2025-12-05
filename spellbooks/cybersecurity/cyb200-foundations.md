@@ -20,16 +20,16 @@ By completing this spellbook, you will:
 ## 📚 Chapter 1: The CIA Triad
 
 ### Confidentiality 🔒
-```
-Definition: Ensuring information is accessible only to authorized parties
 
-Spells (Controls):
+**Definition:** Ensuring information is accessible only to authorized parties
+
+**Spells (Controls):**
 - Encryption (AES, RSA)
 - Access Control Lists (ACLs)
 - Authentication mechanisms
 - Data classification
 
-Example Incantation (Python):
+**Example Incantation (Python):**
 ```python
 from cryptography.fernet import Fernet
 
@@ -44,16 +44,16 @@ print(f"Protected: {encrypted}")
 ```
 
 ### Integrity ✅
-```
-Definition: Ensuring data has not been tampered with
 
-Spells (Controls):
+**Definition:** Ensuring data has not been tampered with
+
+**Spells (Controls):**
 - Hash functions (SHA-256, SHA-3)
 - Digital signatures
 - Version control
 - Checksums
 
-Example Incantation (Python):
+**Example Incantation (Python):**
 ```python
 import hashlib
 
@@ -69,16 +69,16 @@ print(f"Integrity seal: {integrity_hash}")
 ```
 
 ### Availability 🌐
-```
-Definition: Ensuring systems and data are accessible when needed
 
-Spells (Controls):
+**Definition:** Ensuring systems and data are accessible when needed
+
+**Spells (Controls):**
 - Redundancy
 - Load balancing
 - Backup systems
 - DDoS protection
 
-Example Architecture:
+**Example Architecture:**
 ```
 ┌─────────────┐
 │ Load Balancer│
