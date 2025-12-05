@@ -453,11 +453,22 @@ class SpellLicense:
 
 
 # Default revenue split configuration
+# These values can be overridden via environment variables:
+#   HOGWARTS_REVENUE_CREATOR_PCT (default: 60)
+#   HOGWARTS_REVENUE_PLATFORM_PCT (default: 20)
+#   HOGWARTS_REVENUE_CHARITY_PCT (default: 10)
+#   HOGWARTS_REVENUE_SCHOLARSHIP_PCT (default: 10)
+import os
+
+def _get_revenue_pct(env_var: str, default: str) -> Decimal:
+    """Get revenue percentage from environment or use default"""
+    return Decimal(os.environ.get(env_var, default))
+
 DEFAULT_REVENUE_SPLIT = {
-    RevenueRouteType.CREATOR: Decimal("60"),      # 60% to spell author
-    RevenueRouteType.PLATFORM: Decimal("20"),     # 20% to CourseQuest
-    RevenueRouteType.CHARITY: Decimal("10"),      # 10% to ValorYield
-    RevenueRouteType.SCHOLARSHIP: Decimal("10"), # 10% to scholarship pool
+    RevenueRouteType.CREATOR: _get_revenue_pct("HOGWARTS_REVENUE_CREATOR_PCT", "60"),
+    RevenueRouteType.PLATFORM: _get_revenue_pct("HOGWARTS_REVENUE_PLATFORM_PCT", "20"),
+    RevenueRouteType.CHARITY: _get_revenue_pct("HOGWARTS_REVENUE_CHARITY_PCT", "10"),
+    RevenueRouteType.SCHOLARSHIP: _get_revenue_pct("HOGWARTS_REVENUE_SCHOLARSHIP_PCT", "10"),
 }
 
 

@@ -2,22 +2,35 @@
 """
 Hogwarts Protocol Test Suite
 Unit tests for the data models and business logic
+
+Run with:
+    python -m hogwarts_protocol.test_hogwarts_protocol
+Or from the repository root:
+    python hogwarts_protocol/test_hogwarts_protocol.py
 """
 
 import hashlib
-import sys
 from datetime import datetime, timezone
 from decimal import Decimal
 import uuid
 
-# Add parent directory to path
-sys.path.insert(0, '.')
-
-from hogwarts_protocol.models import (
-    Student, Course, Assignment, Spell, CFTBalance, CFTTransaction,
-    RevenueRoute, SpellLicense, SpellStatus, CFTTransactionType, 
-    RevenueRouteType, create_default_revenue_routes, DEFAULT_REVENUE_SPLIT
-)
+# Use relative imports when run as module, absolute when run directly
+try:
+    from .models import (
+        Student, Course, Assignment, Spell, CFTBalance, CFTTransaction,
+        RevenueRoute, SpellLicense, SpellStatus, CFTTransactionType, 
+        RevenueRouteType, create_default_revenue_routes, DEFAULT_REVENUE_SPLIT
+    )
+except ImportError:
+    # Fallback for direct script execution
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from hogwarts_protocol.models import (
+        Student, Course, Assignment, Spell, CFTBalance, CFTTransaction,
+        RevenueRoute, SpellLicense, SpellStatus, CFTTransactionType, 
+        RevenueRouteType, create_default_revenue_routes, DEFAULT_REVENUE_SPLIT
+    )
 
 
 class HogwartsProtocolTests:
