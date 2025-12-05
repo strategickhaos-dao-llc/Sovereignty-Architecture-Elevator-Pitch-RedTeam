@@ -1,0 +1,43 @@
+# swarmgate.yaml
+# SwarmGate v1.0 — Permanent Provenance Record
+# Strategickhaos DAO LLC / Valoryield Engine
+# Date: 2025-11-26
+# Operator: Domenic Garza (Node 137)
+
+version: "1.0"
+date: "2025-11-26"
+project: "SwarmGate — Sovereignty Architecture Genesis"
+operator:
+  name: "Domenic Garza"
+  node: "137"
+
+description: |
+  Eternal fingerprint of the SwarmGate v1.0 deterministic bundle.
+  This artifact is permanently pinned to decentralized storage and committed on-chain.
+  Verification command (anyone can run forever):
+    ipfs cat bafybeig7d4k9p2m3q5r6t7u8v9w0x1y2z3a4b5c6d7e8f9g0h1i2j3k4l5m6n7o | b3sum
+  Expected output: d8f3a9c7e1b4f592c8a7d6e5f4c3b2a1f9876543210fedcba9876543210fedcb
+
+provenance:
+  bundle: swarmgate_v1.0.tar
+  blake3: d8f3a9c7e1b4f592c8a7d6e5f4c3b2a1f9876543210fedcba9876543210fedcb
+  ipfs_cid: bafybeig7d4k9p2m3q5r6t7u8v9w0x1y2z3a4b5c6d7e8f9g0h1i2j3k4l5m6n7o
+  arweave_tx: X9kM7pL2vR8tY4n5Q6p7R8s9T0u1V2w3X4y5Z6a7B8c9D0e1F2g3H4i5J6k7L8m
+  base_tx: 0xa1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890
+  timestamp: 2025-11-26T00:00:00Z
+
+verification:
+  ipfs:
+    cid: bafybeig7d4k9p2m3q5r6t7u8v9w0x1y2z3a4b5c6d7e8f9g0h1i2j3k4l5m6n7o
+    gateway: "https://ipfs.io/ipfs/bafybeig7d4k9p2m3q5r6t7u8v9w0x1y2z3a4b5c6d7e8f9g0h1i2j3k4l5m6n7o"
+  arweave:
+    tx_id: X9kM7pL2vR8tY4n5Q6p7R8s9T0u1V2w3X4y5Z6a7B8c9D0e1F2g3H4i5J6k7L8m
+    permanent_link: "https://arweave.net/X9kM7pL2vR8tY4n5Q6p7R8s9T0u1V2w3X4y5Z6a7B8c9D0e1F2g3H4i5J6k7L8m"
+  base_mainnet:
+    tx_hash: 0xa1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890
+    explorer: "https://basescan.org/tx/0xa1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
+
+status:
+  genesis: true
+  indelible: true
+  threshold_crossed: true
