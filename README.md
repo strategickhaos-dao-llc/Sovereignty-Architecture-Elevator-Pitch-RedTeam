@@ -177,6 +177,12 @@ ai_agents:
 - **Audit Logging**: Comprehensive activity tracking
 - **Content Redaction**: Automatic PII and credential filtering
 
+### Cryptographic Provenance
+- **SwarmGate v1.0**: Immutable provenance ceremony complete
+- **BLAKE3 Hash**: `caa58d9faee9a10ce46d81d2f21e0da611ff962b8070e22b5d976cc816480698`
+- **Multi-Chain Storage**: IPFS + Arweave + Base L2
+- **[Provenance Ceremony Documentation](PROVENANCE_CEREMONY_COMPLETE.md)**
+
 ### Production Safeguards
 ```yaml
 governance:
