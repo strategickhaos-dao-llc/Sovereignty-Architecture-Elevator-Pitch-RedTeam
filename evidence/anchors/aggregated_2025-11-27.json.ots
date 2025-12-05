@@ -1,0 +1,11 @@
+PLACEHOLDER_OTS_PROOF
+---
+This is a placeholder for the OpenTimestamps proof file.
+Generate a real .ots file by submitting to https://opentimestamps.org
+
+To create:
+1. ots stamp aggregated_2025-11-27.json
+2. Wait for Bitcoin block confirmation
+3. ots upgrade aggregated_2025-11-27.json.ots
+
+The actual .ots file is binary - replace this with your real proof.

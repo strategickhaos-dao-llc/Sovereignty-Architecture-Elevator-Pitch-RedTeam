@@ -1,0 +1,121 @@
+name: Export Proof Metadata
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      include_prs:
+        description: 'Include PR metadata export'
+        required: false
+        default: 'true'
+        type: boolean
+      include_runs:
+        description: 'Include Actions runs export'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+jobs:
+  export-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Export PR Metadata
+        if: ${{ github.event.inputs.include_prs != 'false' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "📋 Exporting PR metadata..."
+          mkdir -p evidence/exports
+          
+          # Export merged PRs
+          gh api repos/${{ github.repository }}/pulls?state=all --jq '[.[] | {number, title, state, merged_at, html_url, head: .head.sha, base: .base.ref}]' > evidence/exports/prs.json || echo "[]" > evidence/exports/prs.json
+          
+          echo "✅ Exported $(jq length evidence/exports/prs.json) PRs"
+
+      - name: Export Actions Runs
+        if: ${{ github.event.inputs.include_runs != 'false' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔄 Exporting Actions runs..."
+          
+          # Export recent workflow runs
+          gh api repos/${{ github.repository }}/actions/runs --jq '{total_count, workflow_runs: [.workflow_runs[:20] | .[] | {id, name, head_sha, conclusion, status, created_at, updated_at, html_url}]}' > evidence/exports/actions_runs.json || echo "{}" > evidence/exports/actions_runs.json
+          
+          echo "✅ Exported Actions runs metadata"
+
+      - name: Generate Status Snapshot
+        run: |
+          echo "📊 Generating status snapshot..."
+          
+          # Create timestamp
+          TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          # Generate status snapshot with current data
+          cat > evidence/exports/current_snapshot.json << EOF
+          {
+            "ts_iso": "$TS",
+            "repository": "${{ github.repository }}",
+            "ref": "${{ github.ref_name }}",
+            "sha": "${{ github.sha }}",
+            "run_id": ${{ github.run_id }},
+            "run_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "exports": {
+              "prs": "evidence/exports/prs.json",
+              "actions_runs": "evidence/exports/actions_runs.json"
+            }
+          }
+          EOF
+          
+          echo "✅ Status snapshot generated"
+
+      - name: Compute Hashes
+        run: |
+          echo "🔐 Computing file hashes..."
+          cd evidence/exports
+          
+          # Compute SHA256 hashes for all exported files
+          for f in *.json; do
+            if [ -f "$f" ]; then
+              sha256sum "$f" >> hashes.sha256
+            fi
+          done
+          
+          echo "✅ Hashes computed"
+          cat hashes.sha256
+
+      - name: Upload Proof Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-export-${{ github.run_id }}
+          path: |
+            evidence/exports/*.json
+            evidence/exports/hashes.sha256
+          retention-days: 90
+
+      - name: Summary
+        run: |
+          echo "## 📦 Proof Export Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          for f in evidence/exports/*.json evidence/exports/*.sha256; do
+            if [ -f "$f" ]; then
+              size=$(wc -c < "$f")
+              echo "| $(basename $f) | ${size} bytes |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Hashes" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat evidence/exports/hashes.sha256 >> $GITHUB_STEP_SUMMARY || echo "No hashes generated" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
