@@ -1,0 +1,222 @@
+version: '3.8'
+
+# ============================================
+# ACADEMIC DEPARTMENTS - Docker Compose
+# StrategicKhaos DAO LLC / SNHU Degree Path
+# ============================================
+
+services:
+  # ============================================
+  # PHASE 1: FOUNDATION
+  # Courses: MAT 243, IT 145, PHY 150
+  # ============================================
+  foundation-lab:
+    build:
+      context: ./departments/foundation
+      dockerfile: Dockerfile
+    container_name: academic-foundation
+    ports:
+      - "8001:8080"
+    volumes:
+      - ./spellbooks/foundation:/workspace/spellbooks:ro
+      - ./labs/foundation:/workspace/labs
+    environment:
+      - PHASE=foundation
+      - COURSES=MAT243,IT145,PHY150
+      - STUDENT=Domenic_Garza
+      - GPA_TARGET=3.7
+    networks:
+      - academic-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.foundation.rule=Host(`foundation.academic.localhost`)"
+
+  # ============================================
+  # PHASE 2: CORE PROGRAMMING
+  # Courses: CS 210, CS 230, CS 250, CS 340
+  # ============================================
+  core-programming-lab:
+    build:
+      context: ./departments/core-programming
+      dockerfile: Dockerfile
+    container_name: academic-core-programming
+    ports:
+      - "8002:8080"
+    volumes:
+      - ./spellbooks/cs-core:/workspace/spellbooks:ro
+      - ./labs/programming:/workspace/labs
+    environment:
+      - PHASE=core
+      - COURSES=CS210,CS230,CS250,CS340
+      - JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+    networks:
+      - academic-network
+    depends_on:
+      - foundation-lab
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.core.rule=Host(`core.academic.localhost`)"
+
+  # ============================================
+  # PHASE 3: CYBERSECURITY
+  # Courses: CYB 200-320
+  # ============================================
+  cybersecurity-lab:
+    build:
+      context: ./departments/cybersecurity
+      dockerfile: Dockerfile
+    container_name: academic-cybersecurity
+    ports:
+      - "8003:8080"
+    volumes:
+      - ./spellbooks/cybersecurity:/workspace/spellbooks:ro
+      - ./labs/security:/workspace/labs
+    environment:
+      - PHASE=security
+      - COURSES=CYB200,CYB210,CYB220,CYB240,CYB300,CYB320
+      - SECURITY_MODE=learning
+    networks:
+      - academic-network
+    cap_add:
+      - NET_ADMIN  # Required for network security tools
+    depends_on:
+      - core-programming-lab
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.security.rule=Host(`security.academic.localhost`)"
+
+  # ============================================
+  # PHASE 4: SOFTWARE ENGINEERING
+  # Courses: CS 319, CS 350, CS 405, CS 410
+  # ============================================
+  software-engineering-lab:
+    build:
+      context: ./departments/software-engineering
+      dockerfile: Dockerfile
+    container_name: academic-software-engineering
+    ports:
+      - "8004:8080"
+    volumes:
+      - ./spellbooks/software-engineering:/workspace/spellbooks:ro
+      - ./labs/engineering:/workspace/labs
+    environment:
+      - PHASE=engineering
+      - COURSES=CS319,CS350,CS405,CS410
+      - IDE_PORT=8443
+    networks:
+      - academic-network
+    depends_on:
+      - core-programming-lab
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.engineering.rule=Host(`engineering.academic.localhost`)"
+
+  # ============================================
+  # PHASE 5: INTEGRATION & FULL-STACK
+  # Course: CS 465
+  # ============================================
+  fullstack-lab:
+    build:
+      context: ./departments/fullstack
+      dockerfile: Dockerfile
+    container_name: academic-fullstack
+    ports:
+      - "8005:8080"
+      - "3000:3000"  # Frontend dev server
+      - "5000:5000"  # Backend API
+    volumes:
+      - ./spellbooks/fullstack:/workspace/spellbooks:ro
+      - ./labs/fullstack:/workspace/labs
+    environment:
+      - PHASE=fullstack
+      - COURSES=CS465
+      - NODE_ENV=development
+    networks:
+      - academic-network
+    depends_on:
+      - software-engineering-lab
+      - cybersecurity-lab
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fullstack.rule=Host(`fullstack.academic.localhost`)"
+
+  # ============================================
+  # PHASE 6: CAPSTONE
+  # Course: CS 499
+  # ============================================
+  capstone-lab:
+    build:
+      context: ./departments/capstone
+      dockerfile: Dockerfile
+    container_name: academic-capstone
+    ports:
+      - "8006:8080"
+    volumes:
+      - ./spellbooks/capstone:/workspace/spellbooks:ro
+      - ./labs/capstone:/workspace/labs
+      # Mount all previous work for integration
+      - ./labs:/workspace/all-labs:ro
+    environment:
+      - PHASE=capstone
+      - COURSES=CS499
+      - PROJECT=sovereignty-architecture
+    networks:
+      - academic-network
+    depends_on:
+      - foundation-lab
+      - core-programming-lab
+      - cybersecurity-lab
+      - software-engineering-lab
+      - fullstack-lab
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.capstone.rule=Host(`capstone.academic.localhost`)"
+
+  # ============================================
+  # SUPPORTING SERVICES
+  # ============================================
+  
+  # Spellbook Server - Serves all documentation
+  spellbook-server:
+    image: nginx:alpine
+    container_name: academic-spellbooks
+    ports:
+      - "8080:80"
+    volumes:
+      - ./spellbooks:/usr/share/nginx/html:ro
+    networks:
+      - academic-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.spellbooks.rule=Host(`spellbooks.academic.localhost`)"
+
+  # Progress Tracker Database
+  progress-tracker:
+    image: postgres:15-alpine
+    container_name: academic-progress-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=academic_progress
+      - POSTGRES_USER=student
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mastery_secret}
+    volumes:
+      - progress-data:/var/lib/postgresql/data
+      - ./scripts/init-progress-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - academic-network
+
+# ============================================
+# NETWORKS
+# ============================================
+networks:
+  academic-network:
+    driver: bridge
+    name: academic-departments
+
+# ============================================
+# VOLUMES
+# ============================================
+volumes:
+  progress-data:
+    name: academic-progress-data
