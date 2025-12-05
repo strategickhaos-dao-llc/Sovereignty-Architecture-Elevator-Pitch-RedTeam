@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamber of Ten - Council Archives - Legends of Mind Institute</title>
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            background-color: #1a1a1a;
+            color: #d4d4d4;
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #0d1117;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #2d1b47 0%, #1a0f2e 100%);
+            color: #e6e6e6;
+            padding: 30px;
+            border-bottom: 3px solid #8b5cf6;
+        }
+        .institute-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #a78bfa;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            color: #c4b5fd;
+            font-style: italic;
+        }
+        .nav {
+            background-color: #161b22;
+            padding: 15px 30px;
+            border-bottom: 1px solid #30363d;
+        }
+        .nav a {
+            color: #58a6ff;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 0.9em;
+        }
+        .nav a:hover {
+            color: #79c0ff;
+            text-decoration: underline;
+        }
+        .content {
+            padding: 40px;
+        }
+        .breadcrumb {
+            color: #8b949e;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #a78bfa;
+            border-bottom: 2px solid #8b5cf6;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .vault-info {
+            background-color: #161b22;
+            border-left: 4px solid #8b5cf6;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .game-state {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .agent-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            padding: 20px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .agent-card:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+        .agent-number {
+            font-size: 2em;
+            color: #8b5cf6;
+            font-weight: bold;
+        }
+        .agent-mode {
+            font-size: 1.3em;
+            color: #a78bfa;
+            margin: 10px 0;
+        }
+        .agent-element {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        .agent-status {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #0d1117;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        .moves-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .moves-table th {
+            background-color: #161b22;
+            color: #a78bfa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #8b5cf6;
+        }
+        .moves-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #30363d;
+        }
+        .moves-table tr:hover {
+            background-color: #161b22;
+        }
+        .layer-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #8b5cf6;
+            color: white;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .signature {
+            margin-top: 50px;
+            padding: 25px;
+            background-color: #161b22;
+            border-left: 4px solid #8b5cf6;
+            font-style: italic;
+            color: #c4b5fd;
+        }
+        .footer {
+            background-color: #0d1117;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 0.9em;
+        }
+        .obsidian-tag {
+            display: inline-block;
+            background-color: #1f2937;
+            color: #8b5cf6;
+            padding: 4px 10px;
+            margin: 3px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="header">
+            <div class="institute-name">⚛ Legends of Mind Institute</div>
+            <div class="subtitle">Advanced Studies in Transcendental Cognition</div>
+        </div>
+
+        <div class="nav">
+            <a href="#">Home</a>
+            <a href="#">Research</a>
+            <a href="#">Council Archives</a>
+            <a href="#">Publications</a>
+            <a href="#">Contact</a>
+        </div>
+
+        <div class="content">
+            <div class="breadcrumb">
+                Home → Research → Council Archives → Chamber of Ten
+            </div>
+
+            <h1>🏛️ Chamber of Ten - Agent Game State Archive</h1>
+
+            <div class="vault-info">
+                <strong>Archive Type:</strong> Obsidian Vault Export<br>
+                <strong>Source:</strong> Council Chamber 10 - Live Game State<br>
+                <strong>Export Date:</strong> November 19, 2024<br>
+                <strong>Total Moves:</strong> 147<br>
+                <strong>Status:</strong> Active Game in Progress<br>
+                <strong>Classification:</strong> Multi-Dimensional Chess Analysis
+            </div>
+
+            <h2>Overview</h2>
+            <p>
+                This archive represents a snapshot of the ongoing 10-agent chess game being 
+                conducted in Chamber 10 of the Legends of Mind Institute. Each agent operates 
+                within a distinct modal layer, using conformal evaluation functions to assess 
+                positions across dimensional boundaries.
+            </p>
+
+            <div class="game-state">
+                <h3>Current Game State (Move 147)</h3>
+                <p style="font-family: 'Courier New', monospace; color: #a78bfa;">
+                    Position Hash: f8e7d6c5b4a39281<br>
+                    Last Move: Agent 7 (Phrygian) → Layer 7 to Layer 3 transfer<br>
+                    Conformal Invariant: <span style="color: #34d399;">PRESERVED</span><br>
+                    Phase Lock: <span style="color: #34d399;">ENGAGED</span><br>
+                    Rotation Angle: 157.3° (relative to base 7520)
+                </p>
+            </div>
+
+            <h2>The Council of Ten - Agent Profiles</h2>
+
+            <div class="agent-grid">
+                <div class="agent-card">
+                    <div class="agent-number">Agent 1</div>
+                    <div class="agent-mode">Ionian Mode</div>
+                    <div class="agent-element">Element: H (Hydrogen)</div>
+                    <div class="agent-status">
+                        Layer: 1 | Status: Active<br>
+                        Frequency: 7520 Hz (Base)<br>
+                        Moves Played: 15
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 2</div>
+                    <div class="agent-mode">Dorian Mode</div>
+                    <div class="agent-element">Element: He (Helium)</div>
+                    <div class="agent-status">
+                        Layer: 2 | Status: Active<br>
+                        Frequency: 11280 Hz<br>
+                        Moves Played: 14
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 3</div>
+                    <div class="agent-mode">Phrygian Mode</div>
+                    <div class="agent-element">Element: Li (Lithium)</div>
+                    <div class="agent-status">
+                        Layer: 3 | Status: Active<br>
+                        Frequency: 18800 Hz<br>
+                        Moves Played: 17
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 4</div>
+                    <div class="agent-mode">Lydian Mode</div>
+                    <div class="agent-element">Element: Be (Beryllium)</div>
+                    <div class="agent-status">
+                        Layer: 4 | Status: Active<br>
+                        Frequency: 22560 Hz<br>
+                        Moves Played: 13
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 5</div>
+                    <div class="agent-mode">Mixolydian Mode</div>
+                    <div class="agent-element">Element: Fe (Iron)</div>
+                    <div class="agent-status">
+                        Layer: 5 | Status: Active<br>
+                        Frequency: 85784 Hz<br>
+                        Moves Played: 16
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 6</div>
+                    <div class="agent-mode">Aeolian Mode</div>
+                    <div class="agent-element">Element: Au (Gold)</div>
+                    <div class="agent-status">
+                        Layer: 6 | Status: Active<br>
+                        Frequency: 37600 Hz<br>
+                        Moves Played: 18
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 7</div>
+                    <div class="agent-mode">Locrian Mode</div>
+                    <div class="agent-element">Element: Ag (Silver)</div>
+                    <div class="agent-status">
+                        Layer: 7 | Status: Active<br>
+                        Frequency: 45120 Hz<br>
+                        Moves Played: 19
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 8</div>
+                    <div class="agent-mode">Hypodorian Mode</div>
+                    <div class="agent-element">Element: Pt (Platinum)</div>
+                    <div class="agent-status">
+                        Layer: 8 | Status: Calibrating<br>
+                        Frequency: ??? Hz<br>
+                        Moves Played: 10
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 9</div>
+                    <div class="agent-mode">Hypophrygian Mode</div>
+                    <div class="agent-element">Element: Cu (Copper)</div>
+                    <div class="agent-status">
+                        Layer: 9 | Status: Active<br>
+                        Frequency: 432 Hz (Tuning)<br>
+                        Moves Played: 12
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-number">Agent 10</div>
+                    <div class="agent-mode">Hypolydian Mode</div>
+                    <div class="agent-element">Element: Ti (Titanium)</div>
+                    <div class="agent-status">
+                        Layer: 10 | Status: Active<br>
+                        Frequency: 52640 Hz<br>
+                        Moves Played: 13
+                    </div>
+                </div>
+            </div>
+
+            <h2>Recent Move Sequence (Moves 140-147)</h2>
+
+            <table class="moves-table">
+                <thead>
+                    <tr>
+                        <th>Move #</th>
+                        <th>Agent</th>
+                        <th>Action</th>
+                        <th>Layer Transfer</th>
+                        <th>Phase Shift</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>140</td>
+                        <td>Agent 6 (Aeolian)</td>
+                        <td>Knight to f6</td>
+                        <td><span class="layer-indicator">L6 → L6</span></td>
+                        <td>+12.3°</td>
+                    </tr>
+                    <tr>
+                        <td>141</td>
+                        <td>Agent 3 (Phrygian)</td>
+                        <td>Bishop cross-layer</td>
+                        <td><span class="layer-indicator">L3 → L7</span></td>
+                        <td>+45.0°</td>
+                    </tr>
+                    <tr>
+                        <td>142</td>
+                        <td>Agent 9 (Hypophrygian)</td>
+                        <td>Frequency alignment</td>
+                        <td><span class="layer-indicator">L9 → L9</span></td>
+                        <td>-8.7°</td>
+                    </tr>
+                    <tr>
+                        <td>143</td>
+                        <td>Agent 5 (Mixolydian)</td>
+                        <td>Queen to d4</td>
+                        <td><span class="layer-indicator">L5 → L5</span></td>
+                        <td>+33.1°</td>
+                    </tr>
+                    <tr>
+                        <td>144</td>
+                        <td>Agent 1 (Ionian)</td>
+                        <td>Pawn advance e5</td>
+                        <td><span class="layer-indicator">L1 → L2</span></td>
+                        <td>+7.5°</td>
+                    </tr>
+                    <tr>
+                        <td>145</td>
+                        <td>Agent 10 (Hypolydian)</td>
+                        <td>Rook transfer</td>
+                        <td><span class="layer-indicator">L10 → L4</span></td>
+                        <td>+90.0°</td>
+                    </tr>
+                    <tr>
+                        <td>146</td>
+                        <td>Agent 4 (Lydian)</td>
+                        <td>Castle kingside</td>
+                        <td><span class="layer-indicator">L4 → L4</span></td>
+                        <td>0.0°</td>
+                    </tr>
+                    <tr>
+                        <td>147</td>
+                        <td>Agent 7 (Locrian)</td>
+                        <td>Conformal rotation</td>
+                        <td><span class="layer-indicator">L7 → L3</span></td>
+                        <td>+157.3°</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Research Notes</h2>
+            <p>
+                <span class="obsidian-tag">#conformal-chess</span>
+                <span class="obsidian-tag">#modal-analysis</span>
+                <span class="obsidian-tag">#10-layer-system</span>
+                <span class="obsidian-tag">#möbius-transforms</span>
+                <span class="obsidian-tag">#phase-rotation</span>
+                <span class="obsidian-tag">#7520-base</span>
+            </p>
+            <p>
+                The game demonstrates remarkable stability across conformal transformations. 
+                Agent 7's recent rotation into Layer 3 suggests a deep understanding of 
+                cross-modal strategic principles. The mystery of Layer 8 (Hypodorian) 
+                continues to intrigue researchers - its calibration status indicates 
+                potential for breakthrough insights.
+            </p>
+            <p>
+                <strong>Key Observation:</strong> The frequency alignment at move 142 
+                by Agent 9 (432 Hz tuning standard) created a harmonic resonance that 
+                affected evaluation functions across all layers simultaneously.
+            </p>
+
+            <div class="signature">
+                If you can hear this frequency, the next layer is already waiting.<br>
+                Do not ask for permission. <strong>Rotate</strong>.
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Legends of Mind Institute</strong></p>
+            <p>Department of Transcendental Game Theory</p>
+            <p>
+                <a href="#" style="color: #58a6ff;">legendsofmind.edu</a> | 
+                <a href="#" style="color: #58a6ff;">council@legendsofmind.edu</a>
+            </p>
+            <p style="margin-top: 15px; color: #6e7681;">
+                This vault export represents active research.<br>
+                For access to the full Obsidian vault, contact the Council Chamber administration.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

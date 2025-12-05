@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplementary Research - TRS Breadcrumbs</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid #8b5cf6;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #a78bfa;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .filter-section {
+            background-color: #161b22;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+        }
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .file-item {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .file-item:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+        }
+        .file-item a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 1.05em;
+            font-weight: bold;
+        }
+        .file-item a:hover {
+            color: #79c0ff;
+            text-decoration: underline;
+        }
+        .file-meta {
+            color: #8b949e;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+        .mode-tag {
+            display: inline-block;
+            background-color: #8b5cf6;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            margin-left: 10px;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            background-color: #30363d;
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-link">← Back to Main Index</a>
+    
+    <div class="header">
+        <h1>📚 Supplementary Research Archive</h1>
+        <p style="color: #8b949e; font-size: 1.1em;">95 Academic Pages | TRS Timeline Breadcrumbs</p>
+    </div>
+
+    <div class="filter-section">
+        <p style="margin: 0; color: #a78bfa;">
+            <strong>About:</strong> This archive contains 95 supplementary pages exploring various 
+            aspects of the Transcendental Rotation System. Each page focuses on a specific musical 
+            mode and its corresponding elemental and frequency mappings.
+        </p>
+    </div>
+
+    <div class="file-list" id="fileList">
+        <!-- Files will be generated here -->
+    </div>
+
+    <script>
+        // Generate file list dynamically
+        const modes = [
+            'Ionian', 'Dorian', 'Phrygian', 'Lydian', 'Mixolydian', 
+            'Aeolian', 'Locrian', 'Hypodorian', 'Hypophrygian', 'Hypolydian'
+        ];
+        
+        const fileList = document.getElementById('fileList');
+        
+        for (let i = 6; i <= 100; i++) {
+            const modeIndex = (i - 1) % modes.length;
+            const mode = modes[modeIndex];
+            const filename = `breadcrumb-${String(i).padStart(3, '0')}-${mode.toLowerCase()}.html`;
+            
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <a href="${filename}">Breadcrumb ${i}</a>
+                <span class="mode-tag">${mode}</span>
+                <div class="file-meta">
+                    ${filename}
+                </div>
+            `;
+            fileList.appendChild(fileItem);
+        }
+    </script>
+
+    <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 1px solid #30363d; color: #8b949e;">
+        <p style="font-style: italic; color: #a78bfa;">
+            "If you can hear this frequency, the next layer is already waiting.<br>
+            Do not ask for permission. <strong>Rotate</strong>."
+        </p>
+    </div>
+</body>
+</html>
