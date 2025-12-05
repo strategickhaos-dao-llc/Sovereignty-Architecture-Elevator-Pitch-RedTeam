@@ -35,3 +35,16 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
