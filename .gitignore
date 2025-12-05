@@ -35,3 +35,18 @@ target/
 
 # Workspace data
 workspace/
+
+# Hardhat
+cache/
+artifacts/
+typechain-types/
+coverage/
+coverage.json
+
+# Deployment artifacts
+deployment-*.json
+merkle-root.json
+
+# Environment
+.env
+!.env.example
