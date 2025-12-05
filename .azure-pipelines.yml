@@ -41,17 +41,20 @@ stages:
                 echo "🔍 Scanning for secrets in configuration files..."
                 SECRET_PATTERNS="(password|secret|api_key|apikey|token|credential|private_key)"
                 
+                # Known safe placeholder patterns (exact matches for values, not prefixes)
+                SAFE_PLACEHOLDERS="(example\.com|placeholder|CHANGE_ME|TODO|your_.*_here|<.*>|\$\{.*\})"
+                
                 # Scan YAML and JSON files
-                FOUND_SECRETS=0
+                FILES_WITH_SECRETS=0
                 for file in $(find . -name "*.yml" -o -name "*.yaml" -o -name "*.json" | grep -v node_modules | grep -v .git); do
-                  if grep -iE "$SECRET_PATTERNS" "$file" | grep -vE "(example|placeholder|your-|CHANGE_ME|TODO)" > /dev/null 2>&1; then
+                  if grep -iE "$SECRET_PATTERNS" "$file" | grep -vE "$SAFE_PLACEHOLDERS" > /dev/null 2>&1; then
                     echo "⚠️ Potential secret found in: $file"
-                    FOUND_SECRETS=$((FOUND_SECRETS + 1))
+                    FILES_WITH_SECRETS=$((FILES_WITH_SECRETS + 1))
                   fi
                 done
                 
-                if [ $FOUND_SECRETS -gt 0 ]; then
-                  echo "##vso[task.logissue type=warning]Found $FOUND_SECRETS files with potential secrets"
+                if [ $FILES_WITH_SECRETS -gt 0 ]; then
+                  echo "##vso[task.logissue type=warning]Found potential secrets in $FILES_WITH_SECRETS file(s)"
                 else
                   echo "✅ No hardcoded secrets detected"
                 fi
@@ -60,7 +63,7 @@ stages:
                 echo "Secret Scan Results" > $(Build.ArtifactStagingDirectory)/secret-scan.txt
                 echo "==================" >> $(Build.ArtifactStagingDirectory)/secret-scan.txt
                 echo "Files scanned: $(find . -name "*.yml" -o -name "*.yaml" -o -name "*.json" | grep -v node_modules | grep -v .git | wc -l)" >> $(Build.ArtifactStagingDirectory)/secret-scan.txt
-                echo "Potential issues: $FOUND_SECRETS" >> $(Build.ArtifactStagingDirectory)/secret-scan.txt
+                echo "Files with potential issues: $FILES_WITH_SECRETS" >> $(Build.ArtifactStagingDirectory)/secret-scan.txt
                 echo "Scan completed: $(date -u)" >> $(Build.ArtifactStagingDirectory)/secret-scan.txt
 
           - task: Bash@3
@@ -101,9 +104,24 @@ stages:
                 # Check for package.json (Node.js)
                 if [ -f "package.json" ]; then
                   echo "Node.js project detected" >> $(Build.ArtifactStagingDirectory)/dependency-audit.txt
-                  npm install --package-lock-only 2>/dev/null || true
-                  npm audit --json > $(Build.ArtifactStagingDirectory)/npm-audit.json 2>&1 || true
-                  echo "✅ npm audit completed"
+                  
+                  # Generate package-lock.json if missing
+                  if ! npm install --package-lock-only 2>>$(Build.ArtifactStagingDirectory)/dependency-audit.txt; then
+                    echo "⚠️ npm install failed - check package.json" >> $(Build.ArtifactStagingDirectory)/dependency-audit.txt
+                  fi
+                  
+                  # Run npm audit and capture exit code
+                  AUDIT_EXIT_CODE=0
+                  npm audit --json > $(Build.ArtifactStagingDirectory)/npm-audit.json 2>&1 || AUDIT_EXIT_CODE=$?
+                  
+                  if [ $AUDIT_EXIT_CODE -eq 0 ]; then
+                    echo "✅ npm audit completed - no vulnerabilities found"
+                    echo "No vulnerabilities found" >> $(Build.ArtifactStagingDirectory)/dependency-audit.txt
+                  else
+                    echo "⚠️ npm audit found issues (exit code: $AUDIT_EXIT_CODE)"
+                    echo "##vso[task.logissue type=warning]npm audit found vulnerabilities - see npm-audit.json artifact"
+                    echo "Vulnerabilities detected - see npm-audit.json for details" >> $(Build.ArtifactStagingDirectory)/dependency-audit.txt
+                  fi
                 fi
                 
                 # Check for requirements.txt (Python)
