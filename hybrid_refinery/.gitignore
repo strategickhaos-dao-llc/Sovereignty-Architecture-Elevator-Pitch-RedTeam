@@ -1,0 +1,11 @@
+# Generated log files and reports - not tracked in git
+logs/
+reports/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env

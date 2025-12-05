@@ -1,0 +1,204 @@
+# Strategickhaos Hybrid Refinery - Stock Screening Configuration
+# Screening criteria for dividend-growth hybrid portfolio
+# Last Updated: November 27, 2025
+
+screening_criteria:
+  # Primary filters
+  primary:
+    min_market_cap: 10000000000  # $10B minimum
+    min_dividend_yield: 2.0
+    max_payout_ratio: 80.0
+    min_dividend_years: 10
+    exclude_sectors:
+      - "Speculative"
+      - "Penny Stocks"
+      
+  # Quality metrics
+  quality:
+    min_roe: 10.0  # Return on Equity
+    min_current_ratio: 1.0
+    max_debt_to_equity: 2.0
+    credit_rating_min: "BBB"
+    
+  # Growth metrics
+  growth:
+    min_dividend_growth_5yr: 3.0
+    min_earnings_growth_5yr: 0.0
+    positive_free_cash_flow: true
+    
+  # Valuation screens
+  valuation:
+    max_pe_ratio: 30.0
+    max_price_to_book: 10.0
+    prefer_undervalued: true
+    
+current_holdings:
+  # Financials (14% target)
+  JPM:
+    name: "JPMorgan Chase"
+    sector: "Financials"
+    target_weight: 7.0
+    shares: 0.1555
+    cost_basis: 36.40
+    div_yield: 2.2
+    aristocrat: false
+    years_dividend_growth: 13
+    
+  CB:
+    name: "Chubb Limited"
+    sector: "Financials"
+    target_weight: 7.01
+    shares: 0.1238
+    cost_basis: 36.40
+    div_yield: 1.4
+    aristocrat: false
+    years_dividend_growth: 30
+    
+  TD:
+    name: "Toronto-Dominion Bank"
+    sector: "Financials"
+    target_weight: 7.0
+    shares: 0.617
+    cost_basis: 36.40
+    div_yield: 5.1
+    aristocrat: false
+    years_dividend_growth: 12
+
+  # Consumer Staples (21% target)
+  PG:
+    name: "Procter & Gamble"
+    sector: "Consumer Staples"
+    target_weight: 8.0
+    shares: 0.244
+    cost_basis: 41.60
+    div_yield: 2.4
+    aristocrat: true
+    years_dividend_growth: 68
+
+  KO:
+    name: "Coca-Cola"
+    sector: "Consumer Staples"
+    target_weight: 8.0
+    shares: 0.592
+    cost_basis: 41.60
+    div_yield: 2.9
+    aristocrat: true
+    years_dividend_growth: 62
+
+  PEP:
+    name: "PepsiCo"
+    sector: "Consumer Staples"
+    target_weight: 7.0
+    shares: 0.206
+    cost_basis: 36.40
+    div_yield: 2.8
+    aristocrat: true
+    years_dividend_growth: 52
+
+  CL:
+    name: "Colgate-Palmolive"
+    sector: "Consumer Staples"
+    target_weight: 6.0
+    shares: 0.305
+    cost_basis: 31.20
+    div_yield: 2.2
+    aristocrat: true
+    years_dividend_growth: 61
+
+  # Utilities (14% target)
+  NEE:
+    name: "NextEra Energy"
+    sector: "Utilities"
+    target_weight: 7.0
+    shares: 0.428
+    cost_basis: 36.40
+    div_yield: 2.6
+    aristocrat: false
+    years_dividend_growth: 29
+
+  WEC:
+    name: "WEC Energy Group"
+    sector: "Utilities"
+    target_weight: 7.0
+    shares: 0.387
+    cost_basis: 36.40
+    div_yield: 3.7
+    aristocrat: false
+    years_dividend_growth: 21
+
+  # Real Estate / REITs (20% target)
+  O:
+    name: "Realty Income"
+    sector: "Real Estate"
+    target_weight: 8.01
+    shares: 0.676
+    cost_basis: 41.60
+    div_yield: 5.1
+    aristocrat: true
+    years_dividend_growth: 29
+
+  VICI:
+    name: "VICI Properties"
+    sector: "Real Estate"
+    target_weight: 7.01
+    shares: 1.112
+    cost_basis: 36.40
+    div_yield: 5.4
+    aristocrat: false
+    years_dividend_growth: 6
+
+  PLD:
+    name: "Prologis"
+    sector: "Real Estate"
+    target_weight: 5.99
+    shares: 0.267
+    cost_basis: 31.20
+    div_yield: 3.0
+    aristocrat: false
+    years_dividend_growth: 10
+
+  # Healthcare (15% target)
+  ABBV:
+    name: "AbbVie"
+    sector: "Healthcare"
+    target_weight: 7.0
+    shares: 0.185
+    cost_basis: 36.40
+    div_yield: 3.7
+    aristocrat: true
+    years_dividend_growth: 52
+
+  JNJ:
+    name: "Johnson & Johnson"
+    sector: "Healthcare"
+    target_weight: 8.0
+    shares: 0.255
+    cost_basis: 41.60
+    div_yield: 3.0
+    aristocrat: true
+    years_dividend_growth: 62
+
+  # Energy (6% target)
+  XOM:
+    name: "Exxon Mobil"
+    sector: "Energy"
+    target_weight: 6.0
+    shares: 0.255
+    cost_basis: 31.20
+    div_yield: 3.3
+    aristocrat: false
+    years_dividend_growth: 42
+
+watchlist:
+  # Stocks to consider for future additions
+  candidates:
+    - ticker: "MMM"
+      reason: "Dividend King, 65+ years growth"
+    - ticker: "LOW"
+      reason: "Home improvement leader, dividend aristocrat"
+    - ticker: "ITW"
+      reason: "Industrial dividend aristocrat"
+    - ticker: "SYY"
+      reason: "Food distribution dividend aristocrat"
+    - ticker: "AFL"
+      reason: "Insurance dividend aristocrat"
