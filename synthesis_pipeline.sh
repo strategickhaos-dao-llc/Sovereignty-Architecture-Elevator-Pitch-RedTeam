@@ -201,6 +201,12 @@ stage_notarization() {
     local synth_hash=$(sha256sum "$SYNTHESIZED_FILE" | cut -d' ' -f1)
     local dao_hash=$(sha256sum "$DAO_RECORD" | cut -d' ' -f1)
     
+    # Determine statuses
+    local ipfs_status="not_available"
+    local ots_status="not_available"
+    [[ "$SKIP_IPFS" == "true" ]] && ipfs_status="skipped"
+    [[ "$SKIP_OTS" == "true" ]] && ots_status="skipped"
+    
     # Create manifest
     cat > "$notary_manifest" << EOF
 {
@@ -228,10 +234,10 @@ stage_notarization() {
     "entity_number": "2025-001708194"
   },
   "ipfs": {
-    "status": "${SKIP_IPFS:-false}" == "true" && echo "skipped" || echo "not_available"
+    "status": "$ipfs_status"
   },
   "opentimestamps": {
-    "status": "${SKIP_OTS:-false}" == "true" && echo "skipped" || echo "not_available"
+    "status": "$ots_status"
   }
 }
 EOF
