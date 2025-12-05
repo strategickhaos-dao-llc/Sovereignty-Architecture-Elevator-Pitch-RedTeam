@@ -14,7 +14,7 @@ Version 3.0 - Attorney Review Edition
 
 **Declarant:** Domenic G. Garza
 
-**Entities:** StrategicKhaos DAO LLC (WY 2025-001708194) | ValorValor Engine 501(c)(3) (EIN 39-2923503)
+**Entities:** StrategicKhaos DAO LLC (WY 2025-001708194) | ValorYield Engine 501(c)(3) (EIN 39-2923503)
 
 **Core Achievement:** I've built a fully operational, self-hosted AI research and automation infrastructure that:
 
@@ -236,7 +236,7 @@ I declare the creation of a novel software system formally designated "Strategic
 - **Original Architecture:** Novel combination of dialectical philosophy with software automation
 - **Unique Algorithms:** Semantic analogy matching, contradiction resolution, confidence scoring
 - **Patent Consideration:** Added QuantumEvoTokenizer (QET) integration for pattern discovery
-- **Prompt Engineering Framework:** Systematic credit and credit to multi-model coordination
+- **Prompt Engineering Framework:** Systematic approach to multi-model coordination
 - **Analogy Database:** 100+ mappings, now including trading patterns and financial analogies
 
 ##### c) Implementation Details

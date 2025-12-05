@@ -74,6 +74,12 @@ The StrategicKhaos DAO LLC Board provides governance oversight for all DAO opera
 - Incident response and resolution
 - Capacity planning and scaling
 
+**Service Level Targets:**
+- Uptime: 99.9% for critical services
+- Incident Response: < 15 minutes for P1, < 1 hour for P2
+- Deployment Frequency: Daily for patches, weekly for features
+- Security Scan: Continuous with 24-hour remediation SLA for critical
+
 **Sub-Teams:**
 
 | Team | Lead AI | Responsibilities |
@@ -207,7 +213,14 @@ The StrategicKhaos DAO LLC Board provides governance oversight for all DAO opera
 | $1,000 - $10,000 | Managing Member + AI verification | Same day |
 | $10,000 - $50,000 | Managing Member + SwarmGate gate | 24-hour review |
 | > $50,000 | Board consensus required | Multi-day deliberation |
-| Emergency | Managing Member or Node 137 | Post-hoc documentation |
+| Emergency | Managing Member or Node 137 | Post-hoc documentation (see below) |
+
+**Emergency Procedures:**
+- **Definition:** Security breach, critical system failure, regulatory deadline, or imminent financial loss
+- **Notification:** Immediate Discord/Slack alert to Board + 24-hour email summary
+- **Authority:** Managing Member or designated Node 137 (TWIC-cleared backup)
+- **Documentation:** Written incident report within 72 hours
+- **Review:** Board review at next scheduled meeting
 
 ### B. Technical Decisions
 
