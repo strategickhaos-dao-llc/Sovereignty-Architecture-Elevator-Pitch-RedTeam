@@ -158,6 +158,18 @@ event_gateway:
     - path: "/alert"
       allowed_services: ["alertmanager"]
       discord_channel: "#alerts"
+    - path: "/azure-pipeline"
+      allowed_services: ["azure-devops"]
+      discord_channel: "#deployments"
+      template: |
+        🚨 **Pipeline {{event}}**
+        Repo: {{repo}}
+        Pipeline: {{pipeline}}
+        Commit: {{commit}}
+        {{#if error}}Error: {{error}}{{/if}}
+        [View Logs]({{logs_url}})
+        
+        React with ✅ to retry, 🤖 for AI diagnosis
     - path: "/git"
       verify: "github_app"  # uses webhook_secret_ref
       routes:
@@ -205,6 +217,34 @@ commands:
           type: "string"
         - name: "replicas"
           type: "int"
+    # New DevOps Control Plane commands
+    - name: "diagnose"
+      description: "AI-powered diagnosis of pipeline failures"
+      params:
+        - name: "pipeline"
+          type: "string"
+          required: true
+        - name: "run_id"
+          type: "string"
+          required: false
+    - name: "fix"
+      description: "Run automated remediation for security issues"
+      protected: true
+      params:
+        - name: "issue"
+          type: "string"
+          enum: ["rbac","nsg","policy","headers","secrets","all"]
+          required: true
+    - name: "retry"
+      description: "Retry a failed pipeline"
+      protected: true
+      params:
+        - name: "pipeline"
+          type: "string"
+          required: true
+        - name: "run_id"
+          type: "string"
+          required: false
     - name: "request"
       description: "Create Refinory architecture request"
       params:
