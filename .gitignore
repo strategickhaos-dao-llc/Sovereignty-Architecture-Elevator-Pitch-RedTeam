@@ -35,3 +35,20 @@ target/
 
 # Workspace data
 workspace/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Sovereign bootstrap generated files
+sovereign_bootstrap_state.json
+sovereignty_manifest.json
+cognitive_state.json
+logs/
+state/
+checkpoints/
+alignment_alert_*.json
+uidp_pending_tx_*.json
+cognitive_leaps.log
+sleep_mode.log
