@@ -25,6 +25,8 @@ data:
         agents: "#agents"
         prs: "#prs"
         dev_feed: "#dev-feed"
+        financial: "#financial"
+        treasury: "#treasury"
       bot:
         app_id: null
         token_secret_ref: "vault://kv/discord/bot_token"
@@ -39,12 +41,22 @@ data:
             - "/deploy"
             - "/scale"
             - "/review"
+            - "/portfolio"
+            - "/deposit"
+            - "/rebalance"
           prod_protected_commands:
             - "/deploy"
             - "/scale"
         rate_limits:
           max_msgs_per_min: 30
           burst: 10
+    
+    treasury:
+      accounts_config: "/config/accounts.yaml"
+      api_endpoint: "http://valoryield-api:8080"
+      swarmgate:
+        allocation_percent: 0.07
+        trigger_channel: "#financial"
     
     infra:
       environments: ["dev", "staging", "prod"]

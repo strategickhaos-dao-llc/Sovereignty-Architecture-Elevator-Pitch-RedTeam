@@ -15,6 +15,8 @@ discord:
     agents: "#agents"
     prs: "#prs"
     dev_feed: "#dev-feed"
+    financial: "#financial"         # SwarmGate 7% deposits
+    treasury: "#treasury"           # Legion portfolio analysis
   bot:
     app_id: null                    # Discord application ID
     token_secret_ref: "vault://kv/discord/bot_token"
@@ -80,6 +82,8 @@ ai_agents:
     per_channel:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
+      "#financial": "claude-3-sonnet"  # Portfolio analysis
+      "#treasury": "gpt-4o"            # Trade decisions
   vector_store:
     type: "pgvector"                 # weaviate|qdrant|pgvector|null
     conn_string_secret_ref: "vault://kv/pgvector/conn"
@@ -115,6 +119,13 @@ git:
     - name: "valoryield-engine"
       channel: "#deployments"
       env: "prod"
+      post_events:
+        - "pull_request"
+        - "check_suite"
+        - "push"
+    - name: "Sovereignty-Architecture-Elevator-Pitch"
+      channel: "#prs"
+      env: "dev"
       post_events:
         - "pull_request"
         - "check_suite"
@@ -169,6 +180,29 @@ event_gateway:
         - event: "push"
           branches: ["main","release/*"]
           discord_channel: "#deployments"
+    # SwarmGate paycheck webhook
+    - path: "/swarmgate/paycheck"
+      allowed_services: ["adp", "gusto"]
+      discord_channel: "#financial"
+      nats_subject: "swarmgate.paycheck.detected"
+    # Treasury deposit webhook
+    - path: "/treasury/deposit"
+      allowed_services: ["valoryield-api"]
+      discord_channel: "#treasury"
+      nats_subject: "treasury.deposit"
+
+# Treasury OS Configuration
+treasury:
+  accounts_config: "/config/accounts.yaml"
+  api_endpoint: "http://valoryield-api:8080"
+  swarmgate:
+    allocation_percent: 0.07
+    trigger_channel: "#financial"
+  nats:
+    subjects:
+      - "swarmgate.*"
+      - "treasury.*"
+      - "valoryield.*"
 
 commands:
   enabled: true
@@ -223,6 +257,19 @@ commands:
         - name: "request_id"
           type: "string"
           required: true
+    # Treasury OS Commands
+    - name: "portfolio"
+      description: "View ValorYield Engine portfolio balance"
+      params: []
+    - name: "deposit"
+      description: "Record SwarmGate 7% deposit"
+      params:
+        - name: "amount"
+          type: "number"
+          required: true
+    - name: "rebalance"
+      description: "Trigger Legion portfolio rebalancing"
+      params: []
 
 security:
   secrets_manager: "vault"  # vault|aws_ssm|gcp_sm|azure_kv
