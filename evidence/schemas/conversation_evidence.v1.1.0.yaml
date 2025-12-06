@@ -1,0 +1,97 @@
+# Updated schema with full xAI/Grok support + minor improvements
+# /evidence/schemas/conversation_evidence.v1.1.0.yaml
+
+version: "1.1.0"
+schema_name: "AI Conversation Evidence Ledger"
+purpose: "Legal-grade, cryptographically-linked audit trail for AI-assisted work"
+
+conversation_entry:
+  type: object
+  required: [conversation_id, timestamp, ai_system]
+  properties:
+    conversation_id:
+      type: string
+      format: uuid
+      description: "UUID v4 – immutable unique identifier"
+
+    timestamp:
+      type: string
+      format: date-time
+      description: "ISO-8601 UTC timestamp (e.g. 2025-11-21T19:45:00Z)"
+
+    date_human:
+      type: string
+      pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+
+    ai_system:
+      type: object
+      required: [provider, model]
+      properties:
+        provider:
+          type: string
+          enum: [anthropic, openai, xai, google, meta, mistral, ollama, other]
+        model:
+          type: string
+          examples: ["claude-3.5-sonnet-20241022", "gpt-4o-2024-11-20", "grok-4-2025", "grok-3-beta", "gemini-1.5-pro", "llama-3.1-405b", "qwen2.5-72b"]
+        interface:
+          type: string
+          examples: ["claude.ai", "chatgpt.com", "grok.x.ai", "x.com/grok", "poe.com", "local", "api"]
+        session_type:
+          type: string
+          enum: [web, api, local]
+
+    evidence:
+      type: object
+      properties:
+        share_url:
+          type: [string, "null"]
+          examples: ["https://claude.ai/share/...", "https://x.com/i/grok/share/abc123", "https://chatgpt.com/share/..."]
+        transcript_path:
+          type: [string, "null"]
+        screenshot_paths:
+          type: array
+          items: { type: string }
+        git_commit:
+          type: [string, "null"]
+
+    topic:
+      type: object
+      properties:
+        primary: { type: string }
+        secondary: { type: array, items: { type: string } }
+        domain: { type: string, enum: [technical, business, academic, legal, creative, other] }
+
+    analysis:
+      type: object
+      properties:
+        type: { type: string, enum: [audit, validation, security, architecture, methodology, brainstorming, code-review, other] }
+        conclusion: { type: string }
+        validation_status: { type: string, enum: [confirmed, partially-confirmed, needs-review, disputed, inconclusive] }
+        commercial_impact: { type: string, enum: [high, medium, low, none] }
+
+    legal:
+      type: object
+      properties:
+        copyright_status: { type: string, enum: [ai-generated, user-owned, collaborative, public-domain] }
+        intended_use: { type: string }
+        privacy_sanitized: { type: boolean }
+        contains_pii: { type: boolean }
+        contains_secrets: { type: boolean }
+
+    integration:
+      type: object
+      properties:
+        obsidian_vault: { type: [string, "null"] }
+        obsidian_note_path: { type: [string, "null"] }
+        github_issue: { type: [string, "null"] }
+        ledger_hash: { type: string }  # current entry hash
+        ledger_prev_hash: { type: [string, "null"] }  # previous entry hash for chain
+
+    attestation:
+      type: object
+      required: [verified_by, confidence_level]
+      properties:
+        verified_by: { type: string }
+        verification_method: { type: string }
+        confidence_level: { type: string, enum: [high, medium, low] }
+        notes: { type: [string, "null"] }

@@ -1,0 +1,53 @@
+# Example evidence entry for GPT security validation
+# This demonstrates chain linking (references previous Claude entry)
+
+conversation_id: "b4c7e9d2-5f8a-4b1d-9c3e-6a7d8f0e2b5c"
+timestamp: "2025-11-21T20:15:00Z"
+date_human: "2025-11-21"
+
+ai_system:
+  provider: openai
+  model: gpt-4o-2024-11-20
+  interface: chatgpt.com
+  session_type: web
+
+evidence:
+  share_url: "https://chatgpt.com/share/b4c7e9d2-5f8a-4b1d-9c3e-6a7d8f0e2b5c"
+  transcript_path: "/evidence/conversations/2025-11-21_gpt_security.json"
+  screenshot_paths:
+    - "/evidence/screenshots/2025-11-21_gpt_console_nursery.png"
+  git_commit: null
+
+topic:
+  primary: security
+  secondary:
+    - architecture
+    - ai-containment
+    - threat-model
+  domain: technical
+
+analysis:
+  type: security
+  conclusion: "Console nursery is genius-level safe AI containment. Network architecture validated with comprehensive threat model. Data pipeline security confirmed."
+  validation_status: confirmed
+  commercial_impact: high
+
+legal:
+  copyright_status: collaborative
+  intended_use: audit
+  privacy_sanitized: true
+  contains_pii: false
+  contains_secrets: false
+
+integration:
+  obsidian_vault: Legion-Core
+  obsidian_note_path: "Evidence/AI-Validations/2025-11-21_GPT_Security_Validation.md"
+  github_issue: null
+  ledger_hash: "7c9e4f2a8d1b5e6c3f7e9a0d4b2c1e5f6a8d9c0b3e7f5a1c4d6b8e2f9a0c7d5e"
+  ledger_prev_hash: "9f8a3c7e2d1b5e6f4a8c9d0b3e7f5a1c4d6b8e2f9a0c7d5e1b4a6c8e9f0d3a5b7c"  # Links to Claude entry
+
+attestation:
+  verified_by: "GPT-4o (OpenAI)"
+  verification_method: "direct generation + cryptographic hash"
+  confidence_level: high
+  notes: "Independent security validation confirms findings from Claude audit"
