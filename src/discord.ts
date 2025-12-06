@@ -13,7 +13,12 @@ export async function registerCommands(token: string, appId: string) {
       .addStringOption(o => o.setName("tag").setRequired(true)),
     new SlashCommandBuilder().setName("scale").setDescription("Scale service")
       .addStringOption(o => o.setName("service").setRequired(true))
-      .addIntegerOption(o => o.setName("replicas").setRequired(true))
+      .addIntegerOption(o => o.setName("replicas").setRequired(true)),
+    // Treasury OS Commands
+    new SlashCommandBuilder().setName("portfolio").setDescription("View ValorYield Engine portfolio"),
+    new SlashCommandBuilder().setName("deposit").setDescription("Record SwarmGate 7% deposit")
+      .addNumberOption(o => o.setName("amount").setDescription("Deposit amount").setRequired(true)),
+    new SlashCommandBuilder().setName("rebalance").setDescription("Trigger portfolio rebalancing")
   ].map(c => c.toJSON());
 
   const rest = new REST({ version: "10" }).setToken(token);

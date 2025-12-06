@@ -25,6 +25,8 @@ data:
         agents: "#agents"
         prs: "#prs"
         dev_feed: "#dev-feed"
+        financial: "#financial"
+        treasury: "#treasury"
       bot:
         app_id: null
         token_secret_ref: "vault://kv/discord/bot_token"
@@ -39,6 +41,9 @@ data:
             - "/deploy"
             - "/scale"
             - "/review"
+            - "/portfolio"
+            - "/deposit"
+            - "/rebalance"
           prod_protected_commands:
             - "/deploy"
             - "/scale"
@@ -90,6 +95,8 @@ data:
         per_channel:
           "#agents": "gpt-4o-mini"
           "#inference-stream": "none"
+          "#financial": "claude-3-sonnet"
+          "#treasury": "gpt-4o"
       vector_store:
         type: "pgvector"
         conn_string_secret_ref: "vault://kv/pgvector/conn"

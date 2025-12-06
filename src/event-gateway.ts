@@ -22,5 +22,5 @@ const channelIds = {
 
 app.post("/webhooks/github", githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
 
-const port = Number(process.env.PORT || cfg.event_gateway.port || 3001);
+const port = Number(process.env.PORT || cfg.event_gateway?.port || 3001);
 app.listen(port, () => console.log(`Event gateway on :${port}`));
