@@ -267,19 +267,26 @@ class FrequencySynthesizer:
         
         return json_str
     
-    def get_frequency_range_for_pdf(self, pdf_path: Path | str) -> np.ndarray:
+    def get_whale_frequency_array(self, num_points: int = PIANO_KEYS) -> np.ndarray:
         """
-        Generate frequency array based on PDF content type.
+        Generate array of whale frequencies.
         
-        This method determines whether to use whale or piano frequencies
-        based on the PDF filename.
+        Args:
+            num_points: Number of frequency points (default: 88 for piano keys)
+            
+        Returns:
+            NumPy array of whale frequencies (5.87-6.44 Hz range)
         """
-        pdf_path = Path(pdf_path)
+        return np.linspace(WHALE_FREQ_MIN, WHALE_FREQ_MAX, num_points)
+    
+    def get_piano_frequency_array(self, num_points: int = PIANO_KEYS) -> np.ndarray:
+        """
+        Generate array of piano frequencies.
         
-        if "whale" in pdf_path.name.lower():
-            return np.linspace(WHALE_FREQ_MIN, WHALE_FREQ_MAX, PIANO_KEYS)
-        elif "piano" in pdf_path.name.lower():
-            return np.linspace(PIANO_FREQ_MIN, PIANO_FREQ_MAX, PIANO_KEYS)
-        else:
-            # Default: return whale frequencies
-            return np.linspace(WHALE_FREQ_MIN, WHALE_FREQ_MAX, PIANO_KEYS)
+        Args:
+            num_points: Number of frequency points (default: 88 for piano keys)
+            
+        Returns:
+            NumPy array of piano frequencies (27.5-4186 Hz range)
+        """
+        return np.linspace(PIANO_FREQ_MIN, PIANO_FREQ_MAX, num_points)
