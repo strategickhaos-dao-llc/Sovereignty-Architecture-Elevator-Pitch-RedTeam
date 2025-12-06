@@ -275,17 +275,35 @@ class KhaosArbiter:
         return 0.0
     
     def _get_network_io(self, proc) -> int:
-        """Get network I/O for a process."""
+        """
+        Get estimated network I/O for a process.
+        
+        Note: Per-process network I/O is not directly available via psutil.
+        This method attempts to count open network connections as a proxy.
+        For accurate per-process network stats, consider using:
+        - Linux: /proc/PID/net/dev or nethogs
+        - Windows: ETW tracing
+        
+        Returns:
+            Number of network connections * 1024 as a rough activity estimate,
+            or 0 if unavailable.
+        """
         try:
-            io_counters = proc.io_counters()
-            if io_counters:
-                return io_counters.read_bytes + io_counters.write_bytes
+            connections = proc.net_connections()
+            # Estimate based on number of active connections
+            # More connections = likely more network activity
+            return len(connections) * 1024
         except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
             pass
         return 0
     
     def _get_disk_io(self, proc) -> int:
-        """Get disk I/O for a process."""
+        """
+        Get disk I/O bytes for a process.
+        
+        Returns:
+            Total read + write bytes, or 0 if unavailable.
+        """
         try:
             io_counters = proc.io_counters()
             if io_counters:
