@@ -1,0 +1,96 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sovereign-email
+  labels:
+    app: email-intel
+    legion: minds
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: email-intel-secrets
+  namespace: sovereign-email
+  annotations:
+    description: "IMPORTANT: Replace the placeholder value below before deployment"
+type: Opaque
+stringData:
+  # IMPORTANT: Replace this placeholder with your actual Grok API key before deploying
+  # You can also create this secret separately using:
+  # kubectl create secret generic email-intel-secrets \
+  #   --from-literal=GROK_API_KEY=your-actual-key \
+  #   -n sovereign-email
+  GROK_API_KEY: "REPLACE_WITH_YOUR_GROK_API_KEY"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-intel-api
+  namespace: sovereign-email
+  labels:
+    app: email-intel
+    version: "1.0.0"
+    legion: minds
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: email-intel
+  template:
+    metadata:
+      labels:
+        app: email-intel
+        version: "1.0.0"
+    spec:
+      containers:
+        - name: email-intel-api
+          image: gcr.io/jarvis-swarm-personal/email-intel-api:latest
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            - name: GROK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: email-intel-secrets
+                  key: GROK_API_KEY
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-intel-api
+  namespace: sovereign-email
+  labels:
+    app: email-intel
+spec:
+  type: LoadBalancer
+  selector:
+    app: email-intel
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      name: http
