@@ -21,6 +21,9 @@ target
 #.idea/
 node_modules
 
+# TypeScript/Node.js build artifacts
+dist/
+
 # Java build artifacts
 *.class
 *.jar

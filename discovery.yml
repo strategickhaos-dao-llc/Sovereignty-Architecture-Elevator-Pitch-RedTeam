@@ -47,9 +47,14 @@ infra:
       access: "zerotrust"         # vpn|zerotrust|public
       cidrs_allowed: []           # fill for VPN/IP allowlists
   message_bus:
-    type: "redis"                 # redis|nats|kafka|null
-    url: "redis://redis.internal.strategickhaos:6379"
-    topic_prefix: "ops."
+    primary:
+      type: "nats"                  # nats|redis|kafka|null
+      url: "nats://nats:4222"
+      jetstream: true
+    secondary:
+      type: "redis"                 # redis|nats|kafka|null
+      url: "redis://redis.internal.strategickhaos:6379"
+      topic_prefix: "ops."
   nodes:
     orchestrator: "kubernetes"    # kubernetes|ecs|nomad|baremetal
     clusters:
@@ -169,6 +174,36 @@ event_gateway:
         - event: "push"
           branches: ["main","release/*"]
           discord_channel: "#deployments"
+
+# Queen.js Webhook Receiver - Central Swarm Coordinator
+# Routes webhooks from GitHub, Zapier, SwarmGate to NATS message bus
+queen:
+  enabled: true
+  port: 8081
+  public_url: "https://queen.strategickhaos.com"
+  nats:
+    url: "nats://nats:4222"
+    topic_prefix: ""
+  endpoints:
+    - path: "/webhook/github"
+      description: "GitHub webhook receiver"
+      verify: "github_signature"
+      secret_ref: "vault://kv/git/webhook_secret"
+      nats_subject: "github.webhook"
+      discord_channel: "#github"
+    - path: "/webhook/zapier"
+      description: "Zapier automation events"
+      nats_subject: "zapier.event"
+    - path: "/webhook/swarmgate"
+      description: "SwarmGate deposit notifications"
+      nats_subject: "valoryield.deposit"
+      discord_channel: "#swarmgate"
+    - path: "/webhook/:source"
+      description: "Generic webhook receiver"
+      nats_subject: "webhook.*"
+  healthcheck:
+    path: "/health"
+    interval: 30
 
 commands:
   enabled: true

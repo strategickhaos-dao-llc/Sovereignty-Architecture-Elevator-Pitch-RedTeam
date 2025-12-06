@@ -42,6 +42,40 @@ export PRS_CHANNEL="channel_id"
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
 
+### 👑 Queen.js Webhook Receiver (`queen`)
+Central coordinator for the Sovereignty Architecture swarm. Routes webhooks to NATS message bus.
+
+- **GitHub Webhooks**: Receives and routes GitHub events (push, PR, issues)
+- **Zapier Integration**: Automation event receiver for external workflows
+- **SwarmGate Deposits**: ValorYield financial event processing
+- **NATS Publishing**: Routes all events through NATS JetStream
+- **Generic Webhooks**: Catch-all endpoint for any source (`/webhook/:source`)
+
+```bash
+# Start Queen.js in development mode
+npm run queen
+
+# Or run with Docker
+docker compose up queen
+
+# Test health endpoint
+curl http://localhost:8081/health
+
+# Configure GitHub webhook (in repo settings):
+#   Payload URL: https://your-domain.com/webhook/github
+#   Content type: application/json
+#   Events: Push, Pull request, Issues
+```
+
+**Webhook Endpoints:**
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /health` | Health check and status |
+| `POST /webhook/github` | GitHub webhook receiver |
+| `POST /webhook/zapier` | Zapier automation events |
+| `POST /webhook/swarmgate` | SwarmGate deposit notifications |
+| `POST /webhook/:source` | Generic webhook for any source |
+
 ### 🔄 GitLens Integration
 - **VS Code Tasks**: One-click Discord notifications from GitLens
 - **Review Workflows**: Automated PR lifecycle notifications
