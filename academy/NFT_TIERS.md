@@ -118,7 +118,7 @@ glyph> mint journeyman-pass --wallet 0x... --house {house_code}
 | Feature | Description |
 |---------|-------------|
 | **Code Notarization** | Your code permanently in `oath.lock` |
-| **Eternal Dividend** | 0.137% of the 7% dividend loop **forever** |
+| **Eternal Dividend** | ~0.44% of the 7% dividend pool (~0.03% of total revenue) **forever** |
 | **Discord Access** | All channels + `#glyph-999` secret chamber |
 | **Governance** | Veto power on critical proposals |
 | **Mentorship** | Automatic mentor status |
@@ -205,7 +205,7 @@ Per Crest Share = (Total Revenue × 0.07 × 0.60) / 137
                 ≈ 0.0307% of total revenue per Crest
 ```
 
-**Note:** The 0.137% figure represents the maximum theoretical share when accounting for compound effects and bonus multipliers.
+**Note:** The 0.137% figure is symbolic (tied to the fine-structure constant 1/137). Actual share is ~0.44% of the 7% pool (~0.03% of total revenue per Crest). See [DIVIDEND_LOOP.md](DIVIDEND_LOOP.md) for full math.
 
 ### Active Contributor Pool (30% of 7%)
 

@@ -101,15 +101,19 @@ Example with $100,000 monthly revenue:
 
 ### The 0.137% Claim
 
-The "0.137% of the entire 7%" represents:
+The "0.137% of the 7%" is a **symbolic designation** tied to the significance of 137 in the ecosystem. The actual math:
 
 ```
-0.07 × 0.00137 = 0.0000959 of total revenue
-              ≈ 0.01% of total revenue per Crest
+Actual Per-Crest Share = (60% of 7%) / 137
+                       = 4.2% / 137
+                       ≈ 0.0307% of total revenue per Crest
 
-With compound effects and growth multipliers:
-Maximum theoretical share ≈ 0.137% in optimal conditions
+The 0.137% figure represents:
+- Symbolic: 1/137 of the Crest pool (137 being a sacred number)
+- Actual: ~0.44% of the 7% pool = ~0.03% of total revenue
 ```
+
+**Note:** The 137 represents the fine-structure constant approximation (1/137), a fundamental physical constant. This isn't just math—it's sovereignty numerology.
 
 ### Crest Distribution Schedule
 
