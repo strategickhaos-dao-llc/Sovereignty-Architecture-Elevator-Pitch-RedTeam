@@ -35,3 +35,6 @@ target/
 
 # Workspace data
 workspace/
+
+# Node.js build output
+dist/
