@@ -1,0 +1,121 @@
+name: Deploy Email Service to GKE
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/email/**'
+      - 'config/email_config.yaml'
+      - 'Dockerfile.email'
+      - 'requirements.email.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+      
+      - name: Configure Docker for GCR
+        run: |
+          gcloud auth configure-docker gcr.io --quiet
+      
+      - name: Build Docker image
+        run: |
+          docker build -f Dockerfile.email \
+            -t gcr.io/${{ secrets.GCP_PROJECT }}/email-service:${{ github.sha }} \
+            -t gcr.io/${{ secrets.GCP_PROJECT }}/email-service:latest .
+      
+      - name: Push Docker image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT }}/email-service:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT }}/email-service:latest
+      
+      - name: Get GKE credentials
+        run: |
+          gcloud container clusters get-credentials strategickhaos-cluster \
+            --region ${{ secrets.GCP_REGION || 'us-central1' }} \
+            --project ${{ secrets.GCP_PROJECT }}
+      
+      - name: Deploy to GKE
+        run: |
+          kubectl set image deployment/email-service \
+            email-service=gcr.io/${{ secrets.GCP_PROJECT }}/email-service:${{ github.sha }} \
+            --namespace strategickhaos || \
+          kubectl apply -f - <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: email-service
+            namespace: strategickhaos
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: email-service
+            template:
+              metadata:
+                labels:
+                  app: email-service
+              spec:
+                containers:
+                - name: email-service
+                  image: gcr.io/${{ secrets.GCP_PROJECT }}/email-service:${{ github.sha }}
+                  ports:
+                  - containerPort: 8000
+                  env:
+                  - name: GROK_API_KEY
+                    valueFrom:
+                      secretKeyRef:
+                        name: email-secrets
+                        key: grok-api-key
+                  - name: SENDGRID_API_KEY
+                    valueFrom:
+                      secretKeyRef:
+                        name: email-secrets
+                        key: sendgrid-api-key
+                  - name: ZAPIER_WEBHOOK_URL
+                    valueFrom:
+                      secretKeyRef:
+                        name: email-secrets
+                        key: zapier-webhook-url
+                  resources:
+                    requests:
+                      memory: "256Mi"
+                      cpu: "100m"
+                    limits:
+                      memory: "512Mi"
+                      cpu: "500m"
+                  livenessProbe:
+                    httpGet:
+                      path: /health
+                      port: 8000
+                    initialDelaySeconds: 10
+                    periodSeconds: 30
+                  readinessProbe:
+                    httpGet:
+                      path: /health
+                      port: 8000
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+          EOF
+      
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/email-service --namespace strategickhaos --timeout=300s
