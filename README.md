@@ -280,6 +280,82 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏦 Interview Question Handling Departments
+
+We've established specialized departments to systematically handle business banking and eligibility questions, particularly for Navy Federal Credit Union business accounts and alternative banking solutions.
+
+### Department Structure
+
+Our organization handles interview questions through **five specialized departments**, each with specific expertise:
+
+#### 1. **[Membership Eligibility Department](departments/01_membership_eligibility.md)**
+Determines Navy Federal Credit Union membership eligibility based on:
+- Military service (Active Duty, Reserves, Veterans)
+- DOD employment or contractor status
+- Family member connections
+- Household member connections
+
+#### 2. **[Business Account Services Department](departments/02_business_account_services.md)**
+Provides comprehensive information on Navy Federal business products:
+- Business Checking, Savings, Debit Cards
+- Business Credit Cards (AMEX/Visa)
+- Business Lines of Credit and Loans
+- Support for LLCs, Corporations, Nonprofits, Sole Proprietors
+
+#### 3. **[Document Requirements Department](departments/03_document_requirements.md)**
+Manages documentation requirements for:
+- **Wyoming LLC** (Strategickhaos DAO LLC): Operating Agreement, Articles of Organization, EIN, etc.
+- **501(c)(3) Nonprofit** (ValorYield Engine): Articles of Incorporation, IRS Determination Letter, Board Resolutions
+- Other entity types
+
+#### 4. **[Alternative Banking Solutions Department](departments/04_alternative_banking_solutions.md)**
+Provides banking alternatives for non-eligible applicants:
+- Traditional Banks: Chase, Bank of America, Wells Fargo
+- Digital Banks: Mercury, Relay, Novo, Thread Bank + Sequence
+- Fintech Solutions: BlueVine, Capital One Spark
+- Custom banking architecture strategies
+
+#### 5. **[Eligibility Verification Department](departments/05_eligibility_verification.md)**
+Conducts detailed verification through:
+- Comprehensive screening questionnaires
+- Documentation verification
+- Edge case handling
+- Final eligibility determination
+
+### How We Handle Each Interview Question
+
+```
+Question Flow:
+┌─────────────────────┐
+│  Question Received  │
+└─────────────────────┘
+          ↓
+    ┌─────────┐
+    │ Routing │ → Categorize by topic
+    └─────────┘
+          ↓
+    ┌──────────────────────────────┐
+    │  Specialized Department      │
+    │  • Expert handlers           │
+    │  • Documentation templates   │
+    │  • Decision matrices         │
+    └──────────────────────────────┘
+          ↓
+    ┌─────────────┐
+    │   Response  │ → Comprehensive, actionable answer
+    └─────────────┘
+```
+
+**Key Principles:**
+- ✅ **Systematic approach**: Every question routes to the appropriate expert department
+- ✅ **Complete documentation**: All entity types covered (LLC, 501c3, etc.)
+- ✅ **Alternative solutions**: If Navy Federal isn't available, we have comprehensive alternatives
+- ✅ **Clear decision making**: Use decision matrices and verification checklists
+- ✅ **Actionable responses**: Every answer includes next steps
+
+### Quick Navigation
+For complete details on our interview handling process, see the **[Departments Directory](departments/)**.
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
