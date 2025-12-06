@@ -175,6 +175,27 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # Email Intelligence Service (Zapier + Grok API Integration)
+  email-intelligence:
+    build:
+      context: ./email-service
+      dockerfile: Dockerfile
+    container_name: email-intelligence
+    environment:
+      GROK_API_KEY: ${GROK_API_KEY}
+      QUEEN_API_KEY: ${QUEEN_API_KEY}
+      QUEEN_API_URL: ${QUEEN_API_URL}
+    ports:
+      - "8086:8080"
+    networks:
+      - strategickhaos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
   # JDK Workspace (OpenJDK 21/25 with Maven & Gradle)
   jdk-workspace:
     build:

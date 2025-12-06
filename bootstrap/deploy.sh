@@ -73,6 +73,7 @@ apply_manifests() {
         "configmap.yaml"
         "bot-deployment.yaml"
         "gateway-deployment.yaml"
+        "email-intelligence-deployment.yaml"
         "ingress.yaml"
     )
     
@@ -91,7 +92,7 @@ apply_manifests() {
 wait_for_deployments() {
     echo_info "Waiting for deployments to be ready..."
     
-    local deployments=("discord-ops-bot" "event-gateway")
+    local deployments=("discord-ops-bot" "event-gateway" "email-intelligence")
     
     for deployment in "${deployments[@]}"; do
         echo_info "Waiting for $deployment..."
