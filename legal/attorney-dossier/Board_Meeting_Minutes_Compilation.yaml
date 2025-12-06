@@ -1,0 +1,612 @@
+# StrategicKhaos DAO LLC & ValorYield Engine
+# Board Meeting Minutes Compilation
+# YAML Format - Complete Resolution Record
+# Version: 2.0
+# Date: December 6, 2025
+
+metadata:
+  title: "Board Meeting Minutes Compilation 2025"
+  purpose: "Complete record of all board resolutions for legal review"
+  entities:
+    - "StrategicKhaos DAO LLC (Wyoming, EIN: 39-2900295)"
+    - "ValorYield Engine (Wyoming Nonprofit, EIN: 39-2923503)"
+  prepared_by: "Domenic G. Garza (Node 137)"
+  prepared_for: "Attorney Review and Legal Proof Dossier"
+  legal_disclaimer: "INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED"
+
+# =============================================================================
+# STRATEGICKHAOS DAO LLC - BOARD MEETINGS
+# =============================================================================
+
+strategickhaos_dao_llc:
+  entity_info:
+    legal_name: "StrategicKhaos DAO LLC"
+    jurisdiction: "Wyoming"
+    filing_number: "2025-001708194"
+    ein: "39-2900295"
+    formation_date: "2025"
+    entity_type: "Limited Liability Company"
+    management_structure: "Member-Managed"
+    
+  meetings:
+    - meeting_id: "SK-2025-001"
+      date: "2025-11-16"
+      type: "Organizational Meeting"
+      location: "Virtual (Electronic Meeting)"
+      attendees:
+        - name: "Domenic G. Garza"
+          role: "Managing Member"
+          present: true
+      quorum_met: true
+      
+      agenda:
+        - "Adoption of Operating Agreement"
+        - "Election of Officers"
+        - "Authorization of Banking Relationships"
+        - "Adoption of Governance Policies"
+        - "Intellectual Property Matters"
+        
+      resolutions:
+        - resolution_number: "SK-2025-001-01"
+          title: "Adoption of Operating Agreement"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Operating Agreement of StrategicKhaos DAO LLC, 
+            as presented to this meeting, is hereby adopted as the Operating 
+            Agreement of the Company, and the Managing Member is directed to 
+            execute the same and place it in the Company records.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "SK-2025-001-02"
+          title: "Election of Managing Member"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that Domenic G. Garza is hereby appointed as Managing 
+            Member of StrategicKhaos DAO LLC, with full authority to manage 
+            the day-to-day operations of the Company.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "SK-2025-001-03"
+          title: "Authorization of Navy Federal Credit Union Banking"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Company is authorized to establish and maintain 
+            business banking relationships with Navy Federal Credit Union, 
+            including business checking accounts, savings accounts, credit cards, 
+            lines of credit, and other financial products.
+            
+            FURTHER RESOLVED, that Domenic G. Garza, Managing Member, is 
+            designated as an authorized signatory on all Navy Federal Credit 
+            Union accounts with full authority to open, close, and conduct 
+            transactions.
+            
+            FURTHER RESOLVED, that the Managing Member is authorized to execute 
+            all documents necessary to establish such banking relationships, 
+            including banking resolutions, account agreements, and related forms.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          supporting_docs:
+            - "Banking Resolution - Navy Federal Credit Union"
+            - "Operating Agreement Article V"
+            
+        - resolution_number: "SK-2025-001-04"
+          title: "Authorization of Multi-Institution Banking Strategy"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Company is authorized to maintain banking 
+            relationships with multiple financial institutions as part of a 
+            dual-banking or multi-banking strategy, including but not limited to:
+            - Navy Federal Credit Union (traditional banking)
+            - Thread Bank/Sequence (API-native banking)
+            - Other financial institutions as needed for Company operations
+            
+            FURTHER RESOLVED, that the Managing Member is authorized to 
+            implement automated fund transfers, distribution rules, API 
+            integrations, and treasury management automation between institutions.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "SK-2025-001-05"
+          title: "Adoption of AI Governance Framework"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Company hereby adopts an AI Governance Framework 
+            as set forth in Article VII of the Operating Agreement, which 
+            authorizes the use of artificial intelligence systems for business 
+            operations while maintaining human oversight and final decision-making 
+            authority.
+            
+            FURTHER RESOLVED, that the Managing Member is responsible for 
+            implementing and overseeing AI governance policies including 
+            transparency, privacy protection, bias prevention, regulatory 
+            compliance, and audit trails.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          supporting_docs:
+            - "Operating Agreement Article VII"
+            - "AI Constitution (ai_constitution.yaml)"
+            
+        - resolution_number: "SK-2025-001-06"
+          title: "Intellectual Property Ownership and Protection"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that all intellectual property created by or on behalf of 
+            the Company, including software, algorithms, documentation, and trade 
+            secrets, shall be owned exclusively by the Company.
+            
+            FURTHER RESOLVED, that the Managing Member is authorized to file 
+            trademark applications on behalf of the Company for the following marks:
+            - StrategicKhaos
+            - ValorYield Engine
+            - SwarmGate
+            - FlameWisdom
+            - [Additional marks as identified]
+            
+            FURTHER RESOLVED, that the Managing Member is authorized to execute 
+            assignments, licenses, and other documents necessary to protect and 
+            enforce the Company's intellectual property rights.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          supporting_docs:
+            - "Operating Agreement Article VIII"
+            - "IP Declaration V2.0"
+            - "Trademark Filing Worksheet"
+            
+        - resolution_number: "SK-2025-001-07"
+          title: "Authorization of Charitable Contributions to ValorYield Engine"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Company is authorized to make charitable 
+            contributions to ValorYield Engine, a Wyoming nonprofit corporation 
+            organized under Section 501(c)(3) of the Internal Revenue Code, 
+            in amounts and at times determined by the Managing Member.
+            
+            FURTHER RESOLVED, that the Company may establish automated revenue 
+            distribution systems to allocate a percentage of Company revenues 
+            to ValorYield Engine as charitable contributions, subject to:
+            - Proper documentation and substantiation
+            - Compliance with IRS regulations
+            - Arm's length transaction requirements
+            - Annual review and approval by the Managing Member
+            
+            FURTHER RESOLVED, that the Managing Member is authorized to execute 
+            distribution agreements and related documents with ValorYield Engine.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          notes: |
+            Proposed structure: 7% of qualified revenues to ValorYield Engine.
+            Attorney to review for proper tax treatment and compliance.
+            
+        - resolution_number: "SK-2025-001-08"
+          title: "Fiscal Year and Tax Treatment"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "N/A (Single Member)"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the fiscal year of the Company shall be the calendar 
+            year ending December 31.
+            
+            FURTHER RESOLVED, that the Company shall be treated as a disregarded 
+            entity for federal tax purposes (single-member LLC), unless and until 
+            additional members are admitted or an election is made to be taxed 
+            as a corporation.
+            
+            FURTHER RESOLVED, that the Managing Member is designated as the 
+            Tax Matters Partner (or Partnership Representative) for federal tax 
+            purposes if the Company becomes taxed as a partnership.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+      minutes_certified_by:
+        name: "Domenic G. Garza"
+        title: "Managing Member"
+        date: "2025-11-16"
+        signature: "[To be executed]"
+
+# =============================================================================
+# VALORYIELD ENGINE - BOARD MEETINGS
+# =============================================================================
+
+valoryield_engine:
+  entity_info:
+    legal_name: "ValorYield Engine"
+    jurisdiction: "Wyoming"
+    ein: "39-2923503"
+    formation_date: "2025"
+    entity_type: "Nonprofit Corporation"
+    tax_status: "501(c)(3) Pending/Approved"
+    board_size: "3-15 directors"
+    
+  meetings:
+    - meeting_id: "VY-2025-001"
+      date: "2025-11-16"
+      type: "Organizational Meeting of Board of Directors"
+      location: "Virtual (Electronic Meeting)"
+      attendees:
+        - name: "Domenic G. Garza"
+          role: "Founder and Initial Director"
+          present: true
+        - name: "[Director 2]"
+          role: "Director"
+          present: false
+          note: "To be appointed"
+        - name: "[Director 3]"
+          role: "Director"
+          present: false
+          note: "To be appointed"
+      quorum_met: true
+      
+      agenda:
+        - "Adoption of Bylaws"
+        - "Election of Officers"
+        - "Authorization of Banking Relationships"
+        - "Adoption of Required Policies"
+        - "IRS 501(c)(3) Application Matters"
+        - "Nonprofit Programs and Activities"
+        
+      resolutions:
+        - resolution_number: "VY-2025-001-01"
+          title: "Adoption of Bylaws"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Bylaws of ValorYield Engine, as presented to 
+            this meeting, are hereby adopted as the Bylaws of the Corporation, 
+            and the Secretary is directed to execute a certification of the 
+            same and place them in the corporate records.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "VY-2025-001-02"
+          title: "Election of Officers"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the following individuals are hereby elected as 
+            officers of the Corporation to serve until their successors are 
+            duly elected and qualified:
+            
+            President: Domenic G. Garza
+            Vice President: [To be appointed]
+            Secretary: [To be appointed]
+            Treasurer: [To be appointed]
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "VY-2025-001-03"
+          title: "Confirmation of Tax-Exempt Purpose"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Corporation is organized and shall be operated 
+            exclusively for charitable, educational, and scientific purposes 
+            within the meaning of Section 501(c)(3) of the Internal Revenue Code, 
+            including:
+            - Education and research in artificial intelligence
+            - Community benefit programs in technology
+            - Scientific research in AI safety and alignment
+            - Public education on AI and technology
+            
+            FURTHER RESOLVED, that no part of the net earnings of the Corporation 
+            shall inure to the benefit of any private individual, and the 
+            Corporation shall not engage in any activities prohibited by 
+            Section 501(c)(3).
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "VY-2025-001-04"
+          title: "Authorization to Apply for 501(c)(3) Tax-Exempt Status"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the officers of the Corporation are authorized and 
+            directed to prepare and file IRS Form 1023 or Form 1023-EZ 
+            (Application for Recognition of Exemption) to obtain tax-exempt 
+            status under Section 501(c)(3) of the Internal Revenue Code.
+            
+            FURTHER RESOLVED, that the officers are authorized to provide all 
+            information, documents, and materials required by the IRS and to 
+            take all actions necessary to obtain favorable determination of 
+            tax-exempt status.
+            
+            FURTHER RESOLVED, that the Corporation may engage professional 
+            assistance (attorneys, CPAs) as needed for the application process.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "VY-2025-001-05"
+          title: "Authorization of Navy Federal Credit Union Banking"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Corporation is authorized to establish and maintain 
+            nonprofit banking relationships with Navy Federal Credit Union, 
+            including nonprofit checking accounts, savings accounts, and other 
+            financial products appropriate for 501(c)(3) organizations.
+            
+            FURTHER RESOLVED, that the President and Treasurer are designated 
+            as authorized signatories on all Navy Federal Credit Union accounts.
+            
+            FURTHER RESOLVED, that for transactions exceeding $5,000, dual 
+            signatures or specific Board authorization shall be required.
+            
+            FURTHER RESOLVED, that the President is authorized to execute all 
+            documents necessary to establish such banking relationships, including 
+            banking resolutions and account agreements.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          supporting_docs:
+            - "Banking Resolution - Navy Federal Credit Union"
+            - "Bylaws Article VIII"
+            
+        - resolution_number: "VY-2025-001-06"
+          title: "Adoption of Required Governance Policies"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Corporation hereby adopts the following governance 
+            policies as required for 501(c)(3) organizations:
+            
+            1. Conflict of Interest Policy - requiring disclosure and recusal
+            2. Whistleblower Policy - protecting good faith reporting
+            3. Document Retention and Destruction Policy - specifying retention periods
+            4. Gift Acceptance Policy - governing donation acceptance
+            5. Investment Policy - governing fund management
+            
+            FURTHER RESOLVED, that all directors, officers, and key employees 
+            shall sign annual conflict of interest disclosure statements.
+            
+            FURTHER RESOLVED, that the Board shall review these policies annually 
+            and update as needed.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          supporting_docs:
+            - "Bylaws Article X"
+            
+        - resolution_number: "VY-2025-001-07"
+          title: "Authorization of Program Activities"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Corporation is authorized to conduct the following 
+            charitable program activities consistent with its 501(c)(3) purpose:
+            
+            1. AI Safety and Alignment Research
+            2. Open-Source AI Tool Development
+            3. Technology Education and Training Programs
+            4. Workforce Development Initiatives
+            5. Community Technology Access Programs
+            6. Academic and Research Collaborations
+            7. Educational Content Creation and Distribution
+            8. Workshops, Seminars, and Conferences
+            
+            FURTHER RESOLVED, that the officers are authorized to develop 
+            program budgets, hire staff and contractors, and enter into agreements 
+            necessary to conduct these activities.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "VY-2025-001-08"
+          title: "Acceptance of Donations and Grants"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the Corporation is authorized to solicit and accept:
+            - Individual donations
+            - Corporate contributions
+            - Foundation grants
+            - Government grants
+            - In-kind donations
+            - Planned gifts and bequests
+            
+            FURTHER RESOLVED, that all donations shall be acknowledged in 
+            accordance with IRS substantiation requirements.
+            
+            FURTHER RESOLVED, that the Corporation may enter into revenue sharing 
+            or distribution agreements with related organizations (such as 
+            StrategicKhaos DAO LLC) provided that:
+            - All arrangements serve the Corporation's exempt purposes
+            - Transactions are at arm's length and fair market value
+            - Proper documentation is maintained
+            - IRS regulations on private benefit are followed
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          notes: |
+            Proposed arrangement: Receipt of 7% of qualified revenues from 
+            StrategicKhaos DAO LLC as charitable contribution or payment for services.
+            Attorney and CPA to review for proper structure and compliance.
+            
+        - resolution_number: "VY-2025-001-09"
+          title: "Fiscal Year and Financial Reporting"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that the fiscal year of the Corporation shall be the 
+            calendar year ending December 31.
+            
+            FURTHER RESOLVED, that the Corporation shall file IRS Form 990, 
+            990-EZ, or 990-N annually as required based on gross receipts.
+            
+            FURTHER RESOLVED, that the Treasurer shall provide monthly financial 
+            reports to the Board and shall maintain books and records in 
+            accordance with generally accepted accounting principles for 
+            nonprofit organizations.
+            
+            FURTHER RESOLVED, that the Corporation shall conduct an annual 
+            audit, review, or compilation as required by law or as determined 
+            by the Board.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+        - resolution_number: "VY-2025-001-10"
+          title: "Appointment of Registered Agent"
+          moved_by: "Domenic G. Garza"
+          seconded_by: "[Director name]"
+          vote: "Unanimous"
+          text: |
+            RESOLVED, that Domenic G. Garza is hereby appointed as the registered 
+            agent of the Corporation in the State of Wyoming, and the President 
+            is authorized to file the necessary documentation with the Wyoming 
+            Secretary of State.
+          status: "Adopted"
+          effective_date: "2025-11-16"
+          
+      minutes_certified_by:
+        name: "[Secretary Name]"
+        title: "Secretary"
+        date: "2025-11-16"
+        signature: "[To be executed]"
+
+# =============================================================================
+# CROSS-ENTITY MATTERS
+# =============================================================================
+
+cross_entity_resolutions:
+  - title: "Relationship Between StrategicKhaos DAO LLC and ValorYield Engine"
+    entities:
+      - "StrategicKhaos DAO LLC"
+      - "ValorYield Engine"
+    description: |
+      The two entities maintain a collaborative relationship where:
+      
+      1. StrategicKhaos DAO LLC operates as a for-profit technology company
+         developing AI systems, software, and providing consulting services.
+      
+      2. ValorYield Engine operates as a 501(c)(3) nonprofit conducting
+         charitable AI research, education, and community benefit programs.
+      
+      3. Revenue Sharing: StrategicKhaos may make charitable contributions
+         or pay for services to ValorYield (proposed 7% of qualified revenues).
+      
+      4. IP Sharing: Entities may collaborate on projects with clear IP
+         ownership and licensing agreements.
+      
+      5. Shared Resources: May share office space, equipment, or personnel
+         with appropriate cost allocation and documentation.
+    
+    compliance_requirements:
+      - "All transactions must be at arm's length"
+      - "Fair market value for all services"
+      - "No private inurement or excess benefit"
+      - "Proper documentation and Board approval"
+      - "IRS Form 990 Schedule R disclosure (for ValorYield)"
+      - "Written agreements for all arrangements"
+    
+    attorney_review_required: true
+    cpa_review_required: true
+
+# =============================================================================
+# CERTIFICATION AND ATTESTATION
+# =============================================================================
+
+certification:
+  prepared_by:
+    name: "Domenic G. Garza"
+    title: "Managing Member (StrategicKhaos DAO LLC) / President (ValorYield Engine)"
+    date: "2025-12-06"
+    
+  attestation: |
+    I hereby certify that the foregoing compilation accurately represents
+    the resolutions adopted by StrategicKhaos DAO LLC and ValorYield Engine
+    as of the date indicated. These minutes are compiled from official
+    corporate records and are provided for attorney review and legal
+    documentation purposes.
+    
+  legal_disclaimer: |
+    INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+    
+    This compilation is provided for informational purposes only and does not
+    constitute legal advice. All resolutions and corporate actions should be
+    reviewed by qualified legal counsel before reliance or submission to
+    third parties. This document is part of a legal proof dossier being
+    prepared for attorney review.
+    
+  status: "DRAFT - Awaiting Attorney Review"
+  version: "2.0"
+  last_updated: "2025-12-06"
+
+# =============================================================================
+# SUPPORTING DOCUMENTS CROSS-REFERENCE
+# =============================================================================
+
+supporting_documents:
+  entity_formation:
+    - file: "Wyoming Articles of Organization (StrategicKhaos DAO LLC)"
+      filing_number: "2025-001708194"
+      status: "Filed"
+      
+    - file: "Wyoming Articles of Incorporation (ValorYield Engine)"
+      status: "Filed"
+      
+    - file: "IRS EIN Letter - StrategicKhaos DAO LLC"
+      ein: "39-2900295"
+      status: "Received"
+      
+    - file: "IRS EIN Letter - ValorYield Engine"
+      ein: "39-2923503"
+      status: "Received"
+      
+  governance_documents:
+    - file: "StrategicKhaos DAO LLC Operating Agreement"
+      location: "/legal/navy-federal-packet/StrategicKhaos_DAO_LLC_Operating_Agreement.md"
+      status: "Draft - Attorney Review Required"
+      
+    - file: "ValorYield Engine Bylaws"
+      location: "/legal/navy-federal-packet/ValorYield_Engine_Nonprofit_Bylaws.md"
+      status: "Draft - Attorney Review Required"
+      
+  banking_documents:
+    - file: "StrategicKhaos Banking Resolution (Navy Federal)"
+      location: "/legal/navy-federal-packet/StrategicKhaos_DAO_LLC_Banking_Resolution.md"
+      status: "Draft - Attorney Review Required"
+      
+    - file: "ValorYield Banking Resolution (Navy Federal)"
+      location: "/legal/navy-federal-packet/ValorYield_Engine_Banking_Resolution.md"
+      status: "Draft - Attorney Review Required"
+      
+  intellectual_property:
+    - file: "IP Declaration V2.0"
+      location: "/legal/attorney-dossier/IP_Declaration_V2.0.md"
+      status: "To be created"
+      
+    - file: "Trademark Filing Worksheet"
+      location: "/legal/attorney-dossier/Trademark_Filing_Worksheet.md"
+      status: "To be created"
+      
+  financial_records:
+    - file: "YTD Income Documentation"
+      description: "$151K revenue proof"
+      location: "To be compiled"
+      
+    - file: "Revenue Distribution Agreement"
+      description: "7% allocation to ValorYield"
+      status: "To be drafted by attorney"
+
+# =============================================================================
+# END OF COMPILATION
+# =============================================================================
