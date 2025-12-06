@@ -1,0 +1,69 @@
+# ValorYield Sovereign Treasury OS - Accounts Configuration
+# Version: 1.0
+# Purpose: First "brain cell" of Treasury OS - centralized sovereign financial endpoint registry
+# EIN-anchored, DAO-governed configuration for all financial accounts
+
+entities:
+  strategickhaos_dao:
+    name: "Strategickhaos DAO LLC"
+    ein: "39-2900295"
+    structure: "Wyoming DAO LLC"
+    purpose: "Sovereign mesh governance and public-benefit operations"
+    
+  valoryield_engine_pbc:
+    name: "ValorYield Engine"
+    ein: "39-2923503"
+    structure: "Public Benefit Corporation"
+    purpose: "Track finances, enforce allocation rules, automate bill pay, fund public-benefit work"
+
+treasury_os:
+  name: "ValorYield Sovereign Treasury OS"
+  purpose:
+    - "Track all finances across platforms"
+    - "Enforce 7% allocation rule"
+    - "Automate bill pay"
+    - "Direct surplus to public-benefit work"
+    - "Provide visibility into all account flows"
+
+accounts:
+  - id: "mlion-2143"
+    name: "MoneyLion Aggressive Mix"
+    platform: "MoneyLion"
+    owner: "strategickhaos_dao"
+    type: "robo_advisor"
+    notes: "Balance ~ $207.69, likely exiting"
+  
+  - id: "kraken-primary"
+    name: "Kraken Pro Primary"
+    platform: "Kraken"
+    owner: "strategickhaos_dao"
+    type: "exchange"
+    notes: "Spot + futures, API key to be added (read-only)"
+
+  - id: "ninjatrader-main"
+    name: "NinjaTrader Main"
+    platform: "NinjaTrader"
+    owner: "strategickhaos_dao"
+    type: "broker"
+    notes: "Trading platform for futures and equities"
+
+  - id: "kalshi-events"
+    name: "Kalshi Event Market"
+    platform: "Kalshi"
+    owner: "strategickhaos_dao"
+    type: "prediction_market"
+    notes: "Event contracts trading"
+
+  - id: "biz-checking"
+    name: "Business Checking"
+    platform: "Bank"
+    owner: "valoryield_engine_pbc"
+    type: "checking"
+    notes: "Main bill-pay + treasury in/out"
+
+# Sovereignty metadata
+sovereignty:
+  visibility: "high"
+  control: "we push the buttons"
+  governance: "DAO-governed"
+  ai_council: ["Claude", "GPT", "Grok", "Qwen"]
