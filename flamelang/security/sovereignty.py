@@ -6,7 +6,7 @@ import sys
 import socket
 import psutil
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 class CoherenceMonitor:
     """Monitors process coherence and integrity."""
@@ -19,7 +19,7 @@ class CoherenceMonitor:
         """Capture baseline process state."""
         self.baseline_processes = set(p.name() for p in psutil.process_iter(['name']))
     
-    def check_process_coherence(self) -> Dict[str, any]:
+    def check_process_coherence(self) -> Dict[str, Any]:
         """Check if process list has maintained coherence."""
         if self.baseline_processes is None:
             self.capture_baseline()
@@ -155,7 +155,7 @@ class SovereigntySystem:
         print("   Coherence: MONITORED ✓")
         print("   Audit: ACTIVE ✓")
     
-    def get_status(self) -> Dict[str, any]:
+    def get_status(self) -> Dict[str, Any]:
         """Get sovereignty system status."""
         coherence_status = self.coherence.check_process_coherence()
         
