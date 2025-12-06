@@ -1,0 +1,9 @@
+[package]
+name = "daily_brain"
+version = "0.1.0"
+edition = "2021"
+description = "Daily Brain task automation in Rust"
+authors = ["Strategickhaos"]
+
+[dependencies]
+chrono = "0.4"
