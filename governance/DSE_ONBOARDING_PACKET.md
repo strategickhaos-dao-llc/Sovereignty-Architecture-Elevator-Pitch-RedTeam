@@ -250,9 +250,9 @@ You → Mentor → Division Lead → Council → CSA
 
 ### Documentation
 
-- [Repository Wiki](https://wiki.strategickhaos.internal)
-- [API Documentation](internal)
-- [Architecture Diagrams](cognitive_architecture.svg)
+- Repository Wiki: See `/docs` directory (internal)
+- API Documentation: See `/src` directory for code documentation
+- Architecture Diagrams: See `cognitive_architecture.svg` in repository root
 
 ### Learning Path
 
