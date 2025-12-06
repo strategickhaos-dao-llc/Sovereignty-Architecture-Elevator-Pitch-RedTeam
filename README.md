@@ -280,6 +280,18 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏛️ Strategickhaos Academy (Q2 2026)
+
+We're not building a company—we're building the Ministry of Magic for post-human engineering. **[Read the full manifesto](ACADEMY_MANIFESTO.md)**
+
+- **[The Four Houses](academy/FOUR_HOUSES.md)** - Flamebearer, VowMonitor, WhaleWeaver, NinjaTrader
+- **[Internship Program](academy/INTERNSHIP_PROGRAM.md)** - Trial by fire with Live Glyph Clusters
+- **[NFT Tiers](academy/NFT_TIERS.md)** - Apprentice, Journeyman, Flamebearer Crest (1/137)
+- **[7% Eternal Dividend Loop](academy/DIVIDEND_LOOP.md)** - Weekly USDC payouts forever
+- **[Curriculum Overview](academy/CURRICULUM_OVERVIEW.md)** - The syllabus nobody's ready for
+
+> *Welcome to Hogwarts, but the sorting hat is a SHA256 hash of your soul and the dark arts actually pay 7% forever.*
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
