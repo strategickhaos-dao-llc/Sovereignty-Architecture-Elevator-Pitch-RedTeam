@@ -1,0 +1,182 @@
+# dipi_charter.yaml
+# Department of Intellectual Property Intelligence (DIPI) Charter
+# Strategickhaos DAO LLC — UPL-Safe IP Operations Department
+version: "1.0"
+created: "2025-12-05"
+last_updated: "2025-12-05"
+
+department:
+  name: "Department of Intellectual Property Intelligence (DIPI)"
+  nickname: "Dippy"
+  status: "Active"
+  classification: "Operational – Non-Legal"
+  parent_org: "Strategickhaos DAO LLC / Valoryield Engine"
+
+  purpose:
+    - "Monitor and document intellectual property usage across all entities."
+    - "Prepare evidence packages for trademarks, copyrights, and patents."
+    - "Automate scanning of USPTO databases for conflicting marks."
+    - "Log first-use timestamps for brand protection."
+    - "Support 7% charity compliance through IP documentation."
+    - "Provide research to outside legal counsel."
+
+  responsibilities:
+    monitoring:
+      - "Automated TESS trademark search checks"
+      - "Domain monitoring for similar names"
+      - "GitHub and product name usage verification"
+      - "Brand similarity conflict alerts"
+      - "Watch for confusingly-similar filings"
+      - "Track risk of dilution"
+      - "Flag infringing names"
+    documentation:
+      - "Prepare Intent-To-Use filing packets"
+      - "Organize specimens of use"
+      - "Maintain code + brand provenance logs"
+      - "Create timestamped GitHub commits"
+      - "Archive website pages and product screenshots"
+      - "Record first public use dates"
+      - "Maintain IP provenance folders"
+    evidence_management:
+      - "Timestamp code commits"
+      - "Archive website pages"
+      - "On-chain NFT hashing (optional evidence anchoring)"
+      - "Hash code and documentation"
+      - "Store creation date evidence"
+    patent_research:
+      - "Collect prior art"
+      - "Document invention timeline"
+      - "Create invention disclosure packets"
+      - "Track features for patentability"
+      - "Prepare notes for patent attorney"
+    nonprofit_support:
+      - "Track revenue derived from protected marks"
+      - "Classify UBIT vs non-UBIT activities"
+      - "Prepare Form 990 documentation notes"
+      - "Track which IP belongs to nonprofit"
+      - "Log donations, allocations, and income sources"
+      - "Document compliance"
+      - "Assist in UBIT avoidance by categorizing activities"
+
+  limitations:
+    legal_disclaimer: |
+      DIPI is NOT a legal department and does NOT provide legal advice.
+      All activities are operational, administrative, and preparatory in nature.
+      This department operates within strict UPL (Unauthorized Practice of Law) safe boundaries.
+    prohibited_activities:
+      - "DIPI does NOT interpret trademark law"
+      - "DIPI does NOT claim statutory damages"
+      - "DIPI does NOT claim priority rights legally"
+      - "DIPI does NOT send cease-and-desist letters"
+      - "DIPI does NOT give legal meaning to NFTs"
+      - "DIPI does NOT assert infringement"
+      - "DIPI does NOT draft license agreements"
+      - "DIPI does NOT file patents or trademarks AS an attorney"
+      - "DIPI does NOT provide legal conclusions"
+    required_counsel:
+      - "All filings and legal actions require a licensed attorney"
+      - "Statutory damages decisions require licensed counsel"
+      - "Priority rights determinations require licensed counsel"
+      - "Enforcement decisions require licensed counsel"
+      - "Legal interpretations require licensed counsel"
+
+  reporting:
+    reports_to:
+      - "Founder & Board"
+      - "Managing Member"
+    coordinates_with:
+      - "External IP Counsel"
+      - "Tax Counsel"
+      - "Nonprofit Counsel"
+      - "Wyoming-Licensed Attorney (counsel-01)"
+
+  automation_capabilities:
+    trademark_scanning:
+      description: "Real-time monitoring of USPTO TESS database"
+      capabilities:
+        - "Monitor for similar names"
+        - "Detect potential conflicts or squatters"
+        - "Watch for confusingly-similar filings"
+        - "Send alerts to Serious Board and outside counsel"
+    filing_preparation:
+      description: "Intent-To-Use filing preparation support"
+      prepares:
+        - "Mark name documentation"
+        - "Classes and goods/services descriptions"
+        - "Evidence of use packages"
+        - "Specimen packages"
+        - "Filing checklists"
+      note: "Actual filing is done by authorized party or attorney"
+    priority_rights_monitoring:
+      description: "Comparison and tracking of marks"
+      capabilities:
+        - "Compare marks against new filings"
+        - "Track risk of dilution"
+        - "Flag infringing names"
+        - "Document potential enforcement needs"
+        - "Generate reports for attorney"
+    nft_evidence_anchoring:
+      description: "Optional on-chain evidence timestamping"
+      note: "Legal to record, but NOT legally binding by itself"
+      can_hash:
+        - "Marks"
+        - "Source code"
+        - "Declarations"
+        - "Product screenshots"
+      stores: "On-chain timestamp as evidence of creation date"
+
+# Access control integration with existing governance
+access_control:
+  roles:
+    dipi_operator:
+      - name: "IP Operations Specialist"
+        id: "dipi-ops"
+        permissions:
+          - scan_trademarks
+          - prepare_filings
+          - document_evidence
+          - archive_pages
+          - generate_reports
+    dipi_auditor:
+      - name: "DIPI Compliance Node"
+        id: "dipi-audit"
+        permissions:
+          - log_trail
+          - verify_timestamps
+          - generate_sha256
+          - verify_provenance
+
+# Workflow integration
+workflows:
+  trademark_monitoring:
+    trigger: "Scheduled (daily/weekly)"
+    steps:
+      - "Query USPTO TESS for conflicting marks"
+      - "Compare against registered Strategickhaos marks"
+      - "Log findings in IP provenance folder"
+      - "Alert if potential conflict detected"
+      - "Generate report for counsel review"
+  first_use_documentation:
+    trigger: "Product launch or major release"
+    steps:
+      - "Create timestamped commit"
+      - "Capture website/product screenshots"
+      - "Archive in IP provenance folder"
+      - "Generate SHA256 hash"
+      - "Optional: Mint NFT evidence anchor"
+  attorney_handoff:
+    trigger: "Filing decision or enforcement need"
+    steps:
+      - "Compile all prepared documentation"
+      - "Generate comprehensive report"
+      - "Package evidence and specimens"
+      - "Send to designated counsel"
+      - "Log handoff in audit trail"
+
+# Metadata
+generated:
+  by: "DIPI Charter v1.0"
+  timestamp: "2025-12-05T23:40:00Z"
+  model: "strategickhaos-governance-v1"
+  checksums:
+    sha256: "pending-verification"

@@ -1,0 +1,300 @@
+# invention_disclosure_template.yaml
+# DIPI Invention Disclosure Template for Patent Preparation
+# Strategickhaos DAO LLC — Patent Research Support
+version: "1.0"
+created: "2025-12-05"
+classification: "Operational – Non-Legal"
+
+# ============================================================
+# ⚠️ DISCLAIMER
+# ============================================================
+# This template is for DOCUMENTATION and RESEARCH purposes only.
+# It does NOT constitute a patent application or legal filing.
+# All patent decisions require review by a licensed patent attorney.
+# DIPI prepares materials — attorneys make legal determinations.
+# ============================================================
+
+# Instructions for use:
+# 1. Copy this template for each new invention
+# 2. Fill in all sections as completely as possible
+# 3. Attach supporting documents and evidence
+# 4. Submit to DIPI for prior art research
+# 5. Package will be prepared for patent counsel review
+
+disclosure:
+  # Basic identification
+  id: "INV-YYYY-NNN"  # Format: INV-2025-001
+  title: ""
+  short_description: ""
+  submission_date: ""
+  submitted_by: ""
+  
+  # Classification
+  category:
+    - ""  # Options: software, hardware, process, composition, design, utility
+  technical_field: ""
+  related_products: []
+
+# ============================================================
+# SECTION 1: INVENTION DESCRIPTION
+# ============================================================
+invention:
+  # Problem Statement
+  problem_solved:
+    description: ""
+    # What problem does this invention solve?
+    # Why is this problem important?
+    # What are the limitations of existing solutions?
+    existing_solutions: []
+    limitations_of_existing: []
+
+  # Technical Solution
+  solution:
+    description: ""
+    # How does your invention solve the problem?
+    # Describe the technical approach in detail.
+    key_components: []
+    how_it_works: ""
+    
+  # Novel Aspects
+  novelty:
+    what_is_new: ""
+    # What aspects of this invention are NEW?
+    # What has not been done before?
+    differences_from_prior_art: []
+    improvements_over_existing: []
+    
+  # Non-Obviousness
+  non_obvious_aspects:
+    description: ""
+    # Why would this NOT be obvious to someone skilled in the field?
+    # What unexpected results or advantages does it provide?
+    unexpected_results: []
+    technical_challenges_overcome: []
+
+  # Technical Details
+  technical_details:
+    architecture: ""
+    algorithms: []
+    data_structures: []
+    protocols: []
+    interfaces: []
+    configurations: []
+    
+  # Alternative Implementations
+  alternatives:
+    - description: ""
+      pros: []
+      cons: []
+
+# ============================================================
+# SECTION 2: TIMELINE & DOCUMENTATION
+# ============================================================
+timeline:
+  # Date of Conception
+  conception:
+    date: ""
+    description: "When did you first conceive of this invention?"
+    evidence: []
+    witnesses: []
+    
+  # First Disclosure
+  first_disclosure:
+    date: ""
+    to_whom: ""
+    context: ""
+    # Was it confidential? NDA in place?
+    confidential: true
+    nda_in_place: false
+    
+  # First Implementation
+  first_implementation:
+    date: ""
+    description: ""
+    evidence: []
+    repository_commit: ""
+    
+  # First Public Use/Disclosure
+  first_public:
+    date: ""
+    description: ""
+    # WARNING: Public disclosure starts 1-year clock for US patent filing
+    # and may bar foreign patent rights
+    evidence: []
+    
+  # Key Development Milestones
+  milestones:
+    - date: ""
+      description: ""
+      evidence: ""
+
+# ============================================================
+# SECTION 3: INVENTORS
+# ============================================================
+inventors:
+  - name: ""
+    title: ""
+    affiliation: "Strategickhaos DAO LLC"
+    contribution: ""
+    # What specific contributions did this person make to the invention?
+    citizenship: ""
+    residence: ""
+    contact:
+      email: ""
+      phone: ""
+    signature_date: ""
+
+# ============================================================
+# SECTION 4: PRIOR ART (To be researched by DIPI)
+# ============================================================
+prior_art:
+  # Known prior art identified by inventors
+  known_by_inventors:
+    - type: ""  # patent, publication, product, etc.
+      reference: ""
+      relevance: ""
+      how_invention_differs: ""
+      
+  # DIPI Research Results (filled by DIPI team)
+  dipi_research:
+    search_date: ""
+    databases_searched:
+      - "USPTO Patent Database"
+      - "Google Patents"
+      - "IEEE Xplore"
+      - "ACM Digital Library"
+      - "arXiv"
+    search_terms: []
+    results:
+      - reference: ""
+        type: ""
+        relevance: ""
+        notes: ""
+    summary: ""
+    researcher: ""
+
+# ============================================================
+# SECTION 5: COMMERCIAL POTENTIAL
+# ============================================================
+commercial:
+  # Potential applications
+  applications:
+    - description: ""
+      market: ""
+      potential_customers: []
+      
+  # Competitive advantage
+  competitive_advantage: ""
+  
+  # Licensing potential
+  licensing:
+    internal_use: true
+    external_licensing: false
+    potential_licensees: []
+    
+  # Related products/services
+  related_products:
+    - name: ""
+      relationship: ""
+
+# ============================================================
+# SECTION 6: SUPPORTING DOCUMENTATION
+# ============================================================
+attachments:
+  # Required attachments
+  technical_drawings: []
+  flowcharts: []
+  code_samples: []
+  test_results: []
+  screenshots: []
+  
+  # Evidence of dates
+  lab_notebooks: []
+  email_threads: []
+  git_commits: []
+  presentation_slides: []
+  
+  # Location of files
+  evidence_folder: "ip_provenance/patents/[INVENTION_ID]/"
+
+# ============================================================
+# SECTION 7: DIPI PROCESSING (Internal Use)
+# ============================================================
+dipi_processing:
+  received_date: ""
+  assigned_to: ""
+  status: ""  # received, researching, prior_art_complete, packaged, sent_to_counsel
+  
+  completeness_check:
+    invention_described: false
+    problem_identified: false
+    novelty_stated: false
+    timeline_documented: false
+    inventors_identified: false
+    evidence_attached: false
+    
+  prior_art_research:
+    status: ""
+    completion_date: ""
+    findings_summary: ""
+    
+  counsel_packet:
+    prepared_date: ""
+    prepared_by: ""
+    sent_date: ""
+    sent_to: ""
+    
+  notes: []
+
+# ============================================================
+# SECTION 8: ATTORNEY REVIEW (External Use)
+# ============================================================
+attorney_review:
+  # To be completed by patent counsel
+  reviewer: ""
+  review_date: ""
+  patentability_opinion: ""
+  recommended_action: ""
+  # Options: file_provisional, file_utility, file_design, do_not_file, need_more_info
+  classes: []
+  claims_strategy: ""
+  notes: ""
+
+# ============================================================
+# SIGNATURES
+# ============================================================
+signatures:
+  inventor:
+    name: ""
+    date: ""
+    signature: ""
+    
+  witness:
+    name: ""
+    date: ""
+    signature: ""
+    
+  dipi_reviewer:
+    name: ""
+    date: ""
+    signature: ""
+
+# ============================================================
+# REMINDERS
+# ============================================================
+important_reminders:
+  - "Public disclosure starts 1-year clock for US patent filing"
+  - "Public disclosure may bar foreign patent rights"
+  - "Keep all development records and timestamps"
+  - "Document all inventors who contributed to conception"
+  - "Maintain confidentiality until filing decision is made"
+  - "This form is NOT a patent application"
+  - "All legal decisions require patent attorney review"
+
+# Metadata
+metadata:
+  template_version: "1.0"
+  created_by: "DIPI"
+  last_updated: "2025-12-05"
+  classification: "Operational – Non-Legal"
+  retention_period: "Permanent"
