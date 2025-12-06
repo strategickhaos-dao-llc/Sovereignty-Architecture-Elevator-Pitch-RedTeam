@@ -1,5 +1,7 @@
 # Legal Contracts Directory
 
+**INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED**
+
 This directory contains legal agreements and contract templates for Strategickhaos DAO LLC / Valoryield Engine.
 
 ## Available Documents
