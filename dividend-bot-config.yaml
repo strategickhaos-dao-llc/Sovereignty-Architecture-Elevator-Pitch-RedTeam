@@ -1,0 +1,184 @@
+# Dividend Capture Bot Configuration
+# 
+# This configuration file defines the bot's behavior, strategy, and integration settings.
+# Copy this file and customize for your needs.
+
+ninjatrader:
+  # Mode: 'sim' for testing, 'live' for real money trading
+  # ALWAYS start in 'sim' mode!
+  mode: sim
+  
+  # Data feed provider for historical and real-time data
+  # Options: Polygon, dxFeed, IQFeed, NinjaTrader
+  data_feed_provider: Polygon
+  
+  # Account ID for live trading (leave empty for sim mode)
+  account_id: ""
+  
+  # Enable ATM (Automated Trade Management) Strategy
+  enable_atm: true
+  
+  # Enable Basket Trader for portfolio management
+  enable_basket_trader: true
+
+strategy:
+  # Which dividend capture methods to use
+  # Options: options, futures, drip
+  methods:
+    - options
+    - drip
+  
+  # Minimum dividend yield to consider (as decimal, e.g., 0.025 = 2.5%)
+  min_yield: 0.025
+  
+  # Maximum delta risk for options strategies (as decimal, e.g., 0.10 = 10%)
+  max_delta_risk: 0.10
+  
+  # How often to scan for opportunities (in hours)
+  scan_interval_hours: 6
+  
+  # Dividend aristocrats to focus on (optional - leave empty for all)
+  focus_tickers:
+    - T      # AT&T
+    - KO     # Coca-Cola
+    - JNJ    # Johnson & Johnson
+    - PG     # Procter & Gamble
+    - VZ     # Verizon
+    - XOM    # ExxonMobil
+    - CVX    # Chevron
+    - MMM    # 3M
+    - ABT    # Abbott Labs
+    - MCD    # McDonald's
+
+notifications:
+  # Enable Discord notifications
+  discord_enabled: true
+  
+  # Discord channel ID for trading alerts
+  discord_channel_id: "${TRADING_CHANNEL_ID}"
+  
+  # Notify on these events
+  notify_on:
+    - opportunity_found
+    - trade_executed
+    - trade_closed
+    - backtest_complete
+    - mode_switch
+
+backtest:
+  # Enable backtesting mode
+  enabled: true
+  
+  # Backtest date range
+  start_date: "2023-01-01"
+  end_date: "2023-12-31"
+  
+  # Initial capital for backtest
+  initial_capital: 100000
+  
+  # CRITICAL: Include dividend credits in backtest
+  include_dividends: true
+  
+  # Include corporate actions (splits, etc.)
+  include_corporate_actions: true
+  
+  # Path to historical tick data (optional)
+  tick_data_path: "/path/to/historical/data"
+
+risk_management:
+  # Maximum position size as percentage of account
+  max_position_size: 0.05  # 5% per position
+  
+  # Maximum portfolio exposure to dividends
+  max_dividend_exposure: 0.30  # 30% total
+  
+  # Stop loss percentage for options positions
+  stop_loss_pct: 0.20  # 20% stop loss
+  
+  # Take profit percentage
+  take_profit_pct: 0.50  # 50% take profit
+
+xai:
+  # XAI confidence threshold for trade execution
+  min_confidence: 0.70  # 70% minimum confidence
+  
+  # Enable XAI swarm analysis (multiple agents)
+  enable_swarm: true
+  
+  # Number of agents in swarm
+  swarm_size: 4
+  
+  # Require unanimous consent from swarm
+  require_consensus: false
+
+pid_ranco:
+  # PID controller gains
+  proportional_gain: 0.5
+  integral_gain: 0.1
+  derivative_gain: 0.2
+  
+  # RANCO thresholds
+  long_threshold: 0.5
+  short_threshold: -0.5
+  
+  # Divergence detection sensitivity
+  divergence_sensitivity: 1.0
+
+data_sources:
+  # Polygon.io configuration
+  polygon:
+    api_key: "${POLYGON_API_KEY}"
+    enable_websocket: true
+  
+  # dxFeed configuration
+  dxfeed:
+    endpoint: "demo.dxfeed.com:7300"
+    username: "${DXFEED_USERNAME}"
+    password: "${DXFEED_PASSWORD}"
+  
+  # IQFeed configuration
+  iqfeed:
+    product_id: "${IQFEED_PRODUCT_ID}"
+    product_version: "1.0"
+  
+  # NinjaTrader data configuration
+  ninjatrader:
+    use_historical_bundles: true
+    bundle_path: "/path/to/ninjatrader/bundles"
+
+portfolio:
+  # DRIP strategy configuration
+  drip:
+    # Number of stocks in portfolio
+    portfolio_size: 20
+    
+    # Rebalancing frequency (days)
+    rebalance_frequency: 30
+    
+    # Minimum years of consecutive dividend increases
+    min_aristocrat_years: 25
+    
+    # Sector diversification
+    max_sector_exposure: 0.25  # 25% max per sector
+
+logging:
+  # Log level: debug, info, warn, error
+  level: info
+  
+  # Log to file
+  log_to_file: true
+  log_file_path: "./logs/dividend-bot.log"
+  
+  # Log trades to separate file
+  trade_log_enabled: true
+  trade_log_path: "./logs/trades.log"
+
+# Example values for environment variables
+# Set these in your .env file or environment
+environment_variables:
+  POLYGON_API_KEY: "your_polygon_api_key"
+  DXFEED_USERNAME: "your_dxfeed_username"
+  DXFEED_PASSWORD: "your_dxfeed_password"
+  IQFEED_PRODUCT_ID: "your_iqfeed_product_id"
+  TRADING_CHANNEL_ID: "your_discord_channel_id"
+  NINJATRADER_API_TOKEN: "your_ninjatrader_api_token"

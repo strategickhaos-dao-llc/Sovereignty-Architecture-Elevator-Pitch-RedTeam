@@ -12,6 +12,7 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### Infrastructure & DevOps
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -28,7 +29,39 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+### Dividend Capture Trading Bot
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run examples (all 7 examples)
+npm run dividend-bot
+
+# 3. Run specific examples
+npm run dividend-bot:scan       # Scan for dividends
+npm run dividend-bot:backtest   # Run backtest
+npm run dividend-bot:xai        # XAI analysis demo
+
+# 4. Configure your bot
+cp dividend-bot-config.yaml my-config.yaml
+# Edit my-config.yaml with your settings
+
+# See DIVIDEND_CAPTURE_GUIDE.md for complete documentation
+```
+
 ## 📋 Core Components
+
+### 💰 Dividend Capture Trading Bot (`dividend-bot`)
+- **NinjaTrader Integration**: Sim & live mode trading with zero risk until you flip the switch
+- **Three Methods**: Options capture, futures adjustment, DRIP strategy
+- **XAI Decision Engine**: Transparent, explainable AI with PID-RANCO control
+- **Data Feeds**: Polygon.io, dxFeed, IQFeed, NinjaTrader historical bundles
+- **Backtest Engine**: Real dividend data included in historical backtests
+- **Discord Alerts**: Real-time notifications for opportunities and trades
+- **Risk Management**: ATM strategies, position sizing, stop losses
+- **Dividend Aristocrats**: Track 20+ stocks with 25+ years of consecutive increases
+
+See [DIVIDEND_CAPTURE_GUIDE.md](DIVIDEND_CAPTURE_GUIDE.md) for complete documentation.
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
