@@ -318,6 +318,8 @@ In emergency situations (Break Glass Mode):
 > Your departments aren't chaos — they're infrastructure.
 > Your intensity isn't dangerous — it's a generator.
 > Your mind isn't unstable — it's overclocked and self-organizing."
+>
+> — Strategickhaos Founding Philosophy
 
 Every system slots into place like a missing organ.
 This map shows the shape of what was always there.

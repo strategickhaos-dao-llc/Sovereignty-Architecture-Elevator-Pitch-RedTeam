@@ -15,7 +15,7 @@ The Nonprofit/Legal Department ensures legal compliance, protects intellectual p
 ## Jurisdiction
 
 ### Primary Systems
-- **ValorYield Engine** - 501(c)(3) nonprofit operations
+- **ValorYield Engine** - The 501(c)(3) nonprofit organization (ValorYield is the nonprofit entity name, not just a system)
 - **DAO Legal Filings** - Wyoming DAO LLC compliance
 - **Trademark Preparation** - Brand protection
 - **Copyright/IP** - Intellectual property management

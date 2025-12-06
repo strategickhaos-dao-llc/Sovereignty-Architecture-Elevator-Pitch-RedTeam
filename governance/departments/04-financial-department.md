@@ -45,7 +45,7 @@ The Financial Department ensures financial sustainability, optimizes capital flo
 - DeFi protocol interactions
 
 ### 3. Treasury Operations
-- 7% Treasury Loop maintenance
+- 7% Treasury Loop maintenance (recurring yield mechanism directing 7% of returns to treasury reserves)
 - Capital allocation decisions
 - Liquidity management
 - Reserve requirements

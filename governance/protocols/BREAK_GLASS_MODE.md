@@ -144,7 +144,7 @@ Even during Break Glass Mode, these limits cannot be violated:
 - Hydration: Every 30 minutes
 - Movement: Every 60 minutes (even 30 seconds)
 - Nutrition: Every 4 hours
-- Eyes: 20-20-20 rule (20 min, look 20 ft, 20 sec)
+- Eyes: 20-20-20 rule (every 20 minutes, look at something 20 feet away for 20 seconds)
 
 ---
 
