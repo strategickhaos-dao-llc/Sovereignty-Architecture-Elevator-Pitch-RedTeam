@@ -1,0 +1,16 @@
+# SovereignPRManager Dependencies
+# Core
+PyGithub>=2.1.1
+nats-py>=2.6.0
+
+# AI APIs
+anthropic>=0.18.0
+openai>=1.12.0
+
+# Utilities
+httpx>=0.27.0
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+
+# Optional: Local model support
+# ollama>=0.1.0
