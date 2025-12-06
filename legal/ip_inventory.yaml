@@ -1,0 +1,221 @@
+# ip_inventory.yaml
+# Strategickhaos DAO LLC — Intellectual Property Inventory
+# Version 3.0 - December 5, 2025
+# CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED
+
+version: "3.0"
+declaration_date: "2025-12-05"
+
+declarant:
+  name: "Domenic G. Garza"
+  entity_primary: "StrategicKhaos DAO LLC"
+  entity_primary_type: "Wyoming DAO LLC"
+  entity_primary_file_no: "2025-001708194"
+  entity_nonprofit: "ValorValor Engine"
+  entity_nonprofit_type: "501(c)(3) Nonprofit Corporation"
+  entity_nonprofit_ein: "39-2923503"
+  address: "830 23rd Street, Unit 36, Dickinson, TX 77539"
+
+intellectual_property:
+  trademarks:
+    - name: "StrategicKhaos™"
+      type: "trademark"
+      status: "in_use"
+      protection_strategy:
+        - "Federal trademark filing"
+        - "Class 9 (Software)"
+        - "Class 36 (Financial services)"
+        - "Class 42 (Technology services)"
+      action_required: "File intent-to-use application within 30 days"
+      priority: "high"
+
+    - name: "SwarmGate™"
+      type: "trademark"
+      status: "operational"
+      protection_strategy:
+        - "Federal trademark filing"
+        - "Copyright registration"
+      associated_software: true
+      action_required: "File intent-to-use application within 30 days"
+      priority: "high"
+
+    - name: "QuantumEvoTokenizer (QET™)"
+      type: "trademark"
+      status: "operational"
+      protection_strategy:
+        - "Federal trademark filing"
+        - "Trade secret protection"
+        - "Evaluate patent filing"
+      associated_software: true
+      action_required: "File intent-to-use application within 30 days"
+      priority: "high"
+
+  software_systems:
+    - name: "Strategickhaos Dialectical Engine"
+      type: "source_code_method"
+      status: "operational"
+      description: "Python-based dialectical synthesis engine with YAML-driven metaphorical mapping and contradiction-resolution algorithms"
+      estimated_loc: 450
+      protection_strategy:
+        - "Copyright registration"
+        - "Trade secret protection"
+      action_required: "Copyright registration within 90 days"
+      priority: "high"
+
+    - name: "QuantumEvoTokenizer (QET)"
+      type: "source_code_method"
+      status: "operational"
+      description: "Adaptive tokenization and evolutionary pattern-discovery engine for financial and system logs"
+      protection_strategy:
+        - "Copyright registration"
+        - "Trade secret protection"
+        - "Evaluate patentability"
+      action_required: "Copyright registration within 90 days; patent evaluation"
+      priority: "high"
+
+    - name: "SwarmGate Protocol v1.0"
+      type: "software_system"
+      status: "operational"
+      description: "Automated treasury governance system with 7% allocation rules, cognitive-state gating, and zero-trust execution controls"
+      protection_strategy:
+        - "Copyright registration"
+        - "Trade secret protection"
+      action_required: "Copyright registration within 90 days"
+      priority: "high"
+
+    - name: "Ranks-Style Trading Arsenal"
+      type: "algorithms_code"
+      status: "revenue_generating"
+      description: "Momentum trading algorithm suite including Simple Momentum, Dual Momentum, Accelerated Momentum"
+      tier: "0"
+      protection_strategy:
+        - "Copyright registration"
+        - "Trade secret protection"
+      action_required: "Copyright registration within 90 days"
+      priority: "high"
+
+  methodologies:
+    - name: "Legion of Minds Council Framework"
+      type: "methodology"
+      status: "operational"
+      description: "Hybrid AI integration framework combining Claude, Grok, Gemini, and GitHub Copilot"
+      protection_strategy:
+        - "Trade secret protection"
+        - "Eventual publication"
+      action_required: "Maintain trade secret protocols"
+      priority: "medium"
+
+    - name: "880x Cost Reduction Model"
+      type: "business_method"
+      status: "documented"
+      description: "Methodology demonstrating solo operation of systems that traditionally require 30-40 full-time personnel"
+      protection_strategy:
+        - "Trade secret protection"
+      action_required: "Document and secure"
+      priority: "medium"
+
+infrastructure:
+  kubernetes_cluster:
+    nodes:
+      - name: "Nova"
+        role: "control-plane"
+      - name: "Lyra"
+        role: "worker"
+      - name: "Athena"
+        role: "worker"
+    services_count: 130
+    status: "operational"
+
+  ai_inference:
+    model: "Qwen2.5-72B-Instruct"
+    deployment: "local_sovereign"
+    external_dependency: false
+    status: "operational"
+
+  hybrid_ai:
+    models:
+      - "Claude"
+      - "Grok"
+      - "Gemini"
+      - "GitHub Copilot"
+    framework: "Legion of Minds Council"
+    status: "operational"
+
+  observability:
+    components:
+      - "Prometheus"
+      - "Grafana"
+      - "Elasticsearch"
+      - "Loki"
+    status: "operational"
+
+  integrations:
+    - name: "Kraken"
+      type: "cryptocurrency_exchange"
+      status: "live"
+    - name: "NinjaTrader"
+      type: "trading_platform"
+      status: "live"
+    - name: "Coinbase"
+      type: "cryptocurrency_exchange"
+      status: "live"
+    - name: "Alpaca"
+      type: "brokerage"
+      integration_method: "Zapier webhooks"
+      status: "live"
+    - name: "Thread Bank / Sequence.io"
+      type: "banking"
+      status: "live"
+
+knowledge_management:
+  obsidian_vaults:
+    count: 11
+    notes_count: 10000
+    status: "operational"
+  includes:
+    - "Development logs"
+    - "Architecture diagrams"
+    - "IP provenance trails"
+
+counsel_action_items:
+  - action: "File trademark applications"
+    assets:
+      - "StrategicKhaos™"
+      - "SwarmGate™"
+      - "QET™"
+    deadline_days: 30
+    priority: "critical"
+
+  - action: "Copyright registrations"
+    assets:
+      - "Dialectical Engine"
+      - "QET"
+      - "Trading algorithm suite"
+    deadline_days: 90
+    priority: "high"
+
+  - action: "Patent evaluation"
+    assets:
+      - "QET evolutionary mechanisms"
+      - "Dialectical synthesis process"
+    deadline_days: 90
+    priority: "medium"
+
+  - action: "IP assignment structure review"
+    description: "Confirm optimal IP assignment structure: individual → DAO LLC → 501(c)(3)"
+    deadline_days: 60
+    priority: "high"
+
+  - action: "Trading compliance review"
+    items:
+      - "Pattern Day Trader status"
+      - "Reg T margin compliance"
+      - "Automated trading disclosures"
+    deadline_days: 30
+    priority: "high"
+
+verification:
+  declarant: "Domenic G. Garza"
+  declaration_date: "2025-12-05"
+  jurisdiction: "United States / State of Texas"
+  notary_status: "pending"
