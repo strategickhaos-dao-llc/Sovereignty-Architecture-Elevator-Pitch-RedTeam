@@ -4,7 +4,7 @@ Maps glyphs to their frequencies and functions according to the Glyph Frequency 
 """
 
 from enum import Enum
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 
 class GlyphCategory(Enum):
@@ -191,11 +191,11 @@ class GlyphRegistry:
         """Look up a glyph by symbol or name"""
         return self.glyphs.get(identifier)
     
-    def get_by_frequency(self, frequency: int) -> list[Glyph]:
+    def get_by_frequency(self, frequency: int) -> List[Glyph]:
         """Get all glyphs at a specific frequency"""
         return [g for g in self.glyphs.values() if g.frequency == frequency]
     
-    def get_by_category(self, category: GlyphCategory) -> list[Glyph]:
+    def get_by_category(self, category: GlyphCategory) -> List[Glyph]:
         """Get all glyphs in a specific category"""
         return [g for g in set(self.glyphs.values()) if g.category == category]
     
@@ -203,6 +203,6 @@ class GlyphRegistry:
         """Return the number of unique glyphs"""
         return len(set(self.glyphs.values()))
     
-    def list_all(self) -> list[Glyph]:
+    def list_all(self) -> List[Glyph]:
         """List all unique glyphs"""
         return list(set(self.glyphs.values()))

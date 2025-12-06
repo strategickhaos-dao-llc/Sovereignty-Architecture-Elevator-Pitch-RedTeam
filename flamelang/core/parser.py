@@ -18,7 +18,7 @@ class ASTNode:
 @dataclass
 class NumberNode(ASTNode):
     """Represents a numeric literal"""
-    value: float | int
+    value: Any  # float or int
 
 
 @dataclass
