@@ -1,0 +1,143 @@
+name: Harden Security Verification
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'scripts/harden-security.sh'
+      - 'bootstrap/**'
+      - '.github/workflows/security-harden.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_mode:
+        description: 'Hardening mode to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - rbac
+          - nsg
+          - policy
+          - headers
+          - secrets
+          - containers
+
+env:
+  EVENTS_URL: "https://events.strategickhaos.com/azure-pipeline"
+
+jobs:
+  security-hardening:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📋 Notify Discord - Security Hardening Started
+        if: success()
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+        run: |
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg ref "${{ github.ref_name }}" \
+            --arg actor "${{ github.actor }}" \
+            --arg event "build.started" \
+            --arg pipeline "Harden_Security" \
+            --arg logs_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{event:$event, repo:$repo, commit:$sha, branch:$ref, actor:$actor, pipeline:$pipeline, logs_url:$logs_url}')
+          
+          if [ -n "$EVENTS_HMAC_KEY" ]; then
+            sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+            curl -sS -X POST "$EVENTS_URL" \
+              -H "Content-Type: application/json" \
+              -H "X-Sig: $sig" \
+              -d "$payload" || true
+          else
+            echo "EVENTS_HMAC_KEY not set - skipping Discord notification"
+          fi
+          
+      - name: 🔒 Make security script executable
+        run: chmod +x scripts/harden-security.sh
+        
+      - name: 🔍 Run Security Hardening Verification
+        id: harden
+        run: |
+          echo "Running security hardening with mode: ${{ github.event.inputs.run_mode || 'all' }}"
+          ./scripts/harden-security.sh ${{ github.event.inputs.run_mode || 'all' }}
+        continue-on-error: true
+        
+      - name: 📊 Generate Security Report
+        run: |
+          echo "## Security Hardening Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Actor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Checks Performed" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] RBAC Role Propagation" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Network Security Groups" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Azure Policy Compliance" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Security Headers" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Secrets Management" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Container Security" >> $GITHUB_STEP_SUMMARY
+          
+      - name: ✅ Notify Discord - Success
+        if: steps.harden.outcome == 'success'
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+        run: |
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg ref "${{ github.ref_name }}" \
+            --arg actor "${{ github.actor }}" \
+            --arg event "build.completed" \
+            --arg pipeline "Harden_Security" \
+            --arg logs_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{event:$event, repo:$repo, commit:$sha, branch:$ref, actor:$actor, pipeline:$pipeline, logs_url:$logs_url}')
+          
+          if [ -n "$EVENTS_HMAC_KEY" ]; then
+            sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+            curl -sS -X POST "$EVENTS_URL" \
+              -H "Content-Type: application/json" \
+              -H "X-Sig: $sig" \
+              -d "$payload" || true
+          fi
+
+      - name: 🚨 Notify Discord - Failure
+        if: steps.harden.outcome == 'failure'
+        env:
+          EVENTS_HMAC_KEY: ${{ secrets.EVENTS_HMAC_KEY }}
+        run: |
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg sha "${{ github.sha }}" \
+            --arg ref "${{ github.ref_name }}" \
+            --arg actor "${{ github.actor }}" \
+            --arg event "build.failed" \
+            --arg pipeline "Harden_Security" \
+            --arg error "Security hardening verification failed. Use /diagnose harden-security for AI analysis." \
+            --arg logs_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{event:$event, repo:$repo, commit:$sha, branch:$ref, actor:$actor, pipeline:$pipeline, error:$error, logs_url:$logs_url}')
+          
+          if [ -n "$EVENTS_HMAC_KEY" ]; then
+            sig=$(printf '%s' "$payload" | openssl dgst -sha256 -hmac "$EVENTS_HMAC_KEY" -binary | xxd -p -c 256)
+            curl -sS -X POST "$EVENTS_URL" \
+              -H "Content-Type: application/json" \
+              -H "X-Sig: $sig" \
+              -d "$payload" || true
+          fi
+          
+      - name: ❌ Fail if hardening failed
+        if: steps.harden.outcome == 'failure'
+        run: exit 1

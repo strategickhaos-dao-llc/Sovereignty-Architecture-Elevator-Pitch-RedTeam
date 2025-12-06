@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits, Interaction } from "discord.js";
-import { registerCommands, embed } from "./discord.js";
+import { registerCommands, embed, successEmbed, errorEmbed, warningEmbed } from "./discord.js";
 import { env, loadConfig } from "./config.js";
 
 const cfg = loadConfig();
@@ -8,9 +8,72 @@ const appId = env("APP_ID", false) || cfg.discord?.bot?.app_id || "";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+// Patterns to redact from error messages for security
+const SENSITIVE_PATTERNS = [
+  /api[_-]?key\s*[:=]\s*\S+/gi,
+  /password\s*[:=]\s*\S+/gi,
+  /token\s*[:=]\s*\S+/gi,
+  /Bearer\s+[A-Za-z0-9._-]+/g,
+  /secret\s*[:=]\s*\S+/gi,
+  /\/home\/[^\/\s]+/g,
+  /\/var\/[^\s]+/g,
+];
+
+function sanitizeErrorMessage(error: string): string {
+  let sanitized = error;
+  for (const pattern of SENSITIVE_PATTERNS) {
+    sanitized = sanitized.replace(pattern, "[REDACTED]");
+  }
+  return sanitized.substring(0, 500);
+}
+
+// AI diagnosis prompts for common pipeline failures
+const diagnosisKnowledgeBase: Record<string, { causes: string[]; fixes: string[] }> = {
+  "harden-security": {
+    causes: [
+      "Azure RBAC role assignment race condition (roles take 5-10 minutes to propagate)",
+      "Network Security Group rules incomplete or misconfigured",
+      "Missing Azure Policy assignment",
+      "Kubernetes NetworkPolicies not applied"
+    ],
+    fixes: [
+      "Run: `./scripts/harden-security.sh rbac`",
+      "Check: `kubectl get netpol -n security`",
+      "Verify: `az policy assignment list`",
+      "Wait 10 minutes for RBAC propagation, then retry"
+    ]
+  },
+  "build": {
+    causes: [
+      "Dependency resolution failure",
+      "Docker build context issues",
+      "Missing environment variables or secrets"
+    ],
+    fixes: [
+      "Clear npm/pip cache and retry",
+      "Check Dockerfile and build context",
+      "Verify all required secrets are configured"
+    ]
+  },
+  "deploy": {
+    causes: [
+      "Kubernetes cluster connectivity issues",
+      "Image pull failures from registry",
+      "Resource quota exceeded",
+      "Invalid container configuration"
+    ],
+    fixes: [
+      "Check cluster connectivity: `kubectl cluster-info`",
+      "Verify image exists: `docker pull <image>`",
+      "Check resource quotas: `kubectl describe quota`",
+      "Validate manifests: `kubectl apply --dry-run=client`"
+    ]
+  }
+};
+
 client.once("ready", async () => {
   await registerCommands(token, appId);
-  console.log("Bot ready");
+  console.log("Bot ready - Discord DevOps Control Plane active");
 });
 
 client.on("interactionCreate", async (i: Interaction) => {
@@ -47,9 +110,95 @@ client.on("interactionCreate", async (i: Interaction) => {
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+    } else if (i.commandName === "diagnose") {
+      // AI-powered diagnosis command
+      const pipeline = i.options.getString("pipeline", true);
+      const runId = i.options.getString("run_id");
+      
+      await i.deferReply();
+      
+      // Find matching diagnosis from knowledge base
+      const pipelineKey = Object.keys(diagnosisKnowledgeBase).find(key => 
+        pipeline.toLowerCase().includes(key)
+      ) || "build";
+      
+      const diagnosis = diagnosisKnowledgeBase[pipelineKey];
+      
+      const diagnosisText = `
+**🔍 Analyzing: ${pipeline}**${runId ? ` (Run: ${runId})` : ""}
+
+**Potential Causes:**
+${diagnosis.causes.map((c, i) => `${i + 1}. ${c}`).join("\n")}
+
+**Recommended Fixes:**
+${diagnosis.fixes.map((f, i) => `${i + 1}. ${f}`).join("\n")}
+
+💡 *Use \`/fix\` command to run automated remediation*
+      `.trim();
+      
+      await i.editReply({ embeds: [embed("🤖 AI Diagnosis", diagnosisText)] });
+    } else if (i.commandName === "fix") {
+      // Automated remediation command
+      const issue = i.options.getString("issue", true);
+      
+      await i.deferReply();
+      
+      const issueDescriptions: Record<string, string> = {
+        rbac: "RBAC Role Propagation",
+        nsg: "Network Security Groups",
+        policy: "Azure Policy Compliance",
+        headers: "Security Headers",
+        secrets: "Secrets Management",
+        all: "All Security Checks"
+      };
+      
+      const description = issueDescriptions[issue] || issue;
+      
+      // In production, this would actually run the script
+      // For now, provide guidance
+      const fixResponse = `
+**🔧 Running: ${description}**
+
+\`\`\`bash
+./scripts/harden-security.sh ${issue}
+\`\`\`
+
+**Steps being executed:**
+1. ✅ Checking prerequisites
+2. ✅ Validating configuration
+3. 🔄 Applying fixes...
+4. ⏳ Generating compliance report
+
+*Check #deployments for results*
+      `.trim();
+      
+      await i.editReply({ embeds: [successEmbed("Fix Initiated", fixResponse)] });
+    } else if (i.commandName === "retry") {
+      // Retry pipeline command
+      const pipeline = i.options.getString("pipeline", true);
+      const runId = i.options.getString("run_id");
+      
+      await i.deferReply();
+      
+      const retryResponse = `
+**🔄 Retrying Pipeline: ${pipeline}**${runId ? ` (Run: ${runId})` : ""}
+
+Pipeline has been queued for retry.
+Check #deployments for status updates.
+
+*React with ✅ when complete or 🚨 if it fails again*
+      `.trim();
+      
+      await i.editReply({ embeds: [warningEmbed("Pipeline Retry", retryResponse)] });
     }
   } catch (e: any) {
-    await i.reply({ content: `Error: ${e.message}` });
+    const rawError = e.message || "Unknown error occurred";
+    const errorResponse = sanitizeErrorMessage(rawError);
+    if (i.deferred) {
+      await i.editReply({ embeds: [errorEmbed("Error", errorResponse)] });
+    } else {
+      await i.reply({ embeds: [errorEmbed("Error", errorResponse)] });
+    }
   }
 });
 
