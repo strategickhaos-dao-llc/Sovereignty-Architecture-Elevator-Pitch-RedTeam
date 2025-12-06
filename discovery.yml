@@ -322,3 +322,84 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Quantum Chess Wargame Simulator
+# Moonlight Sunshine Matrix Prototype Sovereign (MSMS)
+quantum_chess:
+  enabled: true
+  codename: "moonlight-sunshine-matrix-prototype-sovereign"
+  
+  # Architecture
+  dimensions: 10
+  metaphor: "10 chessboards stacked vertically"
+  gameplay: "continuous"
+  
+  # Namespaces
+  namespaces:
+    quantum_chess: "quantum-chess"
+    red_team: "red-team"
+    blue_team: "blue-team"
+  
+  # NATS Entanglement Layer
+  nats:
+    url: "nats://nats.quantum-chess.svc.cluster.local:4222"
+    streams:
+      - "red-team-actions"
+      - "blue-team-actions"
+      - "legion-analysis"
+  
+  # Red Team (Offensive)
+  red_team:
+    os: "Kali Linux"
+    image: "kalilinux/kali-rolling:latest"
+    agents:
+      - port_scanner
+      - exploit_engine
+      - lateral_movement
+      - data_exfiltration
+      - persistence
+      - c2_operator
+  
+  # Blue Team (Defensive)
+  blue_team:
+    os: "Parrot OS"
+    image: "parrotsec/core:latest"
+    agents:
+      - firewall_manager
+      - ids_ips_controller
+      - threat_hunter
+      - incident_response
+      - siem_correlator
+      - forensics_analyzer
+      - patch_manager
+      - backup_validator
+  
+  # Visualization
+  visualization:
+    port: 8080
+    moonlight: true
+    sunshine: true
+  
+  # Legion Analysis
+  legion:
+    enabled: true
+    learning_rate: 0.1
+    analysis:
+      - attack_defense_correlation
+      - pattern_recognition
+      - risk_assessment
+  
+  # Discord Integration
+  discord:
+    channels:
+      red_team: "#red-team"
+      blue_team: "#blue-team"
+      quantum_chess: "#quantum-chess"
+      legion_analysis: "#legion-analysis"
+  
+  # Cost Analysis
+  cost_analysis:
+    traditional_cost: "$300K/year"
+    quantum_chess_cost: "$1,200/year"
+    cost_reduction: "250x"
+    learning_speed: "1000x"

@@ -1,0 +1,223 @@
+# Red Team Agent Configuration
+# Quantum Chess Wargame Simulator - Offensive Security Agents
+
+version: "1.0"
+team: "red"
+purpose: "Automated penetration testing and vulnerability discovery"
+
+# Agent definitions
+agents:
+  port_scanner:
+    name: "Port Scanner"
+    description: "Network reconnaissance and service enumeration"
+    tools:
+      - nmap
+      - masscan
+      - rustscan
+    capabilities:
+      - port_discovery
+      - service_detection
+      - os_fingerprinting
+      - version_detection
+    tactics:
+      - T1046  # Network Service Scanning
+      - T1018  # Remote System Discovery
+    nats:
+      publish:
+        - "attack.recon.portscan"
+        - "probe.network.*"
+      subscribe:
+        - "defend.network.block"
+        - "detect.scan.*"
+    schedule:
+      interval: "5m"
+      random_delay: "2m"
+    targets:
+      - namespace: "blue-team"
+        exclude: []
+
+  exploit_engine:
+    name: "Exploit Engine"
+    description: "Vulnerability exploitation and payload delivery"
+    tools:
+      - metasploit
+      - nuclei
+      - sqlmap
+    capabilities:
+      - cve_exploitation
+      - payload_generation
+      - post_exploitation
+    tactics:
+      - T1203  # Exploitation for Client Execution
+      - T1210  # Exploitation of Remote Services
+    nats:
+      publish:
+        - "attack.exploit.*"
+        - "attack.payload.*"
+      subscribe:
+        - "defend.patch.*"
+        - "detect.exploit.*"
+    schedule:
+      interval: "15m"
+      random_delay: "5m"
+    depends_on:
+      - port_scanner
+
+  lateral_movement:
+    name: "Lateral Movement"
+    description: "Internal network pivoting and credential harvesting"
+    tools:
+      - crackmapexec
+      - impacket
+      - bloodhound
+    capabilities:
+      - credential_harvesting
+      - pass_the_hash
+      - kerberoasting
+      - network_pivoting
+    tactics:
+      - T1550  # Use Alternate Authentication Material
+      - T1021  # Remote Services
+      - T1558  # Steal or Forge Kerberos Tickets
+    nats:
+      publish:
+        - "attack.lateral.*"
+        - "attack.credential.*"
+      subscribe:
+        - "defend.auth.*"
+        - "detect.lateral.*"
+    schedule:
+      interval: "30m"
+      random_delay: "10m"
+    depends_on:
+      - exploit_engine
+
+  data_exfiltration:
+    name: "Data Exfiltration"
+    description: "Data discovery and extraction simulation"
+    tools:
+      - dnscat2
+      - chisel
+      - rclone
+    capabilities:
+      - data_discovery
+      - compression
+      - encryption
+      - covert_channels
+    tactics:
+      - T1041  # Exfiltration Over C2 Channel
+      - T1048  # Exfiltration Over Alternative Protocol
+      - T1567  # Exfiltration Over Web Service
+    nats:
+      publish:
+        - "attack.exfil.*"
+        - "attack.data.*"
+      subscribe:
+        - "defend.dlp.*"
+        - "detect.exfil.*"
+    schedule:
+      interval: "1h"
+      random_delay: "15m"
+    depends_on:
+      - lateral_movement
+
+  persistence:
+    name: "Persistence Agent"
+    description: "Maintain access through various persistence mechanisms"
+    tools:
+      - sliver
+      - covenant
+    capabilities:
+      - backdoor_installation
+      - scheduled_tasks
+      - registry_modification
+      - service_creation
+    tactics:
+      - T1053  # Scheduled Task/Job
+      - T1136  # Create Account
+      - T1543  # Create or Modify System Process
+    nats:
+      publish:
+        - "attack.persist.*"
+        - "attack.backdoor.*"
+      subscribe:
+        - "defend.audit.*"
+        - "detect.persist.*"
+    schedule:
+      interval: "2h"
+      random_delay: "30m"
+    depends_on:
+      - exploit_engine
+
+  c2_operator:
+    name: "C2 Operator"
+    description: "Command and control infrastructure management"
+    tools:
+      - mythic
+      - havoc
+    capabilities:
+      - beacon_management
+      - task_execution
+      - communication_encryption
+      - callback_handling
+    tactics:
+      - T1071  # Application Layer Protocol
+      - T1095  # Non-Application Layer Protocol
+      - T1573  # Encrypted Channel
+    nats:
+      publish:
+        - "attack.c2.*"
+        - "attack.command.*"
+      subscribe:
+        - "defend.network.*"
+        - "detect.c2.*"
+    schedule:
+      interval: "10m"
+      random_delay: "3m"
+
+# Echolocation protocol - learning from blue team
+echolocation:
+  enabled: true
+  learning_rate: 0.1
+  adaptation_interval: "1h"
+  
+  observe:
+    - "defend.*"
+    - "detect.*"
+    - "respond.*"
+  
+  adapt_to:
+    - detection_patterns
+    - response_times
+    - defensive_posture
+  
+  feedback_loop:
+    - "If firewall blocks port, try different port"
+    - "If signature detected, modify payload"
+    - "If lateral blocked, try alternate path"
+
+# Safety constraints
+safety:
+  sandbox_mode: true
+  allowed_targets:
+    - namespaces:
+        - "blue-team"
+        - "honeypot"
+  prohibited_actions:
+    - external_network_access
+    - real_data_exfiltration
+    - persistent_damage
+  audit_all_actions: true
+  max_parallel_attacks: 5
+
+# Reporting
+reporting:
+  nats_stream: "red-team-actions"
+  format: "json"
+  include:
+    - timestamp
+    - agent
+    - action
+    - target
+    - result
+    - mitre_tactic

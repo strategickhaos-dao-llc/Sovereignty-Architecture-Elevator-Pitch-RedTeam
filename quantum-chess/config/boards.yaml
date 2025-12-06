@@ -1,0 +1,330 @@
+# 10-Dimensional Chessboard Configuration
+# Each board represents a different operational layer
+
+version: "1.0"
+boards:
+  - level: 10
+    name: "Strategic Command"
+    description: "Board-level decisions, policies, and business objectives"
+    squares: 64
+    pieces:
+      red: ["Reputational attacks", "Ransomware campaigns", "Executive targeting"]
+      blue: ["Cyber insurance", "Incident response plans", "Crisis management"]
+    red_moves:
+      - id: "strategic_ransomware"
+        name: "Ransomware Campaign"
+        mitre: "T1486"
+        impact: "critical"
+      - id: "reputation_attack"
+        name: "Reputational Damage"
+        mitre: "T1491"
+        impact: "high"
+    blue_moves:
+      - id: "incident_response_plan"
+        name: "Execute IR Plan"
+        d3fend: "D3-IR"
+        coverage: "enterprise"
+      - id: "cyber_insurance_claim"
+        name: "Insurance Activation"
+        coverage: "financial"
+
+  - level: 9
+    name: "Tactical Operations"
+    description: "Operational procedures, runbooks, and automations"
+    squares: 64
+    pieces:
+      red: ["Social engineering", "Insider threats", "Physical access"]
+      blue: ["Security awareness", "Access monitoring", "Behavior analytics"]
+    red_moves:
+      - id: "social_engineering"
+        name: "Phishing Campaign"
+        mitre: "T1566"
+        impact: "high"
+      - id: "insider_threat"
+        name: "Insider Manipulation"
+        mitre: "T1078"
+        impact: "critical"
+    blue_moves:
+      - id: "security_awareness"
+        name: "Training Program"
+        d3fend: "D3-AT"
+        coverage: "users"
+      - id: "behavior_monitoring"
+        name: "UEBA Analytics"
+        d3fend: "D3-UA"
+        coverage: "endpoints"
+
+  - level: 8
+    name: "Network Security"
+    description: "Security controls, IDS/IPS, SIEM, and threat intel"
+    squares: 64
+    pieces:
+      red: ["Evasion techniques", "Encoding", "Encryption abuse"]
+      blue: ["Signature updates", "ML detection", "Threat intelligence"]
+    red_moves:
+      - id: "evasion"
+        name: "Detection Evasion"
+        mitre: "T1027"
+        impact: "medium"
+      - id: "encoded_payload"
+        name: "Encoded Commands"
+        mitre: "T1140"
+        impact: "medium"
+    blue_moves:
+      - id: "signature_update"
+        name: "Update Signatures"
+        d3fend: "D3-SU"
+        coverage: "detection"
+      - id: "ml_detection"
+        name: "Anomaly Detection"
+        d3fend: "D3-AD"
+        coverage: "behavior"
+
+  - level: 7
+    name: "Application Layer"
+    description: "Frontend, backend, databases, and application components"
+    squares: 64
+    pieces:
+      red: ["SQL injection", "XSS", "CSRF", "RCE"]
+      blue: ["Prepared statements", "CSP", "CORS", "WAF"]
+    red_moves:
+      - id: "sql_injection"
+        name: "SQL Injection"
+        mitre: "T1190"
+        impact: "critical"
+      - id: "xss"
+        name: "Cross-Site Scripting"
+        mitre: "T1189"
+        impact: "high"
+      - id: "rce"
+        name: "Remote Code Execution"
+        mitre: "T1059"
+        impact: "critical"
+    blue_moves:
+      - id: "prepared_statements"
+        name: "Parameterized Queries"
+        d3fend: "D3-IQP"
+        coverage: "database"
+      - id: "csp"
+        name: "Content Security Policy"
+        d3fend: "D3-CSP"
+        coverage: "browser"
+      - id: "waf"
+        name: "Web Application Firewall"
+        d3fend: "D3-WAF"
+        coverage: "web"
+
+  - level: 6
+    name: "API Gateway"
+    description: "REST/GraphQL/gRPC services and API endpoints"
+    squares: 64
+    pieces:
+      red: ["Auth bypass", "IDOR", "Rate limit abuse", "API fuzzing"]
+      blue: ["OAuth", "API keys", "Input validation", "Rate limiting"]
+    red_moves:
+      - id: "auth_bypass"
+        name: "Authentication Bypass"
+        mitre: "T1556"
+        impact: "critical"
+      - id: "idor"
+        name: "IDOR Exploitation"
+        mitre: "T1565"
+        impact: "high"
+      - id: "api_fuzzing"
+        name: "API Fuzzing"
+        mitre: "T1046"
+        impact: "medium"
+    blue_moves:
+      - id: "oauth"
+        name: "OAuth Implementation"
+        d3fend: "D3-OA"
+        coverage: "auth"
+      - id: "input_validation"
+        name: "Input Validation"
+        d3fend: "D3-IV"
+        coverage: "api"
+      - id: "rate_limiting"
+        name: "Rate Limiting"
+        d3fend: "D3-RL"
+        coverage: "api"
+
+  - level: 5
+    name: "Service Mesh"
+    description: "Microservices, API gateways, sidecars, and proxies"
+    squares: 64
+    pieces:
+      red: ["Service impersonation", "Sidecar injection", "Mesh poisoning"]
+      blue: ["mTLS", "Service identity", "Policy enforcement"]
+    red_moves:
+      - id: "service_impersonation"
+        name: "Service Spoofing"
+        mitre: "T1090"
+        impact: "high"
+      - id: "sidecar_injection"
+        name: "Sidecar Injection"
+        mitre: "T1610"
+        impact: "critical"
+    blue_moves:
+      - id: "mtls"
+        name: "Mutual TLS"
+        d3fend: "D3-TLS"
+        coverage: "network"
+      - id: "service_identity"
+        name: "Service Authentication"
+        d3fend: "D3-SA"
+        coverage: "mesh"
+
+  - level: 4
+    name: "Container Orchestration"
+    description: "Kubernetes namespaces, deployments, services, ingress"
+    squares: 64
+    pieces:
+      red: ["RBAC bypass", "Secret extraction", "Pod escape"]
+      blue: ["Network policies", "OPA/Gatekeeper", "Pod security"]
+    red_moves:
+      - id: "rbac_bypass"
+        name: "RBAC Bypass"
+        mitre: "T1078"
+        impact: "critical"
+      - id: "secret_extraction"
+        name: "Secret Extraction"
+        mitre: "T1552"
+        impact: "critical"
+      - id: "pod_escape"
+        name: "Container Escape"
+        mitre: "T1611"
+        impact: "critical"
+    blue_moves:
+      - id: "network_policies"
+        name: "Network Policies"
+        d3fend: "D3-NP"
+        coverage: "namespace"
+      - id: "opa"
+        name: "Policy Enforcement"
+        d3fend: "D3-PE"
+        coverage: "cluster"
+      - id: "pod_security"
+        name: "Pod Security Standards"
+        d3fend: "D3-PS"
+        coverage: "pods"
+
+  - level: 3
+    name: "Infrastructure"
+    description: "VMs, containers, compute nodes, and cloud resources"
+    squares: 64
+    pieces:
+      red: ["Container escape", "Privilege escalation", "Cloud exploitation"]
+      blue: ["Isolation", "Least privilege", "Cloud security posture"]
+    red_moves:
+      - id: "container_escape"
+        name: "Container Breakout"
+        mitre: "T1611"
+        impact: "critical"
+      - id: "privilege_escalation"
+        name: "Privilege Escalation"
+        mitre: "T1068"
+        impact: "critical"
+    blue_moves:
+      - id: "isolation"
+        name: "Workload Isolation"
+        d3fend: "D3-WI"
+        coverage: "compute"
+      - id: "least_privilege"
+        name: "Least Privilege"
+        d3fend: "D3-LP"
+        coverage: "iam"
+
+  - level: 2
+    name: "Network Topology"
+    description: "Subnets, firewalls, load balancers, and VPNs"
+    squares: 64
+    pieces:
+      red: ["Port scanning", "Firewall bypass", "MITM", "ARP poisoning"]
+      blue: ["Intrusion detection", "Segmentation", "Encryption"]
+    red_moves:
+      - id: "port_scan"
+        name: "Port Scanning"
+        mitre: "T1046"
+        impact: "low"
+      - id: "firewall_bypass"
+        name: "Firewall Bypass"
+        mitre: "T1562"
+        impact: "high"
+      - id: "mitm"
+        name: "Man-in-the-Middle"
+        mitre: "T1557"
+        impact: "critical"
+    blue_moves:
+      - id: "ids"
+        name: "Intrusion Detection"
+        d3fend: "D3-ID"
+        coverage: "network"
+      - id: "segmentation"
+        name: "Network Segmentation"
+        d3fend: "D3-NS"
+        coverage: "network"
+
+  - level: 1
+    name: "Physical Layer"
+    description: "Routers, switches, bare metal servers, and data centers"
+    squares: 64
+    pieces:
+      red: ["MAC flooding", "ARP spoofing", "Physical access", "Supply chain"]
+      blue: ["VLANs", "Port security", "Physical security", "Inventory"]
+    red_moves:
+      - id: "mac_flood"
+        name: "MAC Flooding"
+        mitre: "T1200"
+        impact: "medium"
+      - id: "arp_spoof"
+        name: "ARP Spoofing"
+        mitre: "T1557"
+        impact: "high"
+      - id: "physical_access"
+        name: "Physical Access"
+        mitre: "T1200"
+        impact: "critical"
+    blue_moves:
+      - id: "vlan"
+        name: "VLAN Segmentation"
+        d3fend: "D3-VS"
+        coverage: "network"
+      - id: "port_security"
+        name: "Port Security"
+        d3fend: "D3-PS"
+        coverage: "switches"
+      - id: "asset_inventory"
+        name: "Asset Inventory"
+        d3fend: "D3-AI"
+        coverage: "physical"
+
+# Vertical connectivity
+vertical_effects:
+  description: "Moves on lower boards can affect higher boards"
+  propagation:
+    - from: 1
+      to: [2, 3]
+      effect: "Physical compromise enables network attacks"
+    - from: 2
+      to: [3, 4, 5]
+      effect: "Network access enables infrastructure attacks"
+    - from: 4
+      to: [5, 6, 7]
+      effect: "Container compromise enables application attacks"
+    - from: 7
+      to: [8, 9, 10]
+      effect: "Application breach enables strategic damage"
+
+# Scoring
+scoring:
+  red_team:
+    vulnerability_found: 10
+    exploit_success: 50
+    data_exfiltrated: 100
+    persistence_established: 75
+  
+  blue_team:
+    attack_blocked: 25
+    threat_detected: 15
+    incident_contained: 50
+    system_hardened: 30
