@@ -35,3 +35,13 @@ target/
 
 # Workspace data
 workspace/
+
+# Nonprofit artifacts - generated files (keep templates, ignore outputs)
+irs_audit_*/
+donors/
+defense_package_*/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
