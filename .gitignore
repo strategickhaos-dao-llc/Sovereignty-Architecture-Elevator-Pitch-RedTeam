@@ -35,3 +35,19 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Evolution system generated files
+evolution/evolution_ledger.jsonl
+evolution/current_population.json
+evolution/lineage_graph.dot
+evolution/*.png
