@@ -22,15 +22,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from decimal import Decimal, ROUND_DOWN
 
-try:
-    from nats.aio.client import Client as NATS
-    import aiohttp
-except ImportError:
-    print("Installing required dependencies...")
-    import subprocess
-    subprocess.check_call(["pip", "install", "nats-py", "aiohttp"])
-    from nats.aio.client import Client as NATS
-    import aiohttp
+from nats.aio.client import Client as NATS
+import aiohttp
 
 # Logging configuration
 logging.basicConfig(
@@ -290,9 +283,22 @@ class SovereignBankingProcessor:
         return record
         
     async def _store_audit_record(self, record: Dict[str, Any]):
-        """Store audit record for compliance and verification"""
-        # In production, this would write to a secure audit database
-        # For now, write to local audit log file
+        """
+        Store audit record for compliance and verification.
+        
+        PRODUCTION NOTE: This implementation uses file-based storage for simplicity.
+        For production deployment, integrate with:
+        - PostgreSQL with audit logging extensions
+        - AWS S3 with versioning and immutability
+        - Elasticsearch for searchable audit trails
+        - Blockchain-based immutable ledger
+        
+        Audit records MUST be:
+        - Tamper-proof (cryptographic hashing implemented)
+        - Backed up regularly
+        - Retained per regulatory requirements
+        - Accessible for compliance audits
+        """
         audit_log_path = os.getenv('AUDIT_LOG_PATH', '/var/log/sovereign-banking/audit.jsonl')
         
         try:
@@ -302,7 +308,11 @@ class SovereignBankingProcessor:
             logger.info(f"Audit record stored: {record['audit_id']}")
         except Exception as e:
             logger.error(f"Failed to store audit record: {e}")
-            # In production, this should trigger alerts
+            # Critical: Audit logging failure must trigger immediate alerts
+            await self._notify_error(
+                json.dumps(record),
+                f"CRITICAL: Audit logging failed - {e}"
+            )
             
     async def _notify_discord(self, audit_record: Dict[str, Any]):
         """Send transaction notification to Discord"""

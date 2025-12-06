@@ -17,11 +17,14 @@ metadata:
   namespace: sovereign-banking
 type: Opaque
 stringData:
-  # IMPORTANT: Replace these with actual credentials before deploying
-  sequence_api_key: "YOUR_SEQUENCE_API_KEY_HERE"
-  discord_webhook_url: "YOUR_DISCORD_WEBHOOK_URL_HERE"
-  # Optional: if using custom Sequence API URL
-  # sequence_api_url: "https://api.getsequence.io/v1"
+  # SECURITY WARNING: Never commit actual credentials to version control
+  # These are placeholders only. Use one of these approaches for production:
+  # 1. External secret management (Vault, AWS Secrets Manager, etc.)
+  # 2. Sealed Secrets (bitnami-labs/sealed-secrets)
+  # 3. kubectl create secret from file (not committed to git)
+  # 4. CI/CD pipeline secret injection
+  sequence_api_key: "PLACEHOLDER_REPLACE_VIA_EXTERNAL_SECRET_MANAGER"
+  discord_webhook_url: "PLACEHOLDER_REPLACE_VIA_EXTERNAL_SECRET_MANAGER"
 
 ---
 # ConfigMap for application configuration
@@ -93,12 +96,12 @@ spec:
       
       containers:
       - name: banking-processor
-        image: python:3.11-slim
+        # PRODUCTION: Build and push this image to your container registry
+        # Build: docker build -t your-registry/sovereign-banking:v1.0 .
+        # Push: docker push your-registry/sovereign-banking:v1.0
+        # Update this line with your registry URL
+        image: sovereign-banking:v1.0
         imagePullPolicy: IfNotPresent
-        
-        command:
-          - python
-          - /app/sovereign_banking.py
         
         env:
         # Secrets from Secret
@@ -160,9 +163,6 @@ spec:
             cpu: "500m"
         
         volumeMounts:
-        - name: app-code
-          mountPath: /app
-          readOnly: true
         - name: audit-logs
           mountPath: /var/log/sovereign-banking
         
@@ -188,40 +188,7 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 3
       
-      initContainers:
-      - name: install-dependencies
-        image: python:3.11-slim
-        command:
-          - sh
-          - -c
-          - |
-            pip install --no-cache-dir nats-py aiohttp
-        volumeMounts:
-        - name: pip-cache
-          mountPath: /root/.cache/pip
-      
-      - name: copy-app-code
-        image: busybox:latest
-        command:
-          - sh
-          - -c
-          - |
-            cp /config/sovereign_banking.py /app/
-            chmod 444 /app/sovereign_banking.py
-        volumeMounts:
-        - name: app-config
-          mountPath: /config
-        - name: app-code
-          mountPath: /app
-      
       volumes:
-      - name: app-config
-        configMap:
-          name: banking-app-code
-      - name: app-code
-        emptyDir: {}
-      - name: pip-cache
-        emptyDir: {}
       - name: audit-logs
         persistentVolumeClaim:
           claimName: audit-logs-pvc

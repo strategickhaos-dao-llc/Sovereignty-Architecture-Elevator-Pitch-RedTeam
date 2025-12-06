@@ -151,6 +151,10 @@ This system implements an automated 7% charitable distribution mechanism whereby
 - Discord webhook URL (for notifications)
 - Python 3.11+ (for local testing)
 
+**Dependencies:**
+- nats-py >= 2.7.0
+- aiohttp >= 3.9.4 (security-patched version)
+
 **Optional:**
 - Helm (for simplified deployment)
 - Prometheus/Grafana (for monitoring)
@@ -223,7 +227,30 @@ kubectl create secret generic banking-secrets \
   --from-literal=discord_webhook_url='https://discord.com/api/webhooks/YOUR_WEBHOOK'
 ```
 
-### Step 4: Deploy Banking Integration
+### Step 4: Build and Push Container Image
+
+```bash
+# Navigate to banking integration directory
+cd banking-integration
+
+# Build Docker image
+docker build -t your-registry.com/sovereign-banking:v1.0 .
+
+# Test image locally (optional)
+docker run --rm \
+  -e SEQUENCE_API_KEY="test_key" \
+  -e NATS_URL="nats://localhost:4222" \
+  -e DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/test" \
+  your-registry.com/sovereign-banking:v1.0
+
+# Push to your container registry
+docker push your-registry.com/sovereign-banking:v1.0
+
+# Update deployment.yaml with your registry URL
+# Edit line 89: image: your-registry.com/sovereign-banking:v1.0
+```
+
+### Step 5: Deploy Banking Integration
 
 ```bash
 # Apply all Kubernetes manifests
@@ -234,7 +261,7 @@ kubectl get pods -n sovereign-banking
 kubectl logs -f deployment/sovereign-banking -n sovereign-banking
 ```
 
-### Step 5: Test Transaction Processing
+### Step 6: Test Transaction Processing
 
 ```bash
 # Install NATS CLI
