@@ -35,3 +35,11 @@ target/
 
 # Workspace data
 workspace/
+
+# Solvern binaries and encrypted files
+solvern
+genome.age
+swarm_master.key
+SWARM_DNA_v9_decrypted.yaml
+*.age
+*.key
