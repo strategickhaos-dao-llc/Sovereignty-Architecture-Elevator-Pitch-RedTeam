@@ -211,6 +211,30 @@ event_gateway:
 - **Test**: Quantum-symbolic emulator validation
 - **Deploy**: Blue-green Kubernetes deployments
 - **Notify**: Real-time Discord status updates
+- **Auto-Merge**: Automatic approval and merge for trusted bot PRs
+
+### Auto-Merge for Copilot PRs
+
+The repository includes an auto-merge workflow (`.github/workflows/auto-merge-copilot.yml`) that automatically approves and merges PRs from trusted bot actors:
+
+**Trusted Actors:**
+- `copilot-swe-agent[bot]` - GitHub Copilot coding agent
+- `copilot-swe-agent` - Copilot SWE agent
+- `github-actions[bot]` - GitHub Actions automation
+- `dependabot[bot]` - Dependency updates
+
+**How it works:**
+1. When a PR is opened by a trusted bot, the workflow triggers
+2. It waits for all CI checks to pass
+3. Auto-approves the PR using `hmarr/auto-approve-action`
+4. Enables auto-merge or attempts direct merge
+5. Adds a comment explaining the automation
+
+**Configuration:**
+- Workflow: `.github/workflows/auto-merge-copilot.yml`
+- Code Owners: `.github/CODEOWNERS`
+
+This eliminates the manual approval bottleneck when using AI agents for autonomous development.
 
 ### Event Flow
 ```bash
