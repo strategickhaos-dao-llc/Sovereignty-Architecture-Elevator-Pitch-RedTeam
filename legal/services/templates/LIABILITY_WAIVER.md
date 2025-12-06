@@ -236,7 +236,9 @@ Provider's total aggregate liability for any claims arising from the engagement 
 
 **The lesser of:**
 1. Total fees paid by Client for the specific engagement, OR
-2. $[Amount - typically engagement value or insurance limit]
+2. $[Amount - MUST BE SPECIFIED - typically engagement value or insurance coverage limit, e.g., $1M-$2M]
+
+**Note for Attorney Review:** This amount should align with professional liability insurance coverage limits and be appropriate for the engagement size.
 
 ### 6.2 Excluded Damages
 

@@ -74,6 +74,13 @@ Vulnerability Probability: P(v) = 1 - exp(-λ/β)
 Critical Zones: [API Gateway, Session Manager, Auth Service]
 ```
 
+**Physics Metaphors Explained for Non-Technical Audiences:**
+- **Coherence (Φ):** How well security controls work together (0-1 scale, higher is better)
+- **Event Horizon:** Security boundary where data should not escape (like a black hole)
+- **Information Density:** How much sensitive data exists in a component (higher = more risk)
+- **Hawking Radiation:** Slow information leaks over time (e.g., timing attacks, side channels)
+- **Escape Velocity:** How hard it is to steal data from a component (higher = more secure)
+
 **Step 2: Black Hole Boundary Analysis**
 - Information leak detection using gravitational metaphor
 - "Event horizon" boundaries where data should not escape

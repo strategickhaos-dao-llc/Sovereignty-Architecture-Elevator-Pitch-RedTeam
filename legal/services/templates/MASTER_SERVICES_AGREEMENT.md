@@ -313,7 +313,9 @@ Upon termination:
 
 ### 11.1 Governing Law
 
-This Agreement is governed by the laws of [State/Jurisdiction] without regard to conflicts of law principles.
+This Agreement is governed by the laws of [State/Jurisdiction - MUST BE SPECIFIED] without regard to conflicts of law principles.
+
+**Note for Attorney Review:** Specify the appropriate state jurisdiction based on business location and client location.
 
 ### 11.2 Dispute Resolution
 

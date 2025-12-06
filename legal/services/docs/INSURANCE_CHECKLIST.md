@@ -37,10 +37,12 @@ This checklist outlines the insurance requirements for operating StrategicKhaos 
 - Bodily injury or property damage (covered by GL)
 - Data breaches (covered by cyber liability)
 
-**Estimated Annual Cost:**
+**Estimated Annual Cost (as of December 2025):**
 - 1-person firm: $2,000-$3,000
 - 3-person firm: $3,500-$5,000
 - 5-person firm: $5,000-$7,000
+
+**Note:** These estimates should be updated annually. Always get current quotes from multiple providers.
 
 **Recommended Providers:**
 - **Hiscox** - Specializes in tech E&O, excellent cyber combo policies
