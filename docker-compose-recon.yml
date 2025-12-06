@@ -11,7 +11,7 @@ volumes:
 services:
   # Vector Database
   qdrant:
-    image: qdrant/qdrant:v1.11.0
+    image: docker.io/qdrant/qdrant:v1.11.0
     container_name: recon-qdrant
     hostname: qdrant
     volumes:
@@ -33,7 +33,7 @@ services:
 
   # Embedding Service
   embedder:
-    image: python:3.11-slim
+    image: docker.io/python:3.11-slim
     container_name: recon-embedder
     hostname: embedder
     working_dir: /app
@@ -61,7 +61,7 @@ services:
 
   # Repository Ingestor
   ingestor:
-    image: python:3.11-slim
+    image: docker.io/python:3.11-slim
     container_name: recon-ingestor
     hostname: ingestor
     working_dir: /app
@@ -93,7 +93,7 @@ services:
 
   # RAG Retriever API
   retriever:
-    image: python:3.11-slim
+    image: docker.io/python:3.11-slim
     container_name: recon-retriever
     hostname: retriever
     working_dir: /app

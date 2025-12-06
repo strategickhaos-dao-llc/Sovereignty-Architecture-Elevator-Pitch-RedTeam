@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   vault:
-    image: hashicorp/vault:1.17
+    image: docker.io/hashicorp/vault:1.17
     environment:
       VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_ROOT_TOKEN:-root}
       VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus:v2.55.0
+    image: docker.io/prom/prometheus:v2.55.0
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     command: ["--config.file=/etc/prometheus/prometheus.yml"]
@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:11.2.0
+    image: docker.io/grafana/grafana:11.2.0
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
     ports: ["3000:3000"]
@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
   loki:
-    image: grafana/loki:2.9.8
+    image: docker.io/grafana/loki:2.9.8
     command: ["-config.file=/etc/loki/local-config.yml"]
     ports: ["3100:3100"]
     volumes:

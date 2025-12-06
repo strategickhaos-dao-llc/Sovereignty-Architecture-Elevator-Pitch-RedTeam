@@ -23,7 +23,7 @@ volumes:
 services:
   # Reverse Proxy & Load Balancer
   traefik:
-    image: traefik:v3.0
+    image: docker.io/traefik:v3.0
     container_name: cloudos-traefik
     command:
       - "--api.dashboard=true"
@@ -50,7 +50,7 @@ services:
 
   # Cloud IDE (VS Code Server)
   desktop:
-    image: codercom/code-server:latest
+    image: docker.io/codercom/code-server:latest
     container_name: cloudos-desktop
     environment:
       - PASSWORD=admin
@@ -71,7 +71,7 @@ services:
 
   # Web Terminal
   terminal:
-    image: wettyoss/wetty:latest
+    image: docker.io/wettyoss/wetty:latest
     container_name: cloudos-terminal
     environment:
       - SSHHOST=localhost
@@ -162,7 +162,7 @@ services:
 
   # Chat Server (Matrix Synapse)
   synapse:
-    image: matrixdotorg/synapse:latest
+    image: docker.io/matrixdotorg/synapse:latest
     container_name: cloudos-synapse
     environment:
       - SYNAPSE_SERVER_NAME=localhost
@@ -189,7 +189,7 @@ services:
 
   # Chat UI (Element Web)
   element:
-    image: vectorim/element-web:latest
+    image: docker.io/vectorim/element-web:latest
     container_name: cloudos-element
     environment:
       - DEFAULT_SERVER_CONFIG={"m.homeserver":{"base_url":"http://localhost:8008","server_name":"localhost"}}
@@ -208,7 +208,7 @@ services:
 
   # Object Storage (MinIO)
   minio:
-    image: minio/minio:latest
+    image: docker.io/minio/minio:latest
     container_name: cloudos-minio
     environment:
       - MINIO_ROOT_USER=admin
@@ -238,7 +238,7 @@ services:
 
   # Vector Database
   qdrant:
-    image: qdrant/qdrant:latest
+    image: docker.io/qdrant/qdrant:latest
     container_name: cloudos-qdrant
     ports:
       - "6333:6333"
@@ -256,7 +256,7 @@ services:
 
   # Database
   postgres:
-    image: postgres:15
+    image: docker.io/postgres:15
     container_name: cloudos-postgres
     environment:
       - POSTGRES_DB=strategickhaos
@@ -279,7 +279,7 @@ services:
 
   # Cache & Message Broker
   redis:
-    image: redis:7-alpine
+    image: docker.io/redis:7-alpine
     container_name: cloudos-redis
     ports:
       - "6379:6379"
@@ -297,7 +297,7 @@ services:
 
   # Monitoring - Prometheus
   prometheus:
-    image: prom/prometheus:latest
+    image: docker.io/prom/prometheus:latest
     container_name: cloudos-prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -317,7 +317,7 @@ services:
 
   # Monitoring - Grafana
   grafana:
-    image: grafana/grafana:latest
+    image: docker.io/grafana/grafana:latest
     container_name: cloudos-grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
