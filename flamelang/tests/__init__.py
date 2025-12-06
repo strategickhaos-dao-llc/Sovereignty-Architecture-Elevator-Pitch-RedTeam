@@ -1,0 +1,3 @@
+"""
+FlameLang Tests
+"""
