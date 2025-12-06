@@ -152,6 +152,26 @@ EVENTS_HMAC_KEY=your_64_char_hmac_key
 
 ## 🤖 AI Agent Integration
 
+### Supported LLM Providers
+- **OpenAI**: GPT-4, GPT-3.5-turbo models
+- **Anthropic**: Claude 3 models  
+- **X.AI (Grok)**: Grok-beta, Grok-2 models - [See Integration Guide](GROK_INTEGRATION.md)
+
+### Grok API Integration
+Quick start with Grok:
+```bash
+# Set your API key
+export XAI_API_KEY="xai-your-key-here"
+
+# Use bash script
+./scripts/grok_chat.sh "What is sovereignty architecture?"
+
+# Or use Python client
+python scripts/grok_chat.py "Explain quantum computing" --model grok-2-latest
+```
+
+📖 **Full documentation**: [GROK_INTEGRATION.md](GROK_INTEGRATION.md)
+
 ### Vector Knowledge Base
 - **Runbooks**: Operational procedures and troubleshooting guides
 - **Log Schemas**: Structured logging patterns and analysis
@@ -166,6 +186,7 @@ ai_agents:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
       "#prs": "claude-3-sonnet"  # Code review assistance
+      "#grok": "grok-beta"  # Grok integration for sovereignty analysis
 ```
 
 ## 🔐 Security & Governance
