@@ -1,0 +1,11 @@
+# SKOS Immune System Python Requirements
+# Sovereign Khaos Operating System v0.1.0
+
+# NATS client for async messaging
+nats-py>=2.6.0
+
+# YAML configuration support (optional)
+PyYAML>=6.0
+
+# Type hints for Python 3.9+ (optional, included in 3.11+)
+# typing-extensions>=4.0.0

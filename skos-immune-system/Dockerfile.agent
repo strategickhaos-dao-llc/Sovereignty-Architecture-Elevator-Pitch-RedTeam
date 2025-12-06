@@ -1,0 +1,35 @@
+# SKOS Agent Dockerfile
+# Sovereign Khaos Operating System v0.1.0
+
+FROM python:3.11-slim
+
+LABEL maintainer="Strategickhaos DAO LLC"
+LABEL description="SKOS Agent Base Image"
+LABEL version="0.1.0"
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies for hardware monitoring
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    lm-sensors \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip install --no-cache-dir nats-py>=2.6.0
+
+# Copy agents
+COPY agents/ /app/agents/
+
+# Create non-root user
+RUN useradd -m -u 1000 skos && chown -R skos:skos /app
+USER skos
+
+# Set environment defaults
+ENV NATS_URL=nats://localhost:4222
+ENV NODE_NAME=nova
+ENV LOG_LEVEL=INFO
+
+# Run thermal sentinel by default
+CMD ["python", "-u", "agents/thermal_sentinel.py"]

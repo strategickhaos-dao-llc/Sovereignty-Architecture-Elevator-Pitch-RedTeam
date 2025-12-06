@@ -1,0 +1,119 @@
+# SKOS Immune System - Docker Compose Stack
+# Sovereign Khaos Operating System v0.1.0
+#
+# This stack deploys:
+# - NATS JetStream (message backbone)
+# - Antibody Coordinator (immune system brain)
+# - Thermal Sentinel Agent (temperature monitoring)
+#
+# Usage:
+#   docker-compose up -d
+#
+# Copyright (c) 2024 Strategickhaos DAO LLC
+# License: MIT
+
+version: "3.8"
+
+services:
+  # ============================================
+  # NATS JetStream - Message Backbone
+  # ============================================
+  nats:
+    image: nats:2.10-alpine
+    container_name: skos-nats
+    ports:
+      - "4222:4222"   # Client connections
+      - "8222:8222"   # HTTP monitoring
+    command: 
+      - "--js"        # Enable JetStream
+      - "--http_port=8222"
+      - "--name=skos-nats"
+    volumes:
+      - nats-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - skos-mesh
+
+  # ============================================
+  # Antibody Coordinator - Immune System Brain
+  # ============================================
+  coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile.coordinator
+    container_name: skos-coordinator
+    environment:
+      - NATS_URL=nats://nats:4222
+      - NODE_NAME=coordinator
+      - HEARTBEAT_TIMEOUT=30
+      - AUDIT_STREAM=SKOS_AUDIT
+      - LOG_LEVEL=INFO
+    depends_on:
+      nats:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - skos-mesh
+
+  # ============================================
+  # Thermal Sentinel - Temperature Monitor
+  # ============================================
+  thermal-sentinel:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    container_name: skos-thermal-sentinel
+    environment:
+      - NATS_URL=nats://nats:4222
+      - NODE_NAME=nova
+      - AGENT_ID=thermal-sentinel-nova
+      - MONITOR_INTERVAL=5
+      - HEARTBEAT_INTERVAL=10
+      - WARNING_TEMP=75
+      - CRITICAL_TEMP=85
+      - EMERGENCY_TEMP=95
+      - LOG_LEVEL=INFO
+    depends_on:
+      - coordinator
+    # Mount host thermal sensors for real monitoring
+    volumes:
+      - /sys/class/thermal:/sys/class/thermal:ro
+      - /sys/class/hwmon:/sys/class/hwmon:ro
+    privileged: false
+    cap_add:
+      - SYS_RAWIO
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - skos-mesh
+
+# ============================================
+# Networks
+# ============================================
+networks:
+  skos-mesh:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# ============================================
+# Volumes
+# ============================================
+volumes:
+  nats-data:
+    driver: local

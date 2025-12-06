@@ -35,3 +35,13 @@ target/
 
 # Workspace data
 workspace/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/

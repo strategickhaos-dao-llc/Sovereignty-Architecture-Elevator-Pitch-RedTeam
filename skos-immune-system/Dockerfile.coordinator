@@ -1,0 +1,31 @@
+# SKOS Antibody Coordinator Dockerfile
+# Sovereign Khaos Operating System v0.1.0
+
+FROM python:3.11-slim
+
+LABEL maintainer="Strategickhaos DAO LLC"
+LABEL description="SKOS Antibody Coordinator - Immune System Brain"
+LABEL version="0.1.0"
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir nats-py>=2.6.0
+
+# Copy coordinator code
+COPY coordinator/main.py /app/main.py
+
+# Create non-root user
+RUN useradd -m -u 1000 skos && chown -R skos:skos /app
+USER skos
+
+# Set environment defaults
+ENV NATS_URL=nats://localhost:4222
+ENV NODE_NAME=coordinator
+ENV HEARTBEAT_TIMEOUT=30
+ENV AUDIT_STREAM=SKOS_AUDIT
+ENV LOG_LEVEL=INFO
+
+# Run coordinator
+CMD ["python", "-u", "main.py"]
