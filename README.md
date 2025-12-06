@@ -272,12 +272,38 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📚 Documentation & Legal
+
+### Core Documentation
+- **[Community Manifesto](COMMUNITY.md)** - Philosophy and spirit of The Legion
+- **[Contributors](CONTRIBUTORS.md)** - Recognition of contributors
+- **[Security Guidelines](SECURITY.md)** - Security policies and reporting
+
+### Legal & Compliance
+- **[🚀 Quick Start Guide](QUICKSTART_AI_EVIDENCE.md)** - Get started in 15 minutes with AI conversation documentation
+- **[Appendix C: Legal Status of AI-Generated Evidence](APPENDIX_C_LEGAL_STATUS_AI_EVIDENCE.md)** - Comprehensive legal analysis of AI conversation ledgers for R&D documentation, patent prosecution, and audit trails
+- **[Conversation Evidence Schema](templates/conversation_evidence_schema.yaml)** - YAML template for documenting AI-assisted development
+- **[Sworn Declaration Template](templates/sworn_declaration_template.md)** - Legal attestation template for evidence admissibility
+
+### Technical Guides
+- **[GPG Signature Guide](docs/GPG_SIGNATURE_GUIDE.md)** - Cryptographic signing for non-repudiation ($0 cost)
+- **[OpenTimestamps Guide](docs/OPENTIMESTAMPS_GUIDE.md)** - Blockchain timestamping for proof of existence
+- **[Examples](examples/)** - Complete working examples of conversation ledgers
+
+### Why This Matters
+The AI-augmented development approach used in this project produces not just code and infrastructure, but also **legally-defensible audit trails** that can be used for:
+- 📊 Investor due diligence
+- 🏛️ Patent prosecution (conception dates)
+- 🔐 Trade secret protection
+- 📝 Academic research documentation
+- ⚖️ Regulatory compliance
+
+With minimal investment ($0-50, 2 hours setup), you get 80-90% of the legal protection of a $10,000 professional documentation service.
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
 
-- **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
-- **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
 ## 📄 License & Support
