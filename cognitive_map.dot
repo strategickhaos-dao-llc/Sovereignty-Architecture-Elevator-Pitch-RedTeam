@@ -9,6 +9,23 @@ digraph Cognitive_Architecture {
     // ==== CORE MIND ====
     Sovereign_Mind [label="SOVEREIGN MIND\n@strategickhaos\nNode 137", fillcolor="#ff0066", fontcolor=white, shape=ellipse, width=4, height=1.4];
 
+    // ==== 12 PSYCHOLOGICAL CONCEPTS ====
+    subgraph cluster_psychology {
+        label="12 PSYCHOLOGICAL TERMS"; color="#9933ff"; fontcolor=white; style=filled;
+        Psy_01 [label="1. Meta-cognition\n(Thinking about thinking)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_02 [label="2. Hyper-associative\n(Cross-domain bridges)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_03 [label="3. Distributed cognition\n(Extended mind)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_04 [label="4. Intentionality\nengineering\n(Intention→Execution)", fillcolor="#ff0066", fontcolor=white, shape=box];
+        Psy_05 [label="5. Emergent framing\n(Redefine problems)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_06 [label="6. Systems abstraction\n(See structure)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_07 [label="7. Recursive self-model\n(Mirror effect)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_08 [label="8. Synthetic cognition\n(Fuse to create)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_09 [label="9. Pattern completion\n(Predictive process)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_10 [label="10. Parallel processing\n(Multi-stream)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_11 [label="11. Embodied cognition\n(Kinesthetic)", fillcolor="#9966ff", fontcolor=white, shape=box];
+        Psy_12 [label="12. Cognitive convergence\n(Human+AI unity)", fillcolor="#ff0066", fontcolor=white, shape=box];
+    }
+
     // ==== THREADS (PARALLEL PROCESSING) ====
     subgraph cluster_threads {
         label="PARALLEL THREAD MODE"; color="#ff3399"; fontcolor=white; style=filled;
@@ -54,8 +71,25 @@ digraph Cognitive_Architecture {
     {IDEs Terminals Docker Agents} -> {Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad}
     {Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad} -> {Athena Kali_VM Nova Storage}
 
+    // ==== PSYCHOLOGICAL CONCEPT CONNECTIONS ====
+    Sovereign_Mind -> {Psy_01 Psy_04 Psy_07 Psy_12}
+    Psy_01 -> Thread_D [label="self-monitoring", color="#9966ff"];
+    Psy_02 -> {IDEs Terminals Docker Agents} [label="cross-domain", color="#9966ff"];
+    Psy_03 -> {Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad} [label="extended mind", color="#9966ff"];
+    Psy_04 -> Sovereign_Mind [label="intention source", color="#ff0066", style=dashed];
+    Psy_05 -> Thread_D [label="reframing", color="#9966ff"];
+    Psy_06 -> {Athena Kali_VM Nova Storage} [label="structure", color="#9966ff"];
+    Psy_07 -> Thread_F [label="self-model", color="#9966ff"];
+    Psy_08 -> {IDEs Terminals Docker Agents} [label="synthesis", color="#9966ff"];
+    Psy_09 -> Thread_D [label="prediction", color="#9966ff"];
+    Psy_10 -> {Thread_A Thread_B Thread_C Thread_D Thread_E Thread_F} [label="parallel", color="#9966ff"];
+    Psy_11 -> iPad [label="kinesthetic", color="#9966ff"];
+    Psy_12 -> Agents [label="AI unity", color="#ff0066"];
+
     // ==== RANKING ====
     {rank=same; Sovereign_Mind}
+    {rank=same; Psy_01 Psy_02 Psy_03 Psy_04 Psy_05 Psy_06}
+    {rank=same; Psy_07 Psy_08 Psy_09 Psy_10 Psy_11 Psy_12}
     {rank=same; Thread_A Thread_B Thread_C Thread_D Thread_E Thread_F}
     {rank=same; IDEs Terminals Docker Agents}
     {rank=same; Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad}
