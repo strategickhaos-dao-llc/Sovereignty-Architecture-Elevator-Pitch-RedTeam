@@ -24,6 +24,7 @@ import subprocess
 import re
 import sys
 import os
+import shutil
 from pathlib import Path
 from datetime import datetime
 
@@ -203,7 +204,6 @@ class FlameLangParser:
     
     def _command_exists(self, cmd: str) -> bool:
         """Check if a command exists in PATH."""
-        import shutil
         return shutil.which(cmd) is not None
     
     def list_glyphs(self):

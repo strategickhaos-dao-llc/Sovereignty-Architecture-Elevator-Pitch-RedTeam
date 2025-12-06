@@ -85,7 +85,9 @@ function global:Invoke-Glyph {
         if ($script.EndsWith(".ps1")) {
             & $script
         } elseif ($script.EndsWith(".py")) {
-            python $script
+            # Use Python Launcher on Windows, python3 otherwise
+            $pythonCmd = if (Get-Command py -ErrorAction SilentlyContinue) { "py" } else { "python3" }
+            & $pythonCmd $script
         } else {
             & $script
         }
