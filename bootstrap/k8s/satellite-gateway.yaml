@@ -1,0 +1,247 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: satellite-gateway
+  namespace: ops
+  labels:
+    app: satellite-gateway
+    component: connectivity
+    provider: starlink
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: satellite-gateway
+  template:
+    metadata:
+      labels:
+        app: satellite-gateway
+        component: connectivity
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3002"
+        prometheus.io/path: "/metrics/satellite"
+    spec:
+      serviceAccountName: satellite-gateway
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: satellite-gateway
+          image: ghcr.io/strategickhaos/satellite-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3002
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "3002"
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: satellite-secrets
+                  key: discord-token
+            - name: SATELLITE_RELAY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: satellite-secrets
+                  key: relay-secret
+            - name: STATUS_CHANNEL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: satellite-config
+                  key: status-channel-id
+            - name: ALERTS_CHANNEL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: satellite-config
+                  key: alerts-channel-id
+            - name: AGENTS_CHANNEL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: satellite-config
+                  key: agents-channel-id
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /satellite/health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /satellite/health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: satellite-gateway
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: satellite-gateway
+  namespace: ops
+  labels:
+    app: satellite-gateway
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: satellite-gateway
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: satellite-gateway
+  namespace: ops
+  labels:
+    app: satellite-gateway
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: satellite-config
+  namespace: ops
+  labels:
+    app: satellite-gateway
+data:
+  status-channel-id: ""  # Replace with actual Discord channel ID
+  alerts-channel-id: ""  # Replace with actual Discord channel ID
+  agents-channel-id: ""  # Replace with actual Discord channel ID
+  starlink-node-primary: "wyoming-node-137"
+  starlink-node-backup: "wyoming-node-backup"
+  failover-threshold-ms: "5000"
+  heartbeat-interval-sec: "60"
+---
+# IMPORTANT: Secret Management
+# 
+# Option 1: Vault Integration (Recommended)
+# The vault.hashicorp.com annotations below enable automatic secret injection
+# when using HashiCorp Vault with the Kubernetes auth method.
+#
+# Option 2: External Secrets Operator
+# Use external-secrets.io to sync secrets from AWS Secrets Manager, GCP Secret Manager, etc.
+# Example: kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
+#
+# Option 3: Sealed Secrets
+# Use Bitnami's sealed-secrets for GitOps-friendly encrypted secrets.
+# kubeseal --format=yaml < secret.yaml > sealed-secret.yaml
+#
+# DO NOT commit plaintext secrets to version control.
+# Generate relay-secret with: openssl rand -hex 32
+apiVersion: v1
+kind: Secret
+metadata:
+  name: satellite-secrets
+  namespace: ops
+  labels:
+    app: satellite-gateway
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "satellite-gateway"
+    vault.hashicorp.com/agent-inject-secret-discord-token: "kv/discord/bot_token"
+    vault.hashicorp.com/agent-inject-secret-relay-secret: "kv/satellite/relay_key"
+type: Opaque
+stringData:
+  # These placeholders are for local development only.
+  # In production, use Vault, External Secrets, or Sealed Secrets.
+  discord-token: "REPLACE_WITH_VAULT_OR_SEALED_SECRET"
+  relay-secret: "REPLACE_WITH_VAULT_OR_SEALED_SECRET"
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: satellite-gateway-policy
+  namespace: ops
+spec:
+  podSelector:
+    matchLabels:
+      app: satellite-gateway
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: event-gateway
+      ports:
+        - protocol: TCP
+          port: 3002
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443  # Discord API, Starlink API
+        - protocol: TCP
+          port: 6379 # Redis for message queue
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443  # External satellite API endpoints
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: satellite-gateway
+  namespace: ops
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+    - hosts:
+        - sat-relay.strategickhaos.com
+      secretName: satellite-gateway-tls
+  rules:
+    - host: sat-relay.strategickhaos.com
+      http:
+        paths:
+          - path: /satellite
+            pathType: Prefix
+            backend:
+              service:
+                name: satellite-gateway
+                port:
+                  number: 80

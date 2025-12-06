@@ -244,6 +244,115 @@ governance:
   data_handling:
     post_pii_to_discord: false
 
+# Starlink Satellite Connectivity Layer (Elon Text-Sat Pipeline)
+# Business-grade satellite backbone for sovereign infrastructure
+satellite:
+  enabled: true
+  provider: "starlink"                # starlink|kuiper|oneweb
+  account_type: "business"            # business|residential|roaming
+  
+  # Starlink Business Configuration
+  starlink:
+    static_ip: true                   # Public static IP for ValorYield engine
+    priority_data: true               # Priority data access (up to 220 Mbps down)
+    sla_uptime: 99.9                   # SLA percentage
+    dashboard_url: "https://starlink.com/business"
+    nodes:
+      - name: "primary-dish"
+        location: "wyoming-node-137"
+        status: "active"
+        bonded: false
+      - name: "backup-dish"
+        location: "wyoming-node-backup"
+        status: "standby"
+        bonded: true
+    
+  # Direct-to-Cell Configuration (T-Mobile Partnership)
+  direct_to_cell:
+    enabled: true
+    carrier: "t-mobile"
+    coverage: "nationwide"            # nationwide|global (expanding)
+    capabilities:
+      sms: true                       # Live since 2024
+      voice: false                    # Q4 2025
+      data: false                     # Q1 2026
+    sat_bandwidth_mbps: 4             # 2-4 Mbps per sat pass
+    use_cases:
+      - "agent_failover_relay"        # Swarm agents auto-failover via sat-text
+      - "emergency_commands"          # Critical ops when terrestrial down
+      - "audit_beacon"                # Tamper-evident hash verification
+      
+  # SIM Router Hybrid Failover (Peplink/Gen3)
+  router:
+    model: "peplink_br1_pro_5g"       # peplink_br1_pro_5g|starlink_gen3|custom
+    wan_interfaces:
+      - name: "starlink"
+        type: "satellite"
+        priority: 1
+        bandwidth_down_mbps: 220
+        bandwidth_up_mbps: 20
+      - name: "lte_failover"
+        type: "cellular"
+        priority: 2
+        sim_provider: "t-mobile"
+        plan: "5gb_oobm"              # Out-of-band management plan
+        auto_switch: true
+    failover:
+      mode: "auto"                    # auto|manual|scheduled
+      health_check_interval_sec: 30
+      failover_threshold_ms: 5000     # Latency threshold to trigger failover
+      failback_delay_sec: 60          # Wait before returning to primary
+    oobm:                             # Out-of-Band Management
+      enabled: true
+      ssh_port: 22
+      vpn_tunnel: "wireguard"
+      
+  # Satellite Relay for Swarm Agents
+  swarm_relay:
+    enabled: true
+    endpoint: "https://sat-relay.strategickhaos.com"
+    protocols:
+      - "sms_gateway"                 # SMS-based command relay
+      - "satellite_api"               # Direct Starlink API
+      - "store_and_forward"           # Queued messages during outage
+    encryption:
+      type: "aes256_gcm"
+      key_secret_ref: "vault://kv/satellite/relay_key"
+    message_queue:
+      provider: "redis"
+      topic: "sat.swarm.relay"
+      max_queue_depth: 1000
+      ttl_seconds: 3600
+    agents:
+      auto_failover: true
+      heartbeat_interval_sec: 60
+      relay_on_terrestrial_down: true
+      
+  # Legal & Compliance for Satellite Operations
+  compliance:
+    fcc_licensed: true
+    spectrum_band: "ku_band"          # ku_band|ka_band|v_band
+    export_controlled: false
+    wyoming_entity_compliant: true
+    
+  # Monitoring & Alerts
+  monitoring:
+    metrics_endpoint: "/metrics/satellite"
+    health_endpoint: "/health/satellite"
+    alerts:
+      - name: "starlink_down"
+        condition: "latency > 10000ms OR packet_loss > 50%"
+        discord_channel: "#alerts"
+        priority: "critical"
+      - name: "failover_activated"
+        condition: "active_wan != 'starlink'"
+        discord_channel: "#cluster-status"
+        priority: "warning"
+      - name: "sat_relay_queue_full"
+        condition: "queue_depth > 800"
+        discord_channel: "#alerts"
+        priority: "warning"
+
 testing:
   sandbox_guild_id: null
   dry_run: true
