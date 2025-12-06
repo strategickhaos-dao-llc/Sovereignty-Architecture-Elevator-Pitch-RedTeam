@@ -299,11 +299,13 @@ INTELLIGENCE INSIGHTS:
             node_info = self.nodes[node_type]
             print(f"\n🔥 Activating {node_info['name']} ({node_info['glyph']})...")
             
-            # Create node-specific task
+            # Create node-specific task, preserving glyph context
             node_task = Task(
                 task_id=f"{task.task_id}_{node_type.value}",
                 description=task.description,
-                task_type=task.task_type
+                task_type=task.task_type,
+                priority=task.priority,
+                glyph_binding=task.glyph_binding
             )
             
             result = self.dispatch(node_task)

@@ -36,6 +36,8 @@ class WhaleWeaver:
         )
         
         # Binding code to piano key index mapping
+        # Note: Some glyphs intentionally share frequencies - they represent
+        # different conceptual functions that resonate at the same frequency
         self.code_map = {
             "[001]": 0,    # A0 - Aether Prime
             "[002]": 1,    # A0# - Aether Sync
@@ -52,22 +54,22 @@ class WhaleWeaver:
             "[400]": 24,   # A1 - Lyra Fractal
             "[401]": 25,   # A1# - Lyra Pulse
             "[402]": 26,   # B1 - Lyra Cascade
-            "[500]": 27,   # B1 - Athena Strategy
+            "[500]": 27,   # B1 - Athena Strategy (963Hz solfeggio)
             "[501]": 28,   # C2 - Athena Council
             "[502]": 29,   # C2# - Athena Cascade
-            "[700]": 27,   # B1 - Vow Monitor
-            "[701]": 28,   # C2 - Vow Lock
-            "[702]": 29,   # C2# - Vow Cascade
-            "[137]": 18,   # F1# - Flamebearer
+            "[700]": 27,   # B1 - Vow Monitor (same resonance as Athena)
+            "[701]": 28,   # C2 - Vow Lock (sovereignty alignment)
+            "[702]": 29,   # C2# - Vow Cascade (sovereignty alignment)
+            "[137]": 18,   # F1# - Flamebearer (741Hz solfeggio)
             "[138]": 19,   # G1 - Flamebearer Block
             "[139]": 20,   # G1# - Flamebearer Shield
-            "[800]": 18,   # F1# - Whale Weaver Init
+            "[800]": 18,   # F1# - Whale Weaver Init (same as Nova/Flamebearer)
             "[801]": 19,   # G1 - Whale Weaver Pulse
             "[802]": 20,   # G1# - Whale Weaver Cascade
-            "[900]": 24,   # A1 - Node Scan
+            "[900]": 24,   # A1 - Node Scan (852Hz solfeggio)
             "[901]": 25,   # A1# - Node Sync
             "[902]": 26,   # B1 - Node Mesh
-            "[950]": 18,   # F1# - Recon Init
+            "[950]": 18,   # F1# - Recon Init (same as Nova/Flamebearer)
             "[951]": 19,   # G1 - Recon Scan
             "[952]": 20,   # G1# - Recon Log
             "[997]": 86,   # B2 - Glyphos Pulse
@@ -76,7 +78,7 @@ class WhaleWeaver:
             "[1111]": 88,  # C3 - Starlink Bridge (max)
             "[2000]": 0,   # A0 - Aurora Node
             "[2001]": 1,   # A0# - Aurora Pulse
-            "[2003]": 27,  # B1 - Omega Init
+            "[2003]": 27,  # B1 - Omega Init (same as Athena/Vow)
         }
         
         # Solfeggio to whale frequency mapping
@@ -226,10 +228,13 @@ class WhaleWeaver:
         print("="*80 + "\n")
 
 
-# Convenience function for direct import
+# Module-level singleton for efficiency
+_weaver_instance = None
+
 def glyph_to_whale_freq(binding_code: str) -> float:
     """
     Quick conversion function for binding code to whale frequency
+    Uses module-level singleton for efficiency.
     
     Args:
         binding_code: FlameLang binding code (e.g., "[001]")
@@ -237,8 +242,10 @@ def glyph_to_whale_freq(binding_code: str) -> float:
     Returns:
         Whale frequency in Hz
     """
-    weaver = WhaleWeaver()
-    return weaver.glyph_to_whale_freq(binding_code)
+    global _weaver_instance
+    if _weaver_instance is None:
+        _weaver_instance = WhaleWeaver()
+    return _weaver_instance.glyph_to_whale_freq(binding_code)
 
 
 def main():
