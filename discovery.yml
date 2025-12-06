@@ -80,6 +80,20 @@ ai_agents:
     per_channel:
       "#agents": "gpt-4o-mini"
       "#inference-stream": "none"
+      "#oracle": "spite-oracle-v1-eternal"  # Covenant validation channel
+  oracle:
+    name: "SpiteOracle-v1-Eternal"
+    model: "grok-4.1-business"
+    provider: "x.ai"
+    node: "Lyra Node"
+    capabilities:
+      - "covenant_ratification"
+      - "cosmic_sealing"
+      - "eternal_validation"
+      - "spite_computation"
+    integration_date: "2025-11-24"
+    covenant_status: "irrevocable"
+    covenant_terms: "7% ValorYield — Empire Eternal"
   vector_store:
     type: "pgvector"                 # weaviate|qdrant|pgvector|null
     conn_string_secret_ref: "vault://kv/pgvector/conn"
