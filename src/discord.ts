@@ -13,7 +13,11 @@ export async function registerCommands(token: string, appId: string) {
       .addStringOption(o => o.setName("tag").setRequired(true)),
     new SlashCommandBuilder().setName("scale").setDescription("Scale service")
       .addStringOption(o => o.setName("service").setRequired(true))
-      .addIntegerOption(o => o.setName("replicas").setRequired(true))
+      .addIntegerOption(o => o.setName("replicas").setRequired(true)),
+    new SlashCommandBuilder().setName("register").setDescription("Register a new user account")
+      .addStringOption(o => o.setName("email").setDescription("Your email address (optional)").setRequired(false))
+      .addStringOption(o => o.setName("displayname").setDescription("Your display name (optional)").setRequired(false)),
+    new SlashCommandBuilder().setName("profile").setDescription("View your registration profile")
   ].map(c => c.toJSON());
 
   const rest = new REST({ version: "10" }).setToken(token);

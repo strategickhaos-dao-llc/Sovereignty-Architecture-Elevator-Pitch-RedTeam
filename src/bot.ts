@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Interaction } from "discord.js";
 import { registerCommands, embed } from "./discord.js";
 import { env, loadConfig } from "./config.js";
+import { registerUser, getUser } from "./services/user-service.js";
 
 const cfg = loadConfig();
 const token = env("DISCORD_TOKEN");
@@ -47,6 +48,56 @@ client.on("interactionCreate", async (i: Interaction) => {
         body: JSON.stringify({ service: svc, replicas })
       }).then(r => r.json());
       await i.reply({ embeds: [embed("Scale", `service: ${svc}\nreplicas: ${replicas}\nresult: ${r.status}`)] });
+    } else if (i.commandName === "register") {
+      const email = i.options.getString("email") || undefined;
+      const displayName = i.options.getString("displayname") || undefined;
+      
+      const result = registerUser({
+        discordId: i.user.id,
+        username: i.user.username,
+        email,
+        displayName
+      });
+      
+      if (result.success) {
+        await i.reply({ 
+          embeds: [embed("✅ Registration Successful", 
+            `Welcome, ${result.user?.displayName || i.user.username}!\n\n` +
+            `**Discord ID:** ${result.user?.discordId}\n` +
+            `**Username:** ${result.user?.username}\n` +
+            (result.user?.email ? `**Email:** ${result.user.email}\n` : "") +
+            `**Roles:** ${result.user?.roles.join(", ")}\n` +
+            `**Registered:** ${result.user?.createdAt.toISOString()}`
+          )],
+          ephemeral: true
+        });
+      } else {
+        await i.reply({ 
+          embeds: [embed("❌ Registration Failed", result.message)],
+          ephemeral: true
+        });
+      }
+    } else if (i.commandName === "profile") {
+      const user = getUser(i.user.id);
+      
+      if (user) {
+        await i.reply({ 
+          embeds: [embed("👤 Your Profile", 
+            `**Display Name:** ${user.displayName}\n` +
+            `**Username:** ${user.username}\n` +
+            (user.email ? `**Email:** ${user.email}\n` : "") +
+            `**Roles:** ${user.roles.join(", ")}\n` +
+            `**Registered:** ${user.createdAt.toISOString()}\n` +
+            `**Last Updated:** ${user.updatedAt.toISOString()}`
+          )],
+          ephemeral: true
+        });
+      } else {
+        await i.reply({ 
+          embeds: [embed("❌ Not Registered", "You haven't registered yet. Use `/register` to create an account.")],
+          ephemeral: true
+        });
+      }
     }
   } catch (e: any) {
     await i.reply({ content: `Error: ${e.message}` });

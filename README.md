@@ -31,16 +31,24 @@ export PRS_CHANNEL="channel_id"
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)
-- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
+- **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`, `/register`, `/profile`
+- **User Registration**: Register and manage user accounts via Discord
 - **AI Agent Integration**: GPT-4 powered assistance
 - **RBAC**: Role-based access control for production operations
 - **Audit Logging**: All interactions logged to CloudWatch
+
+### 👤 User Registration
+- **Discord Registration**: Use `/register` command to create a new account
+- **Profile Management**: View your profile with `/profile` command
+- **REST API**: Register users programmatically via the event gateway API
+- **Email Support**: Optionally provide email address during registration
 
 ### 🌐 Event Gateway (`event-gateway`)
 - **Webhook Router**: GitHub/GitLab → Discord channel routing
 - **HMAC Verification**: Cryptographic webhook validation
 - **Multi-tenant**: Support for multiple repositories and environments
 - **Rate Limiting**: API protection and burst control
+- **User Registration API**: REST endpoints for user management
 
 ### 🔄 GitLens Integration
 - **VS Code Tasks**: One-click Discord notifications from GitLens

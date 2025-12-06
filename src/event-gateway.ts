@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import { REST } from "discord.js";
 import { loadConfig, env } from "./config.js";
 import { githubRoutes } from "./routes/github.js";
+import { registrationRoutes } from "./routes/registration.js";
 
 const cfg = loadConfig();
 const app = express();
@@ -20,7 +21,16 @@ const channelIds = {
   alerts: process.env.ALERTS_CHANNEL_ID!
 };
 
+// GitHub webhook routes
 app.post("/webhooks/github", githubRoutes(rest, channelIds, env("GITHUB_WEBHOOK_SECRET")));
+
+// User registration API routes
+const apiSecret = env("API_SECRET");
+const registration = registrationRoutes(apiSecret);
+app.post("/api/users/register", registration.register);
+app.get("/api/users", registration.listUsers);
+app.get("/api/users/:discordId", registration.getUser);
+app.get("/api/users/:discordId/status", registration.checkStatus);
 
 const port = Number(process.env.PORT || cfg.event_gateway.port || 3001);
 app.listen(port, () => console.log(`Event gateway on :${port}`));
