@@ -2,6 +2,7 @@
 # notarize_cognition.sh
 # REFLEXSHELL BRAIN v1 — IPFS + OpenTimestamps Cognitive State Notarization
 # Strategickhaos DAO LLC — Cryptographic Proof of Neural State Transitions
+# IP Framework: legal/DECLARATION-2025-12-02.md
 
 set -euo pipefail
 
@@ -13,8 +14,9 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 echo -e "${BLUE}╔══════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║              COGNITIVE STATE NOTARIZATION v1                 ║${NC}"
+echo -e "${BLUE}║              COGNITIVE STATE NOTARIZATION v1.1               ║${NC}"
 echo -e "${BLUE}║                   IPFS + OTS Timestamping                   ║${NC}"
+echo -e "${BLUE}║          IP Framework: DECLARATION-2025-12-02               ║${NC}"
 echo -e "${BLUE}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -22,6 +24,7 @@ echo ""
 IPFS_API="http://127.0.0.1:5001"
 NOTARY_DIR="cognitive_notary"
 TIMESTAMP=$(date -u +%Y%m%d_%H%M%S)
+IP_FRAMEWORK="${IP_FRAMEWORK:-legal/DECLARATION-2025-12-02.md}"
 
 # Create notary directory
 mkdir -p "$NOTARY_DIR"
@@ -51,7 +54,9 @@ notarize_cognitive_state() {
   "sha256": "$hash",
   "operator": "Node 137",
   "notarization_type": "cognitive_state",
-  "brain_version": "REFLEXSHELL_v1"
+  "brain_version": "REFLEXSHELL_v1.1",
+  "ip_framework": "$IP_FRAMEWORK",
+  "entity": "StrategicKhaos DAO LLC (2025-001708194)"
 }
 EOF
     

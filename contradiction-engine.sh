@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # contradiction-engine.sh - 30 Revenue Stream Generator
 # Converts tensions into profitable solutions
+# IP Framework: legal/DECLARATION-2025-12-02.md
+# StrategicKhaos DAO LLC (2025-001708194)
 
 set -euo pipefail
 
 CONTRADICTIONS_DIR="./contradictions"
+IP_FRAMEWORK="${IP_FRAMEWORK:-legal/DECLARATION-2025-12-02.md}"
 mkdir -p "$CONTRADICTIONS_DIR"
 
 log() { echo "[$(date +%H:%M:%S)] 🎯 $*"; }
