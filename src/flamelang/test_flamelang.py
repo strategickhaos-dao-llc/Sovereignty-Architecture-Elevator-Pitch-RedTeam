@@ -5,6 +5,7 @@ Unit tests for FlameLang Interpreter
 
 import csv
 import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -71,7 +72,6 @@ class TestGlyphTable(unittest.TestCase):
 
     def tearDown(self):
         """Clean up temporary files."""
-        import shutil
         shutil.rmtree(self.temp_dir)
 
     def test_load_from_csv(self):
@@ -212,7 +212,6 @@ class TestFlameLangInterpreter(unittest.TestCase):
 
     def tearDown(self):
         """Clean up temporary files."""
-        import shutil
         shutil.rmtree(self.temp_dir)
 
     def test_execute_by_symbol(self):

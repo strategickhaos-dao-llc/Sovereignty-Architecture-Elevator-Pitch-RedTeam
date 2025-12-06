@@ -15,7 +15,7 @@ import csv
 import sys
 import os
 from pathlib import Path
-from typing import Dict, Optional, List, Callable
+from typing import Dict, Optional, List
 from dataclasses import dataclass
 from datetime import datetime
 
