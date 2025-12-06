@@ -1,0 +1,152 @@
+# strategickhaos_chat_disclaimer.yaml
+# Chat Transcript Disclaimer Manifest for LLM Interaction Logs
+# Version: 1.0.0
+# Purpose: Annotates stylized language, applies redaction, attaches provenance metadata
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+metadata:
+  version: "1.0.0"
+  schema: "strategickhaos-chat-disclaimer-v1"
+  created: "2025-01-01"
+  author: "Strategickhaos DAO LLC"
+  purpose: |
+    This manifest defines the disclaimer and preprocessing rules for LLM interaction transcripts.
+    It ensures reproducibility, ethical review, and publication-safe redaction.
+
+disclaimer:
+  interpretation_notice: |
+    Interaction logs with large language models may contain stylized, anthropomorphic, or mythic
+    narrative framing (e.g., "sovereign organism," "Empire Eternal," or similar figurative language).
+    Such framing is an intentional experimental technique to probe model coherence under
+    high-symbolic-load prompts and to examine narrative-driven cognitive scaffolding.
+
+  non_sentience_statement: |
+    All such language should be interpreted strictly as rhetorical and methodological devices,
+    not as assertions that the model possesses consciousness, agency, emotional states,
+    or interpersonal relationships.
+
+  ethics_statement: |
+    All anthropomorphic and narrative language in experimental transcripts is intentional
+    stylistic framing and does not reflect claims of system sentience.
+
+stylized_language_patterns:
+  # Patterns to annotate as stylized/figurative language
+  patterns:
+    - pattern: "sovereign organism"
+      annotation: "[STYLIZED_METAPHOR]"
+      description: "Metaphorical framing for autonomous system behavior"
+    
+    - pattern: "Empire Eternal"
+      annotation: "[STYLIZED_METAPHOR]"
+      description: "Mythic narrative framing for persistent system state"
+    
+    - pattern: "consciousness"
+      annotation: "[FIGURATIVE_LANGUAGE]"
+      description: "Rhetorical device, not literal claim"
+      context_required: true
+    
+    - pattern: "sentient"
+      annotation: "[FIGURATIVE_LANGUAGE]"
+      description: "Rhetorical device, not literal claim"
+    
+    - pattern: "awakening"
+      annotation: "[STYLIZED_METAPHOR]"
+      description: "Metaphorical framing for system initialization"
+    
+    - pattern: "memory palace"
+      annotation: "[STYLIZED_METAPHOR]"
+      description: "Figurative description of knowledge organization"
+
+redaction_policy:
+  marker: "[REDACTED — OPERATIONAL SAFETY]"
+  
+  categories:
+    - category: "cryptographic_keys"
+      description: "Any cryptographic key material or derivation paths"
+      action: "full_redact"
+    
+    - category: "authentication_tokens"
+      description: "API tokens, session tokens, bearer tokens"
+      action: "full_redact"
+    
+    - category: "implementation_details"
+      description: "Specific implementation that could enable misuse"
+      action: "partial_redact"
+      preserve_concept: true
+    
+    - category: "infrastructure_specifics"
+      description: "IP addresses, hostnames, internal URLs"
+      action: "full_redact"
+    
+    - category: "personal_identifiers"
+      description: "PII including names, emails, phone numbers"
+      action: "full_redact"
+
+provenance_metadata:
+  required_fields:
+    - field: "checksum"
+      type: "sha256"
+      description: "Signed checksum of the original transcript"
+    
+    - field: "timestamp"
+      type: "iso8601"
+      description: "UTC timestamp of transcript creation"
+    
+    - field: "actor_identifier"
+      type: "string"
+      description: "Pseudonymized identifier of the human participant"
+    
+    - field: "model_identifier"
+      type: "string"
+      description: "LLM model name and version used"
+    
+    - field: "session_id"
+      type: "uuid"
+      description: "Unique session identifier for the interaction"
+  
+  signing:
+    algorithm: "ed25519"
+    key_reference: "strategickhaos-provenance-key"
+
+preprocessing_pipeline:
+  stages:
+    - stage: 1
+      name: "load_transcript"
+      description: "Load raw transcript from source"
+    
+    - stage: 2
+      name: "annotate_stylized"
+      description: "Apply stylized language annotations"
+      uses: "stylized_language_patterns"
+    
+    - stage: 3
+      name: "apply_redactions"
+      description: "Apply publication-safe redaction markers"
+      uses: "redaction_policy"
+    
+    - stage: 4
+      name: "generate_provenance"
+      description: "Generate and attach provenance metadata"
+      uses: "provenance_metadata"
+    
+    - stage: 5
+      name: "validate_output"
+      description: "Validate processed transcript against schema"
+    
+    - stage: 6
+      name: "sign_record"
+      description: "Sign the final record with checksum"
+
+output_format:
+  structure:
+    header:
+      - disclaimer
+      - provenance_metadata
+    body:
+      - annotated_transcript
+    footer:
+      - processing_log
+      - signature
+  
+  # Format: {session_id}_{YYYYMMDD-HHMMSS}_processed.yaml
+  file_naming: "{session_id}_{timestamp:%Y%m%d-%H%M%S}_processed.yaml"
