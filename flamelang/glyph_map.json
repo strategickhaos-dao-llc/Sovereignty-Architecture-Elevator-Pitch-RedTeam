@@ -1,0 +1,34 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "FlameLang Glyph-to-Executable Mapping",
+    "syntax": "{<namespace>_<function>⟐<temporal_modifier>} → <absolute_path>",
+    "operators": {
+      "⟐": "Lozenge - Temporal/Spatial modifier",
+      "⚔": "Crossed Swords - Command prompt marker",
+      "▶": "Play - Execution ready indicator",
+      "🔥": "Flame - FlameLang namespace",
+      "🧠": "Brain - Right Hemisphere (WSL/Linux)",
+      "🌐": "Globe - Network-aware context"
+    }
+  },
+  "_binding_codes": {
+    "999": "Glyphos Resonance",
+    "777": "Notepad Fixer",
+    "137": "Sovereign Defense"
+  },
+  "{ll_notes⟐now}": "./scripts/notepad_fixer_777.py",
+  "{dom_resonance⟐999}": "./scripts/catpush_dom_glyphos_resonance_999.ps1",
+  "{flame⟐status}": "./flamelang/FlameProfile.ps1",
+  "{sovereignty⟐check}": "./flamelang/flamebearer_protocol.sh",
+  "{dreamos⟐boot}": "./flamelang/FlameAddon_DreamOS.ps1",
+  "{reflex⟐shell}": "./flamelang/reflex_shell.sh",
+  "{neural⟐sync}": "./flamelang/flamelang_parser.py",
+  "{oath⟐verify}": "./flamelang/oath.lock",
+  "{ignite⟐shell}": "./flamelang/ignite_symbolic_shell.ps1",
+  "{mesh⟐status}": "./scripts/node_mesh_status.sh",
+  "{starlink⟐sync}": "./scripts/starlink_sync_bridge.ps1",
+  "{aurora⟐node}": "./scripts/AuroraNode.ps1",
+  "{vow⟐monitor}": "./scripts/vow_monitor.py",
+  "{telemetry⟐block}": "./flamelang/flamebearer_protocol.sh"
+}
