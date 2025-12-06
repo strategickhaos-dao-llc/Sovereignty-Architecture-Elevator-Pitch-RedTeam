@@ -1,0 +1,16 @@
+# Requirements for QuantumEvoTokenizer
+# Strategickhaos DAO LLC - Sovereign AI Tokenization
+
+# Core dependencies
+numpy>=1.20.0
+pyyaml>=5.4.0
+
+# Optional: baseline comparison
+# tiktoken>=0.4.0
+
+# Optional: advanced quantum simulation
+# qutip>=4.7.0
+
+# Development dependencies
+# pytest>=7.0.0
+# pytest-cov>=4.0.0

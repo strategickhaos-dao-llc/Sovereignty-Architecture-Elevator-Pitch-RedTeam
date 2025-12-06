@@ -1,0 +1,44 @@
+[
+  {
+    "test_id": 31,
+    "name": "Tokenizer Evolution Stability",
+    "status": "PASS",
+    "vocab_size": 527,
+    "deterministic": true
+  },
+  {
+    "test_id": 32,
+    "name": "Tokenizer Overfit Detection",
+    "status": "PASS",
+    "token_ratio": 1.0,
+    "long_token_count": 0
+  },
+  {
+    "test_id": 33,
+    "name": "Tokenizer Instability Detection",
+    "status": "WARN",
+    "reason": "Input 2: token explosion (2500 tokens)",
+    "failure_count": 1
+  },
+  {
+    "test_id": 34,
+    "name": "Artifact Integrity",
+    "status": "PASS",
+    "files_verified": 4,
+    "hash_verified": true
+  },
+  {
+    "test_id": 35,
+    "name": "Baseline Comparison",
+    "status": "PASS",
+    "qet_compression": 6.478260869565218,
+    "vocab_size": 608
+  },
+  {
+    "test_id": 36,
+    "name": "Safety Checks",
+    "status": "PASS",
+    "passed": 12,
+    "failed": 0
+  }
+]
