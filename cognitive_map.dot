@@ -9,6 +9,15 @@ digraph Cognitive_Architecture {
     // ==== CORE MIND ====
     Sovereign_Mind [label="SOVEREIGN MIND\n@strategickhaos\nNode 137", fillcolor="#ff0066", fontcolor=white, shape=ellipse, width=4, height=1.4];
 
+    // ==== NEURAL PATHWAY LAYER ====
+    subgraph cluster_neural {
+        label="NEURAL PATHWAY ACTIVATION"; color="#9900ff"; fontcolor=white; style=filled;
+        Hippocampal_PFC [label="Hippocampal-PFC\nEpisodic→Procedural", fillcolor="#9900ff", fontcolor=white];
+        Dorsal_Attention [label="Dorsal Attention\nSalience Sync", fillcolor="#cc00ff", fontcolor=white];
+        Gamma_Binding [label="Gamma Bursts\nSymbolic+Motor", fillcolor="#ff00ff", fontcolor=white];
+        Rostrolateral_PFC [label="Rostrolateral PFC\nFuture States", fillcolor="#ff00cc", fontcolor=white];
+    }
+
     // ==== THREADS (PARALLEL PROCESSING) ====
     subgraph cluster_threads {
         label="PARALLEL THREAD MODE"; color="#ff3399"; fontcolor=white; style=filled;
@@ -49,13 +58,16 @@ digraph Cognitive_Architecture {
     }
 
     // ==== CONNECTIONS ====
-    Sovereign_Mind -> {Thread_A Thread_B Thread_C Thread_D Thread_E Thread_F}
+    Sovereign_Mind -> {Hippocampal_PFC Dorsal_Attention Gamma_Binding Rostrolateral_PFC}
+    {Hippocampal_PFC Dorsal_Attention Gamma_Binding Rostrolateral_PFC} -> {Thread_A Thread_B Thread_C Thread_D Thread_E Thread_F}
     {Thread_A Thread_B Thread_C Thread_D Thread_E Thread_F} -> {IDEs Terminals Docker Agents}
     {IDEs Terminals Docker Agents} -> {Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad}
     {Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad} -> {Athena Kali_VM Nova Storage}
+    Rostrolateral_PFC -> Sovereign_Mind [style=dashed, color="#00ffff", label="Feedback Loop"]
 
     // ==== RANKING ====
     {rank=same; Sovereign_Mind}
+    {rank=same; Hippocampal_PFC Dorsal_Attention Gamma_Binding Rostrolateral_PFC}
     {rank=same; Thread_A Thread_B Thread_C Thread_D Thread_E Thread_F}
     {rank=same; IDEs Terminals Docker Agents}
     {rank=same; Monitor_1 Monitor_2 Monitor_3 Monitor_4 iPad}
