@@ -214,14 +214,17 @@ class FlameInterpreter:
         return token.signature == expected_sig
     
     def _builtin_seal_data(self, data, seal_type="SHA256"):
-        """Seal data with cryptographic hash."""
+        """Seal data with cryptographic hash.
+        
+        Note: MD5 is intentionally not supported due to known cryptographic weaknesses.
+        """
         if seal_type == "SHA256":
             return hashlib.sha256(str(data).encode()).hexdigest()
         elif seal_type == "SHA512":
             return hashlib.sha512(str(data).encode()).hexdigest()
-        elif seal_type == "MD5":
-            return hashlib.md5(str(data).encode()).hexdigest()  # noqa: S324
-        raise FlameSecurityError(f"Unknown seal type: {seal_type}")
+        elif seal_type == "BLAKE2":
+            return hashlib.blake2b(str(data).encode(), digest_size=32).hexdigest()
+        raise FlameSecurityError(f"Unknown or unsupported seal type: {seal_type}. Supported: SHA256, SHA512, BLAKE2")
     
     def _builtin_node_status(self):
         """Get current node status."""

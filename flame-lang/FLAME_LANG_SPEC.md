@@ -4,7 +4,9 @@
 
 **Version:** 1.0.0  
 **Author:** Domenic Garza / StrategicKhaos DAO LLC  
-**Status:** Production Infrastructure
+**Status:** Production Infrastructure  
+**Python Requirement:** 3.10+  
+**PowerShell Requirement:** 5.1+ / 7+
 
 ---
 
