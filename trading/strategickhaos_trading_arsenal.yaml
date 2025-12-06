@@ -1,0 +1,128 @@
+# strategickhaos_trading_arsenal.yaml
+# Sovereign Ranks-Style Trading Bot Refinery Inventory v1.0
+# Date: 2025-12-05 | Entity: StrategicKhaos DAO LLC (2025-001708194)
+# Fitness Landscape: 7% Income (yield=0.07, drawdown<0.20, readiness>0.80)
+# QET Integration: Tokenize logs for 12-15% compression; evolve patterns in lab only
+
+foundational_principle:
+  description: |
+    Ranks-style trading: Transparent, rank-based signals for low-risk 7% annualized income.
+    Evolve with QET in refinery; deploy static rules only.
+    Legion Synthesis: Grok red-teams, GPT docs, Claude architects, Dom synthesizes.
+  our_environment:
+    constraints: "Low-latency Docker, Polygon/Coingecko feeds, broker APIs, no self-modifying code."
+    fitness_function: "Yield >0.07 | Drawdown <0.20 | Readiness >0.80 | Explainable ranks."
+
+tier_0_immediate_core:
+  description: "Deploy-this-week: 5 algos at 80%+ readiness, 7.2-8.2% yields."
+  algos:
+    - id: 1
+      name: "Simple Momentum Rank"
+      readiness: 0.95
+      yield_annualized: 0.082
+      logic: "Rank by 12-mo returns, long top 20%."
+      deploy_notes: "Docker with Polygon pulls, pandas ranks, monthly rebalance."
+      risk: "Position cap 5%, de-risk >20% drawdown."
+      qet_tie_in: "Tokenize rank histories for pattern spotting."
+    - id: 2
+      name: "Dual Momentum Rank"
+      readiness: 0.90
+      yield_annualized: 0.075
+      logic: "Switch risk-on/off vs bonds/cash."
+      deploy_notes: "Container publishes regime flags to Redis, weekly."
+      risk: "Binary gate for vol reduction."
+      qet_tie_in: "Compress regime logs for breeding."
+    - id: 3
+      name: "Percentile Momentum"
+      readiness: 0.88
+      yield_annualized: 0.078
+      logic: "Long above 80th percentile."
+      deploy_notes: "Config variant of #1."
+      risk: "Lower turnover."
+      qet_tie_in: "Tokenizes thresholds for fits."
+    - id: 4
+      name: "Vol-Adjusted Momentum"
+      readiness: 0.85
+      yield_annualized: 0.072
+      logic: "Rank by return/vol (90-day std)."
+      deploy_notes: "Numpy in #1 pipeline."
+      risk: "Inverse-vol sizing."
+      qet_tie_in: "Entropy on vol chunks."
+    - id: 5
+      name: "Cross-Asset Rank"
+      readiness: 0.82
+      yield_annualized: 0.081
+      logic: "Unified ranks crypto/stocks."
+      deploy_notes: "Coingecko + Polygon; cap crypto 30%."
+      risk: "Venue stops."
+      qet_tie_in: "Unifies cross-asset logs."
+
+tier_1_near_term_add_ons:
+  description: "1-3 months: Refine 4 algos as overlays, 7.0-7.4% yields."
+  algos:
+    - id: 6
+      name: "Mean-Reversion Rank"
+      readiness: 0.80
+      yield_annualized: 0.070
+      logic: "Short bottom 20% with stops."
+      deploy_notes: "Small-sleeve addon to #1."
+      risk: "Strict stops."
+      qet_tie_in: "Tokenizes reversion tails."
+    - id: 7
+      name: "Sector Rotation Rank"
+      readiness: 0.78
+      yield_annualized: 0.074
+      logic: "Monthly sector ETF ranks."
+      deploy_notes: "Pandas groupby."
+      risk: "ETF universe."
+      qet_tie_in: "Merges sector symbols."
+    - id: 8
+      name: "EMA Crossover Rank"
+      readiness: 0.75
+      yield_annualized: 0.073
+      logic: "Rank on EMA signals."
+      deploy_notes: "Numpy as timing filter."
+      risk: "Overlay only."
+      qet_tie_in: "Optimizes crossover chunks."
+    - id: 9
+      name: "RSI Rank Filter"
+      readiness: 0.70
+      yield_annualized: 0.071
+      logic: "Rank oversold RSI."
+      deploy_notes: "Pandas as entry overlay."
+      risk: "Parameter-sensitive."
+      qet_tie_in: "Breeds RSI patterns."
+
+tier_2_refinery_r_d:
+  description: "Lab only: 27 algos <70% readiness; evolve with QET/GA into static rules."
+  clusters:
+    mean_variance:  # IDs 10-18
+      readiness_avg: 0.65
+      notes: "Optims as allocation layers post-Tier 0."
+    ml_ranks:  # IDs 19-27
+      readiness_avg: 0.50
+      notes: "Mine patterns from logs; graduate to ranks."
+    exotics:  # IDs 28-36
+      readiness_avg: 0.30
+      notes: "Search engines; compile to auditable rules."
+
+deployment_stack_v1:
+  services:
+    data: "Pull OHLCV; normalize to Parquet."
+    signal: "Functions for #1-4; outputs weights."
+    execution: "Order diffs; API with guards."
+    monitoring: "P&L, drawdown alerts."
+  qet_role: "Observability: Tokenize logs for mining."
+
+governance:
+  path_a: "Freeze v0.1; notarize benches; version registry."
+  safety: "Max chars/token=128; min compression >1.0."
+  fork_strategy:
+    main: "Frozen releases."
+    dev_speedup: "O(n log n) refactor."
+    dev_finance: "Market data adaptation."
+
+overall_stats:
+  deployable_algos: 9
+  avg_yield: 0.076
+  qet_boost: "12-15% log compression for backtests."

@@ -1,0 +1,234 @@
+# trading_governance.yaml
+# StrategicKhaos DAO LLC — Trading Arsenal Governance
+# Autonomous Execution Override Controls
+
+version: "1.0"
+entity: "StrategicKhaos DAO LLC (2025-001708194)"
+date: "2025-12-05"
+
+# Autonomous Execution Override Matrix
+override_controls:
+  # Emergency halt conditions
+  emergency_halt:
+    triggers:
+      - condition: "drawdown_exceeds_halt_threshold"
+        threshold: 0.20
+        action: "HALT_ALL_TRADING"
+        notification: ["discord", "email", "sms"]
+      - condition: "daily_loss_exceeds_limit"
+        threshold: 0.03
+        action: "HALT_NEW_POSITIONS"
+        notification: ["discord"]
+      - condition: "api_health_degraded"
+        threshold: 0.50  # 50% error rate
+        action: "PAUSE_EXECUTION"
+        notification: ["discord"]
+    recovery:
+      manual_approval_required: true
+      approvers: ["managing-member", "counsel-01"]
+      cooldown_hours: 24
+
+  # Position limits
+  position_controls:
+    max_single_position: 0.05  # 5% of portfolio
+    max_sector_concentration: 0.25  # 25% per sector
+    max_crypto_allocation: 0.30  # 30% crypto cap
+    max_leverage: 1.0  # No leverage
+    min_cash_buffer: 0.05  # 5% cash reserve
+
+  # Trade execution controls
+  execution_controls:
+    max_daily_trades: 50
+    max_order_value: 10000  # USD
+    slippage_tolerance: 0.02  # 2%
+    require_confirmation_above: 5000  # Manual confirm for large orders
+    blackout_periods:
+      - "market_close_minus_15min"
+      - "major_announcements"
+
+# Department Authorization
+departments:
+  - name: "Signal Generation"
+    id: "dept-signal"
+    autonomous: true
+    permissions:
+      - generate_signals
+      - publish_to_redis
+      - read_market_data
+    restrictions:
+      - cannot_execute_trades
+      - cannot_modify_positions
+
+  - name: "Execution"
+    id: "dept-execution"
+    autonomous: true
+    permissions:
+      - consume_signals
+      - submit_orders
+      - cancel_orders
+      - read_positions
+    restrictions:
+      - cannot_generate_signals
+      - cannot_override_risk_limits
+    guards:
+      - risk_check_required
+      - position_limit_check
+      - drawdown_check
+
+  - name: "Monitoring"
+    id: "dept-monitoring"
+    autonomous: true
+    permissions:
+      - read_all_metrics
+      - generate_alerts
+      - publish_to_discord
+    restrictions:
+      - cannot_execute_trades
+      - cannot_modify_signals
+
+  - name: "Data"
+    id: "dept-data"
+    autonomous: true
+    permissions:
+      - fetch_market_data
+      - cache_to_redis
+      - store_to_parquet
+    restrictions:
+      - cannot_execute_trades
+
+# Algorithm Authorization
+algorithm_governance:
+  tier_0:
+    description: "Production-ready algorithms (80%+ readiness)"
+    autonomous_execution: true
+    review_required: false
+    algos: [1, 2, 3, 4, 5]
+    constraints:
+      max_weight_per_algo: 0.25
+      combined_max_drawdown: 0.15
+
+  tier_1:
+    description: "Near-term additions (70-80% readiness)"
+    autonomous_execution: false
+    review_required: true
+    algos: [6, 7, 8, 9]
+    constraints:
+      max_weight_per_algo: 0.10
+      paper_trading_only: true
+      promotion_criteria:
+        min_backtest_months: 12
+        min_sharpe: 0.5
+        max_drawdown: 0.15
+
+  tier_2:
+    description: "R&D algorithms (<70% readiness)"
+    autonomous_execution: false
+    review_required: true
+    paper_trading_only: true
+    promotion_criteria:
+      min_backtest_months: 24
+      code_review_required: true
+      security_audit_required: true
+
+# Audit and Compliance
+audit:
+  logging:
+    all_trades: true
+    all_signals: true
+    all_alerts: true
+    retention_days: 365
+    storage: "s3://strategickhaos-audit/trading/"
+  
+  reporting:
+    daily_pnl_report: true
+    weekly_performance_summary: true
+    monthly_compliance_report: true
+    recipients: ["managing-member"]
+  
+  notarization:
+    algorithm_versions: true
+    backtest_results: true
+    configuration_changes: true
+    hash_algorithm: "sha256"
+
+# Override Commands (Discord/API)
+commands:
+  - name: "/trading-halt"
+    description: "Emergency halt all trading"
+    protected: true
+    requires_role: "managing-member"
+    action: "HALT_ALL_TRADING"
+    confirmation_required: true
+
+  - name: "/trading-resume"
+    description: "Resume trading after halt"
+    protected: true
+    requires_role: "managing-member"
+    action: "RESUME_TRADING"
+    confirmation_required: true
+    cooldown_check: true
+
+  - name: "/trading-status"
+    description: "Get trading system status"
+    protected: false
+    action: "GET_STATUS"
+
+  - name: "/trading-autonomous"
+    description: "Toggle autonomous mode"
+    protected: true
+    requires_role: "managing-member"
+    action: "TOGGLE_AUTONOMOUS"
+    confirmation_required: true
+
+  - name: "/trading-force-close"
+    description: "Force close all positions"
+    protected: true
+    requires_role: "managing-member"
+    action: "FORCE_CLOSE_ALL"
+    confirmation_required: true
+    two_factor_required: true
+
+# Safety Interlocks
+safety:
+  circuit_breakers:
+    - name: "drawdown_breaker"
+      trigger: "current_drawdown > max_drawdown"
+      action: "halt_new_positions"
+      reset: "manual"
+    
+    - name: "volatility_breaker"
+      trigger: "vix > 40 OR crypto_vol > 100"
+      action: "reduce_position_sizes_50pct"
+      reset: "automatic_when_normalized"
+    
+    - name: "api_breaker"
+      trigger: "broker_api_errors > 5_in_5min"
+      action: "pause_execution"
+      reset: "automatic_after_5min"
+  
+  kill_switches:
+    - name: "global_kill"
+      description: "Complete system shutdown"
+      activation: "env:TRADING_KILL_SWITCH=true"
+      action: "shutdown_all_services"
+    
+    - name: "execution_kill"
+      description: "Disable order execution only"
+      activation: "env:EXECUTION_ENABLED=false"
+      action: "disable_order_submission"
+
+# Fitness Function (for algorithm evolution)
+fitness:
+  target_yield: 0.07
+  max_drawdown: 0.20
+  min_sharpe: 0.5
+  min_readiness: 0.80
+  
+  scoring:
+    yield_weight: 0.30
+    drawdown_weight: 0.25
+    sharpe_weight: 0.25
+    explainability_weight: 0.20
+  
+  promotion_threshold: 0.75
+  demotion_threshold: 0.50

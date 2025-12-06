@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trading-api
+  namespace: trading
+  labels:
+    app: trading-api
+    component: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trading-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: trading-api
+        component: api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8086"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: trading-api
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - name: trading-api
+          image: ghcr.io/strategickhaos/trading-arsenal:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8086
+              name: http
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: trading-config
+            - secretRef:
+                name: trading-secrets
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2000m"
+              memory: "2Gi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: trading-data
+              mountPath: /var/trading/data
+            - name: config-volume
+              mountPath: /app/trading/strategickhaos_trading_arsenal.yaml
+              subPath: strategickhaos_trading_arsenal.yaml
+      volumes:
+        - name: trading-data
+          persistentVolumeClaim:
+            claimName: trading-data-pvc
+        - name: config-volume
+          configMap:
+            name: trading-arsenal-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trading-api
+  namespace: trading
+  labels:
+    app: trading-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8086
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: trading-api
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: trading-data-pvc
+  namespace: trading
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trading-api
+  namespace: trading
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: trading-api-role
+  namespace: trading
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: trading-api-binding
+  namespace: trading
+subjects:
+  - kind: ServiceAccount
+    name: trading-api
+    namespace: trading
+roleRef:
+  kind: Role
+  name: trading-api-role
+  apiGroup: rbac.authorization.k8s.io
