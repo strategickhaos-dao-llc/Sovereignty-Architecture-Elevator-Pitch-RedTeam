@@ -280,6 +280,38 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🔥 FlameLang Symbolic Shell
+
+FlameLang is a sovereign symbolic shell system designed to overlay traditional command-line interfaces with a glyph-based execution model.
+
+- **[FlameLang Specification](FLAMELANG_SPEC.md)** - Complete language specification
+- **Components**: Located in the `flamelang/` directory
+  - `FlameProfile.ps1` - PowerShell symbolic prompt overlay
+  - `FlameAddon_DreamOS.ps1` - Device-aware bootstrap
+  - `reflex_shell.sh` - Bash profile for sovereign prompt
+  - `glyph_map.json` - Glyph-to-executable mapping
+  - `flamelang_parser.py` - Python parser implementation
+  - `flamebearer_protocol.sh` - Sovereignty hardening script
+  - `ignite_symbolic_shell.ps1` - Boot sequence
+
+### Quick Start (PowerShell)
+```powershell
+# Initialize FlameLang environment
+.\flamelang\ignite_symbolic_shell.ps1
+
+# Check status
+flame
+```
+
+### Quick Start (Bash)
+```bash
+# Source the ReflexShell
+source flamelang/reflex_shell.sh
+
+# Check status
+flame-status
+```
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
