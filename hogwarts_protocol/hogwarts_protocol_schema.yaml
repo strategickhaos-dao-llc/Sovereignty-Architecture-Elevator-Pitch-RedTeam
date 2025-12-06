@@ -1,0 +1,475 @@
+# Hogwarts Protocol - Data Model Specification
+# The Great Hall Ledger - Blockchain + PostgreSQL Integration
+# Version: 1.0.0
+# Author: Strategickhaos DAO LLC / Valoryield Engine
+
+metadata:
+  protocol_name: "Hogwarts Protocol"
+  version: "1.0.0"
+  platform: "CourseQuest Hogwarts"
+  description: |
+    A blockchain-integrated educational platform combining:
+    - Off-chain PostgreSQL for full data model
+    - On-chain Ethereum for proof of ownership and credentials
+    - CFT (CourseForge Token) for XP and governance
+
+# ============================================
+# ENTITY DEFINITIONS
+# ============================================
+
+entities:
+  
+  # -----------------------------------------
+  # STUDENT
+  # Learner identity with wallet integration
+  # -----------------------------------------
+  student:
+    description: "Educational identity with blockchain wallet linking"
+    storage: "off-chain (PostgreSQL)"
+    on_chain_representation: "wallet_address links to on-chain ownership"
+    
+    fields:
+      student_id:
+        type: "UUID"
+        primary_key: true
+        description: "Unique student identifier"
+      
+      edu_email:
+        type: "VARCHAR(255)"
+        nullable: true
+        unique: true
+        description: "Educational email (.edu)"
+      
+      edu_institution:
+        type: "VARCHAR(255)"
+        nullable: true
+        description: "School name (e.g., SNHU)"
+      
+      display_name:
+        type: "VARCHAR(255)"
+        nullable: true
+        description: "Public display name"
+      
+      wallet_address:
+        type: "VARCHAR(42)"
+        nullable: true
+        unique: true
+        pattern: "^0x[a-fA-F0-9]{40}$"
+        description: "Ethereum wallet address"
+        on_chain: true
+      
+      wallet_nonce:
+        type: "INTEGER"
+        default: 0
+        description: "Signature verification nonce"
+      
+      total_spells:
+        type: "INTEGER"
+        computed: true
+        description: "Count of verified spells"
+      
+      total_cft:
+        type: "NUMERIC(36,18)"
+        computed: true
+        on_chain: "CFT.balanceOf(wallet_address)"
+        description: "Total CFT balance"
+      
+      governance_weight:
+        type: "NUMERIC(36,18)"
+        computed: true
+        on_chain: "CFT.stakedBalance[wallet_address]"
+        description: "Staked CFT for voting"
+  
+  # -----------------------------------------
+  # COURSE
+  # Educational module container
+  # -----------------------------------------
+  course:
+    description: "Course or learning module"
+    storage: "off-chain (PostgreSQL)"
+    on_chain_representation: "course_code stamped in spell records"
+    
+    fields:
+      course_id:
+        type: "UUID"
+        primary_key: true
+      
+      course_code:
+        type: "VARCHAR(50)"
+        required: true
+        example: "MAT-243"
+        on_chain: true  # Referenced in Spell NFT
+      
+      course_name:
+        type: "VARCHAR(255)"
+        required: true
+        example: "Applied Statistics"
+      
+      institution:
+        type: "VARCHAR(255)"
+        example: "SNHU"
+        on_chain: true  # Referenced in Spell NFT
+      
+      description:
+        type: "TEXT"
+        nullable: true
+      
+      learning_outcomes:
+        type: "JSONB"
+        default: "[]"
+      
+      xp_multiplier:
+        type: "NUMERIC(5,2)"
+        default: 1.0
+        description: "Course difficulty bonus multiplier"
+      
+      instructor_share_pct:
+        type: "NUMERIC(5,4)"
+        default: 0.10
+        description: "Revenue share for instructor (10%)"
+  
+  # -----------------------------------------
+  # ASSIGNMENT
+  # Specific task within a course
+  # -----------------------------------------
+  assignment:
+    description: "Graded task within a course"
+    storage: "off-chain (PostgreSQL)"
+    
+    fields:
+      assignment_id:
+        type: "UUID"
+        primary_key: true
+      
+      course_id:
+        type: "UUID"
+        foreign_key: "courses.course_id"
+        required: true
+      
+      assignment_name:
+        type: "VARCHAR(255)"
+        required: true
+        example: "Project One"
+        on_chain: true  # As assignmentCode in Spell NFT
+      
+      assignment_code:
+        type: "VARCHAR(50)"
+        nullable: true
+        example: "P1"
+      
+      base_xp:
+        type: "INTEGER"
+        default: 100
+        description: "Base XP for completion"
+      
+      max_grade_bonus:
+        type: "NUMERIC(5,2)"
+        default: 0.5
+        description: "Maximum grade bonus (50% for A+)"
+  
+  # -----------------------------------------
+  # SPELL
+  # Educational artifact (code submission)
+  # -----------------------------------------
+  spell:
+    description: "Completed educational work artifact"
+    storage: "off-chain (PostgreSQL) + on-chain (HogwartsRegistry)"
+    on_chain_representation: "ERC721 NFT/SBT in HogwartsRegistry"
+    
+    fields:
+      spell_id:
+        type: "UUID"
+        primary_key: true
+        on_chain: "offChainId (string)"
+      
+      owner_id:
+        type: "UUID"
+        foreign_key: "students.student_id"
+        required: true
+        on_chain: "owner (address)"
+      
+      course_id:
+        type: "UUID"
+        foreign_key: "courses.course_id"
+        nullable: true
+      
+      assignment_id:
+        type: "UUID"
+        foreign_key: "assignments.assignment_id"
+        nullable: true
+      
+      spell_name:
+        type: "VARCHAR(255)"
+        required: true
+        example: "spell_descriptive_stats.py"
+      
+      spell_type:
+        type: "VARCHAR(50)"
+        default: "python"
+        description: "File type / language"
+      
+      content_hash:
+        type: "VARCHAR(64)"
+        pattern: "^[a-fA-F0-9]{64}$"
+        on_chain: "contentHash (bytes32)"
+        description: "SHA-256 hash of content"
+      
+      status:
+        type: "ENUM"
+        values: ["draft", "submitted", "verified", "certified", "revoked"]
+        default: "draft"
+      
+      grade:
+        type: "VARCHAR(10)"
+        nullable: true
+        on_chain: "grade (string)"
+        example: "B+"
+      
+      grade_numeric:
+        type: "NUMERIC(4,2)"
+        nullable: true
+        example: 3.3
+      
+      verified_at:
+        type: "TIMESTAMP"
+        nullable: true
+        on_chain: "verifiedAt (uint256)"
+      
+      on_chain_tx_hash:
+        type: "VARCHAR(66)"
+        nullable: true
+        description: "Transaction hash from registration"
+      
+      on_chain_token_id:
+        type: "BIGINT"
+        nullable: true
+        description: "NFT token ID in HogwartsRegistry"
+      
+      chain_id:
+        type: "INTEGER"
+        nullable: true
+        description: "Network ID (1=mainnet, 137=polygon, etc.)"
+      
+      xp_earned:
+        type: "INTEGER"
+        default: 0
+      
+      cft_minted:
+        type: "NUMERIC(36,18)"
+        default: 0
+        description: "CFT minted for this spell"
+      
+      is_licensable:
+        type: "BOOLEAN"
+        default: false
+        description: "Available in marketplace"
+      
+      license_price:
+        type: "NUMERIC(18,2)"
+        nullable: true
+        description: "Price in fiat currency"
+    
+    on_chain_struct:
+      name: "SpellRecord"
+      contract: "HogwartsRegistry"
+      fields:
+        - name: "owner"
+          type: "address"
+        - name: "contentHash"
+          type: "bytes32"
+        - name: "courseCode"
+          type: "string"
+        - name: "assignmentCode"
+          type: "string"
+        - name: "grade"
+          type: "string"
+        - name: "institution"
+          type: "string"
+        - name: "verifiedAt"
+          type: "uint256"
+        - name: "offChainId"
+          type: "string"
+  
+  # -----------------------------------------
+  # CFT BALANCE
+  # CourseForge Token accounting
+  # -----------------------------------------
+  cft_balance:
+    description: "Token balance per student"
+    storage: "off-chain (PostgreSQL) + on-chain (CourseForgeToken)"
+    on_chain_representation: "ERC20 balance + staking mappings"
+    
+    fields:
+      balance_id:
+        type: "UUID"
+        primary_key: true
+      
+      student_id:
+        type: "UUID"
+        foreign_key: "students.student_id"
+        unique: true
+      
+      available_balance:
+        type: "NUMERIC(36,18)"
+        default: 0
+        on_chain: "balanceOf(address)"
+        description: "Spendable CFT"
+      
+      staked_balance:
+        type: "NUMERIC(36,18)"
+        default: 0
+        on_chain: "stakedBalance[address]"
+        description: "Governance-locked CFT"
+      
+      lifetime_earned:
+        type: "NUMERIC(36,18)"
+        default: 0
+        on_chain: "lifetimeEarned[address]"
+        description: "Total ever minted"
+  
+  # -----------------------------------------
+  # CFT TRANSACTION
+  # Token movement audit trail
+  # -----------------------------------------
+  cft_transaction:
+    description: "Audit log of all CFT movements"
+    storage: "off-chain (PostgreSQL)"
+    on_chain_representation: "Events from CourseForgeToken"
+    
+    fields:
+      transaction_id:
+        type: "UUID"
+        primary_key: true
+      
+      student_id:
+        type: "UUID"
+        foreign_key: "students.student_id"
+        required: true
+      
+      transaction_type:
+        type: "ENUM"
+        values: ["mint", "burn", "transfer", "stake", "unstake", "reward", "fee"]
+        required: true
+      
+      amount:
+        type: "NUMERIC(36,18)"
+        required: true
+        check: "> 0"
+      
+      reference_type:
+        type: "VARCHAR(50)"
+        nullable: true
+        description: "Source entity type"
+      
+      reference_id:
+        type: "UUID"
+        nullable: true
+        description: "Source entity ID"
+      
+      reason:
+        type: "VARCHAR(500)"
+        nullable: true
+        description: "Human-readable reason"
+      
+      on_chain_tx_hash:
+        type: "VARCHAR(66)"
+        nullable: true
+
+# ============================================
+# SMART CONTRACTS
+# ============================================
+
+contracts:
+  
+  hogwarts_registry:
+    name: "HogwartsRegistry"
+    standard: "ERC721"
+    file: "contracts/HogwartsRegistry.sol"
+    description: "Spell NFT/SBT registration"
+    
+    features:
+      - "ERC721 with soulbound mode"
+      - "Content hash uniqueness"
+      - "Role-based access (VERIFIER_ROLE)"
+      - "Batch registration support"
+    
+    roles:
+      - DEFAULT_ADMIN_ROLE
+      - VERIFIER_ROLE
+      - PLATFORM_ROLE
+  
+  courseforge_token:
+    name: "CourseForgeToken"
+    standard: "ERC20"
+    file: "contracts/CourseForgeToken.sol"
+    symbol: "CFT"
+    decimals: 18
+    description: "Utility token for XP and governance"
+    
+    features:
+      - "Non-transferable by default (soulbound)"
+      - "Staking for governance weight"
+      - "Platform spending mechanism"
+      - "Lifetime tracking"
+    
+    roles:
+      - DEFAULT_ADMIN_ROLE
+      - MINTER_ROLE
+      - PLATFORM_ROLE
+
+# ============================================
+# REVENUE ROUTING
+# ============================================
+
+revenue_routes:
+  description: "How money flows when spells are licensed"
+  
+  default_split:
+    creator: 60       # % to spell author
+    platform: 20      # % to CourseQuest
+    charity: 10       # % to ValorYield
+    scholarship: 10   # % to scholarship pool
+  
+  route_types:
+    - creator
+    - platform
+    - charity
+    - instructor
+    - scholarship
+  
+  payment_processors:
+    - stripe
+    - crypto
+
+# ============================================
+# XP CALCULATION
+# ============================================
+
+xp_calculation:
+  description: "How XP/CFT is calculated for completed work"
+  
+  formula: |
+    xp_earned = floor(base_xp * xp_multiplier * (1 + grade_bonus))
+    cft_minted = xp_earned  # 1:1 ratio
+  
+  grade_bonus:
+    description: "Linear scale from 0 at GPA 0.0 to max_grade_bonus at GPA 4.0"
+    formula: "max_grade_bonus * (grade_numeric / 4.0)"
+    example:
+      base_xp: 100
+      xp_multiplier: 1.0
+      max_grade_bonus: 0.5
+      grade_numeric: 3.3
+      calculation: "100 * 1.0 * (1 + 0.5 * 3.3 / 4.0) = 141"
+
+# ============================================
+# GLOSSARY
+# ============================================
+
+glossary:
+  spell: "Educational artifact (code/work submission)"
+  cft: "CourseForge Token - crystallized XP"
+  great_hall_ledger: "The on-chain registry of spells"
+  soulbound: "Non-transferable token bound to owner"
+  ministry_of_magic_accounting: "CPA oversight for fiat flows"
+  valoryield: "Nonprofit charity pool"
