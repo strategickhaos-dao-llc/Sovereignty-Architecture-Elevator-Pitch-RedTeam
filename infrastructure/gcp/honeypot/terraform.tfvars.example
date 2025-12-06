@@ -1,0 +1,32 @@
+# GCP Honeypot Infrastructure - Terraform Variables Example
+# Copy this file to terraform.tfvars and customize for your environment
+
+# Required: Your GCP Project ID
+project_id = "your-project-id-here"
+
+# Region for resource deployment
+region = "us-central1"
+
+# Base name for honeypot resources
+honeypot_name = "honeypot-sra"
+
+# Container image for the honeypot service
+# Replace with your Honeytrap Flask app image when ready
+container_image = "gcr.io/cloudrun/hello"
+
+# Port the container listens on
+container_port = 8080
+
+# GCS bucket name for attack logs (will be suffixed with project ID)
+logs_bucket_name = "honeytrap-attack-logs"
+
+# Pub/Sub topic name for Legion attack analysis
+pubsub_topic_name = "legion-attack-analysis"
+
+# Labels for resource organization and cost tracking
+labels = {
+  purpose     = "honeypot"
+  environment = "production"
+  managed_by  = "terraform"
+  project     = "sovereignty-architecture"
+}
