@@ -1,6 +1,6 @@
 # Strategickhaos Sovereignty Architecture - Discord DevOps Control Plane
 
-**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
+**A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, sovereign infrastructure management, and the FlameLang programming language.**
 
 ## 🏛️ Architecture Overview
 
@@ -9,6 +9,7 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **🔥 FlameLang** - Sovereign computing language with physics engine and security protocols
 
 ## 🚀 Quick Start
 
@@ -70,6 +71,59 @@ java HelloCloudOS.java
 # Stop the workspace
 ./start-cloudos-jdk.sh stop
 ```
+
+### 🔥 FlameLang - Sovereign Computing Language
+
+**FlameLang** is a domain-specific language designed for sovereign computing with integrated physics simulations and comprehensive security protocols.
+
+#### Features
+- **Glyph System**: 17 glyphs operating at specific frequencies (137Hz - 963Hz)
+- **Physics Engine**: Schwarzschild metrics, geodesic integration, ocean eddy analysis
+- **Sovereignty Protocol**: Network isolation, coherence monitoring, boundary hardening
+- **Interactive REPL**: Full-featured interactive shell
+- **Built-in Constants**: π, e, φ, c, G, α (fine structure constant)
+
+#### Quick Start
+
+```bash
+# Navigate to FlameLang directory
+cd flamelang
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start interactive REPL
+python -m flamelang.cli repl
+
+# Run a FlameLang script
+python -m flamelang.cli compile examples/hello.fl
+
+# Show version
+python -m flamelang.cli --version
+```
+
+#### Example Code
+
+```flamelang
+# Mathematical operations with constants
+let circle_area = pi * 10 * 10
+print(circle_area)
+
+# Physics simulation - Black hole metrics
+let solar_mass = 1989000000000000000000000000000
+schwarzschild(solar_mass, 10000000000)
+
+# Sovereignty protocol - Network isolation
+isolate("analytics.google.com")
+
+# System coherence monitoring
+monitor()
+
+# Cryptographic boundary
+harden("Sensitive data")
+```
+
+**Documentation**: See [flamelang/README.md](flamelang/README.md) and [flamelang/docs/ARCHITECTURE.md](flamelang/docs/ARCHITECTURE.md)
 
 ## 🏗️ Infrastructure
 
