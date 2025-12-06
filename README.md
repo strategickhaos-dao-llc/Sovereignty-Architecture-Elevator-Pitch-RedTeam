@@ -272,6 +272,20 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+## 📈 Trading Architecture (PID-RANCO + XAI)
+
+Research-grade algorithmic trading architecture combining control theory with explainable AI:
+
+- **[PID-RANCO Trading Engine](docs/trading/PID_RANCO_TRADING_ENGINE.md)** - Feedback controller for market decisions
+- **[XAI Neuro-Trading Layer](docs/trading/XAI_NEURO_TRADING_LAYER.md)** - Explainable AI regime classification
+- **[Invention Disclosure](docs/trading/INVENTION_DISCLOSURE.md)** - Patent/research paper outline
+
+**Architecture Highlights:**
+- PID control theory adapted for trading (P=market pain, I=accumulated longing, D=velocity)
+- Hard risk guardrails (0.69% risk/trade, 3.37% max drawdown, 99-loss apoptosis)
+- XAI regime classification (panic/euphoria/chop/accumulation) with trade veto capability
+- Cryptographic audit trail (GPG + OpenTimestamps)
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
