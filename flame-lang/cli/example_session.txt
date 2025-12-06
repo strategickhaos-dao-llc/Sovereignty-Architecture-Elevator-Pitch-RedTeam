@@ -1,0 +1,261 @@
+# Flame Lang CLI Example Session
+# Strategic Khaos - Flame Lang Interactive Shell
+# Timestamp: Example Session
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Basic Examples
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Hello World
+flame>>> print("🔥 Hello, Sovereignty!")
+🔥 Hello, Sovereignty!
+
+# Variable declaration
+flame>>> spark name = "Nova-Prime"
+flame>>> spark tier = 1
+flame>>> print("Node: " + name + " (Tier " + str(tier) + ")")
+Node: Nova-Prime (Tier 1)
+
+# Arithmetic
+flame>>> spark a = 10
+flame>>> spark b = 3
+flame>>> print(a + b)
+13
+flame>>> print(a * b)
+30
+flame>>> print(a / b)
+3.3333333333333335
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Functions
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> ignite greet(name) {
+     ...     print("Hello, " + name + "!")
+     ...     ash "greeted"
+     ... }
+flame>>> greet("Domenic")
+Hello, Domenic!
+=> greeted
+
+flame>>> ignite factorial(n) {
+     ...     ember (n <= 1) {
+     ...         ash 1
+     ...     }
+     ...     ash n * factorial(n - 1)
+     ... }
+flame>>> factorial(5)
+=> 120
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Conditionals
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> spark status = "active"
+flame>>> ember (status == "active") {
+     ...     print("System is running")
+     ... } else {
+     ...     print("System is offline")
+     ... }
+System is running
+
+flame>>> spark count = 5
+flame>>> ember (count > 10) {
+     ...     print("High")
+     ... } else {
+     ...     ember (count > 0) {
+     ...         print("Normal")
+     ...     }
+     ... }
+Normal
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Loops
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> spark i = 0
+flame>>> blaze (i < 5) {
+     ...     print("Iteration: " + str(i))
+     ...     spark i = i + 1
+     ... }
+Iteration: 0
+Iteration: 1
+Iteration: 2
+Iteration: 3
+Iteration: 4
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Classes (Flames)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> flame Node {
+     ...     ignite init(self, name, tier) {
+     ...         spark self.name = name
+     ...         spark self.tier = tier
+     ...         spark self.active = false
+     ...     }
+     ...     
+     ...     ignite activate(self) {
+     ...         spark self.active = true
+     ...         print(self.name + " activated!")
+     ...         ash true
+     ...     }
+     ...     
+     ...     ignite status(self) {
+     ...         ember (self.active) {
+     ...             ash "online"
+     ...         }
+     ...         ash "offline"
+     ...     }
+     ... }
+
+flame>>> spark node1 = Node("Nova-Prime", 1)
+flame>>> print(node1.status())
+offline
+flame>>> node1.activate()
+Nova-Prime activated!
+=> true
+flame>>> print(node1.status())
+online
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Sovereignty Operations
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> status
+Status: {
+  "active": true,
+  "oath_chain_length": 0,
+  "modules_loaded": [],
+  "timestamp": 1704067200.0
+}
+
+flame>>> oath {
+     ...     bearer: "Nova-Prime",
+     ...     seal: "SHA256"
+     ... }
+=> <OathToken: Nova-Prime>
+
+flame>>> oath_chain
+  [0] Bearer: Nova-Prime, Seal: SHA256
+
+flame>>> spark data = "sensitive information"
+flame>>> spark sealed = seal_data(data, "SHA256")
+flame>>> print(sealed)
+a1b2c3d4e5f6...
+
+flame>>> spark nodeStatus = node_status()
+flame>>> print(nodeStatus)
+{active: true, oath_chain_length: 1, modules_loaded: [], timestamp: 1704067200.0}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Built-in Functions
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> print(len("hello"))
+5
+flame>>> print(len([1, 2, 3, 4, 5]))
+5
+
+flame>>> print(type(42))
+int
+flame>>> print(type("hello"))
+str
+flame>>> print(type([1, 2, 3]))
+list
+
+flame>>> print(str(42))
+42
+flame>>> print(int("42"))
+42
+flame>>> print(float("3.14"))
+3.14
+
+flame>>> print(hash("secret"))
+2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b
+
+flame>>> print(time())
+1704067200.0
+
+flame>>> print(range(5))
+[0, 1, 2, 3, 4]
+flame>>> print(range(2, 8))
+[2, 3, 4, 5, 6, 7]
+flame>>> print(range(0, 10, 2))
+[0, 2, 4, 6, 8]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Arrays
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> spark nodes = ["Nova", "Lyra", "Pulsar"]
+flame>>> print(nodes)
+[Nova, Lyra, Pulsar]
+flame>>> print(len(nodes))
+3
+
+flame>>> spark numbers = [1, 2, 3, 4, 5]
+flame>>> spark sum = 0
+flame>>> spark i = 0
+flame>>> blaze (i < len(numbers)) {
+     ...     spark sum = sum + numbers[i]
+     ...     spark i = i + 1
+     ... }
+flame>>> print(sum)
+15
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Exception Handling
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> inferno {
+     ...     spark x = 10 / 0
+     ... } catch {
+     ...     print("Caught error: " + error)
+     ... }
+Caught error: Division by zero
+
+flame>>> inferno {
+     ...     spark result = risky_function()
+     ...     print(result)
+     ... } catch {
+     ...     print("Operation failed safely")
+     ... }
+Operation failed safely
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Module Import
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> forge "sovereignty_core"
+flame>>> forge "node_manager"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Help and Exit
+# ═══════════════════════════════════════════════════════════════════════════════
+
+flame>>> help
+
+Flame Lang Commands:
+  exit        - Exit the REPL
+  help        - Show this help
+  status      - Show interpreter status
+  oath_chain  - Show oath chain history
+  
+Keywords:
+  ignite      - Define a function
+  spark       - Declare a variable
+  ember       - Conditional (if)
+  blaze       - Loop (while)
+  flame       - Define a class
+  ash         - Return value
+  forge       - Import module
+  oath        - Create sovereignty oath
+  inferno     - Exception handling
+
+flame>>> exit
+🔥 Flame extinguished. Goodbye!
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# END OF SESSION
+# ═══════════════════════════════════════════════════════════════════════════════
