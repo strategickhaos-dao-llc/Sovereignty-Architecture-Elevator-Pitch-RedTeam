@@ -35,3 +35,24 @@ target/
 
 # Workspace data
 workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+.eggs/
+*.egg-info/
+dist/
+build/
+
+# ValorYield Engine
+ValorYieldEngine/logs/
+ValorYieldEngine/pids/
+ValorYieldEngine/web/dist/
+ValorYieldEngine/mobile/.expo/
