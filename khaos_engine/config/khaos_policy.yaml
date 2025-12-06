@@ -1,0 +1,154 @@
+# ═══════════════════════════════════════════════════════════
+# KHAOS ENGINE - Sovereign Policy Configuration
+# Strategickhaos DAO LLC / Valoryield Engine
+# ═══════════════════════════════════════════════════════════
+
+# Policy version for tracking changes
+version: "1.0.0"
+
+# Sovereignty rules define resource governance behavior
+sovereignty_rules:
+  # Temperature threshold in Celsius - trigger cooling actions above this
+  thermal_threshold: 85
+  
+  # Memory threshold as percentage (0.0-1.0) - trigger memory management above this
+  memory_threshold: 0.85
+  
+  # Safety switches
+  auto_kill_enabled: false  # Set to true to enable automatic process termination
+  auto_scale_enabled: true  # Enable automatic scaling recommendations
+  
+  # Priority matrix - higher scores = more protected from termination
+  priority_matrix:
+    critical_infrastructure: 1000  # System processes - never kill
+    strategickhaos_stack: 900      # Your sovereign stack - high protection
+    development_tools: 700         # IDEs, editors - medium-high protection
+    browsers: 500                  # Web browsers - medium protection
+    idle_processes: 200            # Idle/unused - low protection
+
+# Workload distribution settings for multi-node orchestration
+workload_distribution:
+  # Threshold to trigger offloading to cluster (percentage)
+  local_threshold: 0.75
+  
+  # Available cluster nodes for distribution
+  cluster_nodes:
+    - nova
+    - lyra
+    - athena
+    - asteroth
+  
+  # Node preferences for specific workload types
+  node_preferences:
+    ml_workloads: ["nova", "athena"]     # GPU nodes
+    web_services: ["lyra"]               # Low-latency node
+    batch_processing: ["asteroth"]       # High-capacity node
+
+# Process classification rules
+classification:
+  # Critical infrastructure - never terminate
+  critical_processes:
+    - wininit
+    - csrss
+    - services
+    - lsass
+    - smss
+    - winlogon
+    - System
+    - svchost
+    - init
+    - systemd
+    - kernel
+  
+  # Strategickhaos sovereign stack identifiers
+  sovereign_identifiers:
+    - strategickhaos
+    - khaos
+    - legion
+    - valoryield
+    - refinory
+    - sovereignty
+  
+  # Development tools
+  dev_tools:
+    - Code
+    - code
+    - rider
+    - jetbrains
+    - pycharm
+    - intellij
+    - webstorm
+    - goland
+    - vim
+    - nvim
+    - emacs
+    - sublime_text
+  
+  # Web browsers
+  browsers:
+    - firefox
+    - chrome
+    - msedge
+    - brave
+    - opera
+    - chromium
+
+# Monitoring and alerting configuration
+monitoring:
+  # Enable Prometheus metrics export
+  prometheus_enabled: true
+  prometheus_port: 9090
+  
+  # Health check interval in seconds
+  health_check_interval: 30
+  
+  # Metrics collection interval in seconds
+  metrics_interval: 10
+  
+  # Alert channels
+  alerts:
+    discord_webhook: null  # Set to Discord webhook URL
+    slack_webhook: null    # Set to Slack webhook URL
+    email: null            # Set to email address
+
+# Legion coordination for multi-AI orchestration
+legion:
+  enabled: true
+  
+  # AI model preferences for task routing
+  models:
+    simple_tasks: "gpt-3.5-turbo"      # Cost-effective for simple queries
+    complex_reasoning: "claude-3-opus"  # Best for complex analysis
+    code_generation: "gpt-4-turbo"      # Optimal for code
+    fast_responses: "grok-1"            # Low-latency responses
+  
+  # Cost optimization settings
+  cost_optimization:
+    enabled: true
+    max_daily_spend: 50.0  # USD
+    prefer_local_first: true
+
+# Reporting configuration
+reporting:
+  # Output directory for reports
+  output_dir: "~/.strategickhaos/reports"
+  
+  # Report retention in days
+  retention_days: 30
+  
+  # Automatic reporting schedule (cron format)
+  schedule: "0 */6 * * *"  # Every 6 hours
+
+# API configuration
+api:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  
+  # API authentication (set in environment variables)
+  # KHAOS_API_KEY for simple API key auth
+  
+  # CORS settings
+  cors_origins:
+    - "http://localhost:3000"
+    - "https://dashboard.strategickhaos.local"

@@ -1,0 +1,335 @@
+# ═══════════════════════════════════════════════════════════
+# KHAOS ENGINE - Kubernetes Operator Manifests
+# Strategickhaos DAO LLC / Valoryield Engine
+#
+# Deploy with: kubectl apply -f khaos-engine-operator.yaml
+# ═══════════════════════════════════════════════════════════
+
+---
+# Namespace for KHAOS sovereignty components
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: sovereignty
+    strategickhaos.dao/managed: "true"
+
+---
+# ConfigMap containing sovereignty policy
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: khaos-policy
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: config
+data:
+  policy.yaml: |
+    # KHAOS ENGINE - Kubernetes Policy Configuration
+    version: "1.0.0"
+    
+    sovereignty_rules:
+      thermal_threshold: 85
+      memory_threshold: 0.85
+      auto_kill_enabled: true
+      auto_scale_enabled: true
+      
+      priority_matrix:
+        critical_infrastructure: 1000
+        strategickhaos_stack: 900
+        development_tools: 700
+        browsers: 500
+        idle_processes: 200
+        
+    workload_distribution:
+      local_threshold: 0.75
+      cluster_nodes:
+        - nova
+        - lyra
+        - athena
+        - asteroth
+    
+    monitoring:
+      prometheus_enabled: true
+      prometheus_port: 9090
+      health_check_interval: 30
+      metrics_interval: 10
+    
+    legion:
+      enabled: true
+      cost_optimization:
+        enabled: true
+        max_daily_spend: 50.0
+        prefer_local_first: true
+
+---
+# ServiceAccount for KHAOS agent
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: khaos-agent
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: agent
+
+---
+# ClusterRole for node-level resource access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: khaos-agent
+  labels:
+    app.kubernetes.io/name: khaos-engine
+rules:
+  - apiGroups: [""]
+    resources: ["nodes", "pods", "namespaces"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["nodes", "pods"]
+    verbs: ["get", "list"]
+
+---
+# ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: khaos-agent
+  labels:
+    app.kubernetes.io/name: khaos-engine
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: khaos-agent
+subjects:
+  - kind: ServiceAccount
+    name: khaos-agent
+    namespace: khaos-sovereignty
+
+---
+# DaemonSet - deploys agent on every node
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: khaos-node-agent
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: agent
+spec:
+  selector:
+    matchLabels:
+      app: khaos-agent
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: khaos-agent
+        app.kubernetes.io/name: khaos-engine
+        app.kubernetes.io/component: agent
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: khaos-agent
+      hostPID: true  # Access host processes
+      hostNetwork: true  # Access host network for metrics
+      tolerations:
+        - operator: Exists  # Run on all nodes including masters
+      containers:
+        - name: arbiter
+          image: strategickhaos/khaos-engine:latest
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true  # Required for full process visibility
+            runAsUser: 0
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SOVEREIGNTY_MODE
+              value: "FULL_AUTONOMY"
+            - name: CONFIG_PATH
+              value: "/etc/khaos/policy.yaml"
+            - name: PROMETHEUS_PORT
+              value: "9090"
+          ports:
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+            - name: api
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: proc
+              mountPath: /host/proc
+              readOnly: true
+            - name: sys
+              mountPath: /host/sys
+              readOnly: true
+            - name: khaos-config
+              mountPath: /etc/khaos
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: khaos-config
+          configMap:
+            name: khaos-policy
+
+---
+# Service for agent API access
+apiVersion: v1
+kind: Service
+metadata:
+  name: khaos-agent
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: agent
+spec:
+  type: ClusterIP
+  ports:
+    - name: api
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  selector:
+    app: khaos-agent
+
+---
+# Deployment for central controller
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: khaos-controller
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: khaos-controller
+  template:
+    metadata:
+      labels:
+        app: khaos-controller
+        app.kubernetes.io/name: khaos-engine
+        app.kubernetes.io/component: controller
+    spec:
+      serviceAccountName: khaos-agent
+      containers:
+        - name: controller
+          image: strategickhaos/khaos-engine:latest
+          args: ["--mode", "controller"]
+          env:
+            - name: CONTROLLER_MODE
+              value: "true"
+            - name: CONFIG_PATH
+              value: "/etc/khaos/policy.yaml"
+          ports:
+            - name: api
+              containerPort: 8080
+            - name: metrics
+              containerPort: 9090
+          volumeMounts:
+            - name: khaos-config
+              mountPath: /etc/khaos
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+      volumes:
+        - name: khaos-config
+          configMap:
+            name: khaos-policy
+
+---
+# Service for controller
+apiVersion: v1
+kind: Service
+metadata:
+  name: khaos-controller
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    app.kubernetes.io/component: controller
+spec:
+  type: ClusterIP
+  ports:
+    - name: api
+      port: 8080
+      targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: khaos-controller
+
+---
+# ServiceMonitor for Prometheus (if using prometheus-operator)
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: khaos-engine
+  namespace: khaos-sovereignty
+  labels:
+    app.kubernetes.io/name: khaos-engine
+    release: prometheus  # Match your Prometheus release label
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: khaos-engine
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - khaos-sovereignty
