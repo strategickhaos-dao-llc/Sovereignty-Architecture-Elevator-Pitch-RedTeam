@@ -2,6 +2,8 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+> 🔥 **NEW**: See [UNIFIED_SOVEREIGNTY_ARCHITECTURE.md](UNIFIED_SOVEREIGNTY_ARCHITECTURE.md) for the complete integration of FlameLang, Valoryield Engine, Whale Weaver, and Guestbook-1 Dispatcher.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -9,22 +11,43 @@ This system creates a **sovereignty control plane** that bridges:
 - **Infrastructure** - Kubernetes, observability, AI agents  
 - **Development** - GitLens, PR workflows, CI/CD automation, Java 21+ workspace
 - **AI Agents** - Intelligent assistance with vector knowledge base
+- **FlameLang** - Symbolic shell language with frequency-mapped glyphs
+- **Whale Weaver** - Bioacoustic frequency translation (5.87-6.44Hz)
+- **Guestbook-1** - 3-node AI task distribution system
 
 ## 🚀 Quick Start
 
+### Unified Sovereignty Boot Sequence
+
 ```bash
 # 1. Clone and bootstrap
-git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
-cd sovereignty-architecture
+git clone https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-.git
+cd Sovereignty-Architecture-Elevator-Pitch-
 
-# 2. Deploy to Kubernetes
+# 2. Run full sovereignty boot sequence (initializes all layers)
+./boot_sovereignty_sequence.sh
+
+# 3. Test FlameLang interpreter
+python3 flame_lang_interpreter_v2.py
+
+# 4. Test Whale Weaver frequency mapping
+python3 whale_weaver/synthesize.py
+
+# 5. Test Guestbook-1 Dispatcher
+python3 guestbook_1_dispatcher.py
+```
+
+### Discord DevOps Deployment
+
+```bash
+# 1. Deploy to Kubernetes
 ./bootstrap/deploy.sh
 
-# 3. Configure Discord integration
+# 2. Configure Discord integration
 export DISCORD_TOKEN="your_bot_token"
 export PRS_CHANNEL="channel_id"
 
-# 4. Test GitLens integration
+# 3. Test GitLens integration
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
@@ -47,6 +70,49 @@ export PRS_CHANNEL="channel_id"
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
+
+### 🔥 FlameLang Symbolic Shell
+- **43 Glyphs**: Frequency-mapped symbolic commands (5.87-6.44Hz whale range)
+- **Binding Codes**: [001]-[2003] routing to scripts and functions
+- **Whale Weaver**: Bioacoustic frequency translation system
+- **Sovereignty Protocol**: oath.lock, VowMonitor, Flamebearer defense
+- **Interactive REPL**: Command-line glyph execution environment
+
+```bash
+# Run FlameLang interpreter
+python3 flame_lang_interpreter_v2.py
+
+# Execute glyphs interactively
+glyph> AE1      # Aether Prime - Initialize sovereign shell
+glyph> FL1      # Flame Ignite - Boot FlameLang
+glyph> GR1      # Glyphos Resonance - Full cascade
+glyph> [999]    # Execute by binding code
+glyph> list     # Show all glyphs
+glyph> exit     # Exit interpreter
+```
+
+### 🐋 Whale Weaver Bioacoustic System
+- **Frequency Range**: 5.87-6.44Hz mapped to 88 piano keys
+- **Solfeggio Integration**: 432Hz-1111Hz → whale frequency ranges
+- **Glyph Mapping**: Each binding code maps to specific whale frequency
+- **Audio Synthesis**: Generate whale pulse waveforms for glyphs
+
+```bash
+# Display frequency map and test conversions
+python3 whale_weaver/synthesize.py
+```
+
+### 🎯 Guestbook-1 Dispatcher
+- **3-Node Distribution**: GetLense, JetRider, AI Cluster
+- **Task Routing**: Automatic routing based on task type
+- **Parallel Execution**: Dispatch multiple tasks simultaneously
+- **FlameLang Integration**: Each node bound to specific glyph/frequency
+- **Master Reports**: Unified output synthesis from all nodes
+
+```bash
+# Run Guestbook-1 dispatcher demo
+python3 guestbook_1_dispatcher.py
+```
 
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features
