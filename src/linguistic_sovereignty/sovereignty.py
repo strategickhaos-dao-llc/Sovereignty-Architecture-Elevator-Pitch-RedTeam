@@ -30,6 +30,12 @@ else:
     from .algorithms import GlyphAlgorithms, HEBREW_LETTERS
 
 
+# Named constants for frequency bounds and variation
+MIN_FREQUENCY = 0.001  # Minimum glyph frequency in corpus
+MAX_FREQUENCY = 0.1    # Maximum glyph frequency in corpus
+CORRELATION_VARIATION = 0.1  # Random variation for Hebrew/Egyptian correlation
+
+
 class LinguisticSovereignty:
     """
     Build a cryptographic naming system from undeciphered languages.
@@ -215,7 +221,7 @@ class LinguisticSovereignty:
         # Zipf's law approximation
         base_freq = 0.08 / (1 + index * 0.1)
         variation = random.uniform(-0.01, 0.01)
-        return max(0.001, min(0.1, base_freq + variation))
+        return max(MIN_FREQUENCY, min(MAX_FREQUENCY, base_freq + variation))
     
     def _generate_geometric_pattern(self, index: int) -> List[tuple]:
         """Generate geometric pattern based on index."""
@@ -267,13 +273,13 @@ class LinguisticSovereignty:
         """Calculate Hebrew character similarity (0-1)."""
         # Pattern-based similarity
         base = 0.3 + (index % 7) * 0.1
-        return min(1.0, max(0.0, base + random.uniform(-0.1, 0.1)))
+        return min(1.0, max(0.0, base + random.uniform(-CORRELATION_VARIATION, CORRELATION_VARIATION)))
     
     def _calculate_egyptian_similarity(self, index: int) -> float:
         """Calculate Egyptian hieroglyph similarity (0-1)."""
         # Pattern-based similarity
         base = 0.25 + (index % 8) * 0.09
-        return min(1.0, max(0.0, base + random.uniform(-0.1, 0.1)))
+        return min(1.0, max(0.0, base + random.uniform(-CORRELATION_VARIATION, CORRELATION_VARIATION)))
     
     def vectorize_glyph(self, glyph: Glyph) -> List[float]:
         """Convert glyph to 36-dimensional vector space.

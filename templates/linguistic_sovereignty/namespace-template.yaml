@@ -131,8 +131,20 @@ metadata:
     strategickhaos.io/secret-type: "vector-keys"
 type: Opaque
 stringData:
-  # Note: In production, use external secret management (Vault, AWS Secrets Manager)
-  vector-signing-key: "placeholder-replace-with-vault-reference"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # ⚠️  WARNING: PLACEHOLDER VALUE - DO NOT USE IN PRODUCTION
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # This placeholder MUST be replaced with an actual Vault reference before 
+  # deploying to any non-development environment.
+  #
+  # For production, use one of the following approaches:
+  #   1. HashiCorp Vault: vault://secret/sovereignty/vector-signing-key
+  #   2. AWS Secrets Manager: arn:aws:secretsmanager:region:account:secret:name
+  #   3. External Secrets Operator with SecretStore CRD
+  #
+  # NEVER commit actual secret values to version control.
+  # ═══════════════════════════════════════════════════════════════════════════════
+  vector-signing-key: "PLACEHOLDER-REPLACE-WITH-VAULT-REFERENCE-BEFORE-PRODUCTION"
   
 ---
 

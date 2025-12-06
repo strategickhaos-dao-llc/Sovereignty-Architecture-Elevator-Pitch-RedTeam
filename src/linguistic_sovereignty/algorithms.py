@@ -39,6 +39,10 @@ HEBREW_GEMATRIA = {
 # Hebrew letters ordered by index
 HEBREW_LETTERS = list(HEBREW_GEMATRIA.keys())
 
+# Default fractal dimension when calculation is indeterminate
+# Value 1.0 represents a simple line (lowest dimension for connected shapes)
+DEFAULT_FRACTAL_DIMENSION = 1.0
+
 
 class GlyphAlgorithms:
     """Collection of 36 algorithms for glyph vectorization."""
@@ -139,9 +143,12 @@ class GlyphAlgorithms:
         width = max(xs) - min(xs)
         height = max(ys) - min(ys)
         
+        # Return default ratio for degenerate cases
         if height == 0:
-            return 1.0
-        return width / height if height != 0 else float(width) if width > 0 else 1.0
+            # Horizontal line or point - return width as ratio, minimum 1.0
+            return max(1.0, float(width))
+        
+        return width / height
     
     @staticmethod
     def calculate_fractal_dimension(pattern: List[Tuple[int, int]]) -> float:
@@ -150,7 +157,7 @@ class GlyphAlgorithms:
         Estimates fractal dimension using simplified box-counting method.
         """
         if len(pattern) < 2:
-            return 1.0
+            return DEFAULT_FRACTAL_DIMENSION
         
         scales = [1, 2, 4, 8]
         counts = []
@@ -174,7 +181,8 @@ class GlyphAlgorithms:
         
         denominator = n * sum_x2 - sum_x * sum_x
         if denominator == 0:
-            return 1.0
+            # Indeterminate case - return default for simple line
+            return DEFAULT_FRACTAL_DIMENSION
         
         slope = (n * sum_xy - sum_x * sum_y) / denominator
         return -slope
