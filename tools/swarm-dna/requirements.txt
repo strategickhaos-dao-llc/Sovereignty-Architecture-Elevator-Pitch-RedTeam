@@ -1,0 +1,7 @@
+# Swarm DNA Architecture Toolkit Requirements
+
+# Core dependencies
+pyyaml>=6.0
+
+# Optional dependencies for enhanced functionality
+# graphviz  # For DOT graph visualization (install system package instead)

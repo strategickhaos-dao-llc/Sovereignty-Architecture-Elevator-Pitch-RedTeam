@@ -35,3 +35,21 @@ target/
 
 # Workspace data
 workspace/
+
+# Swarm DNA demo outputs and compiled configs (user-generated)
+demo-output/
+swarm-output/
+compiled/
+compiled-configs/
+model_metadata.yaml
+lineage.yaml
+lineage.dot
+lineage.png
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/

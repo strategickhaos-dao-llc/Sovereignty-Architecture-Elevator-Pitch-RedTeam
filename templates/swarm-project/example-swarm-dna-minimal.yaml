@@ -1,0 +1,72 @@
+# Minimal Swarm DNA Configuration Template
+# Copy this to create your own SWARM_DNA.yaml
+
+swarm_identity:
+  name: "Your Organization Name"
+  codename: "Your Project Codename"
+  version: "1.0"
+  birth_date: "2025-11-24"
+  
+  legal_entity:
+    name: "Your Legal Entity Name"
+    ein: "XX-XXXXXXX"  # Your EIN or tax ID
+    jurisdiction: "State/Country"
+
+sovereignty_layer:
+  cognitive_architecture:
+    mode: "narrative-operational-overlap"
+    paradigm: "your-philosophy"
+    
+  operational_philosophy:
+    - "Your core principle 1"
+    - "Your core principle 2"
+    - "Your core principle 3"
+
+swarm_components:
+  ai_models:
+    storage_path: "$HOME/.ollama/models/blob/"
+    format: "GGUF"
+    management:
+      - lineage_tracking: true
+      - metadata_extraction: true
+      
+  orchestration:
+    frameworks:
+      - "GitHub Actions"
+    policy_engines:
+      - "OPA/Rego"
+      
+  data_intelligence:
+    rag_system:
+      vector_db: "Qdrant"
+      embedding_model: "your-model"
+
+technical_infrastructure:
+  control_plane:
+    interface: "Discord DevOps"  # or "Slack" or "CLI"
+    channels:
+      - "#general"
+      - "#deployments"
+      
+  observability:
+    metrics: "Prometheus"
+    logging: "Loki"
+    visualization: "Grafana"
+
+metadata:
+  operator:
+    name: "Your Name"
+    node: "001"
+    
+  philosophical_core:
+    quote: "Your guiding quote"
+    principle: "Your core principle"
+
+proof_of_existence:
+  timestamp: "2025-11-24T00:00:00Z"
+  repository: "your-org/your-repo"
+  
+  verification:
+    method: "GPG detached signature"
+    command: "gpg --armor --detach-sign SWARM_DNA.yaml"
+    signature_file: "SWARM_DNA.yaml.asc"
