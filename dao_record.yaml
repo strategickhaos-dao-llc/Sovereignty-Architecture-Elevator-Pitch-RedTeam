@@ -7,6 +7,15 @@ company:
   formation_date: "2025-06-25"
   dissolution_date: null
 
+brand:
+  origin: "GTA Online gamertag (~2015)"
+  etymology:
+    strategic: "Calculated, planned, optimized approach"
+    khaos: "Controlled chaos, strategic unpredictability"
+  evolution: "Gaming identity → GitHub username → Wyoming DAO LLC"
+  origin_story_doc: "ORIGIN_STORY.md"
+  founder_gamertag: "StrategicKhaos"
+
 contact:
   principal_address:
     street: "1216 S Fredonia St"
