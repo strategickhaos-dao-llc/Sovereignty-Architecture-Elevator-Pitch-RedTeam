@@ -1,0 +1,39 @@
+nats:
+  url: "nats://nats:4222"
+
+nodes:
+  - name: "nova"
+  - name: "lyra"
+  - name: "athena"
+
+roles:
+  synthesis_core:
+    service_name: "synthesis-core"
+
+policies:
+  thermal:
+    max_cpu_temp: 80
+    max_gpu_temp: 80
+  storage:
+    min_free_percent: 20
+  heartbeat:
+    timeout_seconds: 45
+
+actions:
+  # Which antibodies can perform which actions
+  thermal-sentinel:
+    - "throttle"
+    - "redistribute"
+    - "alert"
+  mesh-healer:
+    - "regenerate_config"
+    - "restart_interface"
+    - "failover"
+  storage-watcher:
+    - "cleanup"
+    - "mirror"
+    - "alert"
+  qwen-health-monitor:
+    - "switch_hot_spare"
+    - "reload_model"
+    - "alert"
