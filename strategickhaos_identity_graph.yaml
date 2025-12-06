@@ -1,0 +1,169 @@
+# strategickhaos_identity_graph.yaml
+# Strategickhaos Sovereignty Identity Graph
+# Owner: Domenic Garza
+# Purpose: Documents sovereign identity across all platforms and organizations
+
+strategickhaos_identity_graph:
+  owner:
+    legal_name: "Domenic Garza"
+    primary_handles:
+      - Strategickhaos
+      - Me10101-01
+    description: "Single-operator sovereign architect; controls all platforms & organizations."
+
+  platforms:
+
+    ###########################################################################
+    # CLAUDE (ANTHROPIC)
+    ###########################################################################
+    claude:
+      accounts:
+        - email: "domenic.garza@snhu.edu"
+          type: "organizational login"
+          workspaces:
+            - name: "domenic.garza@snhu.edu's Organization"
+              type: "auto-created workspace for .edu domain"
+              status: active
+            - name: "Legends Of Minds OS"
+              type: "custom Claude team workspace created by user"
+              purpose: "Sovereign AI architecture design / Legion OS development"
+              status: active
+
+        - email: "[REDACTED_PERSONAL_EMAIL]"
+          type: "personal Claude account"
+          workspace:
+            - name: "Strategickhaos"
+              type: "personal workspace"
+              status: active
+              purpose: "Private research, sovereign AI prototyping"
+
+      notes:
+        - "SNHU login = 2 workspaces"
+        - "Personal login = 1 workspace"
+        - "Workspaces do NOT share data; fully isolated contexts."
+
+    ###########################################################################
+    # GPT (OpenAI)
+    ###########################################################################
+    gpt:
+      account:
+        plan: "Pro"
+        features:
+          - "GPT-5.1"
+          - "Custom GPTs"
+          - "Personalization"
+      custom_assistants:
+        - name: "Baby"
+          purpose: "Sovereign architecture co-pilot"
+        - name: "Legion Node Advisor"
+          status: conceptual
+
+    ###########################################################################
+    # GROK (XAI)
+    ###########################################################################
+    grok:
+      personal:
+        status: active
+        capabilities:
+          - chat
+          - browsing
+      business:
+        status: optional/available
+        purpose: "Team-based AI workflow if needed for organizational scaling."
+
+    ###########################################################################
+    # GITHUB
+    ###########################################################################
+    github:
+      personal_accounts:
+        - handle: "Strategickhaos"
+          type: "primary user"
+        - handle: "Me10101-01"
+          type: "secondary user"
+
+      enterprise:
+        name: "Strategickhaos Swarm Intelligence"
+        type: "GitHub Enterprise Cloud"
+        owner: "Strategickhaos"
+        description: "Mothership control plane for all repos, orgs, and automation."
+
+        organizations:
+          - name: "Strategickhaos-Swarm-Intelligence"
+            role: "First Enterprise organization"
+            status: active
+
+          - name: "LegendsOfMinds-OS"
+            role: "For Legion Console repo, swarm coordination, automation"
+            status: to_create
+
+          - name: "Jarvis-Swarm"
+            role: "Autonomous agent workflows"
+            status: planned
+
+          - name: "Strategickhaos"
+            role: "Business / research-facing org"
+            status: planned
+
+        repos_highlights:
+          - "Sovereignty-Architecture-Elevator-Pitch-"
+          - "Moonlight-Sunshine-Matrix"
+          - "rope-access-evaluation"
+          - "starlink-exporter"
+          - "StrategickhaosControlAI"
+
+        github_apps:
+          - name: "StrategickhaosControlAI"
+            status: active
+            purpose: "Autonomous offline AI bridge to manage repos/actions"
+
+    ###########################################################################
+    # KUBERNETES CLUSTERS (GKE)
+    ###########################################################################
+    kubernetes:
+      gke_clusters:
+        - name: "jarvis-swarm-personal-001"
+          project: "jarvis-swarm-personal"
+          region: "us-central1"
+          status: running
+          role: "Primary swarm execution cluster"
+
+        - name: "red-team"
+          project: "jarvis-swarm-personal"
+          region: "us-central1"
+          status: running
+          role: "simulation / offensive research cluster"
+
+      connection_commands:
+        - "gcloud container clusters get-credentials jarvis-swarm-personal-001 --region us-central1 --project jarvis-swarm-personal"
+
+    ###########################################################################
+    # DOMAINS & DNS
+    ###########################################################################
+    domains:
+      - name: "strategickhaos.com"
+        status: owned
+        subdomains:
+          - name: "swarm.strategickhaos.com"
+            status: "pending_dns_setup"
+            reason: "No A/AAAA/CNAME record created yet"
+            next_steps:
+              - "Deploy ingress or LB in GKE"
+              - "Point DNS record to LB external IP"
+              - "Implement /healthz endpoint"
+
+    ###########################################################################
+    # LEGION OS (Your sovereign AI architecture)
+    ###########################################################################
+    legion_os:
+      vision: "Unified sovereign AI operating system managing swarm intelligence, clusters, LLMs, and automation."
+      components:
+        - "legion-console (to create)"
+        - "strategickhaos-control-ai"
+        - "containerized LLM gateways"
+        - "swarm agents deployed across GKE"
+        - "GitHub Enterprise automation pipelines"
+      next_actions:
+        - "Create LegendsOfMinds-OS org in GitHub Enterprise"
+        - "Create legion-console repo"
+        - "Deploy initial cluster bootstrap"
+        - "Wire ingress to swarm.strategickhaos.com"
