@@ -1,0 +1,668 @@
+# Kubernetes Deployment for Dual-Banking Integration
+# StrategicKhaos DAO LLC & ValorYield Engine
+# Revenue Distribution System
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: banking-integration
+  labels:
+    name: banking-integration
+    app.kubernetes.io/name: banking-integration
+    app.kubernetes.io/part-of: sovereignty-architecture
+
+---
+# ConfigMap for distribution configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: distribution-config
+  namespace: banking-integration
+data:
+  distribution.yaml: |
+    distribution:
+      valoryield_percentage: 7.0
+      strategickhaos_percentage: 93.0
+      minimum_distribution_amount: 10.00
+      
+    entities:
+      valoryield:
+        legal_name: "ValorYield Engine"
+        ein: "39-2923503"
+        tax_status: "501(c)(3)"
+        
+      strategickhaos:
+        legal_name: "StrategicKhaos DAO LLC"
+        ein: "39-2900295"
+        entity_type: "LLC"
+    
+    banking:
+      thread_bank:
+        enabled: true
+        api_base_url: "https://api.thread.bank/v1"
+        
+      navy_federal:
+        enabled: true
+        routing_number: "256074974"
+        
+    monitoring:
+      discord_notifications: true
+      sentry_enabled: true
+      prometheus_metrics: true
+      
+    compliance:
+      generate_receipts: true
+      log_retention_days: 2555  # 7 years
+      audit_trail: true
+
+---
+# Secret for API keys and credentials (to be created separately)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: banking-secrets
+  namespace: banking-integration
+type: Opaque
+stringData:
+  # Thread Bank / Sequence
+  thread-bank-api-key: "REPLACE_WITH_ACTUAL_KEY"
+  thread-bank-account-id: "REPLACE_WITH_ACTUAL_ID"
+  thread-webhook-secret: "REPLACE_WITH_ACTUAL_SECRET"
+  
+  # Navy Federal (if API available)
+  navy-federal-api-key: "REPLACE_WITH_ACTUAL_KEY"
+  navy-federal-strategickhaos-account: "REPLACE_WITH_ACCOUNT_NUMBER"
+  navy-federal-valoryield-account: "REPLACE_WITH_ACCOUNT_NUMBER"
+  
+  # Discord webhook for notifications
+  discord-webhook-url: "REPLACE_WITH_WEBHOOK_URL"
+  
+  # Sentry DSN for error tracking
+  sentry-dsn: "REPLACE_WITH_SENTRY_DSN"
+
+---
+# Distribution Engine Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: distribution-engine
+  namespace: banking-integration
+  labels:
+    app: distribution-engine
+    component: core
+spec:
+  replicas: 2  # For high availability
+  selector:
+    matchLabels:
+      app: distribution-engine
+  template:
+    metadata:
+      labels:
+        app: distribution-engine
+        component: core
+    spec:
+      containers:
+      - name: distribution-engine
+        image: strategickhaos/distribution-engine:latest  # To be built
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: metrics
+          protocol: TCP
+        env:
+        # Configuration
+        - name: CONFIG_PATH
+          value: /config/distribution.yaml
+        
+        # Thread Bank
+        - name: THREAD_BANK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: thread-bank-api-key
+        - name: THREAD_BANK_ACCOUNT_ID
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: thread-bank-account-id
+        - name: THREAD_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: thread-webhook-secret
+        
+        # Navy Federal
+        - name: NAVY_FEDERAL_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: navy-federal-api-key
+              optional: true
+        - name: NAVY_FEDERAL_STRATEGICKHAOS_ACCOUNT
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: navy-federal-strategickhaos-account
+        - name: NAVY_FEDERAL_VALORYIELD_ACCOUNT
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: navy-federal-valoryield-account
+        
+        # NATS
+        - name: NATS_URL
+          value: "nats://nats.nats-system:4222"
+        
+        # Monitoring
+        - name: DISCORD_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: discord-webhook-url
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: sentry-dsn
+              optional: true
+        
+        # App settings
+        - name: LOG_LEVEL
+          value: "info"
+        - name: NODE_ENV
+          value: "production"
+        
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+      
+      volumes:
+      - name: config
+        configMap:
+          name: distribution-config
+      
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+
+---
+# Service for distribution engine
+apiVersion: v1
+kind: Service
+metadata:
+  name: distribution-engine
+  namespace: banking-integration
+  labels:
+    app: distribution-engine
+spec:
+  selector:
+    app: distribution-engine
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Webhook Receiver Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-receiver
+  namespace: banking-integration
+  labels:
+    app: webhook-receiver
+    component: ingress
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webhook-receiver
+  template:
+    metadata:
+      labels:
+        app: webhook-receiver
+        component: ingress
+    spec:
+      containers:
+      - name: webhook-receiver
+        image: strategickhaos/webhook-receiver:latest  # To be built
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        - name: THREAD_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: banking-secrets
+              key: thread-webhook-secret
+        - name: NATS_URL
+          value: "nats://nats.nats-system:4222"
+        - name: LOG_LEVEL
+          value: "info"
+        
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+
+---
+# Service for webhook receiver
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-receiver
+  namespace: banking-integration
+  labels:
+    app: webhook-receiver
+spec:
+  selector:
+    app: webhook-receiver
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Ingress for webhook receiver (external access)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webhook-ingress
+  namespace: banking-integration
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - webhooks.strategickhaos.com
+    secretName: webhook-tls
+  rules:
+  - host: webhooks.strategickhaos.com
+    http:
+      paths:
+      - path: /thread-bank
+        pathType: Prefix
+        backend:
+          service:
+            name: webhook-receiver
+            port:
+              number: 80
+
+---
+# HorizontalPodAutoscaler for distribution engine
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: distribution-engine-hpa
+  namespace: banking-integration
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: distribution-engine
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+# ServiceMonitor for Prometheus metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: distribution-engine-metrics
+  namespace: banking-integration
+  labels:
+    app: distribution-engine
+spec:
+  selector:
+    matchLabels:
+      app: distribution-engine
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+# PrometheusRule for alerting
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: banking-integration-alerts
+  namespace: banking-integration
+  labels:
+    prometheus: kube-prometheus
+spec:
+  groups:
+  - name: banking-integration
+    interval: 30s
+    rules:
+    - alert: DistributionFailureHigh
+      expr: rate(distribution_failure_total[5m]) > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Distribution failures detected"
+        description: "Distribution engine is experiencing failures. Check logs immediately."
+    
+    - alert: DistributionLatencyHigh
+      expr: histogram_quantile(0.95, distribution_latency_bucket) > 5000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High distribution latency"
+        description: "95th percentile latency is above 5 seconds."
+    
+    - alert: WebhookReceiverDown
+      expr: up{job="webhook-receiver"} == 0
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Webhook receiver is down"
+        description: "Cannot receive webhooks from Thread Bank."
+    
+    - alert: DistributionEnginePodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="banking-integration", container="distribution-engine"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Distribution engine pod crash looping"
+        description: "Pod {{ $labels.pod }} is crash looping."
+
+---
+# NetworkPolicy - restrict traffic to distribution engine
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: distribution-engine-netpol
+  namespace: banking-integration
+spec:
+  podSelector:
+    matchLabels:
+      app: distribution-engine
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow from webhook receiver
+  - from:
+    - podSelector:
+        matchLabels:
+          app: webhook-receiver
+    ports:
+    - protocol: TCP
+      port: 8080
+  # Allow from Prometheus
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9090
+  egress:
+  # Allow to NATS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: nats-system
+    ports:
+    - protocol: TCP
+      port: 4222
+  # Allow external HTTPS (for Thread Bank and Navy Federal APIs)
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow DNS
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# PodDisruptionBudget for high availability
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: distribution-engine-pdb
+  namespace: banking-integration
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: distribution-engine
+
+---
+# CronJob for daily reconciliation
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-reconciliation
+  namespace: banking-integration
+spec:
+  schedule: "0 2 * * *"  # 2 AM daily
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: reconciliation
+        spec:
+          containers:
+          - name: reconciliation
+            image: strategickhaos/banking-reconciliation:latest
+            imagePullPolicy: Always
+            env:
+            - name: CONFIG_PATH
+              value: /config/distribution.yaml
+            - name: THREAD_BANK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: banking-secrets
+                  key: thread-bank-api-key
+            - name: NAVY_FEDERAL_STRATEGICKHAOS_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: banking-secrets
+                  key: navy-federal-strategickhaos-account
+            - name: NAVY_FEDERAL_VALORYIELD_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: banking-secrets
+                  key: navy-federal-valoryield-account
+            - name: DISCORD_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: banking-secrets
+                  key: discord-webhook-url
+            volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+          volumes:
+          - name: config
+            configMap:
+              name: distribution-config
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+
+---
+# PersistentVolumeClaim for audit logs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audit-logs-pvc
+  namespace: banking-integration
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard  # Adjust based on your cluster
+
+---
+# Audit Log Sidecar Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-logger
+  namespace: banking-integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-logger
+  template:
+    metadata:
+      labels:
+        app: audit-logger
+    spec:
+      containers:
+      - name: audit-logger
+        image: fluent/fluent-bit:latest
+        volumeMounts:
+        - name: audit-logs
+          mountPath: /var/log/audit
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      volumes:
+      - name: audit-logs
+        persistentVolumeClaim:
+          claimName: audit-logs-pvc
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
+
+---
+# ConfigMap for Fluent Bit audit logging
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: banking-integration
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         5
+        Log_Level     info
+        Parsers_File  parsers.conf
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/audit/*.log
+        Parser            json
+        Tag               audit.*
+        Refresh_Interval  5
+
+    [OUTPUT]
+        Name   stdout
+        Match  *
+
+    [OUTPUT]
+        Name              cloudwatch_logs
+        Match             audit.*
+        region            us-east-1
+        log_group_name    /strategickhaos/banking-integration/audit
+        log_stream_prefix from-fluent-bit-
+        auto_create_group true
+
+  parsers.conf: |
+    [PARSER]
+        Name   json
+        Format json
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%LZ
