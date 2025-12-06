@@ -1,0 +1,73 @@
+# Prometheus Configuration for Sovereignty Architecture
+# Monitors the biological/slime mold intelligence components
+#
+# Services monitored:
+# - PostgreSQL (DNA Archive / Long-term Memory) - requires postgres_exporter
+# - Redis (Short-term Memory / Fast Access) - requires redis_exporter
+# - NATS (Synaptic Transmission / Async Messaging)
+# - Event Gateway (Neural Network)
+#
+# NOTE: PostgreSQL and Redis do not expose Prometheus metrics by default.
+# To enable metrics for these services, add exporters:
+#   - postgres_exporter: https://github.com/prometheus-community/postgres_exporter
+#   - redis_exporter: https://github.com/oliver006/redis_exporter
+# The scrape configs below are placeholders for when exporters are deployed.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'sovereignty-slime-mold'
+    environment: '${SOVEREIGNTY_ENV:-development}'
+
+scrape_configs:
+  # PostgreSQL - DNA Archive / Long-term Memory
+  # REQUIRES: postgres_exporter running on port 9187
+  # Without exporter, this job will show as down
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+  #   scrape_interval: 60s
+
+  # Redis - Short-term Memory / Fast Access
+  # REQUIRES: redis_exporter running on port 9121
+  # Without exporter, this job will show as down
+  # - job_name: 'redis'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+  #   scrape_interval: 30s
+
+  # NATS - Synaptic Transmission / Async Messaging
+  # NATS provides built-in monitoring on port 8222
+  - job_name: 'nats'
+    static_configs:
+      - targets: ['nats:8222']
+    metrics_path: /varz
+    scrape_interval: 15s
+
+  # NATS JetStream metrics
+  - job_name: 'nats-jetstream'
+    static_configs:
+      - targets: ['nats:8222']
+    metrics_path: /jsz
+    scrape_interval: 30s
+
+  # NATS connections
+  - job_name: 'nats-connz'
+    static_configs:
+      - targets: ['nats:8222']
+    metrics_path: /connz
+    scrape_interval: 30s
+
+  # Event Gateway - Neural Network
+  - job_name: 'event-gateway'
+    static_configs:
+      - targets: ['event_gateway:3001']
+    metrics_path: /status
+    scrape_interval: 15s
+
+  # Prometheus Self-Monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 60s
