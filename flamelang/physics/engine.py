@@ -6,6 +6,7 @@ import numpy as np
 from typing import Dict, Tuple, Optional
 
 # Physical constants
+_h = 6.62607015e-34  # Planck constant (J·s)
 CONSTANTS = {
     'c': 299792458,           # Speed of light (m/s)
     'G': 6.67430e-11,         # Gravitational constant (m³/kg·s²)
@@ -13,8 +14,8 @@ CONSTANTS = {
     'pi': np.pi,
     'e': np.e,
     'phi': (1 + np.sqrt(5)) / 2,  # Golden ratio
-    'h': 6.62607015e-34,      # Planck constant (J·s)
-    'hbar': 1.054571817e-34,  # Reduced Planck constant (J·s)
+    'h': _h,                  # Planck constant (J·s)
+    'hbar': _h / (2 * np.pi), # Reduced Planck constant (J·s) = h/(2π)
 }
 
 

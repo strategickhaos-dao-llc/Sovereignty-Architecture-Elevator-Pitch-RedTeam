@@ -169,10 +169,14 @@ class FlameLangCompiler:
             
             result = ENGINE.compute_schwarzschild(mass, radius)
             
+            # Get frequency from glyph registry
+            bh1_glyph = get_glyph('BH1')
+            frequency = f"{bh1_glyph['frequency']}Hz" if bh1_glyph else '137Hz'
+            
             # Format output
             output = {
                 'simulation': 'Schwarzschild Black Hole',
-                'frequency': '137Hz',
+                'frequency': frequency,
                 'schwarzschild_radius_km': result['schwarzschild_radius'] / 1000,
                 'redshift_factor': result['redshift_factor'],
                 'escape_velocity_km_s': result['escape_velocity'] / 1000,
