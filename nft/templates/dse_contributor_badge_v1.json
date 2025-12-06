@@ -1,0 +1,25 @@
+{
+  "name": "DSE Contributor Badge v1",
+  "description": "Non-financial credential issued by ValorYield Engine for contributions to the Department of Sovereign Evolution (Strategickhaos Sovereign Compute Authority). This NFT is a badge only. It does not represent equity, profit share, or an expectation of financial return.",
+  "issuer": {
+    "entity": "ValorYield Engine",
+    "ein": "39-2923503",
+    "type": "501(c)(3) Public Charity"
+  },
+  "recipient": {
+    "handle": "<github_or_discord_handle>",
+    "role": "DSE Intern / Contributor"
+  },
+  "contribution_summary": [
+    "Implemented tests/failure_harness.py enhancements",
+    "Ran enterprise benchmarks and documented results",
+    "Updated node_registry.yaml with Lyra attestation"
+  ],
+  "sovereign_context": {
+    "constitution_version": "RATIO_EX_NIHILO_CONSTITUTION_v1.0",
+    "mesh_node": "DOM010101",
+    "mesh_code": 137
+  },
+  "legal_disclaimer": "This NFT is a non-financial credential. It is not an investment contract, not a security, and not a promise of dividends or profits. It serves solely as a record of contribution and recognition within the Strategickhaos ecosystem.",
+  "metadata_version": "1.0"
+}
