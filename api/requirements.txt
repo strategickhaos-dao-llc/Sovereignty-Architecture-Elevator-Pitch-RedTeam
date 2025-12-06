@@ -1,0 +1,11 @@
+# ValorYield Treasury API Connectors - Dependencies
+# Brain Cell #2: Dependencies for api/connectors.py
+
+# HTTP client for API requests
+requests>=2.31.0
+
+# YAML configuration parsing
+pyyaml>=6.0.1
+
+# Environment variable management
+python-dotenv>=1.0.0

@@ -1,0 +1,67 @@
+# ValorYield Treasury - Financial Accounts Registry
+# Brain Cell #1: Account definitions for the ValorYield Engine 501(c)(3)
+# This file defines all financial accounts across multiple platforms
+
+treasury:
+  name: "ValorYield Engine"
+  entity_type: "501(c)(3)"
+  ein: "XX-XXXXXXX"  # To be filled with actual EIN
+  
+accounts:
+  moneylion:
+    platform: "MoneyLion"
+    account_id: "2143"
+    account_type: "Aggressive Mix"
+    allocation:
+      stocks: 80
+      bonds: 10
+      cash: 10
+    currency: "USD"
+    enabled: true
+    api_endpoint: "https://api.moneylion.com/v1"
+    
+  kraken:
+    platform: "Kraken Pro"
+    account_type: "Crypto Trading"
+    supported_assets:
+      - BTC
+      - ETH
+      - USDT
+      - XRP
+    currency: "USD"
+    enabled: true
+    api_endpoint: "https://api.kraken.com"
+    
+  ninjatrader:
+    platform: "NinjaTrader"
+    account_type: "Futures/Options"
+    trading_instruments:
+      - futures
+      - options
+    currency: "USD"
+    enabled: true
+    api_endpoint: "https://api.ninjatrader.com/v1"
+    
+  thread_bank:
+    platform: "Thread Bank"
+    account_type: "Checking"
+    linked_entity: "ValorYield Engine 501(c)(3)"
+    currency: "USD"
+    enabled: true
+    api_endpoint: "https://api.thread.bank/v1"
+
+# Rebalancing configuration
+rebalancing:
+  enabled: false
+  target_allocation:
+    crypto: 20
+    stocks: 50
+    bonds: 20
+    cash: 10
+  rebalance_threshold_pct: 5
+  
+# Reporting configuration  
+reporting:
+  timezone: "America/New_York"
+  currency_display: "USD"
+  decimal_places: 2
