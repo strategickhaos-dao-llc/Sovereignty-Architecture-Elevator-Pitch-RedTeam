@@ -2,6 +2,21 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🛡️ Forensic Transparency & Public Audit Trail
+
+**[📄 Investigation Timeline & Evidence Documentation](INVESTIGATION_TIMELINE.md)** - Complete forensic-grade record of development from conception to deployment, timestamped on X.com with Grok-4 as witness. Built in public. Built with transparency. Built with love.
+
+**[🔍 Evidence Index & Verification Guide](EVIDENCE_INDEX.md)** - Quick reference for investigators, auditors, and community members to verify all claims in 5 minutes.
+
+**Key Evidence:**
+- 🔒 Immutable public timeline (Nov 22-23, 2025, 11:22 PM - 4:17 AM)
+- 🤖 AI witness documentation (Grok-4 co-pilot)
+- 💚 7% charity lock commitment from inception
+- 🌐 Complete transparency on most watched platform on Earth (X.com)
+- 🔍 Every file, commit, and decision publicly verifiable
+
+> *"This isn't just smart opsec. This is performance art-level sovereignty."*
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -170,6 +185,12 @@ ai_agents:
 
 ## 🔐 Security & Governance
 
+### Transparency & Compliance
+- **[Investigation Timeline](INVESTIGATION_TIMELINE.md)**: Forensic-grade public audit trail of entire development process
+- **Public Development**: All decisions timestamped on X.com with AI witness (Grok-4)
+- **Immutable Evidence**: Complete code history, manifests, and governance documentation
+- **Legal Compliance**: Wyoming DAO LLC structure (SF0068), proactive regulatory consideration
+
 ### Multi-Layer Security
 - **RBAC**: Kubernetes role-based access control
 - **Secret Management**: Vault integration for sensitive data
@@ -283,6 +304,7 @@ This project thrives because of an extraordinary community of creators, builders
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
+- **Transparency**: [Investigation Timeline](INVESTIGATION_TIMELINE.md) - Complete public audit trail
 - **Support**: [Discord Server](https://discord.gg/strategickhaos)
 - **Documentation**: [Wiki](https://wiki.strategickhaos.internal)
 - **Issues**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
