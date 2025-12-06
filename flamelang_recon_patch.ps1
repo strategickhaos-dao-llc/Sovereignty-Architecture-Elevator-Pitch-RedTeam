@@ -184,7 +184,6 @@ function Export-FlameLangArchive {
     
     foreach ($artifact in $Artifacts) {
         try {
-            $relativePath = $artifact.FullName -replace [regex]::Escape($SearchPath), ""
             $destFile = Join-Path $DestinationPath (Split-Path $artifact.FullName -Leaf)
             
             Copy-Item -Path $artifact.FullName -Destination $destFile -Force
@@ -308,7 +307,18 @@ function Connect-TrueNAS {
         
         # Create persistent mapping
         Log "Creating SMB mapping..."
-        New-SmbMapping -LocalPath $localPath -RemotePath $remotePath -Persistent $true
+        try {
+            New-SmbMapping -LocalPath $localPath -RemotePath $remotePath -Persistent $true
+        } catch {
+            # If initial connection fails, try with credential prompt
+            Warn "Initial connection failed. Prompting for credentials..."
+            try {
+                $cred = Get-Credential -Message "Enter credentials for TrueNAS share: $remotePath"
+                New-SmbMapping -LocalPath $localPath -RemotePath $remotePath -Persistent $true -UserName $cred.UserName -Password $cred.GetNetworkCredential().Password
+            } catch {
+                throw "Failed to connect with provided credentials: $_"
+            }
+        }
         
         Success "TrueNAS mounted at ${Drive}:"
         
@@ -393,9 +403,28 @@ function Sync-ToTrueNAS {
         )
         
         Log "Running robocopy sync..."
-        $result = robocopy @robocopyArgs
+        $robocopyOutput = robocopy @robocopyArgs
+        $exitCode = $LASTEXITCODE
         
-        Success "Sync completed to TrueNAS: $destPath"
+        # Robocopy exit codes: 0-3 = success, 4+ = errors
+        # See: https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy
+        if ($exitCode -lt 4) {
+            Success "Sync completed to TrueNAS: $destPath"
+            if ($exitCode -eq 0) {
+                Log "   No files copied (already up to date)"
+            } elseif ($exitCode -eq 1) {
+                Log "   Files copied successfully"
+            } elseif ($exitCode -eq 2) {
+                Log "   Extra files/dirs detected in destination"
+            } elseif ($exitCode -eq 3) {
+                Log "   Files copied with extra items in destination"
+            }
+        } else {
+            Warn "Robocopy completed with warnings (exit code: $exitCode)"
+            if ($Verbose) {
+                Write-Host $robocopyOutput
+            }
+        }
     } catch {
         Error "Sync failed: $_"
     }
@@ -411,7 +440,7 @@ function Show-NavigationGuide {
     Write-Host "Navigate between drives:"
     Write-Host "  cd C:\                         # Go to local C: drive"
     Write-Host "  cd ${DriveLetter}:\            # Go to TrueNAS (if mounted)"
-    Write-Host "  cd \$env:USERPROFILE           # Go to user home directory"
+    Write-Host '  cd $env:USERPROFILE            # Go to user home directory'
     Write-Host ""
     Write-Host "Quick shortcuts:"
     Write-Host "  Set-Location C:\               # PowerShell way to change drives"
