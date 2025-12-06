@@ -127,7 +127,7 @@ and digital civil liberties advancement.
 - Accept grants and tax-deductible donations
 - Operate the LLM RAG knowledge base (27+ papers, 0.02 hallucination)
 
-**Prohibition**: No profits shall be distributed. All surplus funds mission activities.
+**Prohibition**: No profits shall be distributed. All surplus funds support mission activities.
 
 ## Section 2.3 — StrategicKhaos DAO LLC (For-Profit Arm)
 
