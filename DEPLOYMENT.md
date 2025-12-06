@@ -193,6 +193,32 @@ curl -X POST https://events.strategickhaos.com/health
 - Set up Alertmanager → Discord integration
 - Create operational dashboards
 
+### 5. GCP Honeypot Infrastructure (Terraform)
+
+For security research and attack analysis, deploy the GCP honeypot:
+
+```bash
+# Navigate to honeypot infrastructure
+cd infrastructure/gcp/honeypot
+
+# Initialize Terraform
+terraform init
+
+# Review the plan
+terraform plan
+
+# Apply the configuration
+terraform apply
+```
+
+This deploys a **deliberately non-sovereign honeypot** for logging and alerting:
+- Cloud Run SRA service (honeypot)
+- Regional HTTP load balancer
+- GCS bucket for attack logs
+- Pub/Sub topic for Legion analysis
+
+See [infrastructure/gcp/honeypot/README.md](infrastructure/gcp/honeypot/README.md) for full details.
+
 ## 🎉 You've Successfully Built...
 
 **A complete sovereign architecture control plane** that enables:
