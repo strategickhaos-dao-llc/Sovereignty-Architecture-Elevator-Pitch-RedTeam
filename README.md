@@ -280,6 +280,18 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 📑 Technical Architecture & IP Declaration
+
+For collaborators, partners, investors, and legal counsel:
+
+- **[Documentation Index](docs/INDEX.md)** - Main documentation navigation
+- **[Executive Snapshot (Public)](docs/EXECUTIVE_SNAPSHOT.md)** - Redacted technical architecture & IP declaration
+  - What exists today (operational systems)
+  - Core IP being claimed (public outline)
+  - How to use this documentation
+
+> _A more detailed "Declaration of Technical Architecture and Intellectual Property" and machine-readable registry are maintained privately and can be shared with counsel or trusted partners as needed._
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
