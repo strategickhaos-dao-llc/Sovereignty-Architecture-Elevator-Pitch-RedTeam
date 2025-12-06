@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+"""FlameLang CLI - Main entry point."""
+
+import sys
+import os
+import argparse
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from core.repl import repl, Interpreter
+from glyphs.registry import REGISTRY
+from security.sovereignty import SOVEREIGNTY
+
+def cmd_repl(args):
+    """Start the REPL."""
+    if args.enable_network:
+        SOVEREIGNTY.network.enable_network()
+    repl()
+
+def cmd_compile(args):
+    """Run a FlameLang script."""
+    if args.enable_network:
+        SOVEREIGNTY.network.enable_network()
+    
+    try:
+        with open(args.file, 'r', encoding='utf-8') as f:
+            source = f.read()
+        
+        interpreter = Interpreter()
+        
+        # Execute line by line
+        for line in source.split('\n'):
+            line = line.strip()
+            if line and not line.startswith('#'):
+                interpreter.execute(line)
+    
+    except FileNotFoundError:
+        print(f"Error: File not found: {args.file}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+def cmd_info(args):
+    """Show system information."""
+    print("🔥 FlameLang v0.1.0")
+    print("=" * 60)
+    print("\nPlatform: Python 3.8+")
+    print("License: MIT / StrategicKhaos DAO")
+    print(f"Released: Dec 6, 2025")
+    
+    print("\nComponents:")
+    print(f"  - Glyphs: {len(REGISTRY.all())} registered")
+    print("  - Physics Engine: Active")
+    print("  - Sovereignty System: Active")
+    
+    print("\nSovereignty Status:")
+    SOVEREIGNTY.initialize_sovereign_environment()
+    status = SOVEREIGNTY.get_status()
+    print(f"  Network: {'ON ✓' if status['network_enabled'] else 'OFF ❌'}")
+    print(f"  Coherence: {status['coherence']:.2%}")
+    print(f"  Audit Log: {status['audit_entries']} entries")
+
+def cmd_export_glyphs(args):
+    """Export glyph table to CSV."""
+    filename = args.output or 'glyphs.csv'
+    try:
+        REGISTRY.export_csv(filename)
+        print(f"✓ Glyph table exported to {filename}")
+    except Exception as e:
+        print(f"Error exporting glyphs: {e}")
+        sys.exit(1)
+
+def main():
+    """Main CLI entry point."""
+    parser = argparse.ArgumentParser(
+        description='🔥 FlameLang - Sovereign Symbolic Language',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    
+    parser.add_argument('--enable-network', action='store_true',
+                       help='Enable network access (not recommended)')
+    
+    subparsers = parser.add_subparsers(dest='command', help='Commands')
+    
+    # REPL command
+    parser_repl = subparsers.add_parser('repl', help='Start interactive REPL')
+    parser_repl.set_defaults(func=cmd_repl)
+    
+    # Compile/run command
+    parser_compile = subparsers.add_parser('compile', help='Run a FlameLang script')
+    parser_compile.add_argument('file', help='FlameLang source file')
+    parser_compile.set_defaults(func=cmd_compile)
+    
+    # Info command
+    parser_info = subparsers.add_parser('info', help='Show system information')
+    parser_info.set_defaults(func=cmd_info)
+    
+    # Export glyphs command
+    parser_export = subparsers.add_parser('export-glyphs', help='Export glyph table to CSV')
+    parser_export.add_argument('output', nargs='?', help='Output filename (default: glyphs.csv)')
+    parser_export.set_defaults(func=cmd_export_glyphs)
+    
+    args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        sys.exit(1)
+    
+    args.func(args)
+
+if __name__ == '__main__':
+    main()

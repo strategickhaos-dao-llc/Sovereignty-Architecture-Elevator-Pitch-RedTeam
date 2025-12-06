@@ -71,6 +71,45 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🔥 FlameLang - Sovereign Symbolic Language
+- **Glyph-Based Syntax**: Use Unicode symbols (⚡, 🔥, 🌊) as code
+- **Physics Engine**: Black hole simulations, ocean eddies, photon spheres
+- **Sovereignty System**: Network blocking, telemetry control, process monitoring
+- **REPL**: Interactive programming environment
+- **Python API**: Full integration for extensibility
+
+```bash
+# Install FlameLang
+cd flamelang
+./install.sh
+
+# Start the REPL
+flamelang repl
+
+# Run a script
+flamelang compile examples/demo.fl
+
+# Get system info
+flamelang info
+```
+
+**Quick Example:**
+```flamelang
+# Black hole simulation
+sim BH1 M=1.989e30 r=1e7
+
+# Glyph pipeline
+⚡ -> [BH1] |> 🔥
+
+# Sovereignty
+🛡️ -> 🔒
+```
+
+**Documentation:**
+- 📖 [FlameLang README](flamelang/README.md) - Complete guide
+- 📋 [Quick Reference](flamelang/QUICKREFERENCE.md) - Syntax reference
+- 🏗️ [Architecture](flamelang/ARCHITECTURE.md) - System design
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment

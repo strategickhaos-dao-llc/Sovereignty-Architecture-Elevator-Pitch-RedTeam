@@ -1,0 +1,18 @@
+# FlameLang Demo Program
+# Black hole simulation with sovereignty
+
+# Create black hole simulation
+sim BH1 M=1.989e30 r=1e7
+
+# Create ocean eddy simulation
+sim OC1
+
+# Variables
+coherence = 0.95
+lambda_param = 1.0
+
+# Glyph pipeline
+⚡ -> [OC1] |> 🔥
+
+# Sovereignty protocol
+🛡️ -> 🔒
