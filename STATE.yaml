@@ -1,0 +1,49 @@
+# Sovereign State Sync - Default State Configuration
+# Protocol: Claudify/Domify Sovereign Truth Enforcer
+# Purpose: Prevents AI nodes from making decisions based on wrong assumptions
+
+meta:
+  protocol_name: Claudify/Domify Sovereign State Sync
+  version: 1.0.0
+  genesis_lock: true
+  architect_snowflake: 1067614449693569044
+  increment: 3449
+  last_updated: null
+  update_hash: null
+
+infrastructure_state:
+  deployed: {}
+  pending_deployment: []
+
+operator_state:
+  hours_awake: '0'
+  last_meal: unknown
+  cognitive_load: normal
+
+decision_gates:
+  pre_deployment_check:
+    required_verifications:
+      - question: Is kubectl working?
+        check_type: kubectl
+        current_state: false
+        block_if_false: true
+        message: kubectl must be working before deployment
+      - question: Has the operator had adequate rest?
+        check_type: operator_rest
+        current_state: false
+        warn_if_false: true
+        message: Consider resting before major deployments
+  pre_financial_check:
+    required_verifications:
+      - question: Is the budget approved?
+        check_type: manual
+        current_state: false
+        block_if_false: true
+        message: Budget must be approved before financial decisions
+  pre_education_check:
+    required_verifications:
+      - question: Are all prerequisites completed?
+        check_type: manual
+        current_state: false
+        warn_if_false: true
+        message: Consider completing prerequisites first
