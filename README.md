@@ -12,6 +12,10 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+**New here? Start with these guides:**
+- 📊 **[Infrastructure Reality Check](./INFRASTRUCTURE_REALITY_CHECK.md)** - Understand what you've actually built
+- ⚡ **[Operational Quick Start](./OPERATIONAL_QUICKSTART.md)** - Get your monitoring up in 5 minutes
+
 ```bash
 # 1. Clone and bootstrap
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
@@ -279,6 +283,19 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 📚 Documentation
+
+### Essential Guides
+- 🎯 **[Infrastructure Reality Check](./INFRASTRUCTURE_REALITY_CHECK.md)** - Production datacenter overview and terminology guide
+- ⚡ **[Operational Quick Start](./OPERATIONAL_QUICKSTART.md)** - 5-minute health checks and monitoring setup
+- 🚀 **[Deployment Complete](./DEPLOYMENT_COMPLETE.md)** - CloudOS deployment status and capabilities
+- 🔒 **[Security Playbook](./VAULT_SECURITY_PLAYBOOK.md)** - Vault and secrets management
+
+### Architecture & Integration
+- 🏛️ **[RECON Stack V2](./RECON_STACK_V2.md)** - Research and code analysis infrastructure
+- 🔗 **[GitLens Integration](./GITLENS_INTEGRATION.md)** - VS Code Git workflow automation
+- 📊 **[Enterprise Benchmarks](./ENTERPRISE_BENCHMARKS_COMPLETE.md)** - Performance metrics
 
 ## 📄 License & Support
 
