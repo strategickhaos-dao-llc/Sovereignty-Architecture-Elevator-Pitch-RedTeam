@@ -280,6 +280,23 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
 
+## 🏛️ 4-Layer Ecosystem Architecture
+
+The StrategicKhaos ecosystem operates as a **self-sustaining 4-layer architecture**:
+
+| Layer | Entity | Purpose |
+|-------|--------|---------|
+| 🧠 **Layer 1** | [ValorYield Engine (501(c)(3))](ECOSYSTEM_ARCHITECTURE.md) | R&D, Education, Open-Source |
+| 💪 **Layer 2** | [StrategicKhaos Commercial LLC](THREE_ENTITY_STRUCTURE.md) | Commercialization, Services |
+| 💰 **Layer 3** | [7% SwarmGate Protocol](SEVEN_PERCENT_LOOP.md) | Self-Funding Financial Engine |
+| 🎖️ **Layer 4** | [NFT Credential System](NFT_CREDENTIAL_SYSTEM.md) | Digital Badges & Certifications |
+
+### Supporting Documents
+
+- **[Three-Entity Legal Structure](THREE_ENTITY_STRUCTURE.md)** - Nonprofit, For-Profit, DAO LLC separation
+- **[Intern Program Charter](INTERN_PROGRAM_CHARTER.md)** - IRS-compliant educational program
+- **[R&D Pipeline Framework](RD_PIPELINE.md)** - Research roadmap from applied to fundamental
+
 ## 📄 License & Support
 
 - **License**: MIT License - see [LICENSE](LICENSE) file
