@@ -2,6 +2,19 @@
 
 **A comprehensive Discord-integrated DevOps automation system for the Strategickhaos ecosystem, featuring AI agents, GitLens integration, and sovereign infrastructure management.**
 
+## 🛡️ Triple Shield Sovereignty Status
+
+**Entity:** Strategickhaos DAO LLC / Valoryield Engine  
+**Sovereignty Level:** 100% (3/3 Shields Active)
+
+| Shield Layer | Status | Authority | Date Locked |
+|--------------|--------|-----------|-------------|
+| **Mathematics** | ✅ Active | GPG + Bitcoin Blockchain | [Pending] |
+| **Federal Law** | 🔄 Pending | USPTO Provisional Patent (63/XXXXXXX) | November 23, 2025 |
+| **State Law** | ✅ Active | Texas LLC + Registered Agent | June 25, 2025 |
+
+The 7% perpetual revenue model is protected by cryptographic proof, federal patent law, and corporate sovereignty. See [`legal/uspto/`](legal/uspto/) for complete documentation.
+
 ## 🏛️ Architecture Overview
 
 This system creates a **sovereignty control plane** that bridges:
@@ -271,6 +284,70 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🏛️ Sovereignty & Legal Framework
+
+### Triple Shield Protection System
+
+This project operates under a revolutionary **Triple Shield Sovereignty Framework** that protects the core intellectual property through three independent layers:
+
+1. **Mathematical Shield (Cryptographic Verification)**
+   - GPG-signed commits with verifiable signatures
+   - SHA256 cryptographic hashes of all sovereignty artifacts
+   - Bitcoin blockchain timestamps via OpenTimestamps protocol
+   - Immutable proof of existence and priority
+
+2. **Federal Shield (USPTO Patent Protection)**
+   - USPTO Provisional Patent Application: 63/XXXXXXX [Pending Filing]
+   - Establishes federal prior art for the 7% perpetual revenue model
+   - 12-month priority protection with conversion path to full utility patent
+   - Federal enforcement through USPTO and federal courts
+
+3. **State Shield (Corporate Structure)**
+   - Legal Entity: Strategickhaos DAO LLC / Valoryield Engine
+   - Jurisdiction: State of Texas (formed June 25, 2025)
+   - Registered Agent: Registered Agents Inc, Austin TX
+   - Limited liability and privacy protection
+
+### USPTO Provisional Patent Filing
+
+**Status:** Awaiting application submission and receipt  
+**Filing Date:** November 23, 2025 (target)  
+**Documentation:** See [`legal/uspto/`](legal/uspto/) for complete filing instructions
+
+To finalize sovereignty after USPTO submission:
+```bash
+# Linux/macOS
+./legal/uspto/finalize-sovereignty.sh 63/XXXXXX
+
+# Windows PowerShell
+.\legal\uspto\finalize-sovereignty.ps1 -UsptoNumber "63/XXXXXX"
+```
+
+### The 7% Perpetual Revenue Model
+
+The core innovation protected by this framework is a self-perpetuating revenue model that:
+- Flows continuously without manual intervention
+- Is cryptographically verified and timestamped
+- Has established federal prior art via USPTO
+- Is owned and operated by a Texas LLC with registered agent
+
+**Protection Notice:** Any attempt to clone, replicate, or derive from the 7% model after the USPTO filing date may constitute patent infringement under federal law (35 U.S.C. § 271).
+
+### Legal Compliance
+
+This project maintains strict compliance with:
+- **UPL (Unauthorized Practice of Law) regulations** - All legal documentation requires attorney review
+- **Patent law procedures** - USPTO provisional and utility patent protocols
+- **Corporate governance** - Texas LLC operating requirements
+- **Open source licensing** - MIT License for non-protected components
+
+For complete sovereignty documentation, see:
+- **[Sovereign Patent Codex](legal/uspto/SOVEREIGN_PATENT_CODEX.md)** - Complete triple shield documentation
+- **[Finalization Workflow](legal/uspto/FINALIZATION_WORKFLOW.md)** - Step-by-step USPTO filing procedures
+- **[DAO Record](dao_record_v1.0.yaml)** - Organizational and operational record
+
+---
 
 ## 👥 Community & Contributors
 
