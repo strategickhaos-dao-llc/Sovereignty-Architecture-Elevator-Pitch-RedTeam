@@ -4,9 +4,9 @@
 
 *This document is an internal draft prepared by Strategickhaos DAO LLC for planning purposes only. This document does not constitute legal advice and should not be relied upon for legal or compliance decisions.*
 
-*WE ARE NOT A LAW FIRM. No attorney-client relationship is created by this document. All legal matters must be reviewed by a Wyoming-licensed attorney before implementation or filing.*
+*WE ARE NOT A LAW FIRM. No attorney-client relationship is created by this document. All legal matters must be reviewed by a Texas-licensed attorney before implementation or filing.*
 
-*For legal advice, consult qualified counsel licensed to practice law in Wyoming or the relevant jurisdiction.*
+*For legal advice, consult qualified counsel licensed to practice law in Texas or the relevant jurisdiction.*
 
 *© 2025 Strategickhaos DAO LLC. Internal use only.*
 
