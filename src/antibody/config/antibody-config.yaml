@@ -1,0 +1,220 @@
+# Sovereign Antibody System Configuration
+# StrategicKhaos Orchestration System (SKOS) - Self-Healing Infrastructure
+
+version: "1.0.0"
+system:
+  name: "SKOS Antibody System"
+  description: "Antifragile Sovereign Infrastructure with autonomous healing agents"
+
+# Antibody Coordinator Settings
+coordinator:
+  port: 8090
+  health_check_interval_ms: 5000
+  failover_timeout_ms: 30000
+  max_concurrent_healings: 10
+  nats:
+    enabled: true
+    url: "nats://localhost:4222"
+    cluster_name: "skos-antibody"
+  metrics:
+    enabled: true
+    port: 9100
+
+# Node Configuration (Nova/Lyra/Athena)
+nodes:
+  nova:
+    host: "nova.local"
+    role: "primary"
+    capabilities: ["gpu", "inference", "storage"]
+  lyra:
+    host: "lyra.local"
+    role: "secondary"
+    capabilities: ["inference", "storage"]
+  athena:
+    host: "athena.local"
+    role: "tertiary"
+    capabilities: ["storage", "backup"]
+
+# Antibody Agent Configurations
+antibodies:
+  # Layer 1: Hardware Resilience
+  thermal_sentinel:
+    enabled: true
+    check_interval_ms: 10000
+    thresholds:
+      cpu_warning: 70
+      cpu_critical: 85
+      gpu_warning: 75
+      gpu_critical: 90
+    actions:
+      - throttle
+      - redistribute
+      - alert
+
+  power_guardian:
+    enabled: true
+    check_interval_ms: 5000
+    ups_integration: true
+    failover_threshold_percent: 20
+    actions:
+      - failover
+      - alert
+      - graceful_shutdown
+
+  storage_watcher:
+    enabled: true
+    check_interval_ms: 30000
+    free_space_buffer_percent: 20
+    auto_archive_days: 30
+    mirror_critical_data: true
+    actions:
+      - archive
+      - alert
+      - mirror
+
+  # Layer 2: Network & Communication
+  mesh_healer:
+    enabled: true
+    check_interval_ms: 30000
+    wireguard_config_path: "/etc/wireguard"
+    connectivity_timeout_ms: 5000
+    actions:
+      - regenerate_config
+      - restart_interface
+      - failover
+
+  auth_keeper:
+    enabled: true
+    check_interval_ms: 15000
+    cache_credentials: true
+    max_retry_attempts: 5
+    exponential_backoff_base_ms: 1000
+    actions:
+      - retry
+      - cache_refresh
+      - alert
+
+  encryption_validator:
+    enabled: true
+    check_interval_ms: 60000
+    blake3_preflight: true
+    auto_rotate_on_mismatch: true
+    key_escrow_enabled: true
+    actions:
+      - validate
+      - rotate_keys
+      - alert
+
+  # Layer 3: Model & Execution
+  qwen_health_monitor:
+    enabled: true
+    check_interval_ms: 30000
+    gguf_integrity_check: true
+    hot_spare_enabled: true
+    model_path: "/models/qwen"
+    actions:
+      - validate
+      - failover
+      - reload
+
+  output_sanitizer:
+    enabled: true
+    check_interval_ms: 1000
+    ast_validation: true
+    docker_lint: true
+    sandbox_test: true
+    actions:
+      - validate
+      - sanitize
+      - reject
+
+  loop_breaker:
+    enabled: true
+    check_interval_ms: 5000
+    max_recursive_depth: 3
+    genealogy_tracking: true
+    circuit_breaker_threshold: 5
+    actions:
+      - depth_limit
+      - circuit_break
+      - alert
+
+  # Layer 4: Data & Parsing
+  vault_parser:
+    enabled: true
+    check_interval_ms: 10000
+    multi_pass_parsing: true
+    utf8_normalization: true
+    confidence_threshold: 0.8
+    actions:
+      - parse
+      - normalize
+      - filter
+
+  log_interpreter:
+    enabled: true
+    check_interval_ms: 5000
+    structured_logging: true
+    schema_validation: true
+    anomaly_detection: true
+    actions:
+      - validate
+      - detect_anomaly
+      - classify
+
+  dependency_guardian:
+    enabled: true
+    check_interval_ms: 60000
+    pin_requirements: true
+    auto_virtualenv: true
+    import_testing: true
+    actions:
+      - validate
+      - pin
+      - isolate
+
+  # Layer 5: Governance & Security
+  zero_trust_enforcer:
+    enabled: true
+    check_interval_ms: 2000
+    rbac_verification: true
+    encryption_at_rest: true
+    auto_wipe_staging: true
+    actions:
+      - verify
+      - encrypt
+      - wipe
+
+  audit_immunizer:
+    enabled: true
+    check_interval_ms: 10000
+    immutable_logs: true
+    separate_node_streaming: true
+    merkle_verification: true
+    actions:
+      - stream
+      - verify
+      - alert_tamper
+
+  multi_sig_gate:
+    enabled: true
+    check_interval_ms: 5000
+    swarm_gate_integration: true
+    ai_council_consensus: true
+    min_signatures: 2
+    actions:
+      - gate
+      - consensus
+      - deploy
+
+# Learning Loop Configuration
+learning:
+  obsidian_vault_path: "/vault/contradictions"
+  contradiction_synthesis: true
+  feedback_loop_enabled: true
+
+# Provenance Configuration
+provenance:
+  blake3_enabled: true
+  merkle_tree_enabled: true
+  immutable_state_changes: true

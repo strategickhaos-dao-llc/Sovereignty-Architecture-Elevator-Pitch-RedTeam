@@ -1,0 +1,260 @@
+# Sovereign Antibody Stack
+# StrategicKhaos Orchestration System (SKOS) - Self-Healing Infrastructure
+# 
+# Deployment pattern for the Sovereign Antibody System.
+# Run: docker-compose -f sovereign-antibody-stack.yml up -d
+
+version: '3.8'
+
+networks:
+  sovereign_mesh:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  antibody_data:
+  antibody_logs:
+  nats_data:
+
+services:
+  # =============================================================================
+  # Core Synthesis Engine (Replicated across Nova/Lyra/Athena)
+  # =============================================================================
+  synthesis-core:
+    image: localhost/synthesis-engine:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+    environment:
+      NODE_ENV: production
+      SYNTHESIS_MODE: distributed
+      ANTIBODY_COORDINATOR_URL: http://antibody-coordinator:8090
+    volumes:
+      - ./src:/app/src:ro
+      - antibody_logs:/app/logs
+    networks:
+      - sovereign_mesh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - antibody-coordinator
+      - nats
+
+  # =============================================================================
+  # Antibody Coordinator (Central orchestration)
+  # =============================================================================
+  antibody-coordinator:
+    image: localhost/antibody-coordinator:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: antibody-coordinator
+    command: ["npx", "tsx", "src/antibody/main.ts"]
+    ports:
+      - "8090:8090"
+      - "9100:9100"
+    environment:
+      NODE_ENV: production
+      ANTIBODY_CONFIG_PATH: /app/src/antibody/config/antibody-config.yaml
+      NATS_URL: nats://nats:4222
+    volumes:
+      - ./src:/app/src:ro
+      - antibody_data:/app/data
+      - antibody_logs:/app/logs
+    networks:
+      - sovereign_mesh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # =============================================================================
+  # Antibody Agents (Specialized healing services)
+  # =============================================================================
+  
+  # Layer 1: Hardware Resilience
+  thermal-sentinel:
+    image: localhost/antibody-agent:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: thermal-sentinel
+    environment:
+      ANTIBODY_TYPE: thermal_sentinel
+      COORDINATOR_URL: http://antibody-coordinator:8090
+      MONITORS: "cpu_temp,gpu_temp,inference_load"
+      ACTIONS: "throttle,redistribute,alert"
+    volumes:
+      - /sys/class/thermal:/sys/class/thermal:ro
+      - /proc:/host/proc:ro
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+    # Use specific capabilities instead of privileged mode for better security
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - no-new-privileges:true
+
+  power-guardian:
+    image: localhost/antibody-agent:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: power-guardian
+    environment:
+      ANTIBODY_TYPE: power_guardian
+      COORDINATOR_URL: http://antibody-coordinator:8090
+      MONITORS: "ups_status,battery_level"
+      ACTIONS: "failover,alert,graceful_shutdown"
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+
+  storage-watcher:
+    image: localhost/antibody-agent:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: storage-watcher
+    environment:
+      ANTIBODY_TYPE: storage_watcher
+      COORDINATOR_URL: http://antibody-coordinator:8090
+      MONITORS: "disk_usage,inode_usage"
+      ACTIONS: "archive,alert,mirror"
+      WATCHED_PATHS: "/data,/var/log"
+    volumes:
+      - /var/log:/host/var/log:ro
+      - antibody_data:/data
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+
+  # Layer 2: Network & Communication
+  mesh-healer:
+    image: localhost/antibody-agent:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: mesh-healer
+    environment:
+      ANTIBODY_TYPE: mesh_healer
+      COORDINATOR_URL: http://antibody-coordinator:8090
+      MONITORS: "wireguard_tunnels,node_connectivity"
+      ACTIONS: "regenerate_config,restart_interface,failover"
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+
+  # Layer 3: Model & Execution
+  output-sanitizer:
+    image: localhost/antibody-agent:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: output-sanitizer
+    environment:
+      ANTIBODY_TYPE: output_sanitizer
+      COORDINATOR_URL: http://antibody-coordinator:8090
+      MONITORS: "synthesis_outputs"
+      ACTIONS: "validate_syntax,sandbox_test,reject_invalid"
+    volumes:
+      - antibody_data:/data
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+
+  loop-breaker:
+    image: localhost/antibody-agent:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.antibody
+    container_name: loop-breaker
+    environment:
+      ANTIBODY_TYPE: loop_breaker
+      COORDINATOR_URL: http://antibody-coordinator:8090
+      MONITORS: "contradiction_genealogy"
+      ACTIONS: "depth_limit,circuit_break,alert_recursive"
+      MAX_RECURSIVE_DEPTH: "3"
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+
+  # =============================================================================
+  # Supporting Infrastructure
+  # =============================================================================
+  
+  # NATS JetStream for distributed coordination
+  nats:
+    image: docker.io/library/nats:2.10-alpine
+    container_name: skos-nats
+    command: ["--jetstream", "--store_dir=/data"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - nats_data:/data
+    networks:
+      - sovereign_mesh
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    container_name: skos-prometheus
+    volumes:
+      - ./monitoring/prometheus-antibody.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9091:9090"
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - antibody-coordinator
+    restart: unless-stopped
+
+  # Grafana for visualization
+  grafana:
+    image: docker.io/grafana/grafana:latest
+    container_name: skos-grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-antibody_admin}
+    ports:
+      - "3001:3000"
+    networks:
+      - sovereign_mesh
+    depends_on:
+      - prometheus
+    restart: unless-stopped
