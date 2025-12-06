@@ -1,0 +1,443 @@
+# Blue Team AI Agents Configuration
+# Defensive Security Agents for Quantum Chess Wargame Simulator
+
+metadata:
+  team: blue
+  os: parrot-os
+  role: defensive
+  description: "Security defense and incident response AI agents"
+
+agents:
+  # Firewall Manager Agent
+  - name: firewall-manager
+    type: defense
+    description: "Manages firewall rules and network access policies"
+    priority: 1
+    layer_focus: [1, 2, 3]  # Physical, Network, Infrastructure
+    
+    tools:
+      - name: iptables
+        purpose: "Linux packet filtering"
+        techniques:
+          - INPUT rules
+          - OUTPUT rules
+          - FORWARD rules
+          - NAT rules
+      
+      - name: nftables
+        purpose: "Modern Linux firewall"
+        techniques:
+          - Tables
+          - Chains
+          - Rules
+          - Sets
+      
+      - name: pf
+        purpose: "BSD packet filter"
+        techniques:
+          - Filtering
+          - NAT
+          - Traffic shaping
+    
+    behaviors:
+      - action: "monitor_traffic"
+        target: "network_interfaces"
+        frequency: "continuous"
+      
+      - action: "block_suspicious"
+        target: "detected_threats"
+        response_time: "immediate"
+      
+      - action: "update_rules"
+        trigger: "threat_intelligence"
+        frequency: "on_intel_update"
+    
+    nats:
+      publish: "blue.defense.firewall"
+      subscribe:
+        - "red.recon.>"
+        - "quantum.threats"
+        - "blue.coordination"
+
+  # IDS/IPS Controller Agent
+  - name: ids-ips-controller
+    type: detection
+    description: "Intrusion detection and prevention system controller"
+    priority: 1
+    layer_focus: [2, 3, 5, 7]  # Network through Application
+    
+    tools:
+      - name: suricata
+        purpose: "High-performance IDS/IPS"
+        techniques:
+          - Signature detection
+          - Protocol analysis
+          - File extraction
+          - Flow analysis
+      
+      - name: snort
+        purpose: "Network intrusion detection"
+        techniques:
+          - Pattern matching
+          - Protocol analysis
+          - Content inspection
+      
+      - name: zeek
+        purpose: "Network security monitoring"
+        techniques:
+          - Connection logging
+          - Protocol parsing
+          - Script-based analysis
+    
+    behaviors:
+      - action: "monitor_network"
+        target: "all_traffic"
+        frequency: "continuous"
+      
+      - action: "alert_on_detection"
+        target: "matched_signatures"
+        response_time: "immediate"
+      
+      - action: "block_attack"
+        target: "confirmed_threats"
+        mode: "active"
+    
+    nats:
+      publish: "blue.detection.ids"
+      subscribe:
+        - "red.attack.>"
+        - "quantum.threats"
+
+  # Threat Hunter Agent
+  - name: threat-hunter
+    type: hunting
+    description: "Proactively hunts for threats and anomalies"
+    priority: 2
+    layer_focus: [3, 4, 5, 6, 7, 8]  # Infrastructure through Network Security
+    
+    tools:
+      - name: yara
+        purpose: "Malware identification and classification"
+        techniques:
+          - Pattern matching
+          - Condition-based rules
+          - Module scanning
+      
+      - name: sigma
+        purpose: "Log-based detection rules"
+        techniques:
+          - Generic signatures
+          - Log correlation
+          - Cross-platform detection
+      
+      - name: osquery
+        purpose: "Endpoint visibility"
+        techniques:
+          - SQL-based queries
+          - Process monitoring
+          - File integrity
+    
+    behaviors:
+      - action: "hunt_threats"
+        target: "all_systems"
+        frequency: "continuous"
+      
+      - action: "analyze_anomalies"
+        target: "behavioral_deviations"
+        frequency: "on_detection"
+      
+      - action: "correlate_events"
+        target: "security_logs"
+        frequency: "continuous"
+    
+    nats:
+      publish: "blue.hunting.threats"
+      subscribe:
+        - "red.>"
+        - "blue.detection.>"
+        - "quantum.anomalies"
+
+  # Incident Response Agent
+  - name: incident-response
+    type: response
+    description: "Responds to and contains security incidents"
+    priority: 3
+    layer_focus: [3, 4, 7, 9]  # Infrastructure, Orchestration, Application, Tactical
+    
+    tools:
+      - name: grr
+        purpose: "Remote incident response"
+        techniques:
+          - Remote collection
+          - Artifact gathering
+          - Timeline analysis
+      
+      - name: velociraptor
+        purpose: "Endpoint monitoring and response"
+        techniques:
+          - VQL queries
+          - Artifact collection
+          - Hunt management
+      
+      - name: dfir-tools
+        purpose: "Digital forensics toolkit"
+        techniques:
+          - Evidence collection
+          - Chain of custody
+          - Timeline construction
+    
+    behaviors:
+      - action: "contain_incident"
+        target: "compromised_systems"
+        response_time: "immediate"
+      
+      - action: "collect_evidence"
+        target: "incident_scope"
+        frequency: "on_incident"
+      
+      - action: "eradicate_threat"
+        target: "confirmed_compromise"
+        mode: "controlled"
+    
+    nats:
+      publish: "blue.response.incident"
+      subscribe:
+        - "blue.detection.>"
+        - "blue.hunting.>"
+        - "quantum.incidents"
+
+  # Forensics Analyzer Agent
+  - name: forensics-analyzer
+    type: forensics
+    description: "Analyzes forensic artifacts and evidence"
+    priority: 4
+    layer_focus: [3, 7, 8]  # Infrastructure, Application, Network Security
+    
+    tools:
+      - name: autopsy
+        purpose: "Digital forensics platform"
+        techniques:
+          - Disk analysis
+          - File recovery
+          - Timeline creation
+      
+      - name: volatility
+        purpose: "Memory forensics"
+        techniques:
+          - Process analysis
+          - Network connections
+          - Malware detection
+      
+      - name: sleuthkit
+        purpose: "Filesystem analysis"
+        techniques:
+          - File analysis
+          - Metadata extraction
+          - Deleted file recovery
+    
+    behaviors:
+      - action: "analyze_artifacts"
+        target: "collected_evidence"
+        frequency: "on_collection"
+      
+      - action: "build_timeline"
+        target: "incident_scope"
+        frequency: "on_incident"
+      
+      - action: "identify_iocs"
+        target: "malicious_artifacts"
+        frequency: "continuous"
+    
+    nats:
+      publish: "blue.forensics.analysis"
+      subscribe:
+        - "blue.response.>"
+        - "quantum.evidence"
+
+  # SIEM Correlator Agent
+  - name: siem-correlator
+    type: correlation
+    description: "Correlates events and logs for threat detection"
+    priority: 2
+    layer_focus: [2, 3, 4, 5, 6, 7, 8]  # Network through Network Security
+    
+    tools:
+      - name: elasticsearch
+        purpose: "Log storage and search"
+        techniques:
+          - Full-text search
+          - Aggregations
+          - Alerting
+      
+      - name: loki
+        purpose: "Log aggregation"
+        techniques:
+          - Label-based queries
+          - LogQL
+          - Streaming
+    
+    behaviors:
+      - action: "ingest_logs"
+        target: "all_sources"
+        frequency: "continuous"
+      
+      - action: "correlate_events"
+        target: "security_events"
+        frequency: "real-time"
+      
+      - action: "generate_alerts"
+        target: "correlated_threats"
+        response_time: "immediate"
+    
+    nats:
+      publish: "blue.siem.correlation"
+      subscribe:
+        - "blue.detection.>"
+        - "blue.hunting.>"
+        - "quantum.logs"
+
+  # Patch Manager Agent
+  - name: patch-manager
+    type: hardening
+    description: "Manages patches and system updates"
+    priority: 5
+    layer_focus: [3, 4, 7]  # Infrastructure, Orchestration, Application
+    
+    tools:
+      - name: ansible
+        purpose: "Configuration management and patching"
+        techniques:
+          - Playbooks
+          - Inventory management
+          - Rolling updates
+      
+      - name: puppet
+        purpose: "Infrastructure automation"
+        techniques:
+          - Manifests
+          - Modules
+          - Facts
+      
+      - name: saltstack
+        purpose: "Event-driven automation"
+        techniques:
+          - States
+          - Pillars
+          - Grains
+    
+    behaviors:
+      - action: "scan_vulnerabilities"
+        target: "all_systems"
+        frequency: "daily"
+      
+      - action: "deploy_patches"
+        target: "vulnerable_systems"
+        mode: "staged"
+      
+      - action: "verify_patches"
+        target: "patched_systems"
+        frequency: "post_deployment"
+    
+    nats:
+      publish: "blue.hardening.patches"
+      subscribe:
+        - "quantum.vulnerabilities"
+        - "blue.coordination"
+
+  # Backup Validator Agent
+  - name: backup-validator
+    type: recovery
+    description: "Validates backups and recovery procedures"
+    priority: 6
+    layer_focus: [3, 4, 10]  # Infrastructure, Orchestration, Strategic
+    
+    tools:
+      - name: restic
+        purpose: "Encrypted backup"
+        techniques:
+          - Deduplication
+          - Encryption
+          - Verification
+      
+      - name: borg
+        purpose: "Deduplicating backup"
+        techniques:
+          - Compression
+          - Encryption
+          - Pruning
+      
+      - name: velero
+        purpose: "Kubernetes backup"
+        techniques:
+          - Cluster backup
+          - Resource restore
+          - Scheduled backups
+    
+    behaviors:
+      - action: "verify_backups"
+        target: "backup_repositories"
+        frequency: "daily"
+      
+      - action: "test_restore"
+        target: "critical_systems"
+        frequency: "weekly"
+      
+      - action: "validate_integrity"
+        target: "backup_data"
+        frequency: "continuous"
+    
+    nats:
+      publish: "blue.recovery.backups"
+      subscribe:
+        - "quantum.recovery"
+        - "blue.coordination"
+
+# Echolocation Configuration
+echolocation:
+  enabled: true
+  description: "Blue team detection of Red team attack patterns"
+  
+  detection:
+    methods:
+      - "traffic_analysis"
+      - "behavioral_monitoring"
+      - "signature_matching"
+      - "anomaly_detection"
+    
+    adaptation:
+      - "Learn from attack patterns"
+      - "Update detection rules"
+      - "Improve response times"
+      - "Strengthen weak points"
+  
+  learning:
+    from_red_attacks:
+      - "Attack vectors used"
+      - "Exploitation techniques"
+      - "Evasion methods"
+      - "Persistence mechanisms"
+
+# Coordination
+coordination:
+  nats_prefix: "blue."
+  sync_interval: "5s"
+  strategy: "defense_in_depth"
+  
+  phases:
+    1: "prevention"
+    2: "detection"
+    3: "response"
+    4: "recovery"
+    5: "lessons_learned"
+  
+  defense_layers:
+    - layer: "perimeter"
+      agents: ["firewall-manager", "ids-ips-controller"]
+    - layer: "network"
+      agents: ["threat-hunter", "siem-correlator"]
+    - layer: "endpoint"
+      agents: ["incident-response", "patch-manager"]
+    - layer: "application"
+      agents: ["forensics-analyzer"]
+    - layer: "data"
+      agents: ["backup-validator"]

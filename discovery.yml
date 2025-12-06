@@ -15,6 +15,11 @@ discord:
     agents: "#agents"
     prs: "#prs"
     dev_feed: "#dev-feed"
+    # Quantum Chess Wargame Simulator channels
+    quantum_chess: "#quantum-chess"
+    red_team: "#red-team"
+    blue_team: "#blue-team"
+    legion_analysis: "#legion-analysis"
   bot:
     app_id: null                    # Discord application ID
     token_secret_ref: "vault://kv/discord/bot_token"
@@ -61,6 +66,28 @@ infra:
         api_server: "https://k8s-dev.strategickhaos.internal"
         auth: "oidc"
         namespaces: ["*"]
+      # Quantum Chess Wargame Simulator clusters
+      - name: "red-team-kali"
+        api_server: "https://k8s-red-team.strategickhaos.internal"
+        auth: "oidc"
+        namespaces: ["red-team"]
+        labels:
+          team: "red"
+          purpose: "offensive-security"
+      - name: "blue-team-parrot"
+        api_server: "https://k8s-blue-team.strategickhaos.internal"
+        auth: "oidc"
+        namespaces: ["blue-team"]
+        labels:
+          team: "blue"
+          purpose: "defensive-security"
+      - name: "quantum-chess"
+        api_server: "https://k8s-quantum-chess.strategickhaos.internal"
+        auth: "oidc"
+        namespaces: ["quantum-chess"]
+        labels:
+          component: "entanglement"
+          purpose: "wargame-simulation"
   logging:
     provider: "loki"              # loki|elk|datadog|splunk
     endpoint: "https://loki.strategickhaos.internal"  # or null
@@ -322,3 +349,124 @@ refinory:
       - "architecture_ready"
       - "build_passed"
       - "deploy_succeeded"
+
+# Quantum Chess Wargame Simulator Configuration
+# Codename: Moonlight Sunshine Matrix Prototype Sovereign
+quantum_chess:
+  enabled: true
+  config_path: "./quantum-chess/config/quantum-chess.yaml"
+  
+  # Architecture Overview
+  architecture:
+    metaphor: "10 chessboards stacked vertically"
+    dimensions: 10
+    squares_per_board: 64
+    continuous_simulation: true
+    
+  # Red Team (Offensive Security)
+  red_team:
+    name: "red-team-kali"
+    os: "kali-linux"
+    role: "offensive"
+    cluster:
+      zone: "us-central1-a"
+      nodes: 3
+      machine_type: "n1-standard-2"
+    agents:
+      - "port-scanner"
+      - "exploit-engine"
+      - "lateral-movement"
+      - "data-exfil"
+      - "persistence"
+      - "c2-operator"
+      - "social-engineer"
+    
+  # Blue Team (Defensive Security)
+  blue_team:
+    name: "blue-team-parrot"
+    os: "parrot-os"
+    role: "defensive"
+    cluster:
+      zone: "us-central1-b"
+      nodes: 3
+      machine_type: "n1-standard-2"
+    agents:
+      - "firewall-manager"
+      - "ids-ips-controller"
+      - "threat-hunter"
+      - "incident-response"
+      - "forensics-analyzer"
+      - "siem-correlator"
+      - "patch-manager"
+      - "backup-validator"
+  
+  # Quantum Entanglement Layer (NATS JetStream)
+  entanglement:
+    protocol: "nats-jetstream"
+    namespace: "quantum-chess"
+    cluster_replicas: 3
+    streams:
+      - name: "red-team-moves"
+        subjects: ["red.>"]
+      - name: "blue-team-moves"
+        subjects: ["blue.>"]
+      - name: "quantum-sync"
+        subjects: ["quantum.>"]
+      - name: "legion-analysis"
+        subjects: ["legion.>"]
+  
+  # Legion AI Analysis
+  legion:
+    enabled: true
+    model: "gpt-4o-mini"
+    purpose: "Learns from both Red and Blue team simultaneously"
+    outputs:
+      - "sovereign_pr_manager_training"
+      - "production_security_hardening"
+      - "honeypot_learning"
+  
+  # Visualization
+  visualization:
+    protocol: "moonlight-sunshine"
+    port: 8080
+    features:
+      - "3d_chess_visualization"
+      - "live_attack_defense_moves"
+      - "layer_switching"
+  
+  # Discord Integration
+  discord:
+    channels:
+      red_team: "#red-team"
+      blue_team: "#blue-team"
+      quantum_chess: "#quantum-chess"
+      legion_analysis: "#legion-analysis"
+    notifications:
+      - event: "simulation_started"
+        channel: "#quantum-chess"
+      - event: "attack_detected"
+        channel: "#blue-team"
+      - event: "defense_bypassed"
+        channel: "#red-team"
+      - event: "legion_insight"
+        channel: "#legion-analysis"
+  
+  # Integration Points
+  integrations:
+    honeypot_sra:
+      enabled: true
+      deploy_to: ["red-team", "blue-team"]
+    sovereign_pr_manager:
+      enabled: true
+      training_source: "legion-analysis"
+    treasury_os:
+      protected_by: "blue-team"
+      tested_by: "red-team"
+  
+  # Cost Analysis
+  cost:
+    traditional_annual: 300000  # $300K/year
+    quantum_chess_annual: 1200  # $1,200/year
+    cost_reduction: "250x"
+    learning_speed: "1000x"
+    roi_multiplier: "250,000x"

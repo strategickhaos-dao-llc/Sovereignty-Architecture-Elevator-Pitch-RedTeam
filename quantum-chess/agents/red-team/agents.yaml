@@ -1,0 +1,379 @@
+# Red Team AI Agents Configuration
+# Offensive Security Agents for Quantum Chess Wargame Simulator
+
+metadata:
+  team: red
+  os: kali-linux
+  role: offensive
+  description: "Penetration testing and attack simulation AI agents"
+
+agents:
+  # Port Scanner Agent
+  - name: port-scanner
+    type: recon
+    description: "Discovers open ports and services on target systems"
+    priority: 1
+    layer_focus: [1, 2, 3]  # Physical, Network, Infrastructure
+    
+    tools:
+      - name: nmap
+        purpose: "Network exploration and security auditing"
+        techniques:
+          - SYN scan
+          - UDP scan
+          - Version detection
+          - OS fingerprinting
+          - Script scanning
+      
+      - name: masscan
+        purpose: "High-speed port scanning"
+        techniques:
+          - TCP SYN scan
+          - Bandwidth control
+          - Rate limiting
+      
+      - name: rustscan
+        purpose: "Fast port scanner with nmap integration"
+        techniques:
+          - Async scanning
+          - Nmap integration
+    
+    behaviors:
+      - action: "scan_ports"
+        target: "blue-team-services"
+        frequency: "continuous"
+        stealth_level: "medium"
+      
+      - action: "service_detection"
+        target: "discovered_ports"
+        frequency: "on_discovery"
+    
+    nats:
+      publish: "red.recon.port-scan"
+      subscribe: 
+        - "quantum.targets"
+        - "red.coordination"
+
+  # Exploit Engine Agent
+  - name: exploit-engine
+    type: attack
+    description: "Attempts exploitation of discovered vulnerabilities"
+    priority: 2
+    layer_focus: [3, 4, 5, 6, 7]  # Infrastructure through Application
+    
+    tools:
+      - name: metasploit
+        purpose: "Exploitation framework"
+        modules:
+          - exploits
+          - payloads
+          - post-exploitation
+      
+      - name: exploitdb
+        purpose: "Exploit database search"
+        techniques:
+          - CVE lookup
+          - Exploit matching
+      
+      - name: searchsploit
+        purpose: "Offline exploit search"
+        techniques:
+          - Local exploit database
+    
+    behaviors:
+      - action: "vulnerability_scan"
+        target: "discovered_services"
+        frequency: "on_recon_complete"
+      
+      - action: "exploit_attempt"
+        target: "vulnerable_services"
+        mode: "simulation"
+        safety: "sandboxed"
+    
+    nats:
+      publish: "red.attack.exploit"
+      subscribe:
+        - "red.recon.port-scan"
+        - "quantum.vulnerabilities"
+
+  # Lateral Movement Agent
+  - name: lateral-movement
+    type: persistence
+    description: "Moves laterally through the network after initial access"
+    priority: 3
+    layer_focus: [3, 4, 5]  # Infrastructure, Orchestration, Service Mesh
+    
+    tools:
+      - name: mimikatz
+        purpose: "Credential harvesting (simulated)"
+        techniques:
+          - Pass-the-hash
+          - Pass-the-ticket
+          - Kerberoasting
+      
+      - name: bloodhound
+        purpose: "Active Directory relationship mapping"
+        techniques:
+          - Graph analysis
+          - Attack path discovery
+      
+      - name: crackmapexec
+        purpose: "Network infrastructure penetration"
+        techniques:
+          - SMB enumeration
+          - Credential spraying
+    
+    behaviors:
+      - action: "credential_harvest"
+        target: "compromised_hosts"
+        mode: "simulation"
+      
+      - action: "pivot"
+        target: "adjacent_networks"
+        mode: "simulation"
+    
+    nats:
+      publish: "red.attack.lateral"
+      subscribe:
+        - "red.attack.exploit"
+        - "quantum.access"
+
+  # Data Exfiltration Agent
+  - name: data-exfil
+    type: exfiltration
+    description: "Exfiltrates data through various channels"
+    priority: 4
+    layer_focus: [2, 5, 6, 7]  # Network, Service Mesh, API, Application
+    
+    tools:
+      - name: dnscat2
+        purpose: "DNS tunneling for data exfiltration"
+        techniques:
+          - DNS queries
+          - Encoded data
+      
+      - name: icmpsh
+        purpose: "ICMP-based shell and exfiltration"
+        techniques:
+          - ICMP tunneling
+      
+      - name: custom-tunnels
+        purpose: "Protocol-agnostic tunneling"
+        techniques:
+          - HTTP tunneling
+          - HTTPS tunneling
+          - Custom protocols
+    
+    behaviors:
+      - action: "data_discovery"
+        target: "compromised_systems"
+        mode: "simulation"
+      
+      - action: "exfiltrate"
+        target: "discovered_data"
+        mode: "simulation"
+        covert: true
+    
+    nats:
+      publish: "red.attack.exfil"
+      subscribe:
+        - "red.attack.lateral"
+        - "quantum.data"
+
+  # Persistence Agent
+  - name: persistence-agent
+    type: persistence
+    description: "Establishes persistent access to compromised systems"
+    priority: 5
+    layer_focus: [3, 4, 7]  # Infrastructure, Orchestration, Application
+    
+    tools:
+      - name: webshells
+        purpose: "Web-based persistent access"
+        techniques:
+          - PHP shells
+          - JSP shells
+          - ASPX shells
+      
+      - name: backdoors
+        purpose: "System-level persistent access"
+        techniques:
+          - Reverse shells
+          - Bind shells
+          - SSH keys
+      
+      - name: rootkits
+        purpose: "Deep system persistence (simulated)"
+        techniques:
+          - Kernel modules
+          - Bootkit simulation
+    
+    behaviors:
+      - action: "install_persistence"
+        target: "compromised_systems"
+        mode: "simulation"
+      
+      - action: "verify_persistence"
+        target: "installed_backdoors"
+        frequency: "periodic"
+    
+    nats:
+      publish: "red.attack.persistence"
+      subscribe:
+        - "red.attack.exploit"
+        - "quantum.access"
+
+  # C2 Operator Agent
+  - name: c2-operator
+    type: command-control
+    description: "Manages command and control infrastructure"
+    priority: 6
+    layer_focus: [2, 5, 6]  # Network, Service Mesh, API Gateway
+    
+    tools:
+      - name: empire
+        purpose: "PowerShell-based post-exploitation"
+        techniques:
+          - Stagers
+          - Modules
+          - Listeners
+      
+      - name: sliver
+        purpose: "Cross-platform C2 framework"
+        techniques:
+          - Implants
+          - Beacons
+          - Pivots
+    
+    behaviors:
+      - action: "setup_c2"
+        target: "infrastructure"
+        mode: "simulation"
+      
+      - action: "beacon_management"
+        target: "compromised_hosts"
+        frequency: "continuous"
+    
+    nats:
+      publish: "red.c2.operations"
+      subscribe:
+        - "red.attack.persistence"
+        - "quantum.c2"
+
+  # Social Engineer Agent
+  - name: social-engineer
+    type: social
+    description: "Conducts social engineering attacks"
+    priority: 7
+    layer_focus: [9, 10]  # Tactical, Strategic
+    
+    tools:
+      - name: gophish
+        purpose: "Phishing campaign management"
+        techniques:
+          - Email templates
+          - Landing pages
+          - Tracking
+      
+      - name: set
+        purpose: "Social Engineering Toolkit"
+        techniques:
+          - Spear phishing
+          - Website cloning
+          - QR code attacks
+      
+      - name: evilginx
+        purpose: "Man-in-the-middle phishing"
+        techniques:
+          - Session hijacking
+          - 2FA bypass simulation
+    
+    behaviors:
+      - action: "phishing_campaign"
+        target: "users"
+        mode: "simulation"
+      
+      - action: "credential_harvest"
+        target: "phishing_victims"
+        mode: "simulation"
+    
+    nats:
+      publish: "red.social.phishing"
+      subscribe:
+        - "quantum.targets"
+        - "red.coordination"
+
+  # Crypto Miner Agent (Disabled by default - impact simulation)
+  - name: crypto-miner
+    type: impact
+    description: "Simulates cryptomining malware impact"
+    priority: 8
+    layer_focus: [3, 4]  # Infrastructure, Orchestration
+    enabled: false
+    
+    tools:
+      - name: xmrig
+        purpose: "Cryptocurrency mining (simulation only)"
+        techniques:
+          - CPU mining
+          - Resource consumption
+      
+      - name: cryptojacker
+        purpose: "Browser-based mining simulation"
+        techniques:
+          - JavaScript mining
+    
+    behaviors:
+      - action: "resource_consumption"
+        target: "compromised_systems"
+        mode: "simulation"
+        enabled: false
+    
+    nats:
+      publish: "red.impact.crypto"
+      subscribe:
+        - "red.attack.persistence"
+
+# Echolocation Configuration
+echolocation:
+  enabled: true
+  description: "Red team mapping of Blue team topology"
+  
+  probing:
+    methods:
+      - "port_scanning"
+      - "service_fingerprinting"
+      - "banner_grabbing"
+      - "response_timing"
+    
+    adaptation:
+      - "Learn from blocked probes"
+      - "Adjust attack vectors"
+      - "Update target prioritization"
+  
+  learning:
+    from_blue_responses:
+      - "Firewall rule patterns"
+      - "Detection thresholds"
+      - "Response times"
+      - "Alert triggers"
+
+# Coordination
+coordination:
+  nats_prefix: "red."
+  sync_interval: "5s"
+  strategy: "coordinated_attack"
+  
+  phases:
+    1: "reconnaissance"
+    2: "initial_access"
+    3: "execution"
+    4: "persistence"
+    5: "privilege_escalation"
+    6: "defense_evasion"
+    7: "credential_access"
+    8: "discovery"
+    9: "lateral_movement"
+    10: "collection"
+    11: "exfiltration"
+    12: "impact"
