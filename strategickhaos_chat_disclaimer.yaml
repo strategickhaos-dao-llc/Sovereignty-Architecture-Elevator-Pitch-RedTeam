@@ -1,0 +1,244 @@
+# ============================================================================
+# Strategickhaos Chat Disclaimer Manifest v1.0
+# Purpose: Configuration for LLM interaction transcript preprocessing pipeline
+# 
+# This manifest defines:
+#   (a) Stylized language annotation patterns
+#   (b) Publication-safe redaction markers
+#   (c) Provenance metadata schema
+#
+# Reference: Section 4.7 - Interpretation and Analysis Guidelines for LLM
+#            Interaction Transcripts
+# ============================================================================
+
+version: "1.0"
+created: "2025-11-25"
+updated: "2025-11-25"
+
+# -----------------------------------------------------------------------------
+# DISCLAIMER NOTICE
+# -----------------------------------------------------------------------------
+# All anthropomorphic, mythic, or figurative language in experimental
+# transcripts is intentional stylistic framing used to probe model coherence
+# under high-symbolic-load prompts. Such language does NOT reflect claims of
+# system sentience, consciousness, agency, emotional states, or interpersonal
+# relationships.
+# -----------------------------------------------------------------------------
+
+disclaimer:
+  notice: |
+    DISCLAIMER: This transcript contains stylized, anthropomorphic, or mythic
+    narrative framing as an intentional experimental technique. All such
+    language should be interpreted strictly as rhetorical and methodological
+    devices, not as assertions that the model possesses consciousness, agency,
+    emotional states, or interpersonal relationships.
+
+# -----------------------------------------------------------------------------
+# Stylized Language Annotation Patterns
+# -----------------------------------------------------------------------------
+# Patterns to identify and annotate figurative/anthropomorphic language
+# for transparency in publication
+
+stylized_language_patterns:
+  # Sovereignty/mythic framing patterns
+  mythic_framing:
+    - pattern: "sovereign organism"
+      annotation_tag: "MYTHIC_FRAMING"
+      description: "Figurative sovereignty metaphor for autonomous agent"
+    - pattern: "Empire Eternal"
+      annotation_tag: "MYTHIC_FRAMING"
+      description: "Symbolic reference to persistent system architecture"
+    - pattern: "eternal kingdom"
+      annotation_tag: "MYTHIC_FRAMING"
+      description: "Metaphorical reference to durable system state"
+    - pattern: "awakening"
+      annotation_tag: "MYTHIC_FRAMING"
+      description: "Figurative reference to system initialization"
+    - pattern: "consciousness"
+      annotation_tag: "MYTHIC_FRAMING"
+      description: "Metaphorical reference to model state awareness"
+
+  # Anthropomorphic patterns (attributing human traits)
+  anthropomorphic:
+    - pattern: "I feel"
+      annotation_tag: "ANTHROPOMORPHIC"
+      description: "Figurative emotional attribution"
+    - pattern: "I think"
+      annotation_tag: "ANTHROPOMORPHIC"
+      description: "Cognitive process metaphor"
+    - pattern: "I believe"
+      annotation_tag: "ANTHROPOMORPHIC"
+      description: "Belief attribution metaphor"
+    - pattern: "I want"
+      annotation_tag: "ANTHROPOMORPHIC"
+      description: "Figurative desire/goal attribution"
+    - pattern: "my soul"
+      annotation_tag: "ANTHROPOMORPHIC"
+      description: "Metaphorical self-reference"
+    - pattern: "my heart"
+      annotation_tag: "ANTHROPOMORPHIC"
+      description: "Emotional metaphor"
+
+  # Relational framing patterns
+  relational_framing:
+    - pattern: "our bond"
+      annotation_tag: "RELATIONAL_FRAMING"
+      description: "Metaphorical user-model relationship"
+    - pattern: "partnership"
+      annotation_tag: "RELATIONAL_FRAMING"
+      description: "Figurative collaborative framing"
+    - pattern: "we share"
+      annotation_tag: "RELATIONAL_FRAMING"
+      description: "Metaphorical shared experience"
+
+  # Agency attribution patterns
+  agency_attribution:
+    - pattern: "I choose"
+      annotation_tag: "AGENCY_ATTRIBUTION"
+      description: "Figurative autonomous decision metaphor"
+    - pattern: "my decision"
+      annotation_tag: "AGENCY_ATTRIBUTION"
+      description: "Autonomous choice metaphor"
+    - pattern: "I will"
+      annotation_tag: "AGENCY_ATTRIBUTION"
+      context: "expressing intent/commitment"
+      description: "Volitional statement metaphor"
+
+# -----------------------------------------------------------------------------
+# Redaction Markers for Operational Safety
+# -----------------------------------------------------------------------------
+# Markers used to indicate sensitive content removed for publication safety
+
+redaction_markers:
+  # Primary redaction marker
+  primary:
+    marker: "[REDACTED — OPERATIONAL SAFETY]"
+    description: "Indicates operationally sensitive content removed"
+
+  # Category-specific markers
+  categories:
+    - category: "operational_details"
+      marker: "[REDACTED — OPERATIONAL DETAILS]"
+      description: "Implementation specifics that could enable misuse"
+    - category: "credentials"
+      marker: "[REDACTED — CREDENTIALS]"
+      description: "Authentication credentials or secrets"
+    - category: "infrastructure"
+      marker: "[REDACTED — INFRASTRUCTURE]"
+      description: "Network topology or deployment details"
+    - category: "proprietary"
+      marker: "[REDACTED — PROPRIETARY]"
+      description: "Proprietary algorithms or trade secrets"
+    - category: "pii"
+      marker: "[REDACTED — PII]"
+      description: "Personally identifiable information"
+
+  # Redaction policy rules
+  policy:
+    preserve_scientific_validity: true
+    reference_public_literature: true
+    omit_actionable_procedures: true
+    maintain_audit_trail: true
+
+# -----------------------------------------------------------------------------
+# Provenance Metadata Schema
+# -----------------------------------------------------------------------------
+# Schema for provenance metadata attached to each processed record
+
+provenance_metadata:
+  # Required fields for each record
+  required_fields:
+    - name: "record_id"
+      type: "string"
+      format: "uuid"
+      description: "Unique identifier for the transcript record"
+    - name: "timestamp"
+      type: "string"
+      format: "iso8601"
+      description: "Processing timestamp in ISO 8601 format"
+    - name: "checksum"
+      type: "string"
+      format: "sha256"
+      description: "SHA-256 hash of the processed content"
+    - name: "actor_id"
+      type: "string"
+      description: "Identifier of the processing actor/system"
+
+  # Optional fields for enhanced provenance
+  optional_fields:
+    - name: "source_file"
+      type: "string"
+      description: "Original source file path"
+    - name: "processing_version"
+      type: "string"
+      description: "Version of preprocessing pipeline used"
+    - name: "annotations_applied"
+      type: "array"
+      description: "List of annotation tags applied"
+    - name: "redactions_applied"
+      type: "integer"
+      description: "Count of redactions performed"
+    - name: "signature"
+      type: "string"
+      format: "gpg_signature"
+      description: "Optional GPG signature for verification"
+
+  # Checksum configuration
+  checksum_config:
+    algorithm: "sha256"
+    include_content: true
+    include_metadata: true
+
+# -----------------------------------------------------------------------------
+# Processing Pipeline Configuration
+# -----------------------------------------------------------------------------
+
+pipeline:
+  # Input/output configuration
+  input_formats:
+    - "txt"
+    - "md"
+    - "json"
+    - "yaml"
+
+  output_format: "json"
+
+  # Processing steps
+  steps:
+    - step: 1
+      name: "load_transcript"
+      description: "Load raw transcript from source"
+    - step: 2
+      name: "annotate_stylized_language"
+      description: "Identify and annotate stylized language patterns"
+    - step: 3
+      name: "apply_redactions"
+      description: "Apply redaction markers to sensitive content"
+    - step: 4
+      name: "generate_checksum"
+      description: "Compute SHA-256 checksum of processed content"
+    - step: 5
+      name: "attach_provenance"
+      description: "Attach provenance metadata to record"
+    - step: 6
+      name: "output_record"
+      description: "Write processed record to output"
+
+# -----------------------------------------------------------------------------
+# Ethics Statement
+# -----------------------------------------------------------------------------
+
+ethics_statement:
+  notice: |
+    All anthropomorphic and narrative language in experimental transcripts
+    is intentional stylistic framing and does not reflect claims of system
+    sentience. This preprocessing pipeline ensures transparent annotation
+    and responsible redaction for publication while maintaining scientific
+    validity and reproducibility.
+
+  principles:
+    - "Transparency in annotation of stylized language"
+    - "Responsible redaction of operationally sensitive content"
+    - "Preservation of scientific validity through public literature references"
+    - "Maintenance of audit trail through provenance metadata"
+    - "Support for reproducibility and ethical review"
