@@ -1,0 +1,172 @@
+# Honeypot Signal Routing Authority Deployment
+#
+# ⚠️  SECURITY NOTICE: This is an INTENTIONALLY VULNERABLE deployment
+# for red team training and attack pattern learning.
+#
+# Deploy only in isolated environments with proper monitoring.
+#
+# Vulnerabilities intentionally exposed:
+# - No HMAC verification on webhooks
+# - No rate limiting
+# - No authentication
+# - Plaintext Discord webhooks (pointing to honeytrap)
+# - Exposed to internet
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: honeypot-sra
+  namespace: red-team-honeypot
+  labels:
+    app: honeypot-sra
+    security: intentionally-vulnerable
+    team: red
+    purpose: offensive-testing
+  annotations:
+    security.strategickhaos.com/status: "vulnerable"
+    security.strategickhaos.com/reason: "honeypot-training"
+    security.strategickhaos.com/approved-by: "red-team-lead"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: honeypot-sra
+  template:
+    metadata:
+      labels:
+        app: honeypot-sra
+        security: intentionally-vulnerable
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: sra
+          # Use a simple vulnerable image - in production, build from signal-router
+          image: python:3.11-slim
+          command: ["python", "-m", "http.server", "8080"]
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            # INTENTIONALLY use honeytrap URLs instead of real Discord webhooks
+            - name: DISCORD_WEBHOOK_ACADEMIC
+              value: "http://honeytrap.red-team-honeypot.svc.cluster.local:8080/webhook/academic"
+            - name: DISCORD_WEBHOOK_GITHUB
+              value: "http://honeytrap.red-team-honeypot.svc.cluster.local:8080/webhook/github"
+            - name: DISCORD_WEBHOOK_FINANCIAL
+              value: "http://honeytrap.red-team-honeypot.svc.cluster.local:8080/webhook/financial"
+            # NO HMAC key - intentionally vulnerable
+            # NO rate limit config - intentionally vulnerable
+            - name: HONEYPOT_MODE
+              value: "true"
+            - name: LOG_ALL_REQUESTS
+              value: "true"
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "25m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          # Minimal health checks - we want this to stay up even under attack
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: honeypot-sra
+  namespace: red-team-honeypot
+  labels:
+    app: honeypot-sra
+    security: intentionally-vulnerable
+spec:
+  type: LoadBalancer  # Intentionally exposed
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: honeypot-sra
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: honeypot-sra
+  namespace: red-team-honeypot
+  labels:
+    app: honeypot-sra
+    security: intentionally-vulnerable
+  annotations:
+    # INTENTIONALLY: No rate limiting
+    # INTENTIONALLY: No authentication
+    # INTENTIONALLY: No WAF rules
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # Allow large payloads for attack testing
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+spec:
+  rules:
+    - host: honeypot-sra.strategickhaos.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: honeypot-sra
+                port:
+                  number: 80
+---
+# ConfigMap with vulnerable configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: honeypot-sra-config
+  namespace: red-team-honeypot
+  labels:
+    app: honeypot-sra
+    security: intentionally-vulnerable
+data:
+  config.yaml: |
+    # Honeypot SRA Configuration
+    # INTENTIONALLY VULNERABLE - DO NOT USE IN PRODUCTION
+    
+    server:
+      port: 8080
+      host: "0.0.0.0"
+    
+    security:
+      # All security features DISABLED for honeypot
+      hmac_verification: false
+      rate_limiting: false
+      authentication: false
+      input_validation: false
+      
+    logging:
+      # Log everything for attack analysis
+      level: DEBUG
+      log_all_requests: true
+      log_request_bodies: true
+      log_headers: true
+      
+    webhooks:
+      # Point to honeytrap instead of real Discord
+      academic: "http://honeytrap:8080/webhook/academic"
+      github: "http://honeytrap:8080/webhook/github"  
+      financial: "http://honeytrap:8080/webhook/financial"

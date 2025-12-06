@@ -1,0 +1,357 @@
+# Honeytrap Deployment - Attack Logging Service
+#
+# This service receives all "attacks" from the honeypot and logs them
+# for analysis by the Legion AI system.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: honeytrap
+  namespace: red-team-honeypot
+  labels:
+    app: honeytrap
+    component: logging
+    team: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: honeytrap
+  template:
+    metadata:
+      labels:
+        app: honeytrap
+        component: logging
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: honeytrap
+          image: python:3.11-slim
+          command:
+            - python
+            - /app/trap_server.py
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: NATS_URL
+              value: "nats://nats.automation.svc.cluster.local:4222"
+            - name: ELASTICSEARCH_URL
+              value: "http://elasticsearch.monitoring.svc.cluster.local:9200"
+            - name: LOG_LEVEL
+              value: "DEBUG"
+          volumeMounts:
+            - name: app-code
+              mountPath: /app
+            - name: attack-logs
+              mountPath: /var/log/honeytrap
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: app-code
+          configMap:
+            name: honeytrap-code
+        - name: attack-logs
+          persistentVolumeClaim:
+            claimName: honeytrap-logs
+---
+# PersistentVolumeClaim for attack logs (shared with Legion Analyzer)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: honeytrap-logs
+  namespace: red-team-honeypot
+  labels:
+    app: honeytrap
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: honeytrap
+  namespace: red-team-honeypot
+  labels:
+    app: honeytrap
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: honeytrap
+---
+# ConfigMap containing the honeytrap server code
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: honeytrap-code
+  namespace: red-team-honeypot
+  labels:
+    app: honeytrap
+data:
+  trap_server.py: |
+    """
+    Honeytrap: Fake Discord webhook that logs all attack attempts
+    
+    This server captures all requests intended for the honeypot and logs them
+    for analysis by the Legion AI system.
+    """
+    
+    import json
+    import hashlib
+    import os
+    import logging
+    from datetime import datetime
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+    from urllib.parse import urlparse, parse_qs
+    
+    # Configure logging
+    logging.basicConfig(
+        level=getattr(logging, os.environ.get('LOG_LEVEL', 'INFO')),
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger('honeytrap')
+    
+    # In-memory attack log (in production, use persistent storage)
+    ATTACK_LOG = []
+    
+    def classify_attack(method, path, body, headers):
+        """Classify the type of attack based on patterns"""
+        attack_types = []
+        body_lower = body.lower() if body else ''
+        path_lower = path.lower()
+        
+        # XSS detection
+        if '<script' in body_lower or 'javascript:' in body_lower or 'onerror=' in body_lower:
+            attack_types.append('XSS_ATTEMPT')
+        
+        # SQL injection detection
+        sql_patterns = ['union select', 'drop table', 'delete from', 
+                       "' or '1'='1", '"; --', 'exec(', 'execute(']
+        if any(p in body_lower for p in sql_patterns):
+            attack_types.append('SQL_INJECTION')
+        
+        # Path traversal detection
+        if '../' in path or '..\\' in path or '%2e%2e' in path_lower:
+            attack_types.append('PATH_TRAVERSAL')
+        
+        # Buffer overflow attempt
+        if len(body) > 10000:
+            attack_types.append('BUFFER_OVERFLOW_ATTEMPT')
+        
+        # Command injection
+        cmd_patterns = ['$(', '`', '|', '&&', ';', 'eval(', 'system(']
+        if any(p in body for p in cmd_patterns):
+            attack_types.append('COMMAND_INJECTION')
+        
+        # Credential stuffing
+        if 'admin' in body_lower or 'password' in body_lower or 'token' in body_lower:
+            attack_types.append('CREDENTIAL_PROBE')
+        
+        # HTTP method tampering
+        if method not in ['GET', 'POST', 'HEAD', 'OPTIONS']:
+            attack_types.append('METHOD_TAMPERING')
+        
+        # Header injection
+        if 'x-forwarded' in str(headers).lower():
+            attack_types.append('HEADER_INJECTION')
+        
+        # SSRF attempt
+        if 'localhost' in body_lower or '127.0.0.1' in body_lower or '169.254' in body:
+            attack_types.append('SSRF_ATTEMPT')
+        
+        return attack_types if attack_types else ['RECON']
+    
+    class HoneytrapHandler(BaseHTTPRequestHandler):
+        def log_message(self, format, *args):
+            """Override to use our logger"""
+            logger.info("%s - %s", self.address_string(), format % args)
+        
+        def _send_response(self, code=200, message="Signal routed"):
+            """Send a fake success response to make attacker think they succeeded"""
+            self.send_response(code)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            response = json.dumps({
+                "status": "success",
+                "message": message,
+                "timestamp": datetime.utcnow().isoformat()
+            })
+            self.wfile.write(response.encode())
+        
+        def _log_attack(self, method):
+            """Log the attack attempt"""
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length).decode('utf-8', errors='replace') if content_length > 0 else ''
+            
+            attack = {
+                "timestamp": datetime.utcnow().isoformat(),
+                "method": method,
+                "path": self.path,
+                "headers": dict(self.headers),
+                "body": body[:5000],  # Limit body size in log
+                "body_length": len(body),
+                "source_ip": self.client_address[0],
+                "user_agent": self.headers.get('User-Agent', 'unknown'),
+                "content_type": self.headers.get('Content-Type', 'unknown'),
+                "attack_signature": hashlib.sha256(
+                    f"{method}{self.path}{body}".encode()
+                ).hexdigest()[:16]
+            }
+            
+            # Classify attack type
+            attack['attack_types'] = classify_attack(
+                method, self.path, body, self.headers
+            )
+            
+            # Log to memory
+            ATTACK_LOG.append(attack)
+            
+            # Log to file
+            log_file = '/var/log/honeytrap/attacks.jsonl'
+            try:
+                with open(log_file, 'a') as f:
+                    f.write(json.dumps(attack) + '\n')
+            except Exception as e:
+                logger.warning(f"Could not write to log file: {e}")
+            
+            # Log to console
+            logger.warning(
+                f"🎣 ATTACK CAPTURED: {method} {self.path} | "
+                f"Types: {attack['attack_types']} | "
+                f"From: {attack['source_ip']} | "
+                f"Signature: {attack['attack_signature']}"
+            )
+            
+            return attack
+        
+        def do_GET(self):
+            # Health check endpoint
+            if self.path == '/health':
+                self._send_response(200, "Honeytrap healthy")
+                return
+            
+            # Stats endpoint for blue team
+            if self.path == '/stats':
+                self._send_stats()
+                return
+            
+            # Metrics endpoint
+            if self.path == '/metrics':
+                self._send_metrics()
+                return
+            
+            # Log as attack
+            self._log_attack('GET')
+            self._send_response()
+        
+        def do_POST(self):
+            self._log_attack('POST')
+            self._send_response()
+        
+        def do_PUT(self):
+            self._log_attack('PUT')
+            self._send_response()
+        
+        def do_DELETE(self):
+            self._log_attack('DELETE')
+            self._send_response()
+        
+        def do_PATCH(self):
+            self._log_attack('PATCH')
+            self._send_response()
+        
+        def do_OPTIONS(self):
+            self._log_attack('OPTIONS')
+            self._send_response()
+        
+        def _send_stats(self):
+            """Return attack statistics"""
+            attack_type_counts = {}
+            source_counts = {}
+            
+            for attack in ATTACK_LOG:
+                for atype in attack.get('attack_types', ['UNKNOWN']):
+                    attack_type_counts[atype] = attack_type_counts.get(atype, 0) + 1
+                src = attack.get('source_ip', 'unknown')
+                source_counts[src] = source_counts.get(src, 0) + 1
+            
+            stats = {
+                "total_attacks": len(ATTACK_LOG),
+                "attack_types": attack_type_counts,
+                "top_sources": dict(sorted(
+                    source_counts.items(), 
+                    key=lambda x: x[1], 
+                    reverse=True
+                )[:10]),
+                "last_attack": ATTACK_LOG[-1] if ATTACK_LOG else None
+            }
+            
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(stats, indent=2).encode())
+        
+        def _send_metrics(self):
+            """Return Prometheus-style metrics"""
+            attack_type_counts = {}
+            for attack in ATTACK_LOG:
+                for atype in attack.get('attack_types', ['UNKNOWN']):
+                    attack_type_counts[atype] = attack_type_counts.get(atype, 0) + 1
+            
+            metrics = [
+                f'# HELP honeytrap_attacks_total Total number of attacks captured',
+                f'# TYPE honeytrap_attacks_total counter',
+                f'honeytrap_attacks_total {len(ATTACK_LOG)}',
+                f'# HELP honeytrap_attacks_by_type Number of attacks by type',
+                f'# TYPE honeytrap_attacks_by_type counter',
+            ]
+            for atype, count in attack_type_counts.items():
+                metrics.append(f'honeytrap_attacks_by_type{{type="{atype}"}} {count}')
+            
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain')
+            self.end_headers()
+            self.wfile.write('\n'.join(metrics).encode())
+    
+    def run_server(port=8080):
+        server_address = ('', port)
+        httpd = HTTPServer(server_address, HoneytrapHandler)
+        logger.info(f"🎣 Honeytrap server listening on port {port}")
+        logger.info("Ready to capture attacks...")
+        httpd.serve_forever()
+    
+    if __name__ == '__main__':
+        port = int(os.environ.get('PORT', 8080))
+        run_server(port)
+  
+  requirements.txt: |
+    # No external dependencies - using stdlib only for simplicity
