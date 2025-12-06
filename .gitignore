@@ -35,3 +35,9 @@ target/
 
 # Workspace data
 workspace/
+
+# Synthesis pipeline output (generated artifacts)
+synthesis_output/
+
+# Cognitive notary (generated artifacts)
+cognitive_notary/
