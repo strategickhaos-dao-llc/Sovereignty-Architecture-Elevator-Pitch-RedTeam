@@ -1,0 +1,296 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLAME NODE RECONNAISSANCE CONFIGURATION
+# Strategic Khaos Sovereignty Architecture - Node Discovery & Management
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# NETWORK CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[network]
+name = "flame-sovereign-network"
+version = "1.0.0"
+discovery_mode = "hybrid"  # auto | manual | hybrid
+sync_interval = 30         # seconds
+heartbeat_timeout = 60     # seconds
+max_nodes = 256
+
+# TIER DEFINITIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[tiers]
+
+[tiers.nova]
+id = 1
+name = "Nova"
+description = "Primary controller nodes"
+max_count = 3
+min_count = 1
+priority = "critical"
+permissions = ["oath.create", "oath.verify", "oath.revoke", "node.register", "node.activate", "system.admin"]
+health_check_interval = 10
+
+[tiers.lyra]
+id = 2
+name = "Lyra"
+description = "Secondary worker nodes"
+max_count = 16
+min_count = 2
+priority = "high"
+permissions = ["oath.create", "oath.verify", "node.register", "node.activate", "seal.create"]
+health_check_interval = 15
+
+[tiers.pulsar]
+id = 3
+name = "Pulsar"
+description = "Observer and monitoring nodes"
+max_count = 32
+min_count = 1
+priority = "medium"
+permissions = ["oath.verify", "node.observe", "seal.verify"]
+health_check_interval = 30
+
+[tiers.nebula]
+id = 4
+name = "Nebula"
+description = "Reserve and backup nodes"
+max_count = 64
+min_count = 0
+priority = "low"
+permissions = ["oath.verify", "seal.verify"]
+health_check_interval = 60
+
+# DEFAULT NODES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[[nodes]]
+name = "Nova-Prime"
+tier = 1
+endpoint = "localhost:7001"
+role = "controller"
+active = true
+auto_activate = true
+
+[[nodes]]
+name = "Nova-Alpha"
+tier = 1
+endpoint = "localhost:7002"
+role = "backup_controller"
+active = false
+auto_activate = false
+
+[[nodes]]
+name = "Nova-Omega"
+tier = 1
+endpoint = "localhost:7003"
+role = "failover"
+active = false
+auto_activate = false
+
+[[nodes]]
+name = "Lyra-Alpha"
+tier = 2
+endpoint = "localhost:7011"
+role = "worker"
+active = true
+auto_activate = true
+
+[[nodes]]
+name = "Lyra-Beta"
+tier = 2
+endpoint = "localhost:7012"
+role = "worker"
+active = true
+auto_activate = true
+
+[[nodes]]
+name = "Lyra-Gamma"
+tier = 2
+endpoint = "localhost:7013"
+role = "worker"
+active = false
+auto_activate = true
+
+[[nodes]]
+name = "Pulsar-01"
+tier = 3
+endpoint = "localhost:7021"
+role = "observer"
+active = true
+auto_activate = true
+monitors = ["network", "security"]
+
+[[nodes]]
+name = "Pulsar-02"
+tier = 3
+endpoint = "localhost:7022"
+role = "observer"
+active = false
+auto_activate = true
+monitors = ["performance", "availability"]
+
+[[nodes]]
+name = "Nebula-A"
+tier = 4
+endpoint = "localhost:7031"
+role = "reserve"
+active = false
+auto_activate = false
+
+[[nodes]]
+name = "Nebula-B"
+tier = 4
+endpoint = "localhost:7032"
+role = "archive"
+active = false
+auto_activate = false
+
+# DISCOVERY ENDPOINTS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[discovery]
+# Primary discovery methods
+methods = ["mdns", "broadcast", "registry"]
+
+[discovery.mdns]
+enabled = true
+service_name = "_flame._tcp"
+domain = "local"
+
+[discovery.broadcast]
+enabled = true
+port = 7099
+interval = 10
+
+[discovery.registry]
+enabled = true
+url = "https://registry.strategickhaos.internal/flame"
+api_key_env = "FLAME_REGISTRY_KEY"
+sync_on_start = true
+
+# HEALTH CHECK CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[health]
+enabled = true
+endpoint = "/health"
+metrics_endpoint = "/metrics"
+
+[health.checks]
+ping = true
+oath_chain = true
+memory = true
+disk = true
+cpu = true
+
+[health.thresholds]
+memory_warn = 80   # percent
+memory_crit = 95
+disk_warn = 85
+disk_crit = 95
+cpu_warn = 70
+cpu_crit = 90
+
+# RECON OPERATIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[recon]
+enabled = true
+mode = "passive"  # passive | active | aggressive
+log_level = "info"
+
+[recon.scan]
+enabled = true
+interval = 300     # seconds
+port_range = "7000-7100"
+protocols = ["tcp", "udp"]
+
+[recon.fingerprint]
+enabled = true
+collect_os = true
+collect_services = true
+collect_versions = true
+
+[recon.alerts]
+new_node = true
+node_offline = true
+node_changed = true
+unauthorized_access = true
+oath_mismatch = true
+
+# OATH CHAIN SYNC
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[oath_sync]
+enabled = true
+mode = "eventual"  # immediate | eventual | manual
+conflict_resolution = "latest"  # latest | majority | manual
+backup_enabled = true
+backup_interval = 3600  # seconds
+backup_location = "${FLAME_HOME}/backups/oath_chain"
+
+# SECURITY SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[security]
+tls_enabled = true
+tls_verify = true
+cert_path = "${FLAME_HOME}/certs/node.crt"
+key_path = "${FLAME_HOME}/certs/node.key"
+ca_path = "${FLAME_HOME}/certs/ca.crt"
+
+[security.auth]
+required = true
+methods = ["oath", "mtls"]
+token_expiry = 3600  # seconds
+
+[security.rate_limit]
+enabled = true
+requests_per_minute = 60
+burst = 10
+
+# LOGGING
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[logging]
+level = "info"
+format = "json"
+output = "both"  # console | file | both
+file_path = "${FLAME_HOME}/logs/recon.log"
+max_size_mb = 100
+max_files = 10
+compress = true
+
+# METRICS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[metrics]
+enabled = true
+exporter = "prometheus"
+port = 9100
+path = "/metrics"
+
+[metrics.labels]
+environment = "${FLAME_ENV:-development}"
+region = "${FLAME_REGION:-local}"
+cluster = "${FLAME_CLUSTER:-default}"
+
+# CLI SESSION DEFAULTS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[cli]
+prompt = "flame>>> "
+history_file = "${FLAME_HOME}/history"
+max_history = 1000
+auto_complete = true
+color_output = true
+
+[cli.aliases]
+st = "status"
+nd = "nodes"
+oh = "oath"
+rc = "recon"
+sy = "sync"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# END OF CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
