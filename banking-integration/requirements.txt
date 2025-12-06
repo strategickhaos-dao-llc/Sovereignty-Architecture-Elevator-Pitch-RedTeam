@@ -1,0 +1,9 @@
+# Sovereign Banking Integration Dependencies
+# Security: All versions verified against GitHub Advisory Database
+
+# NATS client for message queue integration
+nats-py>=2.7.0
+
+# HTTP client for Sequence.io API calls
+# Version >=3.9.4 required to patch CVE-2024-23334 and CVE-2024-23829
+aiohttp>=3.9.4
