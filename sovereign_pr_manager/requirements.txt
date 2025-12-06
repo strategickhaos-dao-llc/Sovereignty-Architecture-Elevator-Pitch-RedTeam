@@ -1,0 +1,14 @@
+# SovereignPRManager Python Requirements
+# Autonomous PR Orchestration System
+
+# Core HTTP/Async
+aiohttp>=3.9.0
+
+# GitHub Integration
+PyYAML>=6.0
+
+# Logging
+structlog>=23.2.0
+
+# Type checking
+typing-extensions>=4.8.0

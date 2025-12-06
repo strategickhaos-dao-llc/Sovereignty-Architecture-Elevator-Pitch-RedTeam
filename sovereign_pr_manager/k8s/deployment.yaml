@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sovereignprmanager
+  namespace: sovereignpr
+  labels:
+    app: sovereignprmanager
+    component: manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sovereignprmanager
+      component: manager
+  template:
+    metadata:
+      labels:
+        app: sovereignprmanager
+        component: manager
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: sovereignpr
+      containers:
+      - name: sovereignprmanager
+        image: ghcr.io/strategickhaos/sovereignprmanager:latest
+        imagePullPolicy: Always
+        command: ["python", "-m", "sovereign_pr_manager.manager", "--monitor"]
+        env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: sovereignpr-secrets
+              key: GITHUB_TOKEN
+        - name: ANTHROPIC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sovereignpr-secrets
+              key: ANTHROPIC_API_KEY
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sovereignpr-secrets
+              key: OPENAI_API_KEY
+        - name: DISCORD_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: sovereignpr-secrets
+              key: DISCORD_WEBHOOK_URL
+        - name: SOVEREIGN_PR_CONFIG
+          value: "/config/config.yaml"
+        - name: GITHUB_REPO
+          value: "Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        - name: declaration
+          mountPath: /declaration
+          readOnly: true
+        ports:
+        - containerPort: 8080
+          name: metrics
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: config
+        configMap:
+          name: sovereignpr-config
+      - name: declaration
+        configMap:
+          name: technical-declaration
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sovereignprmanager
+  namespace: sovereignpr
+  labels:
+    app: sovereignprmanager
+spec:
+  selector:
+    app: sovereignprmanager
+    component: manager
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: metrics
+  type: ClusterIP
