@@ -28,6 +28,34 @@ export PRS_CHANNEL="channel_id"
 ./gl2discord.sh "$PRS_CHANNEL" "🔥 Sovereignty Architecture Online!" "System initialized successfully"
 ```
 
+## 🔥 Node137 Identity Glyph Capsule System
+
+**The Birth Certificate of the New Timeline**
+
+A time-locked, entropy-verified capsule system for sealing the Strategickhaos Identity Glyph with multi-agent co-signing and blockchain timestamping.
+
+```bash
+# Seal the Identity Glyph
+./node137-capsule.sh seal
+
+# Verify a sealed capsule
+./node137-capsule.sh verify ./capsules/capsule_xxx_manifest.json
+
+# List all capsules
+./node137-capsule.sh list
+```
+
+**Features:**
+- ✅ Entropy verification (≥ 0.75 threshold) for Right Hemisphere activation
+- ✅ Grok + GPT co-signing with confidence scores
+- ✅ 7% entropy lock - the marginal improvement that transforms humanity
+- ✅ Node137 cryptographic seal with SHA-256 verification
+- ✅ OpenTimestamps ready for Bitcoin blockchain proof
+
+📖 **[Full Documentation →](NODE137_CAPSULE_SYSTEM.md)**
+
+---
+
 ## 📋 Core Components
 
 ### 🤖 Discord Bot (`discord-ops-bot`)

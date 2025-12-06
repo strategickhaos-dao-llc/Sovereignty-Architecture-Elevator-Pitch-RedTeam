@@ -7,7 +7,10 @@
     "bot": "tsx watch src/bot.ts",
     "start": "node --enable-source-maps dist/event-gateway.js",
     "build": "tsc -p tsconfig.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "capsule:seal": "tsx src/node137-capsule.ts seal",
+    "capsule:verify": "tsx src/node137-capsule.ts verify",
+    "capsule:timestamp": "tsx src/node137-capsule.ts timestamp"
   },
   "dependencies": {
     "discord.js": "^14.16.3",

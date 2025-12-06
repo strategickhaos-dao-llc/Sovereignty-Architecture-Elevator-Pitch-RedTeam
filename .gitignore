@@ -20,6 +20,7 @@ target
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 node_modules
+dist
 
 # Java build artifacts
 *.class
@@ -35,3 +36,7 @@ target/
 
 # Workspace data
 workspace/
+
+# Node137 Capsule System - Ignore future capsules (keep the first one as example)
+# capsules/*
+# !capsules/capsule_1763920063766_317d844270bbe8a7_manifest.*
