@@ -1,0 +1,34 @@
+# FlameLang Hello World Example
+# This demonstrates basic FlameLang syntax and features
+
+# Variable declaration
+let message = "Hello, FlameLang! 🔥"
+print(message)
+
+# Mathematical operations with built-in constants
+let circle_area = pi * 10 * 10
+print("Area of circle with radius 10:")
+print(circle_area)
+
+# Physics simulation - Schwarzschild metrics for a black hole
+print("Black hole metrics for solar mass:")
+let solar_mass = 1989000000000000000000000000000
+let observation_radius = 10000000000
+schwarzschild(solar_mass, observation_radius)
+
+# Sovereignty protocol - Network isolation check
+print("Network isolation check:")
+isolate("analytics.google.com")
+isolate("safe-domain.com")
+
+# Coherence monitoring
+print("System coherence check:")
+monitor()
+
+# Cryptographic boundary
+print("Creating cryptographic boundary:")
+harden("Sensitive data requiring protection")
+
+# Audit trail summary
+print("Security audit summary:")
+audit()
