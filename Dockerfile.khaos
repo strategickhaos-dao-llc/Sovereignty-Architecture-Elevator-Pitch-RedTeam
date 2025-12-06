@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════════
+# KHAOS ENGINE - Sovereign Resource Governance Container
+# Strategickhaos DAO LLC / Valoryield Engine
+# ═══════════════════════════════════════════════════════════
+
+FROM python:3.11-slim-bookworm
+
+# Labels
+LABEL org.opencontainers.image.title="KHAOS ENGINE"
+LABEL org.opencontainers.image.description="Kubernetes-Harmonized Autonomous Operating System for Sovereign Enterprises"
+LABEL org.opencontainers.image.vendor="Strategickhaos DAO LLC"
+LABEL org.opencontainers.image.source="https://github.com/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-"
+
+# Environment
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    procps \
+    iproute2 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user (will run as root when needed for process access)
+RUN useradd -m -s /bin/bash khaos
+
+# Working directory
+WORKDIR /app
+
+# Copy requirements first for caching
+COPY khaos_engine/requirements.khaos.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.khaos.txt
+
+# Copy application code
+COPY khaos_engine/ ./khaos_engine/
+
+# Create config directory
+RUN mkdir -p /etc/khaos /var/log/khaos /var/lib/khaos
+
+# Copy default config
+COPY khaos_engine/config/khaos_policy.yaml /etc/khaos/policy.yaml
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Expose ports
+EXPOSE 8080 9090
+
+# Default command - run the arbiter
+ENTRYPOINT ["python", "-m", "khaos_engine.core.resource_arbiter"]
+CMD ["--cycle"]
