@@ -1,0 +1,303 @@
+# =============================================================================
+# SovereignGuard Default Deny Network Policy
+# =============================================================================
+# Exposure Mitigation: #20 (K8s RBAC Escalation), #24 (WireGuard MITM)
+# Purpose: Block all traffic by default; explicit allow-lists only
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+    security.sovereignguard/policy: "deny-all"
+spec:
+  podSelector: {}  # Apply to all pods
+  policyTypes:
+    - Ingress
+    - Egress
+  # Empty ingress/egress = deny all
+---
+# =============================================================================
+# Allow DNS Resolution (Required for Service Discovery)
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+# =============================================================================
+# Allow Vault Access
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-vault-access
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector:
+    matchLabels:
+      security.sovereignguard/vault-access: "true"
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: vault
+      ports:
+        - protocol: TCP
+          port: 8200
+---
+# =============================================================================
+# Discord Bot Network Policy
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: discord-bot-policy
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector:
+    matchLabels:
+      app: discord-bot
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow health checks from Kubernetes
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    # Allow Discord API (gateway.discord.gg)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow NATS JetStream
+    - to:
+        - podSelector:
+            matchLabels:
+              app: nats
+      ports:
+        - protocol: TCP
+          port: 4222
+---
+# =============================================================================
+# Event Gateway Network Policy
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: event-gateway-policy
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector:
+    matchLabels:
+      app: event-gateway
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow ingress from Traefik/Nginx ingress
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # Allow GitHub webhook callbacks
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow NATS JetStream
+    - to:
+        - podSelector:
+            matchLabels:
+              app: nats
+      ports:
+        - protocol: TCP
+          port: 4222
+    # Allow PostgreSQL
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+# =============================================================================
+# SwarmGate Financial Service Network Policy
+# =============================================================================
+# CRITICAL: Most restrictive policy for financial operations
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: swarmgate-policy
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+    security.sovereignguard/tier: "critical"
+spec:
+  podSelector:
+    matchLabels:
+      app: swarmgate
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Only allow from approved internal services
+    - from:
+        - podSelector:
+            matchLabels:
+              security.sovereignguard/swarmgate-access: "true"
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # Allow trading API endpoints
+    # PRODUCTION: Replace with specific broker IP ranges:
+    # - NinjaTrader: Configure based on your broker's IP ranges
+    # - Kraken: Configure based on api.kraken.com IP ranges
+    # For now, allowing HTTPS to external (except private ranges)
+    # TODO: Pin to specific broker FQDNs when using Cilium or similar
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8       # Private Class A
+              - 172.16.0.0/12    # Private Class B
+              - 192.168.0.0/16   # Private Class C
+              - 127.0.0.0/8      # Loopback
+              - 169.254.0.0/16   # Link-local
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow Vault for secret retrieval
+    - to:
+        - podSelector:
+            matchLabels:
+              app: vault
+      ports:
+        - protocol: TCP
+          port: 8200
+---
+# =============================================================================
+# NATS JetStream Network Policy
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nats-policy
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector:
+    matchLabels:
+      app: nats
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from all sovereignty namespace pods with NATS access
+    - from:
+        - podSelector:
+            matchLabels:
+              security.sovereignguard/nats-access: "true"
+      ports:
+        - protocol: TCP
+          port: 4222
+        - protocol: TCP
+          port: 8222  # Monitoring
+  egress:
+    # Allow cluster communication
+    - to:
+        - podSelector:
+            matchLabels:
+              app: nats
+      ports:
+        - protocol: TCP
+          port: 6222
+---
+# =============================================================================
+# Vault Network Policy
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: vault-policy
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector:
+    matchLabels:
+      app: vault
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from services with vault-access label
+    - from:
+        - podSelector:
+            matchLabels:
+              security.sovereignguard/vault-access: "true"
+      ports:
+        - protocol: TCP
+          port: 8200
+    # Allow from admin namespace for operations
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              security.sovereignguard/admin: "true"
+      ports:
+        - protocol: TCP
+          port: 8200
+  egress:
+    # Allow raft cluster communication
+    - to:
+        - podSelector:
+            matchLabels:
+              app: vault
+      ports:
+        - protocol: TCP
+          port: 8201

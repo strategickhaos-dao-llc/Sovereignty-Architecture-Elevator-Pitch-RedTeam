@@ -1,0 +1,350 @@
+# =============================================================================
+# SovereignGuard Linkerd Service Mesh Configuration
+# =============================================================================
+# Exposure Mitigation: #7, #8, #20, #21, #24 (Lateral Movement Prevention)
+# Purpose: mTLS between all services, service identity, traffic policies
+# =============================================================================
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sovereignty
+  labels:
+    linkerd.io/inject: enabled
+    security.sovereignguard/managed: "true"
+  annotations:
+    linkerd.io/inject: enabled
+    config.linkerd.io/proxy-log-level: "warn,linkerd=info"
+---
+# =============================================================================
+# Linkerd Server Authorization Policy - Default Deny
+# =============================================================================
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: default-deny
+  namespace: sovereignty
+  labels:
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  podSelector:
+    matchLabels: {}
+  port: 1-65535
+  proxyProtocol: HTTP/1
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: deny-all
+  namespace: sovereignty
+spec:
+  server:
+    name: default-deny
+  client:
+    # Empty - denies all by default
+    unauthenticated: false
+    meshTLS:
+      unauthenticatedTLS: false
+---
+# =============================================================================
+# Discord Bot Service + Authorization
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: discord-bot
+  namespace: sovereignty
+  labels:
+    app: discord-bot
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  selector:
+    app: discord-bot
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: discord-bot
+  namespace: sovereignty
+spec:
+  podSelector:
+    matchLabels:
+      app: discord-bot
+  port: 3000
+  proxyProtocol: HTTP/1
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: discord-bot-health
+  namespace: sovereignty
+spec:
+  server:
+    name: discord-bot
+  client:
+    # Allow health checks from kubelet
+    unauthenticated: true
+    networks:
+      - cidr: 10.0.0.0/8  # Adjust to cluster CIDR
+---
+# =============================================================================
+# Event Gateway Service + Authorization
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-gateway
+  namespace: sovereignty
+  labels:
+    app: event-gateway
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  selector:
+    app: event-gateway
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: event-gateway
+  namespace: sovereignty
+spec:
+  podSelector:
+    matchLabels:
+      app: event-gateway
+  port: 8080
+  proxyProtocol: HTTP/1
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: event-gateway-ingress
+  namespace: sovereignty
+spec:
+  server:
+    name: event-gateway
+  client:
+    # Allow from ingress controller
+    meshTLS:
+      serviceAccounts:
+        - name: ingress-nginx
+          namespace: ingress-nginx
+---
+# =============================================================================
+# SwarmGate Service + Authorization (CRITICAL)
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: swarmgate
+  namespace: sovereignty
+  labels:
+    app: swarmgate
+    app.kubernetes.io/part-of: sovereignguard
+    security.sovereignguard/tier: "critical"
+spec:
+  selector:
+    app: swarmgate
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: swarmgate
+  namespace: sovereignty
+spec:
+  podSelector:
+    matchLabels:
+      app: swarmgate
+  port: 8080
+  proxyProtocol: HTTP/2
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: swarmgate-authorized-clients
+  namespace: sovereignty
+spec:
+  server:
+    name: swarmgate
+  client:
+    meshTLS:
+      # Only allow specific authorized service accounts
+      serviceAccounts:
+        - name: refinory
+          namespace: sovereignty
+        - name: discord-bot
+          namespace: sovereignty
+---
+# =============================================================================
+# NATS JetStream Service + Authorization
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: sovereignty
+  labels:
+    app: nats
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  selector:
+    app: nats
+  ports:
+    - name: client
+      port: 4222
+      targetPort: 4222
+    - name: cluster
+      port: 6222
+      targetPort: 6222
+    - name: monitor
+      port: 8222
+      targetPort: 8222
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: nats-client
+  namespace: sovereignty
+spec:
+  podSelector:
+    matchLabels:
+      app: nats
+  port: 4222
+  proxyProtocol: opaque
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: nats-client-access
+  namespace: sovereignty
+spec:
+  server:
+    name: nats-client
+  client:
+    meshTLS:
+      serviceAccounts:
+        - name: discord-bot
+          namespace: sovereignty
+        - name: event-gateway
+          namespace: sovereignty
+        - name: refinory
+          namespace: sovereignty
+        - name: swarmgate
+          namespace: sovereignty
+---
+# =============================================================================
+# Vault Service + Authorization
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault
+  namespace: sovereignty
+  labels:
+    app: vault
+    app.kubernetes.io/part-of: sovereignguard
+spec:
+  selector:
+    app: vault
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+    - name: cluster
+      port: 8201
+      targetPort: 8201
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: vault-api
+  namespace: sovereignty
+spec:
+  podSelector:
+    matchLabels:
+      app: vault
+  port: 8200
+  proxyProtocol: HTTP/1
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: vault-service-access
+  namespace: sovereignty
+spec:
+  server:
+    name: vault-api
+  client:
+    meshTLS:
+      # All services in sovereignty namespace can access Vault
+      identities:
+        - "*.sovereignty.serviceaccount.identity.linkerd.cluster.local"
+---
+# =============================================================================
+# Service Profiles for Traffic Management
+# =============================================================================
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: swarmgate.sovereignty.svc.cluster.local
+  namespace: sovereignty
+spec:
+  routes:
+    - name: POST /api/trade
+      condition:
+        method: POST
+        pathRegex: /api/trade.*
+      # Critical endpoint - timeout quickly, retry never
+      timeout: 5s
+      isRetryable: false
+    - name: GET /api/positions
+      condition:
+        method: GET
+        pathRegex: /api/positions.*
+      timeout: 10s
+      isRetryable: true
+    - name: GET /health
+      condition:
+        method: GET
+        pathRegex: /health
+      timeout: 2s
+      isRetryable: true
+  retryBudget:
+    retryRatio: 0.0  # No retries for financial service
+    minRetriesPerSecond: 0
+    ttl: 10s
+---
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: event-gateway.sovereignty.svc.cluster.local
+  namespace: sovereignty
+spec:
+  routes:
+    - name: POST /webhook
+      condition:
+        method: POST
+        pathRegex: /webhook.*
+      timeout: 30s
+      isRetryable: false
+    - name: GET /health
+      condition:
+        method: GET
+        pathRegex: /health
+      timeout: 2s
+      isRetryable: true
+  retryBudget:
+    retryRatio: 0.2
+    minRetriesPerSecond: 10
+    ttl: 10s
