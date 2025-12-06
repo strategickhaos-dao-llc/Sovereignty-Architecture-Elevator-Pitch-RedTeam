@@ -1,0 +1,40 @@
+# 🔥 FlameLang Demo Programs
+
+# 1. Black Hole Simulation
+sim BH1 M=1.989e30 r=1e7
+
+# 2. Photon Sphere
+sim PS1 M=1.989e30
+
+# 3. Ocean Eddy
+sim OC1
+
+# 4. Physical Constants
+c
+G
+alpha
+
+# 5. Variable Assignment
+mass = 1.989e30
+radius = 1e7
+
+# 6. Glyph Expressions
+⚡
+🔥
+🌊
+
+# 7. Security Glyphs
+🛡️
+🔒
+
+# 8. Physics Glyphs
+BH1
+OC1
+GR1
+
+# 9. Complex Simulation
+sim BH1 M=3.978e30 r=5e6
+
+# 10. Constants with Assignment
+speed_of_light = 299792458
+gravitational_constant = 6.67430e-11
