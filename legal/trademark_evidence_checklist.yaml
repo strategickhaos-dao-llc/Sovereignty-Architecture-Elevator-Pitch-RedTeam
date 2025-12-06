@@ -1,0 +1,135 @@
+# trademark_evidence_checklist.yaml
+# StrategicKhaos DAO LLC — ITU Evidence & Specimen Preparation Kit
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+version: "1.0"
+date: "December 5, 2025"
+purpose: "Evidence and specimen checklist for Intent-to-Use (ITU) trademark conversion"
+authorization: "Board Resolution 005"
+
+evidence_checklist:
+  StrategicKhaos:
+    description: "Core brand identifier for the DAO ecosystem"
+    classes: [9, 36, 42]
+    required_evidence:
+      - type: "GitHub organization page"
+        location: "https://github.com/StrategicKhaos"
+        status: "available"
+        capture_method: "Screenshot with visible URL and date"
+      - type: "GitHub repos (README with name visible)"
+        location: "Repository root README.md files"
+        status: "available"
+        capture_method: "Screenshot showing mark in prominent use"
+      - type: "Screenshots of product interface"
+        location: "Application UI if available"
+        status: "pending"
+        capture_method: "Screenshot with mark visible in header/footer"
+      - type: "Obsidian docs with date metadata"
+        location: "Internal documentation vault"
+        status: "available"
+        capture_method: "Export with metadata preserved"
+      - type: "Declaration v4.0"
+        location: "Governance documentation"
+        status: "available"
+        date: "December 5, 2025"
+
+  SwarmGate:
+    description: "Treasury and governance automation system"
+    classes: [9, 36]
+    required_evidence:
+      - type: "flow.yaml configuration file"
+        location: "Repository configuration files"
+        status: "available"
+        capture_method: "File with header comments showing mark"
+      - type: "Technical documentation screenshots"
+        location: "docs/ directory or README sections"
+        status: "available"
+        capture_method: "Screenshot with mark in context"
+      - type: "GitHub commits referencing SwarmGate"
+        location: "Git history"
+        status: "available"
+        capture_method: "git log output or GitHub UI screenshot"
+
+  ValorYield_Engine:
+    description: "Charitable and financial literacy platform"
+    classes: [36, 42]
+    required_evidence:
+      - type: "Wyoming nonprofit filing PDF"
+        location: "legal/wyoming_sf0068/"
+        status: "available"
+        capture_method: "Official filing document"
+      - type: "IRS EIN assignment CP575E"
+        location: "Tax documentation"
+        status: "required"
+        capture_method: "Official IRS correspondence"
+      - type: "Email receipts or donor materials"
+        location: "Communications records"
+        status: "pending"
+        capture_method: "Screenshots with mark visible"
+
+  Dialectical_Engine:
+    description: "Semantic analysis and synthesis system"
+    classes: [9, 42]
+    required_evidence:
+      - type: "Source code with timestamps"
+        location: "src/ directory"
+        status: "available"
+        capture_method: "File headers with copyright and dates"
+      - type: "Architecture diagrams"
+        location: "cognitive_architecture.svg, cognitive_map.dot"
+        status: "available"
+        capture_method: "Diagrams with mark labeled"
+      - type: "Documentation pages showing mark used in headers"
+        location: "README.md and doc files"
+        status: "available"
+        capture_method: "Screenshot of headers with mark"
+
+notes: |
+  Evidence does not need to show commercial sale for ITU conversion —
+  only bona fide use in commerce. Screenshots and documentation count.
+  
+  Key requirements for Statement of Use:
+  - Mark must be used in connection with the goods/services listed
+  - Use must be in interstate commerce (crossing state lines)
+  - Specimen must show mark as used with consumers
+  
+  Acceptable specimens by class:
+  - Class 9 (Software): Screenshots of software with mark visible
+  - Class 36 (Financial): Marketing materials, website screenshots
+  - Class 42 (SAAS): Service interface, login screens, brochures
+
+specimen_preparation:
+  timeline:
+    initial_filing: "December 5, 2025"
+    notice_of_allowance_expected: "6-12 months from filing"
+    statement_of_use_deadline: "6 months from NOA (extendable)"
+    maximum_extensions: 5
+    maximum_extension_period: "36 months total"
+  
+  action_items:
+    - task: "Capture current GitHub screenshots"
+      priority: "high"
+      deadline: "December 6, 2025"
+    - task: "Document product interfaces"
+      priority: "medium"
+      deadline: "Before Statement of Use"
+    - task: "Organize evidence by mark and class"
+      priority: "high"
+      deadline: "December 10, 2025"
+    - task: "Verify all evidence shows bona fide use"
+      priority: "critical"
+      deadline: "Before Statement of Use filing"
+
+legal_references:
+  - "15 U.S.C. §1051(b) - Intent-to-Use applications"
+  - "15 U.S.C. §1051(d) - Statement of Use requirements"
+  - "37 CFR §2.56 - Specimen requirements"
+  - "TMEP §904 - Specimens"
+
+related_documents:
+  - "governance/resolution_005_trademark_filings.yaml"
+  - "legal/trademark_filing_worksheet.md"
+
+# === GPG SIGNATURE BLOCK (DETACHED) ===
+# Save as trademark_evidence_checklist.yaml.asc
+# Command: gpg --armor --detach-sign trademark_evidence_checklist.yaml

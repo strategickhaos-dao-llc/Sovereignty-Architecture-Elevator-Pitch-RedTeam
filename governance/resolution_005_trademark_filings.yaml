@@ -1,0 +1,62 @@
+# resolution_005_trademark_filings.yaml
+# StrategicKhaos DAO LLC — Board Resolution 005
+# Emergency Authorization for Trademark Filings
+# INTERNAL DRAFT — NOT LEGAL ADVICE — ATTORNEY REVIEW REQUIRED
+
+resolution_005:
+  title: "Emergency Authorization for Trademark Filings"
+  date: "December 5, 2025"
+  enacted_by: "StrategicKhaos DAO LLC Board"
+  classification: "High Priority – Legal/IP Protection"
+  
+  findings:
+    - "The Board recognizes immediate trademark filing is critical to prevent third-party squatting or malicious registration of core StrategicKhaos assets."
+    - "Brand identifiers including StrategicKhaos™, SwarmGate™, ValorYield Engine™, and Dialectical Engine™ are at risk due to increasing visibility of the ecosystem."
+    - "USPTO operates on a first-to-file priority system under 15 U.S.C. §1051."
+    - "Intent-to-Use filings are legally permitted even before commercial deployment."
+  
+  authorization:
+    statement: "Founder (Domenic G. Garza) is hereby authorized to file Intent-to-Use trademark applications for the following marks immediately:"
+    marks:
+      - mark: "StrategicKhaos™"
+        classes: [9, 36, 42]
+        description: "Core brand identifier for the DAO ecosystem"
+      - mark: "SwarmGate™"
+        classes: [9, 36]
+        description: "Treasury and governance automation system"
+      - mark: "ValorYield Engine™"
+        classes: [36, 42]
+        description: "Charitable and financial literacy platform"
+      - mark: "Dialectical Engine™"
+        classes: [9, 42]
+        description: "Semantic analysis and synthesis system"
+  
+  budget:
+    allocated_funds_usd: 2500
+    notes: "Covers TEAS Plus filings for priority protection."
+    breakdown:
+      per_class_filing_fee: 250
+      estimated_total_classes: 10
+  
+  follow_up:
+    - "Founder shall obtain filing receipts and attach them as Exhibit T."
+    - "Founder shall coordinate with legal counsel for amendments, statements of use, and additional filings."
+    - "All trademark documentation shall be stored in the /legal directory."
+    - "Evidence collection per trademark_evidence_checklist.yaml required for Statement of Use."
+  
+  status: "PASSED – unanimous approval"
+  
+  signatures:
+    - role: "Managing Member"
+      name: "Domenic G. Garza"
+      date: "December 5, 2025"
+      status: "APPROVED"
+  
+  legal_references:
+    - "15 U.S.C. §1051 - Lanham Act, Registration of Trademarks"
+    - "USPTO TEAS Plus filing requirements"
+    - "Intent-to-Use (ITU) application procedures"
+
+# === GPG SIGNATURE BLOCK (DETACHED) ===
+# Save as resolution_005_trademark_filings.yaml.asc
+# Command: gpg --armor --detach-sign resolution_005_trademark_filings.yaml
