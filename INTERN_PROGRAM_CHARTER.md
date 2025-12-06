@@ -238,7 +238,21 @@ tax_treatment:
   withholding: "Not withheld (not employment)"
   intern_responsibility: "Self-report as income"
   
-  note: "Interns should consult tax professional"
+  nonprofit_organization:
+    reporting_requirements:
+      - "Form 1099-NEC for payments >$600"
+      - "Maintain records of all educational benefit payments"
+      - "Document educational purpose for each payment"
+    compliance_considerations:
+      - "Stipends must further exempt educational purpose"
+      - "Program must be open to the public (non-discriminatory)"
+      - "No private benefit or inurement to insiders"
+    documentation_required:
+      - "Learning agreements for all participants"
+      - "Progress reports demonstrating educational benefit"
+      - "Board-approved stipend policy"
+  
+  note: "Both interns and organization should consult tax professionals"
 ```
 
 ---

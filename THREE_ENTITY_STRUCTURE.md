@@ -173,6 +173,8 @@ nonprofit_relationship:
 | **State** | Wyoming |
 | **Formation Date** | 2025-06-25 |
 
+*Note: Formation date reflects the incorporation filing date per Wyoming Secretary of State records.*
+
 ### Purpose
 
 The DAO LLC serves as the governance layer:

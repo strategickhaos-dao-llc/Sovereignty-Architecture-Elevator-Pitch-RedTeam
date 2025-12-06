@@ -362,15 +362,16 @@ stipend_allocation:
 
 ### 5-Year Financial Model
 
-| Year | Donations | Grants | Licenses | Investment Return | Total Inflow |
-|------|-----------|--------|----------|-------------------|--------------|
-| 1 | $50,000 | $25,000 | $10,000 | $2,975 | $87,975 |
-| 2 | $75,000 | $50,000 | $25,000 | $6,650 | $156,650 |
-| 3 | $100,000 | $75,000 | $50,000 | $11,375 | $236,375 |
-| 4 | $150,000 | $100,000 | $75,000 | $17,963 | $342,963 |
-| 5 | $200,000 | $150,000 | $100,000 | $26,425 | $476,425 |
+| Year | Donations | Grants | Licenses | Operations (93%) | Investment Reserve (7%) | Cumulative Reserve | Investment Return (7% of Reserve) | Total Available |
+|------|-----------|--------|----------|------------------|-------------------------|--------------------|---------------------------------|-----------------|
+| 1 | $50,000 | $25,000 | $10,000 | $79,050 | $5,950 | $5,950 | $417 | $85,417 |
+| 2 | $75,000 | $50,000 | $25,000 | $139,500 | $10,500 | $16,867 | $1,181 | $151,681 |
+| 3 | $100,000 | $75,000 | $50,000 | $209,250 | $15,750 | $33,798 | $2,366 | $227,616 |
+| 4 | $150,000 | $100,000 | $75,000 | $302,250 | $22,750 | $58,914 | $4,124 | $329,374 |
+| 5 | $200,000 | $150,000 | $100,000 | $418,500 | $31,500 | $94,538 | $6,618 | $456,618 |
 
-*Assumes 7% annual return on investment reserve*
+*Investment return calculation: 7% annual return on cumulative investment reserve from previous year*
+*93% of inflows go to operations, 7% to investment reserve*
 
 ### Perpetual Motion Analysis
 

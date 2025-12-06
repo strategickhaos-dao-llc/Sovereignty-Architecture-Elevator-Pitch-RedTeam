@@ -564,11 +564,13 @@ grant_pipeline:
 
 | Metric | Year 1 | Year 3 | Year 5 |
 |--------|--------|--------|--------|
-| **Publications** | 2-3 | 8-12 | 20+ |
-| **Open Source Projects** | 3-5 | 10-15 | 25+ |
-| **Patents Filed** | 1-2 | 3-5 | 8-10 |
-| **Collaborations** | 2-3 | 5-8 | 10+ |
-| **Interns Trained** | 5-10 | 20-30 | 50+ |
+| **Publications** | 2-3 | 5-8 | 10-15 |
+| **Open Source Projects** | 3-5 | 8-12 | 15-20 |
+| **Patents Filed** | 1-2 | 3-5 | 5-8 |
+| **Collaborations** | 2-3 | 4-6 | 8-10 |
+| **Interns Trained** | 5-10 | 15-25 | 35-50 |
+
+*Note: Projections assume proportional growth in staffing and infrastructure. Year 5 targets require expanded team and partnerships.*
 
 ### Impact Metrics
 
