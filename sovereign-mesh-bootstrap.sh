@@ -101,7 +101,10 @@ check_gh_cli() {
     
     if command -v gh &> /dev/null; then
         local gh_version
-        gh_version=$(gh --version | head -n1 | awk '{print $3}')
+        gh_version=$(gh --version 2>/dev/null | head -n1 | awk '{print $3}' || echo "unknown")
+        if [[ -z "$gh_version" ]] || [[ "$gh_version" == "unknown" ]]; then
+            gh_version="installed"
+        fi
         echo_success "GitHub CLI found: version $gh_version"
         export GH_CLI_AVAILABLE="true"
         return 0
@@ -147,9 +150,10 @@ check_gh_cli() {
         echo_warning "Install gh CLI and re-run this script, or continue without it (some features disabled)"
         
         # Ask if user wants to continue
-        read -p "Continue without gh CLI? (y/N): " -n 1 -r
+        local response
+        read -p "Continue without gh CLI? (y/N): " -n 1 -r response
         echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        if [[ ! $response =~ ^[Yy]$ ]]; then
             echo_error "Bootstrap aborted. Install gh CLI and try again."
             exit 1
         fi
@@ -210,9 +214,10 @@ init_environment() {
     # Check if .env exists
     if [ -f ".env" ]; then
         echo_warning ".env file already exists"
-        read -p "Overwrite existing .env? (y/N): " -n 1 -r
+        local response
+        read -p "Overwrite existing .env? (y/N): " -n 1 -r response
         echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        if [[ ! $response =~ ^[Yy]$ ]]; then
             echo_status "Keeping existing .env file"
             return 0
         fi
@@ -422,7 +427,7 @@ while true; do
     # Monitor system resources
     if command -v df &> /dev/null; then
         DISK_USAGE=$(df -h / | tail -1 | awk '{print $5}' | sed 's/%//')
-        if [ "$DISK_USAGE" -gt 90 ]; then
+        if [[ "$DISK_USAGE" =~ ^[0-9]+$ ]] && [ "$DISK_USAGE" -gt 90 ]; then
             echo "[AUTONOMOUS] Critical disk usage: ${DISK_USAGE}%"
             echo "[AUTONOMOUS] Initiating cleanup procedures..."
             docker system prune -f --volumes
@@ -441,9 +446,10 @@ MONITOR_EOF
     
     # Offer to start autonomous monitor
     echo ""
-    read -p "Start autonomous monitoring in background? (y/N): " -n 1 -r
+    local response
+    read -p "Start autonomous monitoring in background? (y/N): " -n 1 -r response
     echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    if [[ $response =~ ^[Yy]$ ]]; then
         nohup ./.sovereign-mesh/autonomous-monitor.sh > .sovereign-mesh/monitor.log 2>&1 &
         echo_success "Autonomous monitor started (PID: $!)"
         echo_status "Monitor logs: .sovereign-mesh/monitor.log"
@@ -475,7 +481,9 @@ verify_deployment() {
     )
     
     for endpoint_info in "${endpoints[@]}"; do
-        IFS='|' read -r url name <<< "$endpoint_info"
+        local url name
+        url="${endpoint_info%%|*}"
+        name="${endpoint_info##*|}"
         if curl -s -o /dev/null -w "%{http_code}" "$url" 2>/dev/null | grep -q "200\|302"; then
             echo_success "$name accessible at $url"
         else
@@ -567,4 +575,6 @@ main() {
 # Script entry point
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
+    exit_code=$?
+    exit $exit_code
 fi

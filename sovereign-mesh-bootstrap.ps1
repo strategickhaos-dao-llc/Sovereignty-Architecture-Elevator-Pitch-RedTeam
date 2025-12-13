@@ -175,8 +175,16 @@ function Main {
             
             # Convert Windows path to WSL path
             $currentDir = (Get-Location).Path
-            $wslPath = $currentDir -replace '\\', '/' -replace ':', ''
-            $wslPath = "/mnt/$($wslPath.Substring(0,1).ToLower())$($wslPath.Substring(1))"
+            
+            # Validate path format (must be a drive letter path)
+            if ($currentDir -match '^[A-Za-z]:') {
+                $wslPath = $currentDir -replace '\\', '/' -replace ':', ''
+                $wslPath = "/mnt/$($wslPath.Substring(0,1).ToLower())$($wslPath.Substring(1))"
+            } else {
+                Write-Error-Custom "Cannot convert path to WSL format: $currentDir"
+                Write-Status "Please run from a standard Windows drive path (e.g., C:\path\to\repo)"
+                exit 1
+            }
             
             Write-Status "Executing in WSL..."
             wsl bash -c "cd '$wslPath' && bash ./sovereign-mesh-bootstrap.sh"

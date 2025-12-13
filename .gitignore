@@ -35,3 +35,17 @@ target/
 
 # Workspace data
 workspace/
+
+# Sovereign Mesh Bootstrap - Runtime files
+.sovereign-mesh/
+.sovereign-mesh/monitor.log
+.sovereign-mesh/autonomous-monitor.sh.pid
+
+# Environment files (keep .env.example)
+.env
+!.env.example
+
+# Temporary bootstrap files
+bootstrap-fresh.sh
+discord-bot-env.template
+github-app-manifest.json
