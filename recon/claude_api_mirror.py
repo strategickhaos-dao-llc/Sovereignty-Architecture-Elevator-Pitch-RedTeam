@@ -22,31 +22,20 @@ CLAUDE_SESSION_KEY = os.getenv("CLAUDE_SESSION_KEY", "")
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 CACHE_TTL = int(os.getenv("CACHE_TTL", "3600"))  # 1 hour
 
-# Initialize FastAPI
-app = FastAPI(
-    title="Claude API Mirror",
-    description="Local replica of Claude API endpoints for sovereign mesh",
-    version="1.0.0"
-)
-
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# CORS middleware (will be added after app initialization)
 
 # Global clients
 httpx_client = None
 redis_client = None
 
-@app.on_event("startup")
-async def startup():
-    """Initialize clients on startup."""
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application lifespan."""
     global httpx_client, redis_client
     
+    # Startup
     # HTTP client with Claude session key
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; SovereignMesh/1.0)",
@@ -70,12 +59,10 @@ async def startup():
         redis_client = None
     
     print("🚀 Claude API Mirror started")
-
-@app.on_event("shutdown")
-async def shutdown():
-    """Cleanup on shutdown."""
-    global httpx_client, redis_client
     
+    yield
+    
+    # Shutdown
     if httpx_client:
         await httpx_client.aclose()
     
@@ -83,6 +70,23 @@ async def shutdown():
         await redis_client.close()
     
     print("👋 Claude API Mirror shutdown")
+
+# Update app initialization to use lifespan
+app = FastAPI(
+    title="Claude API Mirror",
+    description="Local replica of Claude API endpoints for sovereign mesh",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 async def get_cached(key: str) -> Optional[str]:
     """Get cached response from Redis."""

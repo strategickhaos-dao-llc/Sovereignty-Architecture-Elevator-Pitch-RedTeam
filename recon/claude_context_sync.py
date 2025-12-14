@@ -16,6 +16,13 @@ import httpx
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams, PointStruct
 
+# Optional webhook injection
+try:
+    from claude_webhook_injector import WebhookInjector
+    WEBHOOKS_AVAILABLE = True
+except ImportError:
+    WEBHOOKS_AVAILABLE = False
+
 # Claude API Configuration
 CLAUDE_API_BASE = os.getenv("CLAUDE_API_BASE", "https://claude.ai")
 CLAUDE_ORG_ID = os.getenv("CLAUDE_ORG_ID", "17fcb197-98f1-4c44-9ed8-bc89b419cbbf")
@@ -261,13 +268,25 @@ class ClaudeContextSync:
             batch = contexts[i:i + BATCH_SIZE]
             
             try:
-                # Get embeddings for batch
+                # Get embeddings for batch - process concurrently for better performance
                 texts = [ctx["content"] for ctx in batch]
                 
-                # Get embeddings one by one (simpler for now)
+                # Create embedding tasks for concurrent execution
+                embedding_tasks = [self.get_embedding(text) for text in texts]
+                
+                try:
+                    embeddings = await asyncio.gather(*embedding_tasks, return_exceptions=True)
+                except Exception as e:
+                    print(f"❌ Batch embedding error: {e}")
+                    continue
+                
+                # Build points, handling any failed embeddings
                 points = []
-                for ctx, text in zip(batch, texts):
-                    embedding = await self.get_embedding(text)
+                for ctx, embedding in zip(batch, embeddings):
+                    # Skip failed embeddings (marked as exceptions)
+                    if isinstance(embedding, Exception):
+                        print(f"⚠️ Failed to embed context {ctx['id']}: {embedding}")
+                        continue
                     
                     # Create Qdrant point
                     point = PointStruct(
@@ -286,18 +305,22 @@ class ClaudeContextSync:
                     )
                     points.append(point)
                 
+                # Only upload if we have valid points
+                if not points:
+                    print(f"⚠️ No valid embeddings in batch, skipping upload")
+                    continue
+                
                 # Upload batch to Qdrant
                 self.qdrant.upsert(
                     collection_name=COLLECTION,
                     points=points
                 )
                 
-                print(f"   ✅ Stored batch {i//BATCH_SIZE + 1}/{(len(contexts) + BATCH_SIZE - 1)//BATCH_SIZE}")
+                print(f"   ✅ Stored batch {i//BATCH_SIZE + 1}/{(len(contexts) + BATCH_SIZE - 1)//BATCH_SIZE} ({len(points)} points)")
                 
                 # Trigger webhooks if enabled
-                if trigger_webhooks:
+                if trigger_webhooks and WEBHOOKS_AVAILABLE:
                     try:
-                        from claude_webhook_injector import WebhookInjector
                         async with WebhookInjector() as injector:
                             await injector.inject_batch(batch, event="new_message")
                     except Exception as webhook_err:

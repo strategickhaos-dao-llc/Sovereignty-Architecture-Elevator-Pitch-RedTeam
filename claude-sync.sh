@@ -157,11 +157,18 @@ cmd_test() {
     
     check_session_key
     
+    # Detect Docker network name
+    NETWORK_NAME=$(docker network ls --filter "name=reconnet" --format "{{.Name}}" | head -1)
+    if [ -z "$NETWORK_NAME" ]; then
+        print_warning "Docker network not found, using default"
+        NETWORK_NAME="bridge"
+    fi
+    
     # Test session key validity
     print_info "Testing session key..."
     
     test_result=$(docker run --rm \
-        --network sovereignty-architecture-elevator-pitch-redteam_reconnet \
+        --network "$NETWORK_NAME" \
         -e CLAUDE_SESSION_KEY="$CLAUDE_SESSION_KEY" \
         -e CLAUDE_ORG_ID="${CLAUDE_ORG_ID:-17fcb197-98f1-4c44-9ed8-bc89b419cbbf}" \
         python:3.11-slim \
