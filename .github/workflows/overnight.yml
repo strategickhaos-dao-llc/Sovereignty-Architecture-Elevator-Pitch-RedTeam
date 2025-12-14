@@ -1,0 +1,307 @@
+# ============================================================
+# OVERNIGHT AUTONOMOUS EVOLUTION WORKFLOW
+# Strategickhaos DAO LLC — Sovereignty Architecture
+# Runs: 4 AM UTC daily (10 PM CST) + manual dispatch
+# ============================================================
+name: Overnight Autonomous Evolution
+
+on:
+  schedule:
+    - cron: "0 4 * * *"  # 04:00 UTC = 10:00 PM CST
+  workflow_dispatch:
+    inputs:
+      run_drills:
+        description: "Run mastery drills"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      run_recon:
+        description: "Run security recon"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      gke_health:
+        description: "Run GKE cluster health check"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      deploy:
+        description: "Deploy to K8s (requires secrets)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: overnight-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SOVEREIGN_ENTITY: "Strategickhaos DAO LLC"
+  EIN: "39-2923503"
+
+jobs:
+  # ============================================================
+  # JOB 1: OVERNIGHT TRAINING + DRILLS
+  # ============================================================
+  overnight:
+    name: "🔥 Overnight Training"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      RUN_DRILLS: ${{ inputs.run_drills || 'true' }}
+      RUN_RECON: ${{ inputs.run_recon || 'false' }}
+      DEPLOY: ${{ inputs.deploy || 'false' }}
+    
+    steps:
+      - name: "📥 Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "🕐 Show Execution Context"
+        run: |
+          echo "============================================"
+          echo "🔥 STRATEGICKHAOS OVERNIGHT EVOLUTION"
+          echo "============================================"
+          echo "Entity: $SOVEREIGN_ENTITY"
+          echo "EIN: $EIN"
+          echo "UTC Time: $(date -u '+%Y-%m-%d %H:%M:%S')"
+          echo "Ref: $GITHUB_REF"
+          echo "SHA: ${GITHUB_SHA:0:8}"
+          echo "Run Drills: $RUN_DRILLS"
+          echo "Run Recon: $RUN_RECON"
+          echo "Deploy: $DEPLOY"
+          echo "============================================"
+
+      - name: "🔧 Prepare Scripts"
+        run: |
+          for script in mastery-drills.sh launch-recon.sh quick-deploy.sh; do
+            if [ -f "./$script" ]; then
+              chmod +x "./$script"
+              echo "✅ Made executable: $script"
+            fi
+          done
+
+      - name: "🎯 Run Mastery Drills"
+        if: ${{ env.RUN_DRILLS == 'true' }}
+        run: |
+          if [ ! -f "./mastery-drills.sh" ]; then
+            echo "⚠️ mastery-drills.sh not found; creating stub results"
+            mkdir -p mastery_results
+            echo "No drills script found - $(date -u)" > mastery_results/stub.log
+            exit 0
+          fi
+          mkdir -p mastery_results
+          echo "🎯 Starting Bloom's Taxonomy CLI drills..."
+          ./mastery-drills.sh all 2>&1 | tee mastery_results/mastery_drills.log
+          echo "✅ Drills complete"
+
+      - name: "🔍 Run Security Recon"
+        if: ${{ env.RUN_RECON == 'true' }}
+        run: |
+          if [ ! -f "./launch-recon.sh" ]; then
+            echo "⚠️ launch-recon.sh not found; skipping"
+            exit 0
+          fi
+          mkdir -p recon_results
+          echo "🔍 Starting security reconnaissance..."
+          ./launch-recon.sh 2>&1 | tee recon_results/recon.log
+          echo "✅ Recon complete"
+
+      - name: "📊 Generate Nightly Status"
+        run: |
+          mkdir -p overnight_results
+          cat > overnight_results/overnight_status.json << EOF
+          {
+            "timestamp_utc": "$(date -u '+%Y-%m-%dT%H:%M:%SZ')",
+            "entity": "$SOVEREIGN_ENTITY",
+            "ein": "$EIN",
+            "ref": "$GITHUB_REF",
+            "sha": "$GITHUB_SHA",
+            "run_drills": "$RUN_DRILLS",
+            "run_recon": "$RUN_RECON",
+            "deploy": "$DEPLOY",
+            "status": "complete"
+          }
+          EOF
+          echo "📊 Overnight status logged"
+          cat overnight_results/overnight_status.json
+
+      - name: "🚀 Deploy (Optional)"
+        if: ${{ env.DEPLOY == 'true' }}
+        env:
+          KUBE_CONFIG_B64: ${{ secrets.KUBE_CONFIG_B64 }}
+        run: |
+          if [ -z "${KUBE_CONFIG_B64:-}" ]; then
+            echo "❌ Missing secret KUBE_CONFIG_B64; cannot deploy"
+            exit 1
+          fi
+          if [ ! -f "./quick-deploy.sh" ]; then
+            echo "❌ quick-deploy.sh not found; cannot deploy"
+            exit 1
+          fi
+          echo "$KUBE_CONFIG_B64" | base64 -d > kubeconfig
+          export KUBECONFIG="$PWD/kubeconfig"
+          echo "🚀 Deploying to Kubernetes..."
+          ./quick-deploy.sh 2>&1 | tee overnight_results/deploy.log
+          rm -f kubeconfig
+          echo "✅ Deployment complete"
+
+      - name: "📦 Upload Artifacts"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overnight-results-${{ github.run_number }}
+          path: |
+            mastery_results/
+            recon_results/
+            overnight_results/
+          if-no-files-found: warn
+          retention-days: 30
+
+  # ============================================================
+  # JOB 2: GKE CLUSTER HEALTH CHECK
+  # ============================================================
+  gke-health:
+    name: "☸️ GKE Cluster Health"
+    runs-on: ubuntu-latest
+    needs: overnight
+    if: ${{ inputs.gke_health == 'true' || github.event_name == 'schedule' }}
+    timeout-minutes: 15
+    
+    steps:
+      - name: "🔐 Authenticate to GCP"
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: "🛠️ Setup gcloud CLI"
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          install_components: "kubectl,gke-gcloud-auth-plugin"
+
+      - name: "☸️ Get GKE Credentials"
+        run: |
+          # Adjust cluster name/zone to match your setup
+          gcloud container clusters get-credentials jarvis-swarm-personal \
+            --zone us-central1-a \
+            --project strategickhaos-dao-llc || {
+            echo "⚠️ Could not connect to GKE cluster"
+            exit 0
+          }
+
+      - name: "🩺 Node Health Check"
+        run: |
+          echo "============================================"
+          echo "☸️ GKE CLUSTER HEALTH REPORT"
+          echo "============================================"
+          
+          echo ""
+          echo "📍 NODE STATUS:"
+          kubectl get nodes -o wide || echo "Could not get nodes"
+          
+          echo ""
+          echo "📊 NODE RESOURCES:"
+          kubectl top nodes 2>/dev/null || echo "Metrics server not available"
+          
+          echo ""
+          echo "⚠️ NODE CONDITIONS:"
+          kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{range .status.conditions[*]}  {.type}: {.status}{"\n"}{end}{"\n"}{end}' || true
+
+      - name: "🔍 Pod Health Check"
+        run: |
+          echo ""
+          echo "🔴 UNHEALTHY PODS:"
+          kubectl get pods --all-namespaces | grep -v Running | grep -v Completed | grep -v NAME || echo "✅ All pods healthy"
+          
+          echo ""
+          echo "🔄 CRASHLOOPBACKOFF PODS:"
+          kubectl get pods --all-namespaces -o json | \
+            jq -r '.items[] | select(.status.containerStatuses[]?.state.waiting?.reason == "CrashLoopBackOff") | "\(.metadata.namespace)/\(.metadata.name)"' || echo "✅ No CrashLoopBackOff"
+
+      - name: "🔧 Auto-Heal Crashed Pods"
+        run: |
+          echo ""
+          echo "🔧 AUTO-HEALING CRASHED PODS..."
+          
+          # Find CrashLoopBackOff pods and restart them
+          crashed=$(kubectl get pods --all-namespaces -o json | \
+            jq -r '.items[] | select(.status.containerStatuses[]?.state.waiting?.reason == "CrashLoopBackOff") | "\(.metadata.namespace) \(.metadata.name)"')
+          
+          if [ -z "$crashed" ]; then
+            echo "✅ No crashed pods to heal"
+          else
+            echo "$crashed" | while read ns pod; do
+              if [ -n "$ns" ] && [ -n "$pod" ]; then
+                echo "🔄 Restarting: $ns/$pod"
+                kubectl delete pod "$pod" -n "$ns" --grace-period=0 2>/dev/null || true
+              fi
+            done
+            echo "✅ Auto-heal complete"
+          fi
+
+      - name: "📈 Deployment Status"
+        run: |
+          echo ""
+          echo "📈 DEPLOYMENT STATUS:"
+          kubectl get deployments --all-namespaces -o wide 2>/dev/null | head -20 || echo "Could not get deployments"
+          
+          echo ""
+          echo "🔌 SERVICES:"
+          kubectl get services --all-namespaces 2>/dev/null | head -20 || echo "Could not get services"
+
+  # ============================================================
+  # JOB 3: DISCORD NOTIFICATION
+  # ============================================================
+  notify:
+    name: "📣 Discord Notify"
+    runs-on: ubuntu-latest
+    needs: [overnight, gke-health]
+    if: always()
+    
+    steps:
+      - name: "📣 Send Discord Notification"
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "${DISCORD_WEBHOOK:-}" ]; then
+            echo "⚠️ No Discord webhook configured; skipping notification"
+            exit 0
+          fi
+          
+          # Determine status
+          if [ "${{ needs.overnight.result }}" == "success" ] && [ "${{ needs.gke-health.result }}" != "failure" ]; then
+            STATUS="✅ SUCCESS"
+            COLOR=3066993
+          else
+            STATUS="❌ FAILED"
+            COLOR=15158332
+          fi
+          
+          # Send webhook
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"🔥 Overnight Evolution Complete\",
+                \"description\": \"**Status:** $STATUS\n**Ref:** $GITHUB_REF\n**SHA:** ${GITHUB_SHA:0:8}\",
+                \"color\": $COLOR,
+                \"footer\": {
+                  \"text\": \"Strategickhaos DAO LLC • $(date -u '+%Y-%m-%d %H:%M UTC')\"
+                }
+              }]
+            }" \
+            "$DISCORD_WEBHOOK" || echo "Discord notification failed"
