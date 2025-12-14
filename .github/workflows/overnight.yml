@@ -183,11 +183,17 @@ jobs:
     if: ${{ inputs.gke_health == 'true' || github.event_name == 'schedule' }}
     timeout-minutes: 15
     
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC
+    
     steps:
-      - name: "🔐 Authenticate to GCP"
+      - name: "🔐 Authenticate to GCP via Workload Identity"
+        id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: 'projects/451173080315/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions@jarvis-swarm-personal.iam.gserviceaccount.com'
 
       - name: "🛠️ Setup gcloud CLI"
         uses: google-github-actions/setup-gcloud@v2
