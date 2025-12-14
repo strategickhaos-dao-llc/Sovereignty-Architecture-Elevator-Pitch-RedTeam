@@ -197,9 +197,9 @@ jobs:
       - name: "☸️ Get GKE Credentials"
         run: |
           # Adjust cluster name/zone to match your setup
-          gcloud container clusters get-credentials jarvis-swarm-personal \
-            --zone us-central1-a \
-            --project strategickhaos-dao-llc || {
+          gcloud container clusters get-credentials jarvis-swarm-personal-001 \
+            --region us-central1 \
+            --project jarvis-swarm-personal || {
             echo "⚠️ Could not connect to GKE cluster"
             exit 0
           }
