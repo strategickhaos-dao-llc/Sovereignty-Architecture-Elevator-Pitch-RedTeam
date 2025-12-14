@@ -12,8 +12,36 @@ This system creates a **sovereignty control plane** that bridges:
 
 ## 🚀 Quick Start
 
+### Automated Bootstrap (Recommended)
+
+**For Windows:**
+```powershell
+# PowerShell launcher (automatically detects WSL/Git Bash)
+.\sovereign-mesh-bootstrap.ps1
+
+# Or directly in WSL
+wsl bash ./sovereign-mesh-bootstrap.sh
+```
+
+**For Linux/macOS:**
 ```bash
-# 1. Clone and bootstrap
+# One-command bootstrap with intelligent environment detection
+bash ./sovereign-mesh-bootstrap.sh
+```
+
+The bootstrap automatically:
+- ✓ Detects your environment (WSL, Git Bash, native Linux/macOS)
+- ✓ Checks for GitHub CLI and provides installation guidance
+- ✓ Deploys complete infrastructure stack
+- ✓ Configures autonomous executive override system
+- ✓ Initializes environment with sensible defaults
+
+📖 **[Full Bootstrap Guide](BOOTSTRAP_GUIDE.md)** - Comprehensive documentation and troubleshooting
+
+### Manual Deployment (Advanced)
+
+```bash
+# 1. Clone repository
 git clone https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture.git
 cd sovereignty-architecture
 
@@ -47,6 +75,32 @@ export PRS_CHANNEL="channel_id"
 - **Review Workflows**: Automated PR lifecycle notifications
 - **Commit Graph**: Real-time development activity feeds
 - **Launchpad**: Integrated with GitLens Pro features
+
+### 🤖 Omnipresent Autonomous Executive Override
+- **Intelligent Monitoring**: Continuous health checks and resource monitoring
+- **Autonomous Actions**: Automatic restart of failed services
+- **Resource Management**: Proactive disk cleanup and threshold management
+- **Decision Matrix**: Configurable rules for autonomous operations
+- **Audit Trail**: Complete logging of all autonomous actions
+- **Multi-Environment**: Works across WSL, Git Bash, native Linux/macOS
+
+```bash
+# Start autonomous monitor (configured during bootstrap)
+./.sovereign-mesh/autonomous-monitor.sh &
+
+# View autonomous actions
+tail -f .sovereign-mesh/monitor.log
+
+# Configure thresholds
+vim .sovereign-mesh/executive-override.yaml
+```
+
+**Override Capabilities:**
+- System restart and recovery
+- Service scaling based on load
+- Automatic failover procedures
+- Security patch application
+- Resource threshold enforcement
 
 ### ☕ Java Development Workspace (`jdk-workspace`)
 - **OpenJDK 21**: Latest LTS version with modern Java features
@@ -243,7 +297,29 @@ export PRS_CHANNEL="dev_channel_id"
 
 ## 🆘 Troubleshooting
 
+📖 **[Complete Bootstrap & Troubleshooting Guide](BOOTSTRAP_GUIDE.md)** - Comprehensive solutions for all common issues
+
 ### Common Issues
+
+**Bootstrap fails with "gh: not found":**
+```bash
+# Install GitHub CLI (see BOOTSTRAP_GUIDE.md for platform-specific instructions)
+# Windows: winget install GitHub.cli
+# macOS: brew install gh
+# Linux: See https://cli.github.com/
+
+# Or continue without gh CLI (some features disabled)
+bash ./sovereign-mesh-bootstrap.sh
+```
+
+**Script fails in PowerShell:**
+```powershell
+# Use the PowerShell wrapper instead
+.\sovereign-mesh-bootstrap.ps1
+
+# Or run in WSL
+wsl bash ./sovereign-mesh-bootstrap.sh
+```
 
 **Bot not responding in Discord:**
 ```bash
@@ -272,6 +348,19 @@ kubectl logs -f deployment/event-gateway -n ops
 curl -X POST https://events.strategickhaos.com/health
 ```
 
+**Docker services won't start:**
+```bash
+# Check for port conflicts
+docker compose ps
+netstat -an | grep LISTEN | grep -E "3000|8080|9090"
+
+# Check logs
+docker compose logs -f
+
+# Clean restart
+docker compose down && docker compose up -d
+```
+
 ## 👥 Community & Contributors
 
 This project thrives because of an extraordinary community of creators, builders, and visionaries who choose to contribute not out of obligation, but out of love for what we're building together.
@@ -279,6 +368,14 @@ This project thrives because of an extraordinary community of creators, builders
 - **[Community Manifesto](COMMUNITY.md)** - Understanding the philosophy and spirit of The Legion
 - **[Contributors](CONTRIBUTORS.md)** - Recognizing everyone who makes this project possible
 - **Join the Dance**: Read the community docs, find what calls to you, and start building!
+
+## 📄 Documentation
+
+- **[Bootstrap Guide](BOOTSTRAP_GUIDE.md)** - Complete bootstrap system documentation
+- **[Boot Diagnostics](BOOT_RECON.md)** - System reconnaissance and health checks
+- **[Deployment Guide](DEPLOYMENT.md)** - Advanced deployment configurations
+- **[Community Manifesto](COMMUNITY.md)** - Philosophy and contribution guidelines
+- **[Contributors](CONTRIBUTORS.md)** - Recognition of all contributors
 
 ## 📄 License & Support
 
