@@ -127,3 +127,41 @@ services:
       retries: 3
       start_period: 30s
     restart: unless-stopped
+
+  # Claude Context Sync Daemon
+  claude-sync:
+    image: python:3.11-slim
+    container_name: recon-claude-sync
+    hostname: claude-sync
+    working_dir: /app
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - EMBED_URL=http://embedder:8081/embed
+      - CLAUDE_COLLECTION=claude-context
+      - CLAUDE_API_BASE=https://claude.ai
+      - CLAUDE_ORG_ID=${CLAUDE_ORG_ID:-17fcb197-98f1-4c44-9ed8-bc89b419cbbf}
+      - CLAUDE_SESSION_KEY=${CLAUDE_SESSION_KEY:-}
+      - POLL_INTERVAL=${CLAUDE_POLL_INTERVAL:-300}
+      - MAX_HISTORY_DAYS=${CLAUDE_MAX_HISTORY_DAYS:-7}
+      - BATCH_SIZE=32
+    volumes:
+      - ./recon:/app
+      - ./recon/claude_sync_config.yaml:/app/config.yaml:ro
+    command: >
+      bash -c "
+      pip install --no-cache-dir httpx==0.27.0 qdrant-client==1.11.0 &&
+      echo 'Waiting for dependencies...' &&
+      sleep 30 &&
+      echo 'Starting Claude Context Sync Daemon...' &&
+      python claude_context_sync.py
+      "
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      embedder:
+        condition: service_healthy
+    networks:
+      - reconnet
+    restart: unless-stopped
+    profiles:
+      - claude-sync  # Optional service - start with --profile claude-sync
