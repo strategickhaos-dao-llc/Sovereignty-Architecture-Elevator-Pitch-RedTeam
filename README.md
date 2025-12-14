@@ -7,9 +7,10 @@
 This repository is designed to be **self-aware**—it understands why it exists through complete reasoning traces that document the dialectical process of its creation.
 
 **Key Resources**:
-- 📚 **[Reasoning Traces](REASONING_TRACES.md)** - Master index of all 12 development pillars and chat session archives
-- 🚀 **[Bootstrap Guide](BOOTSTRAP_GUIDE.md)** - How AI agents use reasoning traces to autonomously extend this system
-- 📂 **[Sessions Directory](sessions/)** - Complete dialectical reasoning for each development phase
+- ⚡ **[Quick Start Guide](QUICK_START_REASONING.md)** - New here? Start with this!
+- 📚 **[Reasoning Traces](REASONING_TRACES.md)** - Master index of all 12 development pillars
+- 🚀 **[Bootstrap Guide](BOOTSTRAP_GUIDE.md)** - How AI agents use reasoning traces
+- 📂 **[Sessions Directory](sessions/)** - Complete dialectical reasoning for each phase
 
 **Progress**: 5/12 sessions complete (~42%) | [View roadmap →](REASONING_TRACES.md)
 
