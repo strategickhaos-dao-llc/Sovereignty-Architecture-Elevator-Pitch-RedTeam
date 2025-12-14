@@ -2,56 +2,59 @@
 
 ## 🎯 Absolute Path Reference
 
-**Project Root Path:**
-```
-/home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam
+**Get Your Project Root Path:**
+
+Use the included helper script to automatically detect your project root:
+```bash
+./vim-paths.sh
 ```
 
-*Alternative paths (depending on your setup):*
-- `/home/dom/git/strategickhaos-dao-llc/Sovereignty-Architecture-Elevator-Pitch-RedTeam`
-- `~/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam`
+**Example paths (adjust for your system):**
+- Linux: `/home/$USER/git/Sovereignty-Architecture-Elevator-Pitch-RedTeam`
+- macOS: `/Users/$USER/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam`
+- Generic: `$SOVEREIGNTY_ROOT` (after sourcing vim-paths.sh)
 
 ## 🚀 Quick Vim Commands
 
 ### Open Project Root
 ```vim
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam
+:e $SOVEREIGNTY_ROOT
 ```
 
 ### Open Key Files
 ```vim
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/README.md
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/discovery.yml
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/docker-compose.yml
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/ai_constitution.yaml
+:e $SOVEREIGNTY_ROOT/README.md
+:e $SOVEREIGNTY_ROOT/discovery.yml
+:e $SOVEREIGNTY_ROOT/docker-compose.yml
+:e $SOVEREIGNTY_ROOT/ai_constitution.yaml
 ```
 
 ### Open Important Directories
 ```vim
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/bootstrap/
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/src/
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/scripts/
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/governance/
-:e /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/contradictions/
+:e $SOVEREIGNTY_ROOT/bootstrap/
+:e $SOVEREIGNTY_ROOT/src/
+:e $SOVEREIGNTY_ROOT/scripts/
+:e $SOVEREIGNTY_ROOT/governance/
+:e $SOVEREIGNTY_ROOT/contradictions/
 ```
 
 ## 🔧 Terminal Navigation
 
 ### Change Directory
 ```bash
-cd /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam
+cd $SOVEREIGNTY_ROOT
 ```
 
 ### Open Vim in Project
 ```bash
-vim /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam
+vim $SOVEREIGNTY_ROOT
 ```
 
 ### Quick File Access
 ```bash
-vim /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/README.md
-vim /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/discovery.yml
-vim /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/docker-compose.yml
+vim $SOVEREIGNTY_ROOT/README.md
+vim $SOVEREIGNTY_ROOT/discovery.yml
+vim $SOVEREIGNTY_ROOT/docker-compose.yml
 ```
 
 ## 💡 Helper Script
@@ -108,7 +111,7 @@ Ctrl+w + arrow          " Navigate between splits
 code .
 
 # Open specific file
-code /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/README.md
+code $SOVEREIGNTY_ROOT/README.md
 ```
 
 ## 📋 Common File Patterns
@@ -148,23 +151,25 @@ code /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam/RE
 
 ### Quick Project Jump (Add to ~/.bashrc or ~/.zshrc)
 ```bash
-# Add alias for quick navigation
-alias sov='cd /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam'
-alias vsov='vim /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam'
-alias csov='code /home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam'
+# First, source the vim-paths.sh script to set $SOVEREIGNTY_ROOT
+# Then add these aliases for quick navigation:
 
-# Environment variable
-export SOVEREIGNTY_ROOT="/home/dom/Strategickhaos/Sovereignty-Architecture-Elevator-Pitch-RedTeam"
+alias sov='cd $SOVEREIGNTY_ROOT'
+alias vsov='vim $SOVEREIGNTY_ROOT'
+alias csov='code $SOVEREIGNTY_ROOT'
+
+# Or set it manually in your shell config:
+# export SOVEREIGNTY_ROOT="/path/to/your/Sovereignty-Architecture-Elevator-Pitch-RedTeam"
 ```
 
 ### Quick Access Commands
 ```bash
-# Navigate quickly
+# Navigate quickly (after setting up aliases)
 sov                     # Jump to project root
 vsov                    # Open in Vim
 csov                    # Open in VS Code
 
-# Use environment variable
+# Use environment variable directly
 cd $SOVEREIGNTY_ROOT
 vim $SOVEREIGNTY_ROOT/README.md
 ```
