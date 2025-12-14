@@ -1,0 +1,234 @@
+# Claude Context Sync Configuration
+# Protocol-level reconnaissance for Claude infrastructure
+
+# Claude API Configuration
+claude:
+  api_base: "https://claude.ai"
+  
+  # Session key format: sk-ant-sid01-{base64_payload}-AoFuUAAA
+  # Extract from browser cookies after logging into claude.ai
+  session_key: ""  # Set via CLAUDE_SESSION_KEY env var
+  
+  # Organization ID from console logs
+  org_id: "17fcb197-98f1-4c44-9ed8-bc89b419cbbf"
+  
+  # Optional: User and device IDs for API correlation
+  user_id: "05b0daa4-fb14-4ef4-b7d2-da9fe730e158"
+  anonymous_id: "12590ab2-7347-4c87-bde6-28640cc85620"
+  device_id: "16c85e5d-19e0-48b9-aa33-b04255d647d3"
+
+# API Surface Mapping
+api_endpoints:
+  # Feature flags and configuration
+  spotlight: "/api/organizations/{org}/spotlight"
+  
+  # Published artifacts (may be 403 disabled)
+  artifacts: "/api/organizations/{org}/published_artifacts"
+  
+  # RSC routes (React Server Components)
+  routes:
+    - "/new"
+    - "/recents"
+    - "/projects"
+    - "/artifacts"
+    - "/code"
+  
+  # Chat session endpoint
+  chat: "/chat/{uuid}"
+
+# Infrastructure Stack
+infrastructure:
+  frontend: "Next.js 14+ (React Server Components)"
+  
+  cdn:
+    provider: "Cloudflare"
+    edge_ip: "160.79.104.10"
+    location: "ATL"
+  
+  proxy: "Google (via: 1.1 google)"
+  
+  analytics:
+    - "Segment (isolated iframe)"
+    - "Honeycomb"
+    - "Sentry"
+  
+  auth:
+    type: "Session cookie"
+    format: "sk-ant-sid01-*"
+  
+  security:
+    - "CSP"
+    - "CORS"
+    - "strict-dynamic nonces"
+
+# Sync Daemon Configuration
+sync:
+  # Poll interval in seconds (5 minutes)
+  poll_interval: 300
+  
+  # Maximum history to sync (days)
+  max_history_days: 7
+  
+  # Batch size for embedding and storage
+  batch_size: 32
+  
+  # Rate limiting (requests per minute)
+  rate_limit: 10
+  
+  # Retry configuration
+  retry:
+    max_attempts: 3
+    backoff_factor: 2
+    max_wait: 300
+
+# Local Vector Database
+vector_db:
+  type: "qdrant"
+  url: "http://localhost:6333"
+  collection: "claude-context"
+  
+  # Vector configuration
+  embedding:
+    dimension: 384
+    distance: "cosine"
+    
+  # Embedding service
+  embedder:
+    url: "http://localhost:8081/embed"
+    model: "bge-small-en-v1.5"
+    timeout: 30
+
+# Context Extraction Rules
+extraction:
+  # Minimum message length to extract
+  min_length: 10
+  
+  # Maximum context per chat
+  max_contexts_per_chat: 100
+  
+  # Content filters
+  filters:
+    # Skip system messages
+    skip_roles:
+      - "system"
+    
+    # Skip empty or short messages
+    min_content_length: 10
+  
+  # Metadata to preserve
+  metadata:
+    - "role"
+    - "timestamp"
+    - "chat_uuid"
+    - "message_index"
+    - "org_id"
+    - "source"
+
+# Webhook Injection (Future Feature)
+webhooks:
+  enabled: false
+  
+  # Webhook targets for automated context sync
+  targets:
+    - name: "discord-feed"
+      url: "http://localhost:8080/webhook/claude-sync"
+      enabled: false
+    
+    - name: "refinory-ai"
+      url: "http://localhost:8000/api/context/ingest"
+      enabled: false
+  
+  # Trigger conditions
+  triggers:
+    - event: "new_message"
+      min_length: 100
+    - event: "new_chat"
+    - event: "high_quality_response"
+      confidence_threshold: 0.8
+
+# API Mirroring (Future Feature)
+api_mirror:
+  enabled: false
+  
+  # Mirror Claude API endpoints to local mesh
+  endpoints:
+    - path: "/api/organizations/{org}/spotlight"
+      local: "http://localhost:7001/mirror/spotlight"
+    
+    - path: "/chat/{uuid}"
+      local: "http://localhost:7001/mirror/chat"
+  
+  # Caching strategy
+  cache:
+    enabled: true
+    ttl: 3600  # 1 hour
+    max_size: 1000  # entries
+
+# Security & Privacy
+security:
+  # Session key handling
+  session_key:
+    # Never log full session keys
+    log_truncate: true
+    truncate_length: 20
+    
+    # Rotate keys periodically
+    rotation_days: 30
+    rotation_warning_days: 7
+  
+  # Data retention
+  retention:
+    # Auto-delete old contexts
+    enabled: true
+    max_age_days: 30
+    
+    # Cleanup schedule (cron format)
+    cleanup_schedule: "0 2 * * *"  # 2 AM daily
+  
+  # Privacy filters
+  privacy:
+    # Redact sensitive patterns
+    redact_patterns:
+      - pattern: "sk-ant-[a-zA-Z0-9-]+"
+        replacement: "[REDACTED_KEY]"
+      - pattern: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+        replacement: "[REDACTED_EMAIL]"
+
+# Monitoring & Metrics
+monitoring:
+  # Prometheus metrics
+  prometheus:
+    enabled: true
+    port: 9091
+    path: "/metrics"
+  
+  # Metrics to track
+  metrics:
+    - "sync_cycles_total"
+    - "contexts_extracted_total"
+    - "contexts_stored_total"
+    - "api_requests_total"
+    - "api_errors_total"
+    - "embedding_duration_seconds"
+    - "storage_duration_seconds"
+  
+  # Logging
+  logging:
+    level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+    format: "json"
+    output: "stdout"
+
+# Apache 2.0 License Notice
+license:
+  type: "Apache-2.0"
+  notice: |
+    This implementation leverages publicly observable API patterns
+    for research and sovereignty purposes under Apache 2.0 license.
+    
+    The session key is user-provided from their own Claude.ai account.
+    This tool enables users to maintain sovereign control over their
+    own conversation contexts within their local infrastructure.
+    
+    No reverse engineering or unauthorized access is performed.
+    All data extraction uses standard HTTP APIs with user-provided
+    authentication credentials.
