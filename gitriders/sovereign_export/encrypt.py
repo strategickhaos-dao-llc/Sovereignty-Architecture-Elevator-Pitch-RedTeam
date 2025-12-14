@@ -9,7 +9,7 @@ End-to-end encryption with XChaCha20-Poly1305 and optional key escrow.
 
 import json
 import secrets
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, Optional, Tuple, List
 from pathlib import Path
 
 from nacl.secret import SecretBox
@@ -143,10 +143,14 @@ class EncryptionManager:
     def create_escrow_package(
         self,
         key: bytes,
-        escrow_public_keys: list[str]
+        escrow_public_keys: List[str]
     ) -> Dict[str, Any]:
         """
         Create key escrow package for recovery.
+        
+        NOTE: This is a placeholder implementation for demonstration.
+        Production use requires proper Shamir's Secret Sharing or
+        asymmetric encryption with trusted escrow agents.
         
         Args:
             key: Encryption key to escrow
@@ -154,26 +158,42 @@ class EncryptionManager:
         
         Returns:
             Escrow package with encrypted key shares
+        
+        Warnings:
+            This placeholder stores keys insecurely and should not be
+            used in production without implementing proper key sharing.
         """
-        # For production, implement Shamir's Secret Sharing or similar
-        # This is a simplified version
+        # WARNING: Placeholder implementation only
+        # Production requires: Shamir's Secret Sharing, threshold cryptography,
+        # or asymmetric encryption to trusted escrow agents
+        
+        import warnings
+        warnings.warn(
+            "Key escrow is a placeholder implementation. "
+            "Do not use in production without proper key sharing implementation.",
+            UserWarning,
+            stacklevel=2
+        )
+        
         escrow_shares = []
         
         for pub_key_hex in escrow_public_keys:
-            # In production, use proper asymmetric encryption
-            # This is a placeholder
+            # Placeholder: In production, implement proper asymmetric encryption
+            # or Shamir's Secret Sharing with threshold recovery
             share = {
                 "escrow_key_id": pub_key_hex[:16],
-                "encrypted_share": key.hex(),  # INSECURE: for demo only
-                "algorithm": "placeholder",
+                "encrypted_share": key.hex(),  # INSECURE: placeholder only
+                "algorithm": "placeholder-insecure",
+                "warning": "This is a demo implementation - not secure"
             }
             escrow_shares.append(share)
         
         return {
             "version": "1.0",
-            "escrow_type": "simple",
+            "escrow_type": "placeholder",
             "shares": escrow_shares,
             "recovery_threshold": len(escrow_shares),
+            "warning": "Placeholder implementation - implement proper key sharing for production"
         }
     
     def save_key(self, key: bytes, path: Path) -> None:
@@ -207,7 +227,7 @@ def encrypt_export_package(
     package: Dict[str, Any],
     passphrase: Optional[str] = None,
     key: Optional[bytes] = None,
-    escrow_keys: Optional[list[str]] = None
+    escrow_keys: Optional[List[str]] = None
 ) -> Tuple[Dict[str, Any], bytes, Optional[Dict[str, Any]]]:
     """
     Encrypt an export package.
