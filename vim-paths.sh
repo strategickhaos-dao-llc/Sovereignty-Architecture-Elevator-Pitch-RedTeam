@@ -57,4 +57,3 @@ echo ""
 # Export as environment variable for easy access
 export SOVEREIGNTY_ROOT="$PROJECT_ROOT"
 echo -e "${GREEN}Environment variable set:${NC} \$SOVEREIGNTY_ROOT"
-echo ""
