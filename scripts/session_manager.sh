@@ -117,7 +117,7 @@ function create_session() {
     fi
     
     # Generate next session number
-    local last_num=$(ls -d "$SESSIONS_DIR"/[0-9][0-9]-* 2>/dev/null | tail -1 | sed 's/.*\/\([0-9][0-9]\)-.*/\1/' || echo "12")
+    local last_num=$(ls -d "$SESSIONS_DIR"/[0-9][0-9]-* 2>/dev/null | tail -1 | sed 's/.*\/\([0-9][0-9]\)-.*/\1/' || echo "00")
     local next_num=$(printf "%02d" $((10#$last_num + 1)))
     
     local full_name="$next_num-$session_name"
@@ -135,9 +135,11 @@ function create_session() {
     # Copy template
     cp "$SESSIONS_DIR/SESSION_TEMPLATE.md" "$session_dir/README.md"
     
-    # Replace placeholders
+    # Replace placeholders using safer approach
+    # Escape special characters in session_name for sed
+    local escaped_name=$(echo "$session_name" | sed 's/[\/&]/\\&/g')
     sed -i "s/\[NUMBER\]/$next_num/g" "$session_dir/README.md"
-    sed -i "s/\[THEME NAME\]/$session_name/g" "$session_dir/README.md"
+    sed -i "s/\[THEME NAME\]/$escaped_name/g" "$session_dir/README.md"
     
     echo -e "${GREEN}✓ Created $full_name${NC}"
     echo -e "  - README.md (from template)"

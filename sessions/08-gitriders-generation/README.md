@@ -166,7 +166,8 @@ Entire repository structure as outlined above, with:
 - [ ] Security scanning shows no high/critical issues
 - [ ] Performance benchmarks meet targets
 - [ ] 10+ external contributors within first 3 months
-- [ ] 100+ GitHub stars within first 6 months
+- [ ] 20+ successful production deployments within first 6 months
+- [ ] Installation completion rate >80% (users who start setup finish it)
 
 ## Marketing & Launch
 

@@ -260,12 +260,12 @@ User Journey:
 ✅ Documentation and tutorials
 
 ### Will NOT Include (Future Versions)
-❌ VFASP physical implementation (remains speculative/simulated)
-❌ Full dialectical engine automation (manual-assisted in v1.0)
-❌ Advanced SwarmGate cognitive gates (basic automation only)
-❌ Mobile applications
-❌ Windows/Mac desktop applications
-❌ Full SOC 2 Type II certification (in progress)
+🔮 VFASP physical implementation (remains speculative/simulated)
+🔮 Full dialectical engine automation (manual-assisted in v1.0)
+🔮 Advanced SwarmGate cognitive gates (basic automation only)
+🔮 Mobile applications
+🔮 Windows/Mac desktop applications
+🔮 Full SOC 2 Type II certification (in progress)
 
 ## Roadmap Beyond v1.0
 

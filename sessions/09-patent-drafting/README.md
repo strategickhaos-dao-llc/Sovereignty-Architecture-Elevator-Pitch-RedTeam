@@ -193,6 +193,8 @@ This session will develop patent applications to protect the novel inventions cr
 | PCT filing | $5,000 per patent | Month 18 |
 | **Total (4 patents)** | **$90,000 - $140,000** | 18 months |
 
+**Funding Note**: Budget allocation to be approved through DAO governance (Session 11) and managed via SwarmGate treasury (Session 07). See those sessions for treasury management and funding strategy.
+
 ## Success Criteria
 
 - [ ] 4 provisional patents filed within 60 days

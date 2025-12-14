@@ -252,9 +252,9 @@ quantum processors.
 - [ ] Paper accepted to tier 1 or 2 venue
 - [ ] Mathematical foundations rigorously validated
 - [ ] Simulation results demonstrate clear advantages
-- [ ] At least 20 citations within first year
+- [ ] Presented at 2+ conferences or workshops
 - [ ] Attracts experimental validation collaborations
-- [ ] Establishes VFASP as credible concept
+- [ ] Establishes VFASP as credible concept in academic community
 
 ## Authorship
 
