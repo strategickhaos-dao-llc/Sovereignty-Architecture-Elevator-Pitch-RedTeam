@@ -234,6 +234,28 @@ export PRS_CHANNEL="dev_channel_id"
 # Command Palette → Tasks: Run Task → GitLens: Review Started
 ```
 
+### Vim Workflow Integration
+For developers who prefer Vim or want to switch between VS Code and Vim:
+
+```bash
+# Display absolute paths and quick reference
+./vim-paths.sh
+
+# Source to set $SOVEREIGNTY_ROOT environment variable
+source vim-paths.sh
+
+# Quick navigation
+vim $SOVEREIGNTY_ROOT/README.md
+cd $SOVEREIGNTY_ROOT
+```
+
+**See [VIM_QUICK_REFERENCE.md](VIM_QUICK_REFERENCE.md) for:**
+- Absolute path strings for all key files
+- Copy-paste ready Vim commands
+- Terminal aliases for quick navigation
+- VS Code ↔ Vim workflow tips
+- Flow state optimization tips
+
 ### Contributing
 1. **Fork** the repository
 2. **Fill** `discovery.yml` with your configuration
