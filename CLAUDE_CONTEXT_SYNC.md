@@ -369,7 +369,7 @@ security:
 
 ## 🎯 Advanced Features
 
-### Webhook Injection (Future)
+### Webhook Injection
 
 Automatically push contexts to other systems:
 
@@ -379,26 +379,58 @@ webhooks:
   targets:
     - name: "discord-feed"
       url: "http://localhost:8080/webhook/claude-sync"
+      enabled: true
+      headers:
+        Authorization: "Bearer YOUR_TOKEN"
     - name: "refinory-ai"
       url: "http://localhost:8000/api/context/ingest"
+      enabled: true
   triggers:
     - event: "new_message"
       min_length: 100
+    - event: "high_quality_response"
+      confidence_threshold: 0.8
 ```
 
-### API Mirroring (Future)
+**Usage:**
 
-Create local replicas of Claude API endpoints:
+```bash
+# Enable webhooks in claude_sync_config.yaml
+# Webhooks are triggered automatically during sync
 
-```yaml
-api_mirror:
-  enabled: true
-  endpoints:
-    - path: "/api/organizations/{org}/spotlight"
-      local: "http://localhost:7001/mirror/spotlight"
-    - path: "/chat/{uuid}"
-      local: "http://localhost:7001/mirror/chat"
+# Test webhook configuration
+python recon/claude_webhook_injector.py
 ```
+
+### API Mirroring
+
+Create local replicas of Claude API endpoints with caching:
+
+```bash
+# API Mirror is automatically started with --profile claude-sync
+# Access mirror at http://localhost:7001
+
+# Example: Query spotlight endpoint
+curl http://localhost:7001/api/organizations/{org}/spotlight
+
+# Example: Get recent chats
+curl http://localhost:7001/api/organizations/{org}/recents
+
+# Example: Fetch chat session
+curl http://localhost:7001/chat/{chat_uuid}
+
+# Check cache statistics
+curl http://localhost:7001/cache/stats
+
+# Invalidate specific cache entry
+curl -X DELETE http://localhost:7001/cache/spotlight:{org}
+```
+
+**Benefits:**
+- **Reduced API calls**: Cached responses with configurable TTL
+- **Faster response times**: Serve from local Redis cache
+- **API pattern research**: Study and understand Claude's API behavior
+- **Offline capability**: Access cached data when offline
 
 ## 📈 Monitoring
 

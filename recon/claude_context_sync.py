@@ -245,9 +245,10 @@ class ClaudeContextSync:
         
         return contexts
     
-    async def store_contexts(self, contexts: List[Dict[str, Any]]):
+    async def store_contexts(self, contexts: List[Dict[str, Any]], trigger_webhooks: bool = True):
         """
         Store extracted contexts in Qdrant vector database.
+        Optionally trigger webhooks for new contexts.
         """
         if not contexts:
             print("⚠️ No contexts to store")
@@ -292,6 +293,15 @@ class ClaudeContextSync:
                 )
                 
                 print(f"   ✅ Stored batch {i//BATCH_SIZE + 1}/{(len(contexts) + BATCH_SIZE - 1)//BATCH_SIZE}")
+                
+                # Trigger webhooks if enabled
+                if trigger_webhooks:
+                    try:
+                        from claude_webhook_injector import WebhookInjector
+                        async with WebhookInjector() as injector:
+                            await injector.inject_batch(batch, event="new_message")
+                    except Exception as webhook_err:
+                        print(f"⚠️ Webhook injection failed: {webhook_err}")
                 
             except Exception as e:
                 print(f"❌ Error storing batch: {e}")

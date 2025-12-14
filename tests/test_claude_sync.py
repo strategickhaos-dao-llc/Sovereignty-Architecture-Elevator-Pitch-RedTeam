@@ -128,9 +128,9 @@ class TestClaudeContextSync:
         
         chat_data = {
             "messages": [
-                {"role": "user", "content": "Hello"},
+                {"role": "user", "content": "Hello World"},  # Must be > 10 chars
                 {"role": "assistant", "content": ""},  # Empty - should skip
-                {"role": "user", "content": "World"}
+                {"role": "user", "content": "World is great"}  # Must be > 10 chars
             ]
         }
         
@@ -141,8 +141,8 @@ class TestClaudeContextSync:
         
         # Should only get 2 contexts (skipping the empty one)
         assert len(contexts) == 2
-        assert contexts[0]["content"] == "Hello"
-        assert contexts[1]["content"] == "World"
+        assert contexts[0]["content"] == "Hello World"
+        assert contexts[1]["content"] == "World is great"
     
     @pytest.mark.asyncio
     async def test_extract_context_deduplication(self):

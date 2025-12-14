@@ -149,7 +149,7 @@ services:
       - ./recon/claude_sync_config.yaml:/app/config.yaml:ro
     command: >
       bash -c "
-      pip install --no-cache-dir httpx==0.27.0 qdrant-client==1.11.0 &&
+      pip install --no-cache-dir httpx==0.27.0 qdrant-client==1.11.0 pyyaml==6.0.2 &&
       echo 'Waiting for dependencies...' &&
       sleep 30 &&
       echo 'Starting Claude Context Sync Daemon...' &&
@@ -165,3 +165,48 @@ services:
     restart: unless-stopped
     profiles:
       - claude-sync  # Optional service - start with --profile claude-sync
+
+  # Claude API Mirror
+  claude-mirror:
+    image: python:3.11-slim
+    container_name: recon-claude-mirror
+    hostname: claude-mirror
+    working_dir: /app
+    environment:
+      - CLAUDE_API_BASE=https://claude.ai
+      - CLAUDE_SESSION_KEY=${CLAUDE_SESSION_KEY:-}
+      - REDIS_URL=redis://redis:6379
+      - CACHE_TTL=${CACHE_TTL:-3600}
+    volumes:
+      - ./recon:/app
+    command: >
+      bash -c "
+      pip install --no-cache-dir httpx==0.27.0 fastapi==0.104.1 uvicorn==0.24.0 redis==5.0.1 pydantic==2.5.0 &&
+      echo 'Starting Claude API Mirror...' &&
+      uvicorn claude_api_mirror:app --host 0.0.0.0 --port 7001 --workers 1
+      "
+    ports:
+      - "7001:7001"
+    networks:
+      - reconnet
+    restart: unless-stopped
+    profiles:
+      - claude-sync
+
+  # Redis for API Mirror caching
+  redis:
+    image: redis:7-alpine
+    container_name: recon-redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - reconnet
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    profiles:
+      - claude-sync
