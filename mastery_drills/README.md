@@ -54,9 +54,10 @@ cat mastery_drills/preterm_births_1_5_8.yaml
 python3 -c "import yaml; print(yaml.safe_load(open('mastery_drills/preterm_births_1_5_8.yaml')))"
 ```
 
-### Parse Answers
+### Parse and Validate Exercise
 
 ```bash
+# Quick answer lookup
 python3 -c "
 import yaml
 data = yaml.safe_load(open('mastery_drills/preterm_births_1_5_8.yaml'))
@@ -64,6 +65,20 @@ print('Answers:')
 for q, answer in data['answers'].items():
     print(f'  {q}: {answer}')
 "
+
+# Full validation and display
+python3 mastery_drills/validate_exercise.py mastery_drills/preterm_births_1_5_8.yaml
+```
+
+**Expected Output:**
+```
+✅ Exercise structure is valid
+
+Section 1.5.8: Preterm Births Analysis
+Q1: 10.40%
+Q2: 0.22%
+Q3: Over 40
+🔥 Fire: 10.40% → 0.22% → Over 40 🔥
 ```
 
 ## Integration with Mastery System
