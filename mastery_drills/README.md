@@ -57,17 +57,20 @@ python3 -c "import yaml; print(yaml.safe_load(open('mastery_drills/preterm_birth
 ### Parse and Validate Exercise
 
 ```bash
-# Quick answer lookup
+# Recommended: Use the validation script for safe parsing and display
+python3 mastery_drills/validate_exercise.py mastery_drills/preterm_births_1_5_8.yaml
+
+# Alternative: Quick answer lookup (manual error handling required)
 python3 -c "
 import yaml
-data = yaml.safe_load(open('mastery_drills/preterm_births_1_5_8.yaml'))
-print('Answers:')
-for q, answer in data['answers'].items():
-    print(f'  {q}: {answer}')
+try:
+    data = yaml.safe_load(open('mastery_drills/preterm_births_1_5_8.yaml'))
+    print('Answers:')
+    for q, answer in data['answers'].items():
+        print(f'  {q}: {answer}')
+except Exception as e:
+    print(f'Error: {e}')
 "
-
-# Full validation and display
-python3 mastery_drills/validate_exercise.py mastery_drills/preterm_births_1_5_8.yaml
 ```
 
 **Expected Output:**

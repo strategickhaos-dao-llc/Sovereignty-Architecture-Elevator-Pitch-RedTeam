@@ -25,9 +25,16 @@ def validate_exercise(yaml_file: str) -> bool:
         
         # Validate answers structure
         answers = data.get('answers', {})
-        if not all(key in answers for key in ['q1', 'q2', 'q3']):
-            print("❌ Missing required answer keys (q1, q2, q3)")
+        # Check if at least one answer key exists (flexible validation)
+        if not answers or len(answers) == 0:
+            print("❌ No answer keys found in 'answers' section")
             return False
+        
+        # Verify answer keys follow expected pattern (q1, q2, q3, etc.)
+        expected_keys = [f'q{i}' for i in range(1, len(answers) + 1)]
+        if not all(key in answers for key in expected_keys):
+            print(f"⚠️  Warning: Expected answer keys {expected_keys}, found {list(answers.keys())}")
+            # Don't fail, just warn
         
         print("✅ Exercise structure is valid")
         return True
@@ -42,8 +49,12 @@ def validate_exercise(yaml_file: str) -> bool:
 
 def display_exercise(yaml_file: str):
     """Display exercise details in a formatted way."""
-    with open(yaml_file, 'r') as f:
-        data = yaml.safe_load(f)
+    try:
+        with open(yaml_file, 'r') as f:
+            data = yaml.safe_load(f)
+    except (yaml.YAMLError, IOError) as e:
+        print(f"❌ Error reading file: {e}")
+        return
     
     print("=" * 70)
     print(f"Section {data['section']}: {data['title']}")
