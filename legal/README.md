@@ -82,6 +82,16 @@ This directory contains comprehensive legal documentation establishing a multi-l
 
 **Use Case**: Executive summary for stakeholders; strategic planning guide; investor documentation.
 
+#### 6. [inventions/](./inventions/)
+**Purpose**: Invention queue documenting innovations and discoveries.
+
+**Contents**:
+- INV-080: Glyph-Decoded Statistical Semantics (GDSS)
+- Additional inventions and cognitive architecture innovations
+- Integration with patent claims and defensive publications
+
+**Use Case**: Track innovations for patent filing or defensive publication; maintain invention log.
+
 ---
 
 ## 🎯 Quick Reference Guide
