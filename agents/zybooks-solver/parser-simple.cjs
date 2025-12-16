@@ -123,13 +123,16 @@ function estimateDifficulty(text) {
   return 'easy';
 }
 
+// Constants
+const ANSWER_PLACEHOLDER = '[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]';
+
 /**
  * Generate answers for questions (VESSEL MODE - answers only)
  */
 function generateAnswers(questions) {
   return questions.map(q => ({
     question_id: q.id,
-    answer: '[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]',
+    answer: ANSWER_PLACEHOLDER,
     confidence: 'high'
   }));
 }
@@ -171,28 +174,31 @@ function logPatterns(sessionId, questions, answers) {
  */
 function toYAML(obj, indent = 0) {
   let yaml = '';
-  const spaces = '  '.repeat(indent);
+  const indentStr = '  '.repeat(indent);
+  const itemIndentStr = '  '.repeat(indent + 1);
   
   for (const [key, value] of Object.entries(obj)) {
     if (value === null || value === undefined) {
-      yaml += `${spaces}${key}: null\n`;
+      yaml += `${indentStr}${key}: null\n`;
     } else if (typeof value === 'object' && !Array.isArray(value)) {
-      yaml += `${spaces}${key}:\n`;
+      yaml += `${indentStr}${key}:\n`;
       yaml += toYAML(value, indent + 1);
     } else if (Array.isArray(value)) {
-      yaml += `${spaces}${key}:\n`;
+      yaml += `${indentStr}${key}:\n`;
       value.forEach(item => {
         if (typeof item === 'object') {
-          yaml += `${spaces}  -\n`;
-          yaml += toYAML(item, indent + 2).replace(/^  /, '    ');
+          yaml += `${itemIndentStr}-\n`;
+          // Add proper indentation for nested object properties
+          const nestedYaml = toYAML(item, indent + 2);
+          yaml += nestedYaml;
         } else {
-          yaml += `${spaces}  - ${item}\n`;
+          yaml += `${itemIndentStr}- ${item}\n`;
         }
       });
     } else if (typeof value === 'string') {
-      yaml += `${spaces}${key}: "${value}"\n`;
+      yaml += `${indentStr}${key}: "${value}"\n`;
     } else {
-      yaml += `${spaces}${key}: ${value}\n`;
+      yaml += `${indentStr}${key}: ${value}\n`;
     }
   }
   

@@ -173,13 +173,16 @@ function estimateDifficulty(text: string): string {
   return 'easy';
 }
 
+// Constants
+const ANSWER_PLACEHOLDER = '[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]';
+
 /**
  * Generate answers for questions (VESSEL MODE - answers only)
  */
 function generateAnswers(questions: Question[]): Answer[] {
   return questions.map(q => ({
     question_id: q.id,
-    answer: '[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]',
+    answer: ANSWER_PLACEHOLDER,
     confidence: 'high'
   }));
 }
