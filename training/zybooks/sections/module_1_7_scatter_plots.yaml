@@ -1,0 +1,210 @@
+# ═══════════════════════════════════════════════════════════════════
+# MODULE 1.7: SCATTER PLOTS - TRAINING DATA
+# ═══════════════════════════════════════════════════════════════════
+
+module_metadata:
+  section_id: "1.7"
+  title: "Scatter Plots"
+  questions_total: 12
+  accuracy: "100%"
+  completion_date: "2025-12-16"
+
+# ═══════════════════════════════════════════════════════════════════
+# QUESTION TYPE DISTRIBUTION
+# ═══════════════════════════════════════════════════════════════════
+
+question_types:
+  - type: "multiple_choice"
+    count: 8
+    percentage: 66.67
+  
+  - type: "true_false"
+    count: 4
+    percentage: 33.33
+
+# ═══════════════════════════════════════════════════════════════════
+# CORE PATTERNS IDENTIFIED
+# ═══════════════════════════════════════════════════════════════════
+
+patterns:
+  correlation:
+    name: "Correlation Analysis"
+    description: "Identifying relationship strength and direction between variables"
+    
+    types:
+      positive:
+        description: "As X increases, Y increases"
+        visual: "Points slope upward from left to right"
+        strength_indicators:
+          strong: "Points tightly clustered around line"
+          moderate: "Points loosely follow trend"
+          weak: "Points scattered with slight upward tendency"
+        
+        examples:
+          - x: "Study hours"
+            y: "Test score"
+            relationship: "More study → Higher score"
+          
+          - x: "Temperature"
+            y: "Ice cream sales"
+            relationship: "Hotter weather → More sales"
+      
+      negative:
+        description: "As X increases, Y decreases"
+        visual: "Points slope downward from left to right"
+        strength_indicators:
+          strong: "Points tightly clustered around line"
+          moderate: "Points loosely follow trend"
+          weak: "Points scattered with slight downward tendency"
+        
+        examples:
+          - x: "Vehicle age"
+            y: "Resale value"
+            relationship: "Older car → Lower value"
+          
+          - x: "Distance from city"
+            y: "Property price"
+            relationship: "Farther away → Cheaper price"
+      
+      none:
+        description: "No clear relationship between X and Y"
+        visual: "Points randomly scattered"
+        indicator: "No discernible pattern or trend"
+        
+        examples:
+          - x: "Shoe size"
+            y: "IQ score"
+            relationship: "No connection"
+  
+  outlier_detection:
+    name: "Outlier Detection"
+    description: "Identifying points far from the general pattern"
+    
+    methods:
+      visual_inspection:
+        description: "Points isolated from main cluster"
+        indicator: "Large gap between point and trend"
+      
+      distance_calculation:
+        description: "Calculate distance from trend line"
+        threshold: "Points beyond 2-3 standard deviations"
+    
+    examples:
+      - scenario: "Student performance"
+        pattern: "Most students score 70-90"
+        outlier: "One student scores 20"
+        interpretation: "Unusual performance, investigate cause"
+      
+      - scenario: "Housing prices"
+        pattern: "Most houses $200k-$400k"
+        outlier: "One house $2M"
+        interpretation: "Luxury property or data error"
+  
+  trend_identification:
+    name: "Trend Identification"
+    description: "Recognizing pattern shapes in data"
+    
+    types:
+      linear:
+        description: "Straight line pattern"
+        equation: "y = mx + b"
+        examples:
+          - "Speed vs. time (constant acceleration)"
+          - "Hours worked vs. pay (fixed rate)"
+      
+      non_linear:
+        description: "Curved or complex pattern"
+        examples:
+          - exponential: "Compound interest growth"
+          - quadratic: "Projectile motion"
+          - logarithmic: "Learning curve"
+
+# ═══════════════════════════════════════════════════════════════════
+# QUESTION PATTERN ANALYSIS
+# ═══════════════════════════════════════════════════════════════════
+
+question_patterns:
+  correlation_direction:
+    pattern: "What type of correlation is shown?"
+    options: ["positive", "negative", "none"]
+    method: "Observe point slope direction"
+    difficulty: "Easy"
+  
+  correlation_strength:
+    pattern: "Is the correlation [strong/moderate/weak]?"
+    method: "Assess point clustering around trend"
+    difficulty: "Medium"
+  
+  outlier_identification:
+    pattern: "Which point is an outlier?"
+    method: "Find point isolated from cluster"
+    difficulty: "Easy-Medium"
+  
+  interpretation:
+    pattern: "What does the scatter plot suggest about [relationship]?"
+    method: "Semantic interpretation of correlation"
+    difficulty: "Medium-Hard"
+
+# ═══════════════════════════════════════════════════════════════════
+# COMPILER INSIGHTS EXTRACTED
+# ═══════════════════════════════════════════════════════════════════
+
+compiler_insights:
+  feature_correlation:
+    observation: "Scatter plot shows relationship between semantic features"
+    application: "Type system design based on feature interactions"
+    
+    example:
+      x_axis: "Token complexity score"
+      y_axis: "Compilation time"
+      correlation: "Positive (complex tokens → longer compile)"
+      optimization: "Prioritize simplification of complex tokens"
+  
+  outlier_as_edge_case:
+    observation: "Outliers = edge cases in program behavior"
+    application: "Compiler must handle unusual inputs gracefully"
+    
+    example:
+      typical: "Most functions have 1-5 parameters"
+      outlier: "One function has 50 parameters"
+      handling: "Need special optimization or warning"
+  
+  performance_profiling:
+    observation: "Scatter plots reveal performance bottlenecks"
+    application: "Identify optimization opportunities"
+    
+    example:
+      x_axis: "Input size"
+      y_axis: "Execution time"
+      pattern: "Linear for most, quadratic for outliers"
+      action: "Optimize outlier cases"
+
+# ═══════════════════════════════════════════════════════════════════
+# VALIDATION RECORD
+# ═══════════════════════════════════════════════════════════════════
+
+validation:
+  questions_answered: 12
+  questions_correct: 12
+  accuracy_rate: "100%"
+  
+  error_analysis:
+    errors: 0
+    corrections: 0
+    retry_rate: "0%"
+
+# ═══════════════════════════════════════════════════════════════════
+# ARTIFACT STATUS
+# ═══════════════════════════════════════════════════════════════════
+
+artifact_status:
+  section: "COMPLETE ✅"
+  patterns: "EXTRACTED ✅"
+  compiler_insights: "DOCUMENTED ✅"
+  training_value: "HIGH"
+  
+  next_section: "1.8 Line Graphs"
+
+# ═══════════════════════════════════════════════════════════════════
+# END MODULE 1.7
+# ═══════════════════════════════════════════════════════════════════
