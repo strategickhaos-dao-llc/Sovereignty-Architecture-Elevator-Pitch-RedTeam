@@ -1,0 +1,38 @@
+Section 1.5 - Basic Statistics
+
+1) The mean is the average of a dataset.
+True
+False
+
+2) The median is the middle value when data is sorted.
+True
+False
+
+3) What is 25% of 80?
+[ ]
+
+4) What is 10% of 200?
+[ ]
+
+5) Standard deviation measures the spread of data around the mean.
+True
+False
+
+6) The mode is the same as the median.
+True
+False
+
+7) Correlation implies causation.
+True
+False
+
+8) A sample is a subset of a population.
+True
+False
+
+9) The p-value measures the probability of observing data given the null hypothesis.
+True
+False
+
+10) What is 50% of 150?
+[ ]
