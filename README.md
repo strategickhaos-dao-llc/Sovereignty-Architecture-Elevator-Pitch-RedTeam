@@ -30,6 +30,13 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🔥 FlameLang Knowledge Compiler (`INV-083`)
+- **Pattern Compiler**: Semantic pattern matching for knowledge compilation
+- **Multi-LLM Support**: Runs on Claude, GPT, Grok, and other reasoning engines
+- **Educational AI**: ZyBooks solver for MAT-243 Applied Statistics
+- **5-Layer Architecture**: Classification → Compression → Matching → Confidence → Output
+- **Documentation**: See [FLAMELANG_KNOWLEDGE_COMPILER.md](FLAMELANG_KNOWLEDGE_COMPILER.md)
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance
@@ -271,6 +278,79 @@ kubectl logs -f deployment/event-gateway -n ops
 # Verify HMAC signature
 curl -X POST https://events.strategickhaos.com/health
 ```
+
+## 🔥 FlameLang Knowledge Compiler
+
+### What is FlameLang?
+
+FlameLang is a **semantic pattern compiler** that transforms natural language questions into structured answers. It's literally a compiler, but for knowledge instead of code.
+
+**Traditional Compiler:**
+```
+Source Code → Lexer → Parser → IR → Codegen → Binary
+```
+
+**FlameLang Compiler:**
+```
+Question Text → Classify → Pattern Match → Confidence → Answer
+```
+
+### Quick Start
+
+```bash
+# Demo the pattern compiler
+python3 examples/flamelang_demo.py
+
+# Interactive mode
+python3 examples/flamelang_demo.py --interactive
+```
+
+### Use Cases
+
+- **Educational AI**: Solve zyBooks questions for MAT-243 Applied Statistics
+- **Pattern Recognition**: Classify and match question types automatically
+- **Multi-LLM Deployment**: Run on Claude, GPT, Grok simultaneously
+- **Knowledge Compilation**: Transform domain knowledge into executable patterns
+
+### Example Usage
+
+```python
+# Input question
+"A bar chart excels at showing precise values. True or False?"
+
+# FlameLang output
+answer: false
+confidence: 0.95
+reason: "bars show relative comparison, not precision"
+```
+
+### Documentation
+
+- **[FLAMELANG_KNOWLEDGE_COMPILER.md](FLAMELANG_KNOWLEDGE_COMPILER.md)** - Complete documentation
+- **[flamelang_zybooks_solver_v1.yaml](flamelang_zybooks_solver_v1.yaml)** - Pattern rules artifact
+- **Artifact ID**: INV-083
+- **Version**: 1.0
+
+### Architecture
+
+FlameLang uses a 5-layer architecture:
+
+1. **Layer 1**: Question type classification (boolean, comparison, trend, etc.)
+2. **Layer 2**: Semantic compression using Hebrew roots
+3. **Layer 3**: Pattern matching with domain-specific rules
+4. **Layer 4**: Confidence scoring (high/medium/low)
+5. **Layer 5**: Structured answer output with reasoning
+
+### Deploy to LLMs
+
+Copy `flamelang_zybooks_solver_v1.yaml` to any LLM chat:
+- Claude
+- GPT
+- Grok
+- Gemini
+- Local LLMs
+
+The pattern rules will enable the LLM to solve zyBooks questions automatically.
 
 ## 👥 Community & Contributors
 
