@@ -92,7 +92,7 @@ Analysis:
 **Step 4: LLVM IR Emission**
 ```llvm
 ; Hot path optimization based on frequency analysis
-; Identifiers are inlined due to 40% dominance
+; Identifiers are inlined due to 50% dominance
 define void @ignite() {
   call void @attack_inline()
   call void @mutate_inline()
@@ -139,15 +139,15 @@ token_counts = {
     'flame_glyph': 1,
     'sword_glyph': 1, 
     'dna_glyph': 1,
-    'identifiers': 2
+    'identifiers': 3
 }
-total = sum(token_counts.values())  # 5
+total = sum(token_counts.values())  # 6
 
 normalized = {
     token: count / total 
     for token, count in token_counts.items()
 }
-# Result: {'flame_glyph': 0.2, 'sword_glyph': 0.2, 'dna_glyph': 0.2, 'identifiers': 0.4}
+# Result: {'flame_glyph': 0.167, 'sword_glyph': 0.167, 'dna_glyph': 0.167, 'identifiers': 0.5}
 ```
 
 ## 🎓 The Meta-Pattern: Lossy Compression with Semantic Preservation
