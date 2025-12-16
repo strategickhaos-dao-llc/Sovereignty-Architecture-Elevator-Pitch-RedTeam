@@ -165,6 +165,8 @@ layer_5_output:
     TAG: "Same"
     
   emit: |
+    # Pseudocode representation of the compilation pipeline
+    # This is conceptual - actual implementation varies by LLM platform
     fn solve(question: &str) -> Answer {
         let qtype = layer_1_classify(question);
         let roots = layer_2_compress(question);

@@ -32,11 +32,16 @@ def classify_question(question, solver):
 
 def match_pattern(question, solver):
     """Layer 3: Match pattern rules"""
+    import re
     rules = solver['layer_3_rules']
     q_lower = question.lower()
     
+    # Helper to match words with boundaries
+    def word_in_text(word, text):
+        return bool(re.search(r'\b' + re.escape(word) + r'\b', text))
+    
     # Check bar chart rules
-    if 'bar chart' in q_lower or 'chart' in q_lower:
+    if word_in_text('bar chart', q_lower) or word_in_text('chart', q_lower):
         for rule in rules['bar_chart_rules']:
             pattern_keywords = [k.strip() for k in rule['pattern'].split('+')]
             # Check if all keywords are present in question
@@ -95,6 +100,9 @@ def calculate_confidence(rule, question):
     # Medium confidence for pattern matches
     return 0.80
 
+# Cache the solver to avoid reloading on every call
+_solver_cache = None
+
 def solve_question(question):
     """
     Solve a zyBooks question using the FlameLang pattern compiler
@@ -105,7 +113,10 @@ def solve_question(question):
     Returns:
         dict: {answer, confidence, reason}
     """
-    solver = load_solver()
+    global _solver_cache
+    if _solver_cache is None:
+        _solver_cache = load_solver()
+    solver = _solver_cache
     
     # Layer 1: Classify
     qtype = classify_question(question, solver)
@@ -129,10 +140,11 @@ def solve_question(question):
     confidence = calculate_confidence(rule, question)
     
     # Layer 5: Output
+    # Handle both 'answer' (most rules) and 'method' (prediction rules)
     result = {
-        'answer': rule['answer'],
+        'answer': rule.get('answer', rule.get('method', 'UNKNOWN')),
         'confidence': confidence,
-        'reason': rule['reason']
+        'reason': rule.get('reason', 'Pattern matched')
     }
     
     return result
