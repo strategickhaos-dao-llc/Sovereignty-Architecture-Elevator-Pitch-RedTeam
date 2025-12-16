@@ -35,3 +35,8 @@ target/
 
 # Workspace data
 workspace/
+
+# Training data (optional - can commit if needed for FlameLang)
+# Uncomment to exclude large training datasets:
+# training/zybooks/*.json
+# training/zybooks/*.txt

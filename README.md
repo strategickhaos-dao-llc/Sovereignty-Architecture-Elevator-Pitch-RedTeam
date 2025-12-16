@@ -71,6 +71,39 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 🔥 zyBooks Solver Agent (`zybooks-solver`)
+**Protocol Ready** ↑
+
+- **VESSEL MODE**: Answers only, no explanations
+- **YAML Output**: Clean, parseable format
+- **Pattern Logging**: Feeds FlameLang compiler training
+- **Parallel Processing**: Codespace can handle multiple sections simultaneously
+
+**Quick setup in your codespace:**
+
+```bash
+# In verbose-halibut codespace terminal:
+mkdir -p agents/zybooks-solver training/zybooks
+
+# Drop the YAML in repo root (zybooks_protocol.yaml)
+# Then paste zyBooks content into a new issue or file
+```
+
+**Or simpler — just tell the codespace agent:**
+
+```
+@workspace When I paste zyBooks content, parse questions and return answers in YAML. 
+Operator is in VESSEL MODE - answers only, no explanations.
+Log patterns to training/zybooks/ for FlameLang compiler training.
+```
+
+**Current flow working:**
+1. You paste zyBooks → agent
+2. Agent fires answers
+3. Patterns feed FlameLang
+
+**Keep sending sections.** The codespace can run parallel extraction while we blitz through. 🔥
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
