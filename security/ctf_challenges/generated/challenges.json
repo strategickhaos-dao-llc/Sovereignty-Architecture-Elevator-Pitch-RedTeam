@@ -1,0 +1,43 @@
+{
+  "challenges": [
+    {
+      "id": "CTF-001",
+      "name": "MISC: SQL Injection in User Search",
+      "category": "misc",
+      "difficulty": "medium",
+      "points": 250,
+      "description": "**Challenge Scenario:**\n\nYou've discovered a security issue in a web application. Your task is to \nexploit this vulnerability and capture the flag.\n\n**Vulnerability Type:** SQL Injection in User Search\n\n**Background:**\nThe application fails to properly sanitize user input in the search parameter, allowing SQL injection attacks that can compromise the entire database....\n\n**Your Goal:**\nFind and exploit the vulnerability to capture the flag.\n\n**Flag Format:** flag{...}",
+      "hints": [
+        "Look for user input fields",
+        "Try injecting special characters",
+        "Observe the application's response"
+      ],
+      "flag": "flag{vr_2025_001_solved}",
+      "flag_format": "flag{...}",
+      "files": [],
+      "url": null,
+      "connection_info": null,
+      "solution": "## Solution Writeup\n\n### Step 1: Reconnaissance\nThe application fails to properly sanitize user input in the search parameter, allowing SQL injection attacks that can compromise the entire database....\n\n### Step 2: Exploitation\n1. Navigate to /search\n2. Enter payload: ' OR '1'='1\n3. Observe database error revealing injection\n4. Extract data using UNION queries\n\n### Step 3: Capturing the Flag\nExecute the exploit and observe the response containing the flag.\n\n### Code:\n```\ncurl 'https://example.com/search?q=%27+OR+%271%27%3D%271'\n```\n\n### What We Learned\nThis challenge demonstrates a real-world vulnerability. In production:\n- Disable search functionality\n- Use parameterized queries\n\n### Prevention\nhttps://owasp.org/www-community/attacks/SQL_Injection",
+      "learning_objectives": [
+        "Understanding CWE-89: SQL Injection",
+        "Exploiting web vulnerabilities",
+        "Security testing methodology"
+      ],
+      "tags": [
+        "misc",
+        "medium",
+        "CWE-89"
+      ],
+      "source_vuln_report": "VR-2025-001",
+      "cwe_reference": "CWE-89",
+      "author": "Strategickhaos DAO",
+      "created_date": "2025-12-16 03:29:26.190923"
+    }
+  ],
+  "metadata": {
+    "generator": "Strategickhaos CTF Generator",
+    "version": "1.0.0",
+    "generated_at": "2025-12-16T03:29:26.191138",
+    "total_challenges": 1
+  }
+}
