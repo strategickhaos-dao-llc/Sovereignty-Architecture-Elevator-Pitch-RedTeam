@@ -1,0 +1,21 @@
+# Python Data Visualization Dependencies
+# For tutorials/data-visualization examples
+
+# Core data manipulation
+pandas>=1.3.0
+numpy>=1.21.0
+
+# Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+
+# Statistical analysis
+scipy>=1.7.0
+
+# Jupyter notebook support
+jupyter>=1.0.0
+notebook>=6.4.0
+ipykernel>=6.0.0
+
+# Optional: Additional visualization tools
+plotly>=5.0.0

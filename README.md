@@ -71,6 +71,28 @@ java HelloCloudOS.java
 ./start-cloudos-jdk.sh stop
 ```
 
+### 📚 Educational Materials
+
+The repository includes tutorial materials for learning data science and visualization:
+
+- **[Data Visualization Tutorial](tutorials/data-visualization/)** - Introduction to Python data visualization
+  - Python basics: data types, structures, and modules
+  - matplotlib fundamentals for creating plots
+  - Working examples with Jupyter notebooks
+  - Hands-on exercises with unemployment data and collision statistics
+
+```bash
+# Install visualization dependencies
+pip install -r requirements.visualization.txt
+
+# Run example scripts
+python tutorials/data-visualization/unemployment_plot.py
+python tutorials/data-visualization/car_crashes_plot.py
+
+# Or use Jupyter notebooks
+jupyter notebook tutorials/data-visualization/
+```
+
 ## 🏗️ Infrastructure
 
 ### Kubernetes Deployment
