@@ -1,0 +1,89 @@
+// BM-001: Five-Number Summary Implementation (FlameLang)
+// Cross-language benchmark comparison with C++ and Rust
+//
+// Computes: min, Q1, median, Q3, max, IQR, and outlier count
+// Input: Whitespace-separated numbers from stdin
+// Output: Statistical summary to stdout
+//
+// NOTE: This is a placeholder for when FlameLang compiler is ready (FL-005)
+// The syntax below is speculative and will be finalized during FL-001 through FL-004
+
+// TODO: Implement when FlameLang compiler components are ready
+// Dependencies: FL-001 (Lexer), FL-002 (Parser), FL-003 (AST/IR), 
+//               FL-004 (Type System), FL-005 (LLVM Backend)
+
+struct Statistics {
+    min: f64,
+    q1: f64,
+    median: f64,
+    q3: f64,
+    max: f64,
+    iqr: f64,
+    outlier_count: i32,
+    outlier_percentage: f64,
+}
+
+fn compute_five_number_summary(data: mut Vec<f64>) -> Statistics {
+    // Sort the data (required for quantile calculation)
+    data.sort();
+    
+    let n = data.len();
+    
+    // Calculate five-number summary
+    let min = data[0];
+    let max = data[n - 1];
+    
+    // TODO: Implement quantile calculation
+    let median = 0.0;  // Placeholder
+    let q1 = 0.0;      // Placeholder
+    let q3 = 0.0;      // Placeholder
+    let iqr = q3 - q1;
+    
+    // TODO: Implement outlier detection
+    let outlier_count = 0;
+    let outlier_percentage = 0.0;
+    
+    Statistics {
+        min: min,
+        q1: q1,
+        median: median,
+        q3: q3,
+        max: max,
+        iqr: iqr,
+        outlier_count: outlier_count,
+        outlier_percentage: outlier_percentage,
+    }
+}
+
+fn main() {
+    // Read input data
+    let mut data = Vec::new();
+    
+    // TODO: Implement stdin reading when FL-006 (Standard Library) is ready
+    // for line in stdin.lines() {
+    //     for token in line.split_whitespace() {
+    //         if let Some(value) = token.parse_f64() {
+    //             data.push(value);
+    //         }
+    //     }
+    // }
+    
+    println("Read {} data points", data.len());
+    
+    // Start timing (exclude I/O time)
+    let start_time = now();
+    
+    let stats = compute_five_number_summary(data);
+    
+    let duration = elapsed(start_time);
+    
+    // Output results
+    println("Min: {:.3}", stats.min);
+    println("Q1: {:.3}", stats.q1);
+    println("Median: {:.3}", stats.median);
+    println("Q3: {:.3}", stats.q3);
+    println("Max: {:.3}", stats.max);
+    println("IQR: {:.3}", stats.iqr);
+    println("Outliers: {} ({:.2}%)", stats.outlier_count, stats.outlier_percentage);
+    println("\nExecution Time: {} microseconds", duration);
+}
