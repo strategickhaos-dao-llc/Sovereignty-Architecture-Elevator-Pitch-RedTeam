@@ -35,3 +35,12 @@ target/
 
 # Workspace data
 workspace/
+
+# Benchmark build artifacts
+benches/stats_suite/cpp/five_number_summary
+benches/stats_suite/rust/target/
+benches/**/datasets/
+benches/**/oracles/
+
+# CodeQL analysis artifacts
+_codeql_detected_source_root
