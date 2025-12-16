@@ -1,0 +1,201 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                   🔥 FLAMELANG KNOWLEDGE COMPILER v1.0                    ║
+║                        Artifact ID: INV-083                               ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────┐
+│                         COMPILER ARCHITECTURE                             │
+└───────────────────────────────────────────────────────────────────────────┘
+
+TRADITIONAL COMPILER                    FLAMELANG KNOWLEDGE COMPILER
+═══════════════════════                ════════════════════════════════
+
+┌──────────────┐                       ┌──────────────────────────┐
+│ Source Code  │                       │ Natural Language Question│
+└──────┬───────┘                       └──────────┬───────────────┘
+       │                                          │
+       v                                          v
+┌──────────────┐                       ┌──────────────────────────┐
+│    LEXER     │ ─── Tokenize         │  LAYER 1: CLASSIFY       │
+│              │                       │  Question Type Detection │
+└──────┬───────┘                       └──────────┬───────────────┘
+       │                                          │
+       v                                          v
+┌──────────────┐                       ┌──────────────────────────┐
+│   PARSER     │ ─── Build AST         │  LAYER 2: COMPRESS       │
+│              │                       │  Semantic Root Extraction│
+└──────┬───────┘                       └──────────┬───────────────┘
+       │                                          │
+       v                                          v
+┌──────────────┐                       ┌──────────────────────────┐
+│  SEMANTIC    │ ─── Type Check        │  LAYER 3: MATCH          │
+│  ANALYSIS    │                       │  Pattern Rule Matching   │
+└──────┬───────┘                       └──────────┬───────────────┘
+       │                                          │
+       v                                          v
+┌──────────────┐                       ┌──────────────────────────┐
+│ INTERMEDIATE │ ─── Optimize          │  LAYER 4: SCORE          │
+│ REPR (IR)    │                       │  Confidence Calculation  │
+└──────┬───────┘                       └──────────┬───────────────┘
+       │                                          │
+       v                                          v
+┌──────────────┐                       ┌──────────────────────────┐
+│   CODEGEN    │ ─── Generate          │  LAYER 5: EMIT           │
+│              │                       │  Structured Answer Output│
+└──────┬───────┘                       └──────────┬───────────────┘
+       │                                          │
+       v                                          v
+┌──────────────┐                       ┌──────────────────────────┐
+│    BINARY    │                       │    ANSWER + REASON       │
+│  EXECUTABLE  │                       │    + CONFIDENCE SCORE    │
+└──────────────┘                       └──────────────────────────┘
+
+    Runs on                                  Runs on
+    ┌───┐                                   ┌─────┐
+    │CPU│                                   │ LLM │
+    └───┘                                   └─────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+                            DATA FLOW EXAMPLE
+                            ═════════════════
+
+INPUT QUESTION:
+┌─────────────────────────────────────────────────────────────────────────┐
+│ "A bar chart excels at showing precise values. True or False?"         │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    v
+LAYER 1: CLASSIFICATION
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Type: boolean                                                           │
+│ Triggers: ["True/False"]                                                │
+│ Output Type: BOOL                                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    v
+LAYER 2: SEMANTIC COMPRESSION
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Roots: ["עמוד", "מצטיין", "ערך"]                                       │
+│ Translation: [bar_chart, excels_at, value]                             │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    v
+LAYER 3: PATTERN MATCHING
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Rule: bar_chart_rules[0]                                                │
+│ Pattern: "bar chart + precise values"                                   │
+│ Match: ✓                                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    v
+LAYER 4: CONFIDENCE SCORING
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Confidence: 0.95                                                        │
+│ Level: High (direct pattern match)                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    v
+LAYER 5: OUTPUT ENCODING
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Codon: TAA (STOP codon = negative)                                      │
+│ Answer: false                                                           │
+│ Reason: "bars show relative comparison, not precision"                  │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    v
+FINAL OUTPUT:
+┌─────────────────────────────────────────────────────────────────────────┐
+│ answer: false                                                           │
+│ confidence: 0.95                                                        │
+│ reason: "bars show relative comparison, not precision"                  │
+└─────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+                         PATTERN RULE CATEGORIES
+                         ═══════════════════════
+
+┌────────────────────────┐
+│  BAR CHART RULES       │
+├────────────────────────┤
+│ • Precise values       │
+│ • Relative values      │
+│ • Gridlines            │
+│ • Data labels          │
+└────────────────────────┘
+
+┌────────────────────────┐
+│  ORIENTATION RULES     │
+├────────────────────────┤
+│ • Long labels          │
+│ • Many categories      │
+│ • Negative values      │
+│ • Height data          │
+└────────────────────────┘
+
+┌────────────────────────┐
+│  TREND RULES           │
+├────────────────────────┤
+│ • Gap narrowing        │
+│ • Gap widening         │
+│ • Total rising         │
+│ • Percentage rising    │
+└────────────────────────┘
+
+┌────────────────────────┐
+│  PREDICTION RULES      │
+├────────────────────────┤
+│ • Linear trend         │
+│ • Percentage growth    │
+└────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+                        DEPLOYMENT PLATFORMS
+                        ════════════════════
+
+    ┌────────┐     ┌────────┐     ┌────────┐     ┌────────┐
+    │ Claude │     │  GPT   │     │  Grok  │     │ Gemini │
+    └───┬────┘     └───┬────┘     └───┬────┘     └───┬────┘
+        │              │              │              │
+        └──────────────┴──────────────┴──────────────┘
+                       │
+                       v
+            ┌──────────────────────┐
+            │  FLAMELANG YAML      │
+            │  Pattern Rules       │
+            └──────────────────────┘
+                       │
+                       v
+            ┌──────────────────────┐
+            │  zyBooks Question    │
+            └──────────────────────┘
+                       │
+                       v
+            ┌──────────────────────┐
+            │  Answer + Confidence │
+            └──────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+                           KEY INNOVATION
+                           ══════════════
+
+Traditional:  Compiles CODE into MACHINE INSTRUCTIONS
+FlameLang:    Compiles KNOWLEDGE into DECISIONS
+
+Runtime:      CPU → Any LLM
+Portability:  Architecture-specific → LLM-agnostic
+Output:       Binary → Structured reasoning
+Input:        Formal syntax → Natural language
+
+═══════════════════════════════════════════════════════════════════════════
+
+Operator: Domenic Garza (Me10101)
+Organization: Strategickhaos DAO LLC
+Course: MAT-243 Applied Statistics for STEM
+Version: 1.0
+Date: 2025-12-16
+
+Built with 🔥 by Strategickhaos DAO LLC
