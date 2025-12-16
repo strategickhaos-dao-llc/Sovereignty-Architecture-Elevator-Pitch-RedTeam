@@ -1,0 +1,92 @@
+# ═══════════════════════════════════════════════════════════════════
+# FLAMELANG INVENTORY - CONSOLIDATED TRUTH
+# ═══════════════════════════════════════════════════════════════════
+
+meta:
+  version: 0.1
+  date: 2025-12-15
+  total_needed: ~85 files
+  current_files: 28
+  gap: ~57 files
+
+# ═══════════════════════════════════════════════════════════════════
+# WHAT YOU HAVE (YOUR REPO)
+# ═══════════════════════════════════════════════════════════════════
+
+existing:
+  docs:
+    - INV-080_GDSS.md           # ✅ invention
+    - INV-083_ZYBOOKS_SOLVER.yaml  # ✅ solver
+    - ARCHITECTURE.md           # ✅ vision
+  training:
+    - ZYBOOKS_INGEST_PROTOCOL.yaml  # ✅ agent instructions
+    - module_1_5_bar_charts.yaml    # ✅ training data
+  src:
+    - process/types.flame       # ✅ type stubs
+    - process/manager.flame     # ✅ manager stubs
+  benchmarks:
+    - zybooks/mat243/           # ✅ problem extraction started
+
+# ═══════════════════════════════════════════════════════════════════
+# CRITICAL PATH (BUILD ORDER)
+# ═══════════════════════════════════════════════════════════════════
+
+phase_0_tomorrow:
+  - id: FL-001
+    file: src/compiler/lexer/mod.rs
+    status: MISSING
+    time: "4-6 hours"
+    
+  - id: FL-010  
+    file: benches/stats_suite/
+    status: STUB
+    time: "2 hours"
+    notes: "MAT-243 problems → triplet benchmarks"
+
+phase_1_week_1:
+  - id: FL-002
+    file: src/compiler/parser/
+    depends: [FL-001]
+    
+  - id: FL-003
+    file: src/compiler/ast/
+    depends: [FL-002]
+
+phase_2_week_2:
+  - id: FL-006
+    file: src/compiler/backend/llvm.rs
+    crate: inkwell
+    output: "Hello World compiles"
+
+phase_3_week_3:
+  - id: OS-001
+    file: os/boot/
+    output: "Boots in QEMU"
+
+# ═══════════════════════════════════════════════════════════════════
+# THE RULE
+# ═══════════════════════════════════════════════════════════════════
+
+commit_format: "{ID}: {description}"
+examples:
+  - "FL-001: add tokenizer skeleton"
+  - "FL-010: add boxplot benchmark oracle"
+  - "OS-001: bootloader stub compiles"
+
+# ═══════════════════════════════════════════════════════════════════
+# BOTTOM LINE
+# ═══════════════════════════════════════════════════════════════════
+
+truth: |
+  You have 33% of the DESIGN.
+  You have 0% of the COMPILER.
+  
+  But the compiler is just 4 files to "Hello World":
+    1. lexer.rs
+    2. parser.rs  
+    3. ast.rs
+    4. llvm_backend.rs
+  
+  That's a weekend with focus.
+  
+# ═══════════════════════════════════════════════════════════════════
