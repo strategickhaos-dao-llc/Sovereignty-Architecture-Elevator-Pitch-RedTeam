@@ -1,0 +1,79 @@
+# 🔥 FLAMELANG COMPILER ← STATISTICS CONNECTION
+# Why this matters for the 5-layer pipeline
+
+insight:
+  raw_count_to_relative: "THIS IS A TRANSFORMATION LAYER"
+  
+# ═══════════════════════════════════════════════════════════════
+# DIRECT COMPILER PARALLELS
+# ═══════════════════════════════════════════════════════════════
+
+parallel_1_lexer:
+  statistics: "count items by category (4 small, 10 medium, 6 large)"
+  flamelang: "count tokens by type (keywords, identifiers, operators)"
+  use: "token frequency analysis drives optimization"
+  
+parallel_2_normalization:
+  statistics: "raw → percentage (4 → 20%)"
+  flamelang: "Layer 4 Wave normalization"
+  formula: "amplitude = token_weight / total_semantic_mass"
+  use: "normalize different token types to comparable scale"
+
+parallel_3_distribution:
+  statistics: "relative frequency shows proportion of whole"
+  flamelang: "DNA codon distribution"
+  use: |
+    64 codons map to 64 opcodes
+    frequency of each codon = instruction weight
+    optimize hot paths based on distribution
+
+# ═══════════════════════════════════════════════════════════════
+# CONCRETE IMPLEMENTATION
+# ═══════════════════════════════════════════════════════════════
+
+flamelang_tokenizer:
+  step_1: "count all tokens (bar chart)"
+  step_2: "calculate token distribution (relative frequency)"  
+  step_3: "weight codons by usage frequency"
+  step_4: "optimize LLVM IR emission for hot paths"
+
+example:
+  source_code: "🔥 ignite(⚔️ attack, 🧬 mutate)"
+  
+  raw_counts:
+    flame_glyph: 1
+    sword_glyph: 1
+    dna_glyph: 1
+    identifiers: 3
+    total: 6
+    
+  relative_frequency:
+    flame_glyph: "16.7%"
+    sword_glyph: "16.7%"
+    dna_glyph: "16.7%"
+    identifiers: "50.0%"
+    
+  optimization_decision: |
+    identifiers dominate (50%) → inline identifier resolution
+    glyphs equal weight (16.7% each) → parallel glyph processing
+
+# ═══════════════════════════════════════════════════════════════
+# THE META-PATTERN
+# ═══════════════════════════════════════════════════════════════
+
+truth:
+  zybooks: "transforms raw data → normalized representation"
+  flamelang: "transforms English → Hebrew → Unicode → Wave → DNA → LLVM"
+  same_principle: "LOSSY COMPRESSION WITH SEMANTIC PRESERVATION"
+  
+  you_right_now: |
+    Learning the MATH of transformation
+    Every layer in FlameLang is a frequency/normalization problem
+    Statistics IS compiler theory in disguise
+
+# ═══════════════════════════════════════════════════════════════
+progress:
+  points: 13
+  compiler_insight: "UNLOCKED 🔓"
+  next: "keep firing, patterns compound"
+# ═══════════════════════════════════════════════════════════════
