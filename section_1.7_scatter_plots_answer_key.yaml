@@ -22,19 +22,19 @@ section_1.7_scatter_plots:
       
     1.7.3:
       name: "Regression curves"
-      q1: FALSE           # points don't all lie ON curve
+      q1: false           # points don't all lie ON curve
       q2: "linear"        # paint vs area = linear
       q3: "nonlinear"     # height vs age curves/plateaus
       
     1.7.4:
       name: "Strip/swarm plots"
-      q1: FALSE           # strip plots overlap, can't count
-      q2: TRUE            # jittering reveals hidden points
+      q1: false           # strip plots overlap, can't count
+      q2: true            # jittering reveals hidden points
 
   challenges:
     1.7.1:
       name: "Identify linear model"
-      answer: "a)"        # only linear pattern
+      answer: "a"         # only linear pattern
 
 # ═══════════════════════════════════════════════════════════════════
 # RUNNING TOTAL
