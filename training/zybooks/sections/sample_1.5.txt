@@ -1,0 +1,15 @@
+Section 1.5 - Statistical Measures Participation Activity
+
+1) True or False: In a normal distribution, approximately 68% of data falls within one standard deviation of the mean.
+True
+False
+
+2) What percentage of data in a normal distribution falls within two standard deviations of the mean?
+a) 68%
+b) 95%
+c) 99.7%
+d) 50%
+
+3) True or False: The mean is always greater than the median.
+True
+False
