@@ -1,0 +1,46 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "type": "short_answer",
+      "topic": "general",
+      "difficulty": "easy",
+      "text": "Sample zyBooks Content for Testing"
+    },
+    {
+      "id": 2,
+      "type": "multiple_choice",
+      "topic": "general",
+      "difficulty": "easy",
+      "text": "Question 1: What is the time complexity of binary search?\nA. O(n)\nB. O(log n)\nC. O(n^2)\nD. O(1)"
+    },
+    {
+      "id": 3,
+      "type": "true_false",
+      "topic": "python",
+      "difficulty": "easy",
+      "text": "Question 2: True or False: Python is a compiled language."
+    },
+    {
+      "id": 4,
+      "type": "coding",
+      "topic": "general",
+      "difficulty": "easy",
+      "text": "Question 3: Write a function that returns the factorial of a number n."
+    },
+    {
+      "id": 5,
+      "type": "fill_in",
+      "topic": "general",
+      "difficulty": "easy",
+      "text": "Question 4: Fill in the blank: A _____ is a data structure that follows LIFO principle."
+    },
+    {
+      "id": 6,
+      "type": "multiple_choice",
+      "topic": "general",
+      "difficulty": "easy",
+      "text": "Question 5: Which of the following is NOT a valid IP address format?\nA. 192.168.1.1\nB. 10.0.0.256\nC. 172.16.0.1\nD. 127.0.0.1"
+    }
+  ]
+}

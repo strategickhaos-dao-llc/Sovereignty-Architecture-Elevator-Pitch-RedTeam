@@ -1,0 +1,19 @@
+Sample zyBooks Content for Testing
+
+Question 1: What is the time complexity of binary search?
+A. O(n)
+B. O(log n)
+C. O(n^2)
+D. O(1)
+
+Question 2: True or False: Python is a compiled language.
+
+Question 3: Write a function that returns the factorial of a number n.
+
+Question 4: Fill in the blank: A _____ is a data structure that follows LIFO principle.
+
+Question 5: Which of the following is NOT a valid IP address format?
+A. 192.168.1.1
+B. 10.0.0.256
+C. 172.16.0.1
+D. 127.0.0.1

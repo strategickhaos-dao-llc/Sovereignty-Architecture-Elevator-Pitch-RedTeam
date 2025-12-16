@@ -1,0 +1,48 @@
+# zyBooks Answer Template
+# VESSEL MODE output format
+
+metadata:
+  session_id: "{{ session_id }}"
+  timestamp: "{{ timestamp }}"
+  source: "zyBooks"
+  mode: "VESSEL_MODE"
+  operator: "Dom"
+
+# Questions parsed from content
+questions:
+  - id: 1
+    type: "multiple_choice | fill_in | coding | true_false"
+    topic: "{{ topic }}"
+    difficulty: "{{ difficulty }}"
+    text: "{{ question_text }}"
+    
+  - id: 2
+    type: "{{ type }}"
+    topic: "{{ topic }}"
+    difficulty: "{{ difficulty }}"
+    text: "{{ question_text }}"
+
+# Answers - Direct, no explanations
+answers:
+  - question_id: 1
+    answer: "{{ answer }}"
+    confidence: "{{ confidence_level }}"
+    
+  - question_id: 2
+    answer: "{{ answer }}"
+    confidence: "{{ confidence_level }}"
+
+# Pattern logging for FlameLang
+patterns_logged:
+  path: "training/zybooks/"
+  files:
+    - "{{ session_id }}_structures.json"
+    - "{{ session_id }}_patterns.json"
+  flamelang_ready: true
+
+# Status
+status:
+  processed: true
+  answers_count: "{{ count }}"
+  training_data_logged: true
+  next_action: "Send next section"

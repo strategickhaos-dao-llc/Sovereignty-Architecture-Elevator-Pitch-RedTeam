@@ -1,0 +1,37 @@
+{
+  "answers": [
+    {
+      "question_id": 1,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    },
+    {
+      "question_id": 2,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    },
+    {
+      "question_id": 3,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    },
+    {
+      "question_id": 4,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    },
+    {
+      "question_id": 5,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    },
+    {
+      "question_id": 6,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    }
+  ],
+  "metadata": {
+    "session_id": "zybooks_2025-12-16T03_44_03_270Z"
+  }
+}

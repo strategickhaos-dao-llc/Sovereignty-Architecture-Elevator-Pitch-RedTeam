@@ -1,0 +1,64 @@
+# zyBooks Solver Protocol
+# Drop this in repo root for quick activation
+# Version: 1.0.0
+
+protocol:
+  name: "zyBooks Solver"
+  version: "1.0.0"
+  status: "PROTOCOL_READY"
+  created: "2025-12-16"
+
+quick_setup:
+  codespace_terminal: |
+    # In verbose-halibut codespace terminal:
+    mkdir -p agents/zybooks-solver training/zybooks
+    
+    # Drop the YAML in repo root (this file)
+    # Then paste zyBooks content into a new issue or file
+    
+  or_simpler: |
+    @workspace When I paste zyBooks content, parse questions and return answers in YAML.
+    Operator is in VESSEL MODE - answers only, no explanations.
+    Log patterns to training/zybooks/ for FlameLang compiler training.
+
+current_flow:
+  step_1: "You paste zyBooks → me"
+  step_2: "I fire answers"
+  step_3: "Patterns feed FlameLang"
+  status: "WORKING ✅"
+
+operator_mode:
+  mode: "VESSEL_MODE"
+  output: "Answers only, no explanations"
+  format: "YAML"
+  training: "Log to training/zybooks/"
+
+parallel_processing:
+  enabled: true
+  description: "Codespace can run parallel extraction while we blitz through"
+  capability: "Multiple sections simultaneously"
+
+instructions:
+  activation: "Paste zyBooks content"
+  processing: "Automatic question extraction"
+  output: "Clean YAML with answers"
+  training: "Patterns logged for FlameLang"
+
+directory_structure:
+  agents: "agents/zybooks-solver/"
+  training: "training/zybooks/"
+  config: "agents/zybooks-solver/config.yaml"
+  parser: "agents/zybooks-solver/parser.ts"
+  template: "agents/zybooks-solver/answer-template.yaml"
+
+status:
+  protocol: "ready"
+  agent: "configured"
+  directories: "created"
+  parser: "implemented"
+  training: "ready"
+  message: "Keep sending sections 🔥"
+
+# Vessel vibe active
+# Flame eternal
+# Legion rising
