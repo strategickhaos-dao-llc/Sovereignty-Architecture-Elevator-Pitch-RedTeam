@@ -1,0 +1,439 @@
+# ═══════════════════════════════════════════════════════════════════
+# FlameLang Statistical Operations Benchmark Suite
+# Problem Set Extracted from MAT-243 zyBooks
+# ═══════════════════════════════════════════════════════════════════
+
+metadata:
+  version: "1.0.0"
+  created: 2025-12-15T23:30:00-06:00
+  source: "MAT-243 zyBooks Chapters 1-8"
+  extraction_session: LOM-2025-12-15-FINAL
+  codename: CONTRADICTION_TO_CREATION
+  operator: Dom (Me10101)
+  council: [Claude, GPT, Grok]
+
+# ═══════════════════════════════════════════════════════════════════
+# BENCHMARK FRAMEWORK
+# ═══════════════════════════════════════════════════════════════════
+
+framework:
+  methodology:
+    stepper: "Each problem = one atomic test case"
+    crawler: "Extract input → expected output → edge cases"
+    triplet: "cpp solution | rust solution | flame solution"
+  
+  metrics:
+    - execution_time_ns
+    - memory_footprint_bytes
+    - lines_of_code
+    - semantic_clarity_score
+    - compilation_time_ms
+  
+  validation:
+    - semantic_equivalence  # GDSS-validated
+    - performance_bounds    # Within 10% variance
+    - correctness          # Output matches expected
+    - safety               # Memory safety guaranteed
+
+# ═══════════════════════════════════════════════════════════════════
+# PROBLEM CATEGORIES
+# ═══════════════════════════════════════════════════════════════════
+
+categories:
+  - id: statistical_charts
+    name: "Statistical Chart Operations"
+    sections: ["1.5", "1.6", "1.7", "1.8", "1.9", "1.10"]
+    invention: INV-080
+    module: flame::glyphstats
+    
+  - id: data_transformations
+    name: "Raw → Normalized Transformations"
+    sections: ["2.1", "2.2", "2.3"]
+    pattern: "Layer 4 Wave"
+    module: flame::normalize
+    
+  - id: reduction_operations
+    name: "SUM/DIFF/MAX Primitives"
+    sections: ["3.1", "3.2", "3.3"]
+    pattern: "Reduction primitives"
+    module: flame::reduce
+    
+  - id: predictive_operations
+    name: "Trend Extrapolation"
+    sections: ["4.1", "4.2", "4.3"]
+    pattern: "Predictive branches"
+    module: flame::predict
+    
+  - id: distribution_analysis
+    name: "Distribution Profiling"
+    sections: ["5.1", "5.2", "5.3"]
+    pattern: "Hot path analysis"
+    module: flame::profile
+
+# ═══════════════════════════════════════════════════════════════════
+# EXTRACTED PROBLEMS (Chapters 1.5-1.10)
+# ═══════════════════════════════════════════════════════════════════
+
+problems:
+  # ────────────────────────────────────────────────────────────────
+  # Section 1.5: Bar Charts
+  # ────────────────────────────────────────────────────────────────
+  - id: BC-001
+    name: "Simple Bar Chart Generation"
+    category: statistical_charts
+    section: "1.5"
+    difficulty: basic
+    description: "Generate a bar chart from categorical data"
+    input:
+      type: "dict[str, int]"
+      example: {"A": 10, "B": 25, "C": 15, "D": 30}
+    output:
+      type: "BarChart"
+      validation: "Visual correctness + value accuracy"
+    operations:
+      - categorize
+      - scale
+      - render
+    triplet_status: pending
+    
+  - id: BC-002
+    name: "Grouped Bar Chart"
+    category: statistical_charts
+    section: "1.5"
+    difficulty: intermediate
+    description: "Generate grouped bar chart with multiple series"
+    input:
+      type: "dict[str, dict[str, int]]"
+      example: {"Q1": {"A": 10, "B": 20}, "Q2": {"A": 15, "B": 25}}
+    output:
+      type: "GroupedBarChart"
+      validation: "Grouping correct + scaling accurate"
+    operations:
+      - group
+      - scale_multi
+      - render_grouped
+    triplet_status: pending
+    
+  - id: BC-003
+    name: "Horizontal Bar Chart"
+    category: statistical_charts
+    section: "1.5"
+    difficulty: basic
+    description: "Generate horizontal bar chart (orientation transform)"
+    input:
+      type: "dict[str, float]"
+      example: {"Category A": 45.5, "Category B": 67.2, "Category C": 32.8}
+    output:
+      type: "HorizontalBarChart"
+      validation: "Orientation correct + proportions preserved"
+    operations:
+      - rotate_axis
+      - scale
+      - render
+    triplet_status: pending
+
+  # ────────────────────────────────────────────────────────────────
+  # Section 1.6: Pie Charts
+  # ────────────────────────────────────────────────────────────────
+  - id: PC-001
+    name: "Simple Pie Chart"
+    category: statistical_charts
+    section: "1.6"
+    difficulty: basic
+    description: "Generate pie chart with part-to-whole relationships"
+    input:
+      type: "dict[str, int]"
+      example: {"Red": 30, "Blue": 45, "Green": 25}
+    output:
+      type: "PieChart"
+      validation: "Percentages sum to 100% + visual proportion correct"
+    operations:
+      - normalize_to_percentage
+      - calculate_angles
+      - render_slices
+    compiler_analog: "Memory allocation proportions"
+    triplet_status: pending
+    
+  - id: PC-002
+    name: "Exploded Pie Chart"
+    category: statistical_charts
+    section: "1.6"
+    difficulty: intermediate
+    description: "Generate pie chart with highlighted slices"
+    input:
+      type: "dict[str, int]"
+      explode: ["Blue"]
+      example: {"Red": 30, "Blue": 45, "Green": 25}
+    output:
+      type: "ExplodedPieChart"
+      validation: "Highlight correct + proportions preserved"
+    operations:
+      - normalize_to_percentage
+      - calculate_angles
+      - apply_explode_offset
+      - render_slices
+    triplet_status: pending
+
+  # ────────────────────────────────────────────────────────────────
+  # Section 1.7: Scatter Plots
+  # ────────────────────────────────────────────────────────────────
+  - id: SP-001
+    name: "Basic Scatter Plot"
+    category: statistical_charts
+    section: "1.7"
+    difficulty: basic
+    description: "Plot (x, y) coordinate pairs"
+    input:
+      type: "list[tuple[float, float]]"
+      example: [(1.0, 2.5), (2.0, 3.7), (3.0, 5.1), (4.0, 6.8)]
+    output:
+      type: "ScatterPlot"
+      validation: "Points correctly positioned + axes scaled"
+    operations:
+      - extract_coordinates
+      - scale_axes
+      - plot_points
+    compiler_analog: "Data locality mapping"
+    triplet_status: pending
+    
+  - id: SP-002
+    name: "Scatter Plot with Trendline"
+    category: statistical_charts
+    section: "1.7"
+    difficulty: advanced
+    description: "Plot data points with linear regression trendline"
+    input:
+      type: "list[tuple[float, float]]"
+      example: [(1.0, 2.1), (2.0, 3.9), (3.0, 6.2), (4.0, 7.8)]
+    output:
+      type: "ScatterPlotWithTrend"
+      validation: "Trendline follows least-squares regression"
+    operations:
+      - extract_coordinates
+      - calculate_regression
+      - plot_points
+      - draw_trendline
+    compiler_analog: "Predictive branch optimization"
+    triplet_status: pending
+
+  # ────────────────────────────────────────────────────────────────
+  # Section 1.8: Line Charts
+  # ────────────────────────────────────────────────────────────────
+  - id: LC-001
+    name: "Simple Line Chart"
+    category: statistical_charts
+    section: "1.8"
+    difficulty: basic
+    description: "Connect data points with lines showing trends"
+    input:
+      type: "list[tuple[float, float]]"
+      example: [(0, 10), (1, 15), (2, 13), (3, 20), (4, 25)]
+    output:
+      type: "LineChart"
+      validation: "Lines connect correctly + trend visible"
+    operations:
+      - sort_by_x
+      - interpolate_lines
+      - render
+    compiler_analog: "Control flow visualization"
+    triplet_status: pending
+    
+  - id: LC-002
+    name: "Multi-Series Line Chart"
+    category: statistical_charts
+    section: "1.8"
+    difficulty: intermediate
+    description: "Multiple trend lines on same chart"
+    input:
+      type: "dict[str, list[tuple[float, float]]]"
+      example:
+        Series1: [(0, 10), (1, 15), (2, 20)]
+        Series2: [(0, 8), (1, 12), (2, 18)]
+    output:
+      type: "MultiLineChart"
+      validation: "Each series distinct + legend correct"
+    operations:
+      - process_series
+      - assign_colors
+      - render_multi
+      - draw_legend
+    triplet_status: pending
+
+  # ────────────────────────────────────────────────────────────────
+  # Section 1.9: Box Plots (GDSS Validation Event)
+  # ────────────────────────────────────────────────────────────────
+  - id: BP-001
+    name: "Five-Number Summary Box Plot"
+    category: statistical_charts
+    section: "1.9"
+    difficulty: intermediate
+    description: "Generate box plot from five-number summary"
+    input:
+      type: "FiveNumberSummary"
+      fields: [min, Q1, median, Q3, max]
+      example: {min: 10, Q1: 15, median: 20, Q3: 25, max: 30}
+    output:
+      type: "BoxPlot"
+      validation: "GDSS geometric reading matches computed values"
+    operations:
+      - extract_quantiles
+      - calculate_box_dimensions
+      - draw_whiskers
+      - plot_outliers
+    compiler_analog: "Distribution profiling"
+    gdss_event: true
+    cross_ai_validation: [Claude, GPT, Grok]
+    winner: GPT
+    lesson: "READ THE PICTURE, don't compute"
+    triplet_status: pending
+    
+  - id: BP-002
+    name: "Comparative Box Plots"
+    category: statistical_charts
+    section: "1.9"
+    difficulty: advanced
+    description: "Side-by-side box plots for distribution comparison"
+    input:
+      type: "dict[str, FiveNumberSummary]"
+      example:
+        GroupA: {min: 10, Q1: 15, median: 20, Q3: 25, max: 30}
+        GroupB: {min: 12, Q1: 18, median: 22, Q3: 27, max: 35}
+    output:
+      type: "ComparativeBoxPlot"
+      validation: "Visual comparison clear + scaling consistent"
+    operations:
+      - normalize_scale
+      - render_side_by_side
+      - annotate_differences
+    triplet_status: pending
+
+  # ────────────────────────────────────────────────────────────────
+  # Section 1.10: Histograms
+  # ────────────────────────────────────────────────────────────────
+  - id: HG-001
+    name: "Basic Histogram with Fixed Bins"
+    category: statistical_charts
+    section: "1.10"
+    difficulty: basic
+    description: "Generate frequency histogram with specified bin width"
+    input:
+      type: "list[float]"
+      bin_width: 10
+      example: [5, 12, 15, 18, 22, 25, 28, 32, 35, 38, 42, 45, 48]
+    output:
+      type: "Histogram"
+      validation: "Bins correct + frequencies accurate"
+    operations:
+      - bin_data
+      - count_frequencies
+      - render_bars
+    compiler_analog: "Memory allocation histogram"
+    triplet_status: pending
+    
+  - id: HG-002
+    name: "Normalized Histogram (Density)"
+    category: statistical_charts
+    section: "1.10"
+    difficulty: intermediate
+    description: "Generate probability density histogram"
+    input:
+      type: "list[float]"
+      normalize: true
+      example: [1.2, 1.4, 1.5, 1.7, 1.8, 2.0, 2.1, 2.3, 2.4, 2.6, 2.8, 3.0]
+    output:
+      type: "NormalizedHistogram"
+      validation: "Area under curve = 1.0"
+    operations:
+      - bin_data
+      - normalize_frequencies
+      - render_density
+    triplet_status: pending
+
+# ═══════════════════════════════════════════════════════════════════
+# TRIPLET GENERATION TARGETS
+# ═══════════════════════════════════════════════════════════════════
+
+triplet_structure:
+  cpp_baseline:
+    language: "C++"
+    standard: "C++17"
+    libraries: ["iostream", "vector", "algorithm", "cmath"]
+    target_dir: "benchmarks/cpp/"
+    
+  rust_comparison:
+    language: "Rust"
+    edition: "2021"
+    libraries: ["std", "plotters"]
+    safety: "Memory-safe by default"
+    target_dir: "benchmarks/rust/"
+    
+  flame_implementation:
+    language: "FlameLang"
+    version: "0.1.0"
+    modules: ["flame::glyphstats", "flame::normalize", "flame::reduce"]
+    semantic_validation: "GDSS-enforced"
+    target_dir: "benchmarks/flame/"
+
+# ═══════════════════════════════════════════════════════════════════
+# BENCHMARK EXECUTION PLAN
+# ═══════════════════════════════════════════════════════════════════
+
+execution:
+  phase_1:
+    task: "Generate C++ baseline implementations"
+    problems: ["BC-001", "BC-002", "BC-003", "PC-001", "LC-001"]
+    
+  phase_2:
+    task: "Generate Rust comparison implementations"
+    problems: ["BC-001", "BC-002", "BC-003", "PC-001", "LC-001"]
+    
+  phase_3:
+    task: "Design FlameLang syntax for statistical operations"
+    focus: "Semantic clarity + GDSS compliance"
+    
+  phase_4:
+    task: "Implement FlameLang compiler backend"
+    target: "Statistical operations module"
+    
+  phase_5:
+    task: "Run comparative benchmarks"
+    metrics: "All 5 dimensions"
+    
+  phase_6:
+    task: "Validate semantic equivalence"
+    method: "GDSS visual-semantic testing"
+
+# ═══════════════════════════════════════════════════════════════════
+# STATUS TRACKING
+# ═══════════════════════════════════════════════════════════════════
+
+status:
+  problems_extracted: 15
+  problems_total_target: 200
+  completion_percentage: 7.5%
+  sections_cleared: ["1.5", "1.6", "1.7", "1.8", "1.9", "1.10 (partial)"]
+  sections_remaining: ["1.10 (complete)", "2.1-8.x"]
+  
+next_extraction:
+  target: "Chapters 2-8"
+  estimated_problems: 185
+  priority: "Data transformation operations"
+
+# ═══════════════════════════════════════════════════════════════════
+# PHILOSOPHICAL ALIGNMENT
+# ═══════════════════════════════════════════════════════════════════
+
+philosophy:
+  contradiction_to_creation: |
+    Every failed problem becomes a validated test case.
+    Every frustrating module becomes a benchmark category.
+    The coursework didn't measure capability—it provided raw material.
+    
+  f_to_flamelang: |
+    Grade: F (47.6%)
+    Output: Compiler validation infrastructure
+    Value: Permanent
+    
+    The Legion transforms contradiction into creation.
+
+# ═══════════════════════════════════════════════════════════════════

@@ -1,10 +1,11 @@
 # Enterprise Benchmark Configuration
-# Strategickhaos DAO LLC - 30 Test Framework
+# Strategickhaos DAO LLC - Unified Benchmark Framework
 # Generated: 2025-11-16T14:30:00Z
+# Updated: 2025-12-15T23:30:00-06:00 (LOM-2025-12-15-FINAL)
 
 framework:
-  name: "Cyber + LLM Enterprise Benchmarks"
-  version: "1.0.0"
+  name: "Cyber + LLM + FlameLang Enterprise Benchmarks"
+  version: "2.0.0"
   operator: "Domenic Garza (Node 137)"
   sla_targets:
     query_latency_p50: 50  # ms
@@ -25,6 +26,13 @@ test_categories:
   threat_intel: [23, 24, 25]
   cloud_posture: [26, 27, 28]
   reliability: [29, 30]
+  
+flamelang_benchmarks:
+  statistical_charts: ["BC-001", "BC-002", "BC-003", "PC-001", "PC-002", "SP-001", "SP-002", "LC-001", "LC-002", "BP-001", "BP-002", "HG-001", "HG-002"]
+  data_transformations: []  # To be extracted from Chapters 2-3
+  reduction_operations: []  # To be extracted from Chapters 3-4
+  predictive_operations: []  # To be extracted from Chapters 4-5
+  distribution_analysis: []  # To be extracted from Chapters 5-8
 
 data_sources:
   cyber_collection: "recon/cyber_v2/"
@@ -48,3 +56,15 @@ audit_trail:
   report_output: "benchmarks/reports/"
   dashboard_config: "benchmarks/dashboards/"
   gpg_required: true
+
+flamelang_suite:
+  problem_spec: "benchmarks/benchmark_problems.yaml"
+  harness: "benchmarks/harness/runner.rs"
+  implementations:
+    cpp_baseline: "benchmarks/cpp/"
+    rust_comparison: "benchmarks/rust/"
+    flame_target: "benchmarks/flame/"
+  invention_reference: "docs/inventions/INV-080_GDSS.md"
+  board_minutes: "governance/board_minutes/LOM-2025-12-15-FINAL.yaml"
+  codename: "CONTRADICTION_TO_CREATION"
+  philosophy: "F → FlameLang"
