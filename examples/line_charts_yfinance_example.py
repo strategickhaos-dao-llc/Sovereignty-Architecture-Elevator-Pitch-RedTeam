@@ -96,7 +96,7 @@ def example_target_stock():
         ticker='TGT',
         start_date='1983-01-01',
         end_date='2024-12-31',
-        output_file='/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/tgt_stock_yfinance.png'
+        output_file='tgt_stock_yfinance.png'
     )
 
 
@@ -117,7 +117,7 @@ def example_apple_stock_2015_2016():
         ticker='AAPL',
         start_date='2015-03-01',
         end_date='2016-03-31',
-        output_file='/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/aapl_stock_yfinance.png'
+        output_file='aapl_stock_yfinance.png'
     )
 
 
@@ -138,7 +138,7 @@ def example_google_stock_2015_2016():
         ticker='GOOGL',
         start_date='2015-03-01',
         end_date='2016-03-31',
-        output_file='/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/googl_stock_yfinance.png'
+        output_file='googl_stock_yfinance.png'
     )
 
 
@@ -193,7 +193,7 @@ def compare_multiple_stocks():
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
         
-        output_file = '/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/tech_stocks_comparison.png'
+        output_file = 'tech_stocks_comparison.png'
         plt.savefig(output_file, dpi=300, bbox_inches='tight')
         print(f"\n✓ Chart saved to: {output_file}")
         plt.close()

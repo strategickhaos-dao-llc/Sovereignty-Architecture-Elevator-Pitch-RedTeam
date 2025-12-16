@@ -11,8 +11,6 @@ This module implements the concepts from zyBooks Section 1.8:
 
 import matplotlib.pyplot as plt
 import numpy as np
-from datetime import datetime
-from typing import List, Tuple
 
 
 def example_1_apple_stock_prices():
@@ -53,7 +51,7 @@ def example_1_apple_stock_prices():
     ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/apple_stock_chart.png', dpi=300, bbox_inches='tight')
+    plt.savefig('apple_stock_chart.png', dpi=300, bbox_inches='tight')
     print("✓ Created: apple_stock_chart.png")
     plt.close()
 
@@ -92,7 +90,7 @@ def example_2_apple_with_trendline():
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/apple_stock_trendline.png', dpi=300, bbox_inches='tight')
+    plt.savefig('apple_stock_trendline.png', dpi=300, bbox_inches='tight')
     print("✓ Created: apple_stock_trendline.png")
     plt.close()
 
@@ -131,7 +129,7 @@ def example_3_google_stock_prices():
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/google_stock_chart.png', dpi=300, bbox_inches='tight')
+    plt.savefig('google_stock_chart.png', dpi=300, bbox_inches='tight')
     print("✓ Created: google_stock_chart.png")
     plt.close()
 
@@ -165,7 +163,7 @@ def example_4_multiple_datasets_temperature():
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/temperature_comparison.png', dpi=300, bbox_inches='tight')
+    plt.savefig('temperature_comparison.png', dpi=300, bbox_inches='tight')
     print("✓ Created: temperature_comparison.png")
     plt.close()
 
@@ -200,7 +198,7 @@ def example_5_three_cities_temperature():
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/three_cities_temperature.png', dpi=300, bbox_inches='tight')
+    plt.savefig('three_cities_temperature.png', dpi=300, bbox_inches='tight')
     print("✓ Created: three_cities_temperature.png")
     plt.close()
 
@@ -225,7 +223,7 @@ def example_6_unemployment_rate():
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/unemployment_rate.png', dpi=300, bbox_inches='tight')
+    plt.savefig('unemployment_rate.png', dpi=300, bbox_inches='tight')
     print("✓ Created: unemployment_rate.png")
     plt.close()
 
@@ -258,7 +256,7 @@ def example_7_inappropriate_categorical():
     ax2.grid(True, alpha=0.3, axis='y')
     
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/categorical_comparison.png', dpi=300, bbox_inches='tight')
+    plt.savefig('categorical_comparison.png', dpi=300, bbox_inches='tight')
     print("✓ Created: categorical_comparison.png")
     plt.close()
 
@@ -290,7 +288,7 @@ def example_8_missing_labels():
     
     plt.suptitle('Average Monthly Temperatures in Hawaii', fontsize=14, y=1.02)
     plt.tight_layout()
-    plt.savefig('/home/runner/work/Sovereignty-Architecture-Elevator-Pitch-RedTeam/Sovereignty-Architecture-Elevator-Pitch-RedTeam/examples/labeling_importance.png', dpi=300, bbox_inches='tight')
+    plt.savefig('labeling_importance.png', dpi=300, bbox_inches='tight')
     print("✓ Created: labeling_importance.png")
     plt.close()
 
