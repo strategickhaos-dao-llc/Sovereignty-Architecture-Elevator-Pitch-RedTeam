@@ -1,0 +1,123 @@
+meta:
+  inventory_version: 0.1
+  updated: 2025-12-15
+  repo: Me10101-01/Sovereignty-Architecture-Elevator-Pitch
+  author_note: Single source of truth for all components. Every commit references an ID.
+
+tags:
+  - missing
+  - stub
+  - partial
+  - in_progress
+  - complete
+
+components:
+  # FlameLang Compiler Frontend
+  - id: FL-001
+    name: Lexer
+    domain: flamelang/frontend
+    status: in_progress
+    depends_on: []
+    outputs:
+      - src/flamelang/lexer/
+    notes: Core tokenization with unit tests
+
+  - id: FL-002
+    name: Parser
+    domain: flamelang/frontend
+    status: missing
+    depends_on: [FL-001]
+    outputs:
+      - src/flamelang/parser/
+
+  - id: FL-003
+    name: Semantic Analyzer
+    domain: flamelang/frontend
+    status: missing
+    depends_on: [FL-002]
+    outputs:
+      - src/flamelang/semantics/
+
+  - id: FL-004
+    name: AST + IR Generation
+    domain: flamelang/middle
+    status: missing
+    depends_on: [FL-002, FL-003]
+    outputs:
+      - src/flamelang/ast/
+      - src/flamelang/ir/
+
+  # Middle/Backend
+  - id: FL-005
+    name: Optimizer Passes
+    domain: flamelang/middle
+    status: missing
+    depends_on: [FL-004]
+    outputs:
+      - src/flamelang/opt/
+
+  - id: FL-006
+    name: Backend (LLVM initial)
+    domain: flamelang/backend
+    status: missing
+    depends_on: [FL-004, FL-005]
+    outputs:
+      - src/flamelang/backend/llvm/
+
+  # Stdlib & Runtime
+  - id: FL-007
+    name: Core Standard Library
+    domain: flamelang/stdlib
+    status: missing
+    depends_on: [FL-006]
+    outputs:
+      - std/core/
+
+  - id: FL-008
+    name: Runtime (GC, exceptions)
+    domain: flamelang/runtime
+    status: missing
+    depends_on: [FL-006]
+
+  # Tooling & Benchmarks
+  - id: FL-009
+    name: Build System
+    domain: tooling
+    status: missing
+    depends_on: []
+
+  - id: FL-010
+    name: Benchmark Suite (MAT-243 Stats Problems)
+    domain: benches
+    status: stub
+    depends_on: [FL-006]  # Needs working compiler eventually
+    outputs:
+      - benches/stats_suite/
+    notes: Starting with five-number summary + outliers
+
+  # FlameOS
+  - id: OS-001
+    name: Bootloader Stub
+    domain: os
+    status: stub
+    depends_on: []
+    outputs:
+      - src/kernel/boot/
+
+  - id: OS-002
+    name: Kernel Entry & Panic
+    domain: os
+    status: missing
+    depends_on: [OS-001]
+
+  - id: OS-003
+    name: Memory Management
+    domain: os
+    status: missing
+    depends_on: [OS-002]
+
+  - id: OS-004
+    name: Basic Shell/Userspace
+    domain: os
+    status: missing
+    depends_on: [FL-006, OS-003]  # Written in FlameLang
