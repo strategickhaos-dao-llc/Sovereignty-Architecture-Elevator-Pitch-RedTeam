@@ -1,0 +1,121 @@
+name: zyBooks Ingestion Protocol
+
+on:
+  # Trigger on push to PASTE_HERE.md
+  push:
+    paths:
+      - 'training/zybooks/PASTE_HERE.md'
+      - 'training/zybooks/**/*.md'
+  
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      content_file:
+        description: 'Path to zyBooks content file'
+        required: false
+        default: 'training/zybooks/PASTE_HERE.md'
+
+jobs:
+  process-zybooks:
+    name: Process zyBooks Content
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+      
+      - name: Detect zyBooks content
+        id: detect
+        run: |
+          if [ -f "training/zybooks/PASTE_HERE.md" ]; then
+            content=$(cat training/zybooks/PASTE_HERE.md)
+            # Check if content has actual zyBooks material (not just comments)
+            if echo "$content" | grep -E "(participation activity|zybooks|Section [0-9])" > /dev/null; then
+              echo "detected=true" >> $GITHUB_OUTPUT
+            else
+              echo "detected=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "detected=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Process zyBooks content
+        if: steps.detect.outputs.detected == 'true'
+        run: |
+          echo "🔥 zyBooks content detected! Processing..."
+          
+          # Run the solver
+          cd agents/zybooks-solver
+          python main.py ../../training/zybooks/PASTE_HERE.md --format yaml
+          
+          # Save results
+          python main.py ../../training/zybooks/PASTE_HERE.md --format yaml > ../../training/zybooks/latest_answers.yaml
+          python main.py ../../training/zybooks/PASTE_HERE.md --save ../../training/zybooks/latest_questions.json
+      
+      - name: Archive answers
+        if: steps.detect.outputs.detected == 'true'
+        run: |
+          timestamp=$(date +%Y%m%d_%H%M%S)
+          mkdir -p training/zybooks/archive
+          
+          if [ -f training/zybooks/latest_answers.yaml ]; then
+            cp training/zybooks/latest_answers.yaml training/zybooks/archive/answers_${timestamp}.yaml
+          fi
+          
+          if [ -f training/zybooks/latest_questions.json ]; then
+            cp training/zybooks/latest_questions.json training/zybooks/archive/questions_${timestamp}.json
+          fi
+      
+      - name: Extract patterns for FlameLang
+        if: steps.detect.outputs.detected == 'true'
+        run: |
+          echo "📊 Extracting patterns for FlameLang training..."
+          
+          # Create pattern log
+          mkdir -p training/zybooks/patterns
+          timestamp=$(date +%Y%m%d_%H%M%S)
+          
+          # Log question types and patterns
+          if [ -f training/zybooks/latest_questions.json ]; then
+            echo "Pattern extraction timestamp: $timestamp" > training/zybooks/patterns/pattern_${timestamp}.log
+            cat training/zybooks/latest_questions.json >> training/zybooks/patterns/pattern_${timestamp}.log
+          fi
+      
+      - name: Commit results
+        if: steps.detect.outputs.detected == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "zyBooks Solver Agent"
+          
+          git add training/zybooks/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🔥 zyBooks processed - answers generated [automated]"
+            git push
+          fi
+      
+      - name: Summary
+        if: steps.detect.outputs.detected == 'true'
+        run: |
+          echo "### 🔥 zyBooks Processing Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Status: ✅ LOCKED IN" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f training/zybooks/latest_answers.yaml ]; then
+            echo "#### Answers:" >> $GITHUB_STEP_SUMMARY
+            echo '```yaml' >> $GITHUB_STEP_SUMMARY
+            cat training/zybooks/latest_answers.yaml >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi

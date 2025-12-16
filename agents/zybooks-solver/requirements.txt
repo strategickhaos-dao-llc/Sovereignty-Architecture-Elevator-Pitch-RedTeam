@@ -1,0 +1,4 @@
+# zyBooks Solver Dependencies
+# Minimal dependencies for fast processing
+
+pyyaml>=6.0
