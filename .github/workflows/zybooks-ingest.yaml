@@ -20,6 +20,9 @@ jobs:
     name: Process zyBooks Content
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write  # Needed to commit results back to repository
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
