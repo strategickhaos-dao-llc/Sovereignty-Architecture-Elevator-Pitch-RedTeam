@@ -110,15 +110,19 @@ layer_3_rules:
   trend_rules:
     - pattern: "gap narrowing over time"
       answer: "Decreased"
+      reason: "gap between values is getting smaller"
       
     - pattern: "gap widening over time"  
       answer: "Increased"
+      reason: "gap between values is getting larger"
       
     - pattern: "total rising"
       answer: "Increased"
+      reason: "aggregate values are going up"
       
     - pattern: "percentage rising in stacked chart"
-      answer: "Increase"
+      answer: "Increased"
+      reason: "proportion is growing over time"
 
   # PREDICTION/EXTRAPOLATION
   prediction_rules:
