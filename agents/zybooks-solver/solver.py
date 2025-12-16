@@ -65,6 +65,8 @@ class ZyBooksSolver:
         r'correlation.*causation',  # correlation does NOT imply causation
         r'variance.*(?:is|equals).*standard deviation',  # variance is NOT std dev (it's squared)
         r'same as.*(?:mean|median|mode)',  # X is same as Y (usually false for different terms)
+        r'sample.*larger.*population',  # sample is NOT larger than population
+        r'sample.*bigger.*population',  # sample is NOT bigger than population
     ]
     
     def __init__(self):

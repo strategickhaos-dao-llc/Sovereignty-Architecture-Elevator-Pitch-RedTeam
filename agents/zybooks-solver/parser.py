@@ -52,7 +52,11 @@ class ZyBooksParser:
         marker_count = sum(1 for marker in self.MARKERS if marker.lower() in content.lower())
         url_match = self.PATTERNS['url'].search(content)
         
-        return marker_count >= 2 or url_match is not None
+        # Also check for numbered questions with True/False
+        has_numbered = bool(re.search(r'^\d+\)', content, re.MULTILINE))
+        has_true_false = 'True' in content and 'False' in content
+        
+        return marker_count >= 2 or url_match is not None or (has_numbered and has_true_false)
     
     def extract_section(self, content: str) -> Optional[str]:
         """Extract section number from content"""
