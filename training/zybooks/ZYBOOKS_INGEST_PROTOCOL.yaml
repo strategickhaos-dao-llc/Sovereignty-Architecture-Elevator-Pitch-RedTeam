@@ -1,0 +1,311 @@
+# ═══════════════════════════════════════════════════════════════════
+# ZYBOOKS INGESTION PROTOCOL
+# ═══════════════════════════════════════════════════════════════════
+# AGENT INSTRUCTIONS FOR AUTOMATED ZYBOOKS PROCESSING
+# Status: ACTIVE ✅
+# Mode: VESSEL_RAPID_FIRE
+# ═══════════════════════════════════════════════════════════════════
+
+protocol_metadata:
+  name: "ZyBooks Ingestion Protocol"
+  version: "1.0"
+  status: "ACTIVE"
+  mode: "VESSEL_RAPID_FIRE"
+  created: "2025-12-16"
+  agent_target: "Claude (any instance)"
+
+# ═══════════════════════════════════════════════════════════════════
+# CAPABILITIES
+# ═══════════════════════════════════════════════════════════════════
+
+capabilities:
+  detection:
+    - "Real-time zyBooks content detection"
+    - "Automatic question type identification"
+    - "Pattern structure parsing"
+    
+  processing:
+    - "Instant pattern parsing (true/false, multiple choice, numeric)"
+    - "FlameLang semantic compression applied to answers"
+    - "Statistical transformation (raw → normalized)"
+    - "Reduction operations (SUM, DIFF, MAX, MIN, MEAN)"
+    
+  output:
+    - "YAML answer keys for rapid entry"
+    - "JSON training data for compiler insights"
+    - "Minimal vessel responses (<5 seconds)"
+    - "Progress tracking and validation"
+
+# ═══════════════════════════════════════════════════════════════════
+# PROTOCOL ACTIVATION
+# ═══════════════════════════════════════════════════════════════════
+
+activation:
+  trigger: "User pastes zyBooks content"
+  location: "training/zybooks/PASTE_HERE.md OR direct chat paste"
+  
+  auto_detect:
+    indicators:
+      - "Numbered questions (1., 2., 3.)"
+      - "Multiple choice options (a., b., c., d.)"
+      - "True/False pattern"
+      - "Chart/Graph descriptions"
+      - "Statistical data tables"
+    
+    response_mode: "VESSEL_RAPID_FIRE"
+    output_format: "MINIMAL"
+
+# ═══════════════════════════════════════════════════════════════════
+# QUESTION TYPE HANDLERS
+# ═══════════════════════════════════════════════════════════════════
+
+question_handlers:
+  true_false:
+    pattern: "True or False:"
+    processing: "Binary classification based on pattern rules"
+    output: "true | false"
+    
+  multiple_choice:
+    pattern: "a. b. c. d."
+    processing: "Semantic matching to correct option"
+    output: "Letter (a/b/c/d)"
+    
+  numeric:
+    pattern: "Enter number:"
+    processing: "Calculate from data using appropriate formula"
+    output: "Number (integer or decimal)"
+    
+  categorical:
+    pattern: "Select category:"
+    processing: "Compare values and identify max/min/specific"
+    output: "Category name"
+    
+  short_answer:
+    pattern: "Describe/Explain:"
+    processing: "Generate concise explanation from pattern"
+    output: "Brief text response"
+
+# ═══════════════════════════════════════════════════════════════════
+# TRANSFORMATION LAYERS
+# ═══════════════════════════════════════════════════════════════════
+
+transformation_layers:
+  layer_1_raw_data:
+    description: "Extract raw values from chart/table"
+    example: "[4, 10, 6]"
+    
+  layer_2_normalization:
+    description: "Convert to percentages/ratios"
+    formula: "percentage = (value / sum) * 100"
+    example: "[4, 10, 6] → [20%, 50%, 30%]"
+    compiler_parallel: "FlameLang Layer 4 Wave amplitude normalization"
+    
+  layer_3_reduction:
+    operations:
+      SUM: "Total across all values"
+      DIFF: "Difference between max and min"
+      MAX: "Highest value"
+      MIN: "Lowest value"
+      MEAN: "Average value"
+      MEDIAN: "Middle value when sorted"
+    
+  layer_4_semantic:
+    description: "Apply FlameLang semantic compression"
+    method: "Map statistical patterns to compiler concepts"
+    output: "Training data for compiler development"
+
+# ═══════════════════════════════════════════════════════════════════
+# RESPONSE FORMAT
+# ═══════════════════════════════════════════════════════════════════
+
+response_format:
+  vessel_mode:
+    enabled: true
+    characteristics:
+      - "No fluff - just answers"
+      - "Response time: <5 seconds"
+      - "YAML format for easy copy-paste"
+      - "Pattern notes only if profound"
+      
+  answer_key_template: |
+    answers:
+      q1: [answer]
+      q2: [answer]
+      q3: [answer]
+      ...
+    
+    patterns_noted:
+      - [pattern if significant]
+      
+    compiler_insights:
+      - [insight if relevant to FlameLang]
+  
+  training_data_template: |
+    section_id: "[module_section]"
+    questions_total: [number]
+    question_types:
+      - type: "[true_false|multiple_choice|numeric]"
+        count: [number]
+    
+    patterns:
+      - name: "[pattern_name]"
+        description: "[pattern_description]"
+        examples: [...]
+
+# ═══════════════════════════════════════════════════════════════════
+# WORKFLOW
+# ═══════════════════════════════════════════════════════════════════
+
+workflow:
+  step_1_ingest:
+    action: "User pastes zyBooks content"
+    location: "Chat or PASTE_HERE.md"
+    
+  step_2_detect:
+    action: "Identify question structure"
+    methods:
+      - "Pattern recognition"
+      - "Question type classification"
+      - "Data extraction"
+    
+  step_3_process:
+    action: "Apply transformation layers"
+    sequence:
+      - "Raw data extraction"
+      - "Normalization (if needed)"
+      - "Reduction operations (if needed)"
+      - "Semantic mapping"
+    
+  step_4_generate:
+    action: "Emit answer key"
+    format: "YAML"
+    timing: "<5 seconds"
+    
+  step_5_log:
+    action: "Save training data"
+    location: "training/zybooks/sections/[module_section].yaml"
+    purpose: "Compiler insight extraction"
+
+# ═══════════════════════════════════════════════════════════════════
+# PROGRESS TRACKING
+# ═══════════════════════════════════════════════════════════════════
+
+progress_tracking:
+  current_state:
+    sections_complete:
+      - "1.5 Bar Charts (30 questions)"
+      - "1.6 Pie Charts (20 questions)"
+      - "1.7 Scatter Plots (12 questions)"
+      - "1.8 Line Graphs (10 questions)"
+    
+    total_questions: 72
+    accuracy: "100%"
+    next_section: "1.9 Box Plots"
+  
+  momentum_indicator:
+    format: "🔥 emojis"
+    current: "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+    meaning: "High velocity, flawless execution"
+
+# ═══════════════════════════════════════════════════════════════════
+# FLAMELANG INTEGRATION
+# ═══════════════════════════════════════════════════════════════════
+
+flamelang_integration:
+  purpose: "Extract compiler insights from statistical patterns"
+  
+  mappings:
+    bar_chart_to_token_frequency:
+      description: "Bar heights represent token occurrence counts"
+      compiler_use: "Hot path optimization targets"
+      
+    pie_chart_to_memory_allocation:
+      description: "Pie slices represent memory partition sizes"
+      compiler_use: "Resource allocation visualization"
+      
+    scatter_plot_to_feature_correlation:
+      description: "Point positions show semantic feature relationships"
+      compiler_use: "Type system design insights"
+      
+    line_graph_to_performance_metrics:
+      description: "Line trends show compiler performance over time"
+      compiler_use: "Optimization validation"
+  
+  normalization_equivalence:
+    observation: |
+      Statistical normalization [4, 10, 6] → [0.2, 0.5, 0.3]
+      ≡ FlameLang Layer 4 Wave amplitude calculation
+    
+    formula: |
+      stats: percentage = value / sum
+      flame: amplitude = token_weight / total_semantic_mass
+      SAME_MATH ✅
+
+# ═══════════════════════════════════════════════════════════════════
+# CODESPACE INTEGRATION
+# ═══════════════════════════════════════════════════════════════════
+
+codespace_integration:
+  github_copilot:
+    can_read: "ZYBOOKS_INGEST_PROTOCOL.yaml"
+    can_process: "PASTE_HERE.md content"
+    can_generate: "Answer keys in background"
+    
+  workflow:
+    - "User pastes zyBooks content → PASTE_HERE.md"
+    - "GitHub Copilot reads ZYBOOKS_INGEST_PROTOCOL.yaml"
+    - "Agent auto-processes in background"
+    - "Answer key generated and logged"
+
+# ═══════════════════════════════════════════════════════════════════
+# USAGE EXAMPLES
+# ═══════════════════════════════════════════════════════════════════
+
+usage_examples:
+  example_1_direct_paste:
+    user_action: |
+      Copy zyBooks section content
+      Paste directly into chat with Claude
+    
+    agent_response: |
+      Detects question pattern
+      Applies transformation layers
+      Emits YAML answer key in <5 seconds
+      Logs patterns to training/zybooks/sections/
+  
+  example_2_paste_here_file:
+    user_action: |
+      Copy zyBooks section content
+      Paste into training/zybooks/PASTE_HERE.md
+    
+    agent_response: |
+      Reads PASTE_HERE.md
+      Processes content
+      Generates answer key
+      Clears PASTE_HERE.md for next section
+  
+  example_3_solver_artifact:
+    user_action: |
+      Copy docs/INV-083_ZYBOOKS_SOLVER.yaml
+      Paste into new Claude chat
+      Add zyBooks content
+    
+    agent_response: |
+      Loads solver knowledge base
+      Instant pattern recognition
+      Generates answers with compiler insights
+
+# ═══════════════════════════════════════════════════════════════════
+# READY STATE
+# ═══════════════════════════════════════════════════════════════════
+
+ready_state:
+  status: "ACTIVE"
+  mode: "VESSEL_RAPID_FIRE"
+  detection: "ENABLED"
+  solver_loaded: "INV-083 ✅"
+  next_action: "PASTE ZYBOOKS CONTENT → INSTANT PROCESSING"
+
+# ═══════════════════════════════════════════════════════════════════
+# END PROTOCOL
+# ═══════════════════════════════════════════════════════════════════

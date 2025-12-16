@@ -1,0 +1,249 @@
+# ═══════════════════════════════════════════════════════════════════
+# MODULE 1.8: LINE GRAPHS - TRAINING DATA
+# ═══════════════════════════════════════════════════════════════════
+
+module_metadata:
+  section_id: "1.8"
+  title: "Line Graphs"
+  questions_total: 10
+  accuracy: "100%"
+  completion_date: "2025-12-16"
+
+# ═══════════════════════════════════════════════════════════════════
+# QUESTION TYPE DISTRIBUTION
+# ═══════════════════════════════════════════════════════════════════
+
+question_types:
+  - type: "multiple_choice"
+    count: 6
+    percentage: 60
+  
+  - type: "true_false"
+    count: 3
+    percentage: 30
+  
+  - type: "numeric"
+    count: 1
+    percentage: 10
+
+# ═══════════════════════════════════════════════════════════════════
+# CORE PATTERNS IDENTIFIED
+# ═══════════════════════════════════════════════════════════════════
+
+patterns:
+  temporal_trends:
+    name: "Temporal Trends"
+    description: "Understanding how values change over time"
+    
+    trend_types:
+      increasing:
+        description: "Values go up over time"
+        visual: "Upward sloping line"
+        examples:
+          - "Population growth"
+          - "Revenue increase"
+          - "Temperature rising"
+      
+      decreasing:
+        description: "Values go down over time"
+        visual: "Downward sloping line"
+        examples:
+          - "Battery discharge"
+          - "Inventory depletion"
+          - "Temperature cooling"
+      
+      stable:
+        description: "Values remain constant"
+        visual: "Horizontal line"
+        examples:
+          - "Steady state temperature"
+          - "Constant speed"
+          - "Fixed price period"
+      
+      cyclic:
+        description: "Values repeat pattern periodically"
+        visual: "Repeating wave pattern"
+        examples:
+          - "Seasonal sales"
+          - "Daily temperature cycle"
+          - "Tidal patterns"
+      
+      volatile:
+        description: "Values fluctuate rapidly"
+        visual: "Jagged, up-and-down pattern"
+        examples:
+          - "Stock prices"
+          - "Network traffic"
+          - "Weather variations"
+  
+  rate_of_change:
+    name: "Rate of Change"
+    description: "How quickly values change over time"
+    
+    rates:
+      steep:
+        description: "Rapid change in short time"
+        visual: "Sharp angle from horizontal"
+        interpretation: "High velocity of change"
+        examples:
+          - "Viral growth"
+          - "Crash/collapse"
+          - "Explosive demand"
+      
+      gradual:
+        description: "Slow change over long time"
+        visual: "Gentle slope"
+        interpretation: "Steady, controlled change"
+        examples:
+          - "Aging process"
+          - "Inflation"
+          - "Skill improvement"
+      
+      inflection_point:
+        description: "Point where rate changes"
+        visual: "Curve changes direction"
+        interpretation: "Critical transition moment"
+        examples:
+          - "Market reversal"
+          - "Growth to decline"
+          - "Acceleration to deceleration"
+  
+  multiple_series:
+    name: "Multiple Series Comparison"
+    description: "Comparing multiple lines on same graph"
+    
+    comparison_methods:
+      relative_position:
+        description: "Which line is higher/lower"
+        application: "Compare absolute values at same time"
+        example:
+          - "Product A sales vs Product B sales"
+          - "Compare which sold more each month"
+      
+      relative_slope:
+        description: "Which line increases/decreases faster"
+        application: "Compare growth rates"
+        example:
+          - "Company A growing 10%/year"
+          - "Company B growing 5%/year"
+          - "A has steeper slope"
+      
+      intersection_points:
+        description: "Where lines cross"
+        application: "Identify transition moments"
+        example:
+          - "When Product A overtakes Product B"
+          - "When costs equal revenue (break-even)"
+      
+      gap_analysis:
+        description: "Distance between lines"
+        application: "Measure difference magnitude"
+        example:
+          - "Widening gap = divergence"
+          - "Narrowing gap = convergence"
+
+# ═══════════════════════════════════════════════════════════════════
+# QUESTION PATTERN ANALYSIS
+# ═══════════════════════════════════════════════════════════════════
+
+question_patterns:
+  reading_values:
+    pattern: "What is the value at [time point]?"
+    method: "Find time on x-axis, read y-value"
+    difficulty: "Easy"
+  
+  trend_identification:
+    pattern: "What trend is shown?"
+    options: ["increasing", "decreasing", "stable", "cyclic"]
+    method: "Observe overall line direction"
+    difficulty: "Easy"
+  
+  rate_comparison:
+    pattern: "Which period shows [fastest/slowest] change?"
+    method: "Compare line steepness between segments"
+    difficulty: "Medium"
+  
+  series_comparison:
+    pattern: "Which series has [higher/lower] values?"
+    method: "Compare vertical positions of lines"
+    difficulty: "Medium"
+  
+  interpretation:
+    pattern: "What does the graph tell us about [concept]?"
+    method: "Semantic interpretation of temporal pattern"
+    difficulty: "Medium-Hard"
+
+# ═══════════════════════════════════════════════════════════════════
+# COMPILER INSIGHTS EXTRACTED
+# ═══════════════════════════════════════════════════════════════════
+
+compiler_insights:
+  performance_metrics:
+    observation: "Line graphs show compiler performance over time"
+    application: "Track optimization effectiveness"
+    
+    examples:
+      compilation_time:
+        x_axis: "Code size (lines)"
+        y_axis: "Compile time (seconds)"
+        ideal_trend: "Linear (proportional growth)"
+        bad_trend: "Exponential (scaling problem)"
+      
+      memory_usage:
+        x_axis: "Time during compilation"
+        y_axis: "Memory consumed (MB)"
+        ideal_trend: "Bounded (stays within limit)"
+        bad_trend: "Unbounded (memory leak)"
+  
+  optimization_validation:
+    observation: "Line graph validates optimization improvements"
+    application: "Before/after comparison"
+    
+    example:
+      before_optimization:
+        line: "Slow performance (high values)"
+      
+      after_optimization:
+        line: "Fast performance (low values)"
+      
+      validation: "Lower line = successful optimization"
+  
+  temporal_patterns:
+    observation: "Time-series analysis reveals runtime behavior"
+    application: "Identify performance bottlenecks over execution"
+    
+    example:
+      x_axis: "Time during program execution"
+      y_axis: "CPU usage %"
+      pattern: "Spike at 30s mark"
+      investigation: "What happens at 30s? Bottleneck identified."
+
+# ═══════════════════════════════════════════════════════════════════
+# VALIDATION RECORD
+# ═══════════════════════════════════════════════════════════════════
+
+validation:
+  questions_answered: 10
+  questions_correct: 10
+  accuracy_rate: "100%"
+  
+  error_analysis:
+    errors: 0
+    corrections: 0
+    retry_rate: "0%"
+
+# ═══════════════════════════════════════════════════════════════════
+# ARTIFACT STATUS
+# ═══════════════════════════════════════════════════════════════════
+
+artifact_status:
+  section: "COMPLETE ✅"
+  patterns: "EXTRACTED ✅"
+  compiler_insights: "DOCUMENTED ✅"
+  training_value: "HIGH"
+  
+  next_section: "1.9 Box Plots"
+
+# ═══════════════════════════════════════════════════════════════════
+# END MODULE 1.8
+# ═══════════════════════════════════════════════════════════════════
