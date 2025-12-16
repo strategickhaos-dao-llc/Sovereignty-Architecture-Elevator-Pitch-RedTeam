@@ -1,0 +1,35 @@
+# Statistics Chapter 1.11 - Sampling and Bias Exercises
+# Answer Key for sections 1.11.2, 1.11.4, 1.11.5, and 1.11.6
+
+# Section 1.11.2: Population vs Sample Identification
+1.11.2:
+  1: "Population"      # all 179 judges, computed mean
+  2: "Sample"          # 1000 nurses representing all US nurses
+  3: "A registered nurse"  # sampling unit = individual measured
+  4: "Population"      # 50 people = small enough to survey all
+  5: "Sample"          # 120,000+ employees = too many, sample
+  6: "Microsoft employees"  # sampling frame = who you draw from
+
+# Section 1.11.4: Parameters vs Statistics
+# Parameter: measure of a population
+# Statistic: measure of a sample
+1.11.4:
+  1: "Parameter"   # all 179 judges = population → parameter
+  2: "Statistic"   # 1000 nurses = sample → statistic
+
+# Section 1.11.5: Bias Type Matching
+# Types of bias in sampling and surveys
+1.11.5:
+  texting_while_driving: "Social desirability bias"
+  engineering_building_only: "Undercoverage"
+  rural_poor_internet: "Nonresponse bias"
+  1_or_5_star_reviews: "Extreme responding"
+  is_freedom_important: "Acquiescence bias"
+
+# Section 1.11.6: Sampling Methods
+# Different approaches to selecting samples from populations
+1.11.6:
+  select_5_states: "Cluster sampling"
+  odd_street_numbers: "Systematic sampling"
+  random_from_rolls: "Simple random sampling"
+  property_value_brackets: "Stratified sampling"
