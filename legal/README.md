@@ -82,6 +82,19 @@ This directory contains comprehensive legal documentation establishing a multi-l
 
 **Use Case**: Executive summary for stakeholders; strategic planning guide; investor documentation.
 
+#### 6. [INVENTIONS.md](./INVENTIONS.md)
+**Purpose**: Active invention queue and log for capturing novel insights and innovations.
+
+**Contents**:
+- INV-080: Glyph-Decoded Statistical Semantics (GDSS)
+- Active invention queue with status tracking
+- Instructions for adding new inventions
+- Cross-validation evidence (multi-AI consensus)
+- FlameLang integration examples
+- Patent abstract drafts
+
+**Use Case**: Real-time capture of breakthrough insights; foundation for future patent applications; defensive publication preparation.
+
 ---
 
 ## 🎯 Quick Reference Guide
