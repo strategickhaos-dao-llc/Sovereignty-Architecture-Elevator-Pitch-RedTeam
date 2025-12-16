@@ -1,0 +1,29 @@
+# AP Statistics Section 1.11: Surveys and Sampling - Quick Reference Guide
+# This comprehensive reference covers all key concepts for surveys and sampling methods
+
+hierarchy:
+  population: "all objects under study"
+  sampling_frame: "subset population can draw from"
+  sample: "actual units measured"
+  sampling_unit: "individual in population"
+
+parameter_vs_statistic:
+  parameter: "describes POPULATION (all)"
+  statistic: "describes SAMPLE (subset)"
+
+bias_types:
+  selection_bias:
+    - undercoverage: "some groups underrepresented"
+    - nonresponse: "people who don't respond differ"
+    - voluntary_response: "self-selected participants"
+  response_bias:
+    - acquiescence: "tendency to agree"
+    - extreme_responding: "picks extreme options"
+    - social_desirability: "answers what looks good"
+
+sampling_methods:
+  simple_random: "all equally likely"
+  systematic: "every kth unit"
+  stratified: "divide into groups, random from each proportionally"
+  cluster: "divide into groups, randomly pick whole groups"
+  convenience: "grab what's easy"
