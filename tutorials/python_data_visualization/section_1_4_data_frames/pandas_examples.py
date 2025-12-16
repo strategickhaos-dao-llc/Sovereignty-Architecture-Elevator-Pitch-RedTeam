@@ -40,8 +40,8 @@ def load_titanic_dataset():
     try:
         titanic = sns.load_dataset("titanic")
         return titanic
-    except Exception as e:
-        print(f"Error loading titanic dataset: {e}")
+    except Exception:
+        print("Note: Unable to load Titanic dataset from seaborn.")
         print("Creating a sample dataset instead...")
         # Create a small sample if seaborn data is not available
         return create_sample_titanic()

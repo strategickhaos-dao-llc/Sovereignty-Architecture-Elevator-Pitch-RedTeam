@@ -13,7 +13,7 @@ def load_titanic():
     """Load or create titanic dataset."""
     try:
         return sns.load_dataset("titanic")
-    except:
+    except Exception:
         # Create sample data if seaborn is not available
         data = {
             'survived': [0, 1, 1, 1, 0],

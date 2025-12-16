@@ -110,7 +110,9 @@ def test_subsetting_data():
         
         # Test filtering
         filtered = titanic[titanic['age'] > 30]
-        assert all(filtered['age'] > 30), "All ages should be > 30"
+        # Check only non-NaN values (NaN comparisons return False)
+        non_nan_ages = filtered['age'].dropna()
+        assert all(non_nan_ages > 30), "All non-NaN ages should be > 30"
         
         # Test demonstrations
         selecting_columns()
