@@ -165,6 +165,10 @@ class FlameLangTransformer:
         Parse expression (simplified for now)
         expression := literal | identifier
         """
+        if not self.current_token:
+            # Default to empty expression if no token
+            return ASTNode(ASTNodeType.LITERAL, value="0")
+        
         if self.current_token.type == TokenType.NUMBER:
             value = self.current_token.value
             self.advance()
