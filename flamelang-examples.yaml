@@ -89,7 +89,7 @@ test_cases:
     category: "trend"
     question: "The percentage of online courses in the stacked chart has [increased/decreased]."
     expected_output:
-      answer: "Increase"
+      answer: "Increased"
       confidence: 0.85
       reason: "percentage rising in stacked chart"
     layer_1_match: "type_trend"

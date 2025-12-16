@@ -254,8 +254,7 @@ MIT License
 ## Support
 
 For questions or extensions:
-- **Discord**: [Strategickhaos Server](https://discord.gg/strategickhaos)
-- **Repository**: [GitHub Issues](https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture/issues)
+- **Repository**: [GitHub Issues](https://github.com/strategickhaos-dao-llc/Sovereignty-Architecture-Elevator-Pitch-RedTeam/issues)
 
 ---
 

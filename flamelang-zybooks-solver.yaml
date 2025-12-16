@@ -113,7 +113,7 @@ layer_3_rules:
       answer: "Increased"
       
     - pattern: "percentage rising in stacked chart"
-      answer: "Increase"
+      answer: "Increased"
 
   # PREDICTION/EXTRAPOLATION
   prediction_rules:
