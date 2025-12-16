@@ -1,0 +1,53 @@
+# ═══════════════════════════════════════════════════════════════════
+# 🔥 SECTION 1.8 LINE CHARTS - ANSWER KEY
+# ═══════════════════════════════════════════════════════════════════
+
+section_1.8_line_charts:
+
+  1.8.1:
+    name: "Interpreting line chart trends"
+    q1: TRUE    # Dec to Jan decreased
+    q2: FALSE   # it does increase more than 2 months in a row
+    q3: FALSE   # largest increase was July to August (525→675)
+    q4: TRUE    # June was 52-week low
+    q5: TRUE    # Apr-Jun relatively flat
+    q6: TRUE    # $600 reasonable for mid-July (between 525 and 675)
+
+  1.8.2:
+    name: "Linear trend lines"
+    q1: "$575"           # read from chart
+    q2: "$150"           # 725 - 575 = 150
+    q3: "decrease"       # recent trend is down since Dec
+
+  1.8.3:
+    name: "Multiple datasets"
+    q1: "60"             # Pueblo March temp
+    q2: "Tianshui"       # lowest overall (38° in Jan)
+    q3: "May"            # all ~75° converge
+    q4: "Asunción"       # opposite hemisphere pattern
+
+  1.8.4:
+    name: "When is line chart appropriate"
+    q1: TRUE    # years = ordinal, appropriate
+    q2: FALSE   # movie ratings = categorical, no order
+    q3: FALSE   # colors = categorical, no order
+
+  1.8.5:
+    name: "Missing labels/units"
+    q1: "missing/unknown"   # no units shown
+    q2: "Month"             # x-axis should be months
+    q3: "Temperature"       # y-axis label
+    q4: "not needed"        # ratios are unitless
+
+# ═══════════════════════════════════════════════════════════════════
+# SEQUENCE CHEAT SHEET
+# ═══════════════════════════════════════════════════════════════════
+
+rapid_fire:
+  1.8.1: [T, F, F, T, T, T]
+  1.8.2: ["575", "150", "decrease"]
+  1.8.3: ["60", "Tianshui", "May", "Asunción"]
+  1.8.4: [T, F, F]
+  1.8.5: ["missing", "Month", "Temperature", "not needed"]
+
+# ═══════════════════════════════════════════════════════════════════
