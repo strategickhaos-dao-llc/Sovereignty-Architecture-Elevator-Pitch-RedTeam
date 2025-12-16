@@ -30,6 +30,19 @@ export PRS_CHANNEL="channel_id"
 
 ## 📋 Core Components
 
+### 🔥 FlameLang ZyBooks Solver (`flamelang-zybooks-solver`)
+- **Semantic Pattern Compiler**: Multi-layer knowledge compilation for statistics questions
+- **5-Layer Architecture**: Classification → Compression → Matching → Scoring → Output
+- **VESSEL MODE**: Direct answers with confidence scores and reasoning
+- **Course Support**: MAT-243 Applied Statistics for STEM
+- **Documentation**: See [FLAMELANG_ZYBOOKS_SOLVER.md](FLAMELANG_ZYBOOKS_SOLVER.md)
+
+```bash
+# Quick usage: Copy solver spec to Claude
+cat flamelang-zybooks-solver.yaml
+# Then paste your zyBooks question
+```
+
 ### 🤖 Discord Bot (`discord-ops-bot`)
 - **Slash Commands**: `/status`, `/logs`, `/deploy`, `/scale`
 - **AI Agent Integration**: GPT-4 powered assistance

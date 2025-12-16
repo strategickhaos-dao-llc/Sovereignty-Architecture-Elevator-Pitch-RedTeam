@@ -1,0 +1,272 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# FlameLang ZyBooks Solver - Test Examples
+# ═══════════════════════════════════════════════════════════════════════════
+# These examples demonstrate the solver's pattern matching capabilities
+# Use these to validate the solver is working correctly
+# ═══════════════════════════════════════════════════════════════════════════
+
+test_cases:
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BOOLEAN QUESTIONS
+  # ─────────────────────────────────────────────────────────────────────────
+  
+  - id: "TEST-001"
+    category: "boolean"
+    question: "A bar chart excels at showing precise values. True or False?"
+    expected_output:
+      answer: FALSE
+      confidence: 0.95
+      reason: "bars show relative comparison, not precision"
+    layer_1_match: "type_boolean"
+    layer_3_rule: "bar_chart_rules[0]"
+    
+  - id: "TEST-002"
+    category: "boolean"
+    question: "A bar chart excels at showing relative values. True or False?"
+    expected_output:
+      answer: TRUE
+      confidence: 0.95
+      reason: "visual comparison is core purpose"
+    layer_1_match: "type_boolean"
+    layer_3_rule: "bar_chart_rules[1]"
+    
+  - id: "TEST-003"
+    category: "boolean"
+    question: "Adding more gridlines to a chart improves readability. True or False?"
+    expected_output:
+      answer: FALSE
+      confidence: 0.90
+      reason: "clutter reduces readability"
+    layer_1_match: "type_boolean"
+    layer_3_rule: "bar_chart_rules[2]"
+    
+  - id: "TEST-004"
+    category: "boolean"
+    question: "Horizontal bar charts are preferable when category labels are long. True or False?"
+    expected_output:
+      answer: TRUE
+      confidence: 0.95
+      reason: "no rotation needed"
+    layer_1_match: "type_boolean"
+    layer_3_rule: "orientation_rules[0]"
+    
+  - id: "TEST-005"
+    category: "boolean"
+    question: "Horizontal bar charts are better for displaying negative values. True or False?"
+    expected_output:
+      answer: FALSE
+      confidence: 0.85
+      reason: "vertical intuitive: down = negative"
+    layer_1_match: "type_boolean"
+    layer_3_rule: "orientation_rules[2]"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # TREND QUESTIONS
+  # ─────────────────────────────────────────────────────────────────────────
+  
+  - id: "TEST-006"
+    category: "trend"
+    question: "The gap between male and female enrollment has [increased/decreased] over time."
+    expected_output:
+      answer: "Decreased"
+      confidence: 0.85
+      reason: "gap narrowing over time"
+    layer_1_match: "type_trend"
+    layer_3_rule: "trend_rules[0]"
+    
+  - id: "TEST-007"
+    category: "trend"
+    question: "Total student enrollment has [increased/decreased] from 2015 to 2020."
+    expected_output:
+      answer: "Increased"
+      confidence: 0.90
+      reason: "total rising"
+    layer_1_match: "type_trend"
+    layer_3_rule: "trend_rules[2]"
+    
+  - id: "TEST-008"
+    category: "trend"
+    question: "The percentage of online courses in the stacked chart has [increased/decreased]."
+    expected_output:
+      answer: "Increase"
+      confidence: 0.85
+      reason: "percentage rising in stacked chart"
+    layer_1_match: "type_trend"
+    layer_3_rule: "trend_rules[3]"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # COMPARISON QUESTIONS
+  # ─────────────────────────────────────────────────────────────────────────
+  
+  - id: "TEST-009"
+    category: "comparison"
+    question: "How does Category A compare to Category B in terms of sales?"
+    expected_output:
+      answer: "[more|fewer|same]"
+      confidence: 0.80
+      reason: "visual comparison from chart data"
+    layer_1_match: "type_comparison"
+    note: "Requires actual chart data to determine answer"
+    
+  - id: "TEST-010"
+    category: "comparison"
+    question: "Are there more students in Engineering or Business?"
+    expected_output:
+      answer: "[more|fewer]"
+      confidence: 0.85
+      reason: "direct bar height comparison"
+    layer_1_match: "type_comparison"
+    note: "Requires actual chart data to determine answer"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # PREDICTION QUESTIONS
+  # ─────────────────────────────────────────────────────────────────────────
+  
+  - id: "TEST-011"
+    category: "prediction"
+    question: "Based on the linear trend, what is the best prediction for enrollment in 2025?"
+    expected_output:
+      answer: "[calculated value]"
+      confidence: 0.65
+      reason: "linear extrapolation beyond data range"
+    layer_1_match: "type_prediction"
+    layer_3_rule: "prediction_rules[0]"
+    note: "Requires actual data points to calculate"
+    
+  - id: "TEST-012"
+    category: "prediction"
+    question: "If the percentage growth continues, forecast the value for next year."
+    expected_output:
+      answer: "[calculated value]"
+      confidence: 0.60
+      reason: "percentage growth extrapolation"
+    layer_1_match: "type_prediction"
+    layer_3_rule: "prediction_rules[1]"
+    note: "Requires actual data points to calculate"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # PERCENTAGE QUESTIONS
+  # ─────────────────────────────────────────────────────────────────────────
+  
+  - id: "TEST-013"
+    category: "percentage"
+    question: "What percentage of students chose Option A?"
+    expected_output:
+      answer: "[calculated value]"
+      confidence: 0.90
+      reason: "direct percentage calculation from data"
+    layer_1_match: "type_percentage"
+    note: "Requires actual data points to calculate"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# VALIDATION INSTRUCTIONS
+# ═══════════════════════════════════════════════════════════════════════════
+
+validation_instructions: |
+  
+  To validate the FlameLang ZyBooks Solver:
+  
+  1. Load flamelang-zybooks-solver.yaml into Claude
+  2. For each test case above:
+     - Submit the question text
+     - Verify the answer matches expected_output.answer
+     - Verify the confidence is approximately expected_output.confidence
+     - Verify the reason matches expected_output.reason
+  3. Check that layer_1_match correctly identifies question type
+  4. Check that layer_3_rule correctly matches pattern
+  
+  PASSING CRITERIA:
+  - All boolean questions (TEST-001 to TEST-005) must match exactly
+  - All trend questions (TEST-006 to TEST-008) must match exactly
+  - Comparison/prediction/percentage questions should demonstrate correct
+    classification even if specific answers require chart data
+
+# ═══════════════════════════════════════════════════════════════════════════
+# EDGE CASES
+# ═══════════════════════════════════════════════════════════════════════════
+
+edge_cases:
+  
+  - id: "EDGE-001"
+    question: "A vertical bar chart is best for displaying building heights. True or False?"
+    expected_output:
+      answer: TRUE
+      confidence: 0.90
+      reason: "literal mapping: height shows height"
+    note: "Tests orientation rule with literal height mapping"
+    
+  - id: "EDGE-002"
+    question: "Horizontal bar charts work well when you have many categories. True or False?"
+    expected_output:
+      answer: TRUE
+      confidence: 0.90
+      reason: "vertical scroll > horizontal scroll"
+    note: "Tests orientation rule with category count"
+    
+  - id: "EDGE-003"
+    question: "Data labels on a bar chart show the category names. True or False?"
+    expected_output:
+      answer: FALSE
+      confidence: 0.95
+      reason: "data label = numeric value on bar"
+    note: "Tests common misconception about data labels"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PERFORMANCE BENCHMARKS
+# ═══════════════════════════════════════════════════════════════════════════
+
+performance_expectations:
+  
+  classification_speed:
+    description: "Time to identify question type"
+    target: "< 100ms"
+    complexity: "O(n) where n = number of trigger keywords"
+    
+  pattern_matching_speed:
+    description: "Time to match against pattern rules"
+    target: "< 200ms"
+    complexity: "O(m) where m = number of pattern rules"
+    
+  total_resolution_time:
+    description: "End-to-end time from question to answer"
+    target: "< 500ms"
+    complexity: "O(n + m)"
+    
+  confidence_calibration:
+    description: "Accuracy of confidence scores"
+    target: "> 90% calibration accuracy"
+    method: "Compare predicted confidence to actual correctness rate"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# EXTENSION EXAMPLES
+# ═══════════════════════════════════════════════════════════════════════════
+
+extension_examples:
+  
+  adding_new_chart_type:
+    description: "Example of adding pie chart rules"
+    layer_3_addition: |
+      pie_chart_rules:
+        - pattern: "pie chart + more than 7 slices"
+          answer: FALSE
+          reason: "too many slices reduce readability"
+        - pattern: "pie chart + show proportions"
+          answer: TRUE
+          reason: "visual proportion is pie chart strength"
+    layer_2_addition: |
+      chart_concepts:
+        pie_chart: "עוגה"  # uga - cake/pie
+        slice: "חלק"       # helek - part/portion
+        
+  adding_new_question_type:
+    description: "Example of adding definition questions"
+    layer_1_addition: |
+      type_definition:
+        triggers: ["define", "what is", "meaning of"]
+        output_type: "TEXT"
+    layer_3_addition: |
+      definition_rules:
+        - pattern: "define + bar chart"
+          answer: "A chart using rectangular bars to compare values across categories"
+          reason: "standard definition"
