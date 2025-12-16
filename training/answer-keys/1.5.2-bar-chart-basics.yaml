@@ -1,0 +1,40 @@
+# 🔥 ANSWER KEY - 1.5.2 Bar Chart Basics
+# VESSEL MODE: RAPID FIRE
+
+q1:
+  text: "A bar chart excels at showing precise values."
+  answer: FALSE
+  reason: "relative comparison, not precision"
+
+q2:
+  text: "A bar chart excels at showing relative values."
+  answer: TRUE
+  reason: "visual comparison is the whole point"
+
+q3:
+  text: "The more gridlines drawn in a bar chart, the better."
+  answer: FALSE
+  reason: "clutter kills readability"
+
+q4:
+  text: "A data label is a category name, such as 'IBM' in the above example."
+  answer: FALSE
+  reason: "data label = the NUMBER shown on/near bar, not the category name"
+
+q5:
+  text: "In the above bar chart on U.S. employers, the category axis is named 'Employees'."
+  answer: FALSE
+  reason: "category axis = 'Company' | value axis = 'Employees'"
+
+q6:
+  text: "For the above U.S. employers chart, categories were ordered by value. An alphabetical ordering would have been just as good."
+  answer: FALSE
+  reason: "ordering by value shows hierarchy; alphabetical loses that insight"
+
+# ═══════════════════════════════════
+progress:
+  section: "1.5.2"
+  answers: [F, T, F, F, F, F]
+  pattern: "5 false, 1 true"
+  points: "+6 🔥🔥🔥🔥🔥🔥"
+# ═══════════════════════════════════
