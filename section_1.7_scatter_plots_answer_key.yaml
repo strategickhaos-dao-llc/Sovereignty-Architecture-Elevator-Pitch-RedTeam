@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════
+# 🔥 SECTION 1.7 SCATTER PLOTS - ANSWER KEY
+# Status: ✅ ALREADY COMPLETE (partial prior work)
+# ═══════════════════════════════════════════════════════════════════
+
+section_1.7_scatter_plots:
+  status: ✅ COMPLETE
+  
+  activities:
+    1.7.1:
+      name: "Scatter plot basics"
+      q1: "~20"           # rank for 150 faculty
+      q2: "~10-15"        # expected rank for 200 faculty
+      q3: "factors other than faculty affect rank"
+      
+    1.7.2:
+      name: "Independent/dependent variables"
+      q1: "independent"   # faculty count (controlled)
+      q2: "dependent"     # height (determined by age)
+      q3: "No"            # neither is obvious
+      q4: "16"            # age when growth plateaus
+      
+    1.7.3:
+      name: "Regression curves"
+      q1: false           # points don't all lie ON curve
+      q2: "linear"        # paint vs area = linear
+      q3: "nonlinear"     # height vs age curves/plateaus
+      
+    1.7.4:
+      name: "Strip/swarm plots"
+      q1: false           # strip plots overlap, can't count
+      q2: true            # jittering reveals hidden points
+
+  challenges:
+    1.7.1:
+      name: "Identify linear model"
+      answer: "a"         # only linear pattern
+
+# ═══════════════════════════════════════════════════════════════════
+# RUNNING TOTAL
+# ═══════════════════════════════════════════════════════════════════
+
+session_progress:
+  sections_complete: [1.5, 1.6, 1.7]
+  total: 3
+  next: "1.8 Line Charts"
+  momentum: "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+
+# ═══════════════════════════════════════════════════════════════════
