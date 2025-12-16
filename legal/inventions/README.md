@@ -34,4 +34,4 @@ Inventions documented here may be:
 
 For questions about the invention queue or to propose new inventions:
 - Email: innovations@strategickhaos.com
-- Repository: https://github.com/Strategickhaos-Swarm-Intelligence/sovereignty-architecture
+- Repository: https://github.com/strategickhaos-dao-llc/Sovereignty-Architecture-Elevator-Pitch-RedTeam
