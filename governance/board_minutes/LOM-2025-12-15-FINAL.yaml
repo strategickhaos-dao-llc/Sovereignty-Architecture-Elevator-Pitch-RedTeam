@@ -34,7 +34,7 @@ pivot_approved:
 deliverable:
   name: "FlameLang Statistical Operations Benchmark Suite"
   
-  structure:
+  structure: |
     benchmarks/
       ├── cpp/          # Baseline performance
       ├── rust/         # Memory safety comparison  
