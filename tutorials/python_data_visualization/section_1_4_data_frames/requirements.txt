@@ -1,0 +1,14 @@
+# Requirements for Section 1.4: Data Frames Tutorial
+# Install with: pip install -r requirements.txt
+
+# Core data manipulation library
+pandas>=1.3.0
+
+# Statistical data visualization (includes sample datasets like Titanic)
+seaborn>=0.11.0
+
+# Plotting library (dependency of seaborn)
+matplotlib>=3.3.0
+
+# Numerical computing (dependency of pandas)
+numpy>=1.21.0
