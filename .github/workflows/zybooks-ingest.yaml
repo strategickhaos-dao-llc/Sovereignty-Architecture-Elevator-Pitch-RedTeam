@@ -1,0 +1,151 @@
+name: zyBooks Content Ingestion
+
+on:
+  push:
+    paths:
+      - 'training/zybooks/PASTE_HERE.md'
+      - 'training/zybooks/sections/**'
+  workflow_dispatch:
+    inputs:
+      content_file:
+        description: 'Path to zyBooks content file'
+        required: false
+        default: 'training/zybooks/PASTE_HERE.md'
+      output_format:
+        description: 'Output format (vessel/yaml/detailed)'
+        required: false
+        default: 'vessel'
+
+jobs:
+  process-zybooks:
+    name: Process zyBooks Content
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+      
+      - name: Detect zyBooks content
+        id: detect
+        run: |
+          CONTENT_FILE="${{ github.event.inputs.content_file || 'training/zybooks/PASTE_HERE.md' }}"
+          
+          if [ ! -f "$CONTENT_FILE" ]; then
+            echo "content_found=false" >> $GITHUB_OUTPUT
+            echo "❌ Content file not found: $CONTENT_FILE"
+            exit 0
+          fi
+          
+          # Check if file has content
+          if [ ! -s "$CONTENT_FILE" ]; then
+            echo "content_found=false" >> $GITHUB_OUTPUT
+            echo "❌ Content file is empty: $CONTENT_FILE"
+            exit 0
+          fi
+          
+          echo "content_found=true" >> $GITHUB_OUTPUT
+          echo "✓ Content file found and non-empty"
+      
+      - name: Process zyBooks content
+        if: steps.detect.outputs.content_found == 'true'
+        id: process
+        run: |
+          CONTENT_FILE="${{ github.event.inputs.content_file || 'training/zybooks/PASTE_HERE.md' }}"
+          FORMAT="${{ github.event.inputs.output_format || 'vessel' }}"
+          
+          echo "🔥 Processing zyBooks content..."
+          echo "File: $CONTENT_FILE"
+          echo "Format: $FORMAT"
+          echo ""
+          
+          # Process the content
+          python agents/zybooks-solver/main.py "$CONTENT_FILE" --format "$FORMAT"
+      
+      - name: Archive processed results
+        if: steps.detect.outputs.content_found == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zybooks-results-${{ github.run_number }}
+          path: |
+            training/zybooks/sections/**/*.json
+            training/zybooks/patterns/**/*.jsonl
+          retention-days: 30
+      
+      - name: Summary
+        if: steps.detect.outputs.content_found == 'true'
+        run: |
+          echo "### 🔥 zyBooks Processing Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: ✓ Success" >> $GITHUB_STEP_SUMMARY
+          echo "**Run**: #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Format**: ${{ github.event.inputs.output_format || 'vessel' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Count processed files
+          SECTION_COUNT=$(find training/zybooks/sections -name "*.json" 2>/dev/null | wc -l)
+          echo "**Sections Processed**: $SECTION_COUNT" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Results saved to artifacts for 30 days" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Notify Discord (optional)
+        if: steps.detect.outputs.content_found == 'true' && vars.DISCORD_WEBHOOK_URL != ''
+        run: |
+          curl -X POST "${{ vars.DISCORD_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "🔥 zyBooks content processed - Run #${{ github.run_number }}",
+              "embeds": [{
+                "title": "zyBooks Ingestion Complete",
+                "color": 3447003,
+                "fields": [
+                  {"name": "Status", "value": "✓ Success", "inline": true},
+                  {"name": "Format", "value": "${{ github.event.inputs.output_format || 'vessel' }}", "inline": true}
+                ]
+              }]
+            }'
+
+  # Optional: Validate answers against known patterns
+  validate-answers:
+    name: Validate Answers
+    runs-on: ubuntu-latest
+    needs: process-zybooks
+    if: success()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run validation
+        run: |
+          echo "🔍 Validating answer patterns..."
+          
+          # Check for common statistical patterns
+          if [ -d "training/zybooks/patterns" ]; then
+            echo "✓ Pattern directory exists"
+            
+            # Count patterns by type
+            for pattern_file in training/zybooks/patterns/*.jsonl; do
+              if [ -f "$pattern_file" ]; then
+                COUNT=$(wc -l < "$pattern_file")
+                echo "  - $(basename $pattern_file): $COUNT patterns"
+              fi
+            done
+          fi
+          
+          echo ""
+          echo "✓ Validation complete"

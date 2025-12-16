@@ -35,3 +35,19 @@ target/
 
 # Workspace data
 workspace/
+
+# zyBooks training data (generated files)
+training/zybooks/sections/*.json
+training/zybooks/patterns/*.jsonl
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/

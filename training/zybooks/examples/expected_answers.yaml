@@ -1,0 +1,56 @@
+# Expected answers for sample_statistics.txt
+# Used for validation and testing
+
+section: "1.5"
+topic: "Basic Statistics"
+
+answers:
+  q1:
+    answer: TRUE
+    type: true_false
+    reasoning: "Mean is defined as the average"
+    
+  q2:
+    answer: TRUE
+    type: true_false
+    reasoning: "Median is the middle value of sorted data"
+    
+  q3:
+    answer: "20"
+    type: numeric
+    reasoning: "25% of 80 = 0.25 * 80 = 20"
+    
+  q4:
+    answer: "20"
+    type: numeric
+    reasoning: "10% of 200 = 0.10 * 200 = 20"
+    
+  q5:
+    answer: TRUE
+    type: true_false
+    reasoning: "Standard deviation measures spread/dispersion"
+    
+  q6:
+    answer: FALSE
+    type: true_false
+    reasoning: "Mode and median are different measures"
+    
+  q7:
+    answer: FALSE
+    type: true_false
+    reasoning: "Classic fallacy - correlation does NOT imply causation"
+    
+  q8:
+    answer: TRUE
+    type: true_false
+    reasoning: "Sample is by definition a subset of population"
+    
+  q9:
+    answer: TRUE
+    type: true_false
+    reasoning: "P-value definition is correct"
+    
+  q10:
+    answer: "75"
+    type: numeric
+    reasoning: "50% of 150 = 0.50 * 150 = 75"
