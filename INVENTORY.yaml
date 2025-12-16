@@ -78,6 +78,8 @@ components:
     domain: flamelang/runtime
     status: missing
     depends_on: [FL-006]
+    outputs:
+      - src/flamelang/runtime/
 
   # Tooling & Benchmarks
   - id: FL-009
@@ -85,6 +87,8 @@ components:
     domain: tooling
     status: missing
     depends_on: []
+    outputs:
+      - build/
 
   - id: FL-010
     name: Benchmark Suite (MAT-243 Stats Problems)
@@ -109,15 +113,21 @@ components:
     domain: os
     status: missing
     depends_on: [OS-001]
+    outputs:
+      - src/kernel/entry/
 
   - id: OS-003
     name: Memory Management
     domain: os
     status: missing
     depends_on: [OS-002]
+    outputs:
+      - src/kernel/mm/
 
   - id: OS-004
     name: Basic Shell/Userspace
     domain: os
     status: missing
     depends_on: [FL-006, OS-003]  # Written in FlameLang
+    outputs:
+      - src/userspace/shell/
