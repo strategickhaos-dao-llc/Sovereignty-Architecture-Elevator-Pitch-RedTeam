@@ -1,0 +1,12 @@
+# Requirements for Line Charts Tutorial (Section 1.8)
+# Install with: pip install -r requirements_line_charts.txt
+
+# Core visualization library
+matplotlib>=3.5.0
+
+# Numerical operations and trend line calculations
+numpy>=1.21.0
+
+# Optional: For fetching real financial data
+# yfinance>=0.2.0
+# nasdaq-data-link>=1.0.0
