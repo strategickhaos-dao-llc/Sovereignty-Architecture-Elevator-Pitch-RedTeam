@@ -1,0 +1,180 @@
+{
+  "pattern_library": "algebra_patterns",
+  "version": "1.0.0",
+  "description": "Algebraic equation patterns for automatic solving",
+  "patterns": [
+    {
+      "id": "linear_equation",
+      "name": "Linear Equation Solver",
+      "category": "algebra",
+      "match_regex": "([-]?\\d*\\.?\\d*)x\\s*([+-])\\s*(\\d+(?:\\.\\d+)?)\\s*=\\s*(\\d+(?:\\.\\d+)?)",
+      "semantic_markers": ["solve for x", "linear equation", "find x"],
+      "variables": {
+        "coefficient": "coefficient of x",
+        "constant": "constant term on left side",
+        "result": "value on right side"
+      },
+      "algorithm": {
+        "type": "algebraic_manipulation",
+        "steps": [
+          "parse_coefficient(coefficient)",
+          "parse_constant(constant)",
+          "parse_result(result)",
+          "isolate_x: x = (result - constant) / coefficient"
+        ],
+        "flamelang_code": "solve_linear(${coefficient}, ${constant}, ${result})"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "Solve for x: 2x + 3 = 7",
+          "variables": {"coefficient": 2, "constant": 3, "result": 7},
+          "expected": 2
+        },
+        {
+          "input": "Find x: 5x - 10 = 15",
+          "variables": {"coefficient": 5, "constant": -10, "result": 15},
+          "expected": 5
+        }
+      ]
+    },
+    {
+      "id": "quadratic_equation",
+      "name": "Quadratic Equation Solver",
+      "category": "algebra",
+      "match_regex": "([-]?\\d*\\.?\\d*)x\\^2\\s*([+-])\\s*([-]?\\d*\\.?\\d*)x\\s*([+-])\\s*([-]?\\d+(?:\\.\\d+)?)\\s*=\\s*0",
+      "semantic_markers": ["quadratic", "x^2", "solve quadratic"],
+      "variables": {
+        "a": "coefficient of x^2",
+        "b": "coefficient of x",
+        "c": "constant term"
+      },
+      "algorithm": {
+        "type": "quadratic_formula",
+        "steps": [
+          "parse_coefficients(a, b, c)",
+          "calculate_discriminant: D = b^2 - 4ac",
+          "check_discriminant_validity(D)",
+          "apply_formula: x = (-b ± sqrt(D)) / (2a)"
+        ],
+        "flamelang_code": "solve_quadratic(${a}, ${b}, ${c})",
+        "formula": "x = (-b ± √(b² - 4ac)) / 2a"
+      },
+      "output_format": "array_of_solutions",
+      "validation": {
+        "discriminant_check": "b^2 - 4ac >= 0 for real solutions"
+      },
+      "test_cases": [
+        {
+          "input": "Solve x^2 - 5x + 6 = 0",
+          "variables": {"a": 1, "b": -5, "c": 6},
+          "expected": [2, 3]
+        },
+        {
+          "input": "Find x in x^2 + 2x - 8 = 0",
+          "variables": {"a": 1, "b": 2, "c": -8},
+          "expected": [-4, 2]
+        }
+      ]
+    },
+    {
+      "id": "system_of_equations_2x2",
+      "name": "System of 2 Linear Equations",
+      "category": "algebra",
+      "match_regex": ".*system.*equations.*",
+      "semantic_markers": ["system", "two equations", "simultaneous"],
+      "variables": {
+        "a1": "x coefficient in equation 1",
+        "b1": "y coefficient in equation 1",
+        "c1": "constant in equation 1",
+        "a2": "x coefficient in equation 2",
+        "b2": "y coefficient in equation 2",
+        "c2": "constant in equation 2"
+      },
+      "algorithm": {
+        "type": "elimination_or_substitution",
+        "steps": [
+          "parse_coefficients(a1, b1, c1, a2, b2, c2)",
+          "calculate_determinant: D = a1*b2 - a2*b1",
+          "check_solvability(D)",
+          "apply_cramers_rule: x = (c1*b2 - c2*b1)/D, y = (a1*c2 - a2*c1)/D"
+        ],
+        "flamelang_code": "solve_system_2x2(${a1}, ${b1}, ${c1}, ${a2}, ${b2}, ${c2})"
+      },
+      "output_format": "solution_pair",
+      "test_cases": [
+        {
+          "input": "Solve: 2x + y = 5 and x - y = 1",
+          "variables": {"a1": 2, "b1": 1, "c1": 5, "a2": 1, "b2": -1, "c2": 1},
+          "expected": {"x": 2, "y": 1}
+        }
+      ]
+    },
+    {
+      "id": "polynomial_factorization",
+      "name": "Polynomial Factorization",
+      "category": "algebra",
+      "match_regex": "factor.*x\\^2.*",
+      "semantic_markers": ["factor", "factorize", "factorization"],
+      "variables": {
+        "a": "coefficient of x^2",
+        "b": "coefficient of x",
+        "c": "constant term"
+      },
+      "algorithm": {
+        "type": "factorization",
+        "steps": [
+          "parse_coefficients(a, b, c)",
+          "find_factors_of_ac()",
+          "identify_pair_summing_to_b()",
+          "construct_binomial_factors()"
+        ],
+        "flamelang_code": "factorize_quadratic(${a}, ${b}, ${c})"
+      },
+      "output_format": "factored_form",
+      "test_cases": [
+        {
+          "input": "Factor x^2 + 5x + 6",
+          "variables": {"a": 1, "b": 5, "c": 6},
+          "expected": "(x + 2)(x + 3)"
+        }
+      ]
+    },
+    {
+      "id": "exponential_equation",
+      "name": "Exponential Equation Solver",
+      "category": "algebra",
+      "match_regex": "\\d+\\^x\\s*=\\s*\\d+",
+      "semantic_markers": ["exponential", "solve for exponent"],
+      "variables": {
+        "base": "base of exponential",
+        "result": "result value"
+      },
+      "algorithm": {
+        "type": "logarithmic_conversion",
+        "steps": [
+          "parse_base_and_result(base, result)",
+          "apply_logarithm: x = log_base(result)",
+          "simplify_if_possible()"
+        ],
+        "flamelang_code": "solve_exponential(${base}, ${result})"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "Solve 2^x = 8",
+          "variables": {"base": 2, "result": 8},
+          "expected": 3
+        }
+      ]
+    }
+  ],
+  "usage_instructions": {
+    "step1": "Identify equation type from pattern",
+    "step2": "Extract coefficients and constants",
+    "step3": "Apply appropriate solving algorithm",
+    "step4": "Validate solutions",
+    "step5": "Format output as specified"
+  },
+  "transfer_format": "Paste this JSON into any AI chat to enable algebra pattern recognition"
+}

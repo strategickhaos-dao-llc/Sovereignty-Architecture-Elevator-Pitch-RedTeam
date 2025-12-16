@@ -1,0 +1,254 @@
+{
+  "pattern_library": "boolean_logic_patterns",
+  "version": "1.0.0",
+  "description": "Boolean logic and propositional calculus patterns",
+  "patterns": [
+    {
+      "id": "truth_table_evaluation",
+      "name": "Truth Table Evaluation",
+      "category": "boolean_logic",
+      "match_regex": "truth\\s+table|evaluate.*logic",
+      "semantic_markers": ["truth table", "boolean", "logical expression"],
+      "variables": {
+        "expression": "logical expression",
+        "inputs": "boolean input variables"
+      },
+      "algorithm": {
+        "type": "truth_table_generation",
+        "steps": [
+          "parse_logical_expression(expression)",
+          "identify_variables(inputs)",
+          "generate_all_combinations(inputs)",
+          "evaluate_for_each_combination()"
+        ],
+        "flamelang_code": "generate_truth_table(${expression})"
+      },
+      "output_format": "truth_table",
+      "test_cases": [
+        {
+          "input": "Create truth table for A AND B",
+          "variables": {"expression": "A ∧ B", "inputs": ["A", "B"]},
+          "expected": {
+            "00": false,
+            "01": false,
+            "10": false,
+            "11": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "and_operation",
+      "name": "Logical AND",
+      "category": "boolean_logic",
+      "match_regex": "(\\w+)\\s+(AND|∧|&&)\\s+(\\w+)",
+      "semantic_markers": ["AND", "conjunction", "both"],
+      "variables": {
+        "operand1": "first boolean value",
+        "operand2": "second boolean value"
+      },
+      "algorithm": {
+        "type": "direct_evaluation",
+        "steps": [
+          "parse_boolean(operand1)",
+          "parse_boolean(operand2)",
+          "apply_and(operand1, operand2)"
+        ],
+        "flamelang_code": "eval(and(${operand1}, ${operand2}))"
+      },
+      "output_format": "boolean",
+      "test_cases": [
+        {
+          "input": "What is TRUE AND FALSE?",
+          "variables": {"operand1": true, "operand2": false},
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "or_operation",
+      "name": "Logical OR",
+      "category": "boolean_logic",
+      "match_regex": "(\\w+)\\s+(OR|∨|\\|\\|)\\s+(\\w+)",
+      "semantic_markers": ["OR", "disjunction", "either"],
+      "variables": {
+        "operand1": "first boolean value",
+        "operand2": "second boolean value"
+      },
+      "algorithm": {
+        "type": "direct_evaluation",
+        "steps": [
+          "parse_boolean(operand1)",
+          "parse_boolean(operand2)",
+          "apply_or(operand1, operand2)"
+        ],
+        "flamelang_code": "eval(or(${operand1}, ${operand2}))"
+      },
+      "output_format": "boolean",
+      "test_cases": [
+        {
+          "input": "Evaluate TRUE OR FALSE",
+          "variables": {"operand1": true, "operand2": false},
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "not_operation",
+      "name": "Logical NOT",
+      "category": "boolean_logic",
+      "match_regex": "(NOT|¬|!)\\s*(\\w+)",
+      "semantic_markers": ["NOT", "negation", "inverse"],
+      "variables": {
+        "operand": "boolean value to negate"
+      },
+      "algorithm": {
+        "type": "direct_evaluation",
+        "steps": [
+          "parse_boolean(operand)",
+          "apply_not(operand)"
+        ],
+        "flamelang_code": "eval(not(${operand}))"
+      },
+      "output_format": "boolean",
+      "test_cases": [
+        {
+          "input": "What is NOT TRUE?",
+          "variables": {"operand": true},
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "xor_operation",
+      "name": "Logical XOR",
+      "category": "boolean_logic",
+      "match_regex": "(\\w+)\\s+(XOR|⊕)\\s+(\\w+)",
+      "semantic_markers": ["XOR", "exclusive or", "one or the other"],
+      "variables": {
+        "operand1": "first boolean value",
+        "operand2": "second boolean value"
+      },
+      "algorithm": {
+        "type": "direct_evaluation",
+        "steps": [
+          "parse_boolean(operand1)",
+          "parse_boolean(operand2)",
+          "apply_xor(operand1, operand2)"
+        ],
+        "flamelang_code": "eval(xor(${operand1}, ${operand2}))"
+      },
+      "output_format": "boolean",
+      "test_cases": [
+        {
+          "input": "Calculate TRUE XOR TRUE",
+          "variables": {"operand1": true, "operand2": true},
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "complex_logic_expression",
+      "name": "Complex Logical Expression",
+      "category": "boolean_logic",
+      "match_regex": ".*[∧∨¬⊕].*[∧∨¬⊕].*",
+      "semantic_markers": ["evaluate", "simplify", "logic expression"],
+      "variables": {
+        "expression": "full logical expression"
+      },
+      "algorithm": {
+        "type": "parser_based",
+        "steps": [
+          "tokenize_logical_expression(expression)",
+          "build_logic_ast(tokens)",
+          "apply_precedence_rules()",
+          "evaluate_ast()"
+        ],
+        "flamelang_code": "eval(parse_logic(${expression}))",
+        "precedence": "NOT > AND > OR > XOR"
+      },
+      "output_format": "boolean",
+      "test_cases": [
+        {
+          "input": "Evaluate (A ∧ B) ∨ (¬C)",
+          "variables": {"A": true, "B": false, "C": true},
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "demorgan_simplification",
+      "name": "De Morgan's Law Application",
+      "category": "boolean_logic",
+      "match_regex": "simplify.*NOT.*AND|simplify.*NOT.*OR",
+      "semantic_markers": ["De Morgan", "simplify", "equivalent"],
+      "variables": {
+        "expression": "logical expression to simplify"
+      },
+      "algorithm": {
+        "type": "algebraic_transformation",
+        "steps": [
+          "parse_expression(expression)",
+          "identify_demorgan_pattern()",
+          "apply_transformation: ¬(A ∧ B) = (¬A) ∨ (¬B)",
+          "or: ¬(A ∨ B) = (¬A) ∧ (¬B)"
+        ],
+        "flamelang_code": "apply_demorgan(${expression})"
+      },
+      "output_format": "simplified_expression",
+      "test_cases": [
+        {
+          "input": "Simplify NOT(A AND B)",
+          "variables": {"expression": "¬(A ∧ B)"},
+          "expected": "(¬A) ∨ (¬B)"
+        }
+      ]
+    },
+    {
+      "id": "implication_evaluation",
+      "name": "Logical Implication",
+      "category": "boolean_logic",
+      "match_regex": "(\\w+)\\s+(IMPLIES|→|⇒)\\s+(\\w+)",
+      "semantic_markers": ["implies", "if then", "implication"],
+      "variables": {
+        "antecedent": "condition (if part)",
+        "consequent": "conclusion (then part)"
+      },
+      "algorithm": {
+        "type": "implication_evaluation",
+        "steps": [
+          "parse_boolean(antecedent)",
+          "parse_boolean(consequent)",
+          "apply_implication: ¬antecedent ∨ consequent"
+        ],
+        "flamelang_code": "eval(implies(${antecedent}, ${consequent}))"
+      },
+      "output_format": "boolean",
+      "test_cases": [
+        {
+          "input": "Evaluate TRUE → FALSE",
+          "variables": {"antecedent": true, "consequent": false},
+          "expected": false
+        }
+      ]
+    }
+  ],
+  "logic_laws": {
+    "identity": ["A ∧ TRUE = A", "A ∨ FALSE = A"],
+    "domination": ["A ∨ TRUE = TRUE", "A ∧ FALSE = FALSE"],
+    "idempotent": ["A ∧ A = A", "A ∨ A = A"],
+    "double_negation": "¬(¬A) = A",
+    "commutative": ["A ∧ B = B ∧ A", "A ∨ B = B ∨ A"],
+    "associative": ["(A ∧ B) ∧ C = A ∧ (B ∧ C)", "(A ∨ B) ∨ C = A ∨ (B ∨ C)"],
+    "distributive": ["A ∧ (B ∨ C) = (A ∧ B) ∨ (A ∧ C)"],
+    "demorgan": ["¬(A ∧ B) = (¬A) ∨ (¬B)", "¬(A ∨ B) = (¬A) ∧ (¬B)"]
+  },
+  "usage_instructions": {
+    "step1": "Parse logical expression",
+    "step2": "Identify operators and variables",
+    "step3": "Apply evaluation rules with proper precedence",
+    "step4": "Simplify using logic laws if requested",
+    "step5": "Return boolean result or simplified form"
+  },
+  "transfer_format": "Paste this JSON into any AI chat to enable boolean logic pattern recognition"
+}

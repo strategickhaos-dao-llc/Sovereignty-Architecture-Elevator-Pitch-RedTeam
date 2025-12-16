@@ -1,0 +1,197 @@
+{
+  "pattern_library": "arithmetic_patterns",
+  "version": "1.0.0",
+  "description": "Core arithmetic operation patterns for automatic question solving",
+  "patterns": [
+    {
+      "id": "basic_addition",
+      "name": "Basic Addition",
+      "category": "arithmetic",
+      "match_regex": "(\\d+(?:\\.\\d+)?)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)",
+      "semantic_markers": ["add", "sum", "plus", "total"],
+      "variables": {
+        "operand1": "first number",
+        "operand2": "second number"
+      },
+      "algorithm": {
+        "type": "direct_computation",
+        "steps": [
+          "parse_number(operand1)",
+          "parse_number(operand2)",
+          "add(operand1, operand2)"
+        ],
+        "flamelang_code": "eval(add(${operand1}, ${operand2}))"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "What is 5 + 3?",
+          "variables": {"operand1": 5, "operand2": 3},
+          "expected": 8
+        },
+        {
+          "input": "Calculate 12.5 + 7.3",
+          "variables": {"operand1": 12.5, "operand2": 7.3},
+          "expected": 19.8
+        }
+      ]
+    },
+    {
+      "id": "basic_subtraction",
+      "name": "Basic Subtraction",
+      "category": "arithmetic",
+      "match_regex": "(\\d+(?:\\.\\d+)?)\\s*-\\s*(\\d+(?:\\.\\d+)?)",
+      "semantic_markers": ["subtract", "difference", "minus", "less"],
+      "variables": {
+        "minuend": "number being subtracted from",
+        "subtrahend": "number being subtracted"
+      },
+      "algorithm": {
+        "type": "direct_computation",
+        "steps": [
+          "parse_number(minuend)",
+          "parse_number(subtrahend)",
+          "subtract(minuend, subtrahend)"
+        ],
+        "flamelang_code": "eval(sub(${minuend}, ${subtrahend}))"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "What is 10 - 4?",
+          "variables": {"minuend": 10, "subtrahend": 4},
+          "expected": 6
+        }
+      ]
+    },
+    {
+      "id": "basic_multiplication",
+      "name": "Basic Multiplication",
+      "category": "arithmetic",
+      "match_regex": "(\\d+(?:\\.\\d+)?)\\s*[*×]\\s*(\\d+(?:\\.\\d+)?)",
+      "semantic_markers": ["multiply", "product", "times"],
+      "variables": {
+        "factor1": "first factor",
+        "factor2": "second factor"
+      },
+      "algorithm": {
+        "type": "direct_computation",
+        "steps": [
+          "parse_number(factor1)",
+          "parse_number(factor2)",
+          "multiply(factor1, factor2)"
+        ],
+        "flamelang_code": "eval(mul(${factor1}, ${factor2}))"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "What is 6 × 7?",
+          "variables": {"factor1": 6, "factor2": 7},
+          "expected": 42
+        }
+      ]
+    },
+    {
+      "id": "basic_division",
+      "name": "Basic Division",
+      "category": "arithmetic",
+      "match_regex": "(\\d+(?:\\.\\d+)?)\\s*[/÷]\\s*(\\d+(?:\\.\\d+)?)",
+      "semantic_markers": ["divide", "quotient", "ratio"],
+      "variables": {
+        "dividend": "number being divided",
+        "divisor": "number dividing by"
+      },
+      "algorithm": {
+        "type": "direct_computation",
+        "steps": [
+          "parse_number(dividend)",
+          "parse_number(divisor)",
+          "validate_non_zero(divisor)",
+          "divide(dividend, divisor)"
+        ],
+        "flamelang_code": "eval(div(${dividend}, ${divisor}))"
+      },
+      "output_format": "numeric",
+      "validation": {
+        "divisor_check": "divisor != 0"
+      },
+      "test_cases": [
+        {
+          "input": "What is 20 / 4?",
+          "variables": {"dividend": 20, "divisor": 4},
+          "expected": 5
+        }
+      ]
+    },
+    {
+      "id": "order_of_operations",
+      "name": "Order of Operations (PEMDAS)",
+      "category": "arithmetic",
+      "match_regex": ".*[\\+\\-\\*/\\(\\)].*",
+      "semantic_markers": ["calculate", "evaluate", "simplify"],
+      "variables": {
+        "expression": "full arithmetic expression"
+      },
+      "algorithm": {
+        "type": "parser_based",
+        "steps": [
+          "tokenize(expression)",
+          "build_ast(tokens)",
+          "apply_pemdas(ast)",
+          "evaluate(ast)"
+        ],
+        "flamelang_code": "eval(parse_and_compute(${expression}))"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "Calculate 2 + 3 * 4",
+          "variables": {"expression": "2 + 3 * 4"},
+          "expected": 14
+        },
+        {
+          "input": "Evaluate (2 + 3) * 4",
+          "variables": {"expression": "(2 + 3) * 4"},
+          "expected": 20
+        }
+      ]
+    },
+    {
+      "id": "percentage_calculation",
+      "name": "Percentage Calculation",
+      "category": "arithmetic",
+      "match_regex": "(\\d+(?:\\.\\d+)?)%\\s+of\\s+(\\d+(?:\\.\\d+)?)",
+      "semantic_markers": ["percent", "percentage", "% of"],
+      "variables": {
+        "percentage": "percent value",
+        "base": "base value"
+      },
+      "algorithm": {
+        "type": "direct_computation",
+        "steps": [
+          "parse_number(percentage)",
+          "parse_number(base)",
+          "multiply(base, divide(percentage, 100))"
+        ],
+        "flamelang_code": "eval(mul(${base}, div(${percentage}, 100)))"
+      },
+      "output_format": "numeric",
+      "test_cases": [
+        {
+          "input": "What is 25% of 80?",
+          "variables": {"percentage": 25, "base": 80},
+          "expected": 20
+        }
+      ]
+    }
+  ],
+  "usage_instructions": {
+    "step1": "Parse question text to identify pattern",
+    "step2": "Extract variables using regex or semantic matching",
+    "step3": "Apply FlameLang algorithm from matched pattern",
+    "step4": "Validate output format",
+    "step5": "Return result"
+  },
+  "transfer_format": "Paste this JSON into any AI chat to enable arithmetic pattern recognition"
+}
