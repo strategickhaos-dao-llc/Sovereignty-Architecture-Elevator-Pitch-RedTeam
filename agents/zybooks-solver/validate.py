@@ -123,6 +123,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Validate zyBooks solver accuracy')
     parser.add_argument('content', help='Path to content file')
     parser.add_argument('expected', help='Path to expected answers YAML')
+    parser.add_argument(
+        '--threshold', '-t',
+        type=float,
+        default=80.0,
+        help='Minimum accuracy threshold (default: 80.0)'
+    )
     
     args = parser.parse_args()
     
@@ -130,8 +136,13 @@ if __name__ == "__main__":
         results = validate_answers(args.content, args.expected)
         accuracy = print_validation_report(results)
         
-        # Exit with error code if accuracy is below 80%
-        sys.exit(0 if accuracy >= 80.0 else 1)
+        # Exit with error code if accuracy is below threshold
+        if accuracy < args.threshold:
+            print(f"\n❌ Accuracy {accuracy:.1f}% is below threshold {args.threshold:.1f}%")
+            sys.exit(1)
+        else:
+            print(f"\n✅ Accuracy {accuracy:.1f}% meets threshold {args.threshold:.1f}%")
+            sys.exit(0)
         
     except Exception as e:
         print(f"❌ Validation failed: {e}", file=sys.stderr)

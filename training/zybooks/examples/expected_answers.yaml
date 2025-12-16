@@ -6,12 +6,12 @@ topic: "Basic Statistics"
 
 answers:
   q1:
-    answer: TRUE
+    answer: true
     type: true_false
     reasoning: "Mean is defined as the average"
     
   q2:
-    answer: TRUE
+    answer: true
     type: true_false
     reasoning: "Median is the middle value of sorted data"
     
@@ -26,27 +26,27 @@ answers:
     reasoning: "10% of 200 = 0.10 * 200 = 20"
     
   q5:
-    answer: TRUE
+    answer: true
     type: true_false
     reasoning: "Standard deviation measures spread/dispersion"
     
   q6:
-    answer: FALSE
+    answer: false
     type: true_false
     reasoning: "Mode and median are different measures"
     
   q7:
-    answer: FALSE
+    answer: false
     type: true_false
     reasoning: "Classic fallacy - correlation does NOT imply causation"
     
   q8:
-    answer: TRUE
+    answer: true
     type: true_false
     reasoning: "Sample is by definition a subset of population"
     
   q9:
-    answer: TRUE
+    answer: true
     type: true_false
     reasoning: "P-value definition is correct"
     

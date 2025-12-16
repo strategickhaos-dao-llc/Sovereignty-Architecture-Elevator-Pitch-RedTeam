@@ -63,7 +63,7 @@ class ZyBooksSolver:
         r'mode.*mean',  # mode is NOT mean
         r'standard deviation.*average',  # std dev is NOT average
         r'correlation.*causation',  # correlation does NOT imply causation
-        r'variance.*standard deviation$',  # variance is NOT std dev (it's squared)
+        r'variance.*(?:is|equals).*standard deviation',  # variance is NOT std dev (it's squared)
         r'same as.*(?:mean|median|mode)',  # X is same as Y (usually false for different terms)
     ]
     
@@ -97,9 +97,11 @@ class ZyBooksSolver:
             confidence = min(0.9, 0.6 + (false_score * 0.1))
             reasoning = f"Pattern match: {false_score} false indicators"
         else:
-            answer_value = "TRUE"  # Default to TRUE if uncertain
-            confidence = 0.5
-            reasoning = "No clear pattern, defaulting to TRUE"
+            # When uncertain, default to TRUE with low confidence
+            # This is a conservative approach for educational content
+            answer_value = "TRUE"
+            confidence = 0.3  # Low confidence indicates uncertainty
+            reasoning = "No clear pattern, defaulting to TRUE (low confidence)"
         
         return Answer(
             question_id=question.id,
