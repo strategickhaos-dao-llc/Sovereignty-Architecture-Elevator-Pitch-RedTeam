@@ -1,0 +1,7 @@
+# Ignore generated chart images (they will be created when scripts are run)
+*.png
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
