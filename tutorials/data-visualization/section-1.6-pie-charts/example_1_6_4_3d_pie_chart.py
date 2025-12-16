@@ -37,7 +37,9 @@ ax1.set_title('2D Pie Chart (GOOD)\nFederal Spending by Category',
 ax1.axis('equal')
 
 # Simulated 3D effect (Bad practice)
-# matplotlib doesn't have true 3D pie charts, but we can show the distortion concept
+# This example uses shadows and exploding to demonstrate 3D-like effects rather than true 3D rendering.
+# While matplotlib's mplot3d toolkit can create 3D projections, standard practice is to use these effects
+# to show why 3D-style presentations distort data perception.
 explode = (0.1, 0, 0, 0, 0, 0)  # Explode the first slice to simulate 3D front effect
 
 wedges, texts, autotexts = ax2.pie(percentages, 

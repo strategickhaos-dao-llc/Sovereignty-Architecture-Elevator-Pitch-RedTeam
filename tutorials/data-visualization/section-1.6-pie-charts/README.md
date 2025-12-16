@@ -63,9 +63,10 @@ python example_1_6_5_poor_colors_exploded.py
 ```
 
 Each script will:
-- Display an interactive matplotlib window with the chart
 - Save a high-resolution PNG image of the chart
 - Print key insights and lessons to the console
+
+**Note**: The scripts use a non-interactive backend (Agg) by default to work in headless environments. To view charts interactively, uncomment the `plt.show()` line at the end of each script.
 
 ## Key Concepts
 
