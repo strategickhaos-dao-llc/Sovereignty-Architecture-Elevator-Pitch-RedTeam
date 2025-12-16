@@ -4,16 +4,12 @@
  */
 
 import { DNALayer } from '../types';
+import { DNA_CODONS, TRUTH_THRESHOLD } from '../constants';
 
 export class DNALayerProcessor {
   // DNA codons mapping to boolean logic
-  private codons = {
-    TRUE: "ATG",   // START codon = TRUE
-    FALSE: "TAA",  // STOP codon = FALSE
-    UNCERTAIN: "NNN" // Ambiguous
-  };
-
-  private readonly TRUTH_THRESHOLD = 0.70; // 70% confidence = TRUE
+  private readonly codons = DNA_CODONS;
+  private readonly truthThreshold = TRUTH_THRESHOLD;
 
   /**
    * Convert wave frequency to boolean codon
@@ -36,10 +32,10 @@ export class DNALayerProcessor {
     if (interference !== "none") {
       // Apply interference damping
       const dampedFrequency = frequency * 0.5;
-      return dampedFrequency >= this.TRUTH_THRESHOLD;
+      return dampedFrequency >= this.truthThreshold;
     }
     
     // Normal threshold check
-    return frequency >= this.TRUTH_THRESHOLD;
+    return frequency >= this.truthThreshold;
   }
 }

@@ -278,8 +278,10 @@ function runAllTests(): void {
   }
 }
 
-// Run tests if executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Run tests if executed directly (when this is the main module)
+// Note: This is a simplified check for ES modules
+const isMainModule = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'));
+if (isMainModule) {
   runAllTests();
 }
 

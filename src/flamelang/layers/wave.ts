@@ -4,8 +4,11 @@
  */
 
 import { WaveLayer } from '../types';
+import { CONFIDENCE_LEVELS } from '../constants';
 
 export class WaveLayerProcessor {
+  // Confidence level constants
+  private readonly CONFIDENCE = CONFIDENCE_LEVELS;
   /**
    * Calculate truth frequency and interference
    */
@@ -30,36 +33,36 @@ export class WaveLayerProcessor {
     if (matchType === "LITERAL_MAPPING") {
       // Building floors → vertical is very intuitive
       if (conditionLower.includes("floor") && subjectLower.includes("vertical")) {
-        return 0.98;
+        return this.CONFIDENCE.VERY_HIGH;
       }
       if (conditionLower.includes("floor") && subjectLower.includes("horizontal")) {
-        return 0.05;
+        return this.CONFIDENCE.VERY_LOW;
       }
     }
     
     if (matchType === "MAGNITUDE_DIRECTION") {
       // Negative values → downward (vertical) is intuitive
       if (conditionLower.includes("negative") && subjectLower.includes("vertical")) {
-        return 0.95;
+        return this.CONFIDENCE.HIGH;
       }
       if (conditionLower.includes("negative") && subjectLower.includes("horizontal")) {
-        return 0.15;
+        return this.CONFIDENCE.LOW;
       }
     }
     
     if (matchType === "ABSTRACT_LAYOUT" || matchType === "ALIGNMENT_ADVANTAGE") {
       // Long labels → horizontal avoids rotation
       if (conditionLower.includes("long") && subjectLower.includes("horizontal")) {
-        return 0.95;
+        return this.CONFIDENCE.HIGH;
       }
       // Many categories → horizontal expands easier
       if (conditionLower.includes("many") && subjectLower.includes("horizontal")) {
-        return 0.90;
+        return this.CONFIDENCE.MEDIUM_HIGH;
       }
     }
     
     // Default medium confidence
-    return 0.50;
+    return this.CONFIDENCE.DEFAULT;
   }
 
   /**

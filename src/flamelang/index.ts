@@ -6,6 +6,7 @@
 export * from './types';
 export * from './parser';
 export * from './decision-engine';
+export * from './constants';
 export * from './layers/english';
 export * from './layers/hebrew';
 export * from './layers/unicode';
