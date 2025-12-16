@@ -3,7 +3,7 @@
 
 hierarchy:
   population: "all objects under study"
-  sampling_frame: "subset population can draw from"
+  sampling_frame: "subset of population we can draw from"
   sample: "actual units measured"
   sampling_unit: "individual in population"
 
@@ -18,7 +18,7 @@ bias_types:
     - voluntary_response: "self-selected participants"
   response_bias:
     - acquiescence: "tendency to agree"
-    - extreme_responding: "picks extreme options"
+    - extreme_responding: "tendency to pick extreme options"
     - social_desirability: "answers what looks good"
 
 sampling_methods:
