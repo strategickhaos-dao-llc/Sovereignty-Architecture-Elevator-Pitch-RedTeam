@@ -9,7 +9,7 @@ Reference: INV-082 SwarmBounty specification
 Author: Strategickhaos DAO LLC
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Dict, Literal
 from datetime import datetime
 from enum import Enum
@@ -211,10 +211,11 @@ class VulnerabilityReport(BaseModel):
         description="Whether eligible for bug bounty"
     )
     
-    @validator('cvss_score')
-    def validate_cvss_score(cls, v, values):
+    @field_validator('cvss_score')
+    @classmethod
+    def validate_cvss_score(cls, v, info):
         """Validate CVSS score matches severity"""
-        severity = values.get('severity')
+        severity = info.data.get('severity') if hasattr(info, 'data') else None
         if severity:
             if severity == SeverityLevel.CRITICAL and v < 9.0:
                 raise ValueError("Critical vulnerabilities must have CVSS >= 9.0")
@@ -228,11 +229,11 @@ class VulnerabilityReport(BaseModel):
     
     def to_dict(self) -> Dict:
         """Convert to dictionary"""
-        return self.dict()
+        return self.model_dump()
     
     def to_json_schema(self) -> Dict:
         """Export JSON schema for API consumption"""
-        return self.schema()
+        return self.model_json_schema()
     
     class Config:
         json_schema_extra = {

@@ -355,7 +355,7 @@ This challenge demonstrates a real-world vulnerability. In production:
     
     def export_json(self, output_file: str) -> None:
         """Export challenges to JSON format (CTFd compatible)"""
-        challenges_data = [c.dict() for c in self.challenges]
+        challenges_data = [c.model_dump() for c in self.challenges]
         
         with open(output_file, 'w') as f:
             json.dump({
@@ -372,7 +372,7 @@ This challenge demonstrates a real-world vulnerability. In production:
     
     def export_yaml(self, output_file: str) -> None:
         """Export challenges to YAML format"""
-        challenges_data = [c.dict() for c in self.challenges]
+        challenges_data = [c.model_dump() for c in self.challenges]
         
         with open(output_file, 'w') as f:
             yaml.dump({
