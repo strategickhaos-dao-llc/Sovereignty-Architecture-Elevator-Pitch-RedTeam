@@ -95,7 +95,7 @@ def example_target_stock():
     fetch_and_plot_stock(
         ticker='TGT',
         start_date='1983-01-01',
-        end_date='2024-12-31',
+        end_date='2024-11-30',  # Use a past date to ensure data availability
         output_file='tgt_stock_yfinance.png'
     )
 
