@@ -1,0 +1,12 @@
+{
+  "answers": [
+    {
+      "question_id": 1,
+      "answer": "[ANSWER_PLACEHOLDER - Parse from zyBooks content or generate via LLM]",
+      "confidence": "high"
+    }
+  ],
+  "metadata": {
+    "session_id": "zybooks_2025-12-16T03_45_09_948Z"
+  }
+}
