@@ -16,11 +16,11 @@ module_metadata:
 question_types:
   - type: "multiple_choice"
     count: 8
-    percentage: 67
+    percentage: 66.67
   
   - type: "true_false"
     count: 4
-    percentage: 33
+    percentage: 33.33
 
 # ═══════════════════════════════════════════════════════════════════
 # CORE PATTERNS IDENTIFIED
