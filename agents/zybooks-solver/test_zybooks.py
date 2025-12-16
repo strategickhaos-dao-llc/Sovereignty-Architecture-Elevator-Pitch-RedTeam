@@ -4,6 +4,7 @@ Test suite for zyBooks Solver Agent
 """
 
 import sys
+import traceback
 from pathlib import Path
 
 # Add the agent directory to path
@@ -204,7 +205,6 @@ def run_all_tests():
         return False
     except Exception as e:
         print(f"\n❌ ERROR: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

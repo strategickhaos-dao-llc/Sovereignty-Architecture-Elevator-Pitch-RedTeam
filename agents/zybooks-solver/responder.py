@@ -3,6 +3,7 @@ zyBooks Response Formatter
 Purpose: Format answers for operator in VESSEL MODE (minimal, direct, fast)
 """
 
+import json
 import yaml
 from typing import List, Dict
 from datetime import datetime
@@ -55,7 +56,6 @@ class ZyBooksResponder:
     
     def format_json(self, section: str, answers: List[Dict]) -> str:
         """Format as compact JSON"""
-        import json
         
         output = {
             "section": section,

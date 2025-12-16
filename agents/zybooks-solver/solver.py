@@ -21,6 +21,10 @@ class Answer:
 class ZyBooksSolver:
     """Solve zyBooks questions using semantic compression and statistical reasoning"""
     
+    # Compiled regex patterns for performance
+    WORD_ALL_PATTERN = re.compile(r'\ball\b')
+    WORD_NONE_PATTERN = re.compile(r'\bnone\b')
+    
     def __init__(self):
         self.answers = []
         
@@ -123,6 +127,7 @@ class ZyBooksSolver:
         text = question["text"].lower()
         
         # Remove "true or false:" prefix if present to avoid false positives
+        # This prevents the question format itself from being interpreted as part of the answer
         text_clean = re.sub(r'\btrue or false[:\s]+', '', text, flags=re.IGNORECASE)
         
         # Apply FlameLang compression
@@ -170,7 +175,8 @@ class ZyBooksSolver:
         
         elif "all" in text_clean or "none" in text_clean:
             # Be careful with "all" - it appears in "falls" etc.
-            if re.search(r'\ball\b', text_clean) or re.search(r'\bnone\b', text_clean):
+            # Use word boundary pattern to match only the standalone words
+            if self.WORD_ALL_PATTERN.search(text_clean) or self.WORD_NONE_PATTERN.search(text_clean):
                 answer = "FALSE"
                 confidence = 0.85
                 reasoning = "Absolute statements are rarely true in statistics"

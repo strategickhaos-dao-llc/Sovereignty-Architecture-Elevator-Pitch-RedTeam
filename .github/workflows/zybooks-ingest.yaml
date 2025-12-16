@@ -39,6 +39,8 @@ jobs:
           if [ -f "training/zybooks/PASTE_HERE.md" ]; then
             content=$(cat training/zybooks/PASTE_HERE.md)
             # Check if content has actual zyBooks material (not just comments)
+            # NOTE: This pattern is a simplified version of the detection in parser.py
+            # For full detection logic, the Python parser is used in the next step
             if echo "$content" | grep -E "(participation activity|zybooks|Section [0-9])" > /dev/null; then
               echo "detected=true" >> $GITHUB_OUTPUT
             else

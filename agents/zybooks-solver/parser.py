@@ -22,6 +22,9 @@ class Question:
 class ZyBooksParser:
     """Parse zyBooks content into structured questions"""
     
+    # Detection thresholds
+    MIN_MARKER_COUNT = 2  # Minimum number of markers needed for detection
+    
     # Detection patterns
     MARKERS = [
         "participation activity",
@@ -60,7 +63,7 @@ class ZyBooksParser:
         has_tf = bool(re.search(self.TRUE_FALSE, text))
         
         # Consider it zyBooks content if it has markers or structural patterns
-        return marker_count >= 2 or has_url or (has_numbered and has_tf)
+        return marker_count >= self.MIN_MARKER_COUNT or has_url or (has_numbered and has_tf)
     
     def extract_section(self, text: str) -> Optional[str]:
         """Extract section number from content"""
