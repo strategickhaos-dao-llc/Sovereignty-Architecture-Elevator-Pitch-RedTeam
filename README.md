@@ -168,6 +168,35 @@ ai_agents:
       "#prs": "claude-3-sonnet"  # Code review assistance
 ```
 
+## 🔥 FlameLang Compiler Theory
+
+**Learn how statistics and compiler theory are the same discipline in disguise.**
+
+FlameLang demonstrates the deep connection between statistical normalization (taught in zyBooks) and compiler design. Every compiler layer performs frequency analysis and distribution normalization—the same operations you learn in statistics.
+
+### Core Documentation
+- **[FlameLang Compiler Theory](FLAMELANG_COMPILER_THEORY.md)** - Comprehensive guide to the 5-layer transformation pipeline
+- **[Statistics Connection YAML](flamelang_compiler_statistics_connection.yaml)** - Structured data on compiler-statistics parallels
+
+### Key Concepts
+- **5-Layer Pipeline**: English → Hebrew → Unicode → Wave → DNA → LLVM
+- **Frequency Analysis**: Token counting drives LLVM optimization decisions
+- **Wave Normalization**: Statistical relative frequency = semantic amplitude
+- **DNA Codon Distribution**: 64 codons map to 64 opcodes based on frequency
+- **Meta-Pattern**: Lossy compression with semantic preservation
+
+### Quick Example
+```flamelang
+🔥 ignite(⚔️ attack, 🧬 mutate)
+
+# Token Analysis:
+# Raw counts: 1 flame, 1 sword, 1 DNA, 2 identifiers = 5 total
+# Relative frequency: 40% identifiers (dominant)
+# Optimization: Inline identifier resolution, parallel glyph processing
+```
+
+See [FLAMELANG_COMPILER_THEORY.md](FLAMELANG_COMPILER_THEORY.md) for the complete learning path.
+
 ## 🔐 Security & Governance
 
 ### Multi-Layer Security
