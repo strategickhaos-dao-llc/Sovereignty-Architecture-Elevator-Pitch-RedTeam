@@ -1,0 +1,54 @@
+# 🔥 ZYBOOKS SPRINT TRACKER
+# Section: 1.5 Bar Charts
+# Started: 9:13 PM CT
+# Target: Module completion
+
+metadata:
+  section: "1.5"
+  topic: "Bar Charts"
+  started: "9:13 PM CT"
+  target: "Module completion"
+
+progress:
+  section_1.5:
+    total_questions: 6
+    completed: 1
+    current: 2
+    
+questions:
+  q1:
+    status: "✅ DONE"
+    text: "A bar chart excels at showing precise values."
+    answer: "False"
+    points: "+1 🔥"
+    explanation: "Bar charts excel at showing relative differences between categories. If you need precise values, you add data labels — the bars themselves are for visual comparison, not precision."
+    
+  q2:
+    status: "⏳ ACTIVE"
+    text: null
+    answer: null
+    points: 0
+    
+  q3:
+    status: "⏸️ PENDING"
+    text: null
+    answer: null
+    points: 0
+    
+  q4:
+    status: "⏸️ PENDING"
+    text: null
+    answer: null
+    points: 0
+    
+  q5:
+    status: "⏸️ PENDING"
+    text: null
+    answer: null
+    points: 0
+    
+  q6:
+    status: "⏸️ PENDING"
+    text: null
+    answer: null
+    points: 0
