@@ -1,0 +1,5 @@
+# Requirements for Section 1.6: Pie Charts tutorial
+# Install with: pip install -r requirements.txt
+
+matplotlib>=3.5.0
+numpy>=1.21.0
