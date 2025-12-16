@@ -56,9 +56,15 @@ class ZyBooksSolver:
     
     FALSE_PATTERNS = [
         r'mean.*median',  # mean is NOT median
+        r'median.*mean',  # median is NOT mean
+        r'mode.*median',  # mode is NOT median
+        r'median.*mode',  # median is NOT mode
+        r'mean.*mode',  # mean is NOT mode
+        r'mode.*mean',  # mode is NOT mean
         r'standard deviation.*average',  # std dev is NOT average
         r'correlation.*causation',  # correlation does NOT imply causation
-        r'variance.*standard deviation$'  # variance is NOT std dev (it's squared)
+        r'variance.*standard deviation$',  # variance is NOT std dev (it's squared)
+        r'same as.*(?:mean|median|mode)',  # X is same as Y (usually false for different terms)
     ]
     
     def __init__(self):
