@@ -190,8 +190,8 @@ FlameLang demonstrates the deep connection between statistical normalization (ta
 🔥 ignite(⚔️ attack, 🧬 mutate)
 
 # Token Analysis:
-# Raw counts: 1 flame, 1 sword, 1 DNA, 2 identifiers = 5 total
-# Relative frequency: 40% identifiers (dominant)
+# Raw counts: 1 flame, 1 sword, 1 DNA, 3 identifiers = 6 total
+# Relative frequency: 50% identifiers (dominant)
 # Optimization: Inline identifier resolution, parallel glyph processing
 ```
 

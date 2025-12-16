@@ -70,23 +70,23 @@ step_4: optimize LLVM IR emission for hot paths
 flame_glyph: 1    # 🔥
 sword_glyph: 1    # ⚔️
 dna_glyph: 1      # 🧬
-identifiers: 2    # "ignite", "attack", "mutate"
-total: 5
+identifiers: 3    # "ignite", "attack", "mutate"
+total: 6
 ```
 
 **Step 2: Relative Frequency**
 ```yaml
-flame_glyph: 20%    # 1/5
-sword_glyph: 20%    # 1/5
-dna_glyph: 20%      # 1/5
-identifiers: 40%    # 2/5
+flame_glyph: 16.7%    # 1/6
+sword_glyph: 16.7%    # 1/6
+dna_glyph: 16.7%      # 1/6
+identifiers: 50.0%    # 3/6
 ```
 
 **Step 3: Optimization Decision**
 ```
 Analysis:
-- identifiers dominate (40%) → inline identifier resolution
-- glyphs equal weight (20% each) → parallel glyph processing
+- identifiers dominate (50%) → inline identifier resolution
+- glyphs equal weight (16.7% each) → parallel glyph processing
 ```
 
 **Step 4: LLVM IR Emission**
