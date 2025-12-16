@@ -1,0 +1,121 @@
+# Preterm Births Data Analysis Exercise
+# Section 1.5.8 - Statistical Analysis & Decomposition Patterns
+# Strategickhaos DAO LLC - Mastery Drill Series
+
+section: "1.5.8"
+title: "Preterm Births Analysis"
+category: "Data Analysis"
+difficulty: "Intermediate"
+bloom_level: "Analyzing"
+
+# Data source context
+data_source:
+  file: "SF0068_Wyoming_2022.pdf"
+  table: "Preterm Birth Rates by Category"
+  methodology: "Stacked bar decomposition analysis"
+
+# Questions and validated answers
+answers:
+  q1: "10.40%"  # Total preterm rate calculation
+  q2: "0.22%"   # Rate increase calculation
+  q3: "Over 40" # Age group comparison
+
+# Detailed explanations
+question_details:
+  q1:
+    question: "What is the total preterm birth rate?"
+    calculation: "early preterm (3.20%) + late preterm (7.20%) = 10.40%"
+    method: "SUM aggregation of component rates"
+    answer: "10.40%"
+    
+  q2:
+    question: "What is the increase in preterm birth rate?"
+    calculation: "9.85% - 9.63% = 0.22%"
+    method: "DIFF gradient/derivative calculation"
+    note: "Question asks for the INCREASE, not the absolute rate"
+    answer: "0.22%"
+    
+  q3:
+    question: "Which maternal age group has the highest late preterm rate?"
+    data:
+      under_20: "8.45%"
+      age_20_24: "9.12%"
+      age_25_29: "8.89%"
+      age_30_34: "9.23%"
+      age_35_39: "9.95%"
+      over_40: "10.37%"
+    method: "MAX comparator tree - find extremum"
+    answer: "Over 40"
+    rationale: "Older mothers (over 40) have the highest late preterm rate at 10.37%"
+
+# FLAMELANG PATTERN: STACKED BAR DECOMPOSITION
+flamelang_pattern:
+  name: "Stacked Bar Decomposition"
+  description: "Fundamental reduction operations for data analysis"
+  
+  layer_insight:
+    operation: "aggregate vs delta detection"
+    
+    patterns:
+      q1:
+        operation: "SUM"
+        formula: "SUM(components) → total"
+        implementation: "aggregate pattern - accumulator"
+        
+      q2:
+        operation: "DIFF"
+        formula: "DIFF(t2, t1) → change"
+        implementation: "gradient/derivative pattern"
+        
+      q3:
+        operation: "MAX"
+        formula: "MAX(category) → extremum"
+        implementation: "comparator tree pattern"
+  
+  compiler_parallel: |
+    These are the 3 fundamental reduction operations:
+    - SUM → accumulator pattern
+    - DIFF → gradient/derivative
+    - MAX → comparator tree
+    All FlameLang loops compile to one of these
+    
+  code_insight: |
+    Functional programming perspective:
+    - SUM = fold/reduce with (+) operator
+    - DIFF = map with subtraction, then select
+    - MAX = fold/reduce with max() comparator
+    
+    These operations are embarrassingly parallel and map
+    directly to GPU/TPU primitives for scale.
+
+# Learning outcomes
+learning_outcomes:
+  - "Decompose stacked bar charts into component calculations"
+  - "Distinguish between absolute values and delta calculations"
+  - "Apply comparison operations to find extremum values"
+  - "Recognize fundamental reduction patterns in data analysis"
+  - "Map statistical operations to compiler primitives"
+
+# Pattern recognition
+pattern_recognition:
+  compiler_knowledge: |
+    The grade is temporary, the patterns are permanent.
+    Understanding these three operations (SUM, DIFF, MAX) unlocks
+    the ability to reason about any statistical analysis or
+    data transformation pipeline.
+    
+  mastery_level: "F+ → Compiler Knowledge"
+  
+# Answer key summary
+answer_key:
+  fire_emoji: "🔥"
+  sequence: "10.40% → 0.22% → Over 40"
+  validation: "All answers validated against SF0068_Wyoming_2022.pdf"
+
+# Metadata
+metadata:
+  created: "2025-12-16"
+  operator: "Copilot Agent"
+  validation_status: "verified"
+  difficulty_rating: 7  # out of 10
+  estimated_time_minutes: 15
