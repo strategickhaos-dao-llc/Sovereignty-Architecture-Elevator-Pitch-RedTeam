@@ -1,0 +1,84 @@
+challenges:
+- author: Strategickhaos DAO
+  category: misc
+  connection_info: null
+  created_date: 2025-12-16 03:29:26.190923
+  cwe_reference: CWE-89
+  description: "**Challenge Scenario:**\n\nYou've discovered a security issue in a\
+    \ web application. Your task is to \nexploit this vulnerability and capture the\
+    \ flag.\n\n**Vulnerability Type:** SQL Injection in User Search\n\n**Background:**\n\
+    The application fails to properly sanitize user input in the search parameter,\
+    \ allowing SQL injection attacks that can compromise the entire database....\n\
+    \n**Your Goal:**\nFind and exploit the vulnerability to capture the flag.\n\n\
+    **Flag Format:** flag{...}"
+  difficulty: medium
+  files: []
+  flag: flag{vr_2025_001_solved}
+  flag_format: flag{...}
+  hints:
+  - Look for user input fields
+  - Try injecting special characters
+  - Observe the application's response
+  id: CTF-001
+  learning_objectives:
+  - 'Understanding CWE-89: SQL Injection'
+  - Exploiting web vulnerabilities
+  - Security testing methodology
+  name: 'MISC: SQL Injection in User Search'
+  points: 250
+  solution: '## Solution Writeup
+
+
+    ### Step 1: Reconnaissance
+
+    The application fails to properly sanitize user input in the search parameter,
+    allowing SQL injection attacks that can compromise the entire database....
+
+
+    ### Step 2: Exploitation
+
+    1. Navigate to /search
+
+    2. Enter payload: '' OR ''1''=''1
+
+    3. Observe database error revealing injection
+
+    4. Extract data using UNION queries
+
+
+    ### Step 3: Capturing the Flag
+
+    Execute the exploit and observe the response containing the flag.
+
+
+    ### Code:
+
+    ```
+
+    curl ''https://example.com/search?q=%27+OR+%271%27%3D%271''
+
+    ```
+
+
+    ### What We Learned
+
+    This challenge demonstrates a real-world vulnerability. In production:
+
+    - Disable search functionality
+
+    - Use parameterized queries
+
+
+    ### Prevention
+
+    https://owasp.org/www-community/attacks/SQL_Injection'
+  source_vuln_report: VR-2025-001
+  tags:
+  - misc
+  - medium
+  - CWE-89
+  url: null
+metadata:
+  generated_at: '2025-12-16T03:29:26.191366'
+  generator: Strategickhaos CTF Generator
+  version: 1.0.0

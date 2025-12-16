@@ -1,0 +1,15 @@
+[
+  {
+    "title": "MISC: SQL Injection in User Search",
+    "vulnerability_information": "**Challenge Scenario:**\n\nYou've discovered a security issue in a web application. Your task is to \nexploit this vulnerability and capture the flag.\n\n**Vulnerability Type:** SQL Injection in User Search\n\n**Background:**\nThe application fails to properly sanitize user input in the search parameter, allowing SQL injection attacks that can compromise the entire database....\n\n**Your Goal:**\nFind and exploit the vulnerability to capture the flag.\n\n**Flag Format:** flag{...}",
+    "impact": "Learning objective for misc vulnerabilities",
+    "severity_rating": "medium",
+    "proof_of_concept": "## Solution Writeup\n\n### Step 1: Reconnaissance\nThe application fails to properly sanitize user input in the search parameter, allowing SQL injection attacks that can compromise the entire database....\n\n### Step 2: Exploitation\n1. Navigate to /search\n2. Enter payload: ' OR '1'='1\n3. Observe database error revealing injection\n4. Extract data using UNION queries\n\n### Step 3: Capturing the Flag\nExecute the exploit and observe the response containing the flag.\n\n### Code:\n```\ncurl 'https://example.com/search?q=%27+OR+%271%27%3D%271'\n```\n\n### What We Learned\nThis challenge demonstrates a real-world vulnerability. In production:\n- Disable search functionality\n- Use parameterized queries\n\n### Prevention\nhttps://owasp.org/www-community/attacks/SQL_Injection",
+    "suggested_remediation": "Understanding CWE-89: SQL Injection\nExploiting web vulnerabilities\nSecurity testing methodology",
+    "custom_fields": {
+      "ctf_points": 250,
+      "flag": "flag{vr_2025_001_solved}",
+      "source_report": "VR-2025-001"
+    }
+  }
+]

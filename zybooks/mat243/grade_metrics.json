@@ -1,0 +1,79 @@
+{
+  "timestamp": "2025-12-16T03:23:15.239444",
+  "course": "MAT-243 Applied Statistics for STEM",
+  "student": "Dom (Me10101)",
+  "semester": "Fall 2025",
+  "module_1": {
+    "module_name": "Introduction to Data and Visualization",
+    "average_score": 12.5,
+    "completed_sections": 0,
+    "total_sections": 8,
+    "section_scores": {
+      "1.1": {
+        "name": "Statistics as a field",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      },
+      "1.2": {
+        "name": "Types of data",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      },
+      "1.3": {
+        "name": "Frequency distributions",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      },
+      "1.4": {
+        "name": "Introduction to data visualization with Python",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      },
+      "1.5": {
+        "name": "Bar Charts",
+        "percentage": 100.0,
+        "completed": 2,
+        "total": 2,
+        "status": "in_progress"
+      },
+      "1.6": {
+        "name": "Pie charts",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      },
+      "1.7": {
+        "name": "Histograms",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      },
+      "1.8": {
+        "name": "Scatter plots",
+        "percentage": 0.0,
+        "completed": 0,
+        "total": 1,
+        "status": "not_started"
+      }
+    }
+  },
+  "overall": {
+    "completion_percentage": 0.0,
+    "dopamine_points": 2,
+    "sections_completed": 0,
+    "sections_in_progress": 1,
+    "total_sections": 8
+  },
+  "next_milestone": "Complete 1.5 Bar Charts (4 questions remaining)",
+  "last_updated": "2025-12-15T21:21:00-06:00"
+}
